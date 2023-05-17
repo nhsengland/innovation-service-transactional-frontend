@@ -9,25 +9,24 @@ type InboundPayloadType = {
 type StepPayloadType = {
   email: string,
   name: string,
-  type: null | 'ASSESSMENT' | 'AUTHORISED_PERSON'// 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
-  organisationAcronym?: null | string, // Only for QA, A
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
+  type: null | 'ASSESSMENT' | 'AUTHORISED_PERSON' | 'ADMIN',
+  organisationAcronym?: null | string, // Only for QA, A
   organisationUnitAcronym?: null | string, // Only for A
-  organisationsList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
+  organisationsList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
 };
 
 type OutboundPayloadType = {
   email: string,
   name: string,
-  type: null | undefined | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR',
-  organisationAcronym?: null | string, // Only for QA, A
   role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
+  type: null | undefined | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR' | 'ADMIN',
+  organisationAcronym?: null | string, // Only for QA, A
   organisationUnitAcronym?: null | string, // Only for A
 };
 
 
-// This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
-export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
     new FormEngineModel({
@@ -38,11 +37,11 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'ASSESSMENT', label: 'Needs Assessor' },
-          { value: 'AUTHORISED_PERSON', label: 'Authorised person' }
+          { value: 'AUTHORISED_PERSON', label: 'Authorised person' },
+          { value: 'ADMIN', label: 'Administrator'}
         ]
       }]
     }),
-
     new FormEngineModel({
       parameters: [{
         id: 'email',
@@ -54,7 +53,6 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         }
       }]
     }),
-
     new FormEngineModel({
       parameters: [{
         id: 'name',
@@ -63,7 +61,7 @@ export let CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel(
         description: 'Include the first name and surname of the user, their name will appear on the service as it is written here.',
         validations: { isRequired: [true, 'Name is required'] }
       }]
-    }),
+    })
   ],
   runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
@@ -76,7 +74,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 
   steps.splice(3);
 
-  if (data.type === 'ASSESSMENT') {
+  if (data.type === 'ADMIN' || data.type === 'ASSESSMENT') {
 
     data.organisationAcronym = null;
     data.organisationUnitAcronym = null;
@@ -139,40 +137,38 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
   return {
     email: '',
     name: '',
+    role: null,
     type: null,
     organisationAcronym: null,
     organisationUnitAcronym: null,
-    role: null,
     organisationsList: data.organisationsList
   };
-
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     name: data.name,
     email: data.email,
-    type: data.type === 'AUTHORISED_PERSON' ? 'ACCESSOR' : data.type,
     role: data.role,
+    type: data.type === 'AUTHORISED_PERSON' ? 'ACCESSOR' : data.type,
     organisationAcronym: data.organisationAcronym,
     organisationUnitAcronym: data.organisationUnitAcronym
   };
-
 }
 
 function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
 
   const toReturn: WizardSummaryType[] = [];
+
   const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
+
   let lastMarkStep;
-  if (data.type === 'ASSESSMENT'){
+  if (data.type === 'ADMIN' || data.type === 'ASSESSMENT'){
     toReturn.push(
-      { label: 'User Type', value: 'Needs Assessor' , editStepNumber: 1 },
+      { label: 'User Type', value: data.type === 'ADMIN' ? 'Administrator' : 'Needs Assessor' , editStepNumber: 1 },
       { label: 'Email', value: data.email, editStepNumber: 2  },
       { label: 'User Name', value: data.name, editStepNumber: 3  },
     );
@@ -207,5 +203,8 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
 
     lastMarkStep =  (unitsList as []).length > 1 ? 6 : 5 ;
   }
+
   return toReturn;
+
 }
+

@@ -55,7 +55,7 @@ export class PageAdminUserDeleteComponent extends CoreComponent {
 
     this.serviceUsersService.deleteAdminAccount(this.user.id, this.securityConfirmation).subscribe(
       response => {
-        this.redirectTo(`admin/administration-users`, { alert: 'adminDeletedSuccess' });
+        this.redirectTo(`/admin/users`, { alert: 'adminDeletedSuccess' });
       },
       (error) => {
         this.submitBtnClicked = false;

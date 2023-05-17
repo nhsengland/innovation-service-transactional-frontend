@@ -1,29 +1,30 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
+import { AdminUsersService } from '../../services/admin-users.service';
 
-import { CREATE_NEW_USER_QUESTIONS } from './service-user-new.config';
+import { CREATE_NEW_USER_QUESTIONS } from './user-new.config';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-new',
-  templateUrl: './service-user-new.component.html'
+  selector: 'app-admin-pages-users-user-new',
+  templateUrl: './user-new.component.html'
 })
-export class PageServiceUserNewComponent extends CoreComponent implements OnInit {
+export class PageUserNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
 
   constructor(
-    private organisationsService: OrganisationsService,
-    private serviceUsersService: ServiceUsersService
+    private adminUsersService: AdminUsersService,
+    private usersService: UsersService,
+    private organisationsService: OrganisationsService
   ) {
-
     super();
     this.setPageTitle('Create new user');
   }
@@ -31,7 +32,7 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
   ngOnInit(): void {
 
     // Adds async email validator to the second step.
-    this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.serviceUsersService.userEmailValidator()] };
+    this.wizard.steps[1].parameters[0].validations = { ...this.wizard.steps[1].parameters[0].validations, async: [this.usersService.userEmailValidator()] };
 
     this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
       next: response => {
@@ -40,13 +41,11 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
         this.setPageStatus('READY');
       },
       error: () => {
-        this.setPageStatus('READY');
+        this.setPageStatus('ERROR');
         this.logger.error('Error fetching organisations units');
       }
     });
 
-
-    this.setPageStatus('READY');
   }
 
 
@@ -78,8 +77,8 @@ export class PageServiceUserNewComponent extends CoreComponent implements OnInit
 
     const body = this.wizard.runOutboundParsing();
 
-    this.serviceUsersService.createUser(body).subscribe({
-      next: response => this.redirectTo(`admin/service-users/${response.id}`, { alert: 'userCreationSuccess' }),
+    this.adminUsersService.createUser(body).subscribe({
+      next: response => this.redirectTo(`/admin/users/${response.id}`, { alert: 'userCreationSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();

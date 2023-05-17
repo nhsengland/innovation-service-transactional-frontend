@@ -12,10 +12,11 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+// // Users
+import { PageUserFindComponent } from './pages/users/user-find.component';
+import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserNewComponent } from './pages/users/user-new.component';
 // // Admin Users.
-import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find.component';
-import { PageAdminUserInfoComponent } from './pages/admin-users/admin-user-info.component';
-import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.component';
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
 // // Announcements.
 import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
@@ -37,10 +38,7 @@ import { PageOrganisationUnitUserEditComponent } from './pages/organisations/org
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
-import { PageServiceUserFindComponent } from './pages/service-users/service-user-find.component';
-import { PageServiceUserInfoComponent } from './pages/service-users/service-user-info.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
-import { PageServiceUserNewComponent } from './pages/service-users/service-user-new.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -59,12 +57,14 @@ import { AdminOrganisationsService } from './services/admin-organisations.servic
 import { AnnouncementsService } from './services/announcements.service';
 import { ServiceUsersService } from './services/service-users.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
+import { AdminUsersService } from './services/admin-users.service';
 
 // Resolvers.
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
+
 
 @NgModule({
   imports: [
@@ -80,10 +80,11 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
 
     // Pages.
     PageAccountManageAccountInfoComponent,
+    // Users
+    PageUserFindComponent,
+    PageUserInfoComponent,
+    PageUserNewComponent,
     // // Admin Users.
-    PageAdminUsersFindComponent,
-    PageAdminUserInfoComponent,
-    PageAdminUserNewComponent,
     PageAdminUserDeleteComponent,
     // // Announcements.
     PageAnnouncementInfoComponent,
@@ -104,10 +105,7 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
     // // Service Users.
     PageServiceUserChangeOrganisationUnitComponent,
     PageServiceUserChangeRoleComponent,
-    PageServiceUserFindComponent,
-    PageServiceUserInfoComponent,
     PageServiceUserLockComponent,
-    PageServiceUserNewComponent,
     PageServiceUserUnlockComponent,
     // // Terms of use.
     PageTermsOfUseInfoComponent,
@@ -127,6 +125,7 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
     AnnouncementsService,
     ServiceUsersService,
     UsersValidationRulesService,
+    AdminUsersService,
 
     // Resolvers.
     AnnouncementDataResolver,

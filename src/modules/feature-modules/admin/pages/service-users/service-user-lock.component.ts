@@ -7,6 +7,7 @@ import { RoutingHelper } from '@app/base/helpers';
 
 import { ServiceUsersService } from '../../services/service-users.service';
 import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
+import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   constructor(
     private activatedRoute: ActivatedRoute,
     private serviceUsersService: ServiceUsersService,
+    private usersService: UsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -44,7 +46,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   ngOnInit(): void {
 
     forkJoin([
-      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.usersService.getUserFullInfo(this.user.id),
       this.usersValidationRulesService.getLockUserRules(this.user.id)
     ]).subscribe({
       next: ([userInfo, response]) => {
@@ -73,7 +75,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   onSubmit(): void {
 
     this.serviceUsersService.lockUser(this.user.id).subscribe({
-      next: () => this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'lockSuccess' }),
+      next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'lockSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();

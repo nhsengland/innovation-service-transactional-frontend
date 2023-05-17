@@ -10,10 +10,11 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+// // Users
+import { PageUserFindComponent } from './pages/users/user-find.component';
+import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserNewComponent } from './pages/users/user-new.component';
 // // Admin Users.
-import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find.component';
-import { PageAdminUserInfoComponent } from './pages/admin-users/admin-user-info.component';
-import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.component';
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
 // // Announcements.
 import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
@@ -35,10 +36,7 @@ import { PageOrganisationUnitUserEditComponent } from './pages/organisations/org
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
-import { PageServiceUserFindComponent } from './pages/service-users/service-user-find.component';
-import { PageServiceUserInfoComponent } from './pages/service-users/service-user-info.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
-import { PageServiceUserNewComponent } from './pages/service-users/service-user-new.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -83,8 +81,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
-      { id: 'adminUsers', label: 'Admin users', url: '/admin/administration-users' },
-      { id: 'serviceUsers', label: 'Service users', url: '/admin/service-users' },
+      { id: 'adminUsers', label: 'Users', url: '/admin/users' },
       {
         id: 'management',
         label: 'Management',
@@ -197,40 +194,14 @@ const routes: Routes = [
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
       {
-        path: 'administration-users',
-        data: { breadcrumb: 'administration users' },
+        path: 'users',
+        data: { breadcrumb: 'Users' },
         children: [
           {
-            path: '', pathMatch: 'full', component: PageAdminUsersFindComponent,
+            path: '', pathMatch: 'full', component: PageUserFindComponent,
             data: { breadcrumb: null }
           },
-          { path: 'new', pathMatch: 'full', component: PageAdminUserNewComponent },
-          {
-            path: ':userId',
-            // pathMatch: 'full',
-            resolve: { user: ServiceUserDataResolver },
-            data: {
-              breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
-            },
-            children: [
-              {
-                path: '', pathMatch: 'full', component: PageAdminUserInfoComponent,
-                data: { breadcrumb: null }
-              },
-              { path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'service-users',
-        data: { breadcrumb: 'Service users' },
-        children: [
-          {
-            path: '', pathMatch: 'full', component: PageServiceUserFindComponent,
-            data: { breadcrumb: null }
-          },
-          { path: 'new', pathMatch: 'full', component: PageServiceUserNewComponent },
+          { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
             resolve: { user: ServiceUserDataResolver },
@@ -239,16 +210,28 @@ const routes: Routes = [
             },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageServiceUserInfoComponent,
+                path: '', pathMatch: 'full', component: PageUserInfoComponent,
                 data: { breadcrumb: null }
               },
-              { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent },
-              { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent },
-              { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent },
-              { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent }
+              {
+                path: 'administration-users',
+                children: [
+                  {
+                    path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent, data: { breadcrumb: null }
+                  }
+                ]
+              },
+              {
+                path: 'service-users',
+                children: [
+                  { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
+                  { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
+                  { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
+                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } }
+                ]
+              }
             ]
           }
-
         ]
       },
 
