@@ -100,7 +100,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { this.redirectTo('admin/announcements'); }
+        if (this.wizard.isFirstStep()) { this.redirectTo(`admin/announcements${this.announcementData.isEdition ? '/' + this.announcementId : ''}`); }
         else { this.wizard.previousStep(); }
         break;
       case 'next':

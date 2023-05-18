@@ -29,7 +29,7 @@
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">User groups</dt>
-            <dd class="nhsuk-summary-list__value">{{ announcement.userGroupsLabels }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ announcement.userGroupsLabels }}</dd>
             <dd class="nhsuk-summary-list__actions">
               <a *ngIf="announcement.isScheduled" routerLink="edit/6">Change<span class="nhsuk-u-visually-hidden"> user groups </span></a>
             </dd>

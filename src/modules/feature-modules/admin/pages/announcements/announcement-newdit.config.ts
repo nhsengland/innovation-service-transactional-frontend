@@ -64,7 +64,7 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
         { id: 'insetTitle', dataType: 'text', label: 'Title (optional)', description: 'Enter the title of the inset text' },
         { id: 'insetContent', dataType: 'text', label: 'Content (optional)', description: 'Enter message' },
         { id: 'insetLinkLabel', dataType: 'text', label: 'Add a link (optional)', description: 'Enter the link label' },
-        { id: 'insetLinkUrl', dataType: 'text', label: 'Enter the link URL' }
+        { id: 'insetLinkUrl', dataType: 'text', label: 'Enter the link URL. (Make sure that it starts with http:// or https://)' }
       ]
     }),
     new FormEngineModel({
@@ -79,7 +79,7 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
       label: stepsLabels.l4.label, description: stepsLabels.l4.description,
       parameters: [
         { id: 'actionLinkLabel', dataType: 'text', label: 'Enter the link label' },
-        { id: 'actionLinkUrl', dataType: 'text', label: 'Enter the link URL' }
+        { id: 'actionLinkUrl', dataType: 'text', label: 'Enter the link URL (Make sure that it starts with http:// or https://)' }
       ]
     }),
     new FormEngineModel({

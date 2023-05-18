@@ -31,7 +31,7 @@
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">User groups</dt>
-            <dd class="nhsuk-summary-list__value">{{ wizardSummaryUserGroupsLabels }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ wizardSummaryUserGroupsLabels }}</dd>
             <dd class="nhsuk-summary-list__actions">
               <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(6)">Change<span class="nhsuk-u-visually-hidden"> user groups </span></a>
             </dd>
