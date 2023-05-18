@@ -1,4 +1,4 @@
-import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { FormEngineModel, FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
 
 // Types.
 type InboundPayloadType = {
@@ -20,7 +20,7 @@ type OutboundPayloadType = {
 
 
 export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel({
-  steps: [    
+  steps: [
     new FormEngineModel({
       label: 'Transfer ownership of this innovation',
       parameters: [{
@@ -30,7 +30,7 @@ export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineMod
         description: 'Enter new owner\'s email',
         validations: {
           isRequired: [true, 'Email is required'],
-          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+          validEmail: true
         }
       }]
     }),
@@ -39,7 +39,7 @@ export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineMod
       parameters: [{
         id: 'ownerToCollaborator',
         dataType: 'radio-group',
-        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.', 
+        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
@@ -71,14 +71,14 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
       parameters: [{
         id: 'ownerToCollaborator',
         dataType: 'radio-group',
-        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.', 
+        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
           { value: 'YES', label: 'Yes' },
           { value: 'NO', label: 'No' }
         ]
       }]
-    }) 
+    })
   ],
   runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
@@ -88,13 +88,13 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
 export const otherEmailItem = {
   value: 'other',
   label: 'Other',
-  conditional: new FormEngineParameterModel({ 
-    id: 'email', 
-    dataType: 'text', 
-    label: 'Enter new owner\'s email', 
+  conditional: new FormEngineParameterModel({
+    id: 'email',
+    dataType: 'text',
+    label: 'Enter new owner\'s email',
     validations: {
       isRequired: [true, 'Email is required'],
-      pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+      validEmail: true
     }
   })
 };
@@ -110,7 +110,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   const email = data.collaboratorEmail && data.collaboratorEmail !== 'other' ? data.collaboratorEmail : data.email;
-  
+
   return {
     email: email,
     ownerToCollaborator: data.ownerToCollaborator === 'YES',

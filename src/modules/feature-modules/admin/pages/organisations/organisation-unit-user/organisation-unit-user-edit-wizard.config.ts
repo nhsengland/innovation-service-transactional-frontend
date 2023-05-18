@@ -41,7 +41,7 @@ export const ORGANISATION_UNIT_USER_EDIT: WizardEngineModel = new WizardEngineMo
         label: stepsLabels.l1,
         validations: {
           isRequired: [true, 'Email is required'],
-          pattern: ['^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$', 'Enter a valid email']
+          validEmail: true
         }
       }]
     }),

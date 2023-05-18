@@ -544,6 +544,7 @@ export const locale = {
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
           existsIn: 'Value already exists',
+          validEmail: 'Enter a valid email',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file exceed the maximum size of 20MB',
           empty_file: 'Uploaded files cannot be empty'

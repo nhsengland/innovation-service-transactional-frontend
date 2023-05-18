@@ -40,6 +40,7 @@ export class FormEngineParameterModel {
     equalToLength?: number | [number, string];
     async?: AsyncValidatorFn[];
     existsIn?: string[] | [string[], string];
+    validEmail?: boolean | [boolean, string];
   };
   lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
 
