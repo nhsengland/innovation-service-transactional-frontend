@@ -18,6 +18,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   hasMultipleRoles = false;
   currentRole: null | { id: string, description: string };
+  displayName: string;
 
   constructor(
     private notificationsService: NotificationsService,
@@ -26,6 +27,8 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     super();
     this.setPageTitle('Email notifications');
+    
+    this.displayName = this.authenticationStore.getUserInfo().displayName;
 
     const currentUserContext = this.authenticationStore.getUserContextInfo();
 
