@@ -200,7 +200,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 });
 
 // Login endpoint - AD OpenIdConnect
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
+authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
   passport.authenticate('signInStrategy', {
     ...req.query.back && {customState: req.query.back}
   } as any, (err: any, user: Express.User, _info: any) => {
