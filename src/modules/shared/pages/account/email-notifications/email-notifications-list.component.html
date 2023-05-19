@@ -1,11 +1,11 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text">
-        <p>These preferences are specific to the profile you are currently logged in.</p>
-        <p>{{currentRole.description}}</p>
+      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
+        <p>If you update your email preferences they will only apply to the profile you are logged in with.</p>
+        <p>You are logged in as {{this.displayName}}, {{currentRole.description}}.</p>
       </div>
 
       <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
@@ -18,7 +18,7 @@
         </div>
       </dl>
 
-      <div *ngIf="isAnySubscribed" class="nhsuk-inset-text"><span class="nhsuk-u-visually-hidden">Information:</span>
+      <div *ngIf="isAnySubscribed" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
         <p class="nhsuk-u-margin-0">
           <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
         </p>
