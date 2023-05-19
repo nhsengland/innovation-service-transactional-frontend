@@ -54,7 +54,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     super();
     this.setPageTitle('Notifications');
 
-    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR'].includes(this.stores.authentication.getUserType() ?? '')) {
+    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(this.stores.authentication.getUserType() ?? '')) {
       this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
     }
 
