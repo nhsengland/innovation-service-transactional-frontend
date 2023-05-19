@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/platform-server": "^14.2.0",
     "@angular/router": "^14.2.0",
+    "@azure/msal-node": "^1.17.2",
     "@nguniversal/express-engine": "^14.1.0",
     "@ngx-translate/core": "^14.0.0",
     "applicationinsights": "^2.3.4",
