@@ -81,6 +81,19 @@ export class CustomValidators {
     };
   }
 
+  static urlFormatValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      try {
+        const newUrl = new URL(control.value);
+        if (newUrl.protocol === 'http:' || newUrl.protocol === 'https:') {
+          return null;
+        }
+      } catch (err) {}
+      return { urlFormat: message ? { message } : true };
+    }
+  }
+
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };

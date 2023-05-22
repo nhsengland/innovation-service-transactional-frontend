@@ -117,7 +117,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'hasWebsite', dataType: 'radio-group', label: stepsLabels.q6.label,
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
-          { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'website', dataType: 'text', label: 'Website', validations: { isRequired: [true, 'Website url is required'], maxLength: 100 } }) },
+          { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'website', dataType: 'text', label: 'Website', validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true } }) },
           { value: 'NO', label: 'No' }
         ]
       }]
@@ -258,12 +258,29 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q3.label,
-      value: data.postcode ? `${data.countryName}, ${data.postcode}` : data.countryName,
+      value: data.officeLocation,
       editStepNumber: editStepNumber++
-    }
+    },
   );
 
-  editStepNumber++; // Needed as location uses 2 steps.
+  if (data.officeLocation !== 'Based outside UK') {
+    toReturn.push(
+      {
+        label: stepsLabels.q4.label,
+        value: data.postcode,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
+  else {
+    toReturn.push(
+      {
+        label: stepsLabels.q5.label,
+        value: data.countryLocation ? data.countryLocation[0] : null,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
 
   toReturn.push(
     {
