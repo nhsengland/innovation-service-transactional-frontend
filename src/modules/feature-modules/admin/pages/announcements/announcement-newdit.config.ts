@@ -8,8 +8,8 @@ import { GetAnnouncementInfoType, UpsertAnnouncementType } from '@modules/featur
 // Labels.
 const stepsLabels = {
   l1: {
-    label: `What's the title of the announcement`,
-    description: `Enter a title with with a maximum of 100 characters that explains what the announcement is about. For example, "A new support organisation has been added to the Innovation Service".`
+    label: `What's the title of the announcement?`,
+    description: `Enter a title with a maximum of 100 characters that explains what the announcement is about. For example, "A new support organisation has been added to the Innovation Service".`
   },
   l2: {
     label: 'Add an inset text (optional)',
