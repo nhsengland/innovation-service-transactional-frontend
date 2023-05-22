@@ -136,18 +136,34 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   let editStepNumber = 2;
 
-  const countryName = (data.officeLocation === 'Based outside UK' && data.countryLocation ? data.countryLocation[0] : data.officeLocation);
   toReturn.push(
     { label: stepsLabels.q1.label, value: data.name, editStepNumber: editStepNumber++ },
     { label: stepsLabels.q2.label, value: data.description, editStepNumber: editStepNumber++ },
     {
       label: stepsLabels.q3.label,
-      value: data.postcode ? `${countryName}, ${data.postcode}` : countryName,
+      value: data.officeLocation,
       editStepNumber: editStepNumber++
     }
   );
 
-  editStepNumber++; // Location uses 2 steps
+  if (data.officeLocation !== 'Based outside UK') {
+    toReturn.push(
+      {
+        label: stepsLabels.q4.label,
+        value: data.postcode,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
+  else {
+    toReturn.push(
+      {
+        label: stepsLabels.q5.label,
+        value: data.countryLocation ? data.countryLocation[0] : null,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
 
   toReturn.push(
     { label: stepsLabels.q6.label, value: data.website ?? 'No', editStepNumber: editStepNumber++ }
