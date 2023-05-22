@@ -258,12 +258,29 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q3.label,
-      value: data.postcode ? `${data.countryName}, ${data.postcode}` : data.countryName,
+      value: data.officeLocation,
       editStepNumber: editStepNumber++
-    }
+    },
   );
 
-  editStepNumber++; // Needed as location uses 2 steps.
+  if (data.officeLocation !== 'Based outside UK') {
+    toReturn.push(
+      {
+        label: stepsLabels.q4.label,
+        value: data.postcode,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
+  else {
+    toReturn.push(
+      {
+        label: stepsLabels.q5.label,
+        value: data.countryLocation ? data.countryLocation[0] : null,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
 
   toReturn.push(
     {
