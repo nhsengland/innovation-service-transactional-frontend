@@ -2,7 +2,6 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 import axios, { AxiosInstance } from 'axios';
 import * as express from 'express';
 import * as https from 'https';
-import { IProfile } from 'passport-azure-ad';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
@@ -55,10 +54,10 @@ function parseAPIUrl(url: string): string {
 apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
   const requestHandler = getRequestHandler();
-  const user: IProfile = req.user || {};
-  const accessToken = getAccessTokenByOid(user.oid || '');
+  const oid = req.session.id;
+  const accessToken = getAccessTokenByOid(oid || '');
 
-  if (req.isAuthenticated() && accessToken) {
+  if (oid && accessToken) {
 
     const url = parseAPIUrl(req.url);
     const config = {
