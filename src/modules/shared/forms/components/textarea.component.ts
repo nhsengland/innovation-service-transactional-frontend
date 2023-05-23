@@ -28,7 +28,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-  @Input() lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
+  @Input() lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large' | 'largeUp'; // TODO: Refactor these names!!!!
   @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
 
@@ -69,6 +69,9 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
 
     this.lengthLimit = this.lengthLimit || 'small';
     switch (this.lengthLimit) {
+      case 'largeUp':
+        this.lengthLimitCharacters = 4000;
+        break;
       case 'large':
         this.lengthLimitCharacters = 2000;
         break;
@@ -111,7 +114,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   }
 
   ngDoCheck(): void {
-    
+
     if(this.fieldControl.value !== null && this.textAreaValue === '') {
       this.textAreaValue = this.fieldControl.value;
     }
