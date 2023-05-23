@@ -167,6 +167,7 @@ export class FormEngineHelper {
     if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
     if (error.existsIn) { return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} }; }
     if (error.validEmail) { return { message: error.validEmail.message || 'shared.forms_module.validations.validEmail', params: {} }; }
+    if (error.postcodeFormat) { return { message: error.postcodeFormat.message || 'shared.forms_module.validations.invalid_postcode_format', params: {} }; }
     if (error.urlFormat) { return { message: error.urlFormat.message || 'shared.forms_module.validations.invalid_url_format', params: {} }; }
 
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
@@ -275,11 +276,14 @@ export class FormEngineHelper {
       if (validation[0]) { validators.push(CustomValidators.validEmailValidator(validation[1])); }
     }
 
+    if (parameter.validations?.postcodeFormat) {
+      validation = typeof parameter.validations.postcodeFormat === 'boolean' ? [parameter.validations.postcodeFormat, null] : parameter.validations.postcodeFormat;
+      if (validation[0]) { validators.push(CustomValidators.postcodeFormatValidator(validation[1])); }
+    }
+
     if (parameter.validations?.urlFormat) {
       validation = typeof parameter.validations.urlFormat === 'boolean' ? [parameter.validations.urlFormat, null] : parameter.validations.urlFormat;
-      if (validation[0]) {
-        validators.push(CustomValidators.urlFormatValidator(validation[1]));
-      }
+      if (validation[0]) { validators.push(CustomValidators.urlFormatValidator(validation[1])); }
     }
 
     // Specific types field validations.

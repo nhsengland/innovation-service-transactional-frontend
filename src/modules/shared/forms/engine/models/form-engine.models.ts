@@ -41,6 +41,7 @@ export class FormEngineParameterModel {
     async?: AsyncValidatorFn[];
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
+    postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string]
   };
   lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!

@@ -93,7 +93,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(new FormEngineModel({
       parameters: [{
         id: 'postcode', dataType: 'text', label: stepsLabels.q4.label,
-        validations: { isRequired: [true, 'Postcode is required'], maxLength: 8 }
+        validations: { isRequired: [true, 'Postcode is required'], maxLength: 8, postcodeFormat: true }
       }]
     }));
 
