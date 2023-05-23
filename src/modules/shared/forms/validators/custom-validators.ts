@@ -88,7 +88,20 @@ export class CustomValidators {
       ).test(control.value)
         ? null
         : { postcodeFormat: message ? { message } : true };
-    };
+    }
+  }
+
+  static urlFormatValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      try {
+        const newUrl = new URL(control.value);
+        if (newUrl.protocol === 'http:' || newUrl.protocol === 'https:') {
+          return null;
+        }
+      } catch (err) {}
+      return { urlFormat: message ? { message } : true };
+    }
   }
 
   // May be used in the future.
