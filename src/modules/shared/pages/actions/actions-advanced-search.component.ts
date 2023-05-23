@@ -5,8 +5,8 @@ import { debounceTime } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -53,6 +53,9 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   innovationsList: any;
 
+  // Flags
+  isAssessmentType: boolean;
+
   constructor(
     private innovationsService: InnovationsService
   ) {
@@ -61,7 +64,9 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
     let title = 'Actions advanced search';
 
-    if(this.stores.authentication.isAssessmentType()) {
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+
+    if(this.isAssessmentType) {
       title = 'Actions';
     }
 

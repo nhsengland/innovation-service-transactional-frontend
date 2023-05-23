@@ -1,0 +1,58 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <section class="informational-section">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-one-third">
+        <h2 class="nhsuk-heading-m">User information</h2>
+      </div>
+      <div class="nhsuk-grid-column-two-thirds">
+        <dl class="nhsuk-summary-list">
+          <div *ngFor="let item of sections.userInfo" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key"> {{ item.label }} </dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <div *ngIf="userInfoType === 'INNOVATOR'" >
+    <section class="informational-section">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-one-third">
+          <h2 class="nhsuk-heading-m">Innovations</h2>
+        </div>
+        <div class="nhsuk-grid-column-two-thirds">
+          <p class="nhsuk-u-margin-bottom-1" *ngFor="let item of sections.innovations">{{ item }}</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div *ngIf="userInfoType === 'ACCESSOR' || userInfoType === 'QUALIFYING_ACCESSOR'" >
+    <section class="informational-section">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-one-third">
+          <h2 class="nhsuk-heading-m">Organisation</h2>
+        </div>
+        <div class="nhsuk-grid-column-two-thirds">
+          <ul class="nhsuk-list" *ngFor="let organisation of sections.organisation" >
+            <li style="position:relative;">
+              {{ organisation.name }}
+              <ng-container *ngFor="let unit of organisation?.units" >
+                <ul *ngIf="organisation.name !== unit.name" class="nhsuk-list nhsuk-u-margin-left-3 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
+                  <li class="d-flex nhsuk-u-margin-0 nhsuk-u-padding-left-3">
+                    <span class="app-task-list__task-name"> {{ unit.name }} </span>
+                  </li>
+                </ul>
+              </ng-container>
+
+              <a style="top: 0; position:absolute;right:0;" *ngIf="unitLength > 1" routerLink="/admin/users/{{user.id}}/service-users/change-unit">Change assigned unit</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+</theme-content-wrapper>

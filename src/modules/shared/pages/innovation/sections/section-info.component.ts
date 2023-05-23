@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import { InnovationSectionEnum, INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { INNOVATION_SECTION_STATUS, InnovationSectionEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
@@ -38,6 +38,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   previousSection: null | { id: string, title: string } = null;
   nextSection: null | { id: string, title: string } = null;
 
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
+  isAssessmentType: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute
@@ -62,6 +66,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     };
 
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
 
   }
 
@@ -119,6 +128,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.section.id = sectionId;
     this.section.title = section.title;
     this.section.wizard = section.wizard;
+    this.section.showSubmitButton = false;
+    this.section.showSubmitUpdatesButton = false;
 
     this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);

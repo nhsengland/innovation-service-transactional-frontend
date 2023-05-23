@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
+import { UsersService } from '@modules/shared/services/users.service';
 
 import { ServiceUsersService } from '../../services/service-users.service';
 
@@ -17,7 +18,8 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService
+    private serviceUsersService: ServiceUsersService,
+    private usersService: UsersService
   ) {
 
     super();
@@ -31,12 +33,12 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.serviceUsersService.getUserFullInfo(this.user.id).subscribe({
+    this.usersService.getUserFullInfo(this.user.id).subscribe({
 
       next: response => {
 
         if (!response.lockedAt) {
-          this.redirectTo(`admin/service-users/${this.user.id}`);
+          this.redirectTo(`/admin/users/${this.user.id}`);
           return;
         }
 
@@ -56,7 +58,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
   onSubmit(): void {
 
     this.serviceUsersService.unlockUser(this.user.id).subscribe({
-      next: () => this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'unlockSuccess' }),
+      next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'unlockSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();

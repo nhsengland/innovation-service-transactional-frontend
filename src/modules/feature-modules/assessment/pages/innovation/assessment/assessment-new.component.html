@@ -12,7 +12,7 @@
       </div>
 
       <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
-      <button type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post message</button>
+      <button [disabled]="this.disableCreateButton" type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post message</button>
 
       <div>
         <a routerLink="/assessment/innovations/{{ innovationId }}">Cancel</a>

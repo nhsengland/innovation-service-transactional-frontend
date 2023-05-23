@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
@@ -34,7 +35,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasPatents',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasPatentsItems
         }]
@@ -44,7 +45,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasOtherIntellectual',
           dataType: 'radio-group',
           label: stepsLabels.l2,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasOtherIntellectualItems
         }]

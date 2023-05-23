@@ -21,6 +21,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   formParameters: FormEngineParameterModel[];
   formAnswers: { [key: string]: any };
 
+  disableCreateButton = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -65,12 +66,15 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     }
 
     this.formAnswers = formData.data;
+    this.disableCreateButton = true;
 
     this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe({
       next: response => this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`),
-      error: () => this.setAlertUnknownError()
+      error: () => {
+        this.setAlertUnknownError()
+        this.disableCreateButton = false;
+      }
     });
 
   }
-
 }

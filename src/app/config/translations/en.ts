@@ -119,6 +119,13 @@ export const locale = {
     shared: {
 
       catalog: {
+        announcements: {
+          status: {
+            SCHEDULED: { name: 'Scheduled', cssColorClass: 'nhsuk-tag--yellow' },
+            ACTIVE: { name: 'Active', cssColorClass: 'nhsuk-tag--green' },
+            DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
+          }
+        },
         innovation: {
           action_status: {
             REQUESTED: {
@@ -342,21 +349,29 @@ export const locale = {
             MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
           },
           notification_context_details: {
-            LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked` },
+            LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
             // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
             // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
-            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}"` },
-            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}"` },
-            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}"` },
-            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}"` },
-            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment` },
-            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation` },
-            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review` },
-            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}"` },
-            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review` },
-            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations` },
-            COLLABORATOR_INVITE: { title: `You have been invited to collaborate on {{ innovationName }} innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
+            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}".` },
+            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}".` },
+            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
+            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}".` },
+            NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
+            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment.` },
+            NEEDS_ASSESSMENT_COMPLETED_TO_INNOVATOR: { title: `The needs assessment for innovation "{{ innovationName }}" has been completed.` },
+            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation.` },
+            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review.` },
+            INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
+            INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
+            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
+            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
+            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
+            INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },
+            COLLABORATOR_INVITE: { title: `You have been invited to collaborate on "{{ innovationName }}" innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
             COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
+            TRANSFER_PENDING: { title: `The owner of innovation {{ innovationName }} has deleted their account. Innovation awaiting new owner.` },
+            TRANSFER_EXPIRED: { title: `The invitation to transfer your innovation ownership has expired. Manage your innovation.` },
+            TRANSFER_REMINDER: { title: `The invitation to accept ownership of {{ innovationName }} is about to expire. Accept or decline now.` },
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
@@ -529,6 +544,7 @@ export const locale = {
           password_regex: 'The password must contain at least minimum 8 characters: one uppercase, one lowercase, one number and one special character',
           required: 'Required',
           existsIn: 'Value already exists',
+          validEmail: 'Enter a valid email',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file exceed the maximum size of 20MB',
           empty_file: 'Uploaded files cannot be empty'

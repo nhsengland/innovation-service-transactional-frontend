@@ -38,7 +38,7 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
     this.setPageTitle('Choose which organisations you want to share your data with');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.organisationInfoUrl = `${this.CONSTANTS.BASE_URL}/about-the-service/who-we-are`;
+    this.organisationInfoUrl = this.CONSTANTS.URLS.WHO_WE_ARE;
 
   }
 

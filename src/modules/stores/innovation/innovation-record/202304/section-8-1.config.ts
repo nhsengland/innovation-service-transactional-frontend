@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
@@ -11,7 +12,7 @@ import { hasResourcesToScaleItems, yesNoItems } from './forms.config';
 const stepsLabels = {
   q1: {
     label: 'Is your innovation ready for wider adoption across the health and care system?',
-    description: 'Find out more about <a href="/innovation-guides/commissioning-and-adoption" target="_blank" rel="noopener noreferrer">commissioning and adoption (opens in a new window)</a>.'
+    description: `Find out more about <a href=${URLS.COMISSIONING_AND_ADOPTION} target="_blank" rel="noopener noreferrer">commissioning and adoption (opens in a new window)</a>.`
   },
   q2: {
     label: 'Has your innovation been deployed in a NHS or care setting?',

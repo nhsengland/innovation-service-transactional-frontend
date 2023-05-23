@@ -20,27 +20,28 @@ export class DatesHelper {
     return sDate.toString();
   }
 
-  static parseIntoValidFormat(dateStr: string | null, format = "yyyy/MM/dd"): string | null {
-    if (dateStr === null) {
-      return null;
-    }
+  static parseIntoValidFormat(dateInput: null | string, format = 'yyyy/MM/dd'): null | string {
+
+    if (!dateInput) { return null; }
 
     const validDateFormats = [
-      "dd/MM/yyyy",
-      "yyyy/MM/dd",
-      "MM/dd/yyyy",
-      "d/M/yyyy",
-      "d/M",
-      "M/d",
-      "yyyy"
+      'dd/MM/yyyy',
+      'yyyy/MM/dd',
+      'MM/dd/yyyy',
+      'd/M/yyyy',
+      'd/M',
+      'M/d',
+      'yyyy'
     ];
 
     for (const dateFormat of validDateFormats) {
-      const date = DateTime.fromFormat(dateStr, dateFormat);
 
-      if (date.isValid === true) {
-        return date.toFormat(format);
+      const parsedDate = DateTime.fromFormat(dateInput, dateFormat);
+
+      if (parsedDate.isValid && parsedDate.year > 1900) {
+        return parsedDate.toFormat(format);
       }
+
     }
 
     return null;

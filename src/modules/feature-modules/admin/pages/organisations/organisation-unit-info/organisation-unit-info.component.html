@@ -5,14 +5,14 @@
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Unit</h2>
 
-        <dl class="nhsuk-summary-list">
+        <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
             <dd class="nhsuk-summary-list__value">{{ unit.name }} ({{ unit.acronym }})</dd>
             <dd class="nhsuk-summary-list__actions">
               <a routerLink="edit">
-                Change 
-                <span class="nhsuk-u-visually-hidden"> 
+                Change
+                <span class="nhsuk-u-visually-hidden">
                   {{ unit.name | lowercase }} information
                 </span>
               </a>
@@ -23,16 +23,18 @@
             <dd class="nhsuk-summary-list__value">
               <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                 label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              <p *ngIf="!unit.isActive && !unit.canActivate" class="font-color-secondary nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2">To activate this organisation unit you need to add at least one qualifying accessor to it.</p>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a 
-                *ngIf="unit.isActive || unit.canActivate" 
-                routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}"> 
+              <a
+                *ngIf="unit.isActive || unit.canActivate"
+                routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}">
                 {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
               </a>
             </dd>
           </div>
         </dl>
+
       </div>
     </div>
   </section>
@@ -44,12 +46,12 @@
         <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.users' | pluralTranslate: usersList.getTotalRowsNumber() | translate:  { count: usersList.getTotalRowsNumber() } }}</p>
 
         <!-- TODO: In another US -->
-        <!-- <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
-          <a class="nhsuk-action-link__link" routerLink="">
+        <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
+          <a class="nhsuk-action-link__link" routerLink="user/edit">
             <theme-svg-icon type="action"></theme-svg-icon>
-            <span class="nhsuk-action-link__text">Create a new user</span>
+            <span class="nhsuk-action-link__text">Add user</span>
           </a>
-        </div> -->
+        </div>
 
         <div *ngIf="usersList.getTotalRowsNumber() > 0">
           <table class="nhsuk-table-responsive app-sortable-table">
@@ -64,7 +66,7 @@
             <theme-spinner *ngIf="usersLoading; else users" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
           </table>
         </div>
-    
+
         <theme-pagination class="d-flex justify-content-center" [currentPage]="usersList.page" [pageSize]="usersList.pageSize" [totalRows]="usersList.getTotalRowsNumber()" (updatePageEvent)="onUsersPageChange($event)"></theme-pagination>
       </div>
     </div>
@@ -75,7 +77,7 @@
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
         <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.innovations' | pluralTranslate: innovationsList.getTotalRowsNumber() | translate:  { count: innovationsList.getTotalRowsNumber() } }}</p>
-        
+
         <div *ngIf="innovationsList.getTotalRowsNumber() > 0">
           <table class="nhsuk-table-responsive app-sortable-table">
             <caption class="nhsuk-u-visually-hidden"> Innovation list </caption>
@@ -89,7 +91,7 @@
             <theme-spinner *ngIf="innovationsLoading; else innovations" cssClass="nhsuk-u-margin-9" message="Loading innovations. Please wait..."></theme-spinner>
           </table>
         </div>
-    
+
         <theme-pagination class="d-flex justify-content-center" [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onInnovationsPageChange($event)"></theme-pagination>
       </div>
     </div>
@@ -107,13 +109,13 @@
       </td>
       <td class="nhsuk-table__cell text-align-right">
         <!-- TODO: In another US -->
-        <!-- <span class="nhsuk-table-responsive__heading"></span>
-        <a routerLink=""> 
-          Change 
-          <span class="nhsuk-u-visually-hidden"> 
+        <span class="nhsuk-table-responsive__heading"></span>
+        <a routerLink="">
+          Change
+          <span class="nhsuk-u-visually-hidden">
             {{ item.name | lowercase }} information
           </span>
-        </a> -->
+        </a>
       </td>
     </tr>
   </tbody>

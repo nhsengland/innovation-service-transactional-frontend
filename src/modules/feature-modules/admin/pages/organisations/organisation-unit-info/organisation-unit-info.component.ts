@@ -26,15 +26,14 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
   usersList = new TableModel<UsersListDTO['data'][0], UserListFiltersType>({ pageSize: 5 });
 
-  constructor(    
+  constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
     private innovationsService: InnovationsService,
     private usersService: UsersService
-  ) { 
+  ) {
     super();
-    this.setPageTitle('Unit Information');
-    
+
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
     this.organisationUnitId = this.activatedRoute.snapshot.params.organisationUnitId;
 
@@ -42,7 +41,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
       account: { label: 'User account', orderable: false },
       action: { label: '', orderable: false, align: 'right' }
     }).setFilters({
-      email: true, 
+      email: true,
       onlyActive: false,
       organisationUnitId: this.organisationUnitId,
       userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
@@ -51,14 +50,14 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     this.innovationsList.setVisibleColumns({
       innovation: { label: 'Innovation', orderable: false },
       status: { label: 'Status', orderable: false, align: 'right' }
-    }).setFilters({      
+    }).setFilters({
       engagingOrganisationUnits: [this.organisationUnitId],
       supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED]
     });
   }
 
   ngOnInit(): void {
-    this.setPageStatus('LOADING');   
+    this.setPageStatus('LOADING');
 
     forkJoin([
       this.organisationsService.getOrganisationUnitInfo(this.organisationId, this.organisationUnitId),
@@ -69,11 +68,14 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
         this.unit = unitInfo;
         this.innovationsList.setData(innovations.data, innovations.count);
         this.usersList.setData(users.data, users.count);
-        
+
+        this.setPageTitle(`${this.unit.name} (${this.unit.acronym})`);
+
         this.setPageStatus('READY');
       },
       error: () => {
-        this.setPageStatus('READY');
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
       }
     });
   }
@@ -83,7 +85,7 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
     this.usersList.setPage(event.pageNumber);
 
     this.usersService.getUsersList({ queryParams: this.usersList.getAPIQueryParams() }).subscribe({
-      next: (users) => {        
+      next: (users) => {
         this.usersList.setData(users.data, users.count);
       },
       complete: () => {
@@ -91,13 +93,13 @@ export class PageOrganisationUnitInfoComponent extends CoreComponent implements 
       }
     });
   }
-  
+
   onInnovationsPageChange(event: { pageNumber: number }): void {
     this.innovationsLoading = true;
     this.innovationsList.setPage(event.pageNumber);
 
     this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe({
-      next: (innovations) => {        
+      next: (innovations) => {
         this.innovationsList.setData(innovations.data, innovations.count);
       },
       complete: () => {

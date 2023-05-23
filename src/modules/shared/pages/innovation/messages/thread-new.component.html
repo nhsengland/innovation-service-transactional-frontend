@@ -7,13 +7,13 @@
         Start a new conversation by entering a subject and a message.
       </p>
 
-      <p *ngIf="isInnovator()">
+      <p *ngIf="isInnovatorType">
         <a routerLink="../../everyone">Everyone who is currently working with this innovation</a> will be notified.
       </p>
 
-      <p *ngIf="isNotInnovator()">
+      <p *ngIf="!isInnovatorType">
         The innovator will be notified. Your messages can be seen by everyone who has access to this innovation.
-        <a [routerLink]="stores.authentication.isAccessorType() ? '../../support/organisations' : '../../support'" target="_blank" rel="noopener noreferrer">
+        <a [routerLink]="isAccessorType ? '../../support/organisations' : '../../support'" target="_blank" rel="noopener noreferrer">
           View a list of this innovation's data sharing preferences (opens in a new window).
         </a>
       </p>

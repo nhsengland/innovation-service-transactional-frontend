@@ -9,8 +9,9 @@ import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
 
-import { changeUserRoleDTO, getUserFullInfoDTO, ServiceUsersService } from '../../services/service-users.service';
-import { AdminValidationResponseDTO, getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
+import { changeUserRoleDTO, ServiceUsersService } from '../../services/service-users.service';
+import { getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
+import { getUserFullInfoDTO, UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
   constructor(
     private activatedRoute: ActivatedRoute,
     private serviceUsersService: ServiceUsersService,
+    private usersService: UsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -56,7 +58,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
   ngOnInit(): void {
 
     forkJoin([
-      this.serviceUsersService.getUserFullInfo(this.user.id),
+      this.usersService.getUserFullInfo(this.user.id),
       this.usersValidationRulesService.getUserRoleRules(this.user.id)
     ]).subscribe({
       next: ([userInfo, rules]) => {
@@ -104,7 +106,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
     this.serviceUsersService.changeUserRole(this.user.id, body).subscribe(
       () => {
 
-        this.redirectTo(`admin/service-users/${this.user.id}`, { alert: 'roleChangeSuccess' });
+        this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'roleChangeSuccess' });
 
       },
       (error: { id: string }) => {

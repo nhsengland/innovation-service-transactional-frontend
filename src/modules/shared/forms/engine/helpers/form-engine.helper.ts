@@ -166,6 +166,7 @@ export class FormEngineHelper {
     if (error.equalToLength) { return { message: error.equalToLength.message || 'shared.forms_module.validations.equal_to_length', params: { equalToLength: error.equalToLength.length } }; }
     if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
     if (error.existsIn) { return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} }; }
+    if (error.validEmail) { return { message: error.validEmail.message || 'shared.forms_module.validations.validEmail', params: {} }; }
 
     if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
     if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
@@ -266,6 +267,16 @@ export class FormEngineHelper {
       if (validation[0]) {
         validators.push(CustomValidators.existsInValidator(validation[0] as string[], validation[1] as string));
       }
+    }
+
+    if (parameter.validations?.validEmail) {
+      validation = typeof parameter.validations.validEmail === 'boolean' ? [parameter.validations.validEmail, null] : parameter.validations.validEmail;
+      if (validation[0]) { validators.push(CustomValidators.validEmailValidator(validation[1])); }
+    }
+
+    // Specific types field validations.
+    if (parameter.dataType === 'date') {
+      validators.push(CustomValidators.parsedDateStringValidator());
     }
 
     return validators;

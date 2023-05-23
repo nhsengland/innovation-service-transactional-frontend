@@ -20,7 +20,7 @@
               <theme-svg-icon type="edit"></theme-svg-icon>
               <span class="nhsuk-u-margin-right-2"></span>
 
-              <span>This section is in draft. <span *ngIf="stores.authentication.isInnovatorType()">Check answers and submit updates.</span></span>
+              <span>This section is in draft. <span *ngIf="isInnovatorType">Check answers and submit updates.</span></span>
 
             </ng-container>
 
@@ -30,7 +30,7 @@
                 <span class="nhsuk-u-margin-right-2"></span>
                 <span>
                   This section was submitted by {{ section.submittedBy.name }} on {{ section.date | date: ('app.date_formats.long_date' | translate) }}.
-                  <span class="d-inline-block" *ngIf="stores.authentication.isInnovatorType()">You can update this section at any time.</span>
+                  <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
                 </span>
               </ng-container>
             </ng-container>
@@ -42,24 +42,24 @@
 
       <ng-container *ngIf="!section.isNotStarted">
 
-        <div *ngIf="(stores.authentication.isInnovatorType() || stores.authentication.isAccessorType()) && innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT'" class="nhsuk-inset-text">
+        <div *ngIf="(isInnovatorType || isAccessorType) && innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT'" class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p *ngIf="stores.authentication.isInnovatorType()">
+          <p *ngIf="isInnovatorType">
             This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.
           </p>
-          <p *ngIf="stores.authentication.isAccessorType()">
+          <p *ngIf="isAccessorType">
             You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create an action or send a message to the innovator asking them to resubmit it.</span>
           </p>
         </div>
 
         <ng-container *ngIf="summaryList.length > 0">
-          <h2 class="nhsuk-heading-m">{{ stores.authentication.isInnovatorType() ? 'Your' : 'Submitted' }} answers</h2>
+          <h2 class="nhsuk-heading-m">{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
           <dl class="nhsuk-summary-list">
 
             <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
               <ng-container [ngSwitch]="item.type">
                 <ng-container *ngSwitchCase="'button'">
-                  <div *ngIf="stores.authentication.isInnovatorType()" class="width-max-content">
+                  <div *ngIf="isInnovatorType" class="width-max-content">
                     <dt class="nhsuk-u-margin-top-5">
                       <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
                     </dt>
@@ -73,7 +73,7 @@
                       <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                      <a *ngIf="stores.authentication.isInnovatorType() && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                      <a *ngIf="isInnovatorType && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       <a *ngIf="item.evidenceId !== undefined" routerLink="evidences/{{ item.evidenceId }}"> View <span class="nhsuk-u-visually-hidden"> evidence detail </span></a>
                     </dd>
                   </div>
@@ -85,7 +85,7 @@
 
       </ng-container>
 
-      <ng-container *ngIf="stores.authentication.isInnovatorType()">
+      <ng-container *ngIf="isInnovatorType">
         <button *ngIf="section.isNotStarted" type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3"> Start now </button>
         <div>
           <button *ngIf="section.hasEvidences && !section.isNotStarted" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary"> Add evidence </button>
@@ -97,13 +97,13 @@
       </ng-container>
 
       <ng-container *ngIf="
-        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && stores.authentication.isAccessorType() ||
-        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && stores.authentication.isAssessmentType())
+        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && isAccessorType ||
+        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
       ">
         <button routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovation.id }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-right-3"> Create action for this section </button>
       </ng-container>
 
-      <ng-container *ngIf="stores.authentication.isAssessmentType()" [ngSwitch]="innovation.status">
+      <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">
 
         <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
           <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button"> Start needs assessment </button>

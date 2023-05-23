@@ -5,20 +5,14 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AnnouncementRoutingModule } from './announcement-routing.module';
 
-// Base Layout
-import { AnnouncementsLayoutComponent } from './base/announcements-layout.component';
-
-// Pages
+// Pages.
 import { AnnouncementsListComponent } from './pages/announcements-list/announcements-list.component';
 
-// Components/Templates
-import { AnnouncementGenericComponent } from './components/announcement-generic/announcement-generic.component';
-
-// Services
-import { AnnouncementsService } from './services/announcements.service';
-
-// Guards
+// Guards.
 import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
+
+// Services.
+import { AnnouncementsService } from './services/announcements.service';
 
 
 @NgModule({
@@ -29,20 +23,15 @@ import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
     AnnouncementRoutingModule
   ],
   declarations: [
-    AnnouncementsLayoutComponent,
-
-    // Components/Templates
-    AnnouncementGenericComponent,
-
     // Pages
     AnnouncementsListComponent
   ],
   providers: [
-    // Services
-    AnnouncementsService,
-
     // Guards
-    AnnouncementsAccessGuard
+    AnnouncementsAccessGuard,
+
+    // Services.
+    AnnouncementsService
   ]
 })
 export class AnnouncementsModule { }

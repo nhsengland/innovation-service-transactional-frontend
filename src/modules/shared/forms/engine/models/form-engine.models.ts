@@ -23,7 +23,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'date' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -40,6 +40,7 @@ export class FormEngineParameterModel {
     equalToLength?: number | [number, string];
     async?: AsyncValidatorFn[];
     existsIn?: string[] | [string[], string];
+    validEmail?: boolean | [boolean, string];
   };
   lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
 

@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
@@ -35,7 +36,7 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasRevenueModel',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: 'See <a href="/innovation-guides/advanced-innovation-guide" target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about creating a revenue model.',
+          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about creating a revenue model.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRevenueModelItems
         }]

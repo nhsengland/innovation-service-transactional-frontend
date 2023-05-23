@@ -1,3 +1,4 @@
+import { URLS } from '@app/base/constants';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
 import { FormSelectableFieldType, InnovationSectionConfigType } from '../ir-versions.types';
@@ -34,7 +35,7 @@ const stepsLabels = {
   },
   q13: {
     label: 'Are you currently receiving any support for your innovation?',
-    description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href="/about-the-service/who-we-are#The%20organisations%20behind%20the%20service" target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.`
+    description: `This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href=${URLS.ORGANISATIONS_BEHIND_THE_SERVICE} target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.`
   },
   q14: { label: 'Are you involved with any Accelerated Access Collaborative programmes?', description: 'Select all that apply, or select no, if not relevant.' }
 };
@@ -257,12 +258,29 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q3.label,
-      value: data.postcode ? `${data.countryName}, ${data.postcode}` : data.countryName,
+      value: data.officeLocation,
       editStepNumber: editStepNumber++
-    }
+    },
   );
 
-  editStepNumber++; // Needed as location uses 2 steps.
+  if (data.officeLocation !== 'Based outside UK') {
+    toReturn.push(
+      {
+        label: stepsLabels.q4.label,
+        value: data.postcode,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
+  else {
+    toReturn.push(
+      {
+        label: stepsLabels.q5.label,
+        value: data.countryLocation ? data.countryLocation[0] : null,
+        editStepNumber: editStepNumber++
+      }
+    )
+  }
 
   toReturn.push(
     {

@@ -107,6 +107,9 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
                   break;
+                case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
+                  link = null;
+                  break;
                 default:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
                   break;

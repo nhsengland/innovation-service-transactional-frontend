@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
-import { WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
@@ -22,6 +22,9 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   summaryList: WizardSummaryType[] = [];
 
+  // Flags
+  isInnovatorType: boolean;
+
   constructor(
     private activatedRoute: ActivatedRoute
   ) {
@@ -38,6 +41,8 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     if (this.wizard.steps.length === 0) {
       this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`);
     }
+
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
   }
 

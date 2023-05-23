@@ -54,7 +54,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     super();
     this.setPageTitle('Notifications');
 
-    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR'].includes(this.stores.authentication.getUserType() ?? '')) {
+    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(this.stores.authentication.getUserType() ?? '')) {
       this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
     }
 
@@ -100,10 +100,18 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   }
 
-  onNotificationClick(notificationId: string, url: string): void {
+  onNotificationClick(notificationId: string, url: null | string): void {
 
     this.stores.context.dismissUserNotification(notificationId);
-    this.redirectTo(url);
+
+    if(url) {
+      this.redirectTo(url);
+    } else {
+      const notification = this.notificationsList.getRecords().find(i => i.id === notificationId);
+      if(notification) {
+        notification.readAt = new Date().toISOString();
+      }
+    }
 
   }
 

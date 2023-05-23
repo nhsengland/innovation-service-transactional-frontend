@@ -16,18 +16,16 @@ export class OrganisationDataResolver implements Resolve<any> {
   ) { }
 
 
-  resolve(route: ActivatedRouteSnapshot): Observable<any> {
+  resolve(route: ActivatedRouteSnapshot): Observable<{ id: string, name: string, acronym: string }> {
 
     return this.organisationsService.getOrganisationInfo(route.params.organisationId).pipe(
-      map(
-        response => ({ id: response.id, name: response.name }),
-        catchError(error => {
-          /* istanbul ignore next */
-          this.logger.error('Error fetching organisation information', error);
-          /* istanbul ignore next */
-          return of({ id: '', name: 'Error' });
-        })
-      )
+      map(response => {
+        return {
+          id: response.id,
+          name: response.name,
+          acronym: response.acronym
+        };
+      })
     );
 
   }

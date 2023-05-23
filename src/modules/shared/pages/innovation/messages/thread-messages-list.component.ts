@@ -35,10 +35,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     message: new UntypedFormControl('')
   }, { updateOn: 'blur' });
 
-  isInnovator(): boolean { return this.stores.authentication.isInnovatorType(); }
-  isNotInnovator(): boolean { return !this.stores.authentication.isInnovatorType(); }
-  isAccessor(): boolean { return this.stores.authentication.isAccessorType(); }
-
+  // Flags
+  isInnovatorType: boolean;
+  isAccessorType: boolean;
+  isAdmin: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -56,6 +56,11 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAdmin = this.stores.authentication.isAdminRole();
 
   }
 
@@ -80,8 +85,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.threadInfo = threadInfo;
         this.threadParticipants = threadParticipants;
-        
-        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants': 'participant'; 
+
+        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants': 'participant';
 
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.

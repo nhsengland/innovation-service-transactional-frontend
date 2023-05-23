@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <p *ngIf="this.stores.authentication.isInnovatorType() && this.request?.status === 'PENDING'">
+      <p *ngIf="isInnovatorType && this.request?.status === 'PENDING'">
         If you approve this request, everyone from this organisation unit will be able to export your innovation record
         for the next 30 days.
       </p>
@@ -139,7 +139,7 @@
       </ul>
       <p>
         <!-- TODO: this needs to be updated with roles in dev -->
-        For more information, please <a href="{{ this.userType === 'INNOVATOR' ? '/terms-of-use/innovator' : '/terms-of-use/support-organisation' }}" target="_blank" rel="noopener noreferrer">see
+        For more information, please <a href="{{ this.userType === 'INNOVATOR' ? CONSTANTS.URLS.TOU_INNOVATOR : CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer">see
           the terms of use (opens in a new window).</a></p>
     </div>
   </details>

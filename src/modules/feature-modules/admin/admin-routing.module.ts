@@ -10,11 +10,16 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+// // Users
+import { PageUserFindComponent } from './pages/users/user-find.component';
+import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserNewComponent } from './pages/users/user-new.component';
 // // Admin Users.
-import { PageAdminUsersFindComponent } from './pages/admin-users/admin-users-find.component';
-import { PageAdminUserInfoComponent } from './pages/admin-users/admin-user-info.component';
-import { PageAdminUserNewComponent } from './pages/admin-users/admin-user-new.component';
 import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
+// // Announcements.
+import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
+import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
@@ -22,16 +27,16 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
+import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
+import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
+
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
-import { PageServiceUserFindComponent } from './pages/service-users/service-user-find.component';
-import { PageServiceUserInfoComponent } from './pages/service-users/service-user-info.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
-import { PageServiceUserNewComponent } from './pages/service-users/service-user-new.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -43,6 +48,7 @@ import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/acc
 // // // Innovations
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // // Innovation
+import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
@@ -62,23 +68,25 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
+import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
+import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
+
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
+
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
-      { id: 'adminUsers', label: 'Admin users', url: '/admin/administration-users' },
-      { id: 'serviceUsers', label: 'Service users', url: '/admin/service-users' },
+      { id: 'adminUsers', label: 'Users', url: '/admin/users' },
       {
         id: 'management',
         label: 'Management',
         children: [
+          { label: 'Announcements', url: '/admin/announcements', description: 'Manage and create announcements' },
           { label: 'Organisations', url: '/admin/organisations', description: 'Manage organisations and associated units' },
           { label: 'Terms of use', url: '/admin/terms-conditions', description: 'Create a new version and trigger acceptance by the users' }
         ]
@@ -117,7 +125,7 @@ const routes: Routes = [
             path: ':organisationId',
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
             resolve: { organisation: OrganisationDataResolver },
-            data: { breadcrumb: (data: { organisation: { id: string, name: string } }) => `${data.organisation.name}` },
+            data: { breadcrumb: (data: { organisation: { id: string, name: string, acronym: string } }) => `${data.organisation.name}` },
             children: [
               {
                 path: '', pathMatch: 'full', component: PageOrganisationInfoComponent,
@@ -130,40 +138,53 @@ const routes: Routes = [
               {
                 path: 'unit',
                 data: { breadcrumb: null },
-                children: [       
-                  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },           
+                children: [
+                  { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
                   {
-                    path: 'new', 
-                    pathMatch: 'full', 
+                    path: 'new',
+                    pathMatch: 'full',
                     component: PageOrganisationUnitNewComponent
                   },
                   {
                     path: ':organisationUnitId',
+                    resolve: { organisationUnit: OrganisationUnitDataResolver },
+                    data: { breadcrumb: (data: { organisationUnit: { id: string, name: string, acronym: string } }) => `${data.organisationUnit.name}` },
                     children: [
                       {
                         path: '',
                         pathMatch: 'full',
+                        data: { breadcrumb: null },
                         component: PageOrganisationUnitInfoComponent,
-                        data: { breadcrumb: 'Unit information' }
                       },
                       {
-                        path: 'edit', 
-                        pathMatch: 'full', 
+                        path: 'edit',
+                        pathMatch: 'full',
                         component: PageOrganisationEditComponent,
                         data: { module: 'Unit' }
                       },
-                      {  
-                        path: 'activate', 
-                        pathMatch: 'full', 
-                        component: WizardOrganisationUnitActivateComponent 
+                      {
+                        path: 'activate',
+                        pathMatch: 'full',
+                        component: WizardOrganisationUnitActivateComponent
                       },
-                      { 
+                      {
                         path: 'inactivate',
-                        pathMatch: 'full', 
-                        component: WizardOrganisationUnitInactivateComponent 
+                        pathMatch: 'full',
+                        component: WizardOrganisationUnitInactivateComponent
+                      },
+                      {
+                        path: 'user',
+                        children: [
+                          {
+                            path: 'edit',
+                            pathMatch: 'full',
+                            data: { breadcrumb: null },
+                            component: PageOrganisationUnitUserEditComponent
+                          }
+                        ]
                       }
                     ]
-                  },
+                  }
                 ]
               }
             ]
@@ -173,60 +194,72 @@ const routes: Routes = [
 
       // NOTE: When creating the future admin-users routes, a guard should be created to protect those routes!
       {
-        path: 'administration-users',
-        data: { breadcrumb: 'administration users' },
+        path: 'users',
+        data: { breadcrumb: 'Users' },
         children: [
           {
-            path: '', pathMatch: 'full', component: PageAdminUsersFindComponent,
+            path: '', pathMatch: 'full', component: PageUserFindComponent,
             data: { breadcrumb: null }
           },
-          { path: 'new', pathMatch: 'full', component: PageAdminUserNewComponent },
+          { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
-            // pathMatch: 'full',
             resolve: { user: ServiceUserDataResolver },
             data: {
               breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
             },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAdminUserInfoComponent,
+                path: '', pathMatch: 'full', component: PageUserInfoComponent,
                 data: { breadcrumb: null }
               },
-              { path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent }
+              {
+                path: 'administration-users',
+                children: [
+                  {
+                    path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent, data: { breadcrumb: null }
+                  }
+                ]
+              },
+              {
+                path: 'service-users',
+                children: [
+                  { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
+                  { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
+                  { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
+                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } }
+                ]
+              }
             ]
           }
         ]
       },
-      {
-        path: 'service-users',
-        data: { breadcrumb: 'Service users' },
-        children: [
-          {
-            path: '', pathMatch: 'full', component: PageServiceUserFindComponent,
-            data: { breadcrumb: null }
-          },
-          { path: 'new', pathMatch: 'full', component: PageServiceUserNewComponent },
-          {
-            path: ':userId',
-            resolve: { user: ServiceUserDataResolver },
-            data: {
-              breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
-            },
-            children: [
-              {
-                path: '', pathMatch: 'full', component: PageServiceUserInfoComponent,
-                data: { breadcrumb: null }
-              },
-              { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent },
-              { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent },
-              { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent },
-              { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent }
-            ]
-          }
 
+      {
+        path: 'announcements',
+        data: { breadcrumb: 'Announcements' },
+        children: [
+          {
+            path: '', pathMatch: 'full', component: PageAnnouncementsListComponent,
+            data: { breadcrumb: null }
+          },
+          { path: 'new', pathMatch: 'full', component: PageAnnouncementNewditComponent },
+          {
+            path: ':announcementId',
+            resolve: { announcement: AnnouncementDataResolver },
+            data: { breadcrumb: (data: { announcement: { id: string, title: string } }) => `${data.announcement.title}` },
+            children: [
+              {
+                path: '', pathMatch: 'full', component: PageAnnouncementInfoComponent,
+                data: { breadcrumb: null }
+              },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
+              { path: 'edit/:stepId', pathMatch: 'full', component: PageAnnouncementNewditComponent }
+            ]
+          }
         ]
       },
+
       {
         path: 'account',
         data: { breadcrumb: 'Account' },
@@ -250,6 +283,7 @@ const routes: Routes = [
           },
         ]
       },
+
       {
         path: 'terms-conditions',
         data: { breadcrumb: 'Terms of use' },
@@ -269,6 +303,7 @@ const routes: Routes = [
           { path: 'show-version/:id', pathMatch: 'full', component: PageTermsOfUseInfoComponent }
         ]
       },
+
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
@@ -450,6 +485,7 @@ const routes: Routes = [
           }
         ]
       }
+
     ]
   }
 ];

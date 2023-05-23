@@ -22,7 +22,7 @@ export const MANAGE_COLLABORATORS_CONFIG_NEW: WizardEngineModel = new WizardEngi
         label: stepsLabels.l1,
         validations: {
           isRequired: [true, 'Email is required'],
-          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
+          validEmail: true
         }
       }]
     }),

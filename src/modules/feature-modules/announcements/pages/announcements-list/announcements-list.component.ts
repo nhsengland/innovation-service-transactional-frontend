@@ -1,60 +1,71 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { Announcement, AnnouncementsService } from '../../services/announcements.service';
+
+import { AnnouncementType, AnnouncementsService } from '@modules/feature-modules/announcements/services/announcements.service';
+
 
 @Component({
   selector: 'app-announcements-announcements-list',
   templateUrl: './announcements-list.component.html'
 })
 export class AnnouncementsListComponent extends CoreComponent implements OnInit {
-  #announcements: Announcement[] = [];
-  #announcementNumber = 0;
 
-  announcement?: Announcement;
+  #announcements: AnnouncementType[] = [];
+  #announcementIndex = 0;
 
-  isBtnDisabled = false;
+  announcement?: AnnouncementType;
+
+  isContinueButtonActive = true;
 
   constructor(
-    private announcementsService: AnnouncementsService,
+    private announcementsService: AnnouncementsService
   ) { super(); }
+
 
   ngOnInit(): void {
 
-    this.announcementsService.getAnnouncements().subscribe((announcements) => {
-      this.#announcements = announcements;
+    this.announcementsService.getAnnouncements().subscribe(response => {
 
-      this.announcement = this.#announcements[this.#announcementNumber];
+      this.#announcements = response;
+      this.announcement = this.#announcements[this.#announcementIndex];
 
       this.setTitle();
+      this.setPageStatus('READY');
+
     });
 
   }
 
   onContinue(announcementId: string) {
-    if (this.isBtnDisabled) { return; }
 
-    this.isBtnDisabled = true;
+    if (!this.isContinueButtonActive) { return; }
+
+    this.isContinueButtonActive = false;
 
     this.announcementsService.readAnnouncement(announcementId).subscribe({
       next: () => {
-        this.#announcementNumber++;
 
-        if (this.#announcementNumber < this.#announcements.length) {
-          this.announcement = this.#announcements[this.#announcementNumber];
+        this.#announcementIndex++;
+
+        if (this.#announcementIndex < this.#announcements.length) {
+
+          this.announcement = this.#announcements[this.#announcementIndex];
 
           this.setTitle();
           this.setFocus();
+
         } else {
           // All announcements are read
           window.location.assign(`${this.CONSTANTS.APP_URL}/dashboard`);
           return;
         }
 
-        this.isBtnDisabled = false;
+        this.isContinueButtonActive = true;
+
       },
       error: () => {
-        this.isBtnDisabled = false;
+        this.isContinueButtonActive = true;
         this.setAlertError('An error occured while reading an announcement. Please try again or contact us for further help.', { width: '2.thirds' })
       }
     });
@@ -62,15 +73,19 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
   }
 
   private setTitle() {
-    const title = this.announcement?.params?.title ?? 'Announcement';
+
+    const title = this.announcement?.title ?? '';
+
     if (this.#announcements.length > 1) {
-      this.setPageTitle(title, { hint: `${this.#announcementNumber + 1} of ${this.#announcements.length}` });
+      this.setPageTitle(title, { hint: `${this.#announcementIndex + 1} of ${this.#announcements.length}` });
     } else {
       this.setPageTitle(title);
     }
+
   }
 
   private setFocus() {
+
     if (this.isRunningOnBrowser()) {
       setTimeout(() => { // Await for the html injection if needed.
         const h = document.getElementById('announcement-container');
@@ -84,6 +99,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
         }
       });
     }
+
   }
 
 }
