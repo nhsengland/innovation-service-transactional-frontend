@@ -5,6 +5,7 @@ import {
   Configuration,
   LogLevel,
 } from '@azure/msal-node';
+import axios from 'axios';
 import * as dotenv from 'dotenv';
 import { Response, Router } from 'express';
 import { ENVIRONMENT } from '../config/constants.config';
@@ -112,76 +113,88 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
 });
 
 
-authenticationRouter.get(
-  `${ENVIRONMENT.BASE_PATH}/signin`,
-  (req, res) => {
-    // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
-    getAuthCode(authorities.signIn, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
-  }
-);
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
+  // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
+  getAuthCode(authorities.signIn, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
+});
 
-authenticationRouter.get(
-  `${ENVIRONMENT.BASE_PATH}/signin/callback`,
-  (req, res) => {
-    if(!req.query.code) {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
+  if(!req.query.code) {
+    // TODO
+    console.log('no code');
+    res.status(500).send();
+  }
+
+  const [state, backUrl] = (req.query.state as string).split(';');
+
+  switch (state) {
+    case 'LOGIN':
+      console.log('LOGIN');
+      confidentialClientApplication.acquireTokenByCode({
+        redirectUri: redirects.LOGIN,
+        scopes: [],
+        code: req.query.code as string,
+      }).then((response)=>{
+
+        console.log(`response: ${JSON.stringify(response)}`);
+
+        setAccessTokenByOid(req.session.id, response);
+        (req.session as any).sessionParams = { test: 'todo'};
+        res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
+        }).catch((error)=>{
+            console.log("\nErrorAtLogin: \n" + error);
+            res.status(500).send();
+        });
+      break;
+    case 'SIGNUP':
+      console.log('SIGNUP');
+      break;
+    default:
       // TODO
-      console.log('no code');
-      return;
-    }
-
-    const [state, backUrl] = (req.query.state as string).split(';');
-
-    switch (state) {
-      case 'LOGIN':
-        console.log('LOGIN');
-        confidentialClientApplication.acquireTokenByCode({
-          redirectUri: redirects.LOGIN,
-          scopes: [],
-          code: req.query.code as string,
-        }).then((response)=>{
-
-          console.log(`response: ${JSON.stringify(response)}`);
-
-          setAccessTokenByOid(req.session.id, response);
-          (req.session as any).sessionParams = { test: 'todo'};
-          res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
-          }).catch((error)=>{
-              console.log("\nErrorAtLogin: \n" + error);
-              res.status(500).send();
-          });
-        break;
-      case 'SIGNUP':
-        console.log('SIGNUP');
-        break;
-      default:
-        // TODO
-        console.log('default');
-    }
-
-    // TODO res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
-    // res.redirect(`${ENVIRONMENT.BASE_PATH}/home`);
+      console.log('default');
   }
-);
+
+  // TODO res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
+  // res.redirect(`${ENVIRONMENT.BASE_PATH}/home`);
+});
 
 
-authenticationRouter.get(
-  `${ENVIRONMENT.BASE_PATH}/signout`,
-  (req, res, next) => {
-    const redirectUrl = req.query.redirectUrl as string || X.signoutRedirectUrl;
-    const azLogoutUri = `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
-      + `?p=${X.signinPolicy}` // add policy information
-      + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
+  const redirectUrl = req.query.redirectUrl as string || X.signoutRedirectUrl;
+  const azLogoutUri = `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
+    + `?p=${X.signinPolicy}` // add policy information
+    + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
-    const oid = req.session.id;
-    req.session.destroy(() => {
-      console.log(`redirecting to ${azLogoutUri}`)
-      deleteAccessTokenByOid(oid);
-      res.redirect(azLogoutUri);
-    })
+  const oid = req.session.id;
+  req.session.destroy(() => {
+    console.log(`redirecting to ${azLogoutUri}`)
+    deleteAccessTokenByOid(oid);
+    res.redirect(azLogoutUri);
+  })
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
+  getAuthCode(authorities.signIn, [], 'SIGNUP', res);
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
+  const token = req.query.id_token;
+
+  if (!token) {
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    return;
   }
-);
+
+  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token })
+    .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
+    .catch((error: any) => {
+      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    });
+});
+
+// TODO reset password
 //#endregion
-
 
 //#region Auxiliary functions
 function getAuthCode(
