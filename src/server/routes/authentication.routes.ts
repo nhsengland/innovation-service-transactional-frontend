@@ -23,14 +23,15 @@ const X = {
 // https://learn.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-in-node-web-app
 
 const authorities = {
-  signIn: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signinPolicy}`,
+  signin: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signinPolicy}`,
+  signup: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signupPolicy}`,
 };
 
 const confidentialClientConfig: Configuration = {
   auth: {
     clientId: process.env.OAUTH_CLIENT_ID || '',
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
-    authority: authorities.signIn,
+    authority: authorities.signin,
     knownAuthorities: Object.values(authorities),
     //    redirectUri: process.env.REDIRECT_URI,
   },
@@ -115,7 +116,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
   // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
-  getAuthCode(authorities.signIn, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
+  getAuthCode(authorities.signin, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
@@ -174,23 +175,34 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
-  getAuthCode(authorities.signIn, [], 'SIGNUP', res);
+  getAuthCode(authorities.signup, [], 'SIGNUP', res);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
-  const token = req.query.id_token;
-
-  if (!token) {
-    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
-    return;
+  if(!req.query.code) {
+    // TODO
+    console.log('no code');
+    res.status(500).send();
   }
 
-  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token })
+  confidentialClientApplication.acquireTokenByCode({
+    authority: authorities.signup,
+    redirectUri: redirects.SIGNUP,
+    scopes: [],
+    code: req.query.code as string,
+  }).then((response)=>{
+    axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token: response.idToken })
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
       console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
+  }).catch((error)=>{
+    console.log
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+  });
+
+  
 });
 
 // TODO reset password
@@ -249,6 +261,8 @@ export default authenticationRouter;
 // TODO keep current url
 // TODO restart server and keep session
 // TODO logs
+// TODO send errors "nice"
+
 
 
 // Didn't create from previous
