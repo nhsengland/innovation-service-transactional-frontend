@@ -146,7 +146,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
 
 authenticationRouter.get(
   `${ENVIRONMENT.BASE_PATH}/signin`,
-  (req, res, next) => {
+  (req, res) => {
     getAuthCode(authorities.signIn, [], 'LOGIN', res);
   }
 );
@@ -196,24 +196,17 @@ authenticationRouter.get(
 authenticationRouter.get(
   `${ENVIRONMENT.BASE_PATH}/signout`,
   (req, res, next) => {
-    console.log(`SIGNOUT: ${JSON.stringify(req.body)}`);
-    res.redirect(`${ENVIRONMENT.BASE_PATH}/home`);
-
     const redirectUrl = req.query.redirectUrl as string || X.signoutRedirectUrl;
     const azLogoutUri = `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
       + `?p=${X.signinPolicy}` // add policy information
       + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
-    console.log(`destroying session`)
     const oid = req.session.id;
     req.session.destroy(() => {
       console.log(`redirecting to ${azLogoutUri}`)
       deleteAccessTokenByOid(oid);
-      // TOOD this breaks ... server side ??? 
-      // res.redirect(azLogoutUri);
+      res.redirect(azLogoutUri);
     })
-    // TODO remove this after
-    res.redirect(redirectUrl);
   }
 );
 
@@ -236,3 +229,7 @@ function refreshAccessTokenByOid(oid: string): void {
 }
 
 export default authenticationRouter;
+
+// TODO keep current url
+// TODO restart server and keep session
+// TODO logs
