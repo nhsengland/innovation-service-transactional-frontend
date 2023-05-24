@@ -37,7 +37,7 @@
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
-          <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="large"></theme-form-textarea>
+          <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="largeUp"></theme-form-textarea>
           <p class="nhsuk-body-s font-color-secondary" *ngIf="isInnovatorType; else notInnovator" >
             Once sent, all participants in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
           </p>
