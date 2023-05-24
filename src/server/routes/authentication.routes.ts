@@ -6,7 +6,7 @@ import {
   LogLevel,
 } from '@azure/msal-node';
 import * as dotenv from 'dotenv';
-import { Router } from 'express';
+import { Response, Router } from 'express';
 import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
@@ -74,12 +74,13 @@ const getAuthCode = (
   authority: string,
   scopes: string[],
   state: APP_STATES,
-  res: any
+  res: Response,
+  backUrl?: string
 ) => {
   const authCodeRequest: AuthorizationCodeRequest = {
     authority: authority,
     scopes: scopes,
-    state: state,
+    state: backUrl ? `${state};${backUrl}` : state,
     redirectUri: redirects[state],
     code: 'TODO', // ver como sacar isto fora, acho que era suposto
   };
@@ -147,7 +148,8 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
 authenticationRouter.get(
   `${ENVIRONMENT.BASE_PATH}/signin`,
   (req, res) => {
-    getAuthCode(authorities.signIn, [], 'LOGIN', res);
+    // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
+    getAuthCode(authorities.signIn, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
   }
 );
 
@@ -160,7 +162,9 @@ authenticationRouter.get(
       return;
     }
 
-    switch (req.query.state) {
+    const [state, backUrl] = (req.query.state as string).split(';');
+
+    switch (state) {
       case 'LOGIN':
         console.log('LOGIN');
         confidentialClientApplication.acquireTokenByCode({
@@ -173,10 +177,10 @@ authenticationRouter.get(
 
           setAccessTokenByOid(req.session.id, response);
           (req.session as any).sessionParams = { test: 'todo'};
-          res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
-          //res.render('signin',{showSignInButton: false, givenName: response.account.idTokenClaims.given_name});
+          res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
           }).catch((error)=>{
               console.log("\nErrorAtLogin: \n" + error);
+              res.status(500).send();
           });
         break;
       case 'SIGNUP':
