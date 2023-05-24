@@ -63,50 +63,17 @@ const redirects = {
   PASSWORD_RESET: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!,
 };
 
-/**
- * This method is used to generate an auth code request
- * @param {string} authority: the authority to request the auth code from
- * @param {array} scopes: scopes to request the auth code for
- * @param {string} state: state of the application
- * @param {Object} res: express middleware response object
- */
-const getAuthCode = (
-  authority: string,
-  scopes: string[],
-  state: APP_STATES,
-  res: Response,
-  backUrl?: string
-) => {
-  const authCodeRequest: AuthorizationCodeRequest = {
-    authority: authority,
-    scopes: scopes,
-    state: backUrl ? `${state};${backUrl}` : state,
-    redirectUri: redirects[state],
-    code: 'TODO', // ver como sacar isto fora, acho que era suposto
-  };
 
-  // Cenas extra para o code request como parâmetros adicionais
-  // authCodeRequest.extraQueryParameters = {"campaignId" : "germany-promotion"}
-
-  //Each time you fetch Authorization code, update the relevant authority in the tokenRequest configuration
-  // TODO tokenRequest.authority = authority;
-
-  // request an authorization code to exchange for a token
-  return confidentialClientApplication
-    .getAuthCodeUrl(authCodeRequest)
-    .then((response) => {
-      console.log('RESPONSE:', response)
-      //redirect to the auth code URL/send code to
-      res.redirect(response);
-    })
-    .catch((error) => {
-      res.status(500).send(error);
-    });
-};
 
 const authenticationRouter: Router = Router();
 
-// Route methods
+export function getAccessTokenByOid(oid: string): string {
+  const session = userSessions.get(oid);
+  return session && session.expiresAt > +new Date()/1000 ? session.accessToken : '';
+}
+
+
+//#region Routes
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
   const authenticated = req.session.id && getAccessTokenByOid(req.session.id);
   if (authenticated) {
@@ -213,12 +180,43 @@ authenticationRouter.get(
     })
   }
 );
+//#endregion
 
 
-export function getAccessTokenByOid(oid: string): string {
-  const session = userSessions.get(oid);
-  return session && session.expiresAt > +new Date()/1000 ? session.accessToken : '';
-}
+//#region Auxiliary functions
+function getAuthCode(
+  authority: string,
+  scopes: string[],
+  state: APP_STATES,
+  res: Response,
+  backUrl?: string
+) {
+  const authCodeRequest: AuthorizationCodeRequest = {
+    authority: authority,
+    scopes: scopes,
+    state: backUrl ? `${state};${backUrl}` : state,
+    redirectUri: redirects[state],
+    code: 'TODO', // ver como sacar isto fora, acho que era suposto
+  };
+
+  // Cenas extra para o code request como parâmetros adicionais
+  // authCodeRequest.extraQueryParameters = {"campaignId" : "germany-promotion"}
+
+  //Each time you fetch Authorization code, update the relevant authority in the tokenRequest configuration
+  // TODO tokenRequest.authority = authority;
+
+  // request an authorization code to exchange for a token
+  return confidentialClientApplication
+    .getAuthCodeUrl(authCodeRequest)
+    .then((response) => {
+      console.log('RESPONSE:', response)
+      //redirect to the auth code URL/send code to
+      res.redirect(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+};
 
 function setAccessTokenByOid(oid: string, response: AuthenticationResult): void {
   userSessions.set(oid, { oid, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
@@ -231,9 +229,14 @@ function deleteAccessTokenByOid(oid: string): void {
 function refreshAccessTokenByOid(oid: string): void {
   // TODO
 }
+//#endregion
 
 export default authenticationRouter;
 
 // TODO keep current url
 // TODO restart server and keep session
 // TODO logs
+
+
+// Didn't create from previous
+// authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {
