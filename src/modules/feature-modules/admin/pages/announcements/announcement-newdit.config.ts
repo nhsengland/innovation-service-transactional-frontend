@@ -23,7 +23,7 @@ const stepsLabels = {
     label: 'Add a secondary link (optional)',
     description: 'Add a link if you want to guide users to start a task or to point them to relevant content in another page. The label should describe where the link are taking the users. For example, go to your innovations page and change your data sharing preferences.'
   },
-  l5: { label: 'When do you want this announcement to be live' },
+  l5: { label: 'When do you want this announcement to be live?' },
   l6: {
     label: 'Which user groups do you want this announcement to be sent to?',
     description: 'Select all that apply.'
@@ -71,7 +71,7 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
       parameters: [
         {
           id: 'content', dataType: 'textarea', label: stepsLabels.l3.label, description: stepsLabels.l3.description,
-          lengthLimit: 'small'
+          lengthLimit: 'xs'
         }
       ]
     }),
@@ -89,7 +89,7 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
           id: 'startsAt', dataType: 'date', label: 'Set a start date', description: 'For example, 21/12/2014.',
           validations: { isRequired: [true, 'Start date is required'] }
         },
-        { id: 'expiresAt', dataType: 'date', label: 'Set an end date', description: 'If you do not set an end date, the announcement will remain on the service until the user clicks continue.<br />Enter date. For example, 21/12/2014.' }
+        { id: 'expiresAt', dataType: 'date', label: 'Set an end date', description: 'If you do not set an end date, the announcement will remain on the service until the user clicks continue. For example, 21/12/2014.' }
       ]
     }),
     new FormEngineModel({

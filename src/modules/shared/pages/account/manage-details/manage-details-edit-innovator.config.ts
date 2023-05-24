@@ -103,7 +103,7 @@ export const ACCOUNT_DETAILS_INNOVATOR: WizardEngineModel = new WizardEngineMode
         dataType: 'textarea',
         label: 'Is there anything else we should know about communicating with you?',
         description: 'For example, non-working days, visual or hearing impairments, or other accessibility needs.',
-        lengthLimit: 'small',
+        lengthLimit: 'xs',
       }]
     }),
 

@@ -111,7 +111,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l5,
         validations: { isRequired: [true, 'Details are required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({
@@ -120,7 +120,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l6,
         validations: { isRequired: [true, 'Details are required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     })
   );

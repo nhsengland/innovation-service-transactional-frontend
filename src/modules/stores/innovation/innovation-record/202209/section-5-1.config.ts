@@ -72,7 +72,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         label: stepsLabels.l3,
         description: 'Please focus on any areas that will be impacted by introducing your innovation to the care pathway.',
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({

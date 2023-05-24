@@ -120,7 +120,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             label: `What was the commercial basis for deployment in ${item.name}`,
             description: 'For example, did you provide your innovation for free or was it purchased?',
             validations: { isRequired: [true, 'A description is required'] },
-            lengthLimit: 'medium'
+            lengthLimit: 's'
           }]
         }),
         new FormEngineModel({
@@ -130,7 +130,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             label: `How did the deployment of your innovation in ${item.name} affect the organisation?`,
             description: 'For example, which job roles were affected and how was the care pathway redesigned?',
             validations: { isRequired: [true, 'A description is required'] },
-            lengthLimit: 'medium'
+            lengthLimit: 's'
           }]
         })
       );

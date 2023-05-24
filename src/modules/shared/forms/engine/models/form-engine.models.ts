@@ -1,6 +1,6 @@
 import { AsyncValidatorFn } from '@angular/forms';
 
-import { FileTypes } from '../types/form-engine.types';
+import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 
 
 export class FormEngineModel {
@@ -44,7 +44,7 @@ export class FormEngineParameterModel {
     postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string]
   };
-  lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
+  lengthLimit?: TextareaLengthLimitType;
 
   additional?: FormEngineParameterModel[];
 

@@ -68,7 +68,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       parameters: [{
         id: 'marketResearch', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'largeDown'
+        lengthLimit: 'l'
       }]
     }),
     new FormEngineModel({
@@ -82,7 +82,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       parameters: [{
         id: 'whatCompetitorsAlternativesExist', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'largeDown'
+        lengthLimit: 'l'
       }]
     })
   );

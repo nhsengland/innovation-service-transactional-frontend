@@ -59,7 +59,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         dataType: 'textarea',
         label: stepsLabels.l2,
         validations: { isRequired: [true, 'A description of the market research is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     })
   );

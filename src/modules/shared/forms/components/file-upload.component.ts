@@ -8,7 +8,7 @@ import { catchError, map, take } from 'rxjs/operators';
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
 
-import { FileTypes, FileUploadType } from '../engine/types/form-engine.types';
+import { FileTypes, FileUploadType } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 

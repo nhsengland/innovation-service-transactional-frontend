@@ -7,6 +7,7 @@ import { ControlValueAccessorComponent } from '../base/control-value-accessor.co
 
 import { Subscription, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
+import { TEXTAREA_LENGTH_LIMIT, TextareaLengthLimitType } from '../engine/config/form-engine.config';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-  @Input() lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large' | 'largeUp'; // TODO: Refactor these names!!!!
+  @Input() lengthLimit?: TextareaLengthLimitType;
   @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
 
@@ -67,28 +68,8 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
 
-    this.lengthLimit = this.lengthLimit || 'small';
-    switch (this.lengthLimit) {
-      case 'largeUp':
-        this.lengthLimitCharacters = 4000;
-        break;
-      case 'large':
-        this.lengthLimitCharacters = 2000;
-        break;
-      case 'largeDown':
-        this.lengthLimitCharacters = 1500;
-        break;
-      case 'mediumUp':
-        this.lengthLimitCharacters = 1000;
-        break;
-      case 'medium':
-        this.lengthLimitCharacters = 500;
-        break;
-      case 'small':
-      default:
-        this.lengthLimitCharacters = 200;
-        break;
-    }
+    this.lengthLimit = this.lengthLimit ?? 'xs';
+    this.lengthLimitCharacters = TEXTAREA_LENGTH_LIMIT[this.lengthLimit ?? 'xs'];
 
     const validators = this.fieldControl.validator ? [this.fieldControl.validator] : [];
     validators.push(Validators.maxLength(this.lengthLimitCharacters));
@@ -115,7 +96,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
 
   ngDoCheck(): void {
 
-    if(this.fieldControl.value !== null && this.textAreaValue === '') {
+    if (this.fieldControl.value !== null && this.textAreaValue === '') {
       this.textAreaValue = this.fieldControl.value;
     }
 

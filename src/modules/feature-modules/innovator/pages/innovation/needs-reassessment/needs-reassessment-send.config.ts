@@ -64,7 +64,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         label: currentValues.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
         description: currentValues.status === InnovationStatusEnum.PAUSED ? 'Let us know what has changed and what support you now need with your innovation.' : 'Enter your comment',
         validations: { isRequired: [true, 'A comment is required'] },
-        lengthLimit: 'small'
+        lengthLimit: 'xs'
       }]
     })
   );
