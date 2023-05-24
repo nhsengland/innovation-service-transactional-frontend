@@ -63,7 +63,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       parameters: [{
         id: 'potentialPathway', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'mediumUp'
+        lengthLimit: 'm'
       }]
     })
   );

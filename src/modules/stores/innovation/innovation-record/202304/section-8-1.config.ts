@@ -100,14 +100,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         parameters: [{
           id: 'commercialBasis', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'large'
+          lengthLimit: 'xl'
         }]
       }),
       new FormEngineModel({
         parameters: [{
           id: 'organisationDeploymentAffect', dataType: 'textarea', label: stepsLabels.q5.label, description: stepsLabels.q5.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'large'
+          lengthLimit: 'xl'
         }]
       })
     );

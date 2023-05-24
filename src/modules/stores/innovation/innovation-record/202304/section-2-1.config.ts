@@ -77,7 +77,7 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
         parameters: [{
           id: 'problemsTackled', dataType: 'textarea', label: stepsLabels.q1.label, description: stepsLabels.q1.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'largeDown'
+          lengthLimit: 'l'
         }]
       }),
       new FormEngineModel({
@@ -85,7 +85,7 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'howInnovationWork',
           dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'largeDown'
+          lengthLimit: 'l'
         }]
       }),
       new FormEngineModel({
@@ -145,7 +145,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
         parameters: [{
           id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7.labelYES : stepsLabels.q7.labelNOTYET,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'large'
+          lengthLimit: 'xl'
         }]
       })
     );

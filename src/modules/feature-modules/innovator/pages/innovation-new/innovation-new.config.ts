@@ -58,7 +58,7 @@ export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel
       parameters: [{
         id: 'description', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({

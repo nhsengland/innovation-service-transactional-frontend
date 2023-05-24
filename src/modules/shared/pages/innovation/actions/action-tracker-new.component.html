@@ -6,7 +6,7 @@
       <form [formGroup]="form">
 
         <theme-form-radio-group controlName="section" label="Which section of the innovation record is this action for?" [items]="sectionItems" [pageUniqueField]="false"></theme-form-radio-group>
-        <theme-form-textarea controlName="description" label="Please describe what information you want the innovator to provide" [pageUniqueField]="false" lengthLimit="medium"></theme-form-textarea>
+        <theme-form-textarea controlName="description" label="Please describe what information you want the innovator to provide" [pageUniqueField]="false" lengthLimit="s"></theme-form-textarea>
         <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Request action</button>
 
         <div>
