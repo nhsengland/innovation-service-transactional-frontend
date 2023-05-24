@@ -1,4 +1,5 @@
 import {
+  AuthenticationResult,
   AuthorizationCodeRequest,
   ConfidentialClientApplication,
   Configuration,
@@ -44,7 +45,7 @@ const confidentialClientConfig: Configuration = {
 };
 
 // Session
-type UserSession = { oid: string, accessToken: string };
+type UserSession = { oid: string, accessToken: string, expiresAt: number };
 const userSessions = new Map<string, UserSession>();
 
 // Initialize MSAL Node
@@ -81,10 +82,10 @@ const getAuthCode = (
     state: state,
     redirectUri: redirects[state],
     code: 'TODO', // ver como sacar isto fora, acho que era suposto
-    maxAge: 3600000, // validate this is correct
   };
 
-  // Cenas extra para o code request como pârametros adicionais
+  // Cenas extra para o code request como parâmetros adicionais
+  // authCodeRequest.extraQueryParameters = {"campaignId" : "germany-promotion"}
 
   //Each time you fetch Authorization code, update the relevant authority in the tokenRequest configuration
   // TODO tokenRequest.authority = authority;
@@ -137,6 +138,8 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
     //   }
     // });
     res.status(401).send();
+
+    //res.redirect(`${ENVIRONMENT.BASE_PATH}/signin`);
   }
 });
 
@@ -166,7 +169,9 @@ authenticationRouter.get(
           code: req.query.code as string,
         }).then((response)=>{
 
-          setAccessTokenByOid(req.session.id, response.idToken);
+          console.log(`response: ${JSON.stringify(response)}`);
+
+          setAccessTokenByOid(req.session.id, response);
           (req.session as any).sessionParams = { test: 'todo'};
           res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
           //res.render('signin',{showSignInButton: false, givenName: response.account.idTokenClaims.given_name});
@@ -192,7 +197,6 @@ authenticationRouter.get(
   `${ENVIRONMENT.BASE_PATH}/signout`,
   (req, res, next) => {
     console.log(`SIGNOUT: ${JSON.stringify(req.body)}`);
-    // todo remove user session
     res.redirect(`${ENVIRONMENT.BASE_PATH}/home`);
 
     const redirectUrl = req.query.redirectUrl as string || X.signoutRedirectUrl;
@@ -201,8 +205,10 @@ authenticationRouter.get(
       + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
     console.log(`destroying session`)
+    const oid = req.session.id;
     req.session.destroy(() => {
       console.log(`redirecting to ${azLogoutUri}`)
+      deleteAccessTokenByOid(oid);
       // TOOD this breaks ... server side ??? 
       // res.redirect(azLogoutUri);
     })
@@ -213,17 +219,20 @@ authenticationRouter.get(
 
 
 export function getAccessTokenByOid(oid: string): string {
-  // Validate token ??
-  // Renew token ??
-  return userSessions.get(oid)?.accessToken || '';
+  const session = userSessions.get(oid);
+  return session && session.expiresAt > +new Date()/1000 ? session.accessToken : '';
 }
 
-function setAccessTokenByOid(oid: string, accessToken: string): void {
-  userSessions.set(oid, { oid, accessToken });
+function setAccessTokenByOid(oid: string, response: AuthenticationResult): void {
+  userSessions.set(oid, { oid, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
 }
 
 function deleteAccessTokenByOid(oid: string): void {
   userSessions.delete(oid);
+}
+
+function refreshAccessTokenByOid(oid: string): void {
+  // TODO
 }
 
 export default authenticationRouter;
