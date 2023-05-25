@@ -1,5 +1,4 @@
 import * as express from 'express';
-import { IProfile } from 'passport-azure-ad';
 import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { PDFGeneratorSectionsNotFoundError } from '../utils/errors';
@@ -14,9 +13,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
   try {
 
     const innovationId = req.params.innovationId;
-    const user: IProfile = req.user || {};
-    const oid: string = user.oid || '';
-    const accessToken = getAccessTokenBySessionId(oid);
+    const accessToken = getAccessTokenBySessionId(req.session.id);
     const config = { 
       headers: { 
         Authorization: `Bearer ${accessToken}`,
@@ -38,7 +35,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
             query: req.query,
             path: req.path,
             route: req.route,
-            authenticatedUser: (req.user as any)?.oid,
+            authenticatedUser: (req.session as any).oid,
           }
         });
 
@@ -61,7 +58,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
             query: req.query,
             path: req.path,
             route: req.route,
-            authenticatedUser: (req.user as any)?.oid,
+            authenticatedUser: (req.session as any).oid,
             stack: error.stack,
           }
         })
@@ -82,7 +79,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: (req.user as any)?.oid,
+        authenticatedUser: (req.session as any).oid,
         stack: error.stack,
       }
     });

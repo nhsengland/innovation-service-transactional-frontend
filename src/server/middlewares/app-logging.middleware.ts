@@ -8,14 +8,14 @@ export const appLoggingMiddleware = (req: any, res: any, next: any) => {
     const client = getAppInsightsClient(req);
 
     client.trackTrace({
-      message: `[${req.method}] ${req.url} requested by ${req.user ? req.user.oid : 'anonymous'}`,
+      message: `[${req.method}] ${req.url} requested by ${req.session.oid ?? 'anonymous'}`,
       severity: SeverityLevel.Verbose,
       properties: {
         params: req.params,
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: req.user?.oid,
+        authenticatedUser: req.session.oid,
         method: req.method,
       }
     });

@@ -17,7 +17,7 @@ export const handler = (req: any, res: any) => {
   const func = methods[type];
   const message = req.body.message;
   const severity = req.body.severity;
-  const authenticatedUser = req.user?.oid || null;
+  const authenticatedUser = req.session.oid || null;
   const properties = {
     ...req.body.properties,
     authenticatedUser,

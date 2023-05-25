@@ -141,7 +141,6 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         setAccessTokenBySessionId(req.session.id, response);
         (req.session as any).oid = response.uniqueId;
 
-        console.log(`req.session: ${JSON.stringify(req.session)}`);
         res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
         }).catch((error)=>{
             console.log("\nErrorAtLogin: \n" + error);

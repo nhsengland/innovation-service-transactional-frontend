@@ -13,7 +13,7 @@ export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: a
       query: req.query,
       path: req.path,
       route: req.route,
-      authenticatedUser: req.user?.oid,
+      authenticatedUser: req.session.oid,
       stack: err.stack,
     }
   });

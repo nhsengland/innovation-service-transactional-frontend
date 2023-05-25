@@ -2,7 +2,6 @@ import axios, { Method } from 'axios';
 import * as express from 'express';
 import { Router } from 'express';
 import * as multer from 'multer';
-import { IProfile } from 'passport-azure-ad';
 import * as path from 'path';
 
 import { UrlModel } from '@app/base/models';
@@ -83,15 +82,13 @@ async function uploadFile(url: string, file: any): Promise<void> {
 }
 
 fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
-  const user: IProfile = req.user || {};
-  const oid: string = user.oid || '';
-  const accessToken = getAccessTokenBySessionId(oid);
+  const accessToken = getAccessTokenBySessionId(req.session.id);
   const file = req.file;
   const reqBody = req.body;
 
   const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/upload').setPathParams({ innovationId: reqBody.innovationId }).buildUrl();
 
-  if (!req.isAuthenticated() || !accessToken) {
+  if (!accessToken) {
     res.status(401).send();
     return;
   }
