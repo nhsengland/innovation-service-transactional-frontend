@@ -12,21 +12,18 @@ import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
 
-const X = {
+const OAUTH_CONFIG = {
   tenantName: process.env.OAUTH_TENANT_NAME || '',
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
   changePasswordPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
-
   signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
 };
 
-// https://learn.microsoft.com/en-us/azure/active-directory-b2c/enable-authentication-in-node-web-app
-
 const authorities = {
-  signin: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signinPolicy}`,
-  signup: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signupPolicy}`,
-  changePassword: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.changePasswordPolicy}`,
+  signin: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signinPolicy}`,
+  signup: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signupPolicy}`,
+  changePassword: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.changePasswordPolicy}`,
 };
 
 const confidentialClientConfig: Configuration = {
@@ -163,9 +160,9 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
 
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
-  const redirectUrl = req.query.redirectUrl as string || X.signoutRedirectUrl;
-  const azLogoutUri = `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
-    + `?p=${X.signinPolicy}` // add policy information
+  const redirectUrl = req.query.redirectUrl as string || OAUTH_CONFIG.signoutRedirectUrl;
+  const azLogoutUri = `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
+    + `?p=${OAUTH_CONFIG.signinPolicy}` // add policy information
     + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
 
   const oid = req.session.id;
