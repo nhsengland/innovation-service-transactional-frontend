@@ -68,15 +68,15 @@ const redirects = {
 
 const authenticationRouter: Router = Router();
 
-export function getAccessTokenByOid(oid: string): string {
-  const session = userSessions.get(oid);
-  return session && session.expiresAt > +new Date()/1000 ? session.accessToken : '';
+export function getAccessTokenBySessionId(sessionId: string): string {
+  const sessionToken = userSessions.get(sessionId);
+  return sessionToken && sessionToken.expiresAt > +new Date()/1000 ? sessionToken.accessToken : '';
 }
 
 
 //#region Routes
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
-  const authenticated = req.session.id && getAccessTokenByOid(req.session.id);
+  const authenticated = req.session.id && getAccessTokenBySessionId(req.session.id);
   if (authenticated) {
     console.log('user is authenticated')
     // client.trackTrace({
@@ -138,8 +138,10 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
 
         console.log(`response: ${JSON.stringify(response)}`);
 
-        setAccessTokenByOid(req.session.id, response);
-        (req.session as any).sessionParams = { test: 'todo'};
+        setAccessTokenBySessionId(req.session.id, response);
+        (req.session as any).oid = response.uniqueId;
+
+        console.log(`req.session: ${JSON.stringify(req.session)}`);
         res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
         }).catch((error)=>{
             console.log("\nErrorAtLogin: \n" + error);
@@ -168,7 +170,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
   const oid = req.session.id;
   req.session.destroy(() => {
     console.log(`redirecting to ${azLogoutUri}`)
-    deleteAccessTokenByOid(oid);
+    deleteAccessTokenBySessionId(oid);
     res.redirect(azLogoutUri);
   })
 });
@@ -245,16 +247,12 @@ function getAuthCode(
     });
 };
 
-function setAccessTokenByOid(oid: string, response: AuthenticationResult): void {
-  userSessions.set(oid, { oid, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
+function setAccessTokenBySessionId(sessionId: string, response: AuthenticationResult): void {
+  userSessions.set(sessionId, { oid: response.uniqueId, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
 }
 
-function deleteAccessTokenByOid(oid: string): void {
-  userSessions.delete(oid);
-}
-
-function refreshAccessTokenByOid(oid: string): void {
-  // TODO
+function deleteAccessTokenBySessionId(sessionId: string): void {
+  userSessions.delete(sessionId);
 }
 //#endregion
 

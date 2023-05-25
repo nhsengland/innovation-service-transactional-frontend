@@ -4,7 +4,7 @@ import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { PDFGeneratorSectionsNotFoundError } from '../utils/errors';
 import { generatePDF } from '../utils/pdf/parser';
-import { getAccessTokenByOid } from './authentication.routes';
+import { getAccessTokenBySessionId } from './authentication.routes';
 
 const pdfRouter = express.Router();
 
@@ -16,7 +16,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     const innovationId = req.params.innovationId;
     const user: IProfile = req.user || {};
     const oid: string = user.oid || '';
-    const accessToken = getAccessTokenByOid(oid);
+    const accessToken = getAccessTokenBySessionId(oid);
     const config = { 
       headers: { 
         Authorization: `Bearer ${accessToken}`,

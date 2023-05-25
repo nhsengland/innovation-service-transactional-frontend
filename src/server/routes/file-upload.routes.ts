@@ -7,7 +7,7 @@ import * as path from 'path';
 
 import { UrlModel } from '@app/base/models';
 import { ENVIRONMENT } from '../config/constants.config';
-import { getAccessTokenByOid } from './authentication.routes';
+import { getAccessTokenBySessionId } from './authentication.routes';
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -85,7 +85,7 @@ async function uploadFile(url: string, file: any): Promise<void> {
 fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
   const user: IProfile = req.user || {};
   const oid: string = user.oid || '';
-  const accessToken = getAccessTokenByOid(oid);
+  const accessToken = getAccessTokenBySessionId(oid);
   const file = req.file;
   const reqBody = req.body;
 

@@ -5,7 +5,7 @@ import * as https from 'https';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
-import { getAccessTokenByOid } from './authentication.routes';
+import { getAccessTokenBySessionId } from './authentication.routes';
 
 
 const apiRouter = express.Router();
@@ -55,7 +55,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
 
   const requestHandler = getRequestHandler();
   const oid = req.session.id;
-  const accessToken = getAccessTokenByOid(oid || '');
+  const accessToken = getAccessTokenBySessionId(oid || '');
 
   if (oid && accessToken) {
 
