@@ -1,9 +1,9 @@
 import {
   AuthenticationResult,
-  AuthorizationCodeRequest,
+  AuthorizationUrlRequest,
   ConfidentialClientApplication,
   Configuration,
-  LogLevel,
+  LogLevel
 } from '@azure/msal-node';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
@@ -16,6 +16,7 @@ const X = {
   tenantName: process.env.OAUTH_TENANT_NAME || '',
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
+  changePasswordPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
 
   signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
 };
@@ -25,6 +26,7 @@ const X = {
 const authorities = {
   signin: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signinPolicy}`,
   signup: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.signupPolicy}`,
+  changePassword: `https://${X.tenantName}.b2clogin.com/${X.tenantName}.onmicrosoft.com/${X.changePasswordPolicy}`,
 };
 
 const confidentialClientConfig: Configuration = {
@@ -55,14 +57,14 @@ const confidentialClientApplication = new ConfidentialClientApplication(
   confidentialClientConfig
 );
 
-const APP_STATES = ['LOGIN', 'SIGNUP', 'SIGNOUT', 'PASSWORD_RESET'] as const;
+const APP_STATES = ['LOGIN', 'SIGNUP', 'SIGNOUT', 'CHANGE_PASSWORD'] as const;
 type APP_STATES = (typeof APP_STATES)[number];
 
 const redirects = {
   LOGIN: process.env.OAUTH_REDIRECT_URL_SIGNIN!,
   SIGNUP: process.env.OAUTH_REDIRECT_URL_SIGNUP!,
   SIGNOUT: process.env.OAUTH_REDIRECT_URL_SIGNOUT!,
-  PASSWORD_RESET: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!,
+  CHANGE_PASSWORD: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!,
 };
 
 
@@ -205,7 +207,9 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
   
 });
 
-// TODO reset password
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (_req, res) => {
+  getAuthCode(authorities.changePassword, [], 'CHANGE_PASSWORD', res);
+});
 //#endregion
 
 //#region Auxiliary functions
@@ -216,13 +220,14 @@ function getAuthCode(
   res: Response,
   backUrl?: string
 ) {
-  const authCodeRequest: AuthorizationCodeRequest = {
+  const authCodeRequest: AuthorizationUrlRequest = {
     authority: authority,
     scopes: scopes,
     state: backUrl ? `${state};${backUrl}` : state,
-    redirectUri: redirects[state],
-    code: 'TODO', // ver como sacar isto fora, acho que era suposto
+    redirectUri: redirects[state]
   };
+
+  // console.log('AUTH CODE REQUEST:', authCodeRequest)
 
   // Cenas extra para o code request como parâmetros adicionais
   // authCodeRequest.extraQueryParameters = {"campaignId" : "germany-promotion"}
