@@ -1,132 +1,92 @@
+import {
+  AuthenticationResult,
+  AuthorizationUrlRequest,
+  ConfidentialClientApplication,
+  Configuration,
+  LogLevel
+} from '@azure/msal-node';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
-import * as express from 'express';
-import { Router } from 'express';
-import * as passport from 'passport';
-import { IOIDCStrategyOptionWithoutRequest, IProfile, OIDCStrategy, VerifyCallback } from 'passport-azure-ad';
+import { Response, Router } from 'express';
 import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
 
-// Types definitions.
-type UserSession = { oid: string, accessToken: string };
-
-const OAUTH_CONFIGURATION: {
-  tenantName: string;
-  clientID: string;
-  clientSecret: string;
-  signinRedirectUrl: string;
-  signupRedirectUrl: string;
-  signoutRedirectUrl: string;
-  changePwRedirectUrl: string,
-  signinPolicy: string;
-  signupPolicy: string;
-  changePwPolicy: string;
-  allowHttpForRedirectUrl: boolean;
-  scope: string[];
-  responseType: 'code' | 'code id_token' | 'id_token code' | 'id_token',
-  responseMode: 'query' | 'form_post';
-  passReqToCallback: false;
-} = {
+const OAUTH_CONFIG = {
   tenantName: process.env.OAUTH_TENANT_NAME || '',
-  clientID: process.env.OAUTH_CLIENT_ID || '',
-  clientSecret: process.env.OAUTH_CLIENT_SECRET || '',
-  signinRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNIN || '',
-  signupRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNUP || '',
-  signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
-  changePwRedirectUrl: process.env.OAUTH_REDIRECT_URL_CHANGE_PW || '',
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
-  changePwPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
-  allowHttpForRedirectUrl: !!process.env.OAUTH_ALLOW_HTTP_REDIRECT,
-  scope: process.env.OAUTH_SCOPE?.split(' ') || [],
-  responseType: 'code id_token',
-  responseMode: 'form_post',
-  passReqToCallback: false
+  changePasswordPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
+  signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
 };
 
-const signInOptions: IOIDCStrategyOptionWithoutRequest = {
-  identityMetadata: `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/${OAUTH_CONFIGURATION.signinPolicy}/v2.0/.well-known/openid-configuration`,
-  clientID: OAUTH_CONFIGURATION.clientID,
-  clientSecret: OAUTH_CONFIGURATION.clientSecret,
-  responseType: OAUTH_CONFIGURATION.responseType,
-  responseMode: OAUTH_CONFIGURATION.responseMode,
-  redirectUrl: OAUTH_CONFIGURATION.signinRedirectUrl,
-  allowHttpForRedirectUrl: OAUTH_CONFIGURATION.allowHttpForRedirectUrl,
-  passReqToCallback: OAUTH_CONFIGURATION.passReqToCallback,
-  scope: OAUTH_CONFIGURATION.scope,
-  nonceLifetime: 3600000
+const authorities = {
+  signin: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signinPolicy}`,
+  signup: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signupPolicy}`,
+  changePassword: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.changePasswordPolicy}`,
 };
-const userSessions: UserSession[] = [];
 
-export function getAccessTokenByOid(oid: string): string {
-  const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
-  return (userSessionIdx !== -1) ? userSessions[userSessionIdx].accessToken : '';
-}
+const confidentialClientConfig: Configuration = {
+  auth: {
+    clientId: process.env.OAUTH_CLIENT_ID || '',
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    authority: authorities.signin,
+    knownAuthorities: Object.values(authorities),
+  },
+  system: {
+    loggerOptions: {
+      loggerCallback(logLevel: LogLevel, message) {
+        try {
+          getAppInsightsClient().trackTrace({
+            severity: 4-logLevel as SeverityLevel ?? SeverityLevel.Information,  // logLevel is reverse of SeverityLevel
+            message: message,
+          });
+        } catch (error) {
+          // Ignore error
+        }
+      },
+      piiLoggingEnabled: false,
+      logLevel: LogLevel.Warning,
+    },
+  },
+};
 
-function findUserSessionByOid(oid: string, fn: ((...args: any[]) => void)): void {
-  for (let i = 0, len = userSessions.length; i < len; i++) {
-    const user = userSessions[i];
-    if (user.oid === oid) { return fn(null, user); }
-  }
-  return fn(null, null);
-}
+// Session
+type UserSession = { oid: string, accessToken: string, expiresAt: number };
+const userSessions = new Map<string, UserSession>();
 
-function removeUserSessionByOid(oid: string): void {
-  const userSessionIdx = userSessions.findIndex((u) => u.oid === oid);
-  if (userSessionIdx !== -1) { userSessions.splice(userSessionIdx, 1); }
-}
-
-const signInStrategy: OIDCStrategy = new OIDCStrategy(
-  signInOptions,
-  (iss: string, sub: string, profile: IProfile, accessToken: string, refreshToken: string, done: VerifyCallback) => {
-
-    const oid = profile.oid || '';
-
-    if (!oid) { return done(new Error('No oid found'), null); }
-
-    // console.log('TOKEN: ', accessToken);
-
-    findUserSessionByOid(oid, (err: string, userSession: UserSession): void => {
-
-      if (err) { return done(err); }
-
-      if (!userSession) {
-        const newUserSession: UserSession = { oid, accessToken };
-        userSessions.push(newUserSession);
-        return done(null, profile);
-      }
-
-      userSession.accessToken = accessToken;
-      return done(null, profile);
-
-    });
-  }
+// Initialize MSAL Node
+const confidentialClientApplication = new ConfidentialClientApplication(
+  confidentialClientConfig
 );
-signInStrategy.name = 'signInStrategy';
 
-const authenticationRouter: Router = express.Router();
+const APP_STATES = ['LOGIN', 'SIGNUP', 'SIGNOUT', 'CHANGE_PASSWORD'] as const;
+type APP_STATES = (typeof APP_STATES)[number];
 
-// Passport configuration.
-authenticationRouter.use(passport.initialize());
-authenticationRouter.use(passport.session());
-passport.use(signInStrategy);
+const redirects = {
+  LOGIN: process.env.OAUTH_REDIRECT_URL_SIGNIN!,
+  SIGNUP: process.env.OAUTH_REDIRECT_URL_SIGNUP!,
+  SIGNOUT: process.env.OAUTH_REDIRECT_URL_SIGNOUT!,
+  CHANGE_PASSWORD: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!,
+};
 
-passport.serializeUser((user, next) => { next(null, user); });
-passport.deserializeUser((obj: any, next) => { next(null, obj); });
 
-// Authentication routes.
+
+const authenticationRouter: Router = Router();
+
+export function getAccessTokenBySessionId(sessionId: string): string {
+  const sessionToken = userSessions.get(sessionId);
+  return sessionToken && sessionToken.expiresAt > +new Date()/1000 ? sessionToken.accessToken : '';
+}
+
+
+//#region Routes
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
-
-  const client = getAppInsightsClient(req);
-
-  client.trackTrace({ severity: SeverityLevel.Information, message: '/session called' });
-
-  if (req.isAuthenticated()) {
-
-    client.trackTrace({
+  const authenticated = req.session.id && getAccessTokenBySessionId(req.session.id);
+  if (authenticated) {
+    getAppInsightsClient().trackTrace({
       severity: SeverityLevel.Information,
       message: '/session called and user is authenticated',
       properties: {
@@ -134,16 +94,14 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: (req.user as any)?.oid,
+        authenticatedUser: (req.session as any).oid,
         session: req.session,
         sessionId: req.sessionID
       }
     });
     res.send('OK');
-
   } else {
-
-    client.trackTrace({
+    getAppInsightsClient().trackTrace({
       severity: SeverityLevel.Information,
       message: '/session called and user is NOT authenticated',
       properties: {
@@ -151,161 +109,203 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: (req.user as any)?.oid,
+        authenticatedUser: (req.session as any).oid,
       }
     });
     res.status(401).send();
-
-  }
-
-});
-
-
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {
-  const user: IProfile = req.user || {};
-
-  if (req.isAuthenticated() && user.oid) {
-    const userInfo = { data: { id: user.oid, type: 'user', attributes: { displayName: user.displayName } } };
-    res.send(userInfo);
-  } else {
-    res.status(401).send();
   }
 });
 
-// MS Azure OpenId Connect strategy (passport) and callbacks handling.
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (req, res) => {
-  const azSignupUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&response_mode=query&prompt=login`
-    + `&p=${OAUTH_CONFIGURATION.signupPolicy}` // add policy information
-    + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
-    + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.signupRedirectUrl)}`; // add redirect uri
 
-  res.redirect(azSignupUri);
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
+  // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
+  getAuthCode(authorities.signin, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
+  if(!req.query.code) {
+    getAppInsightsClient().trackTrace({
+      message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        method: req.method,
+      }
+    });
+    res.status(500).send();
+  }
+
+  const [state, backUrl] = (req.query.state as string).split(';');
+
+  switch (state) {
+    case 'LOGIN':
+      confidentialClientApplication.acquireTokenByCode({
+        redirectUri: redirects.LOGIN,
+        scopes: [],
+        code: req.query.code as string,
+      }).then((response)=>{
+        setAccessTokenBySessionId(req.session.id, response);
+        (req.session as any).oid = response.uniqueId;
+
+        res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
+        }).catch((error)=>{
+          getAppInsightsClient().trackException({
+            exception: error,
+            severity: SeverityLevel.Error,
+            properties: {
+              params: req.params,
+              query: req.query,
+              path: req.path,
+              route: req.route,
+              authenticatedUser: (req.session as any).oid,
+              stack: error.stack,
+            }
+          });
+          res.status(500).send();
+        });
+      break;
+    default:
+      // We only have login callback for now
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because the state ${state} was not recognized`,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          method: req.method,
+        }
+      });
+      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
+  }
+});
+
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
+  const redirectUrl = req.query.redirectUrl as string || OAUTH_CONFIG.signoutRedirectUrl;
+  const azLogoutUri = `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
+    + `?p=${OAUTH_CONFIG.signinPolicy}` // add policy information
+    + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
+
+  const oid = req.session.id;
+  req.session.destroy(() => {
+    deleteAccessTokenBySessionId(oid);
+    res.redirect(azLogoutUri);
+  })
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
+  getAuthCode(authorities.signup, [], 'SIGNUP', res);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
-  const token = req.query.id_token;
-
-  if (!token) {
-    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
-    return;
+  if(!req.query.code) {
+    getAppInsightsClient().trackTrace({
+      message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        method: req.method,
+      }
+    });
+    res.status(500).send();
   }
 
-  axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token })
+  confidentialClientApplication.acquireTokenByCode({
+    authority: authorities.signup,
+    redirectUri: redirects.SIGNUP,
+    scopes: [],
+    code: req.query.code as string,
+  }).then((response)=>{
+    axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token: response.idToken })
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
-      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
-      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
-    });
-
-});
-
-// Login endpoint - AD OpenIdConnect
-authenticationRouter.use(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res, next) => {
-  passport.authenticate('signInStrategy', {
-    ...req.query.back && {customState: req.query.back}
-  } as any, (err: any, user: Express.User, _info: any) => {
-
-    if (err) {
-      const client = getAppInsightsClient(req);
-      client.trackTrace({
-        message: '/signin - autenticate error',
+      getAppInsightsClient().trackException({
+        exception: error,
         severity: SeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
           path: req.path,
           route: req.route,
-          authenticatedUser: (req.user as any)?.oid,
-          session: req.session,
-          sessionId: req.sessionID
+          authenticatedUser: (req.session as any).oid,
+          stack: error.stack,
+          message: `Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`
         }
       });
-
-      // will generate a 500 error
-      return next(err);
-    }
-
-    if (!user) {
-      const client = getAppInsightsClient(req);
-      client.trackTrace({
-        message: '/signin - user profile undefined',
-        severity: SeverityLevel.Information,
-        properties: {
-          params: req.params,
-          query: req.query,
-          path: req.path,
-          route: req.route,
-          authenticatedUser: (req.user as any)?.oid,
-          session: req.session,
-          sessionId: req.sessionID
-        }
-      });
-
-      return res.redirect(`${ENVIRONMENT.BASE_PATH}/signin`);
-    }
-
-    req.login(user, (err) => {
-      if (err) {
-        const client = getAppInsightsClient(req);
-        client.trackTrace({
-          message: '/signin - login error',
-          severity: SeverityLevel.Error,
-          properties: {
-            params: req.params,
-            query: req.query,
-            path: req.path,
-            route: req.route,
-            authenticatedUser: (req.user as any)?.oid,
-            session: req.session,
-            sessionId: req.sessionID
-          }
-        });
-
-        // will generate a 500 error
-        return next(err);
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    });
+  }).catch((error)=>{
+    getAppInsightsClient().trackException({
+      exception: error,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        stack: error.stack,
       }
-
-      const redirectUrl = typeof req.body?.state === 'string' && req.body.state.startsWith('/') ? `${ENVIRONMENT.BASE_PATH}${req.body.state}` : `${ENVIRONMENT.BASE_PATH}/dashboard`;
-      return res.redirect(redirectUrl);
     });
-  })(req, res, next);
-});
-
-authenticationRouter.post(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
-  res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
-});
-
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
-
-  const user: IProfile = req.user || {};
-  const oid: string = user.oid || '';
-
-  req.session.destroy(() => {
-
-    const redirectUrl = req.query.redirectUrl as string || OAUTH_CONFIGURATION.signoutRedirectUrl;
-
-    const azLogoutUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
-      + `?p=${OAUTH_CONFIGURATION.signinPolicy}` // add policy information
-      + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
-
-    removeUserSessionByOid(oid);
-    req.logout(() => {
-      // if (error) { return next(error); }
-      res.redirect(azLogoutUri);
-    });
-
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
   });
 
+  
 });
 
-// Change password endpoint - AD OpenIdConnect
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (req, res) => {
-  const azChangePwUri = `https://${OAUTH_CONFIGURATION.tenantName}.b2clogin.com/${OAUTH_CONFIGURATION.tenantName}.onmicrosoft.com/oauth2/v2.0/authorize?scope=openid&response_type=id_token&prompt=login`
-    + `&p=${OAUTH_CONFIGURATION.changePwPolicy}` // add policy information
-    + `&client_id=${OAUTH_CONFIGURATION.clientID}` // add client id
-    + `&redirect_uri=${encodeURIComponent(OAUTH_CONFIGURATION.changePwRedirectUrl)}`; // add redirect uri
-  res.redirect(azChangePwUri);
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (_req, res) => {
+  getAuthCode(authorities.changePassword, [], 'CHANGE_PASSWORD', res);
 });
+//#endregion
 
+//#region Auxiliary functions
+function getAuthCode(
+  authority: string,
+  scopes: string[],
+  state: APP_STATES,
+  res: Response,
+  backUrl?: string
+) {
+  const authCodeRequest: AuthorizationUrlRequest = {
+    authority: authority,
+    scopes: scopes,
+    state: backUrl ? `${state};${backUrl}` : state,
+    redirectUri: redirects[state]
+  };
+
+  // request an authorization code to exchange for a token
+  return confidentialClientApplication
+    .getAuthCodeUrl(authCodeRequest)
+    .then((response) => {
+      //redirect to the auth code URL/send code to
+      res.redirect(response);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+};
+
+function setAccessTokenBySessionId(sessionId: string, response: AuthenticationResult): void {
+  userSessions.set(sessionId, { oid: response.uniqueId, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
+}
+
+function deleteAccessTokenBySessionId(sessionId: string): void {
+  userSessions.delete(sessionId);
+}
+//#endregion
 
 export default authenticationRouter;
+
+// Didn't create from previous seems it wasn't used
+// authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {

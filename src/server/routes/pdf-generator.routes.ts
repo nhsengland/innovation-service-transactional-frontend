@@ -1,10 +1,9 @@
 import * as express from 'express';
-import { IProfile } from 'passport-azure-ad';
 import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { PDFGeneratorSectionsNotFoundError } from '../utils/errors';
 import { generatePDF } from '../utils/pdf/parser';
-import { getAccessTokenByOid } from './authentication.routes';
+import { getAccessTokenBySessionId } from './authentication.routes';
 
 const pdfRouter = express.Router();
 
@@ -14,9 +13,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
   try {
 
     const innovationId = req.params.innovationId;
-    const user: IProfile = req.user || {};
-    const oid: string = user.oid || '';
-    const accessToken = getAccessTokenByOid(oid);
+    const accessToken = getAccessTokenBySessionId(req.session.id);
     const config = { 
       headers: { 
         Authorization: `Bearer ${accessToken}`,
@@ -28,7 +25,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     generatePDF(req.params.innovationId, config, version)
       .then((response: any) => {
 
-        const client = getAppInsightsClient(req);
+        const client = getAppInsightsClient();
 
         client.trackTrace({
           message: 'PDFGenerator Success',
@@ -38,7 +35,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
             query: req.query,
             path: req.path,
             route: req.route,
-            authenticatedUser: (req.user as any)?.oid,
+            authenticatedUser: (req.session as any).oid,
           }
         });
 
@@ -52,7 +49,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
 
       })
       .catch((error: any) => {
-        const client = getAppInsightsClient(req);
+        const client = getAppInsightsClient();
         client.trackException({
           exception: error,
           severity: 3,
@@ -61,7 +58,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
             query: req.query,
             path: req.path,
             route: req.route,
-            authenticatedUser: (req.user as any)?.oid,
+            authenticatedUser: (req.session as any).oid,
             stack: error.stack,
           }
         })
@@ -73,7 +70,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
 
   } catch (error: any) {
 
-    const client = getAppInsightsClient(req);
+    const client = getAppInsightsClient();
     client.trackException({
       exception: error,
       severity: 3,
@@ -82,7 +79,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: (req.user as any)?.oid,
+        authenticatedUser: (req.session as any).oid,
         stack: error.stack,
       }
     });
