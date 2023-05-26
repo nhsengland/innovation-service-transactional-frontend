@@ -29,30 +29,27 @@ dotenv.config();
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
+
   initAppInsights();
 
   const server = express();
   const staticContentPath = `${ENVIRONMENT.BASE_PATH}${ENVIRONMENT.STATIC_CONTENT_PATH}`;
   const distFolder = join(process.cwd(), ENVIRONMENT.VIEWS_PATH);
-  const indexHtml = fs.existsSync(join(distFolder, 'index.original.html'))
-    ? 'index.original.html'
-    : 'index';
+  const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   server.use(coockieParser());
-  server.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'secret',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: true
-      },
-    })
-  );
+  server.use(session({
+    secret: process.env.SESSION_SECRET || 'secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true
+    }
+  }));
 
   // Helmet configuration.
   server.use(
@@ -80,11 +77,12 @@ export function app(): express.Express {
   // PING Endpoint
   server.get(`${ENVIRONMENT.BASE_PATH}/ping`, (req, res) => {
     const response = {
-      state: 'Running',
+      state: 'Running'
     };
 
     res.status(200).send(response);
   });
+
 
   // Angular routing.
   // // Serve static files.
@@ -94,8 +92,7 @@ export function app(): express.Express {
   server.post(`${ENVIRONMENT.BASE_PATH}/insights`, handler);
   server.post('/*', (req, res) => {
     res.render(indexHtml, {
-      req,
-      res,
+      req, res,
       providers: [
         { provide: APP_BASE_HREF, useValue: req.baseUrl },
         {
@@ -104,10 +101,10 @@ export function app(): express.Express {
             BASE_URL: ENVIRONMENT.BASE_URL,
             BASE_PATH: ENVIRONMENT.BASE_PATH,
             LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
-            ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS,
-          },
-        },
-      ],
+            ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
+          }
+        }
+      ]
     });
   });
 
@@ -124,37 +121,38 @@ export function app(): express.Express {
   });
 
   // // All regular routes using the Universal engine.
-  server.get('*', csurf({ cookie: true }), (req, res) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), { httpOnly: false });
-    res.render(indexHtml, {
-      req,
-      res,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        {
-          provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
-          useValue: {
-            BASE_URL: ENVIRONMENT.BASE_URL,
-            BASE_PATH: ENVIRONMENT.BASE_PATH,
-            LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
-            ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS,
-          },
-        },
-      ],
+  server.get('*',
+    csurf({ cookie: true }),
+    (req, res) => {
+      res.cookie('XSRF-TOKEN', req.csrfToken(), { httpOnly: false });
+      res.render(indexHtml, {
+        req, res,
+        providers: [
+          { provide: APP_BASE_HREF, useValue: req.baseUrl },
+          {
+            provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
+            useValue: {
+              BASE_URL: ENVIRONMENT.BASE_URL,
+              BASE_PATH: ENVIRONMENT.BASE_PATH,
+              LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
+              ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
+            }
+          }
+        ]
+      });
     });
-  });
 
   return server;
 }
 
+
 function run(): void {
+
   const port = process.env['PORT'] || 4000;
 
   // Start up the Node server
   const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+  server.listen(port, () => { console.log(`Node Express server listening on http://localhost:${port}`); });
 }
 
 // Webpack will replace 'require' with '__webpack_require__'
@@ -162,7 +160,7 @@ function run(): void {
 // The below code is to ensure that the server is run only when not requiring the bundle.
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
-const moduleFilename = (mainModule && mainModule.filename) || '';
+const moduleFilename = mainModule && mainModule.filename || '';
 if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
