@@ -5,7 +5,7 @@ export const appLoggingMiddleware = (req: any, res: any, next: any) => {
 
   if (req.path.includes(process.env.BASE_PATH)) {
 
-    const client = getAppInsightsClient(req);
+    const client = getAppInsightsClient();
 
     client.trackTrace({
       message: `[${req.method}] ${req.url} requested by ${req.session.oid ?? 'anonymous'}`,

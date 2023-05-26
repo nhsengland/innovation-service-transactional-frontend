@@ -15,6 +15,6 @@ export const initAppInsights = () => {
 
 };
 
-export const getAppInsightsClient = (req: any) => {
+export const getAppInsightsClient = () => {
   return appinsights.defaultClient;
 };

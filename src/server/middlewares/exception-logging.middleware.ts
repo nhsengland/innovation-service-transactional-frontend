@@ -3,7 +3,7 @@ import { getAppInsightsClient } from '../../globals';
 
 export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: any) => {
 
-  const client = getAppInsightsClient(req);
+  const client = getAppInsightsClient();
 
   client.trackException({
     exception: err,

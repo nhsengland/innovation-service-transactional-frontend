@@ -5,9 +5,11 @@ import {
   Configuration,
   LogLevel
 } from '@azure/msal-node';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import axios from 'axios';
 import * as dotenv from 'dotenv';
 import { Response, Router } from 'express';
+import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
@@ -32,15 +34,21 @@ const confidentialClientConfig: Configuration = {
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     authority: authorities.signin,
     knownAuthorities: Object.values(authorities),
-    //    redirectUri: process.env.REDIRECT_URI,
   },
   system: {
     loggerOptions: {
-      loggerCallback(loglevel, message, containsPii) {
-        console.log(message);
+      loggerCallback(logLevel: LogLevel, message) {
+        try {
+          getAppInsightsClient().trackTrace({
+            severity: 4-logLevel as SeverityLevel ?? SeverityLevel.Information,  // logLevel is reverse of SeverityLevel
+            message: message,
+          });
+        } catch (error) {
+          // Ignore error
+        }
       },
       piiLoggingEnabled: false,
-      logLevel: LogLevel.Verbose,
+      logLevel: LogLevel.Warning,
     },
   },
 };
@@ -78,37 +86,33 @@ export function getAccessTokenBySessionId(sessionId: string): string {
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
   const authenticated = req.session.id && getAccessTokenBySessionId(req.session.id);
   if (authenticated) {
-    console.log('user is authenticated')
-    // client.trackTrace({
-    //   severity: SeverityLevel.Information,
-    //   message: '/session called and user is authenticated',
-    //   properties: {
-    //     params: req.params,
-    //     query: req.query,
-    //     path: req.path,
-    //     route: req.route,
-    //     authenticatedUser: (req.user as any)?.oid,
-    //     session: req.session,
-    //     sessionId: req.sessionID
-    //   }
-    // });
+    getAppInsightsClient().trackTrace({
+      severity: SeverityLevel.Information,
+      message: '/session called and user is authenticated',
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        session: req.session,
+        sessionId: req.sessionID
+      }
+    });
     res.send('OK');
   } else {
-    console.log('user is not authenticated')
-    // client.trackTrace({
-    //   severity: SeverityLevel.Information,
-    //   message: '/session called and user is NOT authenticated',
-    //   properties: {
-    //     params: req.params,
-    //     query: req.query,
-    //     path: req.path,
-    //     route: req.route,
-    //     authenticatedUser: (req.user as any)?.oid,
-    //   }
-    // });
+    getAppInsightsClient().trackTrace({
+      severity: SeverityLevel.Information,
+      message: '/session called and user is NOT authenticated',
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+      }
+    });
     res.status(401).send();
-
-    //res.redirect(`${ENVIRONMENT.BASE_PATH}/signin`);
   }
 });
 
@@ -120,8 +124,18 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
   if(!req.query.code) {
-    // TODO
-    console.log('no code');
+    getAppInsightsClient().trackTrace({
+      message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        method: req.method,
+      }
+    });
     res.status(500).send();
   }
 
@@ -129,34 +143,47 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
 
   switch (state) {
     case 'LOGIN':
-      console.log('LOGIN');
       confidentialClientApplication.acquireTokenByCode({
         redirectUri: redirects.LOGIN,
         scopes: [],
         code: req.query.code as string,
       }).then((response)=>{
-
-        console.log(`response: ${JSON.stringify(response)}`);
-
         setAccessTokenBySessionId(req.session.id, response);
         (req.session as any).oid = response.uniqueId;
 
         res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
         }).catch((error)=>{
-            console.log("\nErrorAtLogin: \n" + error);
-            res.status(500).send();
+          getAppInsightsClient().trackException({
+            exception: error,
+            severity: SeverityLevel.Error,
+            properties: {
+              params: req.params,
+              query: req.query,
+              path: req.path,
+              route: req.route,
+              authenticatedUser: (req.session as any).oid,
+              stack: error.stack,
+            }
+          });
+          res.status(500).send();
         });
       break;
-    case 'SIGNUP':
-      console.log('SIGNUP');
-      break;
     default:
-      // TODO
-      console.log('default');
+      // We only have login callback for now
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because the state ${state} was not recognized`,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          method: req.method,
+        }
+      });
+      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
   }
-
-  // TODO res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
-  // res.redirect(`${ENVIRONMENT.BASE_PATH}/home`);
 });
 
 
@@ -168,7 +195,6 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
 
   const oid = req.session.id;
   req.session.destroy(() => {
-    console.log(`redirecting to ${azLogoutUri}`)
     deleteAccessTokenBySessionId(oid);
     res.redirect(azLogoutUri);
   })
@@ -180,8 +206,18 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
   if(!req.query.code) {
-    // TODO
-    console.log('no code');
+    getAppInsightsClient().trackTrace({
+      message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        method: req.method,
+      }
+    });
     res.status(500).send();
   }
 
@@ -194,11 +230,34 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token: response.idToken })
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
-      console.error(`Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`);
+      getAppInsightsClient().trackException({
+        exception: error,
+        severity: SeverityLevel.Error,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          stack: error.stack,
+          message: `Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`
+        }
+      });
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
   }).catch((error)=>{
-    console.log
+    getAppInsightsClient().trackException({
+      exception: error,
+      severity: SeverityLevel.Error,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+        stack: error.stack,
+      }
+    });
     res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
   });
 
@@ -225,19 +284,10 @@ function getAuthCode(
     redirectUri: redirects[state]
   };
 
-  // console.log('AUTH CODE REQUEST:', authCodeRequest)
-
-  // Cenas extra para o code request como parâmetros adicionais
-  // authCodeRequest.extraQueryParameters = {"campaignId" : "germany-promotion"}
-
-  //Each time you fetch Authorization code, update the relevant authority in the tokenRequest configuration
-  // TODO tokenRequest.authority = authority;
-
   // request an authorization code to exchange for a token
   return confidentialClientApplication
     .getAuthCodeUrl(authCodeRequest)
     .then((response) => {
-      console.log('RESPONSE:', response)
       //redirect to the auth code URL/send code to
       res.redirect(response);
     })
@@ -257,12 +307,5 @@ function deleteAccessTokenBySessionId(sessionId: string): void {
 
 export default authenticationRouter;
 
-// TODO keep current url
-// TODO restart server and keep session
-// TODO logs
-// TODO send errors "nice"
-
-
-
-// Didn't create from previous
+// Didn't create from previous seems it wasn't used
 // authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/auth/user`, (req, res) => {

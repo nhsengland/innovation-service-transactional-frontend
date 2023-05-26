@@ -25,7 +25,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
     generatePDF(req.params.innovationId, config, version)
       .then((response: any) => {
 
-        const client = getAppInsightsClient(req);
+        const client = getAppInsightsClient();
 
         client.trackTrace({
           message: 'PDFGenerator Success',
@@ -49,7 +49,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
 
       })
       .catch((error: any) => {
-        const client = getAppInsightsClient(req);
+        const client = getAppInsightsClient();
         client.trackException({
           exception: error,
           severity: 3,
@@ -70,7 +70,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) =
 
   } catch (error: any) {
 
-    const client = getAppInsightsClient(req);
+    const client = getAppInsightsClient();
     client.trackException({
       exception: error,
       severity: 3,
