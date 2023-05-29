@@ -41,7 +41,10 @@ export class AuthenticationRedirectionGuard implements CanActivate {
     }
 
     if (pathSegment === 'dashboard') {
-      this.router.navigateByUrl(this.authentication.userUrlBasePath());
+      const alert = activatedRouteSnapshot.queryParams.state === 'CHANGE_PASSWORD' ? {
+        alert: activatedRouteSnapshot.queryParams.state
+      } : undefined
+      this.router.navigateByUrl(this.authentication.userUrlBasePath(), alert && {state: alert});
       return false;
     }
 
