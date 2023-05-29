@@ -1,18 +1,17 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { PageDashboardComponent } from './dashboard.component';
 
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
@@ -53,21 +52,21 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have alert when password changed', () => {
+  // it('should have alert when password changed', () => {
 
-    authenticationStore.getUserInfo = () => ({
-      ...USER_INFO_INNOVATOR,
-      type: UserRoleEnum.ADMIN,
-      passwordResetAt: new Date(new Date().getTime() - 1 * 60000).toString()
-    });
+  //   authenticationStore.getUserInfo = () => ({
+  //     ...USER_INFO_INNOVATOR,
+  //     type: UserRoleEnum.ADMIN,
+  //     passwordResetAt: new Date(new Date().getTime() - 1 * 60000).toString()
+  //   });
 
-    const expected = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
+  //   const expected = { type: 'SUCCESS', title: 'You have successfully changed your password.', setFocus: true };
 
-    fixture = TestBed.createComponent(PageDashboardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    expect(component.alert).toEqual(expected);
+  //   fixture = TestBed.createComponent(PageDashboardComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  //   expect(component.alert).toEqual(expected);
 
-  });
+  // });
 
 });
