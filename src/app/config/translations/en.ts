@@ -531,7 +531,7 @@ export const locale = {
           invalid_format: 'Invalid format',
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
           invalid_json_format: 'Invalid JSON format',
-          invalid_url_format: ' Website url format invalid. Please provide an valid one including http or https://',
+          invalid_url_format: 'Website url format invalid. Please provide an valid one including http or https://',
           invalid_value: 'Invalid value',
           min: 'Value below the minimum allowed',
           min_hexadecimal: 'Value below the minimum allowed',
