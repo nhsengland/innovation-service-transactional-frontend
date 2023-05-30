@@ -94,12 +94,17 @@ export class CustomValidators {
   static urlFormatValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) { return null; }
-      try {
-        const newUrl = new URL(control.value);
-        if (newUrl.protocol === 'http:' || newUrl.protocol === 'https:') {
-          return null;
-        }
-      } catch (err) {}
+      const pattern = new RegExp(
+        '^(https?:\\/\\/)' + // protocol (mandator)
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$', // fragment locator
+        'i'
+      );
+      if (pattern.test(control.value)) { return null; }
+      
       return { urlFormat: message ? { message } : true };
     }
   }
