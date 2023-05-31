@@ -253,7 +253,11 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     scopes: [],
     code: req.query.code as string,
   }).then((response)=>{
-    axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, { token: response.idToken })
+    axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, {}, {
+      headers: {
+        'Authorization': `Bearer ${response.idToken}`,
+      }
+    })
     .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
     .catch((error: any) => {
       getAppInsightsClient().trackException({
