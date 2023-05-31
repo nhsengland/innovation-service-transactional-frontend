@@ -137,6 +137,8 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
       }
     });
     res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+
+    return;
   }
 
   const [state, backUrl] = (req.query.state as string).split(';');
@@ -206,19 +208,32 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
   if(!req.query.code) {
-    getAppInsightsClient().trackTrace({
-      message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
-      severity: SeverityLevel.Error,
-      properties: {
-        params: req.params,
-        query: req.query,
-        path: req.path,
-        route: req.route,
-        authenticatedUser: (req.session as any).oid,
-        method: req.method,
-      }
-    });
-    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    // If the user canceled the request, the error_description will contain AADB2C90091
+    if(req.query.error && req.query.error_description && req.query.error_description.toString().includes('AADB2C90091')) {
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
+        severity: SeverityLevel.Error,
+        properties: {
+          authenticatedUser: (req.session as any).oid,
+        }
+      });
+      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
+    } else {
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+        severity: SeverityLevel.Error,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          method: req.method,
+        }
+      });
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    }
+    return;
   }
 
   confidentialClientApplication.acquireTokenByCode({
