@@ -136,7 +136,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         method: req.method,
       }
     });
-    res.status(500).send();
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
   }
 
   const [state, backUrl] = (req.query.state as string).split(';');
@@ -165,7 +165,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
               stack: error.stack,
             }
           });
-          res.status(500).send();
+          res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
         });
       break;
     default:
@@ -218,7 +218,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
         method: req.method,
       }
     });
-    res.status(500).send();
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
   }
 
   confidentialClientApplication.acquireTokenByCode({
@@ -291,8 +291,8 @@ function getAuthCode(
       //redirect to the auth code URL/send code to
       res.redirect(response);
     })
-    .catch((error) => {
-      res.status(500).send(error);
+    .catch(() => {
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
 };
 
