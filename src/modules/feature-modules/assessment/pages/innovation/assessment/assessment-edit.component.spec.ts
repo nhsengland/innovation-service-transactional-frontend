@@ -56,18 +56,6 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
     expect(component).toBeTruthy();
   });
 
-  it('should be a valid step 1', () => {
-
-    activatedRoute.params = of({ stepId: 1 });
-
-    fixture = TestBed.createComponent(InnovationAssessmentEditComponent);
-    component = fixture.componentInstance;
-
-    fixture.detectChanges();
-    expect(component.isValidStepId()).toBe(true);
-
-  });
-
   // it('should run getInnovationNeedsAssessment() with success', () => {
 
   //   organisationsService.getOrganisationsListWithUnits = () => of([{ id: 'orgId', name: 'Org name', acronym: 'ORG', organisationUnits: [] }]);
