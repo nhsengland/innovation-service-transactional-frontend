@@ -5,8 +5,8 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
@@ -77,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovation = {
         owner: { name: innovationInfo.owner?.name ?? '' },
         loggedUser: { isOwner: innovationContext.loggedUser.isOwner },
-        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email}${item.role ? `(${item.role})` : ''}` })),
+        collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email} ${item.role ? `(${item.role})` : ''}` })),
         status: innovationInfo.status,
         groupedStatus: innovationInfo.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),

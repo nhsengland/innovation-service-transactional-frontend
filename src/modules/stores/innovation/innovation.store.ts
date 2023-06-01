@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
@@ -10,9 +10,9 @@ import { Store } from '../store.class';
 
 import { InnovationService } from './innovation.service';
 
-import { GetInnovationEvidenceDTO, InnovationModel, InnovationSectionInfoDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, SectionsSummaryModel } from './innovation.models';
 import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
 import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
+import { GetInnovationEvidenceDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
