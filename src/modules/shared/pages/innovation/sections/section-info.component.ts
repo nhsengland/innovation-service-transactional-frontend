@@ -29,7 +29,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     hasEvidences: boolean,
     wizard: WizardEngineModel,
     date: string,
-    submittedBy: null | { name: string, isOwner: boolean }
+    submittedBy: null | { name: string, isOwner?: boolean }
   };
 
   summaryList: WizardSummaryType[] = [];
