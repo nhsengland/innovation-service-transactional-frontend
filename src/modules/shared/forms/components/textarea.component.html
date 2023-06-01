@@ -25,8 +25,6 @@
     {{ fieldControl.value }}
   </textarea>
 
-  <div aria-live="polite" class="nhsuk-hint" *ngIf="(lengthLimitCharacters - (this.textAreaValue || '').length > -1)">
-    You have {{ lengthLimitCharacters - (textAreaValue || '').length }} characters remaining
-  </div>
+  <div class="nhsuk-hint" aria-live="polite">You have {{ currentAvailableCharacters }} characters remaining</div>
 
 </div>
