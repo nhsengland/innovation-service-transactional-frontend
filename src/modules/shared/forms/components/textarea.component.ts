@@ -76,6 +76,8 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
     validators.push(Validators.maxLength(this.lengthLimitCharacters));
     this.fieldControl.setValidators(validators);
 
+    // Characters countdown behaviors.
+    // // This makes sure that counter is updated when user is typing, even with form onUpdate: 'blur'.
     if (this.textAreaRef) {
       this.fieldChangeSubscription.add(
         fromEvent(this.textAreaRef.nativeElement, 'keyup')
@@ -91,13 +93,17 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
       );
     }
 
+    // // This makes sure that counter is updated when value is changed from parent component.
+    // // Note: This will take into account the form onUpdate strategy.
+    this.fieldChangeSubscription.add(
+      this.fieldControl.valueChanges.subscribe(value => {
+        this.currentAvailableCharacters = this.lengthLimitCharacters - value.length;
+      })
+    );
+
   }
 
   ngDoCheck(): void {
-
-    if (this.fieldControl.value.length > 0) {
-      this.currentAvailableCharacters = this.lengthLimitCharacters - this.fieldControl.value.length;
-    }
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
@@ -32,7 +32,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   participantNumberText: 'participant' | 'participants' = 'participant';
 
   form = new FormGroup({
-    message: new UntypedFormControl('')
+    message: new FormControl<string>('')
   }, { updateOn: 'blur' });
 
   // Flags
@@ -86,11 +86,11 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.threadInfo = threadInfo;
         this.threadParticipants = threadParticipants;
 
-        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants': 'participant';
+        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants' : 'participant';
 
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, {contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id]});
+        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
 
         this.setPageStatus('READY');
 
@@ -139,7 +139,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.setPageStatus('LOADING');
 
-    const body = { message: this.form.get('message')?.value };
+    const body = { message: messageField.value };
 
     this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
