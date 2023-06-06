@@ -55,7 +55,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
 
   const requestHandler = getRequestHandler();
   const oid = req.session.id;
-  const accessToken = await getAccessTokenBySessionId(oid || '');
+  const accessToken = await getAccessTokenBySessionId(oid);
 
   if (oid && accessToken) {
 
