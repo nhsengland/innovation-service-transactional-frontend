@@ -34,7 +34,7 @@
         </dl>
 
         <a [href]="documentInfo.file.url" role="button" class="nhsuk-button nhsuk-u-margin-right-3">Download document</a>
-        <button type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">Delete document</button>
+        <button *ngIf="canDelete" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">Delete document</button>
 
       </ng-container>
 

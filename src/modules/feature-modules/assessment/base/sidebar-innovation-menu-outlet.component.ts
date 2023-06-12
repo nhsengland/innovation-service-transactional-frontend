@@ -15,7 +15,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[]= [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
 
@@ -34,8 +34,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     );
 
     this.onRouteChange();
-  } 
-  
+  }
+
   ngOnInit(): void {
     this.generateSidebar();
   }
@@ -44,8 +44,10 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  private generateSidebar(): void {    
+  private generateSidebar(): void {
+
     if (this.sidebarItems.length === 0) {
+
       const innovation = this.contextStore.getInnovation();
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('assessment', innovation.id);
@@ -53,28 +55,29 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
         // TODO: DOCUMENTS: Unccomment this!
+        // ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }] : []),
         // { label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/assessment/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/assessment/innovations/${innovation.id}/support` }
       ];
-  
+
       if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
         this._sidebarItems.push(
           { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }
         );
       }
-  
+
       this._sidebarItems.push({ label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` });
     }
   }
 
   private onRouteChange(): void {
     this.generateSidebar();
-    
+
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
-      this.sidebarItems = this.sectionsSidebar;        
+      this.sidebarItems = this.sectionsSidebar;
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;

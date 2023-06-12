@@ -44,7 +44,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private generateSidebar(): void {
+
     if (this.sidebarItems.length === 0) {
+
       const innovation = this.contextStore.getInnovation();
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('admin', innovation.id);
@@ -52,6 +54,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
         // TODO: DOCUMENTS: Unccomment this!
+        // ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }] : []),
         // { label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
@@ -64,6 +67,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
       this._sidebarItems.push({ label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` });
     }
+
   }
 
   private onRouteChange(): void {

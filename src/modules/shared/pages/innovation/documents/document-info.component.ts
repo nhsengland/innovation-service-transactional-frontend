@@ -20,6 +20,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
+  // Flags
+  canDelete = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -43,7 +46,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
         this.documentInfo = {
           ...response,
           locationLink: response.context.type === 'INNOVATION_SECTION' ? getAllSectionsList().find(item => item.value === response.context.id)?.label ?? '[Archived section]' : null,
-        }
+        };
+
+        this.canDelete = !this.stores.authentication.isAdminRole();
 
         this.setPageStatus('READY');
 
