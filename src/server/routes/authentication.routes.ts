@@ -16,6 +16,7 @@ import { ENVIRONMENT } from '../config/constants.config';
 dotenv.config();
 
 const OAUTH_CONFIG = {
+  clientId: process.env.OAUTH_CLIENT_ID || '',
   tenantName: process.env.OAUTH_TENANT_NAME || '',
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
@@ -34,7 +35,7 @@ const confidentialClientConfig: Configuration = {
     clientId: process.env.OAUTH_CLIENT_ID || '',
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
     authority: authorities.signin,
-    knownAuthorities: Object.values(authorities),
+    knownAuthorities: Object.values(authorities)
   },
   system: {
     loggerOptions: {
@@ -53,6 +54,11 @@ const confidentialClientConfig: Configuration = {
     },
   }
 };
+
+// Currently using these scopes to get the auth token which was not working with silent auth. Without the auth code the
+// token request from cache was returning no token and forcing a new token to be created
+// There seems to be an issue with b2c and auth token which forced this: see https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2315#issuecomment-706382855
+const scopes = ['openid', OAUTH_CONFIG.clientId]
 
 // Session
 type UserSession = { oid: string, account: AccountInfo };
@@ -83,7 +89,7 @@ export async function getAccessTokenBySessionId(sessionId: string): Promise<stri
     try {
       return (await confidentialClientApplication.acquireTokenSilent({
         account: sessionToken.account,
-        scopes: [],
+        scopes: scopes,
       }))?.idToken ?? '';
     } catch (error: any) {
       // This will fail if we don't have the token cached but there will be a 401 and a redirect to b2c
@@ -134,7 +140,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
   // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
-  getAuthCode(authorities.signin, [], 'LOGIN', res, req.query.back?.toString() ?? undefined);
+  getAuthCode(authorities.signin, 'LOGIN', res, req.query.back?.toString() ?? undefined);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
@@ -173,7 +179,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
     case 'LOGIN':
       confidentialClientApplication.acquireTokenByCode({
         redirectUri: redirects.LOGIN,
-        scopes: [],
+        scopes: scopes,
         code: req.query.code as string,
       }).then((response)=>{
         setAccessTokenBySessionId(req.session.id, response);
@@ -229,7 +235,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
-  getAuthCode(authorities.signup, [], 'SIGNUP', res);
+  getAuthCode(authorities.signup, 'SIGNUP', res);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
@@ -265,7 +271,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
   confidentialClientApplication.acquireTokenByCode({
     authority: authorities.signup,
     redirectUri: redirects.SIGNUP,
-    scopes: [],
+    scopes: scopes,
     code: req.query.code as string,
   }).then((response)=>{
     axios.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, {}, {
@@ -310,14 +316,13 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (_req, res) => {
-  getAuthCode(authorities.changePassword, [], 'CHANGE_PASSWORD', res);
+  getAuthCode(authorities.changePassword, 'CHANGE_PASSWORD', res);
 });
 //#endregion
 
 //#region Auxiliary functions
 function getAuthCode(
   authority: string,
-  scopes: string[],
   state: APP_STATES,
   res: Response,
   backUrl?: string
