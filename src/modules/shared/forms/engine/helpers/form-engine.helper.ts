@@ -56,7 +56,14 @@ export class FormEngineHelper {
           form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
           break;
 
-        case 'file-upload': // Creates an FormArray and pushes defaultValues into it.
+        case 'file-upload': // Creates a FormGroup and pushes defaultValues into it.
+          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
+          Object.entries(parameterValue ?? {}).forEach(([key, value]) => {
+            (form.get(parameter.id) as FormGroup).addControl(key, new FormControl(value));
+          });
+          break;
+
+        case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
             (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
@@ -200,7 +207,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
           case 'checkbox-group':
@@ -234,7 +241,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           default:
@@ -253,7 +260,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           default:

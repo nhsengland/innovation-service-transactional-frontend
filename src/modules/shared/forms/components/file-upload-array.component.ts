@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
@@ -13,25 +13,25 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 
 @Component({
-  selector: 'theme-form-file-upload',
-  templateUrl: 'file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss'],
+  selector: 'theme-form-file-upload-array',
+  templateUrl: 'file-upload-array.component.html',
+  styleUrls: ['./file-upload-array.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormFileUploadComponent implements OnInit, DoCheck {
+export class FormFileUploadArrayComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
-  @Input() groupName = '';
+  @Input() arrayName = '';
   @Input() label?: string;
   @Input() description?: string;
   @Input() pageUniqueField = true;
 
   @Input()
   set config(c: undefined | {
-    httpUploadUrl: string,
-    httpUploadBody?: { [key: string]: any },
-    acceptedFiles?: FileTypes[],
-    maxFileSize?: number // In Mb.
+    httpUploadUrl: string;
+    httpUploadBody?: { [key: string]: any };
+    acceptedFiles?: FileTypes[];
+    maxFileSize?: number; // In Mb.
   }) {
 
     this.fileConfig = {
@@ -42,13 +42,13 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     this.dzConfig = {
       acceptedFiles: (c?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
       maxFileSize: c?.maxFileSize ? (c.maxFileSize * 1000000) : 1000000, // 1Mb.
-      multiple: false
+      multiple: true
     };
 
   };
 
-  uploadedFile: null | { id: string, file: File } = null;
-  previousUploadedFile: null | FileUploadType = null;
+  uploadedFiles: { id: string, file: File }[] = [];
+  previousUploadedFiles: FileUploadType[] = [];
 
   hasError = false;
   hasUploadError = false;
@@ -66,9 +66,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     maxFileSize: number; // In bytes
   } = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
 
-  // Form controls.
+  // Get hold of the control being used.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldGroupControl(): FormGroup { return this.parentFieldControl?.get(this.groupName) as FormGroup; }
+  get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
+  get fieldArrayValues(): { id: string, name: string, url: string }[] { return this.fieldArrayControl.value as { id: string, name: string, url: string }[]; }
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
@@ -89,14 +90,11 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
-    const currentValue = this.fieldGroupControl.value;
-    this.previousUploadedFile = currentValue.id ? {
-      id: currentValue.id,
-      name: currentValue.name,
-      size: currentValue.size,
-      extension: currentValue.extension,
-      url: currentValue.url
-    } : null;
+    // TODO: This need revisit when documents feature is closed and information regarding files
+    // will always have size and extension information!
+    // Then, the following line can be unccommented!
+    // this.previousUploadedFiles = [...this.fieldArrayValues]; // Need to clone here!
+    this.previousUploadedFiles = this.fieldArrayValues.map(item => ({ id: item.id, name: item.name, size: 0, extension: '', url: item.url })); // Need to clone here!
 
   }
 
@@ -106,8 +104,8 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       this.hasError = this.hasUploadError;
       this.hasUploadError = false;
     } else if (!this.isLoadingFile) {
-      this.hasError = (this.fieldGroupControl.invalid && (this.fieldGroupControl.touched || this.fieldGroupControl.dirty));
-      this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors) : { message: '', params: {} };
+      this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
+      this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
       this.cdr.detectChanges();
     }
 
@@ -172,13 +170,15 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
         this.uploadFile(file).subscribe({
           next: response => {
 
-            this.uploadedFile = { id: response.id, file };
+            this.uploadedFiles.push({ id: response.id, file });
 
-            this.fieldGroupControl.addControl('id', new FormControl(response.id));
-            this.fieldGroupControl.addControl('name', new FormControl(response.name));
-            this.fieldGroupControl.addControl('size', new FormControl(response.size));
-            this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
-            this.fieldGroupControl.addControl('url', new FormControl(response.url));
+            this.fieldArrayControl.push(new FormGroup({
+              id: new FormControl(response.id),
+              name: new FormControl(response.name),
+              size: new FormControl(response.size),
+              extension: new FormControl(response.extension),
+              url: new FormControl(response.url)
+            }));
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);
@@ -199,23 +199,27 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
   }
 
-  onRemoveUploadedFile(): void {
-    this.uploadedFile = null;
-    this.fieldGroupControl.removeControl('id');
-    this.fieldGroupControl.removeControl('name');
-    this.fieldGroupControl.removeControl('size');
-    this.fieldGroupControl.removeControl('extension');
-    this.fieldGroupControl.removeControl('url');
+  onRemoveUploadedFile(id: string): void {
+
+    this.uploadedFiles.splice(this.uploadedFiles.findIndex(item => item.id === id), 1);
+
+    const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
+    if (arrayIndex > -1) {
+      const file = this.fieldArrayValues[arrayIndex];
+      this.fieldArrayControl.removeAt(arrayIndex);
+      this.evaluateDropZoneTabIndex();
+      this.setAuxMessageAndFocus(`${file.name} removed.`);
+    }
+
     this.cdr.detectChanges();
   }
 
-  onRemovePreviousUploadedFile(): void {
-    this.previousUploadedFile = null;
-    this.fieldGroupControl.removeControl('id');
-    this.fieldGroupControl.removeControl('name');
-    this.fieldGroupControl.removeControl('size');
-    this.fieldGroupControl.removeControl('extension');
-    this.fieldGroupControl.removeControl('url');
+  onRemovePreviousUploadedFile(id: string): void {
+    this.previousUploadedFiles.splice(this.previousUploadedFiles.findIndex(item => item.id === id), 1);
+
+    const arrayIndex = this.fieldArrayValues.findIndex(item => item.id === id);
+    if (arrayIndex > -1) { this.fieldArrayControl.removeAt(arrayIndex); }
+
     this.cdr.detectChanges();
   }
 
@@ -241,7 +245,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
     const element: any = document.getElementsByTagName('ngx-dropzone')[0] as HTMLInputElement;
 
-    if (this.uploadedFile) {
+    if (this.uploadedFiles.length === 0) {
       element.firstElementChild.setAttribute('tabIndex', '0');
     } else {
       element.firstElementChild.setAttribute('tabIndex', '-1');

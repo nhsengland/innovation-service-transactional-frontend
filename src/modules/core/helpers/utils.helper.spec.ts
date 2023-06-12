@@ -1,15 +1,6 @@
 import { UtilsHelper } from './utils.helper';
 
-
 describe('Core/Helpers/UtilsHelper/isEmpty', () => {
-
-  it(`should return 'true' when object is 'empty'`, () => {
-    expect(UtilsHelper.isEmpty({})).toBe(true);
-  });
-
-  it(`should return 'false' when object has at least 'one attribute'`, () => {
-    expect(UtilsHelper.isEmpty({ prop: 1 })).toBe(false);
-  });
 
   it(`should return 'true when object is 'undefined'`, () => {
     expect(UtilsHelper.isEmpty(undefined)).toBe(true);
@@ -17,6 +8,30 @@ describe('Core/Helpers/UtilsHelper/isEmpty', () => {
 
   it(`should return 'true' when object is null`, () => {
     expect(UtilsHelper.isEmpty(null)).toBe(true);
+  });
+
+  it(`should return 'true' when object is empty string`, () => {
+    expect(UtilsHelper.isEmpty('')).toBe(true);
+  });
+
+  it(`should return 'true' when object is number 0`, () => {
+    expect(UtilsHelper.isEmpty(0)).toBe(false);
+  });
+
+  it(`should return 'true' when object is false`, () => {
+    expect(UtilsHelper.isEmpty(false)).toBe(true);
+  });
+
+  it(`should return 'true' when object is true`, () => {
+    expect(UtilsHelper.isEmpty(true)).toBe(false);
+  });
+
+  it(`should return 'true' when object is 'empty'`, () => {
+    expect(UtilsHelper.isEmpty({})).toBe(true);
+  });
+
+  it(`should return 'false' when object has at least 'one attribute'`, () => {
+    expect(UtilsHelper.isEmpty({ prop: 1 })).toBe(false);
   });
 
   it(`should return 'true' when an 'empty Array' is passed in`, () => {

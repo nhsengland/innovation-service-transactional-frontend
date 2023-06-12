@@ -17,6 +17,8 @@ export type AllSectionsOutboundPayloadType = {
   }[];
 }[];
 
+export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
+export const irVersionsClinicalMainCategoryItems = [...SECTIONS_202209_evidencetypeItems, ...SECTIONS_202304_evidenceTypeItems];
 
 export function getInnovationRecordConfig(version?: string): InnovationSectionsListType {
 
@@ -51,5 +53,13 @@ export function getAllSectionsSummary(
 
 }
 
-export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
-export const irVersionsClinicalMainCategoryItems = [...SECTIONS_202209_evidencetypeItems, ...SECTIONS_202304_evidenceTypeItems];
+export function getAllSectionsList(): { value: string, label: string }[] {
+  return getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
+    return [
+      ...sectionGroupAcc,
+      ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
+        return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
+      }, [])
+    ];
+  }, [])
+};

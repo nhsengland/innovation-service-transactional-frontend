@@ -88,7 +88,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   setUploadConfiguration(): void {
 
-    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
+    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload-array') {
       this.wizard.currentStep().parameters[0].fileUploadConfig = {
         httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
         httpUploadBody: {

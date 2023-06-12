@@ -51,6 +51,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
+        // TODO: DOCUMENTS: Unccomment this!
+        // { label: 'Documents', url: `/accessor/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },
         { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },

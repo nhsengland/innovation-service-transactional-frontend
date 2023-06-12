@@ -26,6 +26,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private innovationStore: InnovationStore
   ) {
+
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         this.onRouteChange()
@@ -51,6 +52,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
+        // TODO: DOCUMENTS: Unccomment this!
+        // { label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
@@ -83,5 +86,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
     }
+
   }
+
 }
