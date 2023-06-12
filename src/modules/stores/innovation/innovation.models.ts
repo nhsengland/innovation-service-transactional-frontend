@@ -2,8 +2,8 @@ import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 import { InnovationSectionsVersions } from './innovation-record/ir-versions.types';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
 
 
 // Store state model.
@@ -37,7 +37,7 @@ export type InnovationSectionInfoDTO = {
   submittedAt: string;
   submittedBy: null | {
     name: string,
-    isOwner: boolean,
+    isOwner?: boolean,
   },
   actionsIds?: string[];
 }
@@ -59,7 +59,7 @@ export type InnovationSectionsListDTO = {
   submittedAt: null | DateISOType,
   submittedBy: null | {
     name: string,
-    isOwner: boolean
+    isOwner?: boolean
   },
   openActionsCount: number
 }[];
@@ -83,7 +83,7 @@ export type SectionsSummaryModel = {
     submittedAt: null | DateISOType,
     submittedBy: null | {
       name: string,
-      isOwner: boolean
+      isOwner?: boolean
     },
     isCompleted: boolean,
     openActionsCount: number

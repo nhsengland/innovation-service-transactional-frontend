@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Injector, Input, OnDestroy, OnInit, ViewChild, forwardRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
+import { Subscription, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
-import { Subscription, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
+import { TEXTAREA_LENGTH_LIMIT, TextareaLengthLimitType } from '../engine/config/form-engine.config';
 
 
 @Component({
@@ -28,7 +29,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-  @Input() lengthLimit?: 'small' | 'medium' | 'mediumUp' | 'largeDown' | 'large'; // TODO: Refactor these names!!!!
+  @Input() lengthLimit?: TextareaLengthLimitType;
   @Input() pageUniqueField = true;
   @Input() cssOverride?: string;
 
@@ -36,10 +37,9 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   lengthLimitCharacters = 200;
+  currentAvailableCharacters = 0;
 
   divCssOverride = '';
-
-  textAreaValue = '';
 
   private fieldChangeSubscription = new Subscription();
 
@@ -64,57 +64,46 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
-    this.type = this.type || 'text';
-    this.placeholder = this.placeholder || '';
+    this.type = this.type ?? 'text';
+    this.placeholder = this.placeholder ?? '';
 
-    this.lengthLimit = this.lengthLimit || 'small';
-    switch (this.lengthLimit) {
-      case 'large':
-        this.lengthLimitCharacters = 2000;
-        break;
-      case 'largeDown':
-        this.lengthLimitCharacters = 1500;
-        break;
-      case 'mediumUp':
-        this.lengthLimitCharacters = 1000;
-        break;
-      case 'medium':
-        this.lengthLimitCharacters = 500;
-        break;
-      case 'small':
-      default:
-        this.lengthLimitCharacters = 200;
-        break;
-    }
+    this.lengthLimit = this.lengthLimit ?? 'xs';
+    this.lengthLimitCharacters = this.currentAvailableCharacters = TEXTAREA_LENGTH_LIMIT[this.lengthLimit ?? 'xs'];
+
+    this.divCssOverride = this.cssOverride ?? '';
 
     const validators = this.fieldControl.validator ? [this.fieldControl.validator] : [];
     validators.push(Validators.maxLength(this.lengthLimitCharacters));
     this.fieldControl.setValidators(validators);
 
-    this.divCssOverride = this.cssOverride || '';
-
+    // Characters countdown behaviors.
+    // // This makes sure that counter is updated when user is typing, even with form onUpdate: 'blur'.
     if (this.textAreaRef) {
       this.fieldChangeSubscription.add(
         fromEvent(this.textAreaRef.nativeElement, 'keyup')
           .pipe(
-            map((event: Event) => (event.target as HTMLTextAreaElement).value),
-            debounceTime(1000),
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            debounceTime(100),
+            map((event: Event) => (event.target as HTMLTextAreaElement).value)
           )
           .subscribe(value => {
-            this.textAreaValue = value;
+            this.currentAvailableCharacters = this.lengthLimitCharacters - value.length;
             this.cdr.markForCheck();
           })
       );
     }
 
+    // // This makes sure that counter is updated when value is changed from parent component.
+    // // Note: This will take into account the form onUpdate strategy.
+    this.fieldChangeSubscription.add(
+      this.fieldControl.valueChanges.subscribe(value => {
+        this.currentAvailableCharacters = this.lengthLimitCharacters - value.length;
+      })
+    );
+
   }
 
   ngDoCheck(): void {
-    
-    if(this.fieldControl.value !== null && this.textAreaValue === '') {
-      this.textAreaValue = this.fieldControl.value;
-    }
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };

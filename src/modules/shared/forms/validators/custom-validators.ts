@@ -81,6 +81,34 @@ export class CustomValidators {
     };
   }
 
+  static postcodeFormatValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return new RegExp(
+        /^(([A-Z][A-HJ-Y]?\d[A-Z\d]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA) \d[A-Z]{2}|BFPO \d{1,4}|(KY\d|MSR|VG|AI)[ -]?\d{4}|[A-Z]{2} \d{2}|GE CX|GIR 0A{2}|SAN TA1)$/gmi
+      ).test(control.value)
+        ? null
+        : { postcodeFormat: message ? { message } : true };
+    }
+  }
+
+  static urlFormatValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      const pattern = new RegExp(
+        '^(https?:\\/\\/)' + // protocol (mandator)
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$', // fragment locator
+        'i'
+      );
+      if (pattern.test(control.value)) { return null; }
+      
+      return { urlFormat: message ? { message } : true };
+    }
+  }
+
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };

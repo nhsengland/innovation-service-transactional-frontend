@@ -58,7 +58,7 @@ export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel
       parameters: [{
         id: 'description', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({
@@ -85,7 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     steps.push(new FormEngineModel({
       parameters: [{
         id: 'postcode', dataType: 'text', label: stepsLabels.q4.label,
-        validations: { isRequired: [true, 'Postcode is required'], maxLength: 8 }
+        validations: { isRequired: [true, 'Postcode is required'], maxLength: 8, postcodeFormat: true }
       }]
     }));
 
@@ -109,7 +109,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         id: 'hasWebsite', dataType: 'radio-group', label: stepsLabels.q6.label,
         validations: { isRequired: [true, 'Choose one option'] },
         items: [
-          { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'website', dataType: 'text', label: 'Website', validations: { isRequired: [true, 'Website url is required'], maxLength: 100 } }) },
+          { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'website', dataType: 'text', label: 'Website', validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true } }) },
           { value: 'NO', label: 'No' }
         ]
       }]

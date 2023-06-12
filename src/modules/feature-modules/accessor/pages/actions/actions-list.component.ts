@@ -28,7 +28,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.setPageTitle('Actions');
 
     this.tabs = [
       {
@@ -64,6 +63,8 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
+        
+        this.setPageTitle('Actions');
 
         if (!queryParams.openActions) {
           this.router.navigate(['/accessor/actions'], { queryParams: { openActions: 'true' } });
@@ -100,15 +101,12 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         }
 
         this.getActionsList();
-
       })
     );
-
   }
 
 
   getActionsList(column?: string): void {
-
     this.setPageStatus('LOADING');
 
     this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
@@ -119,7 +117,6 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     }
 
     );
-
   }
 
   onTableOrder(column: string): void {

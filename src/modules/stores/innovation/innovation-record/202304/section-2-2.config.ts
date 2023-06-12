@@ -71,7 +71,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
         parameters: [{
           id: 'summaryOngoingEvidenceGathering', dataType: 'textarea', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'largeDown'
+          lengthLimit: 'l'
         }]
       }),
       new FormEngineModel({

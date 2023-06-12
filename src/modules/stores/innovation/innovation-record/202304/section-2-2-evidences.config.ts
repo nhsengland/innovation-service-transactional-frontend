@@ -103,7 +103,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       parameters: [{
         id: 'summary', dataType: 'textarea', label: stepsLabels.q5.label, description: stepsLabels.q5.description,
         validations: { isRequired: [true, 'Summary is required'] },
-        lengthLimit: 'mediumUp'
+        lengthLimit: 'm'
       }]
     }),
     new FormEngineModel({

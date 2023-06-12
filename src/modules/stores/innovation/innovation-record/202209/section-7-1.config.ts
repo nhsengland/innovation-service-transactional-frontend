@@ -81,7 +81,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         label: stepsLabels.l3,
         description: 'The more specific you can be with your answer, the better.',
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({
@@ -91,7 +91,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         label: stepsLabels.l4,
         description: 'The more specific you can be with your answer, the better.',
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'medium'
+        lengthLimit: 's'
       }]
     }),
     new FormEngineModel({
@@ -115,7 +115,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
           dataType: 'textarea',
           label: stepsLabels.l6,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'medium'
+          lengthLimit: 's'
         }]
       })
     );

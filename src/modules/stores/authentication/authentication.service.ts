@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, concatMap, map, take } from 'rxjs/operators';
 
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
@@ -94,6 +94,16 @@ export class AuthenticationService {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
     return this.http.get<GetUserInfoDTO>(url.buildUrl()).pipe(take(1),
+      // if for some reason the user is authenticated but v1/me returns 404 and user not found we need to create the user
+      // this can happen if user cancels b2c after sign up and then tries to sign in after
+      catchError(e => {
+        if(e.status === 404 && e.error.error === 'U.0003') {
+          const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
+          return this.http.post(url.buildUrl(), {}).pipe(concatMap(() => this.http.get<GetUserInfoDTO>(url.buildUrl())));
+        } else {
+          return throwError(() => {throw e});
+        }
+      }),
       map(response => ({
         id: response.id,
         email: response.email,

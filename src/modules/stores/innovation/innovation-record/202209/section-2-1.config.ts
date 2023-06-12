@@ -107,7 +107,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.l4,
           description: 'For example, carers of people with functional disability following stroke, GP practice managers, liaison psychiatrists in emergency departments.',
           validations: { isRequired: [true, 'Specification is required'] },
-          lengthLimit: 'medium'
+          lengthLimit: 's'
         }]
 
       })

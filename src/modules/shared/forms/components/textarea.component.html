@@ -19,14 +19,12 @@
     </span>
   </ng-container>
 
-  <textarea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" [maxlength]="lengthLimitCharacters" class="nhsuk-textarea"
+  <textarea #textArea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" [maxlength]="lengthLimitCharacters" class="nhsuk-textarea"
   [attr.aria-invalid]="hasError ? 'true' : null"
-  [attr.aria-describedby]="ariaDescribedBy" #textArea>
+  [attr.aria-describedby]="ariaDescribedBy">
     {{ fieldControl.value }}
   </textarea>
 
-  <div aria-live="polite" class="nhsuk-hint" *ngIf="(lengthLimitCharacters - (this.textAreaValue || '').length > -1)">
-    You have {{ lengthLimitCharacters - (textAreaValue || '').length }} characters remaining
-  </div>
+  <div class="nhsuk-hint" aria-live="polite">You have {{ currentAvailableCharacters }} characters remaining</div>
 
 </div>

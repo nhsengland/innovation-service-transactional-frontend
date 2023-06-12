@@ -83,14 +83,14 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
       parameters: [{
         id: 'payingOrganisations', dataType: 'textarea', label: stepsLabels.q3.label, description: stepsLabels.q3.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'mediumUp'
+        lengthLimit: 'm'
       }]
     }),
     new FormEngineModel({
       parameters: [{
         id: 'benefittingOrganisations', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
         validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'mediumUp'
+        lengthLimit: 'm'
       }]
     }),
     new FormEngineModel({
@@ -110,7 +110,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType
         parameters: [{
           id: 'fundingDescription', dataType: 'textarea', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'medium'
+          lengthLimit: 's'
         }]
       })
     );

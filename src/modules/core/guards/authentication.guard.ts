@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';

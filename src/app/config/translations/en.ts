@@ -531,7 +531,7 @@ export const locale = {
           invalid_format: 'Invalid format',
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
           invalid_json_format: 'Invalid JSON format',
-          invalid_url_format: 'Invalid URL',
+          invalid_url_format: 'The format of this URL is invalid. Add the full URL, including http:// or https://',
           invalid_value: 'Invalid value',
           min: 'Value below the minimum allowed',
           min_hexadecimal: 'Value below the minimum allowed',
@@ -545,6 +545,7 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           validEmail: 'Enter a valid email',
+          invalid_postcode_format: 'Postcode format is invalid',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file exceed the maximum size of 20MB',
           empty_file: 'Uploaded files cannot be empty'

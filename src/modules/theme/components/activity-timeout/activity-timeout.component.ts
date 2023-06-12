@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
-import { LocalStorageHelper } from '@app/base/helpers';
-import { interval, Subscription } from 'rxjs';
+import { Subscription, interval } from 'rxjs';
 
 
 @Component({
@@ -49,9 +48,8 @@ export class ActivityTimeoutComponent implements OnInit, OnDestroy {
 
       this.timeoutSubscription = interval(this.CHECK_INTERVAL * 1000).subscribe(() => this.check());
 
+      // console.log('Timeout started', this.minutesToLogout);
     }
-
-    console.log('Timeout started', this.minutesToLogout);
 
   }
 

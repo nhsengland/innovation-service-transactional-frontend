@@ -11,10 +11,10 @@ import { PageNotFoundComponent } from '@modules/shared/pages/error/not-found.com
 import { PageSwitchContextComponent } from '@modules/shared/pages/switch-context/switch-context.component';
 
 // Guards.
-import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { AuthenticationRedirectionGuard } from '@modules/core/guards/authentication-redirection.guard';
-import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
+import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
+import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 
 
 const routes: Routes = [

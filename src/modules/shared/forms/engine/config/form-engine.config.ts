@@ -15,3 +15,14 @@ export enum FileTypes {
   DOCX = '.docx',
   PDF = '.pdf'
 }
+
+
+export const TEXTAREA_LENGTH_LIMIT = {
+  xs: 200,
+  s: 500,
+  m: 1000,
+  l: 1500,
+  xl: 2000,
+  xxl: 4000
+};
+export type TextareaLengthLimitType = keyof typeof TEXTAREA_LENGTH_LIMIT;

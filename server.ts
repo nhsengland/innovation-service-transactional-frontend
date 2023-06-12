@@ -45,7 +45,7 @@ export function app(): express.Express {
   server.use(session({
     secret: process.env.SESSION_SECRET || 'secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
       httpOnly: true
     }

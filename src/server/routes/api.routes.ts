@@ -2,11 +2,10 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 import axios, { AxiosInstance } from 'axios';
 import * as express from 'express';
 import * as https from 'https';
-import { IProfile } from 'passport-azure-ad';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
-import { getAccessTokenByOid } from './authentication.routes';
+import { getAccessTokenBySessionId } from './authentication.routes';
 
 
 const apiRouter = express.Router();
@@ -52,13 +51,13 @@ function parseAPIUrl(url: string): string {
 }
 
 // Authenticated API proxy endpoints.
-apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
+apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
 
   const requestHandler = getRequestHandler();
-  const user: IProfile = req.user || {};
-  const accessToken = getAccessTokenByOid(user.oid || '');
+  const oid = req.session.id;
+  const accessToken = await getAccessTokenBySessionId(oid);
 
-  if (req.isAuthenticated() && accessToken) {
+  if (oid && accessToken) {
 
     const url = parseAPIUrl(req.url);
     const config = {
