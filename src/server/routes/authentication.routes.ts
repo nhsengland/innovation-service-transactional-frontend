@@ -343,7 +343,7 @@ function getAuthCode(
 
 function setAccessTokenBySessionId(sessionId: string, response: AuthenticationResult): void {
   if(response.account) {
-    userSessions.set(sessionId, { oid: response.uniqueId, account: response.account }); // Change the renewAt to 1800000
+    userSessions.set(sessionId, { oid: response.uniqueId, account: response.account });
   }
 }
 
