@@ -51,11 +51,11 @@ function parseAPIUrl(url: string): string {
 }
 
 // Authenticated API proxy endpoints.
-apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, (req, res) => {
+apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
 
   const requestHandler = getRequestHandler();
   const oid = req.session.id;
-  const accessToken = getAccessTokenBySessionId(oid || '');
+  const accessToken = await getAccessTokenBySessionId(oid);
 
   if (oid && accessToken) {
 

@@ -1,4 +1,5 @@
 import {
+  AccountInfo,
   AuthenticationResult,
   AuthorizationUrlRequest,
   ConfidentialClientApplication,
@@ -50,11 +51,11 @@ const confidentialClientConfig: Configuration = {
       piiLoggingEnabled: false,
       logLevel: LogLevel.Warning,
     },
-  },
+  }
 };
 
 // Session
-type UserSession = { oid: string, accessToken: string, expiresAt: number };
+type UserSession = { oid: string, account: AccountInfo };
 const userSessions = new Map<string, UserSession>();
 
 // Initialize MSAL Node
@@ -76,15 +77,29 @@ const redirects = {
 
 const authenticationRouter: Router = Router();
 
-export function getAccessTokenBySessionId(sessionId: string): string {
+export async function getAccessTokenBySessionId(sessionId: string): Promise<string> {
   const sessionToken = userSessions.get(sessionId);
-  return sessionToken && sessionToken.expiresAt > +new Date()/1000 ? sessionToken.accessToken : '';
+  if(sessionToken) {
+    try {
+      return (await confidentialClientApplication.acquireTokenSilent({
+        account: sessionToken.account,
+        scopes: [],
+      }))?.idToken ?? '';
+    } catch (error: any) {
+      // This will fail if we don't have the token cached but there will be a 401 and a redirect to b2c
+      getAppInsightsClient().trackException({
+        severity: SeverityLevel.Information,
+        exception: error
+      });
+    }
+  }
+  return '';
 }
 
 
 //#region Routes
-authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, (req, res) => {
-  const authenticated = req.session.id && getAccessTokenBySessionId(req.session.id);
+authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) => {
+  const authenticated = req.session.id && await getAccessTokenBySessionId(req.session.id);
   if (authenticated) {
     getAppInsightsClient().trackTrace({
       severity: SeverityLevel.Information,
@@ -327,7 +342,9 @@ function getAuthCode(
 };
 
 function setAccessTokenBySessionId(sessionId: string, response: AuthenticationResult): void {
-  userSessions.set(sessionId, { oid: response.uniqueId, accessToken: response.idToken, expiresAt: (response.idTokenClaims as any).exp ?? Math.floor(+new Date()/1000) + 3600 });
+  if(response.account) {
+    userSessions.set(sessionId, { oid: response.uniqueId, account: response.account });
+  }
 }
 
 function deleteAccessTokenBySessionId(sessionId: string): void {

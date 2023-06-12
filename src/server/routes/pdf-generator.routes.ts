@@ -8,12 +8,12 @@ import { getAccessTokenBySessionId } from './authentication.routes';
 const pdfRouter = express.Router();
 
 // Generate PDF endpoint
-pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, (req, res) => {
+pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, res) => {
 
   try {
 
     const innovationId = req.params.innovationId;
-    const accessToken = getAccessTokenBySessionId(req.session.id);
+    const accessToken = await getAccessTokenBySessionId(req.session.id);
     const config = { 
       headers: { 
         Authorization: `Bearer ${accessToken}`,

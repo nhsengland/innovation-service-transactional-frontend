@@ -82,7 +82,7 @@ async function uploadFile(url: string, file: any): Promise<void> {
 }
 
 fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
-  const accessToken = getAccessTokenBySessionId(req.session.id);
+  const accessToken = await getAccessTokenBySessionId(req.session.id);
   const file = req.file;
   const reqBody = req.body;
 
