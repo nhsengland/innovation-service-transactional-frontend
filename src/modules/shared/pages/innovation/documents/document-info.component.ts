@@ -48,7 +48,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           locationLink: response.context.type === 'INNOVATION_SECTION' ? getAllSectionsList().find(item => item.value === response.context.id)?.label ?? '[Archived section]' : null,
         };
 
-        this.canDelete = !this.stores.authentication.isAdminRole();
+        this.canDelete = response.canDelete;
 
         this.setPageStatus('READY');
 

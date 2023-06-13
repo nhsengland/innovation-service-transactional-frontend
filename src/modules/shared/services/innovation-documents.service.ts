@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -42,7 +42,8 @@ type InnovationDocumentInfoInDTO = {
   description?: string,
   createdAt: DateISOType,
   createdBy: { name: string; role: UserRoleEnum; isOwner?: boolean; orgUnitName?: string };
-  file: FileUploadType
+  file: FileUploadType,
+  canDelete: boolean
 };
 export type InnovationDocumentInfoOutDTO = InnovationDocumentInfoInDTO & {
   context: InnovationDocumentInfoInDTO['context'] & { label: string, description?: string, descriptionUrl?: string },
