@@ -45,7 +45,11 @@
         </div>
 
         <div *ngSwitchCase="'file-upload'">
-          <theme-form-file-upload [arrayName]="p.id" [label]="p.label" [description]="p.description" [config]="p.fileUploadConfig" [pageUniqueField]="onlyOneField"></theme-form-file-upload>
+          <theme-form-file-upload [groupName]="p.id" [label]="p.label" [description]="p.description" [config]="p.fileUploadConfig" [pageUniqueField]="onlyOneField"></theme-form-file-upload>
+        </div>
+
+        <div *ngSwitchCase="'file-upload-array'">
+          <theme-form-file-upload-array [arrayName]="p.id" [label]="p.label" [description]="p.description" [config]="p.fileUploadConfig" [pageUniqueField]="onlyOneField"></theme-form-file-upload-array>
         </div>
 
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">

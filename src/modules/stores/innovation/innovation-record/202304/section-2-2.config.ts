@@ -76,7 +76,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       }),
       new FormEngineModel({
         parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q4.label, description: stepsLabels.q4.description
+          id: 'files', dataType: 'file-upload-array', label: stepsLabels.q4.label, description: stepsLabels.q4.description
         }]
       })
     );

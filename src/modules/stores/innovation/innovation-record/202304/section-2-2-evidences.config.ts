@@ -108,7 +108,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     }),
     new FormEngineModel({
       parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q6.label, description: stepsLabels.q6.description
+        id: 'files', dataType: 'file-upload-array', label: stepsLabels.q6.label, description: stepsLabels.q6.description
       }]
     })
   );

@@ -1,10 +1,10 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { DatesHelper } from '@app/base/helpers';
+import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 export class CustomValidators {
 
   static required(message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => !!control.value ? null : { required: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null => !UtilsHelper.isEmpty(control.value) ? null : { required: (message ? { message } : true) };
   }
 
   static requiredCheckboxArray(message?: string | null): ValidatorFn {
@@ -96,15 +96,15 @@ export class CustomValidators {
       if (!control.value) { return null; }
       const pattern = new RegExp(
         '^(https?:\\/\\/)' + // protocol (mandator)
-          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-          '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-          '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-          '(\\#[-a-z\\d_]*)?$', // fragment locator
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$', // fragment locator
         'i'
       );
       if (pattern.test(control.value)) { return null; }
-      
+
       return { urlFormat: message ? { message } : true };
     }
   }

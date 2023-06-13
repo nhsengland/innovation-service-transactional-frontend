@@ -1,0 +1,52 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <ng-container *ngIf="pageStep === 'INFO' && documentInfo">
+
+        <dl class="nhsuk-summary-list">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Document name</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.name }} ({{ documentInfo.file.extension | uppercase }}{{ documentInfo.file.size ? ', ' + (documentInfo.file.size | bytesPrettyPrint)  : ''}})</dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Uploaded on</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.createdAt | date: ('app.date_formats.medium_date_time' | translate) }}</dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Uploaded by</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.createdBy.description }}</dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Location</dt>
+            <dd class="nhsuk-summary-list__value">
+              {{ 'shared.catalog.documents.contextType.' + documentInfo.context.type | translate }}
+              <br />
+              <span *ngIf="!documentInfo.context.descriptionUrl">{{ documentInfo.context.description }}</span>
+              <span *ngIf="documentInfo.context.descriptionUrl"><a href="{{ documentInfo.context.descriptionUrl }}">{{ documentInfo.context.description }}</a></span>
+            </dd>
+          </div>
+          <div *ngIf="documentInfo.description" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Description</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.description }}</dd>
+          </div>
+        </dl>
+
+        <a [href]="documentInfo.file.url" role="button" class="nhsuk-button nhsuk-u-margin-right-3">Download document</a>
+        <button *ngIf="canDelete" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">Delete document</button>
+
+      </ng-container>
+
+      <ng-container *ngIf="pageStep === 'DELETE' && documentInfo">
+        <div class="nhsuk-warning-callout">
+          <h2 class="nhsuk-warning-callout__label">Important<span class="nhsuk-u-visually-hidden">:</span></h2>
+          <p>Are you sure that you want to delete the {{ documentInfo.name }} document?</p>
+        </div>
+        <button type="button" class="nhsuk-button" (click)="onDelete()">Delete document</button>
+      </ng-container>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

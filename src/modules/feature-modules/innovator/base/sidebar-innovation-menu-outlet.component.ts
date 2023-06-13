@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter, Subscription } from 'rxjs';
+import { Subscription, filter } from 'rxjs';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -26,6 +26,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private innovationStore: InnovationStore
   ) {
+
     this.subscriptions.add(
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         this.onRouteChange()
@@ -44,13 +45,16 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private generateSidebar(): void {
+
     if (this.sidebarItems.length === 0) {
+
       const innovation = this.contextStore.getInnovation();
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
+        { label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
@@ -83,5 +87,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
     }
+
   }
+
 }

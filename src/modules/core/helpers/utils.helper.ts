@@ -1,10 +1,18 @@
-import { locale } from "@app/config/translations/en";
-import { PhoneUserPreferenceEnum } from "@modules/stores/authentication/authentication.service";
+import { locale } from '@app/config/translations/en';
+import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
 
+  static isEmpty(value: any) {
 
-  static isEmpty = (obj: any) => [Object, Array].includes((obj || {}).constructor) && !Object.entries((obj || {})).length;
+    switch (typeof value) {
+      case 'number': return value < 0; // 0 is considered NOT empty.
+      case 'string': return value === '';
+      case 'boolean': return !value;
+      default: return [Object, Array].includes((value ?? {}).constructor) && !Object.entries((value ?? {})).length;
+    }
+
+  }
 
   static arrayFullTextSearch(items: string[], searchText: string): string[] {
 
@@ -29,20 +37,13 @@ export class UtilsHelper {
       value = `By phone, ${locale.data.shared.catalog.user.contact_user_preferences[contactByPhoneTimeframe].confirmation}`;
       newLine = true;
     }
-    
+
     if (contactByEmail) {
-      if (newLine) { value += '\n'}
+      if (newLine) { value += '\n' }
       value += 'By email';
     }
-  
+
     return value;
   }
 
-  static indefiniteArticle(word: string): string {
-    const regex = new RegExp('^[aeiou].*', 'i');
-    const startWithVowel = regex.test(word);
-
-   return startWithVowel ? `an ${word}` : `a ${word}`;
-
-  }
 }

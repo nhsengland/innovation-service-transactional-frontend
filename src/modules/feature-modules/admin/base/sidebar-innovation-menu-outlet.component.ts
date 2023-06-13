@@ -44,16 +44,19 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private generateSidebar(): void {
+
     if (this.sidebarItems.length === 0) {
+
       const innovation = this.contextStore.getInnovation();
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('admin', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
+        { label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change      
+        { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change
       ];
 
       if (innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
@@ -62,6 +65,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
       this._sidebarItems.push({ label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` });
     }
+
   }
 
   private onRouteChange(): void {

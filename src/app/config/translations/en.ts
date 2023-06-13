@@ -126,6 +126,12 @@ export const locale = {
             DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
           }
         },
+        documents: {
+          contextType: {
+            INNOVATION: 'Documents',
+            INNOVATION_SECTION: 'Innovation record'
+          }
+        },
         innovation: {
           action_status: {
             REQUESTED: {
