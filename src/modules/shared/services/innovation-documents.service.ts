@@ -182,10 +182,10 @@ export class InnovationDocumentsService extends CoreService {
 
   }
 
-  deleteDocument(innovationId: string, documentId: string): Observable<{ id: string }> {
+  deleteDocument(innovationId: string, documentId: string): Observable<void> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files/:documentId').setPathParams({ innovationId, documentId });
-    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1));
 
   }
 

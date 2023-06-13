@@ -14,7 +14,7 @@ const stepsLabels = {
     description: 'Enter a name with a maximum of 100 characters.'
   },
   l4: {
-    label: 'Write a short description fot his document (optional)',
+    label: 'Write a short description for his document (optional)',
     description: 'Enter a brief description about this document.'
   },
   l5: { label: 'Upload the document', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' }
