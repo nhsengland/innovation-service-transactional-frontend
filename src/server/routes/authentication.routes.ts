@@ -185,7 +185,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         setAccessTokenBySessionId(req.session.id, response);
         (req.session as any).oid = response.uniqueId;
 
-        res.redirect(backUrl ? backUrl : `${ENVIRONMENT.BASE_PATH}/dashboard`);
+        res.redirect(backUrl ? `${ENVIRONMENT.BASE_PATH}${backUrl}` : `${ENVIRONMENT.BASE_PATH}/dashboard`);
         }).catch((error)=>{
           getAppInsightsClient().trackException({
             exception: error,
