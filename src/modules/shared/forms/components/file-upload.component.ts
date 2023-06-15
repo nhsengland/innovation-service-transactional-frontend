@@ -139,7 +139,6 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       return;
     }
 
-    console.log(event);
     if (event.rejectedFiles.length > 0) {
 
       const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
@@ -184,7 +183,6 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
-            console.log(this.fieldGroupControl);
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);
