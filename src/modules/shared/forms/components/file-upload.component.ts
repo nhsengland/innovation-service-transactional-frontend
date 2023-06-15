@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
@@ -139,6 +139,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       return;
     }
 
+    console.log(event);
     if (event.rejectedFiles.length > 0) {
 
       const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
@@ -172,6 +173,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
         this.uploadFile(file).subscribe({
           next: response => {
 
+            if(this.uploadedFile) {
+              this.onRemoveUploadedFile();
+            }
+
             this.uploadedFile = { id: response.id, file };
 
             this.fieldGroupControl.addControl('id', new FormControl(response.id));
@@ -179,6 +184,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.fieldGroupControl.addControl('size', new FormControl(response.size));
             this.fieldGroupControl.addControl('extension', new FormControl(response.extension));
             this.fieldGroupControl.addControl('url', new FormControl(response.url));
+            console.log(this.fieldGroupControl);
 
             this.evaluateDropZoneTabIndex();
             this.setAuxMessageAndFocus(`${file.name} added.`);

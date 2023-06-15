@@ -3,7 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <p>
+      <p *ngIf="isInnovatorType">
         Everyone who has access to your innovation will be able to view and download your documents.
         If you want to stop sharing your innovation with an organisation, update your <a routerLink="../support">data sharing preferences</a>.
       </p>
@@ -19,7 +19,7 @@
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
-      <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no conversations.</p>
+      <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no documents.</p>
 
       <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
         <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
@@ -40,7 +40,7 @@
           </thead>
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">
+              <td class="nhsuk-table__cell word-break">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('name') }}</span>
                 <div><a href="{{ item.file.url }}" attr.aria-label="Download {{ item.name }} file">{{ item.name }} ({{ item.file.extension | uppercase }}{{ item.file.size ? ', ' + (item.file.size | bytesPrettyPrint)  : ''}})</a></div>
                 <div><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">View details</a></div>

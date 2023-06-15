@@ -23,7 +23,8 @@
           </div>
         </dl>
 
-        <button type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm</button>
+        <button *ngIf="documentData.isCreation" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
+        <button *ngIf="documentData.isEdition" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
 
       </ng-container>
 

@@ -6,8 +6,8 @@ import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/for
 
 import { InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 
-import { DOCUMENT_EDIT_QUESTIONS, DOCUMENT_INNOVATOR_QUESTIONS, DOCUMENT_OTHER_USERS_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
 import { UrlModel } from '@app/base/models';
+import { DOCUMENT_EDIT_QUESTIONS, DOCUMENT_INNOVATOR_QUESTIONS, DOCUMENT_OTHER_USERS_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
 
 
 @Component({
@@ -148,7 +148,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
       this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
         next: response => {
-          this.setRedirectAlertSuccess('A new document was created.');
+          this.setRedirectAlertSuccess('Your document has been added.');
           this.redirectTo(`${this.baseUrl}/${response.id}`);
         },
         error: () => {
@@ -161,7 +161,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
       this.innovationDocumentsService.updateDocument(this.innovationId, this.documentId, wizardSummary).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess('The document was updated.');
+          this.setRedirectAlertSuccess('Your document has been updated.');
           this.redirectTo(`${this.baseUrl}/${this.documentId}`);
         },
         error: () => {
