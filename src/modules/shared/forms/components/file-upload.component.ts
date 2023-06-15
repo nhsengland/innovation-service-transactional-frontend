@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
@@ -171,6 +171,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
         this.uploadFile(file).subscribe({
           next: response => {
+
+            if(this.uploadedFile) {
+              this.onRemoveUploadedFile();
+            }
 
             this.uploadedFile = { id: response.id, file };
 

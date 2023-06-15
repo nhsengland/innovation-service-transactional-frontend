@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 
 @Component({

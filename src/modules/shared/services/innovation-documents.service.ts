@@ -67,8 +67,6 @@ export class InnovationDocumentsService extends CoreService {
 
   getDocumentList(innovationId: string, queryParams: APIQueryParamsType<InnovationDocumentsListFiltersType>): Observable<InnovationDocumentsListOutDTO> {
 
-    console.log('getDocumentList', queryParams);
-
     const { filters, ...qParams } = queryParams;
     const qp = {
       ...qParams,

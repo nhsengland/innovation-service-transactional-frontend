@@ -69,6 +69,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   gotoDeletePage() {
+    this.resetAlert();
     this.setPageTitle('Delete document');
     this.setBackLink('Go back', this.gotoInfoPage.bind(this));
     this.pageStep = 'DELETE';
