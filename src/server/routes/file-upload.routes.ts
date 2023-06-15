@@ -5,6 +5,8 @@ import * as multer from 'multer';
 import * as path from 'path';
 
 import { UrlModel } from '@app/base/models';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
@@ -109,8 +111,18 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), 
     await uploadFile(fileInfo.url, file);
     res.status(201).send(fileInfo);
 
-  } catch (error) {
-    console.error(`Error when attempting to upload data. Error: ${error}`);
+  } catch (error: any) {
+    getAppInsightsClient().trackException({
+      exception: error,
+      severity: SeverityLevel.Warning,
+      properties: {
+        params: req.params,
+        query: req.query,
+        path: req.path,
+        route: req.route,
+        authenticatedUser: (req.session as any).oid,
+      }
+    })
     res.status(500).send();
   }
 
