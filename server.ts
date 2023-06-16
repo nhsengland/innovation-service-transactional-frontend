@@ -66,7 +66,7 @@ export function app(): express.Express {
   server.use(staticContentPath, express.static(distFolder));
 
   // Temporary to diagnose 500 errors.
-  server.use(async (req, res, next) => {
+  server.use((req, res, next) => {
     res.on('finish', () => {
       if (res.statusCode === 500) {
         getAppInsightsClient().trackTrace({ 
