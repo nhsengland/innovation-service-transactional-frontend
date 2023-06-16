@@ -12,7 +12,7 @@ import * as fs from 'fs';
 import * as helmet from 'helmet';
 import { join } from 'path';
 
-import { initAppInsights } from 'src/globals';
+import { getAppInsightsClient, initAppInsights } from 'src/globals';
 import { ENVIRONMENT } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
@@ -23,6 +23,7 @@ import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { AppServerModule } from './src/main.server';
 
 dotenv.config();
@@ -63,6 +64,30 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
+
+  // Temporary to diagnose 500 errors.
+  server.use(async (req, res, next) => {
+    res.on('finish', () => {
+      if (res.statusCode === 500) {
+        getAppInsightsClient().trackTrace({ 
+          message: `Diagnose 500`,
+          severity: SeverityLevel.Information,
+          properties: {
+            request: {
+              url: req.url,
+              method: req.method,
+              body: req.body
+            },
+            response: {
+              statusCode: res.statusCode,
+              statusMessage: res.statusMessage
+            }
+          }
+        });  
+      }
+    });
+    next();
+  });
 
   // Routes
   server.use(authenticationRouter);
