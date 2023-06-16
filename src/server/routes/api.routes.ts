@@ -5,6 +5,8 @@ import * as https from 'https';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { getAppInsightsClient } from 'src/globals';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
 
@@ -74,8 +76,19 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
 
     const fail = (error: any) => {
 
-      console.error(`Error calling API URL: ${url}`);
-      console.error(`StatusCode: ${error.response.status}`, `Data: ${JSON.stringify(error.response.data)}`);
+      getAppInsightsClient().trackTrace({
+        message: `Error calling API URL: ${url}`,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          apiStatusCode: error.response && error.response.status,
+          apiData: error.response && error.response.data,
+        }
+      })
 
       if (error.response && error.response.status) {
         res.status(error.response.status).send(error.response.data);
@@ -124,7 +137,17 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
   requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/${req.params.id}/check`)
     .then(response => { res.status(response.status).send(response.data); })
     .catch((error: any) => {
-      console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/:id/check`, error);
+      getAppInsightsClient().trackException({
+        exception: error,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+        }
+      })
       res.status(500).send();
     });
 
@@ -136,7 +159,17 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id
   requestHandler.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
     .then(response => { res.status(response.status).send(response.data) })
     .catch((error: any) => {
-      console.error(`Error: ${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/:id/check`, error);
+      getAppInsightsClient().trackException({
+        exception: error,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+        }
+      })
       res.status(error.response.status).send();
     });
 

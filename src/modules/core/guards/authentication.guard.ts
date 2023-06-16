@@ -29,7 +29,7 @@ export class AuthenticationGuard implements CanActivate {
     return this.authentication.initializeAuthentication$().pipe(
       map(response => response),
       catchError((e: HttpErrorResponse) => {
-        this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', Severity.ERROR, { error: e });
+        this.loggerService.trackTrace('[AuthenticationGuard] Sign In Error', e.status === 401 ? Severity.VERBOSE : Severity.ERROR, { error: e });
 
         // 401: User in not authenticated on identity provider.
         // 4xx: User is authenticated, but has no permission. (Ex: user is blocked).
@@ -40,8 +40,7 @@ export class AuthenticationGuard implements CanActivate {
           return of(false);
         }
 
-        this.serverResponse.status(303).setHeader('Location', redirectUrl);
-        this.serverResponse.end();
+        this.serverResponse.redirect(redirectUrl);
         return of(false);
 
       })
