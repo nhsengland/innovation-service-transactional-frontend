@@ -74,10 +74,10 @@ export class InnovationDocumentsService extends CoreService {
     const { filters, ...qParams } = queryParams;
     const qp = {
       ...qParams,
-      ...(filters.name ? { name: filters.name } : {}),
-      ...(filters.contextId ? { contextId: filters.contextId } : {}),
-      ...(filters.contextTypes ? { contextTypes: filters.contextTypes } : {}),
-      ...(filters.fields ? { fields: filters.fields } : {}),
+      ...(filters.name && { name: filters.name }),
+      ...(filters.contextId && { contextId: filters.contextId }),
+      ...(filters.contextTypes && { contextTypes: filters.contextTypes }),
+      ...(filters.fields && { fields: filters.fields }),
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId }).setQueryParams(qp);
