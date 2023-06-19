@@ -6,8 +6,10 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationSectionEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -32,11 +34,15 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     submittedBy: null | { name: string, isOwner?: boolean }
   };
 
+  documents: InnovationDocumentsListOutDTO['data'] = [];
+
   summaryList: WizardSummaryType[] = [];
   sectionsIdsList: string[];
 
   previousSection: null | { id: string, title: string } = null;
   nextSection: null | { id: string, title: string } = null;
+
+  baseUrl: string;
 
   // Flags
   isInnovatorType: boolean;
@@ -44,7 +50,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isAssessmentType: boolean;
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private innovationDocumentsService: InnovationDocumentsService
   ) {
 
     super();
@@ -66,6 +73,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     };
 
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
+
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -132,14 +141,23 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.section.showSubmitUpdatesButton = false;
 
     this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
-    this.setBackLink('Innovation Record', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record`);
+    this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
-      next: response => {
-        this.section.status = { id: response.status, label: INNOVATION_SECTION_STATUS[response.status]?.label || '' };
+    forkJoin([
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id),
+      this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+        skip: 0,
+        take: 50,
+        order: { createdAt: 'DESC' },
+        filters: { contextId: this.section.id, contextTypes: ['INNOVATION_SECTION'],
+        fields: ['description']
+      }})
+    ]).subscribe(([sectionInfo, documents]) => {
+
+      this.section.status = { id: sectionInfo.status, label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || '' };
         this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.date = response.submittedAt;
-        this.section.submittedBy = response.submittedBy;
+        this.section.date = sectionInfo.submittedAt;
+        this.section.submittedBy = sectionInfo.submittedBy;
 
         this.getPreviousAndNextPagination();
 
@@ -149,12 +167,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         } else {
 
           // Special business rule around section 2.2.
-          this.section.hasEvidences = !!(section.evidences && response.data.hasEvidence && response.data.hasEvidence === 'YES');
+          this.section.hasEvidences = !!(section.evidences && sectionInfo.data.hasEvidence && sectionInfo.data.hasEvidence === 'YES');
 
-          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(response.data)).runRules();
+          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(sectionInfo.data)).runRules();
 
           const validInformation = this.section.wizard.validateData();
-          const nActions = response.actionsIds?.length ?? 0;
+          const nActions = sectionInfo.actionsIds?.length ?? 0;
 
           if (this.section.status.id === 'DRAFT' && validInformation.valid) {
             this.section.showSubmitButton = nActions === 0;
@@ -165,10 +183,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
         }
 
-        this.setPageStatus('READY');
+        // Documents
+        this.documents = documents.data;
 
-      }
-    });
+        this.setPageStatus('READY');
+    })
 
   }
 

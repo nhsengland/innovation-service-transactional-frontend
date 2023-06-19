@@ -14,7 +14,10 @@ import { getAllSectionsList } from '@modules/stores/innovation/innovation-record
 type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION';
 
 export type InnovationDocumentsListFiltersType = {
-  name?: null | string
+  name?: null | string,
+  contextTypes?: ContextTypeType[],
+  contextId?: string;
+  fields?: ('description')[]
 }
 type InnovationDocumentsListInDTO = {
   count: number,
@@ -22,6 +25,7 @@ type InnovationDocumentsListInDTO = {
     id: string,
     context: { type: ContextTypeType, id: string },
     name: string,
+    description?: string;
     createdAt: DateISOType,
     createdBy: { name: string; role: UserRoleEnum; isOwner?: boolean; orgUnitName?: string };
     file: FileUploadType
@@ -70,7 +74,10 @@ export class InnovationDocumentsService extends CoreService {
     const { filters, ...qParams } = queryParams;
     const qp = {
       ...qParams,
-      ...(filters.name ? { name: filters.name } : {})
+      ...(filters.name && { name: filters.name }),
+      ...(filters.contextId && { contextId: filters.contextId }),
+      ...(filters.contextTypes && { contextTypes: filters.contextTypes }),
+      ...(filters.fields && { fields: filters.fields }),
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId }).setQueryParams(qp);
