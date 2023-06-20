@@ -22,13 +22,14 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = InnovationDocumentInfoOutDTO;
+type InboundPayloadType = InnovationDocumentInfoOutDTO & { isSectionDoc: boolean };
 type StepPayloadType = {
   contextType?: InnovationDocumentInfoOutDTO['context']['type'],
   section?: string,
   name?: string,
   description?: string,
-  file?: FileUploadType
+  file?: FileUploadType,
+  isSectionDoc?: boolean
 };
 export type OutboundPayloadType = UpsertInnovationDocumentType;
 
@@ -41,7 +42,7 @@ const relatedWithSectionItems = [
 const innovationSectionsItems = getAllSectionsList();
 
 
-export const DOCUMENT_INNOVATOR_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const DOCUMENT_WITH_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       parameters: [{
@@ -57,7 +58,7 @@ export const DOCUMENT_INNOVATOR_QUESTIONS: WizardEngineModel = new WizardEngineM
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
-export const DOCUMENT_OTHER_USERS_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const DOCUMENT_WITHOUT_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       parameters: [{
@@ -154,7 +155,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     ...(data.context.type === 'INNOVATION_SECTION' && { section: data.context.id }),
     name: data.name,
     description: data.description,
-    file: data.file
+    file: data.file,
+    isSectionDoc: data.isSectionDoc
   };
 
 }
@@ -191,6 +193,11 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       value: innovationSectionsItems.find(item => item.value === data.section)?.label,
       editStepNumber: editStepNumber++
     });
+  }
+
+  // In case is a document added directly from the section we don't want to edit the fields l1 and l2
+  if(data.isSectionDoc) {
+    editStepNumber = 1;
   }
 
   toReturn.push(

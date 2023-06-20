@@ -122,11 +122,12 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         items: hasResourcesToScaleItems
       }]
     }),
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload-array', label: stepsLabels.q7.label, description: stepsLabels.q7.description
-      }]
-    })
+    // TECH DEBT: A new config should be made after evidences decision
+    // new FormEngineModel({
+    //   parameters: [{
+    //     id: 'files', dataType: 'file-upload-array', label: stepsLabels.q7.label, description: stepsLabels.q7.description
+    //   }]
+    // })
   );
 
 }
@@ -221,7 +222,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   // Add a button to the end of the list.
-  toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
+  // TECH DEBT: A new config should be made after evidences decision
+  // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   return toReturn;
 

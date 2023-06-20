@@ -130,13 +130,13 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`userTestFeedback_${StringsHelper.slugify(item.kind)}`] = item.feedback;
   });
 
-  steps.push(
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload-array', label: stepsLabels.q5.label, description: stepsLabels.q5.description
-      }]
-    })
-  );
+  // steps.push(
+  //   new FormEngineModel({
+  //     parameters: [{
+  //       id: 'files', dataType: 'file-upload-array', label: stepsLabels.q5.label, description: stepsLabels.q5.description
+  //     }]
+  //   })
+  // );
 
 }
 
@@ -229,7 +229,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     });
 
     // Add a button to the end of the list.
-    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
+    // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   }
 

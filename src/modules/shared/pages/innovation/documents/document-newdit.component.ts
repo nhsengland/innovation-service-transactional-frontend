@@ -7,7 +7,7 @@ import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/for
 import { InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 
 import { UrlModel } from '@app/base/models';
-import { DOCUMENT_EDIT_QUESTIONS, DOCUMENT_INNOVATOR_QUESTIONS, DOCUMENT_OTHER_USERS_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
+import { DOCUMENT_EDIT_QUESTIONS, DOCUMENT_WITH_LOCATION_QUESTIONS, DOCUMENT_WITHOUT_LOCATION_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
 
 
 @Component({
@@ -28,6 +28,9 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   wizard = new WizardEngineModel({});
 
+  // Flags
+  isCreateDocFromSection: boolean;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -43,43 +46,56 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     };
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/documents`;
 
+    this.isCreateDocFromSection = false;
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
   }
 
   ngOnInit(): void {
 
-    if (this.documentData.isCreation) {
+    this.subscriptions.push(
+      this.activatedRoute.queryParams.subscribe(queryParams => {
 
-      if (this.stores.authentication.isInnovatorType()) {
-        this.wizard = new WizardEngineModel(DOCUMENT_INNOVATOR_QUESTIONS);
-      } else {
-        // this.wizard.setAnswers(this.wizard.runInboundParsing({ contextType: 'INNOVATION' }));
-        this.wizard = new WizardEngineModel(DOCUMENT_OTHER_USERS_QUESTIONS);
-      }
+        if (this.documentData.isCreation) {
 
-      this.wizard.runRules();
+          // If sectionId isn't passed it means we want to show the full journey
+          if (this.stores.authentication.isInnovatorType() && !queryParams.sectionId) {
+            this.wizard = new WizardEngineModel(DOCUMENT_WITH_LOCATION_QUESTIONS);
+          } else {
+            this.wizard = new WizardEngineModel(DOCUMENT_WITHOUT_LOCATION_QUESTIONS);
 
-      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-      this.setPageStatus('READY');
+            if(queryParams.sectionId) {
+              this.isCreateDocFromSection = true;
+              this.wizard.setAnswers(this.wizard.runInboundParsing({ context: { type: 'INNOVATION_SECTION', id: queryParams.sectionId }, isSectionDoc: this.isCreateDocFromSection }));
+            }
+          }
 
-    } else {
+          this.wizard.runRules();
 
-      this.innovationDocumentsService.getDocumentInfo(this.innovationId, this.documentId).subscribe(response => {
+          this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+          this.setPageStatus('READY');
 
-        this.wizard = new WizardEngineModel(DOCUMENT_EDIT_QUESTIONS);
+        } else {
 
-        this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
-        this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
+          this.innovationDocumentsService.getDocumentInfo(this.innovationId, this.documentId).subscribe(response => {
 
-        this.setUploadConfiguration();
+            this.wizard = new WizardEngineModel(DOCUMENT_EDIT_QUESTIONS);
 
-        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-        this.setPageStatus('READY');
+            this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
 
-      });
+            this.setUploadConfiguration();
 
-    }
+            this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+            this.setPageStatus('READY');
+
+          });
+
+        }
+
+      })
+    );
 
   }
 
