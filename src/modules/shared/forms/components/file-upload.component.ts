@@ -140,7 +140,6 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     }
 
     if (event.rejectedFiles.length > 0) {
-      console.log(event.rejectedFiles);
 
       const sizeExceeded = event.rejectedFiles.some((f) => f.reason === 'size');
       if (sizeExceeded) {
