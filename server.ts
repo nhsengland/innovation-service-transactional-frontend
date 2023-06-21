@@ -15,6 +15,8 @@ import { join } from 'path';
 import { getAppInsightsClient, initAppInsights } from 'src/globals';
 import { ENVIRONMENT } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
+import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
+import { exceptionLoggingMiddleware } from 'src/server/middlewares/exception-logging.middleware';
 
 import apiRouter from 'src/server/routes/api.routes';
 import authenticationRouter from 'src/server/routes/authentication.routes';
@@ -59,11 +61,6 @@ export function app(): express.Express {
     helmet.frameguard({ action: 'deny' })
   );
 
-  server.use((req, _res, next) => {
-    console.log(req.url);
-    next();
-  });
-
   server.set('view engine', 'html');
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
@@ -99,8 +96,8 @@ export function app(): express.Express {
   server.use(apiRouter);
 
   // Middleware
-  // server.use(appLoggingMiddleware);
-  // server.use(exceptionLoggingMiddleware);
+  server.use(appLoggingMiddleware);
+  server.use(exceptionLoggingMiddleware);
 
   // PING Endpoint
   server.get(`${ENVIRONMENT.BASE_PATH}/ping`, (req, res) => {

@@ -336,18 +336,15 @@ function getAuthCode(
     state: backUrl ? `${state};${backUrl}` : state,
     redirectUri: redirects[state]
   };
-  console.log('getAuthCode');
 
   // request an authorization code to exchange for a token
   return confidentialClientApplication
     .getAuthCodeUrl(authCodeRequest)
     .then((response) => {
       //redirect to the auth code URL/send code to
-      console.log('redirecting to auth code url', res.writableEnded);
       res.redirect(response);
     })
     .catch(() => {
-      console.log('error generic');
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
 };
