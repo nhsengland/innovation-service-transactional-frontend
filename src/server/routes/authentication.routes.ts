@@ -141,9 +141,9 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
 });
 
 
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, (req, res) => {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, async (req, res) => {
   // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
-  getAuthCode(authorities.signin, 'LOGIN', res, req.query.back?.toString() ?? undefined);
+  await getAuthCode(authorities.signin, 'LOGIN', res, req.query.back?.toString() ?? undefined);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
@@ -336,15 +336,18 @@ function getAuthCode(
     state: backUrl ? `${state};${backUrl}` : state,
     redirectUri: redirects[state]
   };
+  console.log('getAuthCode');
 
   // request an authorization code to exchange for a token
   return confidentialClientApplication
     .getAuthCodeUrl(authCodeRequest)
     .then((response) => {
       //redirect to the auth code URL/send code to
+      console.log('redirecting to auth code url', res.writableEnded);
       res.redirect(response);
     })
     .catch(() => {
+      console.log('error generic');
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
 };

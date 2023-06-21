@@ -28,8 +28,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   initializeAuthentication$(): Observable<boolean> {
 
     return new Observable((observer: Observer<boolean>) => {
-
-      this.authenticationService.verifyUserSession().pipe(
+      //this.authenticationService.verifyUserSession()
+      of(true).pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
 

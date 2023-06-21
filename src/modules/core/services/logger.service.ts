@@ -1,8 +1,7 @@
 /* istanbul ignore file */
 
-import { Injectable, ErrorHandler } from '@angular/core';
-import { AxiosInstance } from 'axios';
-import axios from 'axios';
+import { Injectable } from '@angular/core';
+import axios, { AxiosInstance } from 'axios';
 
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
@@ -27,7 +26,7 @@ export class LoggerService {
   private client: AxiosInstance;
 
   constructor(
-    private errorHandler: ErrorHandler,
+//    private errorHandler: ErrorHandler,
     private envVariablesStore: EnvironmentVariablesStore
   ) {
 
@@ -42,22 +41,22 @@ export class LoggerService {
 
     try {
 
-      await this.client.request({
-        method: 'POST',
-        url: `${this.envVariablesStore.APP_URL}/insights`,
-        data: {
-          type: 'trace',
-          message,
-          severity,
-          properties: { ...props }
-        }
-      });
+      // await this.client.request({
+      //   method: 'POST',
+      //   url: `${this.envVariablesStore.APP_URL}/insights`,
+      //   data: {
+      //     type: 'trace',
+      //     message,
+      //     severity,
+      //     properties: { ...props }
+      //   }
+      // });
 
       return { success: true, type: 'trace' };
 
     } catch (error) {
 
-      this.errorHandler.handleError(error);
+      // this.errorHandler.handleError(error);
 
       return { success: false, type: 'trace', error };
 
