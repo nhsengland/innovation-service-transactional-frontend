@@ -44,7 +44,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.tableList.setVisibleColumns({
       name: { label: 'Name', orderable: true },
       createdAt: { label: 'Uploaded', orderable: true },
-      contextType: { label: 'Location', align: 'right', orderable: true },
+      contextType: { label: 'Location', orderable: true },
+      actions: { label: '', align: 'right'}
     }).setOrderBy('createdAt', 'descending');
 
     this.getDocumentsList();

@@ -95,6 +95,8 @@
       <ng-container *ngIf="!section.isNotStarted">
         <h2 class="nhsuk-heading-m">Documents</h2>
 
+        <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ sectionId: section.id }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
+
         <p *ngIf="documents.length === 0">There are no documents uploaded to this section.</p>
 
         <dl *ngIf="documents.length > 0" class="nhsuk-summary-list">
