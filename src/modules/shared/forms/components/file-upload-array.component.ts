@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
 import { Observable, of } from 'rxjs';
@@ -139,11 +139,16 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
 
     if (event.rejectedFiles.length > 0) {
 
-      const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
-
+      const sizeExceeded = event.rejectedFiles.some((i) => i.reason === 'size');
       if (sizeExceeded) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ maxFileSize: 'true' });
+      }
+
+      const wrongFormat = event.rejectedFiles.some(f => f.reason === 'type');
+      if(wrongFormat) {
+        this.hasUploadError = true;
+        this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' })
       }
 
       event.rejectedFiles.forEach(file => {

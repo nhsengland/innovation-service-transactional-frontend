@@ -96,7 +96,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const startTime = new Date();
 
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
-      this.setAlertSuccess('You have successfully changed your password.');
+      this.setAlertSuccess('You have successfully changed your password');
     }
 
   }

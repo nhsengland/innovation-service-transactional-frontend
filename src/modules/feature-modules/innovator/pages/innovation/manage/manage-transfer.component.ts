@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormGroup, FormEngineParameterModel, Validators, WizardEngineModel, FormEngineComponent } from '@app/base/forms';
+import { CustomValidators, FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ActivatedRoute } from '@angular/router';
+import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { WizardSummaryType } from '@modules/shared/forms';
-import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { cloneDeep } from 'lodash';
+import { COLLABORATORS_TRANSFERS, NO_COLLABORATORS_TRANSFERS, otherEmailItem } from './manage-transfer.config';
 
 
 @Component({
@@ -91,7 +91,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
 
           if(Number(params.stepId) === 1) {
             this.setBackLink('Go back');
-          } else {            
+          } else {
             this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
           }
 
@@ -136,7 +136,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
         }
       },
       error: () => {
-        this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info.');
+        this.setAlertError('An error occurred when transferring innovation ownership. Please check the details and try again or contact us for further info');
       }
     });
   }

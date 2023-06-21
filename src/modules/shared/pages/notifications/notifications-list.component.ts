@@ -122,7 +122,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     this.notificationsService.deleteNotification(notificationId).subscribe({
       next: () => {
-        this.setAlertSuccess('Notification successfully cleared.');
+        this.setAlertSuccess('Notification successfully cleared');
         this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
@@ -141,7 +141,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     this.notificationsService.dismissAllUserNotifications().subscribe({
       next: response => {
-        this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read.`);
+        this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read`);
         this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
