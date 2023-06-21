@@ -1,13 +1,13 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { OrganisationErrorsEnum } from '@app/base/enums';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/admin-users.service';
 import { GetOrganisationUnitUserDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ORGANISATION_UNIT_USER_EDIT } from './organisation-unit-user-edit-wizard.config';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AdminUsersService } from '@modules/feature-modules/admin/services/admin-users.service';
 
 @Component({
   selector: 'app-admin-pages-organisation-unit-user-edit',
@@ -136,7 +136,7 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
   }
 
   private onSubmitWizardSuccess(): void {
-    this.setRedirectAlertSuccess('A new user has been added to this organisation unit.', {
+    this.setRedirectAlertSuccess('A new user has been added to this organisation unit', {
       width: '2.thirds'
     });
     this.redirectTo(this.redirectUrl);

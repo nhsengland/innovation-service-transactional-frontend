@@ -5,12 +5,12 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { MappedObjectType, WizardStepEventType } from '@app/base/types';
 
-import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/users-step.component';
-import { UsersStepInputType, UsersStepOutputType } from './steps/users-step.types';
+import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
+import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './steps/innovations-step.component';
 import { InnovationsStepInputType, InnovationsStepOutputType } from './steps/innovations-step.types';
-import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
-import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
+import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/users-step.component';
+import { UsersStepInputType, UsersStepOutputType } from './steps/users-step.types';
 
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -189,7 +189,7 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
     this.setPageStatus('LOADING');
     this.adminOrganisationsService.inactivateOrganisationUnit(this.wizard.data.organisation.id, this.wizard.data.organisationUnit.id).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully inactivated the organisation unit.');
+        this.setRedirectAlertSuccess('You have successfully inactivated the organisation unit');
         this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}/unit/${this.wizard.data.organisationUnit.id}`);
       },
       error: () => {
