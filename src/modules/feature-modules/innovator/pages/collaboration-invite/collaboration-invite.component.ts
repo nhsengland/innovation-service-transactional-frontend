@@ -26,7 +26,7 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.collaboratorId = this.activatedRoute.snapshot.params.collaboratorId;
-    
+
     this.setPageTitle('Do you want to collaborate on this innovation?');
   }
 
@@ -44,10 +44,10 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
     this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status)
     .pipe(catchError(() => { this.redirectTo('/error/forbidden-collaborator'); return EMPTY }))
     .subscribe(() => {
-      const successMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ? 
-        `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.` 
-        : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator.`;
-    
+      const successMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ?
+        `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`
+        : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`;
+
       this.setRedirectAlertSuccess(successMessage);
       this.redirectTo(`/innovator/dashboard`);
     })

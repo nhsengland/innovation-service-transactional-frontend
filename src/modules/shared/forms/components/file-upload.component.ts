@@ -140,12 +140,18 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     }
 
     if (event.rejectedFiles.length > 0) {
+      console.log(event.rejectedFiles);
 
-      const sizeExceeded = event.rejectedFiles.find((i) => i.reason === 'size');
-
+      const sizeExceeded = event.rejectedFiles.some((f) => f.reason === 'size');
       if (sizeExceeded) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ maxFileSize: 'true' });
+      }
+
+      const wrongFormat = event.rejectedFiles.some(f => f.reason === 'type');
+      if(wrongFormat) {
+        this.hasUploadError = true;
+        this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' })
       }
 
       event.rejectedFiles.forEach(file => {
@@ -158,7 +164,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
     if (event.addedFiles.length > 0) {
 
-      const emptyFile = event.addedFiles.find(i => i.size === 0);
+      const emptyFile = event.addedFiles.some(i => i.size === 0);
       if (emptyFile) {
         event.addedFiles = event.addedFiles.filter(i => i.size !== 0);
         this.hasUploadError = true;

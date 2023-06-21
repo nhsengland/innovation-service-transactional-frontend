@@ -553,8 +553,9 @@ export const locale = {
           validEmail: 'Enter a valid email',
           invalid_postcode_format: 'Postcode format is invalid',
           invalid_parse_date: 'Please enter a valid date format',
-          max_file_size: 'The file exceed the maximum size of 20MB',
-          empty_file: 'Uploaded files cannot be empty'
+          max_file_size: 'The file size is above the limit of 20MB',
+          empty_file: 'Uploaded files cannot be empty',
+          wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF'
         }
       }
 

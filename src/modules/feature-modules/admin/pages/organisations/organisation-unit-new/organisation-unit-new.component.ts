@@ -121,7 +121,7 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Submit' };
-        this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+        this.setAlertError('Please try again or contact us for further help', { width: '2.thirds' })
       }
     });
 

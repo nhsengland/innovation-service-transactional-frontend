@@ -51,7 +51,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     const startTime = new Date();
 
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
-      this.setAlertSuccess('You have successfully changed your password.');
+      this.setAlertSuccess('You have successfully changed your password');
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER, UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER] };

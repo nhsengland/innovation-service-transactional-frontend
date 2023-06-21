@@ -66,7 +66,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
       },
       error: () => {
         this.isContinueButtonActive = true;
-        this.setAlertError('An error occured while reading an announcement. Please try again or contact us for further help.', { width: '2.thirds' })
+        this.setAlertError('An error occured while reading an announcement. Please try again or contact us for further help', { width: '2.thirds' })
       }
     });
 

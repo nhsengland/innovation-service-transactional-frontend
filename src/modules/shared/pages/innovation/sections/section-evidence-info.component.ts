@@ -72,7 +72,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
         this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteSuccess' });
       },
       error: () => {
-        this.setAlertError('An error occurred when deleting your evidence. Please try again or contact us for further help.');
+        this.setAlertError('An error occurred when deleting your evidence. Please try again or contact us for further help');
         // this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteError' });
       }
     });

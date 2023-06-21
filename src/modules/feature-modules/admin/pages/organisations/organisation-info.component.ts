@@ -48,19 +48,19 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'organisationCreationSuccess':
-        this.setAlertSuccess('You\'ve successfully created the organisation.');
+        this.setAlertSuccess('You\'ve successfully created the organisation');
         break;
       case 'updateOrganisationSuccess':
-        this.setAlertSuccess('You\'ve successfully updated the organisation.');
+        this.setAlertSuccess('You\'ve successfully updated the organisation');
         break;
       case 'updateUnitSuccess':
-        this.setAlertSuccess('You\'ve successfully updated the organisation unit.');
+        this.setAlertSuccess('You\'ve successfully updated the organisation unit');
         break;
       case 'organisationUnitActivateSuccess':
-        this.setAlertSuccess('You\'ve successfully activated the organisation unit.');
+        this.setAlertSuccess('You\'ve successfully activated the organisation unit');
         break;
       case 'organisationUnitInactivateSuccess':
-        this.setAlertSuccess('You\'ve successfully inactivated the organisation unit.');
+        this.setAlertSuccess('You\'ve successfully inactivated the organisation unit');
         break;
       default:
         break;

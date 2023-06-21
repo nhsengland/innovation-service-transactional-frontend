@@ -6,7 +6,6 @@ import { concatMap } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent } from '@app/base/forms';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovatorService } from '../../services/innovator.service';
 
 import { HttpErrorResponse } from '@angular/common/http';
@@ -80,7 +79,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       },
       error: ({ error: err }: HttpErrorResponse) => {
         if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
-          this.setAlertError('An innovation with that name already exists. Try again with a new name.');
+          this.setAlertError('An innovation with that name already exists. Try again with a new name');
         } else {
           this.setAlertError('An error occurred when creating the innovation. Please try again or contact us for further help');
         }
