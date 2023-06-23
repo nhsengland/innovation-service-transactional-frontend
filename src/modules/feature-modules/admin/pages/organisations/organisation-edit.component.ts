@@ -123,7 +123,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         this.adminOrganisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe({
           next: (response) => {
             if (response.unitId) {
-              this.setRedirectAlertSuccess('You have successfully updated the organisation unit.');
+              this.setRedirectAlertSuccess('You have successfully updated the organisation unit');
             } else {
               this.setRedirectAlertError('Error updating unit')
             }

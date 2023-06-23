@@ -136,7 +136,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
       this.announcementsService.createAnnouncement(this.wizardSummary).subscribe({
         next: response => {
-          this.setRedirectAlertSuccess('A new announcement was created.');
+          this.setRedirectAlertSuccess('A new announcement was created');
           this.redirectTo(`admin/announcements/${response.id}`);
         },
         error: () => {
@@ -149,7 +149,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
       this.announcementsService.updateAnnouncement(this.announcementId, this.announcementData.status!, this.wizardSummary).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess('The announcement was updated.');
+          this.setRedirectAlertSuccess('The announcement was updated');
           this.redirectTo(`admin/announcements/${this.announcementId}`);
         },
         error: () => {

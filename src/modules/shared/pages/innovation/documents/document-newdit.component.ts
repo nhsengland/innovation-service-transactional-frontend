@@ -164,7 +164,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
       this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
         next: response => {
-          this.setRedirectAlertSuccess('Your document has been added.');
+          this.setRedirectAlertSuccess('Your document has been added');
           this.redirectTo(`${this.baseUrl}/${response.id}`);
         },
         error: () => {
@@ -177,7 +177,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
       this.innovationDocumentsService.updateDocument(this.innovationId, this.documentId, wizardSummary).subscribe({
         next: () => {
-          this.setRedirectAlertSuccess('Your document has been updated.');
+          this.setRedirectAlertSuccess('Your document has been updated');
           this.redirectTo(`${this.baseUrl}/${this.documentId}`);
         },
         error: () => {

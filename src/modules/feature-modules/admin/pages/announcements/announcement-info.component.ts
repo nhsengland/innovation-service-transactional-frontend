@@ -75,7 +75,7 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
 
     this.announcementsService.deleteAnnouncement(this.announcementId).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('The announcement was deleted.');
+        this.setRedirectAlertSuccess('The announcement was deleted');
         this.redirectTo(`admin/announcements`);
       },
       error: () => {

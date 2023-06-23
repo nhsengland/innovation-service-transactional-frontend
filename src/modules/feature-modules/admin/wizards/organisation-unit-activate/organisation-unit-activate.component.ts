@@ -5,10 +5,10 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { MappedObjectType, WizardStepEventType } from '@app/base/types';
 
+import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
+import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
 import { WizardOrganisationUnitActivateUsersStepComponent } from './steps/users-step.component';
 import { UsersStepInputType, UsersStepOutputType } from './steps/users-step.types';
-import { SummaryWithConfirmStepInputType, SummaryWithConfirmStepOutputType } from '@modules/shared/wizards/steps/summary-with-confirm-step.types';
-import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
@@ -163,7 +163,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
       this.wizard.data.usersStep.users.map(item => item.id)
     ).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully activated the organisation unit.');
+        this.setRedirectAlertSuccess('You have successfully activated the organisation unit');
         this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}/unit/${this.wizard.data.organisationUnit.id}`);
       },
       error: () => {
