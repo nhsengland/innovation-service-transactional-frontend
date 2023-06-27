@@ -7,7 +7,8 @@ import { UrlModel } from '@app/base/models';
 
 import { InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 
-import { WIZARD_EDIT_QUESTIONS, WIZARD_WITH_LOCATION_QUESTIONS, WIZARD_BASE_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
+import { InnovationErrorsEnum } from '@app/base/enums';
+import { OutboundPayloadType, WIZARD_BASE_QUESTIONS, WIZARD_EDIT_QUESTIONS, WIZARD_WITH_LOCATION_QUESTIONS } from './document-newdit.config';
 
 
 @Component({
@@ -160,9 +161,13 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
           this.setRedirectAlertSuccess('Your document has been added');
           this.redirectTo(this.redirectUrl({ sectionId: this.pageData.queryParams.sectionId, documentId: response.id }));
         },
-        error: () => {
+        error: ({ error: err }) => {
           this.setPageStatus('ERROR');
-          this.setAlertUnknownError();
+          if (err.error === InnovationErrorsEnum.INNOVATION_MAX_ALLOWED_FILES_REACHED) {
+            this.setAlertError('You cannot upload this file as this innovation has reached the limit of 50 files.');
+          } else {
+            this.setAlertUnknownError();
+          }
         }
       });
 
