@@ -209,17 +209,17 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: editStepNumber++
   });
 
-  const stepNumber = editStepNumber++;
-  const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-  allFiles.forEach((item, i) => {
-    toReturn.push({
-      label: `Attachment ${i + 1}`,
-      value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-      editStepNumber: stepNumber,
-      allowHTML: true,
-      isFile: true
-    });
-  });
+  // const stepNumber = editStepNumber++;
+  // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+  // allFiles.forEach((item, i) => {
+  //   toReturn.push({
+  //     label: `Attachment ${i + 1}`,
+  //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+  //     editStepNumber: stepNumber,
+  //     allowHTML: true,
+  //     isFile: true
+  //   });
+  // });
 
   // Add a button to the end of the list.
   // TECH DEBT: A new config should be made after evidences decision
