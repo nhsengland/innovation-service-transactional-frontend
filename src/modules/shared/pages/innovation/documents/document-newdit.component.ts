@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
+import { UrlModel } from '@app/base/models';
 
 import { InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 
-import { UrlModel } from '@app/base/models';
-import { DOCUMENT_EDIT_QUESTIONS, DOCUMENT_WITH_LOCATION_QUESTIONS, DOCUMENT_WITHOUT_LOCATION_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
+import { WIZARD_EDIT_QUESTIONS, WIZARD_WITH_LOCATION_QUESTIONS, WIZARD_BASE_QUESTIONS, OutboundPayloadType } from './document-newdit.config';
 
 
 @Component({
@@ -20,16 +20,16 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   innovationId: string;
   documentId: string;
-  documentData: {
+
+  pageData: {
     isCreation: boolean,
-    isEdition: boolean
+    isEdition: boolean,
+    queryParams: {
+      sectionId?: string
+    }
   };
-  baseUrl: string;
 
   wizard = new WizardEngineModel({});
-
-  // Flags
-  isCreateDocFromSection: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -40,13 +40,11 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.announcementId;
-    this.documentData = {
+    this.pageData = {
       isCreation: !this.documentId,
-      isEdition: !!this.documentId
+      isEdition: !!this.documentId,
+      queryParams: { sectionId: this.activatedRoute.snapshot.queryParams.sectionId }
     };
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/documents`;
-
-    this.isCreateDocFromSection = false;
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
@@ -54,48 +52,43 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   ngOnInit(): void {
 
-    this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe(queryParams => {
+    if (this.pageData.isCreation) {
 
-        if (this.documentData.isCreation) {
+      if (this.stores.authentication.isInnovatorType()) {
 
-          // If sectionId isn't passed it means we want to show the full journey
-          if (this.stores.authentication.isInnovatorType() && !queryParams.sectionId) {
-            this.wizard = new WizardEngineModel(DOCUMENT_WITH_LOCATION_QUESTIONS);
-          } else {
-            this.wizard = new WizardEngineModel(DOCUMENT_WITHOUT_LOCATION_QUESTIONS);
-
-            if(queryParams.sectionId) {
-              this.isCreateDocFromSection = true;
-              this.wizard.setAnswers(this.wizard.runInboundParsing({ context: { type: 'INNOVATION_SECTION', id: queryParams.sectionId }, isSectionDoc: this.isCreateDocFromSection }));
-            }
-          }
-
-          this.wizard.runRules();
-
-          this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-          this.setPageStatus('READY');
-
+        if (this.pageData.queryParams.sectionId) {
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+          this.wizard.setAnswers(this.wizard.runInboundParsing({ context: { type: 'INNOVATION_SECTION', id: this.pageData.queryParams.sectionId } }));
         } else {
-
-          this.innovationDocumentsService.getDocumentInfo(this.innovationId, this.documentId).subscribe(response => {
-
-            this.wizard = new WizardEngineModel(DOCUMENT_EDIT_QUESTIONS);
-
-            this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
-            this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
-
-            this.setUploadConfiguration();
-
-            this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-            this.setPageStatus('READY');
-
-          });
-
+          this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS);
         }
 
-      })
-    );
+      } else {
+        this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+      }
+
+      this.wizard.runRules();
+
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setPageStatus('READY');
+
+    } else {
+
+      this.innovationDocumentsService.getDocumentInfo(this.innovationId, this.documentId).subscribe(response => {
+
+        this.wizard = new WizardEngineModel(WIZARD_EDIT_QUESTIONS);
+
+        this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
+        this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
+
+        this.setUploadConfiguration();
+
+        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+        this.setPageStatus('READY');
+
+      });
+
+    }
 
   }
 
@@ -127,7 +120,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   onSubmitStep(action: 'previous' | 'next'): void {
 
-    const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) { // Don't move forward if step is NOT valid.
       return;
@@ -137,7 +130,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
+        if (this.wizard.isFirstStep()) { this.redirectTo(this.redirectUrl()); }
         else { this.wizard.previousStep(); }
         break;
       case 'next':
@@ -160,12 +153,12 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
     const wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    if (this.documentData.isCreation) {
+    if (this.pageData.isCreation) {
 
       this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
         next: response => {
           this.setRedirectAlertSuccess('Your document has been added');
-          this.redirectTo(`${this.baseUrl}/${response.id}`);
+          this.redirectTo(this.redirectUrl({ sectionId: this.pageData.queryParams.sectionId, documentId: response.id }));
         },
         error: () => {
           this.setPageStatus('ERROR');
@@ -178,7 +171,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
       this.innovationDocumentsService.updateDocument(this.innovationId, this.documentId, wizardSummary).subscribe({
         next: () => {
           this.setRedirectAlertSuccess('Your document has been updated');
-          this.redirectTo(`${this.baseUrl}/${this.documentId}`);
+          this.redirectTo(this.redirectUrl({ documentId: this.documentId }));
         },
         error: () => {
           this.setPageStatus('ERROR');
@@ -186,6 +179,20 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
         }
       });
 
+    }
+
+  }
+
+  redirectUrl(data?: { documentId?: string, sectionId?: string }): string {
+
+    const baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
+
+    if (data?.sectionId) {
+      return `${baseUrl}/record/sections/${data.sectionId}`;
+    } else if (data?.documentId) {
+      return `${baseUrl}/documents/${data.documentId}`;
+    } else {
+      return this.stores.context.getPreviousUrl() ?? `${baseUrl}/documents`;
     }
 
   }
