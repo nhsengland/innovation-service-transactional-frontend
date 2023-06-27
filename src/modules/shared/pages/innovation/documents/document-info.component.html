@@ -39,10 +39,12 @@
       </ng-container>
 
       <ng-container *ngIf="pageStep === 'DELETE' && documentInfo">
-        <div class="nhsuk-warning-callout">
-          <h2 class="nhsuk-warning-callout__label">Important<span class="nhsuk-u-visually-hidden">:</span></h2>
-          <p>Are you sure that you want to delete the {{ documentInfo.name }} document?</p>
-        </div>
+        <p *ngIf="documentInfo.context.type === 'INNOVATION_SECTION'; else defaultDeleteMessage">
+          If you delete this document, it will also be deleted from your innovation record and cannot be recovered.
+        </p>
+        <ng-template #defaultDeleteMessage>
+          <p>If you delete this document, it cannot be recovered.</p>
+        </ng-template>
         <button type="button" class="nhsuk-button" (click)="onDelete()">Delete document</button>
       </ng-container>
 

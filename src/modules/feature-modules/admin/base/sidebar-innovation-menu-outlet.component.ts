@@ -53,7 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
-        { label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` },
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }] : []),
         { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change
