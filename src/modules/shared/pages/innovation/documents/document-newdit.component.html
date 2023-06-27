@@ -11,20 +11,20 @@
       <ng-container *ngIf="wizard.isSummaryStep()">
 
         <dl class="nhsuk-summary-list">
-          <div *ngFor="let item of wizard.getSummary(); let i = index" class="nhsuk-summary-list__row">
+          <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">
               <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
               <span *ngIf="!item.allowHTML">{{ item.value }}</span>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a *ngIf="isCreateDocFromSection && i > 1 || !isCreateDocFromSection" href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+              <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
             </dd>
           </div>
         </dl>
 
-        <button *ngIf="documentData.isCreation" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
-        <button *ngIf="documentData.isEdition" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
+        <button *ngIf="pageData.isCreation" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
+        <button *ngIf="pageData.isEdition" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
 
       </ng-container>
 

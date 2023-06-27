@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -9,7 +10,6 @@ import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationSectionEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { forkJoin } from 'rxjs';
 
 
 @Component({
@@ -148,45 +148,45 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 50,
-        order: { createdAt: 'DESC' },
-        filters: { contextId: this.section.id, contextTypes: ['INNOVATION_SECTION'],
-        fields: ['description']
-      }})
+        order: { createdAt: 'ASC' },
+        filters: { contextTypes: ['INNOVATION_SECTION'], contextId: this.section.id, fields: ['description'] }
+      })
     ]).subscribe(([sectionInfo, documents]) => {
 
       this.section.status = { id: sectionInfo.status, label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || '' };
-        this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-        this.section.date = sectionInfo.submittedAt;
-        this.section.submittedBy = sectionInfo.submittedBy;
+      this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
+      this.section.date = sectionInfo.submittedAt;
+      this.section.submittedBy = sectionInfo.submittedBy;
 
-        this.getPreviousAndNextPagination();
+      this.getPreviousAndNextPagination();
 
-        if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
-          // If accessor, only view information if section is submitted.
-          this.summaryList = [];
-        } else {
+      if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+        // If accessor, only view information if section is submitted.
+        this.summaryList = [];
+      } else {
 
-          // Special business rule around section 2.2.
-          this.section.hasEvidences = !!(section.evidences && sectionInfo.data.hasEvidence && sectionInfo.data.hasEvidence === 'YES');
+        // Special business rule around section 2.2.
+        this.section.hasEvidences = !!(section.evidences && sectionInfo.data.hasEvidence && sectionInfo.data.hasEvidence === 'YES');
 
-          this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(sectionInfo.data)).runRules();
+        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(sectionInfo.data)).runRules();
 
-          const validInformation = this.section.wizard.validateData();
-          const nActions = sectionInfo.actionsIds?.length ?? 0;
+        const validInformation = this.section.wizard.validateData();
+        const nActions = sectionInfo.actionsIds?.length ?? 0;
 
-          if (this.section.status.id === 'DRAFT' && validInformation.valid) {
-            this.section.showSubmitButton = nActions === 0;
-            this.section.showSubmitUpdatesButton = nActions > 0;
-          }
-
-          this.summaryList = this.section.wizard.runSummaryParsing();
-
+        if (this.section.status.id === 'DRAFT' && validInformation.valid) {
+          this.section.showSubmitButton = nActions === 0;
+          this.section.showSubmitUpdatesButton = nActions > 0;
         }
 
-        // Documents
-        this.documents = documents.data;
+        this.summaryList = this.section.wizard.runSummaryParsing();
 
-        this.setPageStatus('READY');
+      }
+
+      // Documents
+      this.documents = documents.data;
+
+      this.setPageStatus('READY');
+
     })
 
   }

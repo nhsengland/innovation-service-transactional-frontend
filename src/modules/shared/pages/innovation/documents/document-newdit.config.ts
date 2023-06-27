@@ -22,14 +22,16 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = InnovationDocumentInfoOutDTO & { isSectionDoc: boolean };
+type InboundPayloadType = InnovationDocumentInfoOutDTO & {
+  wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS'
+};
 type StepPayloadType = {
+  wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS'
   contextType?: InnovationDocumentInfoOutDTO['context']['type'],
   section?: string,
   name?: string,
   description?: string,
-  file?: FileUploadType,
-  isSectionDoc?: boolean
+  file?: FileUploadType
 };
 export type OutboundPayloadType = UpsertInnovationDocumentType;
 
@@ -42,23 +44,7 @@ const relatedWithSectionItems = [
 const innovationSectionsItems = getAllSectionsList();
 
 
-export const DOCUMENT_WITH_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
-  steps: [
-    new FormEngineModel({
-      parameters: [{
-        id: 'contextType', dataType: 'radio-group', label: stepsLabels.l1.label,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: relatedWithSectionItems
-      }]
-    })
-  ],
-  showSummary: true,
-  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
-  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-});
-
-export const DOCUMENT_WITHOUT_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const WIZARD_BASE_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       parameters: [{
@@ -80,12 +66,12 @@ export const DOCUMENT_WITHOUT_LOCATION_QUESTIONS: WizardEngineModel = new Wizard
     })
   ],
   showSummary: true,
-  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  inboundParsing: (data: InboundPayloadType) => inboundParsing({ ...data, wizardType: 'WIZARD_BASE_QUESTIONS' }),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
-export const DOCUMENT_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const WIZARD_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       parameters: [{
@@ -101,7 +87,24 @@ export const DOCUMENT_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineModel(
     })
   ],
   showSummary: true,
-  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  inboundParsing: (data: InboundPayloadType) => inboundParsing({ ...data, wizardType: 'WIZARD_EDIT_QUESTIONS' }),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+});
+
+export const WIZARD_WITH_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+  steps: [
+    new FormEngineModel({
+      parameters: [{
+        id: 'contextType', dataType: 'radio-group', label: stepsLabels.l1.label,
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: relatedWithSectionItems
+      }]
+    })
+  ],
+  showSummary: true,
+  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing({ ...data, wizardType: 'WIZARD_WITH_LOCATION_QUESTIONS' }),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
@@ -156,7 +159,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     name: data.name,
     description: data.description,
     file: data.file,
-    isSectionDoc: data.isSectionDoc
+    wizardType: data.wizardType
   };
 
 }
@@ -179,25 +182,20 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   let editStepNumber = 1;
 
-  if (data.contextType) { // When the user IS NOT an innovator, this question is not asked!
+  if (data.wizardType === 'WIZARD_WITH_LOCATION_QUESTIONS') {
+
     toReturn.push({
       label: stepsLabels.l1.label,
       value: relatedWithSectionItems.find(item => item.value === data.contextType)?.label,
       editStepNumber: editStepNumber++
     });
-  }
 
-  if (data.contextType === 'INNOVATION_SECTION') {
     toReturn.push({
       label: stepsLabels.l2.label,
       value: innovationSectionsItems.find(item => item.value === data.section)?.label,
       editStepNumber: editStepNumber++
     });
-  }
 
-  // In case is a document added directly from the section we don't want to edit the fields l1 and l2
-  if(data.isSectionDoc) {
-    editStepNumber = 1;
   }
 
   toReturn.push(

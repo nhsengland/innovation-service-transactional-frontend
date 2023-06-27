@@ -63,14 +63,16 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   gotoInfoPage() {
-    this.setBackLink('Go back', `${this.baseUrl}/documents`);
 
-    if(this.stores.context.getPreviousUrl()?.includes('/sections')) {
+    if (this.stores.context.getPreviousUrl()?.includes('/sections')) {
       this.setBackLink('Go back');
+    } else {
+      this.setBackLink('Go back', `${this.baseUrl}/documents`);
     }
 
     this.setPageTitle('Document details');
     this.pageStep = 'INFO';
+
   }
 
   gotoDeletePage() {
