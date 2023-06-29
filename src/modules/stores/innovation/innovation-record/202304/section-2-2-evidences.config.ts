@@ -24,9 +24,9 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
-type StepPayloadType = InboundPayloadType;
-type OutboundPayloadType = Required<DocumentType202304>['evidences'][number];
+// type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
+type StepPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id' | 'files'> & { id?: string, files: { id: string; name: string, url: string }[] };
+type OutboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
 
 
 // Logic.
@@ -183,7 +183,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   allFiles.forEach((item, i) => {
     toReturn.push({
       label: `Attachment ${i + 1}`,
-      value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+      value: `<a href='${item.url}'>${item.name}</a>`,
       editStepNumber: stepNumber,
       allowHTML: true,
       isFile: true

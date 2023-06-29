@@ -46,6 +46,7 @@ export type DocumentType202209 = {
   EVIDENCE_OF_EFFECTIVENESS: {
     hasEvidence?: catalogYesInProgressNotYet;
     evidences?: {
+      id?: string,
       evidenceType: catalogEvidenceType,
       clinicalEvidenceType?: catalogClinicalEvidence,
       description?: string,

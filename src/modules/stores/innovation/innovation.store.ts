@@ -88,7 +88,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
   }
 
-  deleteEvidence$(innovationId: string, evidenceId: string): Observable<boolean> {
+  deleteEvidence$(innovationId: string, evidenceId: string): Observable<void> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
