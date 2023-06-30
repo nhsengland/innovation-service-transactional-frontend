@@ -61,9 +61,9 @@ export class InnovationService {
   }
 
 
-  getSectionEvidenceInfo(innovationId: string, evidenceOffset: string): Observable<GetInnovationEvidenceDTO> {
+  getSectionEvidenceInfo(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/evidences/:evidenceOffset').setPathParams({ innovationId, evidenceOffset });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/evidences/:evidenceId').setPathParams({ innovationId, evidenceId });
     return this.http.get<GetInnovationEvidenceDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }

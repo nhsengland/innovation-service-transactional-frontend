@@ -114,7 +114,7 @@
       </ng-container>
 
       <div *ngIf="isInnovatorType">
-        <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-butto nhsuk-u-margin-top-5">Confirm section answers</button>
+        <button *ngIf="section.showSubmitButton" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">Confirm section answers</button>
         <button *ngIf="section.showSubmitUpdatesButton" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/{{ section.id }}/confirm-update" class="nhsuk-button nhsuk-u-margin-top-5">Submit updates</button>
       </div>
 

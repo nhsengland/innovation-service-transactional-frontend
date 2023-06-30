@@ -80,8 +80,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
-  getSectionEvidence$(innovationId: string, evidenceOffset: string): Observable<GetInnovationEvidenceDTO> {
-    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceOffset);
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
+    return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
   }
 
   upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
