@@ -34,10 +34,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     submittedBy: null | { name: string, isOwner?: boolean }
   };
 
-  documents: InnovationDocumentsListOutDTO['data'] = [];
-
-  summaryList: WizardSummaryType[] = [];
   sectionsIdsList: string[];
+  summaryList: WizardSummaryType[] = [];
+  evidencesList: WizardSummaryType[] = [];
+  documents: InnovationDocumentsListOutDTO['data'] = [];
 
   previousSection: null | { id: string, title: string } = null;
   nextSection: null | { id: string, title: string } = null;
@@ -178,7 +178,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.section.showSubmitUpdatesButton = nActions > 0;
         }
 
-        this.summaryList = this.section.wizard.runSummaryParsing();
+        const data = this.section.wizard.runSummaryParsing();
+        this.summaryList = data.filter(item => !item.evidenceId);
+        this.evidencesList = data.filter(item => item.evidenceId);
 
       }
 

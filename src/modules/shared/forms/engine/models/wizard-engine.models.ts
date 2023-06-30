@@ -10,7 +10,7 @@ export type WizardSummaryType = {
   label: string,
   value?: null | string,
   editStepNumber?: number,
-  evidenceId?: number,
+  evidenceId?: string,
   allowHTML?: boolean,
   isFile?: boolean
 };

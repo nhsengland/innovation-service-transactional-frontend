@@ -25,7 +25,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
   files?: { id: string; name: string, url: string }[],
-  evidences?: { evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
+  evidences?: { id: string, evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
 };
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'];
@@ -161,8 +161,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   data.evidences?.forEach((item, i) => {
     toReturn.push({
       label: `Evidence ${i + 1}`,
-      value: item.description || evidenceSubmitTypeItems.find(e => e.value === item.evidenceSubmitType)?.label,
-      evidenceId: i
+      value: item.description ?? evidenceSubmitTypeItems.find(e => e.value === item.evidenceSubmitType)?.label,
+      evidenceId: item.id
     });
   });
 
