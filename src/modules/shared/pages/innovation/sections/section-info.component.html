@@ -89,7 +89,7 @@
               <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
               <dd class="nhsuk-summary-list__actions">
-                <a routerLink="evidences/{{ item.evidenceId }}">View <span class="nhsuk-u-visually-hidden">evidence detail</span></a>
+                <a routerLink="evidences/{{ item.evidenceId }}" attr.aria-label="View {{ item.value }} details">More details</a>
               </dd>
             </div>
           </dl>
