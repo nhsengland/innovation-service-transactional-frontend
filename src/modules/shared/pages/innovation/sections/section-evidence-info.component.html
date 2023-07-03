@@ -19,7 +19,7 @@
 
       <h2>Documents</h2>
       <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ evidenceId: evidenceId }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
-      <p *ngIf="documentsList.length === 0">There are no documents uploaded to this section.</p>
+      <p *ngIf="documentsList.length === 0">There are no documents uploaded to this evidence.</p>
       <dl *ngIf="documentsList.length > 0" class="nhsuk-summary-list">
         <div *ngFor="let document of documentsList; let i = index" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
