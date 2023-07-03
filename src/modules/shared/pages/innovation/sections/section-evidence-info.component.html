@@ -3,8 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <h2>{{ isInnovatorType ? 'Submitted' : 'Your' }} answers</h2>
-
+      <h2>{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -18,7 +17,23 @@
         </div>
       </dl>
 
-      <button *ngIf="isInnovatorType" class="nhsuk-button nhsuk-button--secondary" (click)="onDeleteEvidence()">Delete this entry</button>
+      <h2>Documents</h2>
+      <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ evidenceId: evidenceId }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
+      <p *ngIf="documentsList.length === 0">There are no documents uploaded to this evidence.</p>
+      <dl *ngIf="documentsList.length > 0" class="nhsuk-summary-list">
+        <div *ngFor="let document of documentsList; let i = index" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap">
+            <a href="{{ document.file.url }}" attr.aria-label="Download {{ document.name }} file">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a>
+            <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+          </dd>
+        </div>
+      </dl>
+
+      <button *ngIf="isInnovatorType" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onDeleteEvidence()">Delete this entry</button>
 
     </div>
   </div>

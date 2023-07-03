@@ -37,7 +37,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   sectionsIdsList: string[];
   summaryList: WizardSummaryType[] = [];
   evidencesList: WizardSummaryType[] = [];
-  documents: InnovationDocumentsListOutDTO['data'] = [];
+  documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   previousSection: null | { id: string, title: string } = null;
   nextSection: null | { id: string, title: string } = null;
@@ -185,7 +185,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       }
 
       // Documents
-      this.documents = documents.data;
+      this.documentsList = documents.data;
 
       this.setPageStatus('READY');
 
