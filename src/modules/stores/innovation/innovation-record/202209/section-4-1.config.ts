@@ -117,7 +117,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'files',
-        dataType: 'file-upload',
+        dataType: 'file-upload-array',
         label: stepsLabels.l_last,
         description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB.'
       }],

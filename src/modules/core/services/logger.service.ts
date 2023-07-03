@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 
-import { Injectable, ErrorHandler } from '@angular/core';
-import { AxiosInstance } from 'axios';
-import axios from 'axios';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import axios, { AxiosInstance } from 'axios';
 
+import { isPlatformBrowser } from '@angular/common';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 
@@ -27,7 +27,7 @@ export class LoggerService {
   private client: AxiosInstance;
 
   constructor(
-    private errorHandler: ErrorHandler,
+    @Inject(PLATFORM_ID) private platformId: object,
     private envVariablesStore: EnvironmentVariablesStore
   ) {
 
@@ -42,23 +42,23 @@ export class LoggerService {
 
     try {
 
-      await this.client.request({
-        method: 'POST',
-        url: `${this.envVariablesStore.APP_URL}/insights`,
-        data: {
-          type: 'trace',
-          message,
-          severity,
-          properties: { ...props }
-        }
-      });
-
+      if (isPlatformBrowser(this.platformId)) {
+        await this.client.request({
+          method: 'POST',
+          url: `${this.envVariablesStore.APP_URL}/insights`,
+          data: {
+            type: 'trace',
+            message,
+            severity,
+            properties: { ...props }
+          }
+        });
+      } else {
+        console.error(`[TRACE] [${severity}] ${message}`, props);
+      }
       return { success: true, type: 'trace' };
-
     } catch (error) {
-
-      this.errorHandler.handleError(error);
-
+      console.error(`[TRACE ERROR] [${severity}] ${message}`, props, error);
       return { success: false, type: 'trace', error };
 
     }

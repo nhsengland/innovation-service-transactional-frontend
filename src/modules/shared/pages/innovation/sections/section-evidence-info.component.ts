@@ -52,7 +52,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidence.id).subscribe(response => {
 
       this.summaryList = this.wizard.runSummaryParsing(response);
-      this.evidence.title = this.summaryList[1].value || '';
+      this.evidence.title = this.summaryList[1].value ?? '';
 
       this.setPageTitle(this.evidence.title);
       this.setPageStatus('READY');
@@ -72,8 +72,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
         this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteSuccess' });
       },
       error: () => {
-        this.setAlertError('An error occurred when deleting your evidence. Please try again or contact us for further help.');
-        // this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteError' });
+        this.setAlertError('An error occurred when deleting your evidence. Please try again or contact us for further help');
       }
     });
 

@@ -7,9 +7,9 @@ import { ContextInnovationType } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { MANAGE_COLLABORATORS_CONFIG_EDIT, MANAGE_COLLABORATORS_CONFIG_NEW } from './manage-collaborators-wizard.config';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UtilsHelper } from '@app/base/helpers';
+import { MANAGE_COLLABORATORS_CONFIG_EDIT, MANAGE_COLLABORATORS_CONFIG_NEW } from './manage-collaborators-wizard.config';
 
 
 type ActionsType = 'create' | 'update';
@@ -141,7 +141,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
         error: (error: HttpErrorResponse) => {
 
           if (error.status === 409) {
-            this.setAlertError(`Please, make sure that the user you're inviting does not have already access to this innovation.`);
+            this.setAlertError(`Please, make sure that the user you're inviting does not have already access to this innovation`);
           } else {
             this.setAlertUnknownError();
           }
@@ -154,7 +154,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
     } else {
 
       const body = { role: UtilsHelper.isEmpty(this.wizard.currentAnswers.role) ? null : this.wizard.currentAnswers.role }
-      
+
       this.innovationsService.updateInnovationCollaborator(this.innovation.id, this.innovationCollaboratorId ?? '', body).subscribe({
         next: () => {
           this.setRedirectAlertSuccess(`The collaborator information has been updated`);

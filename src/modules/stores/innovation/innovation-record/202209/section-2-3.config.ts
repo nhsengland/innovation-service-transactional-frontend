@@ -70,7 +70,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     toReturn.push({
       label: `Evidence ${i + 1}`,
       value: item.description || clinicalEvidenceItems.find(e => e.value === item.clinicalEvidenceType)?.label,
-      evidenceId: i
+      evidenceId: item.id
     });
   });
 

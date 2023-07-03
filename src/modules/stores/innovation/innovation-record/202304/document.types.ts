@@ -103,6 +103,7 @@ export type DocumentType202304 = {
     files?: string[]
   },
   evidences?: {
+    id: string,
     evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
     evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
     description?: string,

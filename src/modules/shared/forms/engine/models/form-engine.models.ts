@@ -23,7 +23,7 @@ export class FormEngineModel {
 export class FormEngineParameterModel {
 
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'date' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload';
+  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'date' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload' | 'file-upload-array';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -75,11 +75,10 @@ export class FormEngineParameterModel {
   };
 
   fileUploadConfig?: {
-    httpUploadUrl: string;
-    httpUploadBody?: { [key: string]: any };
-    acceptedFiles?: FileTypes[];
-    multiple?: boolean;
-    maxFileSize?: number; // In Mb.
+    httpUploadUrl: string,
+    httpUploadBody?: Record<string, {}>,
+    acceptedFiles?: FileTypes[],
+    maxFileSize?: number, // In Mb.
     previousUploadedFiles?: { id: string, name: string }[]
   };
 

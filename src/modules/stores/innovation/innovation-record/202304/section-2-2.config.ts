@@ -25,7 +25,7 @@ const stepsLabels = {
 // Types.
 type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
   files?: { id: string; name: string, url: string }[],
-  evidences?: { evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
+  evidences?: { id: string, evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
 };
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'];
@@ -73,12 +73,12 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
           validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'l'
         }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q4.label, description: stepsLabels.q4.description
-        }]
       })
+      // new FormEngineModel({
+      //   parameters: [{
+      //     id: 'files', dataType: 'file-upload-array', label: stepsLabels.q4.label, description: stepsLabels.q4.description
+      //   }]
+      // })
     );
 
   } else {
@@ -138,17 +138,17 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       editStepNumber: editStepNumber++
     });
 
-    const stepNumber = editStepNumber++;
-    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    allFiles.forEach((item, i) => {
-      toReturn.push({
-        label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: stepNumber,
-        allowHTML: true,
-        isFile: true
-      });
-    });
+    // const stepNumber = editStepNumber++;
+    // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+    // allFiles.forEach((item, i) => {
+    //   toReturn.push({
+    //     label: `Attachment ${i + 1}`,
+    //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+    //     editStepNumber: stepNumber,
+    //     allowHTML: true,
+    //     isFile: true
+    //   });
+    // });
 
   }
 
@@ -161,8 +161,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   data.evidences?.forEach((item, i) => {
     toReturn.push({
       label: `Evidence ${i + 1}`,
-      value: item.description || evidenceSubmitTypeItems.find(e => e.value === item.evidenceSubmitType)?.label,
-      evidenceId: i
+      value: item.description ?? evidenceSubmitTypeItems.find(e => e.value === item.evidenceSubmitType)?.label,
+      evidenceId: item.id
     });
   });
 

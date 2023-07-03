@@ -130,13 +130,13 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`userTestFeedback_${StringsHelper.slugify(item.kind)}`] = item.feedback;
   });
 
-  steps.push(
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload', label: stepsLabels.q5.label, description: stepsLabels.q5.description
-      }]
-    })
-  );
+  // steps.push(
+  //   new FormEngineModel({
+  //     parameters: [{
+  //       id: 'files', dataType: 'file-upload-array', label: stepsLabels.q5.label, description: stepsLabels.q5.description
+  //     }]
+  //   })
+  // );
 
 }
 
@@ -216,20 +216,20 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       });
     });
 
-    const stepNumber = editStepNumber++;
-    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    allFiles.forEach((item, i) => {
-      toReturn.push({
-        label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: stepNumber,
-        allowHTML: true,
-        isFile: true
-      });
-    });
+    // const stepNumber = editStepNumber++;
+    // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+    // allFiles.forEach((item, i) => {
+    //   toReturn.push({
+    //     label: `Attachment ${i + 1}`,
+    //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+    //     editStepNumber: stepNumber,
+    //     allowHTML: true,
+    //     isFile: true
+    //   });
+    // });
 
     // Add a button to the end of the list.
-    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
+    // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   }
 

@@ -34,8 +34,8 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
   ngOnInit(): void {
     this.stores.innovation.getSectionInfo$(this.innovationId, this.sectionId).subscribe({
       next: response => {
-       
-        this.setPageTitle('Have you completed all actions for this section?');   
+
+        this.setPageTitle('Have you completed all actions for this section?');
         this.requestedActionsCounter = response.actionsIds?.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds?.length} requested actions`;
         this.actionsCounter = response.actionsIds?.length ?? 0;
         this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
@@ -44,19 +44,19 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
       }
     })
 
-  
+
   }
 
 
   onConfirmClick(): void {
     const actionComplete = this.form.get('actionComplete')?.value ?? true;
 
-    actionComplete ? this.onSubmitSection() : this.onCompleteSectionLater();    
+    actionComplete ? this.onSubmitSection() : this.onCompleteSectionLater();
   }
 
   private onSubmitSection(): void {
     this.stores.innovation.submitSections$(this.innovationId, this.sectionId).subscribe({
-      next: () => {      
+      next: () => {
         this.setRedirectAlertSuccess('You have successfully updated this section', { message: `Actions requested for this section have been submitted. You can update this section at any time.` });
 
         this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
@@ -66,7 +66,7 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
   }
 
   private onCompleteSectionLater(): void {
-    this.setRedirectAlertInformation('Your section will be in draft until you complete all actions requested for this section.')
+    this.setRedirectAlertInformation('Your section will be in draft until you complete all actions requested for this section')
     this.redirectTo(`innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
   }
 }

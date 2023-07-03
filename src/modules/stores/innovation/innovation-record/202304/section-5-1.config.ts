@@ -110,18 +110,19 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet;
   });
 
+  // TECH DEBT: A new config should be made after evidences decision
   // Only diplay files if answered YES to at least on "standard" question.
-  if (currentValues.standards.some(item => item.hasMet === 'YES')) {
-    steps.push(
-      new FormEngineModel({
-        parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q3.label, description: stepsLabels.q3.description
-        }],
-      })
-    );
-  } else {
-    delete currentValues.files;
-  }
+  // if (currentValues.standards.some(item => item.hasMet === 'YES')) {
+  //   steps.push(
+  //     new FormEngineModel({
+  //       parameters: [{
+  //         id: 'files', dataType: 'file-upload-array', label: stepsLabels.q3.label, description: stepsLabels.q3.description
+  //       }],
+  //     })
+  //   );
+  // } else {
+  //   delete currentValues.files;
+  // }
 
 }
 
@@ -184,24 +185,25 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       });
     });
 
-    if (data.standards?.some(item => item.hasMet === 'YES')) {
+    // TECH DEBT: A new config should be made after evidences decision
+    // if (data.standards?.some(item => item.hasMet === 'YES')) {
 
-      const stepNumber = toReturn.length + 1;
-      const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-      allFiles.forEach((item, i) => {
-        toReturn.push({
-          label: `Attachment ${i + 1}`,
-          value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-          editStepNumber: stepNumber,
-          allowHTML: true,
-          isFile: true
-        });
-      });
+    //   const stepNumber = toReturn.length + 1;
+    //   const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+    //   allFiles.forEach((item, i) => {
+    //     toReturn.push({
+    //       label: `Attachment ${i + 1}`,
+    //       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+    //       editStepNumber: stepNumber,
+    //       allowHTML: true,
+    //       isFile: true
+    //     });
+    //   });
 
-      // Add a button to the end of the list.
-      toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
+    //   // Add a button to the end of the list.
+    //   toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
 
-    }
+    // }
 
   }
 

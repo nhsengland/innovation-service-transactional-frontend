@@ -30,10 +30,10 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'versionCreationSuccess':
-        this.setAlertSuccess('You\'ve successfully created new version.');
+        this.setAlertSuccess('You\'ve successfully created new version');
         break;
       case 'versionUpdatedSuccess':
-        this.setAlertSuccess('You\'ve successfully updated version.');
+        this.setAlertSuccess('You\'ve successfully updated version');
         break;
       default:
         break;

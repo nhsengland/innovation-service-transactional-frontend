@@ -1,8 +1,8 @@
 import axios, { Method } from 'axios';
 import * as express from 'express';
-import { Router } from 'express';
 import * as multer from 'multer';
-import * as path from 'path';
+import { extname } from 'path';
+import { Router } from 'express';
 
 import { UrlModel } from '@app/base/models';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
@@ -10,18 +10,17 @@ import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
+
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  fileFilter: (req, file, cb) => {
-    checkFileType(file, cb);
-  }
+  fileFilter: (req, file, cb) => { checkFileType(file, cb); }
 });
+const fileUploadRouter: Router = express.Router();
 
-// Allowed ext
-const filetypes = /docx|pdf|csv|xlsx/;
+const filetypes = /docx|pdf|csv|xlsx/; // Allowed extensions.
 
-// Allowed mimetypes
+// Allowed mimetypes.
 const whitelist = [
   'application/pdf',
   'text/csv',
@@ -31,42 +30,54 @@ const whitelist = [
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
 ];
 
-const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-  // Check mime
+const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
+
+  const allowedExtension = filetypes.test(extname(file.originalname).toLowerCase());
   const mimetype = whitelist.includes(file.mimetype);
 
-  if (mimetype && extname) {
+  if (mimetype && allowedExtension) {
     return cb(null, true);
   } else {
     cb('Error: Invalid Format!');
   }
 };
 
-const fileUploadRouter: Router = express.Router();
 
-async function getUploadUrl(url: string, body: any, accessToken: string): Promise<any> {
-  let res;
+async function getUploadUrlDeprecated(accessToken: string, innovationId: string, body: { fileName: string, context: null | string }): Promise<{ id: string; displayFileName: string; url: string }> {
+
+  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/upload').setPathParams({ innovationId }).buildUrl();
+
   try {
-    const config = { headers: { Authorization: `Bearer ${accessToken}` } };
-    res = await axios.post(url, body, config);
+    const result = await axios.post<{ id: string; displayFileName: string; url: string }>(url, body, { headers: { Authorization: `Bearer ${accessToken}` } });
+    return result.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
 
-  return res.data;
+}
+
+async function getUploadUrl(accessToken: string, innovationId: string, body: { filename: string }): Promise<{ id: string; name: string; url: string }> {
+
+  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/files/upload-url').setPathParams({ innovationId }).buildUrl();
+
+  try {
+    const result = await axios.post<{ id: string; name: string; url: string }>(url, body, { headers: { Authorization: `Bearer ${accessToken}` } });
+    return result.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+
 }
 
 async function uploadFile(url: string, file: any): Promise<void> {
+
   try {
     const config = {
       method: 'PUT' as Method,
-      params: {
-        fileName: file.originalname
-      },
+      params: { fileName: file.originalname },
       headers: {
         'x-ms-blob-type': 'BlockBlob',
         'content-length': file.size
@@ -75,41 +86,83 @@ async function uploadFile(url: string, file: any): Promise<void> {
       maxContentLength: 20000000,
       data: file.buffer
     };
-
     await axios(url, config);
   } catch (error) {
     console.error('uploadFile', error);
     throw error;
   }
+
 }
 
+// TODO: DEPRECATE this when documents are final!
 fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload`, upload.single('file'), async (req, res) => {
-  const accessToken = await getAccessTokenBySessionId(req.session.id);
-  const file = req.file;
-  const reqBody = req.body;
 
-  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/upload').setPathParams({ innovationId: reqBody.innovationId }).buildUrl();
+  const accessToken = await getAccessTokenBySessionId(req.session.id);
+  const requestFile = req.file;
+  const requestBody = {
+    innovationId: req.body.innovationId,
+    context: req.body.context
+  };
 
   if (!accessToken) {
     res.status(401).send();
     return;
   }
 
-  if (!file) {
+  if (!requestFile) {
     res.status(400).send();
     return;
   }
 
   try {
 
-    const body = {
-      context: reqBody.context,
-      fileName: file.originalname
-    };
+    const fileInfo = await getUploadUrlDeprecated(accessToken, req.body.innovationId, { context: requestBody.context, fileName: requestFile.originalname });
+    await uploadFile(fileInfo.url, requestFile);
 
-    const fileInfo = await getUploadUrl(url, body, accessToken);
-    await uploadFile(fileInfo.url, file);
-    res.status(201).send(fileInfo);
+    res.status(201).send({
+      id: fileInfo.id,
+      name: fileInfo.displayFileName,
+      size: req.file?.size,
+      extension: req.file ? extname(req.file?.originalname).toLowerCase() : '',
+      url: fileInfo.url
+    });
+
+  } catch (error) {
+    console.error(`Error when attempting to upload data. Error: ${error}`);
+    res.status(500).send();
+  }
+
+});
+
+
+fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('file'), async (req, res) => {
+
+  const accessToken = await getAccessTokenBySessionId(req.session.id);
+  const requestFile = req.file;
+
+  if (!accessToken) {
+    res.status(401).send();
+    return;
+  }
+
+  if (!requestFile) {
+    res.status(400).send();
+    return;
+  }
+
+  try {
+
+    // TODO: Remove this context parameter when BE endpoint is changed!
+    const fileInfo = await getUploadUrl(accessToken, req.body.innovationId, { filename: requestFile.originalname });
+    await uploadFile(fileInfo.url, requestFile);
+
+    res.status(201).send({
+      id: fileInfo.id,
+      name: fileInfo.name,
+      size: req.file?.size,
+      extension: req.file ? extname(req.file?.originalname).toLowerCase().substring(1) : '',
+      url: fileInfo.url
+    });
 
   } catch (error: any) {
     getAppInsightsClient().trackException({

@@ -44,19 +44,24 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private generateSidebar(): void {
+
     if (this.sidebarItems.length === 0) {
+
       const innovation = this.contextStore.getInnovation();
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('accessor', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
+        { label: 'Documents', url: `/accessor/innovations/${innovation.id}/documents` },
         { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },
         { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
       ];
+
     }
+
   }
 
   private onRouteChange(): void {

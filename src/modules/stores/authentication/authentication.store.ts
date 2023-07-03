@@ -28,8 +28,8 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   initializeAuthentication$(): Observable<boolean> {
 
     return new Observable((observer: Observer<boolean>) => {
-
-      this.authenticationService.verifyUserSession().pipe(
+      //this.authenticationService.verifyUserSession()
+      of(true).pipe(
         concatMap(() => this.authenticationService.getUserInfo()),
         concatMap(user => {
 
@@ -153,18 +153,6 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
     this.state.userContext = userContext;
 
-  }
-
-  getUserTypeDescription(userType: UserRoleEnum): string {
-    switch (userType) {
-      case UserRoleEnum.ADMIN: return 'Administrator';
-      case UserRoleEnum.ASSESSMENT: return 'Needs assessment';
-      case UserRoleEnum.ACCESSOR:
-      case UserRoleEnum.QUALIFYING_ACCESSOR:
-        return 'Support assessment';
-      case UserRoleEnum.INNOVATOR: return 'Innovator';
-      default: return '';
-    }
   }
 
   getRoleDescription(role: string): string {

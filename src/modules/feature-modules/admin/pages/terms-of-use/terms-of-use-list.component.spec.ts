@@ -1,19 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageTermsOfUseListComponent } from './terms-of-use-list.component';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { AlertType } from '@app/base/types';
+import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', () => {
@@ -100,7 +100,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
     activatedRoute.snapshot.queryParams = { alert: 'versionCreationSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully created new version.', setFocus: true };
+    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully created new version', setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
@@ -111,7 +111,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
     activatedRoute.snapshot.queryParams = { alert: 'versionUpdatedSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully updated version.', setFocus: true };
+    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully updated version', setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;

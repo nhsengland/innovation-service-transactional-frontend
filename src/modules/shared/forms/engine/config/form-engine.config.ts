@@ -1,6 +1,8 @@
 export type FileUploadType = {
-  id: string;
-  name: string;
+  id: string,
+  name: string,
+  size?: number,
+  extension: string,
   url: string
 };
 
@@ -15,7 +17,6 @@ export enum FileTypes {
   DOCX = '.docx',
   PDF = '.pdf'
 }
-
 
 export const TEXTAREA_LENGTH_LIMIT = {
   xs: 200,

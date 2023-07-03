@@ -177,17 +177,18 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
     })
   );
 
-  if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
-    steps.push(
-      new FormEngineModel({
-        parameters: [{
-          id: 'files', dataType: 'file-upload', label: stepsLabels.q11.label, description: stepsLabels.q11.description
-        }]
-      })
-    );
-  } else {
-    delete data.files;
-  }
+  // TECH DEBT: A new config should be made after evidences decision
+  // if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
+  //   steps.push(
+  //     new FormEngineModel({
+  //       parameters: [{
+  //         id: 'files', dataType: 'file-upload-array', label: stepsLabels.q11.label, description: stepsLabels.q11.description
+  //       }]
+  //     })
+  //   );
+  // } else {
+  //   delete data.files;
+  // }
 
 }
 
@@ -279,24 +280,25 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     }
   );
 
-  if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
+  // TECH DEBT: A new config should be made after evidences decision
+  // if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
 
-    const stepNumber = editStepNumber++;
-    const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    allFiles.forEach((item, i) => {
-      toReturn.push({
-        label: `Attachment ${i + 1}`,
-        value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-        editStepNumber: stepNumber,
-        allowHTML: true,
-        isFile: true
-      });
-    });
+  //   const stepNumber = editStepNumber++;
+  //   const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
+  //   allFiles.forEach((item, i) => {
+  //     toReturn.push({
+  //       label: `Attachment ${i + 1}`,
+  //       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
+  //       editStepNumber: stepNumber,
+  //       allowHTML: true,
+  //       isFile: true
+  //     });
+  //   });
 
-    // Add a button to the end of the list.
-    toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
+  //   // Add a button to the end of the list.
+  //   toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
-  }
+  // }
 
   return toReturn;
 

@@ -56,7 +56,14 @@ export class FormEngineHelper {
           form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
           break;
 
-        case 'file-upload': // Creates an FormArray and pushes defaultValues into it.
+        case 'file-upload': // Creates a FormGroup and pushes defaultValues into it.
+          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
+          Object.entries(parameterValue ?? {}).forEach(([key, value]) => {
+            (form.get(parameter.id) as FormGroup).addControl(key, new FormControl(value));
+          });
+          break;
+
+        case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
             (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
@@ -176,6 +183,7 @@ export class FormEngineHelper {
     if (error.parsedDateString) { return { message: error.parsedDateString.message || "shared.forms_module.validations.invalid_parse_date", params: {} } }
     if (error.maxFileSize) { return { message: 'shared.forms_module.validations.max_file_size', params: {} } }
     if (error.emptyFile) { return { message: 'shared.forms_module.validations.empty_file', params: {} } }
+    if (error.wrongFileFormat) { return { message: 'shared.forms_module.validations.wrong_file_format', params: {} } }
     if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
@@ -200,7 +208,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.requiredCheckboxArray(validation[1]));
             break;
           case 'checkbox-group':
@@ -234,7 +242,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.minCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           default:
@@ -253,7 +261,7 @@ export class FormEngineHelper {
           case 'autocomplete-array':
           case 'checkbox-array':
           case 'fields-group':
-          case 'file-upload':
+          case 'file-upload-array':
             validators.push(CustomValidators.maxCheckboxArray(validation[0] as number, validation[1] as string));
             break;
           default:
