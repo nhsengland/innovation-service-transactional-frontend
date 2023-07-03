@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
@@ -16,30 +18,34 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
-  evidence: { id: string, title: string };
+  evidenceId: string;
+  baseUrl: string;
 
   wizard: WizardEngineModel;
 
   summaryList: WizardSummaryType[] = [];
+  documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   // Flags
   isInnovatorType: boolean;
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private innovationDocumentsService: InnovationDocumentsService
   ) {
 
     super();
 
     this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.evidence = { id: this.activatedRoute.snapshot.params.evidenceId, title: '' };
+    this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.wizard = this.stores.innovation.getInnovationRecordSection(this.sectionId).evidences ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {
-      this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`);
+      this.redirectTo(`${this.baseUrl}/record/sections/${this.sectionId}`);
     }
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -49,12 +55,20 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidence.id).subscribe(response => {
+    forkJoin([
+      this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
+      this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+        skip: 0,
+        take: 50,
+        order: { createdAt: 'ASC' },
+        filters: { contextTypes: ['INNOVATION_EVIDENCE'], contextId: this.evidenceId, fields: ['description'] }
+      })
+    ]).subscribe(([evidenceInfo, documents]) => {
 
-      this.summaryList = this.wizard.runSummaryParsing(response);
-      this.evidence.title = this.summaryList[1].value ?? '';
+      this.summaryList = this.wizard.runSummaryParsing(evidenceInfo);
+      this.documentsList = documents.data;
 
-      this.setPageTitle(this.evidence.title);
+      this.setPageTitle(this.summaryList[1].value ?? '');
       this.setPageStatus('READY');
 
     });
@@ -66,7 +80,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
-    this.stores.innovation.deleteEvidence$(this.innovation.id, this.evidence.id).subscribe({
+    this.stores.innovation.deleteEvidence$(this.innovation.id, this.evidenceId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been deleted');
         this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`, { alert: 'evidenceDeleteSuccess' });

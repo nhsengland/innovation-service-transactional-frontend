@@ -11,7 +11,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
-type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION';
+type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
