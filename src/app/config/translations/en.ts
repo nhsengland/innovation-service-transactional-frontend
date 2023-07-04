@@ -129,7 +129,8 @@ export const locale = {
         documents: {
           contextType: {
             INNOVATION: 'Documents',
-            INNOVATION_SECTION: 'Innovation record'
+            INNOVATION_SECTION: 'Innovation section',
+            INNOVATION_EVIDENCE: 'Innovation evidence'
           }
         },
         innovation: {
