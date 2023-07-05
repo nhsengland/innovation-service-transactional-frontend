@@ -106,11 +106,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         lengthLimit: 'm'
       }]
     })
-    // new FormEngineModel({
-    //   parameters: [{
-    //     id: 'files', dataType: 'file-upload-array', label: stepsLabels.q6.label, description: stepsLabels.q6.description
-    //   }]
-    // })
   );
 
 }
@@ -121,7 +116,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.evidenceType && { evidenceType: data.evidenceType }),
     ...(data.description && { description: data.description }),
     summary: data.summary
-    // ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
   };
 }
 
@@ -176,22 +170,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     value: data.summary,
     editStepNumber: editStepNumber++
   });
-
-
-  // const stepNumber = editStepNumber++;
-  // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-  // allFiles.forEach((item, i) => {
-  //   toReturn.push({
-  //     label: `Attachment ${i + 1}`,
-  //     value: `<a href='${item.url}'>${item.name}</a>`,
-  //     editStepNumber: stepNumber,
-  //     allowHTML: true,
-  //     isFile: true
-  //   });
-  // });
-
-  // // Add a button to the end of the list.
-  // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   return toReturn;
 

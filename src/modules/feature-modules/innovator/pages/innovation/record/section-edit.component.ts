@@ -4,8 +4,7 @@ import { of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { UrlModel } from '@app/base/models';
+import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum } from '@modules/stores/innovation';
@@ -71,8 +70,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
-        this.setUploadConfiguration();
-
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
 
@@ -85,31 +82,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   }
 
-
-  setUploadConfiguration(): void {
-
-    if (this.wizard.currentStep().parameters[0].dataType === 'file-upload-array') {
-      this.wizard.currentStep().parameters[0].fileUploadConfig = {
-        httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload').buildUrl(),
-        httpUploadBody: {
-          context: this.sectionId,
-          innovatorId: this.stores.authentication.getUserId(),
-          innovationId: this.innovation.id
-        },
-        maxFileSize: 20,
-        acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
-      };
-    }
-
-  }
-
-
   onGotoStep(stepNumber: number): void {
 
     this.wizard.gotoStep(stepNumber);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-    this.setUploadConfiguration();
 
   }
 
@@ -126,7 +103,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       if (this.wizard.isFirstStep()) { this.redirectTo(this.baseUrl); }
       else { this.wizard.previousStep(); }
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-      this.setUploadConfiguration();
       return;
     }
 
@@ -188,7 +164,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
           if (this.wizard.isQuestionStep()) {
             this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-            this.setUploadConfiguration();
           }
           else {
 

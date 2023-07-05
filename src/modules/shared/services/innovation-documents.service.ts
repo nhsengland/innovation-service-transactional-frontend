@@ -23,7 +23,7 @@ type InnovationDocumentsListInDTO = {
   count: number,
   data: {
     id: string,
-    context: { type: ContextTypeType, id: string },
+    context: { type: ContextTypeType, id: string, name?: string },
     name: string,
     description?: string;
     createdAt: DateISOType,
@@ -41,7 +41,7 @@ export type InnovationDocumentsListOutDTO = {
 
 type InnovationDocumentInfoInDTO = {
   id: string,
-  context: { type: ContextTypeType, id: string },
+  context: { type: ContextTypeType, id: string, name?: string },
   name: string,
   description?: string,
   createdAt: DateISOType,
@@ -56,7 +56,7 @@ export type InnovationDocumentInfoOutDTO = InnovationDocumentInfoInDTO & {
 
 export type UpsertInnovationDocumentType = {
   contextType: ContextTypeType,
-  section?: string,
+  contextId: string,
   name: string,
   description?: string,
   file?: FileUploadType
@@ -86,8 +86,19 @@ export class InnovationDocumentsService extends CoreService {
         count: response.count,
         data: response.data.map(item => {
 
-          let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
+          let description = '';
+          switch (item.context.type) {
+            case 'INNOVATION_SECTION':
+              description = getAllSectionsList().find(s => s.value === item.context.id)?.label ?? '[archived section]';
+              break;
+            case 'INNOVATION_EVIDENCE':
+              description = item.context.name ?? '';
+              break;
+            default:
+              break;
+          }
 
+          let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
           if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
             switch (item.createdBy.isOwner) {
               case undefined: userDescription += ''; break;
@@ -102,9 +113,8 @@ export class InnovationDocumentsService extends CoreService {
             ...item,
             context: {
               ...item.context,
-              label: item.context.type === 'INNOVATION_SECTION' ? 'Innovation record' : 'Documents',
-              ...(item.context.type === 'INNOVATION_SECTION' && { description: getAllSectionsList().find(s => s.value === item.context.id)?.label ?? '[archived section]' })
-            },
+              label: this.translate(`shared.catalog.documents.contextType.${item.context.type}`),
+              description },
             createdBy: { ...item.createdBy, description: userDescription }
           };
 
@@ -120,6 +130,22 @@ export class InnovationDocumentsService extends CoreService {
     return this.http.get<InnovationDocumentInfoInDTO>(url.buildUrl()).pipe(take(1),
       map(item => {
 
+        let description: null | string = null;
+        let descriptionUrl: null | string = null;
+        switch (item.context.type) {
+          case 'INNOVATION_SECTION':
+            const section = getAllSectionsList().find(s => s.value === item.context.id)?.label;
+            description = section ?? '[archived section]';
+            descriptionUrl = (section && `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}`) ?? null;
+            break;
+          case 'INNOVATION_EVIDENCE':
+            description = item.context.name ?? '';
+            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${item.context.id}`;
+            break;
+          default:
+            break;
+        }
+
         let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
           switch (item.createdBy.isOwner) {
@@ -131,18 +157,13 @@ export class InnovationDocumentsService extends CoreService {
           userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
         }
 
-        let section;
-        if (item.context.type === 'INNOVATION_SECTION') {
-          section = getAllSectionsList().find(s => s.value === item.context.id)?.label;
-        }
-
         return {
           ...item,
           context: {
             ...item.context,
-            label: item.context.type === 'INNOVATION_SECTION' ? 'Innovation record' : 'Documents',
-            ...(item.context.type === 'INNOVATION_SECTION' && { description: section ?? '[archived section]' }),
-            ...(item.context.type === 'INNOVATION_SECTION' && section && { descriptionUrl: `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}` })
+            label: this.translate(`shared.catalog.documents.contextType.${item.context.type}`),
+            ...(description && { description }),
+            ...(descriptionUrl && { descriptionUrl })
           },
           createdBy: { ...item.createdBy, description: userDescription }
         };
@@ -154,10 +175,7 @@ export class InnovationDocumentsService extends CoreService {
   createDocument(innovationId: string, data: UpsertInnovationDocumentType): Observable<{ id: string }> {
 
     const body = {
-      context: {
-        type: data.contextType,
-        id: data.contextType === 'INNOVATION_SECTION' ? data.section : innovationId
-      },
+      context: { type: data.contextType, id: data.contextId },
       name: data.name,
       ...(data.description && { description: data.description }),
       ...(data.file && {

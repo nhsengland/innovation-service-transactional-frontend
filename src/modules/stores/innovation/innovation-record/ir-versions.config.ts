@@ -20,6 +20,16 @@ export type AllSectionsOutboundPayloadType = {
 export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
 export const irVersionsClinicalMainCategoryItems = [...SECTIONS_202209_evidencetypeItems, ...SECTIONS_202304_evidenceTypeItems];
 
+// These sections should accept documents/files even before the innovation is submitted for NA.
+export const innovationSectionsWithFiles = [
+  'UNDERSTANDING_OF_NEEDS',
+  'EVIDENCE_OF_EFFECTIVENESS',
+  'TESTING_WITH_USERS',
+  'REGULATIONS_AND_STANDARDS',
+  'DEPLOYMENT'
+];
+
+
 export function getInnovationRecordConfig(version?: string): InnovationSectionsListType {
 
   switch (version) {

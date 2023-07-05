@@ -25,9 +25,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   pageData: {
     isCreation: boolean,
     isEdition: boolean,
-    queryParams: {
-      sectionId?: string
-    }
+    queryParams: { sectionId?: string, evidenceId?: string }
   };
 
   wizard = new WizardEngineModel({});
@@ -44,7 +42,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     this.pageData = {
       isCreation: !this.documentId,
       isEdition: !!this.documentId,
-      queryParams: { sectionId: this.activatedRoute.snapshot.queryParams.sectionId }
+      queryParams: { sectionId: this.activatedRoute.snapshot.queryParams.sectionId, evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId }
     };
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
@@ -59,13 +57,16 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
         if (this.pageData.queryParams.sectionId) {
           this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
-          this.wizard.setAnswers(this.wizard.runInboundParsing({ context: { type: 'INNOVATION_SECTION', id: this.pageData.queryParams.sectionId } }));
+          this.wizard.setInboundParsedAnswers({ innovationId: this.innovationId, context: { type: 'INNOVATION_SECTION', id: this.pageData.queryParams.sectionId } });
+        } else if (this.pageData.queryParams.evidenceId) {
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+          this.wizard.setInboundParsedAnswers({ innovationId: this.innovationId, context: { type: 'INNOVATION_EVIDENCE', id: this.pageData.queryParams.evidenceId } });
         } else {
-          this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS);
+          this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({ innovationId: this.innovationId });
         }
 
       } else {
-        this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+        this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS).setInboundParsedAnswers({ innovationId: this.innovationId });
       }
 
       this.wizard.runRules();
@@ -79,7 +80,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
         this.wizard = new WizardEngineModel(WIZARD_EDIT_QUESTIONS);
 
-        this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
+        this.wizard.setInboundParsedAnswers(response).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
 
         this.setUploadConfiguration();
@@ -157,9 +158,9 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     if (this.pageData.isCreation) {
 
       this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
-        next: response => {
+        next: () => {
           this.setRedirectAlertSuccess('Your document has been added');
-          this.redirectTo(this.redirectUrl({ sectionId: this.pageData.queryParams.sectionId, documentId: response.id }));
+          this.redirectTo(this.redirectUrl({ sectionId: this.pageData.queryParams.sectionId, evidenceId: this.pageData.queryParams.evidenceId }));
         },
         error: ({ error: err }) => {
           this.setPageStatus('ERROR');
@@ -188,11 +189,13 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   }
 
-  redirectUrl(data?: { documentId?: string, sectionId?: string }): string {
+  redirectUrl(data?: { documentId?: string, sectionId?: string, evidenceId?: string }): string {
 
     const baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
 
-    if (data?.sectionId) {
+    if (data?.evidenceId) {
+      return `${baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${data.evidenceId}`;
+    } else if (data?.sectionId) {
       return `${baseUrl}/record/sections/${data.sectionId}`;
     } else if (data?.documentId) {
       return `${baseUrl}/documents/${data.documentId}`;

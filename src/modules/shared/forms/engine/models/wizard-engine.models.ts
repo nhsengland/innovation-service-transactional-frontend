@@ -31,18 +31,18 @@ export class WizardEngineModel {
   private summary: WizardSummaryType[] = [];
 
   constructor(data: Partial<WizardEngineModel>) {
-    this.steps = data.steps || [];
+    this.steps = data.steps ?? [];
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
-    this.currentAnswers = data.currentAnswers || {};
-    this.showSummary = data.showSummary || false;
-    this.runtimeRules = data.runtimeRules || [];
+    this.currentAnswers = data.currentAnswers ?? {};
+    this.showSummary = data.showSummary ?? false;
+    this.runtimeRules = data.runtimeRules ?? [];
     this.inboundParsing = data.inboundParsing;
     this.outboundParsing = data.outboundParsing;
     this.summaryParsing = data.summaryParsing;
   }
 
   runRules(data?: MappedObjectType): this {
-    this.runtimeRules.forEach(rule => rule(this.steps, data || this.currentAnswers, this.currentStepId));
+    this.runtimeRules.forEach(rule => rule(this.steps, data ?? this.currentAnswers, this.currentStepId));
     return this;
   }
 
@@ -141,9 +141,13 @@ export class WizardEngineModel {
     this.currentAnswers = data;
     return this;
   }
+  setInboundParsedAnswers(data?: MappedObjectType): this {
+    this.currentAnswers = (this.inboundParsing ? this.inboundParsing(data) : data) ?? {};
+    return this;
+  }
+
 
   getSummary(): WizardSummaryType[] { return this.summary; }
-
 
 
   validateData(): { valid: boolean, errors: { title: string, description: string }[] } {

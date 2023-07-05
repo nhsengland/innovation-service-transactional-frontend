@@ -62,8 +62,8 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['UNDERSTANDING_OF_NEEDS'], 'files'> & { files?: { id: string; name: string, url: string }[] };
-type StepPayloadType = InboundPayloadType;
+// type InboundPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
+type StepPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
 type OutboundPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
 
 
@@ -177,19 +177,6 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
     })
   );
 
-  // TECH DEBT: A new config should be made after evidences decision
-  // if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
-  //   steps.push(
-  //     new FormEngineModel({
-  //       parameters: [{
-  //         id: 'files', dataType: 'file-upload-array', label: stepsLabels.q11.label, description: stepsLabels.q11.description
-  //       }]
-  //     })
-  //   );
-  // } else {
-  //   delete data.files;
-  // }
-
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
@@ -204,8 +191,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.estimatedCarbonReductionSavingsDescription && { estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription }),
     ...(data.carbonReductionPlan && { carbonReductionPlan: data.carbonReductionPlan }),
     ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
-    ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment })
   };
 
 }
@@ -279,26 +265,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       editStepNumber: editStepNumber++
     }
   );
-
-  // TECH DEBT: A new config should be made after evidences decision
-  // if (data.completedHealthInequalitiesImpactAssessment === 'YES') {
-
-  //   const stepNumber = editStepNumber++;
-  //   const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-  //   allFiles.forEach((item, i) => {
-  //     toReturn.push({
-  //       label: `Attachment ${i + 1}`,
-  //       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-  //       editStepNumber: stepNumber,
-  //       allowHTML: true,
-  //       isFile: true
-  //     });
-  //   });
-
-  //   // Add a button to the end of the list.
-  //   toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
-
-  // }
 
   return toReturn;
 
