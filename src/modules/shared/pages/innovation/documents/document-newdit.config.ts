@@ -54,7 +54,7 @@ const relatedWithSectionItems = [
   { value: 'NO', label: 'No' }
 ];
 const injector = AppInjector.getInjector();
-const innovationStoreInnovationService = injector.get(InnovationService);
+const innovationStoreInnovationService = injector?.get(InnovationService); // Needs to have the optional because of tests.
 const evidencesSectionId = 'EVIDENCE_OF_EFFECTIVENESS';
 const innovationSectionsItems = getAllSectionsList();
 
