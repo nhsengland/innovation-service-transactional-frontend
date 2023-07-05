@@ -29,15 +29,13 @@ export type DocumentType202304 = {
     estimatedCarbonReductionSavingsDescription?: string, // New field.
     carbonReductionPlan?: catalogCarbonReductionPlan, // New field.
     keyHealthInequalities?: catalogKeyHealthInequalities[], // New field.
-    completedHealthInequalitiesImpactAssessment?: catalogYesNo, // New field.
-    files?: string[]
+    completedHealthInequalitiesImpactAssessment?: catalogYesNo // New field.
   },
   EVIDENCE_OF_EFFECTIVENESS: {
     hasEvidence?: catalogYesNotYet,
     currentlyCollectingEvidence?: catalogYesNo,
     summaryOngoingEvidenceGathering?: string,
-    needsSupportAnyArea?: catalogNeedsSupportAnyArea[],
-    files?: string[]
+    needsSupportAnyArea?: catalogNeedsSupportAnyArea[]
   },
   MARKET_RESEARCH: {
     hasMarketResearch?: catalogYesInProgressNotYet,
@@ -57,8 +55,7 @@ export type DocumentType202304 = {
     userTests?: { // Moved from section 5.2.
       kind: string,
       feedback?: string
-    }[],
-    files?: string[] // Moved from section 5.2.
+    }[]
   },
   REGULATIONS_AND_STANDARDS: {
     hasRegulationKnowledge?: catalogHasRegulationKnowledge,
@@ -66,8 +63,7 @@ export type DocumentType202304 = {
       type: catalogStandardsType,
       hasMet?: catalogYesInProgressNotYet
     }[],
-    otherRegulationDescription?: string,
-    files?: string[]
+    otherRegulationDescription?: string
   },
   INTELLECTUAL_PROPERTY: {
     hasPatents?: catalogHasPatents,
@@ -99,15 +95,13 @@ export type DocumentType202304 = {
     deploymentPlans?: string[],
     commercialBasis?: string, // New field.
     organisationDeploymentAffect?: string // New field.
-    hasResourcesToScale?: catalogYesNoNotSure,
-    files?: string[]
+    hasResourcesToScale?: catalogYesNoNotSure
   },
   evidences?: {
     id: string,
     evidenceSubmitType: catalogEvidenceSubmitType, // Similar to previous "evidenceType", but with a new list of options.
     evidenceType?: catalogEvidenceType, // Previous clinicalEvidenteType field.
     description?: string,
-    summary: string,
-    files?: string[]
+    summary: string
   }[]
 };

@@ -23,8 +23,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
-  files?: { id: string; name: string, url: string }[],
+type InboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'] & {
   evidences?: { id: string, name: string, summary: string }[]
 };
 type StepPayloadType = InboundPayloadType;
@@ -78,7 +77,6 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
 
   } else {
     delete data.summaryOngoingEvidenceGathering;
-    delete data.files;
   }
 
   steps.push(
@@ -99,8 +97,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.hasEvidence && { hasEvidence: data.hasEvidence }),
     ...(data.currentlyCollectingEvidence && { currentlyCollectingEvidence: data.currentlyCollectingEvidence }),
     ...(data.summaryOngoingEvidenceGathering && { summaryOngoingEvidenceGathering: data.summaryOngoingEvidenceGathering }),
-    ...((data.needsSupportAnyArea ?? []).length > 0 && { needsSupportAnyArea: data.needsSupportAnyArea }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    ...((data.needsSupportAnyArea ?? []).length > 0 && { needsSupportAnyArea: data.needsSupportAnyArea })
   };
 
 }

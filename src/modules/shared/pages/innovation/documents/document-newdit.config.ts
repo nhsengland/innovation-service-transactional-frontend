@@ -130,12 +130,15 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
   // As we need to do async calls, we do it only one time at the begginning.
   // Response will be received after this method finishes, but that's not a problem as this information is only needed on step 3.
   if (!data.evidencesList) {
-    innovationStoreInnovationService.getSectionInfo(data.innovationId, evidencesSectionId, {}).subscribe(response => {
-      if (response.data.hasEvidence === 'YES') { // Only show evidences if section 2.2 question is YES.
-        data.evidencesList = ((response.data.evidences as StepPayloadType['evidencesList']) ?? []).map(item => ({ id: item.id, name: item.name, summary: StringsHelper.smartTruncate(item.summary, 150) }));
-      } else {
-        data.evidencesList = [];
-      }
+    innovationStoreInnovationService.getSectionInfo(data.innovationId, evidencesSectionId, {}).subscribe({
+      next: response => {
+        if (response.data.hasEvidence === 'YES') { // Only show evidences if section 2.2 question is YES.
+          data.evidencesList = ((response.data.evidences as StepPayloadType['evidencesList']) ?? []).map(item => ({ id: item.id, name: item.name, summary: StringsHelper.smartTruncate(item.summary, 150) }));
+        } else {
+          data.evidencesList = [];
+        }
+      },
+      error: () => console.error('Error fetching section/evidences information.')
     });
   }
 
@@ -151,7 +154,7 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
         items: innovationSectionsItems.map(item => ({
           ...item,
           ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {
-            description: `There's ${data.evidencesList?.length} evidences. Choosing this section we'll ask you more information on the next question.`
+            description: `There's ${data.evidencesList?.length} evidence${data.evidencesList?.length === 1 ? '' : 's'}. Choosing this section we'll ask you more information on the next question.`
           })
         }))
       }]
@@ -165,7 +168,7 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
           validations: { isRequired: [true, 'Choose one option'] },
           items: [
             ...[{ value: 'NONE', label: `I want to upload this document on section "${innovationSectionsItems.find(item => item.value === evidencesSectionId)?.label}", not an evidence` }],
-            ...(data.evidencesList ?? []).map(item => ({ value: item.id, label: item.name, description: item.summary })) // TODO: limit this summary!
+            ...(data.evidencesList ?? []).map(item => ({ value: item.id, label: item.name, description: item.summary }))
           ]
         }]
       }));
