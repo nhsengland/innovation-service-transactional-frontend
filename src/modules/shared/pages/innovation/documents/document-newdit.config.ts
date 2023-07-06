@@ -271,12 +271,15 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         editStepNumber: editStepNumber++
       });
 
-      if (data.evidence && data.evidence !== 'NONE') {
-        toReturn.push({
-          label: 'Which evidence does this document support?',
-          value: (data.evidencesList ?? []).find(item => item.id === data.evidence)?.name,
-          editStepNumber: editStepNumber++
-        });
+      if (data.evidence) {
+        if (data.evidence === 'NONE') { editStepNumber++ }
+        else {
+          toReturn.push({
+            label: 'Which evidence does this document support?',
+            value: (data.evidencesList ?? []).find(item => item.id === data.evidence)?.name,
+            editStepNumber: editStepNumber++
+          });
+        }
       }
 
     }
