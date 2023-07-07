@@ -125,23 +125,13 @@
         (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && isAccessorType ||
         (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
       ">
-        <button routerLink="/{{ baseUrl }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-right-3">Create action for this section</button>
+        <button routerLink="/{{ baseUrl }}/action-tracker/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5">Create action for this section</button>
       </ng-container>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">
-
-        <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
-          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button">Start needs assessment</button>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">
-          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit" class="nhsuk-button">Continue needs assessment</button>
-        </ng-container>
-
-        <ng-container *ngSwitchCase="'IN_PROGRESS'">
-          <button routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}" class="nhsuk-button">View needs assessment</button>
-        </ng-container>
-
+        <button *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button nhsuk-u-margin-top-5">Start needs assessment</button>
+        <button *ngSwitchCase="'NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit" class="nhsuk-button nhsuk-u-margin-top-5">Continue needs assessment</button>
+        <button *ngSwitchCase="'IN_PROGRESS'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}" class="nhsuk-button nhsuk-u-margin-top-5">View needs assessment</button>
       </ng-container>
 
     </div>

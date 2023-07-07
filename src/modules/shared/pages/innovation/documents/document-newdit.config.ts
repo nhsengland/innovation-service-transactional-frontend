@@ -35,7 +35,7 @@ type StepPayloadType = {
   // Logic fields.
   innovationId: string,
   wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS'
-  contextType?: InnovationDocumentInfoOutDTO['context']['type'],
+  contextType: InnovationDocumentInfoOutDTO['context']['type'],
   evidencesList?: { id: string, name: string, summary: string }[],
   section?: string,
   evidence?: string,
@@ -220,7 +220,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     innovationId: data.innovationId,
     wizardType: data.wizardType,
-    contextType: data.context?.type,
+    contextType: data.context?.type ?? 'INNOVATION',
     ...(data.context?.type === 'INNOVATION_SECTION' && { section: data.context.id }),
     ...(data.context?.type === 'INNOVATION_EVIDENCE' && { evidence: data.context.id }),
     name: data.name,
