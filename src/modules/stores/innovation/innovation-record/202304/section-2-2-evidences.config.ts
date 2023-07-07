@@ -25,7 +25,7 @@ const stepsLabels = {
 
 // Types.
 // type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
-type StepPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id' | 'files'> & { id?: string, files: { id: string; name: string, url: string }[] };
+type StepPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
 type OutboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
 
 
@@ -105,11 +105,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Summary is required'] },
         lengthLimit: 'm'
       }]
-    }),
-    new FormEngineModel({
-      parameters: [{
-        id: 'files', dataType: 'file-upload-array', label: stepsLabels.q6.label, description: stepsLabels.q6.description
-      }]
     })
   );
 
@@ -120,8 +115,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     evidenceSubmitType: data.evidenceSubmitType,
     ...(data.evidenceType && { evidenceType: data.evidenceType }),
     ...(data.description && { description: data.description }),
-    summary: data.summary,
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    summary: data.summary
   };
 }
 
@@ -176,22 +170,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     value: data.summary,
     editStepNumber: editStepNumber++
   });
-
-
-  const stepNumber = editStepNumber++;
-  const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-  allFiles.forEach((item, i) => {
-    toReturn.push({
-      label: `Attachment ${i + 1}`,
-      value: `<a href='${item.url}'>${item.name}</a>`,
-      editStepNumber: stepNumber,
-      allowHTML: true,
-      isFile: true
-    });
-  });
-
-  // Add a button to the end of the list.
-  toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   return toReturn;
 

@@ -45,8 +45,9 @@
         <div *ngIf="(isInnovatorType || isAccessorType) && innovation.status === 'IN_PROGRESS' && section.status.id === 'DRAFT'" class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p *ngIf="isInnovatorType">This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.</p>
-          <p *ngIf="isAccessorType">You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create an action or send a message to the innovator asking them
-              to resubmit it.</span></p>
+          <p *ngIf="isAccessorType">
+            You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create an action or send a message to the innovator asking them to resubmit it.</span>
+          </p>
         </div>
 
         <ng-container *ngIf="summaryList.length > 0">
@@ -81,7 +82,7 @@
         </ng-container>
 
         <ng-container *ngIf="section.hasEvidences">
-          <h2>Evidences</h2>
+          <h2>Evidence</h2>
           <button *ngIf="isInnovatorType" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary">Add evidence</button>
           <p *ngIf="evidencesList.length === 0">There are no evidences on this section.</p>
           <dl *ngIf="evidencesList.length > 0" class="nhsuk-summary-list">
@@ -95,21 +96,23 @@
           </dl>
         </ng-container>
 
-        <h2>Documents</h2>
-        <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ sectionId: section.id }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
-        <p *ngIf="documents.length === 0">There are no documents uploaded to this section.</p>
-        <dl *ngIf="documents.length > 0" class="nhsuk-summary-list">
-          <div *ngFor="let document of documents; let i = index" class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">
-              <a href="{{ document.file.url }}" attr.aria-label="Download {{ document.name }} file">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a>
-              <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
-            </dd>
-            <dd class="nhsuk-summary-list__actions">
-              <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
-            </dd>
-          </div>
-        </dl>
+        <ng-container *ngIf="shouldShowDocuments">
+          <h2>Documents</h2>
+          <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ sectionId: section.id }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
+          <p *ngIf="documentsList.length === 0">There are no documents uploaded to this section.</p>
+          <dl *ngIf="documentsList.length > 0" class="nhsuk-summary-list">
+            <div *ngFor="let document of documentsList; let i = index" class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">
+                <a href="{{ document.file.url }}" attr.aria-label="Download {{ document.name }} file">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a>
+                <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
+              </dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+              </dd>
+            </div>
+          </dl>
+        </ng-container>
 
       </ng-container>
 

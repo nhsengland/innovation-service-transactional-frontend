@@ -84,7 +84,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.getSectionEvidenceInfo(innovationId, evidenceId);
   }
 
-  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<MappedObjectType> {
+  upsertSectionEvidenceInfo$(innovationId: string, data: MappedObjectType, evidenceId?: string): Observable<{ id: string }> {
     return this.innovationsService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
   }
 

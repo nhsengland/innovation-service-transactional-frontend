@@ -40,7 +40,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['DEPLOYMENT'], 'files'> & { files?: { id: string; name: string, url: string }[] };
+type InboundPayloadType = DocumentType202304['DEPLOYMENT'];
 type StepPayloadType = InboundPayloadType & { stepDeploymentPlans: { name: string }[] };
 type OutboundPayloadType = DocumentType202304['DEPLOYMENT'];
 
@@ -121,13 +121,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         validations: { isRequired: [true, 'Choose one option'] },
         items: hasResourcesToScaleItems
       }]
-    }),
-    // TECH DEBT: A new config should be made after evidences decision
-    // new FormEngineModel({
-    //   parameters: [{
-    //     id: 'files', dataType: 'file-upload-array', label: stepsLabels.q7.label, description: stepsLabels.q7.description
-    //   }]
-    // })
+    })
   );
 
 }
@@ -141,8 +135,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     stepDeploymentPlans: data.deploymentPlans?.map(item => ({ name: item })) ?? [],
     commercialBasis: data.commercialBasis,
     organisationDeploymentAffect: data.organisationDeploymentAffect,
-    hasResourcesToScale: data.hasResourcesToScale,
-    files: data.files
+    hasResourcesToScale: data.hasResourcesToScale
   };
 
 }
@@ -156,8 +149,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.stepDeploymentPlans.length > 0 && { deploymentPlans: data.stepDeploymentPlans?.map(item => item.name) }),
     ...(data.commercialBasis && { commercialBasis: data.commercialBasis }),
     ...(data.organisationDeploymentAffect && { organisationDeploymentAffect: data.organisationDeploymentAffect }),
-    ...(data.hasResourcesToScale && { hasResourcesToScale: data.hasResourcesToScale }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    ...(data.hasResourcesToScale && { hasResourcesToScale: data.hasResourcesToScale })
   };
 
 }
@@ -208,22 +200,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     value: hasResourcesToScaleItems.find(item => item.value === data.hasResourcesToScale)?.label,
     editStepNumber: editStepNumber++
   });
-
-  // const stepNumber = editStepNumber++;
-  // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-  // allFiles.forEach((item, i) => {
-  //   toReturn.push({
-  //     label: `Attachment ${i + 1}`,
-  //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-  //     editStepNumber: stepNumber,
-  //     allowHTML: true,
-  //     isFile: true
-  //   });
-  // });
-
-  // Add a button to the end of the list.
-  // TECH DEBT: A new config should be made after evidences decision
-  // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   return toReturn;
 

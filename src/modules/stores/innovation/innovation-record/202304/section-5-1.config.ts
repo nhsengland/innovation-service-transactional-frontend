@@ -26,7 +26,7 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['REGULATIONS_AND_STANDARDS'], 'files'> & { files?: { id: string; name: string, url: string }[] };
+type InboundPayloadType = DocumentType202304['REGULATIONS_AND_STANDARDS'];
 type StepPayloadType = InboundPayloadType
   & { standardsType: catalogStandardsType[] }
   & { [key in `standardHasMet_${string}`]?: catalogYesInProgressNotYet };
@@ -63,7 +63,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     delete currentValues.standards;
     currentValues.standardsType = [];
     delete currentValues.otherRegulationDescription;
-    delete currentValues.files;
     Object.keys(currentValues).filter(key => key.startsWith('standardHasMet_')).forEach((key) => { delete currentValues[key as any]; });
     return;
   }
@@ -110,20 +109,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`standardHasMet_${StringsHelper.slugify(item.type)}`] = item.hasMet;
   });
 
-  // TECH DEBT: A new config should be made after evidences decision
-  // Only diplay files if answered YES to at least on "standard" question.
-  // if (currentValues.standards.some(item => item.hasMet === 'YES')) {
-  //   steps.push(
-  //     new FormEngineModel({
-  //       parameters: [{
-  //         id: 'files', dataType: 'file-upload-array', label: stepsLabels.q3.label, description: stepsLabels.q3.description
-  //       }],
-  //     })
-  //   );
-  // } else {
-  //   delete currentValues.files;
-  // }
-
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -132,7 +117,6 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     hasRegulationKnowledge: data.hasRegulationKnowledge,
     standards: data.standards,
     otherRegulationDescription: data.otherRegulationDescription,
-    files: data.files,
     standardsType: data.standards?.map(item => item.type)
   } as StepPayloadType;
 
@@ -152,8 +136,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
         ...(item.hasMet && { hasMet: item.hasMet })
       }))
     }),
-    ...(data.otherRegulationDescription && { otherRegulationDescription: data.otherRegulationDescription }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    ...(data.otherRegulationDescription && { otherRegulationDescription: data.otherRegulationDescription })
 
   };
 
@@ -184,26 +167,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         editStepNumber: toReturn.length + 1
       });
     });
-
-    // TECH DEBT: A new config should be made after evidences decision
-    // if (data.standards?.some(item => item.hasMet === 'YES')) {
-
-    //   const stepNumber = toReturn.length + 1;
-    //   const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    //   allFiles.forEach((item, i) => {
-    //     toReturn.push({
-    //       label: `Attachment ${i + 1}`,
-    //       value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-    //       editStepNumber: stepNumber,
-    //       allowHTML: true,
-    //       isFile: true
-    //     });
-    //   });
-
-    //   // Add a button to the end of the list.
-    //   toReturn.push({ type: 'button', label: 'Add certification documents', editStepNumber: stepNumber });
-
-    // }
 
   }
 

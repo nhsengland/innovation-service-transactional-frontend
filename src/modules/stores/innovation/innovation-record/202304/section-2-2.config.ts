@@ -3,9 +3,9 @@ import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType }
 
 import { InnovationSectionConfigType } from '../ir-versions.types';
 
-import { InnovationSections, catalogEvidenceSubmitType } from './catalog.types';
+import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
-import { evidenceSubmitTypeItems, needsSupportAnyAreaItems, yesNoItems, yesNotYetItems } from './forms.config';
+import { needsSupportAnyAreaItems, yesNoItems, yesNotYetItems } from './forms.config';
 import { SECTION_2_EVIDENCES } from './section-2-2-evidences.config';
 
 
@@ -23,9 +23,8 @@ const stepsLabels = {
 
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
-  files?: { id: string; name: string, url: string }[],
-  evidences?: { id: string, evidenceSubmitType: catalogEvidenceSubmitType, description?: string }[]
+type InboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'] & {
+  evidences?: { id: string, name: string, summary: string }[]
 };
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'];
@@ -74,16 +73,10 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
           lengthLimit: 'l'
         }]
       })
-      // new FormEngineModel({
-      //   parameters: [{
-      //     id: 'files', dataType: 'file-upload-array', label: stepsLabels.q4.label, description: stepsLabels.q4.description
-      //   }]
-      // })
     );
 
   } else {
     delete data.summaryOngoingEvidenceGathering;
-    delete data.files;
   }
 
   steps.push(
@@ -104,8 +97,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.hasEvidence && { hasEvidence: data.hasEvidence }),
     ...(data.currentlyCollectingEvidence && { currentlyCollectingEvidence: data.currentlyCollectingEvidence }),
     ...(data.summaryOngoingEvidenceGathering && { summaryOngoingEvidenceGathering: data.summaryOngoingEvidenceGathering }),
-    ...((data.needsSupportAnyArea ?? []).length > 0 && { needsSupportAnyArea: data.needsSupportAnyArea }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    ...((data.needsSupportAnyArea ?? []).length > 0 && { needsSupportAnyArea: data.needsSupportAnyArea })
   };
 
 }
@@ -138,18 +130,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       editStepNumber: editStepNumber++
     });
 
-    // const stepNumber = editStepNumber++;
-    // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    // allFiles.forEach((item, i) => {
-    //   toReturn.push({
-    //     label: `Attachment ${i + 1}`,
-    //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-    //     editStepNumber: stepNumber,
-    //     allowHTML: true,
-    //     isFile: true
-    //   });
-    // });
-
   }
 
   toReturn.push({
@@ -161,7 +141,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   data.evidences?.forEach((item, i) => {
     toReturn.push({
       label: `Evidence ${i + 1}`,
-      value: item.description ?? evidenceSubmitTypeItems.find(e => e.value === item.evidenceSubmitType)?.label,
+      value: item.name,
       evidenceId: item.id
     });
   });

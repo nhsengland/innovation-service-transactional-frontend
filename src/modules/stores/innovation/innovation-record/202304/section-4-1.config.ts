@@ -24,7 +24,7 @@ const stepsLabels = {
 };
 
 // Types.
-type InboundPayloadType = Omit<DocumentType202304['TESTING_WITH_USERS'], 'files'> & { files?: { id: string; name: string, url: string }[] };
+type InboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 type StepPayloadType = InboundPayloadType & { [key in `userTestFeedback_${string}`]?: string };
 type OutboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 
@@ -66,7 +66,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     delete currentValues.intendedUserGroupsEngaged;
     delete currentValues.otherIntendedUserGroupsEngaged;
     delete currentValues.userTests;
-    delete currentValues.files;
     Object.keys(currentValues).filter(key => key.startsWith('userTestFeedback_')).forEach((key) => { delete currentValues[key as any]; });
     return;
   }
@@ -130,14 +129,6 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues[`userTestFeedback_${StringsHelper.slugify(item.kind)}`] = item.feedback;
   });
 
-  // steps.push(
-  //   new FormEngineModel({
-  //     parameters: [{
-  //       id: 'files', dataType: 'file-upload-array', label: stepsLabels.q5.label, description: stepsLabels.q5.description
-  //     }]
-  //   })
-  // );
-
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -147,8 +138,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     testedWithIntendedUsers: data.testedWithIntendedUsers,
     intendedUserGroupsEngaged: data.intendedUserGroupsEngaged,
     otherIntendedUserGroupsEngaged: data.otherIntendedUserGroupsEngaged,
-    userTests: data.userTests,
-    files: data.files
+    userTests: data.userTests
   } as StepPayloadType;
 
   (data.userTests ?? []).forEach((item, i) => { parsedData[`userTestFeedback_${StringsHelper.slugify(item.kind)}`] = item.feedback; });
@@ -169,8 +159,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
         kind: item.kind,
         ...(item.feedback && { feedback: item.feedback })
       }))
-    }),
-    ...((data.files ?? []).length > 0 && { files: data.files?.map(item => item.id) })
+    })
   };
 
 }
@@ -215,21 +204,6 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         editStepNumber: editStepNumber++
       });
     });
-
-    // const stepNumber = editStepNumber++;
-    // const allFiles = (data.files || []).map(item => ({ id: item.id, name: item.name, url: item.url }));
-    // allFiles.forEach((item, i) => {
-    //   toReturn.push({
-    //     label: `Attachment ${i + 1}`,
-    //     value: `<a href='${item.url}'>${item.name}</a>` || 'Unknown',
-    //     editStepNumber: stepNumber,
-    //     allowHTML: true,
-    //     isFile: true
-    //   });
-    // });
-
-    // Add a button to the end of the list.
-    // toReturn.push({ type: 'button', label: 'Add documents', editStepNumber: stepNumber });
 
   }
 

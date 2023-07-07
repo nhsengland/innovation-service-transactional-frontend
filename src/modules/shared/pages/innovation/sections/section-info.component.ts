@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -8,8 +8,8 @@ import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS, InnovationSectionEnum } from '@modules/stores/innovation';
-import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { getInnovationRecordConfig, innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
 @Component({
@@ -37,7 +37,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   sectionsIdsList: string[];
   summaryList: WizardSummaryType[] = [];
   evidencesList: WizardSummaryType[] = [];
-  documents: InnovationDocumentsListOutDTO['data'] = [];
+  documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   previousSection: null | { id: string, title: string } = null;
   nextSection: null | { id: string, title: string } = null;
@@ -48,6 +48,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
+  shouldShowDocuments = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -139,13 +140,16 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.section.wizard = section.wizard;
     this.section.showSubmitButton = false;
     this.section.showSubmitUpdatesButton = false;
+    this.shouldShowDocuments =
+      this.innovation.status !== InnovationStatusEnum.CREATED ||
+      (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section.id));
 
     this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     forkJoin([
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id),
-      this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+      !this.shouldShowDocuments ? of(null) : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 50,
         order: { createdAt: 'ASC' },
@@ -184,8 +188,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       }
 
-      // Documents
-      this.documents = documents.data;
+      // Documents.
+      this.documentsList = documents?.data ?? [];
 
       this.setPageStatus('READY');
 
