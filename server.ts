@@ -47,8 +47,8 @@ export function app(): express.Express {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.LOCAL_MODE !== 'true',
-      sameSite: process.env.LOCAL_MODE !== 'true' ? 'strict' : 'lax'
+      secure: process.env.BASE_URL?.startsWith('https'),
+      sameSite: 'lax'
     }
   }));
 
