@@ -1,12 +1,12 @@
-import { AppInjector } from '@modules/core';
+// import { AppInjector } from '@modules/core';
 
 import { FileUploadType } from '@app/base/forms';
 
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentInfoOutDTO, UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
-import { InnovationService } from '@modules/stores';
+// import { InnovationService } from '@modules/stores';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { StringsHelper } from '@app/base/helpers';
+// import { StringsHelper } from '@app/base/helpers';
 
 
 // Labels.
@@ -35,8 +35,8 @@ type StepPayloadType = {
   // Logic fields.
   innovationId: string,
   wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS'
-  contextType?: InnovationDocumentInfoOutDTO['context']['type'],
-  evidencesList?: { id: string, name: string, summary: string }[],
+  contextType: InnovationDocumentInfoOutDTO['context']['type'],
+  // evidencesList?: { id: string, name: string, summary: string }[],
   section?: string,
   evidence?: string,
   // Questions fields.
@@ -53,9 +53,9 @@ const relatedWithSectionItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' }
 ];
-const injector = AppInjector.getInjector();
-const innovationStoreInnovationService = injector?.get(InnovationService); // Needs to have the optional because of tests.
-const evidencesSectionId = 'EVIDENCE_OF_EFFECTIVENESS';
+// const injector = AppInjector.getInjector();
+// const innovationStoreInnovationService = injector?.get(InnovationService); // Needs to have the optional because of tests.
+// const evidencesSectionId = 'EVIDENCE_OF_EFFECTIVENESS';
 const innovationSectionsItems = getAllSectionsList();
 
 
@@ -129,18 +129,18 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
 
   // As we need to do async calls, we do it only one time at the begginning.
   // Response will be received after this method finishes, but that's not a problem as this information is only needed on step 3.
-  if (!data.evidencesList) {
-    innovationStoreInnovationService.getSectionInfo(data.innovationId, evidencesSectionId, {}).subscribe({
-      next: response => {
-        if (response.data.hasEvidence === 'YES') { // Only show evidences if section 2.2 question is YES.
-          data.evidencesList = ((response.data.evidences as StepPayloadType['evidencesList']) ?? []).map(item => ({ id: item.id, name: item.name, summary: StringsHelper.smartTruncate(item.summary, 150) }));
-        } else {
-          data.evidencesList = [];
-        }
-      },
-      error: () => console.error('Error fetching section/evidences information.')
-    });
-  }
+  // if (!data.evidencesList) {
+  //   innovationStoreInnovationService.getSectionInfo(data.innovationId, evidencesSectionId, {}).subscribe({
+  //     next: response => {
+  //       if (response.data.hasEvidence === 'YES') { // Only show evidences if section 2.2 question is YES.
+  //         data.evidencesList = ((response.data.evidences as StepPayloadType['evidencesList']) ?? []).map(item => ({ id: item.id, name: item.name, summary: StringsHelper.smartTruncate(item.summary, 150) }));
+  //       } else {
+  //         data.evidencesList = [];
+  //       }
+  //     },
+  //     error: () => console.error('Error fetching section/evidences information.')
+  //   });
+  // }
 
 
   steps.splice(1);
@@ -150,42 +150,43 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
     steps.push(new FormEngineModel({
       parameters: [{
         id: 'section', dataType: 'radio-group', label: stepsLabels.l2.label,
+        description: `If you want to upload evidence of impact of benefits, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
         validations: { isRequired: [true, 'Choose one option'] },
         items: innovationSectionsItems.map(item => ({
-          ...item,
-          ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {
-            description: `There's ${data.evidencesList?.length} evidence${data.evidencesList?.length === 1 ? '' : 's'}. Choosing this section we'll ask you more information on the next question.`
-          })
+          ...item
+          // ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {
+          //   description: `There's ${data.evidencesList?.length} evidence${data.evidencesList?.length === 1 ? '' : 's'}. Choosing this section we'll ask you more information on the next question.`
+          // })
         }))
       }]
     }));
 
-    if (data.section === evidencesSectionId && (data.evidencesList ?? []).length > 0) {
+    // if (data.section === evidencesSectionId && (data.evidencesList ?? []).length > 0) {
 
-      steps.push(new FormEngineModel({
-        parameters: [{
-          id: 'evidence', dataType: 'radio-group', label: stepsLabels.l3.label,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: [
-            ...[{ value: 'NONE', label: `I want to upload this document on section "${innovationSectionsItems.find(item => item.value === evidencesSectionId)?.label}", not an evidence` }],
-            ...(data.evidencesList ?? []).map(item => ({ value: item.id, label: item.name, description: item.summary }))
-          ]
-        }]
-      }));
+    //   steps.push(new FormEngineModel({
+    //     parameters: [{
+    //       id: 'evidence', dataType: 'radio-group', label: stepsLabels.l3.label,
+    //       validations: { isRequired: [true, 'Choose one option'] },
+    //       items: [
+    //         ...[{ value: 'NONE', label: `I want to upload this document on section "${innovationSectionsItems.find(item => item.value === evidencesSectionId)?.label}", not an evidence` }],
+    //         ...(data.evidencesList ?? []).map(item => ({ value: item.id, label: item.name, description: item.summary }))
+    //       ]
+    //     }]
+    //   }));
 
-    } else {
-      delete data.evidence;
-    }
+    // } else {
+    //   delete data.evidence;
+    // }
 
   } else {
     delete data.section;
-    delete data.evidence;
+    // delete data.evidence;
   }
 
   // Updates contextType as this is defined by questions on 3 first steps!
-  if (data.evidence && data.evidence !== 'NONE') {
-    data.contextType = 'INNOVATION_EVIDENCE';
-  } else if (data.section) {
+  // if (data.evidence && data.evidence !== 'NONE') {
+  //   data.contextType = 'INNOVATION_EVIDENCE';
+  if (data.section) {
     data.contextType = 'INNOVATION_SECTION';
   } else {
     data.contextType = 'INNOVATION';
@@ -220,7 +221,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     innovationId: data.innovationId,
     wizardType: data.wizardType,
-    contextType: data.context?.type,
+    contextType: data.context?.type ?? 'INNOVATION',
     ...(data.context?.type === 'INNOVATION_SECTION' && { section: data.context.id }),
     ...(data.context?.type === 'INNOVATION_EVIDENCE' && { evidence: data.context.id }),
     name: data.name,
@@ -271,16 +272,16 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         editStepNumber: editStepNumber++
       });
 
-      if (data.evidence) {
-        if (data.evidence === 'NONE') { editStepNumber++ }
-        else {
-          toReturn.push({
-            label: 'Which evidence does this document support?',
-            value: (data.evidencesList ?? []).find(item => item.id === data.evidence)?.name,
-            editStepNumber: editStepNumber++
-          });
-        }
-      }
+      // if (data.evidence) {
+      //   if (data.evidence === 'NONE') { editStepNumber++ }
+      //   else {
+      //     toReturn.push({
+      //       label: 'Which evidence does this document support?',
+      //       value: (data.evidencesList ?? []).find(item => item.id === data.evidence)?.name,
+      //       editStepNumber: editStepNumber++
+      //     });
+      //   }
+      // }
 
     }
 
