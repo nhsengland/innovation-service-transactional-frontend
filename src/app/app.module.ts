@@ -1,16 +1,16 @@
+import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { ErrorHandler, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { CoreModule } from '@modules/core/core.module';
 import { StoresModule } from '@modules/stores/stores.module';
 import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
-import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 
 
 @NgModule({

@@ -1,11 +1,12 @@
 import { isPlatformServer } from '@angular/common';
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { Observable } from 'rxjs';
-
 import { AuthenticationStore } from '@modules/stores';
 import { REQUEST } from '@nguniversal/express-engine/tokens';
 import { Request } from 'express';
+import { Observable } from 'rxjs';
+
+import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 @Injectable()
 export class ApiOutInterceptor implements HttpInterceptor {
@@ -13,7 +14,9 @@ export class ApiOutInterceptor implements HttpInterceptor {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(REQUEST) private serverRequest: Request,    
-    private authentication: AuthenticationStore
+    private authentication: AuthenticationStore,
+    private envVariablesStore: EnvironmentVariablesStore,
+    private tokenExtractor: HttpXsrfTokenExtractor
   ) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -30,13 +33,20 @@ export class ApiOutInterceptor implements HttpInterceptor {
         }
       });
     } else {
-      request = request.clone({
-        setHeaders: {
-          ...userContext && { 
-            'x-is-role': userContext.roleId
-          },
-        }
-      });
+      // We only intercept requests to our API.
+      if(request.url.startsWith(this.envVariablesStore.BASE_URL)) {  
+        const token = request.method !== 'GET' && request.method !== 'HEAD' && request.method !== 'OPTIONS' && this.tokenExtractor.getToken()
+        request = request.clone({
+          setHeaders: {
+            ...userContext && { 
+              'x-is-role': userContext.roleId
+            },
+            ...token && {
+              'X-XSRF-TOKEN': token
+            }
+          }
+        });
+      }
     }
 
     return next.handle(request);

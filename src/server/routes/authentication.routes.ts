@@ -8,6 +8,7 @@ import {
 } from '@azure/msal-node';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import axios from 'axios';
+import { randomBytes } from 'crypto';
 import * as dotenv from 'dotenv';
 import { Response, Router } from 'express';
 import { Agent } from 'https';
@@ -187,6 +188,16 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
       }).then((response)=>{
         setAccessTokenBySessionId(req.session.id, response);
         (req.session as any).oid = response.uniqueId;
+
+        // SET XSRF TOKEN
+        // https://angular.io/guide/http-security-xsrf-protection
+        // https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token
+        const token = randomBytes(24).toString('hex');
+        res.cookie('XSRF-TOKEN', token, {
+          httpOnly: false, // required by angular to be false so that it can be used by the interceptor to send in the header
+          secure: process.env.BASE_URL?.startsWith('https'),
+          sameSite: process.env.BASE_URL?.startsWith('https') ? 'strict' : 'lax'
+        })  
 
         res.redirect(backUrl ? `${ENVIRONMENT.BASE_PATH}${backUrl}` : `${ENVIRONMENT.BASE_PATH}/dashboard`);
         }).catch((error)=>{

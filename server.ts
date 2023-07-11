@@ -4,7 +4,6 @@ import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 
 import * as coockieParser from 'cookie-parser';
-import * as csurf from 'csurf';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as session from 'express-session';
@@ -12,7 +11,7 @@ import * as fs from 'fs';
 import * as helmet from 'helmet';
 import { join } from 'path';
 
-import { getAppInsightsClient, initAppInsights } from 'src/globals';
+import { initAppInsights } from 'src/globals';
 import { ENVIRONMENT } from 'src/server/config/constants.config';
 import { handler } from 'src/server/handlers/logger.handler';
 import { appLoggingMiddleware } from 'src/server/middlewares/app-logging.middleware';
@@ -23,7 +22,6 @@ import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
-import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { AppServerModule } from './src/main.server';
 
 dotenv.config();
@@ -48,7 +46,9 @@ export function app(): express.Express {
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true
+      httpOnly: true,
+      secure: process.env.LOCAL_MODE !== 'true',
+      sameSite: process.env.LOCAL_MODE !== 'true' ? 'strict' : 'lax'
     }
   }));
 
@@ -65,27 +65,13 @@ export function app(): express.Express {
   server.set('views', distFolder);
   server.use(staticContentPath, express.static(distFolder));
 
-  // Temporary to diagnose 500 errors.
+  // CSRF protection.
   server.use((req, res, next) => {
-    res.on('finish', () => {
-      if (res.statusCode === 500) {
-        getAppInsightsClient().trackTrace({ 
-          message: `Diagnose 500`,
-          severity: SeverityLevel.Information,
-          properties: {
-            request: {
-              url: req.url,
-              method: req.method,
-              body: req.body
-            },
-            response: {
-              statusCode: res.statusCode,
-              statusMessage: res.statusMessage
-            }
-          }
-        });  
+    if (!(req.method === 'OPTIONS' || req.method === 'GET' || req.method === 'HEAD')) {
+      if(req.cookies['XSRF-TOKEN'] !== req.headers['x-xsrf-token']) {
+        res.send(403);
       }
-    });
+    }
     next();
   });
 
@@ -147,9 +133,7 @@ export function app(): express.Express {
 
   // // All regular routes using the Universal engine.
   server.get('*',
-    csurf({ cookie: true }),
     (req, res) => {
-      res.cookie('XSRF-TOKEN', req.csrfToken(), { httpOnly: false });
       res.render(indexHtml, {
         req, res,
         providers: [

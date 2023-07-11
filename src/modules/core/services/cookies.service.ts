@@ -1,5 +1,5 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
@@ -15,20 +15,21 @@ type CookiesConsentType = {
 @Injectable()
 export class CookiesService {
 
-  private cookiesOptions: {
+  private readonly cookiesOptions: {
     expires?: number | Date;
     path?: string;
     domain?: string;
     secure?: boolean;
     sameSite?: 'Lax' | 'None' | 'Strict';
-  } = { path: '/', expires: 365, sameSite: 'Strict' };
-
+  }
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private coockieService: CookieService,
     private environment: EnvironmentVariablesStore
-  ) { }
+  ) { 
+    this.cookiesOptions = { path: '/', expires: 365, sameSite: 'Strict', secure: environment.BASE_URL.startsWith('https') };
+  }
 
 
   shouldAskForCookies(): boolean { return (isPlatformBrowser(this.platformId) && Object.keys(this.getConsentCookie()).length === 0); }
