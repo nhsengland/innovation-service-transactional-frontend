@@ -37,6 +37,7 @@ export function app(): express.Express {
   const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
 
   server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
+  server.set('trust proxy', 1); // trust first proxy
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
@@ -47,7 +48,7 @@ export function app(): express.Express {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: process.env.BASE_URL?.startsWith('https'),
+      secure: 'auto',
       sameSite: 'lax'
     }
   }));
