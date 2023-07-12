@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { OrganisationErrorsEnum } from '@app/base/enums';
 import { FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
@@ -23,14 +23,11 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
   organisationId: string;
   unitId: string;
   submitBtnClicked = false;
-  securityConfirmation = { id: '', code: '' };
 
   module: 'Organisation' | 'Unit';
-  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
+  pageStep: 'RULES_LIST' | 'SUCCESS' = 'RULES_LIST';
 
-  form = new FormGroup({
-    code: new UntypedFormControl('')
-  }, { updateOn: 'blur' });
+  form = new FormGroup({}, { updateOn: 'blur' });
 
   wizard: WizardEngineModel = new WizardEngineModel({});
 
@@ -104,23 +101,22 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
   onSubmitWizard(): void {
     const body: MappedObjectType = this.wizard.runOutboundParsing();
-    this.securityConfirmation.code = this.form.get('code')!.value;
     this.submitBtnClicked = true;
 
     switch (this.module) {
       case 'Organisation':
-        this.adminOrganisationsService.updateOrganisation(body, this.securityConfirmation, this.organisationId).subscribe(
-          response => {
+        this.adminOrganisationsService.updateOrganisation(body, this.organisationId).subscribe({
+          next: (response) => {
             (response.organisationId) ?
               this.redirectTo(`admin/organisations/${response.organisationId}`, { alert: 'updateOrganisationSuccess' })
               : this.alert = { type: 'ERROR', title: 'Error updating organisation' };
             this.submitBtnClicked = false;
           },
-          error => this.errorResponse(error)
-        );
+          error: (err) => this.errorResponse(err)
+        });
         break;
       case 'Unit':
-        this.adminOrganisationsService.updateUnit(body, this.securityConfirmation, this.unitId, this.organisationId).subscribe({
+        this.adminOrganisationsService.updateUnit(body, this.unitId, this.organisationId).subscribe({
           next: (response) => {
             if (response.unitId) {
               this.setRedirectAlertSuccess('You have successfully updated the organisation unit');
@@ -141,17 +137,16 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
   }
 
   errorResponse(error: { id: string }): void {
-    this.submitBtnClicked = false;
-
-    if (!this.securityConfirmation.id && error.id) {
-      this.securityConfirmation.id = error.id;
-      this.pageStep = 'CODE_REQUEST';
-
-    } else {
-
-      this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
-
+    switch (error.id) {
+      case OrganisationErrorsEnum.ORGANISATION_ALREADY_EXISTS:
+        this.alert = { type: 'ERROR', title: 'Organisation name or acronym already in use' };
+        break;
+      case OrganisationErrorsEnum.ORGANISATION_UNIT_ALREADY_EXISTS:
+        this.alert = { type: 'ERROR', title: 'Organisation unit name or acronym already in use' };
+        break;
+      default:
+        this.alert = { type: 'ERROR', title: 'Error updating organisation' };
     }
-
+    this.submitBtnClicked = false;
   }
 }
