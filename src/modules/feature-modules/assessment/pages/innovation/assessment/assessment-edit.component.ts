@@ -135,13 +135,16 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
 
-    this.subscriptions.push(
-      interval(1000 * 60).subscribe(() => {
-        if (!this.saveButton.disabled) {
-          this.onSubmit('autosave');
-        }
-      })
-    );
+    // Only autosave if the assessment has not been submitted.
+    if(!this.assessmentHasBeenSubmitted) {
+      this.subscriptions.push(
+        interval(1000 * 60).subscribe(() => {
+          if (!this.saveButton.disabled) {
+            this.onSubmit('autosave');
+          }
+        })
+      );
+    }
 
   }
 
@@ -166,7 +169,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         ...this.currentAnswers,
         // Update to null empty values.
         ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
-          return { ...accumulator, [key]: UtilsHelper.isEmpty(value) ? null : value };
+          return { ...accumulator, [key]: key !== 'suggestedOrganisationUnitsIds' && UtilsHelper.isEmpty(value) ? null : value };
         }, {})
       }
 
