@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { OrganisationErrorsEnum } from '@app/base/enums';
 import { FormGroup } from '@app/base/forms';
 import { MappedObjectType } from '@app/base/types';
 
@@ -137,10 +138,10 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
   errorResponse(error: { id: string }): void {
     switch (error.id) {
-      case 'O.0006':
+      case OrganisationErrorsEnum.ORGANISATION_ALREADY_EXISTS:
         this.alert = { type: 'ERROR', title: 'Organisation name or acronym already in use' };
         break;
-      case 'O.0007':
+      case OrganisationErrorsEnum.ORGANISATION_UNIT_ALREADY_EXISTS:
         this.alert = { type: 'ERROR', title: 'Organisation unit name or acronym already in use' };
         break;
       default:
