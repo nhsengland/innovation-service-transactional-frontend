@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, interval } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { UtilsHelper } from '@app/base/helpers';
 import { MappedObjectType } from '@app/base/types';
 import { FormEngineComponent, FormEngineHelper, FormEngineParameterModel } from '@modules/shared/forms';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -135,13 +134,16 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
 
-    this.subscriptions.push(
-      interval(1000 * 60).subscribe(() => {
-        if (!this.saveButton.disabled) {
-          this.onSubmit('autosave');
-        }
-      })
-    );
+    // Only autosave if the assessment has not been submitted.
+    if(!this.assessmentHasBeenSubmitted) {
+      this.subscriptions.push(
+        interval(1000 * 60).subscribe(() => {
+          if (!this.saveButton.disabled) {
+            this.onSubmit('autosave');
+          }
+        })
+      );
+    }
 
   }
 
@@ -165,9 +167,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       this.currentAnswers = {
         ...this.currentAnswers,
         // Update to null empty values.
-        ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
-          return { ...accumulator, [key]: UtilsHelper.isEmpty(value) ? null : value };
-        }, {})
+        // ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
+        //   return { ...accumulator, [key]: UtilsHelper.isEmpty(value) ? null : value };
+        // }, {})
+        ...formData?.data
       }
 
     });
