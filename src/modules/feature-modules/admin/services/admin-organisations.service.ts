@@ -42,29 +42,25 @@ export class AdminOrganisationsService extends CoreService {
 
   constructor() { super(); }
 
-  updateOrganisation(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationId: string): Observable<updateOrganisationDTO> {
+  updateOrganisation(body: MappedObjectType, organisationId: string): Observable<updateOrganisationDTO> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId').setPathParams({ organisationId });
     return this.http.patch<updateOrganisationDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error.error })))
     );
 
   }
 
 
-  updateUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, organisationUnitId: string, organisationId: string): Observable<updateOrganisationUnitDTO> {
+  updateUnit(body: MappedObjectType, organisationUnitId: string, organisationId: string): Observable<updateOrganisationUnitDTO> {
 
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/organisations/:organisationId/units/:organisationUnitId').setPathParams({ organisationId, organisationUnitId });
     return this.http.patch<updateOrganisationUnitDTO>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response),
-      catchError(error => throwError(() => ({ id: error.error.id })))
+      catchError(error => throwError(() => ({ id: error.error.error })))
     );
 
   }
