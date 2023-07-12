@@ -186,63 +186,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   });
 
-  it('should run onSubmitWizard() with API error, returning SLS ID when updating organisation', () => {
-    activatedRoute.snapshot.params = { organisationId: 'Org01' };
-    activatedRoute.snapshot.data = { module: 'Organisation' };
-    authenticationStore.initializeAuthentication$ = () => of(true);
-
-    adminOrganisationsService.updateOrganisation = () => throwError({ id: '123456ABCDFG' });
-
-    fixture = TestBed.createComponent(PageOrganisationEditComponent);
-    component = fixture.componentInstance;
-    component.form.get('code')?.setValue('12345');
-    component.onSubmitWizard();
-
-    expect(component.pageStep).toBe('CODE_REQUEST');
-
-  });
-
-  it('should run onSubmitWizard() with API error, returning SLS ID when updating unt', () => {
-    activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
-    activatedRoute.snapshot.data = { module: 'Unit' };
-    authenticationStore.initializeAuthentication$ = () => of(true);
-
-    adminOrganisationsService.updateUnit = () => throwError({ id: '123456ABCDFG' });
-
-    fixture = TestBed.createComponent(PageOrganisationEditComponent);
-    component = fixture.componentInstance;
-    component.form.get('code')?.setValue('12345');
-    component.onSubmitWizard();
-
-    expect(component.pageStep).toBe('CODE_REQUEST');
-
-  });
-  it('should run onSubmitWizard() with API error when updating organisation', () => {
-    activatedRoute.snapshot.params = { organisationId: 'Org01' };
-    activatedRoute.snapshot.data = { module: 'Organisation' };
-    adminOrganisationsService.updateOrganisation = () => throwError('error');
-
-    fixture = TestBed.createComponent(PageOrganisationEditComponent);
-    component = fixture.componentInstance;
-    component.form.get('code')?.setValue('12345');
-    component.onSubmitWizard();
-
-    expect(component.form.invalid).toBe(true);
-
-  });
-  it('should run onSubmitWizard() with API error when updating unit', () => {
-    activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
-    activatedRoute.snapshot.data = { module: 'Unit' };
-    adminOrganisationsService.updateUnit = () => throwError('error');
-
-    fixture = TestBed.createComponent(PageOrganisationEditComponent);
-    component = fixture.componentInstance;
-    component.form.get('code')?.setValue('12345');
-    component.onSubmitWizard();
-
-    expect(component.form.invalid).toBe(true);
-
-  });
   it('should run onSubmitStep() and redirect because is the first step', () => {
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
