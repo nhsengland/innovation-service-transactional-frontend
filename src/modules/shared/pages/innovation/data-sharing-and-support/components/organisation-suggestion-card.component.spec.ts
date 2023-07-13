@@ -1,13 +1,13 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Component, Injector, ViewChild } from '@angular/core';
 
 import { AppInjector, CoreModule } from '@modules/core';
+import { SharedModule } from '@modules/shared/shared.module';
 import { StoresModule } from '@modules/stores';
 import { ThemeModule } from '@modules/theme/theme.module';
-import { SharedModule } from '@modules/shared/shared.module';
 
 import { OrganisationSuggestionsCardComponent } from './organisation-suggestion-card.component';
 
@@ -71,14 +71,14 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
     hostComponent.suggestions = {
       assessment: {
         id: '',
-        suggestedOrganisations: []
+        suggestedOrganisationUnits: []
       },
       accessors: [{
         organisationUnit: {
           id: '', name: '', acronym: '',
           organisation: { id: '', name: '', acronym: '' }
         },
-        suggestedOrganisations: []
+        suggestedOrganisationUnits: []
 
       }]
     };

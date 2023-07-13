@@ -45,7 +45,6 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-
     if (this.suggestions) {
       this.accessors = this.parseAccessors(this.suggestions.accessors ?? []);
       this.assessments = this.parseAssessments(this.suggestions.assessment);
@@ -63,11 +62,12 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   }
 
   private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
-    const shares = this.shares?.map(s => s.organisationId) || [];
-    const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} ${as.organisationUnit.organisation.acronym}`);
+    const shares = new Set(this.shares?.map(s => s.organisationId) || []);
+    const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} (${as.organisationUnit.organisation.acronym})`);
     const suggestedOrganisations = accessorsSuggestions
-      .flatMap(as => as.suggestedOrganisations
-        .filter(so => !shares.includes(so.id))
+      .flatMap(as => as.suggestedOrganisationUnits
+        .map(ou => ou.organisation)
+        .filter(so => !shares.has(so.id))
         .map(so => `${so.name} (${so.acronym})`)
       );
 
@@ -82,9 +82,10 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
 
-    const shares = this.shares?.map(s => s.organisationId) || [];
-    const suggestedOrganisations = (assessmentsSuggestions.suggestedOrganisations ?? [])
-      .filter(so => !shares.includes(so.id))
+    const shares = new Set(this.shares?.map(s => s.organisationId) || []);
+    const suggestedOrganisations = (assessmentsSuggestions.suggestedOrganisationUnits ?? [])
+      .map(ou => ou.organisation)
+      .filter(so => !shares.has(so.id))
       .map(so => `${so.name} (${so.acronym})`);
 
     // removes duplicate entries
