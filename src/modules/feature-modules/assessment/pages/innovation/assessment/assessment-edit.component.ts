@@ -90,6 +90,17 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
+      // Only autosave if the assessment has not been submitted.
+      if(!this.assessmentHasBeenSubmitted) {
+        this.subscriptions.push(
+          interval(1000 * 60).subscribe(() => {
+            if (!this.saveButton.disabled) {
+              this.onSubmit('autosave');
+            }
+          })
+        );
+      }
+
       this.setPageStatus('READY');
 
     });
@@ -134,17 +145,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       })
     );
-
-    // Only autosave if the assessment has not been submitted.
-    if(!this.assessmentHasBeenSubmitted) {
-      this.subscriptions.push(
-        interval(1000 * 60).subscribe(() => {
-          if (!this.saveButton.disabled) {
-            this.onSubmit('autosave');
-          }
-        })
-      );
-    }
 
   }
 
