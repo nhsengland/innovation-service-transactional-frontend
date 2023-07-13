@@ -39,11 +39,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     { id: 'SUGGESTED', title: 'Suggested support organisations', unitsList: [] }
   ];
 
-  // engagingList: unitsListType[] = [];
-
-  // tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
-
-
   constructor(
     private innovationsService: InnovationsService,
     private datePipe: DatePipe
@@ -66,7 +61,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
 
   ngOnInit(): void {
-
 
     this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id).subscribe({
       next: response => {
@@ -97,18 +91,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
   }
 
-  // getOrganisationUnitHistory(organisationUnitId: string, item: TableModel<InnovationSupportSummaryOrganisationHistoryDTO['data'][number], {}>): void {
-
-  //   this.setPageStatus('LOADING');
-
-  //   this.innovationsService.getSupportSummaryOrganisationHistory(this.innovation.id, organisationUnitId, item.getAPIQueryParams()).subscribe(response => {
-  //     item.setData(response.data, response.count);
-
-  //     this.setPageStatus('READY');
-  //   });
-
-  // }
-
   onOpenCloseUnit(sectionsListIndex: number, unitsListIndex: number): void {
 
     let unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
@@ -138,16 +120,5 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const element = document.querySelector(`#${goToId}`);
     if (element) { element.scrollIntoView(true) };
   }
-
-
-  // onTableOrder(column: string): void {
-  //   this.tableList.setOrderBy(column);
-  //   this.getOrganisationsList(column);
-  // }
-
-  // onPageChange(event: { pageNumber: number }): void {
-  //   this.tableList.setPage(event.pageNumber);
-  //   this.getOrganisationsList();
-  // }
 
 }
