@@ -103,9 +103,11 @@ export type OrganisationUnitModel = {
   acronym: string;
 };
 
+export type OrganisationUnitModelWithOrganisation = OrganisationUnitModel & { organisation: Omit<OrganisationModel, 'organisationUnits'> };
+
 export type AssessmentSuggestionModel = {
   id: string;
-  suggestedOrganisations: OrganisationModel[];
+  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
 };
 
 export type AccessorSuggestionModel = {
@@ -115,7 +117,7 @@ export type AccessorSuggestionModel = {
     acronym: string;
     organisation: OrganisationModel,
   };
-  suggestedOrganisations: OrganisationModel[];
+  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
 };
 
 export type OrganisationSuggestionModel = {
