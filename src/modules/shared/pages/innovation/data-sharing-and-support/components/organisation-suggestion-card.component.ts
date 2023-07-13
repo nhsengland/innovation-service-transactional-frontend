@@ -65,7 +65,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
     const shares = new Set(this.shares?.map(s => s.organisationId) || []);
-    const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} ${as.organisationUnit.organisation.acronym}`);
+    const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} (${as.organisationUnit.organisation.acronym})`);
     const suggestedOrganisations = accessorsSuggestions
       .flatMap(as => as.suggestedOrganisationUnits
         .map(ou => ou.organisation)
