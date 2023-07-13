@@ -45,8 +45,6 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   }
 
   ngOnChanges(): void {
-    console.log('batatas');
-
     if (this.suggestions) {
       this.accessors = this.parseAccessors(this.suggestions.accessors ?? []);
       this.assessments = this.parseAssessments(this.suggestions.assessment);
