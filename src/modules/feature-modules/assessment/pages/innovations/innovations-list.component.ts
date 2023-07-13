@@ -7,8 +7,8 @@ import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
-import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { ActivatedRoute, Params } from '@angular/router';
 import { DatesHelper } from '@app/base/helpers';

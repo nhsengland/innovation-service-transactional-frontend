@@ -46,7 +46,7 @@ export type ContextInnovationType = {
   statusUpdatedAt: null | DateISOType,
   owner?: { name: string, isActive: boolean },
   loggedUser: { isOwner: boolean },
-  assessment?: { id: string },
+  assessment?: { id: string, createdAt: DateISOType, finishedAt: null | DateISOType },
   assignedTo?: { id: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
   notifications?: { [key in NotificationContextTypeEnum]?: number },

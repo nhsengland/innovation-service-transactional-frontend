@@ -8,7 +8,7 @@ import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
-import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { InnovationNeedsAssessmentInfoDTO, InnovationSupportsLogOutDTO, SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
@@ -30,7 +30,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
   userType: '' | UserRoleEnum;
 
-  logHistory: InnovationSupportsLogDTO[] = [];
+  logHistory: InnovationSupportsLogOutDTO[] = [];
   supportLogType = SupportLogType;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
