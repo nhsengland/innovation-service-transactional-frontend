@@ -91,7 +91,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       // Only autosave if the assessment has not been submitted.
-      console.log(this.assessmentHasBeenSubmitted);
       if(!this.assessmentHasBeenSubmitted) {
         this.subscriptions.push(
           interval(1000 * 60).subscribe(() => {
