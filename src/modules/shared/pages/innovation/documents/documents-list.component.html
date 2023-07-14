@@ -40,9 +40,9 @@
           </thead>
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell word-break">
+              <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('name') }}</span>
-                <div><span class="nhsuk-u-font-weight-bold">{{ item.name }}</span> ({{ item.file.extension | uppercase }}{{ item.file.size ? ', ' + (item.file.size | bytesPrettyPrint)  : ''}})</div>
+                <div><span class="nhsuk-u-font-weight-bold word-break">{{ item.name }}</span> ({{ item.file.extension | uppercase }}{{ item.file.size ? ', ' + (item.file.size | bytesPrettyPrint)  : ''}})</div>
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>
@@ -54,10 +54,10 @@
                 <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
                 <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
               </td>
-              <td class="nhsuk-table__cell text-align-right">
+              <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('actions') }}</span>
-                <div><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
-                <div><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
+                <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
               </td>
             </tr>
           </tbody>
