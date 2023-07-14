@@ -104,9 +104,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     this.stores.context.dismissUserNotification(notificationId);
 
-    if(url) {
-      this.redirectTo(url);
-    } else {
+    if(!url) {
       const notification = this.notificationsList.getRecords().find(i => i.id === notificationId);
       if(notification) {
         notification.readAt = new Date().toISOString();
