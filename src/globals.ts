@@ -11,11 +11,12 @@ export const initAppInsights = () => {
       .start();
 
     appinsights.defaultClient.addTelemetryProcessor((envelope, context) => {
-      envelope.tags['xpto'] = 'xpto'; // TODO remove
-      const oid = context?.['http.ServerRequest']?.session?.oid;
-      if(oid) {
-        context.data.authenticatedUser = oid;
-        context.data.session = context?.['http.ServerRequest']?.sessionID;
+      if(envelope.data.baseData) {
+        const oid = context?.['http.ServerRequest']?.session?.oid;
+        if(oid) {
+          envelope.data.baseData.properties['authenticatedUser'] = oid;
+          envelope.data.baseData.properties['session'] = context?.['http.ServerRequest']?.sessionID;
+        }
       }
       return true;
     });
