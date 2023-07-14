@@ -75,9 +75,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         }));
         this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
-          temporalDescription: item.support.start && item.support.end
-            ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}${item.support.end ? ` to ${this.datePipe.transform(item.support.end, 'MMMM y')}` : ''}`
-            : ''
+          temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
         this.setPageStatus('READY');

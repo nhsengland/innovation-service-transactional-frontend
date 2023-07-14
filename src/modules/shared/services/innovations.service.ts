@@ -364,43 +364,12 @@ export class InnovationsService extends CoreService {
   // Support summary.
   getSupportSummaryOrganisationsList(innovationId: string): Observable<SupportSummaryOrganisationsListDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/units').setPathParams({ innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary').setPathParams({ innovationId });
     return this.http.get<SupportSummaryOrganisationsListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 
   getSupportSummaryOrganisationHistory(innovationId: string, organisationUnitId: string): Observable<SupportSummaryOrganisationHistoryDTO> {
-
-    return of(
-      [
-        {
-          type: 'SUPPORT_UPDATE',
-          createdAt: '2023-01-01',
-          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
-          params: {
-            supportStatus: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED
-          }
-        },
-        {
-          type: 'SUGGESTED_ORGANISATION',
-          createdAt: '2023-01-01',
-          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
-          params: {
-            suggestedByName: 'blab blalb fdgs gfd sdgf'
-          }
-        },
-        {
-          type: 'PROGRESS_UPDATE',
-          createdAt: '2023-01-01',
-          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
-          params: {
-            title: 'some title here',
-            message: 'coisoisd gdkfsgj kdg lblab blalb fdgs gfd sdgf',
-            file: { id: 'fsfasdfa', name: 'name of the file', url: 'some-url' }
-          }
-        }
-      ]
-    );
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/units/:organisationUnitId').setPathParams({ innovationId, organisationUnitId });
     return this.http.get<SupportSummaryOrganisationHistoryDTO>(url.buildUrl()).pipe(take(1), map(response => response));
