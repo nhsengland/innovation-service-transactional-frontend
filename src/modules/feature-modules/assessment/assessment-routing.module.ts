@@ -17,8 +17,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
-import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
+import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Innovations.
 import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
@@ -40,8 +40,8 @@ import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/i
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
-import { PageInnovationDocumentsNewditComponent } from '@modules/shared/pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentInfoComponent } from '@modules/shared/pages/innovation/documents/document-info.component';
+import { PageInnovationDocumentsNewditComponent } from '@modules/shared/pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentsListComponent } from '@modules/shared/pages/innovation/documents/documents-list.component';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
@@ -49,8 +49,8 @@ import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages
 import { PageInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
-import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
@@ -72,7 +72,7 @@ const header: RoutesDataType['header'] = {
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
       { id: 'actions', label: 'Actions', url: '/assessment/actions', },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
-      { id: 'account', label: 'Your account', url: '/assessment/account' },
+      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details' },
     ],
     right: []
   },
