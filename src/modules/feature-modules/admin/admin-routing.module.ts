@@ -60,8 +60,9 @@ import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innova
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
-import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
+import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
+import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 
@@ -464,6 +465,7 @@ const routes: Routes = [
                   }
                 ]
               },
+
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
@@ -477,16 +479,29 @@ const routes: Routes = [
                   }
                 ]
               },
+
               {
-                path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent,
-                data: { breadcrumb: 'Statuses' }
+                path: 'support-summary',
+                data: { breadcrumb: 'Support summary' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationSupportSummaryListComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               },
+
               {
                 path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
                 data: {
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
+              },
+
+              {
+                path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent,
+                data: { breadcrumb: 'Statuses' }
               }
 
             ]

@@ -87,6 +87,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
             map((event: Event) => (event.target as HTMLTextAreaElement).value)
           )
           .subscribe(value => {
+            this.fieldControl.setValue(value);
             this.currentAvailableCharacters = this.lengthLimitCharacters - value.length;
             this.cdr.markForCheck();
           })
@@ -104,6 +105,10 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   }
 
   ngDoCheck(): void {
+
+    if (this.fieldControl.value?.length > 0) {
+      this.currentAvailableCharacters = this.lengthLimitCharacters - this.fieldControl.value.length;
+    }
 
     this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };

@@ -38,7 +38,7 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
         let support: undefined | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string };
 
         if (this.authenticationStore.isAccessorType()) {
-          support = (response.supports || []).find(item => item.organisationUnitId === userContext?.organisationUnit?.id);
+          support = (response.supports ?? []).find(item => item.organisationUnitId === userContext?.organisationUnit?.id);
         }
 
         this.contextStore.setInnovation({
@@ -46,9 +46,9 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           name: response.name,
           status: response.groupedStatus === InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
-          ...(response.owner ? {owner: { isActive: response.owner.isActive, name: response.owner.name}} : {}),
+          ...(response.owner ? { owner: { isActive: response.owner.isActive, name: response.owner.name } } : {}),
           loggedUser: { isOwner: response.owner ? response.owner?.id === userContext?.id : false },
-          ...(response.assessment ? { assessment: { id: response.assessment.id } } : {}),
+          ...(response.assessment ? { assessment: { id: response.assessment.id, createdAt: response.assessment.createdAt, finishedAt: response.assessment.finishedAt } } : {}),
           ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo?.id } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           export: response.export,

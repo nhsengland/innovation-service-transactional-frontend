@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -58,6 +58,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }] : []),
         { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
       ];
 

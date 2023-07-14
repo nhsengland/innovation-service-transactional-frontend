@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -10,39 +10,12 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
+import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, SupportLogType } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
-export enum AssessmentSupportFilterEnum {
-  UNASSIGNED = 'UNASSIGNED',
-  ENGAGING = 'ENGAGING',
-  NOT_ENGAGING = 'NOT_ENGAGING'
-}
-
-export type InnovationsListFiltersType = {
-  name?: null | string,
-  mainCategories?: string[],
-  locations?: string[],
-  status?: InnovationStatusEnum[],
-  assessmentSupportStatus?: AssessmentSupportFilterEnum,
-  supportStatuses?: InnovationSupportStatusEnum[],
-  groupedStatuses?: InnovationGroupedStatusEnum[],
-  engagingOrganisations?: string[],
-  engagingOrganisationUnits?: string[],
-  assignedToMe?: boolean,
-  suggestedOnly?: boolean,
-  latestWorkedByMe?: boolean,
-  hasAccessThrough?: ('owner' | 'collaborator')[],
-  dateFilter?: {
-    field: 'submittedAt',
-    startDate?: DateISOType,
-    endDate?: DateISOType
-  }[],
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
-}
 
 export type InnovationsActionsListFilterType = {
   innovationId?: string,
@@ -356,6 +329,8 @@ export class InnovationsService extends CoreService {
 
   }
 
+
+  // Innovation support methods.
   getInnovationSupportsList(innovationId: string, accessorsInfo: boolean): Observable<InnovationSupportsListDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports').setPathParams({ innovationId });
@@ -385,15 +360,59 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
-    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  // Support summary.
+  getSupportSummaryOrganisationsList(innovationId: string): Observable<SupportSummaryOrganisationsListDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/units').setPathParams({ innovationId });
+    return this.http.get<SupportSummaryOrganisationsListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+
   }
 
-  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogDTO[]> {
+  getSupportSummaryOrganisationHistory(innovationId: string, organisationUnitId: string): Observable<SupportSummaryOrganisationHistoryDTO> {
+
+    return of(
+      [
+        {
+          type: 'SUPPORT_UPDATE',
+          createdAt: '2023-01-01',
+          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
+          params: {
+            supportStatus: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED
+          }
+        },
+        {
+          type: 'SUGGESTED_ORGANISATION',
+          createdAt: '2023-01-01',
+          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
+          params: {
+            suggestedByName: 'blab blalb fdgs gfd sdgf'
+          }
+        },
+        {
+          type: 'PROGRESS_UPDATE',
+          createdAt: '2023-01-01',
+          createdBy: { id: 'abc', name: 'Ricky Jovel', displayRole: 'role dele' },
+          params: {
+            title: 'some title here',
+            message: 'coisoisd gdkfsgj kdg lblab blalb fdgs gfd sdgf',
+            file: { id: 'fsfasdfa', name: 'name of the file', url: 'some-url' }
+          }
+        }
+      ]
+    );
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/units/:organisationUnitId').setPathParams({ innovationId, organisationUnitId });
+    return this.http.get<SupportSummaryOrganisationHistoryDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+
+
+
+  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogOutDTO[]> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
-    return this.http.get<InnovationSupportsLog[]>(url.buildUrl()).pipe(
+    return this.http.get<InnovationSupportsLogInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response.map(item => {
 
@@ -413,7 +432,7 @@ export class InnovationsService extends CoreService {
         return {
           ...item,
           logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits ?? []).map(o => o.name)
         };
 
       }))
@@ -720,6 +739,12 @@ export class InnovationsService extends CoreService {
 
   }
 
+  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
+    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
   // Sections
   getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[] }): Observable<InnovationSectionInfoDTO> {
 
@@ -727,12 +752,9 @@ export class InnovationsService extends CoreService {
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
-      .setPathParams({
-        innovationId,
-        sectionId
-      }).setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId').setPathParams({ innovationId, sectionId }).setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
+
 }

@@ -5,9 +5,8 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
-  selector: 'shared-pages-innovation-support-status-list',
-  templateUrl: './innovation-support-status-list.component.html',
-  styleUrls: ['./innovation-support-status-list.component.scss']
+  selector: 'shared-pages-innovation-support-support-status-list',
+  templateUrl: './support-status-list.component.html'
 })
 export class PageInnovationSupportStatusListComponent extends CoreComponent {
 

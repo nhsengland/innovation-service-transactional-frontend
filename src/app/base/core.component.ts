@@ -161,7 +161,10 @@ export class CoreComponent implements OnDestroy {
    * @param urlOrCallback either a string url or a callback function to be called
    * @param hiddenLabel hidden label for the back button
    */
-  setBackLink(label: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
+  setBackLink(label?: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
+
+    if (!label) { label = 'Go back'; }
+
     // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
     if (!urlOrCallback) {
       urlOrCallback = this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;

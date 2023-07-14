@@ -7,6 +7,28 @@ import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationGroupedStat
 import { InnovationStatisticsEnum } from './statistics.enum';
 
 
+// getInnovationsList.
+export type InnovationsListFiltersType = {
+  name?: null | string,
+  mainCategories?: string[],
+  locations?: string[],
+  status?: InnovationStatusEnum[],
+  assessmentSupportStatus?: 'UNASSIGNED' | 'ENGAGING' | 'NOT_ENGAGING',
+  supportStatuses?: InnovationSupportStatusEnum[],
+  groupedStatuses?: InnovationGroupedStatusEnum[],
+  engagingOrganisations?: string[],
+  engagingOrganisationUnits?: string[],
+  assignedToMe?: boolean,
+  suggestedOnly?: boolean,
+  latestWorkedByMe?: boolean,
+  hasAccessThrough?: ('owner' | 'collaborator')[],
+  dateFilter?: {
+    field: 'submittedAt',
+    startDate?: DateISOType,
+    endDate?: DateISOType
+  }[],
+  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
+}
 export type InnovationsListDTO = {
   count: number,
   data: {
@@ -38,14 +60,11 @@ export type InnovationsListDTO = {
       }
     }[],
     notifications?: number,
-    statistics?: {
-      messages: number,
-      actions: number
-    }
+    statistics?: { messages: number, actions: number }
   }[]
 };
 
-
+// getInnovationInfo.
 export type InnovationInfoDTO = {
   id: string,
   name: string,
@@ -108,6 +127,8 @@ export type InnovationNeedsAssessmentInfoDTO = {
 };
 
 
+// Innovation support methods.
+// // getInnovationSupportsList.
 export type InnovationSupportsListDTO = {
   id: string,
   status: InnovationSupportStatusEnum,
@@ -118,12 +139,62 @@ export type InnovationSupportsListDTO = {
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
 }[];
 
-
+// getInnovationSupportInfo.
 export type InnovationSupportInfoDTO = {
   id: string,
   status: InnovationSupportStatusEnum,
   engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
 };
+
+
+// Support summary.
+const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
+export type SupportSummarySectionType = typeof SupportSummarySectionType[number];
+export type SupportSummaryOrganisationsListDTO = {
+  [key in SupportSummarySectionType]: {
+    id: string,
+    name: string
+    support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
+  }[]
+};
+export type SupportSummaryOrganisationHistoryDTO = {
+  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE',
+  createdAt: DateISOType,
+  createdBy: { id: string, name: string, displayRole: string },
+  params: {
+    supportStatus?: InnovationSupportStatusEnum,
+    title?: string
+    message?: string,
+    suggestedByName?: string,
+    file?: { id: string, name: string, url: string }
+  }
+}[];
+
+
+//getInnovationSupportLog.
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
+
+export type InnovationSupportsLogInDTO = {
+  id: string;
+  type: SupportLogType;
+  description: string;
+  createdBy: string;
+  createdAt: DateISOType;
+  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
+  organisationUnit: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  };
+  suggestedOrganisationUnits?: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  }[];
+};
+export type InnovationSupportsLogOutDTO = InnovationSupportsLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
+
 
 export type InnovationActionsListInDTO = {
   count: number,
@@ -137,7 +208,7 @@ export type InnovationActionsListInDTO = {
     createdAt: DateISOType,
     updatedAt: DateISOType,
     updatedBy: { name: string, role: UserRoleEnum },
-    createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
+    createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
     notifications: number;
   }[];
 };
@@ -153,7 +224,7 @@ export type InnovationActionInfoDTO = {
   createdAt: DateISOType,
   updatedAt: DateISOType,
   updatedBy: { name: string, role: UserRoleEnum, isOwner?: boolean },
-  createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string} },
+  createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
   declineReason?: string,
 };
 
@@ -204,14 +275,13 @@ export type InnovationActivityLogListDTO = {
 };
 
 export type InnovationStatisticsDTO = {
-  [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-  [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
-  [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType;},
-  [InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType;},
+  [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
+  [InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType; },
 }
 
 export type BaseStatisticsCard = {
@@ -230,27 +300,3 @@ export type StatisticsCard = {
   emptyMessageTitle?: string,
   emptyMessage?: string,
 } & BaseStatisticsCard;
-
-export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
-  STATUS_UPDATE = 'STATUS_UPDATE',
-}
-
-export type InnovationSupportsLog = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: DateISOType;
-  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-
-export type InnovationSupportsLogDTO = InnovationSupportsLog & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
