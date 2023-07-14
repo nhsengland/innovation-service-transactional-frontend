@@ -3,9 +3,9 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <div *ngIf="isInnovatorType" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <p>If you want to stop sharing your innovation with an organisation, <a href="{{ CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer">update your data sharing preferences</a>.</p>
+        <p>If you want to stop sharing your innovation with an organisation, <a routerLink="../support">update your data sharing preferences</a>.</p>
       </div>
 
       <ng-container *ngFor="let sectionItem of sectionsList; let sectionIndex = index;">
@@ -17,21 +17,19 @@
 
             <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
 
-              <dt class="" [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
-                <div class="d-flex">
-                  <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+              <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
+                <button id="engaging-button-{{ unitItem.id }}" (click)="onOpenCloseUnit(sectionIndex, unitIndex)" class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0" attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
+                  attr.aria-controls="engaging-section-{{ unitItem.id }}">
+                  <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon nhsuk-icon__plus nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
                   </svg>
-                  <svg *ngIf="unitItem.isOpened" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+                  <svg *ngIf="unitItem.isOpened" class="nhsuk-icon nhsuk-icon__minus nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
                   </svg>
-                  <button id="engaging-button-{{ unitItem.id }}" (click)="onOpenCloseUnit(sectionIndex, unitIndex)" class="button-as-link with-collapsible-icon nhsuk-u-font-size-22 nhsuk-u-font-weight-bold" attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
-                    attr.aria-controls="engaging-section-{{ unitItem.id }}">
-                    {{ unitItem.name }}
-                  </button>
-                </div>
+                  {{ unitItem.name }}
+                </button>
                 <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-6 nhsuk-u-margin-bottom-3">
                   <span *ngIf="unitItem.temporalDescription" class="nhsuk-u-margin-right-4">{{ unitItem.temporalDescription }}</span>
                   <span>Status: <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"></theme-tag></span>
@@ -46,7 +44,7 @@
                   </div>
                 </div>
 
-                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 12px">
+                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 10px">
 
                   <li *ngFor="let historyItem of unitItem.historyList; let historyIndex = index; let historyIsLast = last">
 
@@ -120,12 +118,10 @@
 
       <ng-container *ngIf="innovation.assessment">
         <h2>Needs assessment</h2>
-        <!-- <div class="nhsuk-u-margin-bottom-3"> -->
         <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">Needs assessment complete</a>
         <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">
           Completed at {{ innovation.assessment.finishedAt | date: 'MMMM y' }}
         </div>
-        <!-- </div> -->
       </ng-container>
 
     </div>
