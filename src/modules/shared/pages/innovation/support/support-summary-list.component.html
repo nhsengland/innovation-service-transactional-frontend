@@ -75,7 +75,7 @@
                             by {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? ' (' + historyItem.createdBy.displayRole + ')' : '' }}
                           </span>
                         </p>
-                        <p class="nhsuk-u-font-weight-bold">{{ historyItem.params.suggestedByName }}</p>
+                        <p *ngIf="historyItem.params.suggestedByName" class="nhsuk-u-font-weight-bold">{{ historyItem.params.suggestedByName }}</p>
                         <p *ngIf="historyItem.params.message">
                           <span class="nhsuk-u-font-weight-bold">Comment</span>
                           <span class="nhsuk-body-s">{{ historyItem.params.message }}</span>
