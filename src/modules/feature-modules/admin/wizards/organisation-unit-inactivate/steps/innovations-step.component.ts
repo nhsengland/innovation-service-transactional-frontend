@@ -1,18 +1,21 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
+import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { forkJoin } from 'rxjs';
 
 import { InnovationsStepInputType, InnovationsStepOutputType } from './innovations-step.types';
+
 
 @Component({
   selector: 'app-admin-wizards-organisation-unit-inactivate-innovations-step',
