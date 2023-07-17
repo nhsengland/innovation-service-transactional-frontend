@@ -28,9 +28,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   ) {
 
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-        this.onRouteChange()
-      })
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange())
     );
 
     this.onRouteChange();
@@ -58,23 +56,16 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
         { label: 'Data sharing and support', url: `/innovator/innovations/${innovation.id}/support` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }] : []),
-        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` }
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }] : []),
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Needs assessment', url: `/innovator/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []),
+        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` },
+        ...(innovation.loggedUser.isOwner
+          ? [{ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage/innovation` }]
+          : [{ label: 'Manage access', url: `/innovator/innovations/${innovation.id}/manage/access` }])
       ];
 
-      if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
-        this._sidebarItems.splice(5, 0,
-          { label: 'Needs assessment', url: `/innovator/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` },
-        );
-      }
-
-      if (innovation.loggedUser.isOwner) {
-        this._sidebarItems.push({ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage/innovation` });
-      } else {
-        this._sidebarItems.push({ label: 'Manage access', url: `/innovator/innovations/${innovation.id}/manage/access` });
-      }
-
     }
+
   }
 
   private onRouteChange(): void {

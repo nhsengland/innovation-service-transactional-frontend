@@ -44,7 +44,7 @@
                   </div>
                 </div>
 
-                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 10px">
+                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 13px">
 
                   <li *ngFor="let historyItem of unitItem.historyList; let historyIndex = index; let historyIsLast = last">
 
@@ -59,9 +59,9 @@
                           </span>
                         </p>
                         <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.name' | translate }}"></theme-tag>
-                        <p *ngIf="historyItem.params.message">
-                          <span class="nhsuk-u-font-weight-bold">Comment</span>
-                          <span class="nhsuk-body-s">{{ historyItem.params.message }}</span>
+                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s nhsuk-u-margin-top-4">
+                          <span class="d-block nhsuk-u-font-weight-bold">Comment</span>
+                          <span>{{ historyItem.params.message }}</span>
                         </p>
                       </ng-container>
 
@@ -74,15 +74,15 @@
                           </span>
                         </p>
                         <p *ngIf="historyItem.params.suggestedByName" class="nhsuk-u-font-weight-bold">{{ historyItem.params.suggestedByName }}</p>
-                        <p *ngIf="historyItem.params.message">
-                          <span class="nhsuk-u-font-weight-bold">Comment</span>
-                          <span class="nhsuk-body-s">{{ historyItem.params.message }}</span>
+                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s">
+                          <span class="d-block nhsuk-u-font-weight-bold">Comment</span>
+                          <span>{{ historyItem.params.message }}</span>
                         </p>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'PROGRESS_UPDATE'">
                         <p>
-                          <span class="nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
+                          <span class="nhsuk-u-font-weight-bold">Progress update</span>
                           <span class="nhsuk-hint nhsuk-u-font-size-14">
                             {{ historyItem.createdAt | date: ('app.date_formats.medium_date' | translate) }}
                             by {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? ' (' + historyItem.createdBy.displayRole + ')' : '' }}
