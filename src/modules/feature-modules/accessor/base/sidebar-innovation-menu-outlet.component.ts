@@ -27,13 +27,13 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private innovationStore: InnovationStore
   ) {
+
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-        this.onRouteChange()
-      })
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange())
     );
 
     this.onRouteChange();
+
   }
 
   ngOnInit(): void {
@@ -58,7 +58,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Action tracker', url: `/accessor/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },
         { label: 'Support status', url: `/accessor/innovations/${innovation.id}/support` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Support summary', url: `/accessor/innovations/${innovation.id}/support-summary` }] : []),
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/accessor/innovations/${innovation.id}/support-summary` }] : []),
         { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
       ];
 
@@ -67,6 +67,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   private onRouteChange(): void {
+
     this.generateSidebar();
 
     if (this.router.url.includes('sections')) {
@@ -76,5 +77,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
     }
+
   }
+
 }
