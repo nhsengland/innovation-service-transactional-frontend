@@ -59,6 +59,8 @@ import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/page
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
+import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-delete.component';
+import { PageInnovationSupportSummaryProgressUpdateComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -365,7 +367,21 @@ const routes: Routes = [
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationSupportSummaryListComponent,
-                    data: { breadcrumb: null, layout: { type: 'full' } }
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'progress-update-new', pathMatch: 'full', component: PageInnovationSupportSummaryProgressUpdateComponent,
+                    data: { layout: { type: 'full' } }
+                  },
+                  {
+                    path: ':supportSummaryHistoryId',
+                    children: [
+                      { path: '', pathMatch: 'full', redirectTo: '../support-summary' },
+                      {
+                        path: 'progress-update-delete-confirmation', pathMatch: 'full', component: PageInnovationSupportSummaryProgressUpdateDeleteComponent,
+                        data: {  breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
                   }
                 ]
               },

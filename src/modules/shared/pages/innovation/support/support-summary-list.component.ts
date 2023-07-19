@@ -6,6 +6,7 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, SupportSummarySectionType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { LocalStorageHelper } from '@app/base/helpers';
 
 
 type sectionsListType = {
@@ -21,6 +22,8 @@ type unitsListType = SupportSummaryOrganisationsListDTO[SupportSummarySectionTyp
   isLoading: boolean
 }
 
+const lsCacheId = 'page-innovations-support-summary-list::open-units';
+
 
 @Component({
   selector: 'shared-pages-innovation-support-support-summary-list',
@@ -29,15 +32,18 @@ type unitsListType = SupportSummaryOrganisationsListDTO[SupportSummarySectionTyp
 export class PageInnovationSupportSummaryListComponent extends CoreComponent implements OnInit {
 
   innovation: ContextInnovationType;
+  lsCache: Set<string>;
 
   isAdmin: boolean;
   isInnovatorType: boolean;
+  accessorUnitId: null | string;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
     { id: 'SUGGESTED', title: 'Suggested support organisations', unitsList: [] }
   ];
+
 
   constructor(
     private innovationsService: InnovationsService,
@@ -46,15 +52,21 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
     super();
     this.setPageTitle('Support summary');
-    this.setBackLink();
 
     this.innovation = this.stores.context.getInnovation();
 
+    try { // Cache holds opened sections in the format ["sectionIndex,unitId", ...]
+      this.lsCache = new Set(LocalStorageHelper.getObjectItem<string[]>(lsCacheId) ?? []);
+    } catch (error) {
+      this.lsCache = new Set([]);
+    }
+
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.accessorUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? null;
 
     if (this.isAdmin) {
-      this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` })
+      this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
     }
 
   }
@@ -67,16 +79,31 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         this.sectionsList[0].unitsList = response.ENGAGING.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
-          temporalDescription: `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
+          temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
         this.sectionsList[1].unitsList = response.BEEN_ENGAGED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
-          temporalDescription: `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')} to ${this.datePipe.transform(item.support.end, 'MMMM y')}`
+          temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to ${this.datePipe.transform(item.support.end, 'MMMM y')}`
         }));
         this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
           temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
+
+        this.lsCache.forEach(item => {
+
+          const [sectionIndex, unitId] = item.split(',');
+
+          const unitIndex = this.sectionsList[parseInt(sectionIndex)].unitsList.findIndex(i => i.id === unitId);
+          if (unitIndex > -1) {
+            this.onOpenCloseUnit(parseInt(sectionIndex), unitIndex);
+          } else {
+            this.lsCache.delete(`${sectionIndex},${unitId}`); // Removes outdated entry.
+          }
+
+        });
+
+        LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
 
         this.setPageStatus('READY');
 
@@ -94,7 +121,12 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     let unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
     unitItem.isOpened = !unitItem.isOpened;
 
-    if (unitItem.isOpened) {
+    if (!unitItem.isOpened) {
+
+      this.lsCache.delete(`${sectionsListIndex},${unitItem.id}`);
+      LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
+
+    } else {
 
       unitItem.isLoading = true;
 
@@ -102,12 +134,16 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         next: response => {
           unitItem.historyList = response;
           unitItem.isLoading = false;
+          this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
         },
         error: () => {
           unitItem.isOpened = false;
           unitItem.isLoading = false;
+          this.lsCache.delete(`${sectionsListIndex},${unitItem.id}`);
           this.setAlertError('Unable to fetch organisation information. Please try again or contact us for further help');
-        }
+        },
+      }).add(() => {
+        LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
       });
 
     }

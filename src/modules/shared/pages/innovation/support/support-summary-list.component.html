@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-grid-column-full">
 
       <div *ngIf="isInnovatorType" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
@@ -20,19 +20,19 @@
               <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                 <button id="engaging-button-{{ unitItem.id }}" (click)="onOpenCloseUnit(sectionIndex, unitIndex)" class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0" attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
                   attr.aria-controls="engaging-section-{{ unitItem.id }}">
-                  <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon nhsuk-icon__plus nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+                  <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon__plus nhsuk-u-margin-top-1 nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="25" width="25" aria-hidden="true">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
                   </svg>
-                  <svg *ngIf="unitItem.isOpened" class="nhsuk-icon nhsuk-icon__minus nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
+                  <svg *ngIf="unitItem.isOpened" class="nhsuk-icon__minus nhsuk-u-margin-top-1 nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="25" width="25" aria-hidden="true">
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
                   </svg>
                   {{ unitItem.name }}
                 </button>
-                <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-6 nhsuk-u-margin-bottom-3">
-                  <span *ngIf="unitItem.temporalDescription" class="nhsuk-u-margin-right-4">{{ unitItem.temporalDescription }}</span>
+                <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
                   <span>Status: <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"></theme-tag></span>
+                  <span *ngIf="unitItem.temporalDescription" class="nhsuk-u-margin-left-4">{{ unitItem.temporalDescription }}</span>
                 </div>
               </dt>
 
@@ -44,7 +44,11 @@
                   </div>
                 </div>
 
-                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 13px">
+                <button *ngIf="!unitItem.isLoading && sectionIndex === 0 && accessorUnitId === unitItem.id" routerLink="progress-update-new" class="nhsuk-button button-small nhsuk-u-margin-left-5 nhsuk-u-margin-bottom-4">
+                  Update progress
+                </button>
+
+                <ul *ngIf="!unitItem.isLoading" class="list-vertical-line" style="margin-left: 9px">
 
                   <li *ngFor="let historyItem of unitItem.historyList; let historyIndex = index; let historyIsLast = last">
 
@@ -59,25 +63,18 @@
                           </span>
                         </p>
                         <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.name' | translate }}"></theme-tag>
-                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s nhsuk-u-margin-top-4">
-                          <span class="d-block nhsuk-u-font-weight-bold">Comment</span>
-                          <span>{{ historyItem.params.message }}</span>
-                        </p>
+                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s nhsuk-u-margin-top-2">{{ historyItem.params.message }}</p>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'SUGGESTED_ORGANISATION'">
                         <p>
-                          <span class="nhsuk-u-font-weight-bold">Organisation suggested</span>
+                          <span class="nhsuk-u-font-weight-bold">Organisation suggested by {{ historyItem.params.suggestedByName || 'Needs assessment' }}</span>
                           <span class="nhsuk-hint nhsuk-u-font-size-14">
                             {{ historyItem.createdAt | date: ('app.date_formats.medium_date' | translate) }}
                             by {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? ' (' + historyItem.createdBy.displayRole + ')' : '' }}
                           </span>
                         </p>
-                        <p *ngIf="historyItem.params.suggestedByName" class="nhsuk-u-font-weight-bold">{{ historyItem.params.suggestedByName }}</p>
-                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s">
-                          <span class="d-block nhsuk-u-font-weight-bold">Comment</span>
-                          <span>{{ historyItem.params.message }}</span>
-                        </p>
+                        <p *ngIf="historyItem.params.message" class="nhsuk-body-s">{{ historyItem.params.message }}</p>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'PROGRESS_UPDATE'">
@@ -88,10 +85,16 @@
                             by {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? ' (' + historyItem.createdBy.displayRole + ')' : '' }}
                           </span>
                         </p>
-                        <p>
-                          <span class="nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">{{ historyItem.params.message }}</span>
+                        <p class="nhsuk-body-s">
+                          <span class="d-block nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
+                          <span>{{ historyItem.params.message }}</span>
                         </p>
+                        <p class="nhsuk-body-s">
+                          <span class="d-block nhsuk-u-font-weight-bold">Document</span>
+                          <span *ngIf="!historyItem.params.file">No document added. <a routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document</a>.</span>
+                          <a *ngIf=" historyItem.params.file" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
+                        </p>
+                        <a *ngIf="accessorUnitId === unitItem.id" routerLink="{{ historyItem.id }}/progress-update-delete-confirmation" class="nhsuk-button button-small nhsuk-button--secondary nhsuk-u-margin-bottom-2">Delete this entry</a>
                       </ng-container>
 
                     </ng-container>
