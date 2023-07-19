@@ -8,16 +8,16 @@
         <p>If you want to stop sharing your innovation with an organisation, <a routerLink="../support">update your data sharing preferences</a>.</p>
       </div>
 
-      <ng-container *ngFor="let sectionItem of sectionsList; let sectionIndex = index;">
+      <ng-container *ngFor="let sectionItem of sectionsList; let sectionIndex = index; let sectionIsFirst = first">
         <ng-container *ngIf="sectionItem.unitsList.length">
 
-          <h2>{{ sectionItem.title }}</h2>
+          <h2 [ngClass]="{ 'nhsuk-u-padding-top-3': !sectionIsFirst }">{{ sectionItem.title }}</h2>
 
           <dl class="nhsuk-u-margin-0">
 
             <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
 
-              <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-8': !unitItem.isOpened }">
+              <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                 <button id="engaging-button-{{ unitItem.id }}" (click)="onOpenCloseUnit(sectionIndex, unitIndex)" class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0" attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
                   attr.aria-controls="engaging-section-{{ unitItem.id }}">
                   <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon__plus nhsuk-u-margin-top-1 nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="25" width="25" aria-hidden="true">
@@ -36,7 +36,7 @@
                 </div>
               </dt>
 
-              <dd *ngIf="unitItem.isOpened" id="engaging-section-{{ unitItem.id }}" class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-8" attr.aria-labelledby="engaging-button-{{ unitItem.id }}">
+              <dd *ngIf="unitItem.isOpened" id="engaging-section-{{ unitItem.id }}" class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-5" attr.aria-labelledby="engaging-button-{{ unitItem.id }}">
 
                 <div *ngIf="unitItem.isLoading" class="nhsuk-grid-row">
                   <div class="nhsuk-grid-column-one-half">
@@ -123,7 +123,7 @@
       </ng-container>
 
       <ng-container *ngIf="innovation.assessment">
-        <h2>Needs assessment</h2>
+        <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
         <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">Needs assessment complete</a>
         <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">
           Completed at {{ innovation.assessment.finishedAt | date: 'MMMM y' }}
