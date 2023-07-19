@@ -19,7 +19,8 @@ type unitsListType = SupportSummaryOrganisationsListDTO[SupportSummarySectionTyp
   temporalDescription: string,
   historyList: SupportSummaryOrganisationHistoryDTO,
   isOpened: boolean,
-  isLoading: boolean
+  isLoading: boolean,
+  canDoProgressUpdates: boolean
 }
 
 const lsCacheId = 'page-innovations-support-summary-list::open-units';
@@ -36,7 +37,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
   isAdmin: boolean;
   isInnovatorType: boolean;
-  accessorUnitId: null | string;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
@@ -63,7 +63,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.accessorUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? null;
 
     if (this.isAdmin) {
       this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
@@ -79,14 +78,17 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         this.sectionsList[0].unitsList = response.ENGAGING.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
+          canDoProgressUpdates: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id,
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
         this.sectionsList[1].unitsList = response.BEEN_ENGAGED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
+          canDoProgressUpdates: false,
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to ${this.datePipe.transform(item.support.end, 'MMMM y')}`
         }));
         this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
+          canDoProgressUpdates: false,
           temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
