@@ -357,7 +357,7 @@ const routes: Routes = [
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationSupportSummaryListComponent,
-                    data: { breadcrumb: null, layout: { type: 'full' } }
+                    data: { breadcrumb: null }
                   }
                 ]
               },

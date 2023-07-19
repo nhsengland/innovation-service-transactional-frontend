@@ -1,13 +1,16 @@
 import { Params } from '@angular/router';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
-import { DateISOType } from '@app/base/types';
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { FileUploadType } from '@app/base/forms';
+import { DateISOType } from '@app/base/types';
+
+import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+
 import { InnovationStatisticsEnum } from './statistics.enum';
 
 
-// getInnovationsList.
+// Innovations.
 export type InnovationsListFiltersType = {
   name?: null | string,
   mainCategories?: string[],
@@ -64,7 +67,6 @@ export type InnovationsListDTO = {
   }[]
 };
 
-// getInnovationInfo.
 export type InnovationInfoDTO = {
   id: string,
   name: string,
@@ -98,6 +100,105 @@ export type InnovationInfoDTO = {
   createdAt: DateISOType
 };
 
+export type InnovationSharesListDTO = { organisation: { id: string, name: string, acronym: string; }; }[];
+
+
+// Innovation collaborators.
+export type getInnovationCollaboratorsListDTO = {
+  count: number,
+  data: {
+    id: string,
+    name?: string,
+    role?: string,
+    email?: string,
+    status: InnovationCollaboratorStatusEnum
+  }[]
+};
+
+export type getInnovationCollaboratorInfoDTO = {
+  id: string,
+  name?: string,
+  role?: string,
+  email: string,
+  status: InnovationCollaboratorStatusEnum,
+  invitedAt: DateISOType,
+  innovation: { id: string, name: string, description: null | string, owner: { id: string, name?: string } }
+};
+
+
+// Innovation support.
+export type InnovationSupportsListDTO = {
+  id: string,
+  status: InnovationSupportStatusEnum,
+  organisation: {
+    id: string, name: string, acronym: string,
+    unit: { id: string, name: string, acronym: string; };
+  },
+  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+}[];
+
+export type InnovationSupportInfoDTO = {
+  id: string,
+  status: InnovationSupportStatusEnum,
+  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+};
+
+
+// Support summary.
+const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
+export type SupportSummarySectionType = typeof SupportSummarySectionType[number];
+export type SupportSummaryOrganisationsListDTO = {
+  [key in SupportSummarySectionType]: {
+    id: string,
+    name: string
+    support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
+  }[]
+};
+export type SupportSummaryOrganisationHistoryDTO = {
+  id: string,
+  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE',
+  createdAt: DateISOType,
+  createdBy: { id: string, name: string, displayRole: string },
+  params: {
+    supportStatus?: InnovationSupportStatusEnum,
+    title?: string
+    message?: string,
+    suggestedByName?: string,
+    file?: { id: string, name: string, url: string }
+  }
+}[];
+export type CreateSupportSummaryProgressUpdateType = {
+  title: string,
+  description: string,
+  document?: { name: string, description?: string, file?: Omit<FileUploadType, 'url'> }
+};
+
+// Support log
+export enum SupportLogType {
+  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
+  STATUS_UPDATE = 'STATUS_UPDATE',
+}
+
+export type InnovationSupportsLogInDTO = {
+  id: string;
+  type: SupportLogType;
+  description: string;
+  createdBy: string;
+  createdAt: DateISOType;
+  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
+  organisationUnit: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  };
+  suggestedOrganisationUnits?: {
+    id: string; name: string; acronym: string;
+    organisation: { id: string; name: string; acronym: string; };
+  }[];
+};
+export type InnovationSupportsLogOutDTO = InnovationSupportsLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
+
+
+// Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
   id: string,
   reassessment?: { updatedInnovationRecord: string, description: string; },
@@ -125,75 +226,6 @@ export type InnovationNeedsAssessmentInfoDTO = {
   updatedAt: null | DateISOType,
   updatedBy: { id: string, name: string }
 };
-
-
-// Innovation support methods.
-// // getInnovationSupportsList.
-export type InnovationSupportsListDTO = {
-  id: string,
-  status: InnovationSupportStatusEnum,
-  organisation: {
-    id: string, name: string, acronym: string,
-    unit: { id: string, name: string, acronym: string; };
-  },
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
-}[];
-
-// getInnovationSupportInfo.
-export type InnovationSupportInfoDTO = {
-  id: string,
-  status: InnovationSupportStatusEnum,
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
-};
-
-
-// Support summary.
-const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
-export type SupportSummarySectionType = typeof SupportSummarySectionType[number];
-export type SupportSummaryOrganisationsListDTO = {
-  [key in SupportSummarySectionType]: {
-    id: string,
-    name: string
-    support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
-  }[]
-};
-export type SupportSummaryOrganisationHistoryDTO = {
-  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE',
-  createdAt: DateISOType,
-  createdBy: { id: string, name: string, displayRole: string },
-  params: {
-    supportStatus?: InnovationSupportStatusEnum,
-    title?: string
-    message?: string,
-    suggestedByName?: string,
-    file?: { id: string, name: string, url: string }
-  }
-}[];
-
-
-//getInnovationSupportLog.
-export enum SupportLogType {
-  ACCESSOR_SUGGESTION = 'ACCESSOR_SUGGESTION',
-  STATUS_UPDATE = 'STATUS_UPDATE',
-}
-
-export type InnovationSupportsLogInDTO = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: DateISOType;
-  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-export type InnovationSupportsLogOutDTO = InnovationSupportsLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
 
 
 export type InnovationActionsListInDTO = {

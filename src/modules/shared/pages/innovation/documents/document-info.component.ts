@@ -64,7 +64,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   gotoInfoPage() {
 
-    if (this.stores.context.getPreviousUrl()?.includes('/sections')) {
+    if (['/sections', '/support-summary'].some(i => this.stores.context.getPreviousUrl()?.includes(i))) {
       this.setBackLink('Go back');
     } else {
       this.setBackLink('Go back', `${this.baseUrl}/documents`);

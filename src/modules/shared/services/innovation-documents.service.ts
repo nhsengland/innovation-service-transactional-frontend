@@ -11,7 +11,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
-type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE';
+type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
@@ -55,11 +55,10 @@ export type InnovationDocumentInfoOutDTO = InnovationDocumentInfoInDTO & {
 };
 
 export type UpsertInnovationDocumentType = {
-  contextType: ContextTypeType,
-  contextId: string,
+  context: { type: ContextTypeType, id: string },
   name: string,
   description?: string,
-  file?: FileUploadType
+  file?: Omit<FileUploadType, 'url'>
 };
 
 
@@ -114,7 +113,8 @@ export class InnovationDocumentsService extends CoreService {
             context: {
               ...item.context,
               label: this.translate(`shared.catalog.documents.contextType.${item.context.type}`),
-              description },
+              description
+            },
             createdBy: { ...item.createdBy, description: userDescription }
           };
 
@@ -173,24 +173,8 @@ export class InnovationDocumentsService extends CoreService {
   }
 
   createDocument(innovationId: string, data: UpsertInnovationDocumentType): Observable<{ id: string }> {
-
-    const body = {
-      context: { type: data.contextType, id: data.contextId },
-      name: data.name,
-      ...(data.description && { description: data.description }),
-      ...(data.file && {
-        file: {
-          id: data.file.id,
-          name: data.file.name,
-          size: data.file.size,
-          extension: data.file.extension
-        }
-      })
-    };
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
+    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(take(1), map(response => response));
   }
 
   updateDocument(innovationId: string, documentId: string, data: UpsertInnovationDocumentType): Observable<{ id: string }> {
