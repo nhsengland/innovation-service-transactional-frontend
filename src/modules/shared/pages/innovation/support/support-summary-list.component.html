@@ -17,7 +17,7 @@
 
             <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
 
-              <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
+              <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-8': !unitItem.isOpened }">
                 <button id="engaging-button-{{ unitItem.id }}" (click)="onOpenCloseUnit(sectionIndex, unitIndex)" class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0" attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
                   attr.aria-controls="engaging-section-{{ unitItem.id }}">
                   <svg *ngIf="!unitItem.isOpened" class="nhsuk-icon__plus nhsuk-u-margin-top-1 nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="25" width="25" aria-hidden="true">
@@ -36,7 +36,7 @@
                 </div>
               </dt>
 
-              <dd *ngIf="unitItem.isOpened" id="engaging-section-{{ unitItem.id }}" class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-5" attr.aria-labelledby="engaging-button-{{ unitItem.id }}">
+              <dd *ngIf="unitItem.isOpened" id="engaging-section-{{ unitItem.id }}" class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-8" attr.aria-labelledby="engaging-button-{{ unitItem.id }}">
 
                 <div *ngIf="unitItem.isLoading" class="nhsuk-grid-row">
                   <div class="nhsuk-grid-column-one-half">
@@ -44,7 +44,7 @@
                   </div>
                 </div>
 
-                <button *ngIf="!unitItem.isLoading && sectionIndex === 0 && accessorUnitId === unitItem.id" routerLink="progress-update-new" class="nhsuk-button button-small nhsuk-u-margin-left-5 nhsuk-u-margin-bottom-4">
+                <button *ngIf="!unitItem.isLoading && unitItem.canDoProgressUpdates" routerLink="progress-update-new" class="nhsuk-button button-small nhsuk-u-margin-left-5 nhsuk-u-margin-bottom-4">
                   Update progress
                 </button>
 
@@ -68,7 +68,7 @@
 
                       <ng-container *ngSwitchCase="'SUGGESTED_ORGANISATION'">
                         <p>
-                          <span class="nhsuk-u-font-weight-bold">Organisation suggested by {{ historyItem.params.suggestedByName || 'Needs assessment' }}</span>
+                          <span class="nhsuk-u-font-weight-bold">Organisation suggested by {{ historyItem.params.suggestedByName || 'Needs Assessment team' }}</span>
                           <span class="nhsuk-hint nhsuk-u-font-size-14">
                             {{ historyItem.createdAt | date: ('app.date_formats.medium_date' | translate) }}
                             by {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? ' (' + historyItem.createdBy.displayRole + ')' : '' }}
@@ -91,10 +91,13 @@
                         </p>
                         <p class="nhsuk-body-s">
                           <span class="d-block nhsuk-u-font-weight-bold">Document</span>
-                          <span *ngIf="!historyItem.params.file">No document added. <a routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document</a>.</span>
+                          <span *ngIf="!historyItem.params.file">
+                            No document added.
+                            <a *ngIf="unitItem.canDoProgressUpdates" routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document.</a>
+                          </span>
                           <a *ngIf="historyItem.params.file" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
                         </p>
-                        <a *ngIf="accessorUnitId === unitItem.id" routerLink="{{ historyItem.id }}/progress-update-delete-confirmation" class="nhsuk-button button-small nhsuk-button--secondary nhsuk-u-margin-bottom-2">Delete this entry</a>
+                        <a *ngIf="unitItem.canDoProgressUpdates" routerLink="{{ historyItem.id }}/progress-update-delete-confirmation" class="nhsuk-button button-small nhsuk-button--secondary nhsuk-u-margin-bottom-2">Delete this entry</a>
                       </ng-container>
 
                     </ng-container>

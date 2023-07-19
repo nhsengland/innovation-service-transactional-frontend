@@ -110,7 +110,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.addDocument === 'YES' && {
       document: {
         name: data.documentName ?? '',
-        description: data.documentDescription,
+        ...(data.documentDescription && { description: data.documentDescription }),
         ...(data.documentFile && {
           file: {
             id: data.documentFile.id,
