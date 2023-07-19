@@ -92,7 +92,7 @@
                         <p class="nhsuk-body-s">
                           <span class="d-block nhsuk-u-font-weight-bold">Document</span>
                           <span *ngIf="!historyItem.params.file">No document added. <a routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document</a>.</span>
-                          <a *ngIf=" historyItem.params.file" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
+                          <a *ngIf="historyItem.params.file" routerLink="../documents/{{ historyItem.params.file.id }}">{{ historyItem.params.file.name }}</a>
                         </p>
                         <a *ngIf="accessorUnitId === unitItem.id" routerLink="{{ historyItem.id }}/progress-update-delete-confirmation" class="nhsuk-button button-small nhsuk-button--secondary nhsuk-u-margin-bottom-2">Delete this entry</a>
                       </ng-container>
