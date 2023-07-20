@@ -35,7 +35,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasPatents',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
+          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasPatentsItems
         }]
@@ -45,7 +45,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasOtherIntellectual',
           dataType: 'radio-group',
           label: stepsLabels.l2,
-          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
+          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasOtherIntellectualItems
         }]
