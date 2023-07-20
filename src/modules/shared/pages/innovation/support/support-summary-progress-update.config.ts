@@ -6,8 +6,8 @@ import { CreateSupportSummaryProgressUpdateType } from '@modules/shared/services
 
 // Labels.
 const stepsLabels = {
-  l1: { label: 'Title', description: 'Enter a title with a maximum of 100 characters' },
-  l2: { label: 'Description of progress', description: 'Enter your description' },
+  l1: { label: 'Start by adding a title to your progress update', description: 'Enter a title with a maximum of 100 characters' },
+  l2: { label: 'Add a description for your progress update', description: 'Enter your description' },
   l3: { label: 'Do you want to add a document to support this progress update?' },
   l4: { label: 'What do you want to name this document?', description: 'Enter a name with a maximum of 100 characters.' },
   l5: { label: 'Write a short description for this document (optional)', description: 'Enter a short description about this document.' },
@@ -35,6 +35,8 @@ const addDocumentItems = [
 export const SUPPORT_SUMMARY_PROGRESS_UPDATE: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
+      label:  'Add progress update',
+      description: 'For example, an assessment has started, a key meeting has been scheduled, or the innovation has moved to the next phase of a selection process.',
       parameters: [{
         id: 'progressUpdateTitle', dataType: 'text', label: stepsLabels.l1.label, description: stepsLabels.l1.description,
         validations: { isRequired: [true, 'Title is required'], maxLength: 100 }

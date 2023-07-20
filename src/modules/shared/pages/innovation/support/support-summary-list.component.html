@@ -89,7 +89,7 @@
                           <span class="d-block nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
                           <span>{{ historyItem.params.message }}</span>
                         </p>
-                        <p class="nhsuk-body-s">
+                        <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file" class="nhsuk-body-s">
                           <span class="d-block nhsuk-u-font-weight-bold">Document</span>
                           <span *ngIf="!historyItem.params.file">
                             No document added.
