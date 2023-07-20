@@ -45,7 +45,7 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasRegulationKnowledge',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer"> Innovation guides (opens in a new window) </a> for more information about regulations and standards.`,
+          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer"> Innovation guides (opens in a new window) </a> for more information about regulations and standards.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasRegulationKnowledgeItems
         }]

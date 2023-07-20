@@ -40,7 +40,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
           id: 'hasDeployPlan',
           dataType: 'radio-group',
           label: stepsLabels.l1,
-          description: `See <a href=${URLS.ADVANCED_INNOVATION_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about implementation plans.`,
+          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about implementation plans.`,
           validations: { isRequired: [true, 'Choose one option'] },
           items: hasDeployPlanItems
         }]
