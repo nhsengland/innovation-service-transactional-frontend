@@ -355,6 +355,7 @@ export const locale = {
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
             MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
+            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
