@@ -104,15 +104,14 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
     // Do nothing if user using shortcut to open in new window (this is handled by the browser)
     if(event.ctrlKey && url) {
-      return
+      return;
     }
-
-    // Stop event propagation to avoid triggering the href link
-    event.preventDefault();
 
     this.stores.context.dismissUserNotification(notificationId);
 
     if(url) {
+      // Stop event propagation to avoid triggering the href link
+      event.preventDefault();
       this.redirectTo(url);
     } else {
       const notification = this.notificationsList.getRecords().find(i => i.id === notificationId);
