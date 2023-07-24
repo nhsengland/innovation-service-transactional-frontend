@@ -5,7 +5,7 @@ export enum NotificationContextTypeEnum {
   ACTION = 'ACTION',
   THREAD = 'THREAD',
   // COMMENT = 'COMMENT'
-  // DATA_SHARING = 'DATA_SHARING'
+  DATA_SHARING = 'DATA_SHARING'
 }
 
 export enum NotificationContextDetailEnum {
