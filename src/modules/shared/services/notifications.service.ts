@@ -127,6 +127,16 @@ export class NotificationsService extends CoreService {
             case NotificationContextTypeEnum.THREAD:
               link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
               break;
+            case NotificationContextTypeEnum.DATA_SHARING:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
+                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                  break;
+              };
+              break;
             // case NotificationContextTypeEnum.COMMENT:
             //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
             //   break;
