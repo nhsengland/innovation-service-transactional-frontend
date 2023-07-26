@@ -7,6 +7,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, SupportSummarySectionType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { LocalStorageHelper } from '@app/base/helpers';
+import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
 
 type sectionsListType = {
@@ -137,6 +138,9 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           unitItem.historyList = response;
           unitItem.isLoading = false;
           this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
+          if (this.isInnovatorType) {
+            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE], contextIds: [unitItem.id] })
+          }
         },
         error: () => {
           unitItem.isOpened = false;
