@@ -50,7 +50,7 @@ export type NotificationsListOutDTO = {
   data: (
     Omit<NotificationsListInDTO['data'][0], 'innovation' | 'params'>
     & {
-      link: null | { label: string; url: string; },
+      link: null | { label: string; url: string; queryParams?: Record<string, string>},
       params: null | {
         innovationId: string;
         innovationName: string;
@@ -93,7 +93,7 @@ export class NotificationsService extends CoreService {
         count: response.count,
         data: response.data.map(item => {
 
-          let link: null | { label: string; url: string; } = null;
+          let link: null | { label: string; url: string; queryParams?: Record<string, string> } = null;
 
           switch (item.contextType) {
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
@@ -121,7 +121,7 @@ export class NotificationsService extends CoreService {
             case NotificationContextTypeEnum.SUPPORT:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary` };
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
                   break;
                 default:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
