@@ -119,7 +119,14 @@ export class NotificationsService extends CoreService {
               };
               break;
             case NotificationContextTypeEnum.SUPPORT:
-              link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary` };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+                  break;
+              }
               break;
             case NotificationContextTypeEnum.ACTION:
               link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/action-tracker/${item.contextId}` };
