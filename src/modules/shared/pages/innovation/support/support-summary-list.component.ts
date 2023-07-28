@@ -97,6 +97,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         const unitId = this.activatedRoute.snapshot.queryParams.unitId;
 
+        // open the support summary entry specified in the query parameter
         for (const [listIndex, list] of this.sectionsList.entries()) {
           const unitIndex = list.unitsList.findIndex(unit => unit.id === unitId)
           if (unitIndex !== -1) {
