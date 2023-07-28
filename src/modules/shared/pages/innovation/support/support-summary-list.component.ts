@@ -95,11 +95,11 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
-        const unitId = this.activatedRoute.snapshot.queryParams.unitId;
+        const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
 
         // open the support summary entry specified in the query parameter
         for (const [listIndex, list] of this.sectionsList.entries()) {
-          const unitIndex = list.unitsList.findIndex(unit => unit.id === unitId)
+          const unitIndex = list.unitsList.findIndex(unit => unit.id === queryUnitId)
           if (unitIndex !== -1) {
             this.onOpenCloseUnit(listIndex, unitIndex);
             break;
@@ -110,8 +110,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
           const [sectionIndex, unitId] = item.split(',');
 
-          const unitIndex = this.sectionsList[parseInt(sectionIndex)].unitsList.findIndex(i => i.id === unitId);
-          if (unitIndex > -1 && this.sectionsList[parseInt(sectionIndex)].unitsList[unitIndex].id !== unitId) {
+          const unitIndex = this.sectionsList[parseInt(sectionIndex)].unitsList.findIndex(i => i.id === unitId && i.id !== queryUnitId);
+          if (unitIndex > -1) {
             this.onOpenCloseUnit(parseInt(sectionIndex), unitIndex);
           } else {
             this.lsCache.delete(`${sectionIndex},${unitId}`); // Removes outdated entry.
