@@ -8,6 +8,7 @@ import { SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDT
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { LocalStorageHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { ActivatedRoute } from '@angular/router';
 
 
 type sectionsListType = {
@@ -47,6 +48,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private datePipe: DatePipe
   ) {
@@ -93,12 +95,23 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
+        const unitId = this.activatedRoute.snapshot.queryParams.unitId;
+
+        // open the support summary entry specified in the query parameter
+        for (const [listIndex, list] of this.sectionsList.entries()) {
+          const unitIndex = list.unitsList.findIndex(unit => unit.id === unitId)
+          if (unitIndex !== -1) {
+            this.onOpenCloseUnit(listIndex, unitIndex);
+            break;
+          }
+        }
+
         this.lsCache.forEach(item => {
 
           const [sectionIndex, unitId] = item.split(',');
 
           const unitIndex = this.sectionsList[parseInt(sectionIndex)].unitsList.findIndex(i => i.id === unitId);
-          if (unitIndex > -1) {
+          if (unitIndex > -1 && this.sectionsList[parseInt(sectionIndex)].unitsList[unitIndex].id !== unitId) {
             this.onOpenCloseUnit(parseInt(sectionIndex), unitIndex);
           } else {
             this.lsCache.delete(`${sectionIndex},${unitId}`); // Removes outdated entry.

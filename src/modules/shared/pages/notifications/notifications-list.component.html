@@ -105,7 +105,7 @@
 
                 </ng-container>
 
-                <a *ngIf="item.link" href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url)">
+                <a *ngIf="item.link" href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url, item.link.queryParams)">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                   <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                 </a>
