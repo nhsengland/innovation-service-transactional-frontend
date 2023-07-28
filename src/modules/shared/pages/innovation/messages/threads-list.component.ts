@@ -17,7 +17,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   selfUser: { id: string, organisationUnitId?: string };
   innovation: ContextInnovationType;
-  tableList = new TableModel<GetThreadsListDTO['threads'][0]>({ pageSize: 10 });
+  tableList = new TableModel<GetThreadsListDTO['data'][0]>({ pageSize: 10 });
 
   // Flags
   isInnovatorType: boolean;
@@ -58,8 +58,8 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.tableList.setVisibleColumns({
       subject: { label: 'Subject', orderable: true },
       messageCount: { label: 'Nº messages', orderable: true },
-      createdAt: { label: 'Latest received', align: 'right', orderable: true }
-    }).setOrderBy('createdAt', 'descending');
+      latestMessageCreatedAt: { label: 'Latest received', align: 'right', orderable: true }
+    }).setOrderBy('latestMessageCreatedAt', 'descending');
 
     this.getThreadsList();
 
@@ -70,7 +70,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.setPageStatus('LOADING');
 
     this.innovationsService.getThreadsList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
-      this.tableList.setData(response.threads, response.count);
+      this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });

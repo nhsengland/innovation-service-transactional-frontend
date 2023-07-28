@@ -72,7 +72,7 @@
                     <p *ngFor="let organisationUnit of item.suggestedOrganisationUnitsNames" class="nhsuk-u-margin-bottom-0"> {{ organisationUnit }} </p>
                   </div>
                   <div *ngSwitchCase="supportLogType.STATUS_UPDATE">
-                    <strong class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{ innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
+                    <strong *ngIf="item.innovationSupportStatus" class="nhsuk-tag" [ngClass]="innovationSupportStatus[item.innovationSupportStatus].cssClass">{{ innovationSupportStatus[item.innovationSupportStatus].label }}</strong>
                   </div>
                 </ng-container>
                 <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-4">Comment</p>

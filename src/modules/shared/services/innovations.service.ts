@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -10,10 +10,10 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, SupportLogType, getInnovationCollaboratorsListDTO, getInnovationCollaboratorInfoDTO, InnovationSharesListDTO, CreateSupportSummaryProgressUpdateType } from './innovations.dtos';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, getInnovationCollaboratorsListDTO } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
 
@@ -30,7 +30,7 @@ export type InnovationsActionsListFilterType = {
 
 export type GetThreadsListDTO = {
   count: number;
-  threads: {
+  data: {
     id: string;
     subject: string;
     messageCount: number;
@@ -488,7 +488,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        threads: response.threads
+        data: response.data
       }))
     );
 

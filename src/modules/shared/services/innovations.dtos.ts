@@ -185,7 +185,7 @@ export type InnovationSupportsLogInDTO = {
   description: string;
   createdBy: string;
   createdAt: DateISOType;
-  innovationSupportStatus: keyof typeof InnovationSupportStatusEnum;
+  innovationSupportStatus?: keyof typeof InnovationSupportStatusEnum;
   organisationUnit: {
     id: string; name: string; acronym: string;
     organisation: { id: string; name: string; acronym: string; };
