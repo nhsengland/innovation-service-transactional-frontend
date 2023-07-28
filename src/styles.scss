@@ -208,20 +208,52 @@ $service-manual-container-size: 1100px; // Container width variable.
   border: 0;
   color: $nhsuk-link-color;
   cursor: pointer;
+  text-decoration: underline;
 
+  &:hover { text-decoration: none; }
   &:visited {
     color: $nhsuk-link-color;
-    &:hover {
-      color: $nhsuk-link-hover-color;
-    }
+    &:hover { color: $nhsuk-link-hover-color; }
   }
-  &:focus {
-    &:hover {
-      color: $nhsuk-focus-text-color;
-    }
-  }
+  // &:focus {
+  //   &:hover { color: $nhsuk-focus-text-color; }
+  // }
 }
 
+// button.with-collapsible-icon {
+
+//   position: relative;
+//   padding-left: 24px;
+
+//   &:before {
+//     bottom: 0;
+//     content: "";
+//     left: 0;
+//     margin: auto;
+//     position: absolute;
+//     top: 0;
+//     display: block;
+//     width: 0;
+//     height: 0;
+//     border-style: solid;
+//     border-color: transparent;
+//     clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+//     border-width: 7px 0 7px 12.124px;
+//     border-left-color: inherit;
+//   }
+
+//   &[aria-expanded="true"]:before {
+//     display: block;
+//     width: 0;
+//     height: 0;
+//     border-style: solid;
+//     border-color: transparent;
+//     clip-path: polygon(0% 0%, 50% 100%, 100% 0%);
+//     border-width: 12.124px 7px 0 7px;
+//     border-top-color: inherit;
+//   }
+
+// }
 
 // Overrides.
 // Angular Material.
@@ -465,15 +497,42 @@ $service-manual-container-size: 1100px; // Container width variable.
   }
 }
 
+ul.list-vertical-line {
+  position: relative;
+  list-style: none;
+  padding: 0;
+
+  &:before {
+    content:"";
+    position: absolute;
+    top: 12px;
+    left: 0px;
+    width: 4px;
+    height: 100%;
+    background: var(--primary-color);
+  }
+
+  li {
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 15px;
+    &:before{
+      content:"";
+      position: absolute;
+      top: 11px;
+      left: 0;
+      width: 13px;
+      height: 4px;
+      background: var(--primary-color);
+    }
+  }
+}
+
+
+
 .app-table-inside-card {
-
-  th:first-of-type { padding-left: 24px; }
-  th:last-of-type { padding-right: 24px; }
-
-  td { vertical-align: middle; }
-  td:first-of-type { padding-left: 24px; }
-  td:last-of-type { padding-right: 24px; }
-
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .app-tabs {

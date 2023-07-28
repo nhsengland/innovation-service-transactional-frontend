@@ -1,7 +1,7 @@
 import { isPlatformBrowser, isPlatformServer, Location } from '@angular/common';
 import { Component, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
@@ -18,8 +18,8 @@ import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/co
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { UtilsHelper } from './helpers';
 import { URLS } from './constants';
+import { UtilsHelper } from './helpers';
 
 
 @Component({ template: '' })
@@ -98,7 +98,12 @@ export class CoreComponent implements OnDestroy {
     this.stores.context.setCurrentUrl(this.location.path());
 
     this.subscriptions.push(
-      this.stores.context.pageLayoutStatus$().subscribe(item => { this.pageStatus = item; })
+      this.stores.context.pageLayoutStatus$().subscribe(item => { this.pageStatus = item; }),
+      this.router.events.subscribe((e: any) => {
+        if(e instanceof NavigationEnd) {
+          this.stores.context.setCurrentUrl(e.urlAfterRedirects);
+        }
+      })
     );
 
   }
@@ -161,7 +166,10 @@ export class CoreComponent implements OnDestroy {
    * @param urlOrCallback either a string url or a callback function to be called
    * @param hiddenLabel hidden label for the back button
    */
-  setBackLink(label: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
+  setBackLink(label?: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
+
+    if (!label) { label = 'Go back'; }
+
     // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
     if (!urlOrCallback) {
       urlOrCallback = this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;

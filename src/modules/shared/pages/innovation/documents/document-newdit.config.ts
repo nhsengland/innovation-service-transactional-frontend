@@ -14,14 +14,8 @@ const stepsLabels = {
   l1: { label: 'Is this document related to any section of your innovation record?' },
   l2: { label: 'Which section of the innovation record does this document support?' },
   l3: { label: 'This document relates with the section or is it related to an evidence?' },
-  l4: {
-    label: 'What do you want to name this document?',
-    description: 'Enter a name with a maximum of 100 characters.'
-  },
-  l5: {
-    label: 'Write a short description for this document (optional)',
-    description: 'Enter a short description about this document.'
-  },
+  l4: { label: 'What do you want to name this document?', description: 'Enter a name with a maximum of 100 characters.' },
+  l5: { label: 'Write a short description for this document (optional)', description: 'Enter a short description about this document.' },
   l6: { label: 'Upload the document', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' }
 };
 
@@ -39,6 +33,7 @@ type StepPayloadType = {
   // evidencesList?: { id: string, name: string, summary: string }[],
   section?: string,
   evidence?: string,
+  progressUpdate?: string,
   // Questions fields.
   relatedWithSection?: 'YES' | 'NO',
   name?: string,
@@ -224,6 +219,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     contextType: data.context?.type ?? 'INNOVATION',
     ...(data.context?.type === 'INNOVATION_SECTION' && { section: data.context.id }),
     ...(data.context?.type === 'INNOVATION_EVIDENCE' && { evidence: data.context.id }),
+    ...(data.context?.type === 'INNOVATION_PROGRESS_UPDATE' && { progressUpdate: data.context.id }),
     name: data.name,
     description: data.description,
     file: data.file
@@ -238,14 +234,21 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     case 'INNOVATION': contextId = data.innovationId; break;
     case 'INNOVATION_SECTION': contextId = data.section ?? ''; break;
     case 'INNOVATION_EVIDENCE': contextId = data.evidence ?? ''; break;
+    case 'INNOVATION_PROGRESS_UPDATE': contextId = data.progressUpdate ?? ''; break;
   }
 
   return {
-    contextType: data.contextType ?? 'INNOVATION',
-    contextId,
+    context: { type: data.contextType ?? 'INNOVATION', id: contextId },
     name: data.name ?? '',
-    description: data.description,
-    file: data.file
+    ...(data.description && { description: data.description }),
+    ...(data.file && {
+      file: {
+        id: data.file.id,
+        name: data.file.name,
+        size: data.file.size,
+        extension: data.file.extension
+      }
+    })
   };
 
 }

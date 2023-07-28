@@ -56,14 +56,14 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }] : []),
         { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` }, // TODO: this url may change
+        { label: 'Data sharing and support', url: `/admin/innovations/${innovation.id}/support` },
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/admin/innovations/${innovation.id}/support-summary` }] : []),
+        ...(innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT ?
+          [{ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []
+        ),
+        { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
       ];
 
-      if (innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
-        this._sidebarItems.push({ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` });
-      }
-
-      this._sidebarItems.push({ label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` });
     }
 
   }

@@ -118,6 +118,11 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   }
 
   onSubmitWizard(): void {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
     const wizardData = this.wizard.runOutboundParsing();
 
     const body: { innovationId: string, email: string, ownerToCollaborator: boolean } = {

@@ -27,13 +27,13 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private innovationStore: InnovationStore
   ) {
+
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-        this.onRouteChange()
-      })
+      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange())
     );
 
     this.onRouteChange();
+
   }
 
   ngOnInit(): void {
@@ -54,23 +54,21 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
-        { label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` },
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }] : []),
         { label: 'Action tracker', url: `/assessment/innovations/${innovation.id}/action-tracker` },
         { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing and support', url: `/assessment/innovations/${innovation.id}/support` }
+        { label: 'Data sharing and support', url: `/assessment/innovations/${innovation.id}/support` },
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }] : []),
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []),
+        { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
       ];
 
-      if (innovation.status === InnovationStatusEnum.IN_PROGRESS) {
-        this._sidebarItems.push(
-          { label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }
-        );
-      }
-
-      this._sidebarItems.push({ label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` });
     }
+
   }
 
   private onRouteChange(): void {
+
     this.generateSidebar();
 
     if (this.router.url.includes('sections')) {
@@ -81,4 +79,5 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.sidebarItems = this._sidebarItems;
     }
   }
+
 }

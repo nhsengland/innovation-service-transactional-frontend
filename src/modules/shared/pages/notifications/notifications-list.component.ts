@@ -100,15 +100,22 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   }
 
-  onNotificationClick(notificationId: string, url: null | string): void {
+  onNotificationClick(event: MouseEvent, notificationId: string, url: null | string, queryParams?: Record<string, string>): void {
+
+    // Do nothing if user using shortcut to open in new window (this is handled by the browser)
+    if (event.ctrlKey && url) {
+      return;
+    }
 
     this.stores.context.dismissUserNotification(notificationId);
 
-    if(url) {
-      this.redirectTo(url);
+    if (url) {
+      // Stop event propagation to avoid triggering the href link
+      event.preventDefault();
+      this.redirectTo(url, queryParams);
     } else {
       const notification = this.notificationsList.getRecords().find(i => i.id === notificationId);
-      if(notification) {
+      if (notification) {
         notification.readAt = new Date().toISOString();
       }
     }

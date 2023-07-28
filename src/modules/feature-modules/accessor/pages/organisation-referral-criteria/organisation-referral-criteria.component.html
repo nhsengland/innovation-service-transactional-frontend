@@ -1,59 +1,50 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-
-      <p class="nhsuk-body-l">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>
         Below you will find information on the referral criteria for each organisation that uses the NHS Innovation
         Service, which may help with the information you can provide to the Needs Assessment team, so that they can
         provide the best support for your innovation.
       </p>
+    </div>
+  </div>
 
-      <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
-        <caption class="nhsuk-u-visually-hidden">Organisations referral criteria</caption>
-        <tbody class="nhsuk-table__body">
-          <tr *ngFor="let organisation of organisationsInformation" class="nhsuk-table__row">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
 
-            <td class="nhsuk-table__cell">
-              <a [href]="organisation.link" target="_blank" aria-label="opens in a new window" rel="noopener noreferrer">{{ organisation.name }}</a>
-            </td>
-            
-            <td class="nhsuk-table__cell">
-              <ng-container *ngFor="let info of organisation.information">
+      <dl class="nhsuk-summary-list">
 
-                <ng-container [ngSwitch]="info.type">
+        <div *ngFor="let organisation of organisationsInformation" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            <a [href]="organisation.link" target="_blank" rel="noopener noreferrer" attr.aria-label="{{ organisation.name }} (Opens in a new window)">{{ organisation.name }}</a>
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            <ng-container *ngFor="let info of organisation.information">
 
-                  <ng-container *ngSwitchCase="'BULLET_LIST'">
+              <ng-container [ngSwitch]="info.type">
+                <ng-container *ngSwitchCase="'BULLET_LIST'">
+                  <ul class="nhsuk-list nhsuk-list--bullet">
+                    <ng-container *ngFor="let value of info.values">
+                      <li>{{ value.description }}</li>
+                      <ul *ngIf="value.subBullets" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
+                        <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0"> {{ subBullet }} </li>
+                      </ul>
+                    </ng-container>
+                  </ul>
+                </ng-container>
 
-                    <ul class="nhsuk-list nhsuk-list--bullet">
-
-                      <ng-container *ngFor="let value of info.values">
-                        <li>{{ value.description }}</li>
-
-                        <ul *ngIf="value.subBullets" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
-                          <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0"> {{ subBullet }} </li>
-                        </ul>
-                      </ng-container>
-
-                    </ul>
-
-                  </ng-container>
-
-                  <ng-container *ngSwitchCase="'PARAGRAPH'">
-
-                    <p *ngFor="let value of info.values">
-                      {{ value.description }}
-                    </p>
-
-                  </ng-container>
-
+                <ng-container *ngSwitchCase="'PARAGRAPH'">
+                  <p *ngFor="let value of info.values">{{ value.description }}</p>
                 </ng-container>
 
               </ng-container>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+
+            </ng-container>
+          </dd>
+        </div>
+
+      </dl>
 
     </div>
   </div>

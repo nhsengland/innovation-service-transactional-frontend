@@ -25,7 +25,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   pageData: {
     isCreation: boolean,
     isEdition: boolean,
-    queryParams: { sectionId?: string, evidenceId?: string }
+    queryParams: { sectionId?: string, evidenceId?: string, progressUpdateId?: string }
   };
 
   wizard = new WizardEngineModel({});
@@ -42,7 +42,11 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     this.pageData = {
       isCreation: !this.documentId,
       isEdition: !!this.documentId,
-      queryParams: { sectionId: this.activatedRoute.snapshot.queryParams.sectionId, evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId }
+      queryParams: {
+        sectionId: this.activatedRoute.snapshot.queryParams.sectionId,
+        evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId,
+        progressUpdateId: this.activatedRoute.snapshot.queryParams.progressUpdateId
+      }
     };
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
@@ -66,7 +70,14 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
         }
 
       } else {
-        this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS).setInboundParsedAnswers({ innovationId: this.innovationId });
+
+        if (this.pageData.queryParams.progressUpdateId) {
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+          this.wizard.setInboundParsedAnswers({ innovationId: this.innovationId, context: { type: 'INNOVATION_PROGRESS_UPDATE', id: this.pageData.queryParams.progressUpdateId } });
+        } else {
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS).setInboundParsedAnswers({ innovationId: this.innovationId });
+        }
+
       }
 
       this.wizard.runRules();
@@ -99,11 +110,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
       this.wizard.currentStep().parameters[0].fileUploadConfig = {
         httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload-file').buildUrl(),
-        httpUploadBody: {
-          innovatorId: this.stores.authentication.getUserId(),
-          innovationId: this.innovationId,
-          // context: '' // this.sectionId, // TODO!
-        },
+        httpUploadBody: { innovatorId: this.stores.authentication.getUserId(), innovationId: this.innovationId },
         maxFileSize: 20,
         acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
       };

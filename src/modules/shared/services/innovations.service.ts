@@ -10,39 +10,12 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationsListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLog, InnovationSupportsLogDTO, SupportLogType } from './innovations.dtos';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, getInnovationCollaboratorsListDTO } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
-export enum AssessmentSupportFilterEnum {
-  UNASSIGNED = 'UNASSIGNED',
-  ENGAGING = 'ENGAGING',
-  NOT_ENGAGING = 'NOT_ENGAGING'
-}
-
-export type InnovationsListFiltersType = {
-  name?: null | string,
-  mainCategories?: string[],
-  locations?: string[],
-  status?: InnovationStatusEnum[],
-  assessmentSupportStatus?: AssessmentSupportFilterEnum,
-  supportStatuses?: InnovationSupportStatusEnum[],
-  groupedStatuses?: InnovationGroupedStatusEnum[],
-  engagingOrganisations?: string[],
-  engagingOrganisationUnits?: string[],
-  assignedToMe?: boolean,
-  suggestedOnly?: boolean,
-  latestWorkedByMe?: boolean,
-  hasAccessThrough?: ('owner' | 'collaborator')[],
-  dateFilter?: {
-    field: 'submittedAt',
-    startDate?: DateISOType,
-    endDate?: DateISOType
-  }[],
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
-}
 
 export type InnovationsActionsListFilterType = {
   innovationId?: string,
@@ -55,32 +28,9 @@ export type InnovationsActionsListFilterType = {
   fields?: ('notifications')[]
 };
 
-type getInnovationCollaboratorsListDTO = {
-  count: number,
-  data: {
-    id: string,
-    name?: string,
-    role?: string,
-    email?: string,
-    status: InnovationCollaboratorStatusEnum
-  }[]
-};
-
-type getInnovationCollaboratorInfoDTO = {
-  id: string,
-  name?: string,
-  role?: string,
-  email: string,
-  status: InnovationCollaboratorStatusEnum,
-  invitedAt: DateISOType,
-  innovation: { id: string, name: string, description: null | string, owner: { id: string, name?: string } }
-};
-
-type getInnovationSubmissionDTO = { submittedAllSections: boolean, submittedForNeedsAssessment: boolean };
-
 export type GetThreadsListDTO = {
   count: number;
-  threads: {
+  data: {
     id: string;
     subject: string;
     messageCount: number;
@@ -175,8 +125,6 @@ export type CreateThreadMessageDTO = {
   };
 };
 
-export type InnovationSharesListDTO = { organisation: { id: string, name: string, acronym: string; }; }[];
-
 export type statusChangeDTO = {
   statusChangedAt: null | string;
 };
@@ -207,14 +155,13 @@ export type GetExportRequestsListDTO = {
   data: InnovationExportRequestItemType[]
 }
 
-export type GetExportRequestInfoDto = InnovationExportRequestItemType;
 
 @Injectable()
 export class InnovationsService extends CoreService {
 
   constructor() { super(); }
 
-
+  // Innovations.
   getInnovationsList({ queryParams, fields = [] }: { queryParams?: APIQueryParamsType<InnovationsListFiltersType>, fields?: InnovationsListFiltersType['fields'] } = {}): Observable<InnovationsListDTO> {
 
     if (!queryParams) {
@@ -309,6 +256,18 @@ export class InnovationsService extends CoreService {
 
   }
 
+  getInnovationSubmission(innovationId: string): Observable<{ submittedAllSections: boolean, submittedForNeedsAssessment: boolean }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submissions').setPathParams({ innovationId });
+    return this.http.get<{ submittedAllSections: boolean, submittedForNeedsAssessment: boolean }>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  getInnovationSharesList(innovationId: string): Observable<InnovationSharesListDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
+    return this.http.get<InnovationSharesListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+
+  // Innovation collaborators.
   getInnovationCollaboratorsList(innovationId: string, type: ('pending' | 'active' | 'history')[]): Observable<getInnovationCollaboratorsListDTO> {
 
     const qp: { take: number, skip: number, status: InnovationCollaboratorStatusEnum[] } = { take: 100, skip: 0, status: [] };
@@ -349,13 +308,8 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getInnovationSharesList(innovationId: string): Observable<InnovationSharesListDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/shares').setPathParams({ innovationId });
-    return this.http.get<InnovationSharesListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
-
+  // Innovation support.
   getInnovationSupportsList(innovationId: string, accessorsInfo: boolean): Observable<InnovationSupportsListDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports').setPathParams({ innovationId });
@@ -379,21 +333,36 @@ export class InnovationsService extends CoreService {
   }
 
   getInnovationSupportInfo(innovationId: string, supportId: string): Observable<InnovationSupportInfoDTO> {
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId').setPathParams({ innovationId, supportId });
     return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
   }
 
-  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
-    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  // Support summary.
+  getSupportSummaryOrganisationsList(innovationId: string): Observable<SupportSummaryOrganisationsListDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary').setPathParams({ innovationId });
+    return this.http.get<SupportSummaryOrganisationsListDTO>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
-  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogDTO[]> {
+  getSupportSummaryOrganisationHistory(innovationId: string, organisationUnitId: string): Observable<SupportSummaryOrganisationHistoryDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/units/:organisationUnitId').setPathParams({ innovationId, organisationUnitId });
+    return this.http.get<SupportSummaryOrganisationHistoryDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+  createSupportSummaryProgressUpdate(innovationId: string, data: CreateSupportSummaryProgressUpdateType): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/progress-update').setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(take(1), map(response => response));
+  }
+  deleteSupportSummaryProgressUpdate(innovationId: string, id: string): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/progress-update/:id').setPathParams({ innovationId, id });
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
+
+  // Support log
+  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogOutDTO[]> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
-    return this.http.get<InnovationSupportsLog[]>(url.buildUrl()).pipe(
+    return this.http.get<InnovationSupportsLogInDTO[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response.map(item => {
 
@@ -413,19 +382,15 @@ export class InnovationsService extends CoreService {
         return {
           ...item,
           logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits || []).map(o => o.name)
+          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits ?? []).map(o => o.name)
         };
 
       }))
     );
   }
 
-  getInnovationSubmission(innovationId: string): Observable<getInnovationSubmissionDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/submissions').setPathParams({ innovationId });
-    return this.http.get<getInnovationSubmissionDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-  }
 
-  // Needs Assessment
+  // Needs Assessment.
   getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<InnovationNeedsAssessmentInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
@@ -523,7 +488,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
-        threads: response.threads
+        data: response.data
       }))
     );
 
@@ -703,14 +668,9 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getExportRequestInfo(innovationId: string, requestId: string): Observable<GetExportRequestInfoDto> {
-
+  getExportRequestInfo(innovationId: string, requestId: string): Observable<InnovationExportRequestItemType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests/:requestId').setPathParams({ innovationId, requestId });
-    return this.http.get<GetExportRequestInfoDto>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
-
+    return this.http.get<InnovationExportRequestItemType>(url.buildUrl()).pipe(take(1), map(response => response));
   }
 
   updateExportRequestStatus(innovationId: string, requestId: string, body: { status: keyof typeof InnovationExportRequestStatusEnum, rejectReason?: string }): Observable<{ id: string }> {
@@ -720,6 +680,12 @@ export class InnovationsService extends CoreService {
 
   }
 
+  getInnovationStatisticsInfo(innovationId: string, qParams: { statistics: InnovationStatisticsEnum[] }): Observable<InnovationStatisticsDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/statistics').setPathParams({ innovationId }).setQueryParams(qParams);
+    return this.http.get<InnovationStatisticsDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+  }
+
   // Sections
   getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[] }): Observable<InnovationSectionInfoDTO> {
 
@@ -727,12 +693,9 @@ export class InnovationsService extends CoreService {
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId')
-      .setPathParams({
-        innovationId,
-        sectionId
-      }).setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId').setPathParams({ innovationId, sectionId }).setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
+
 }

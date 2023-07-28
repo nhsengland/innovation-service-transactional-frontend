@@ -1,11 +1,11 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
 import { TranslateService } from '@ngx-translate/core';
+import { filter } from 'rxjs/operators';
 
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { CookiesService } from '@modules/core/services/cookies.service';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 import { locale as enLanguage } from './config/translations/en';
 
@@ -34,7 +34,7 @@ export class AppComponent {
     if (isPlatformBrowser(this.platformId) && this.environmentStore.ENV.ENABLE_ANALYTICS && this.cookiesService.getConsentCookie().analytics) {
 
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-        gtag('config', 'G-4XB9VSJZ0G', {
+        gtag && gtag('config', 'G-4XB9VSJZ0G', {
           page_path: e.urlAfterRedirects
         });
       });

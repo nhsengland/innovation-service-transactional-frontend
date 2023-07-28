@@ -49,7 +49,7 @@
       <ng-container *ngIf="pageStep === 'REMOVE' && announcement && (announcement.isScheduled || announcement.isActive)">
         <div class="nhsuk-warning-callout">
           <h3 class="nhsuk-warning-callout__label">Important<span class="nhsuk-u-visually-hidden">:</span></h3>
-          <p *ngIf="announcement.isScheduled">This announcement is not active so is fairly safe to remote it.</p>
+          <p *ngIf="announcement.isScheduled">This announcement is not active so is fairly safe to remove it.</p>
           <p *ngIf="announcement.isActive">This announcement is currently active and could already had been seen by users.</p>
         </div>
         <button type="button" class="nhsuk-button" (click)="onDelete()">Remove announcement</button>

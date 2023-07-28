@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { InnovationsListDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
-import { InnovationsListFiltersType, InnovationsService } from '@modules/shared/services/innovations.service';
+
+import { InnovationsListDTO, InnovationsListFiltersType, StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-assessment-pages-dashboard',

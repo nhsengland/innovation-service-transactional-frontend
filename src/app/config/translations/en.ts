@@ -130,7 +130,8 @@ export const locale = {
           contextType: {
             INNOVATION: 'Documents',
             INNOVATION_SECTION: 'Innovation section',
-            INNOVATION_EVIDENCE: 'Innovation evidence'
+            INNOVATION_EVIDENCE: 'Innovation evidence',
+            INNOVATION_PROGRESS_UPDATE: 'Support summary'
           }
         },
         innovation: {
@@ -354,6 +355,7 @@ export const locale = {
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
             MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
+            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
@@ -371,6 +373,7 @@ export const locale = {
             INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
             INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
+            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.`},
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
             INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },
@@ -379,6 +382,7 @@ export const locale = {
             TRANSFER_PENDING: { title: `The owner of innovation {{ innovationName }} has deleted their account. Innovation awaiting new owner.` },
             TRANSFER_EXPIRED: { title: `The invitation to transfer your innovation ownership has expired. Manage your innovation.` },
             TRANSFER_REMINDER: { title: `The invitation to accept ownership of {{ innovationName }} is about to expire. Accept or decline now.` },
+            INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED: { title: 'An organisation has been suggested to support your innovation but will not able to view it until you update your data sharing preferences.' }
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },

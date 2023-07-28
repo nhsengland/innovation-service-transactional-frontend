@@ -21,10 +21,10 @@ import { InnovationExportRequestComponent } from './pages/innovation/export/expo
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
+import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
-import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 
 // Shared module pages.
 // // Account.
@@ -44,8 +44,8 @@ import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/i
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
-import { PageInnovationDocumentsNewditComponent } from '@modules/shared/pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentInfoComponent } from '@modules/shared/pages/innovation/documents/document-info.component';
+import { PageInnovationDocumentsNewditComponent } from '@modules/shared/pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentsListComponent } from '@modules/shared/pages/innovation/documents/documents-list.component';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageExportRecordInfoComponent } from '@modules/shared/pages/innovation/export/export-record-info.component';
@@ -55,9 +55,12 @@ import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages
 import { PageInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
-import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
-import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/innovation-support-status-list.component';
+import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
+import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
+import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
+import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-delete.component';
+import { PageInnovationSupportSummaryProgressUpdateComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -66,10 +69,10 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
@@ -78,7 +81,7 @@ const header: RoutesDataType['header'] = {
       { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
       { id: 'actions', label: 'Actions', url: '/accessor/actions' },
       { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-      { id: 'account', label: 'Your account', url: '/accessor/account' }
+      { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' }
     ],
     right: []
   },
@@ -341,8 +344,6 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Data Sharing and Support' },
-                // runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
-                // resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
@@ -355,9 +356,32 @@ const routes: Routes = [
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent },
                   {
                     path: ':supportId/request-update', pathMatch: 'full', component: InnovationSupportRequestUpdateStatusComponent,
-                    data: {
-                      layout: { type: 'full' }
-                    }
+                    data: { layout: { type: 'full' } }
+                  }
+                ]
+              },
+
+              {
+                path: 'support-summary',
+                data: { breadcrumb: 'Support summary' },
+                children: [
+                  {
+                    path: '', pathMatch: 'full', component: PageInnovationSupportSummaryListComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'progress-update-new', pathMatch: 'full', component: PageInnovationSupportSummaryProgressUpdateComponent,
+                    data: { layout: { type: 'full' } }
+                  },
+                  {
+                    path: ':supportSummaryHistoryId',
+                    children: [
+                      { path: '', pathMatch: 'full', redirectTo: '../support-summary' },
+                      {
+                        path: 'progress-update-delete-confirmation', pathMatch: 'full', component: PageInnovationSupportSummaryProgressUpdateDeleteComponent,
+                        data: {  breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
                   }
                 ]
               },
