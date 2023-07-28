@@ -111,7 +111,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           const [sectionIndex, unitId] = item.split(',');
 
           const unitIndex = this.sectionsList[parseInt(sectionIndex)].unitsList.findIndex(i => i.id === unitId);
-          if (unitIndex > -1) {
+          if (unitIndex > -1 && this.sectionsList[parseInt(sectionIndex)].unitsList[unitIndex].id !== unitId) {
             this.onOpenCloseUnit(parseInt(sectionIndex), unitIndex);
           } else {
             this.lsCache.delete(`${sectionIndex},${unitId}`); // Removes outdated entry.
