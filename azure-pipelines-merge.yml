@@ -1,6 +1,11 @@
 trigger:
-- develop
-- master
+  batch: true
+  tags:
+    include:
+      - '2.*'
+  branches:
+    include:
+      - develop
 
 pr: none
 
