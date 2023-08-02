@@ -6,6 +6,7 @@ export { InnovationService } from './innovation.service';
 
 // Enums-
 export {
+  InnovationCollaboratorStatusEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTransferStatusEnum,

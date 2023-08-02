@@ -30,9 +30,10 @@ export type InnovationsListFiltersType = {
     startDate?: DateISOType,
     endDate?: DateISOType
   }[],
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
+  fields?: ('assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
 }
-export type InnovationsListDTO = {
+
+export type InnovationsListInDTO = {
   count: number,
   data: {
     id: string,
@@ -46,8 +47,14 @@ export type InnovationsListDTO = {
     postCode: null | string,
     mainCategory: null | string,
     otherMainCategoryDescription: null | string,
-    isAssessmentOverdue?: boolean,
-    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string; }, reassessmentCount: number },
+    assessment?: null | {
+      id: string,
+      isExempted?: boolean,
+      createdAt: DateISOType,
+      finishedAt: null | DateISOType,
+      assignedTo: { name: string },
+      reassessmentCount: number
+    },
     statusUpdatedAt: null | DateISOType,
     supports?: {
       id: string,
@@ -65,6 +72,13 @@ export type InnovationsListDTO = {
     notifications?: number,
     statistics?: { messages: number, actions: number }
   }[]
+};
+export type InnovationsListDTO = {
+  count: number,
+  data: (
+    InnovationsListInDTO['data'][0]
+    & { overdueStatus: null | string, daysFromSubmittedAtToToday: null | number }
+  )[]
 };
 
 export type InnovationInfoDTO = {

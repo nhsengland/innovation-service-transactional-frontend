@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
+import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
+import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { ActivatedRoute, Params } from '@angular/router';
-import { DatesHelper } from '@app/base/helpers';
-import { DateISOType } from '@app/base/types';
-import { CustomValidators } from '@modules/shared/forms';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 enum FilterTypeEnum {
   CHECKBOX = 'CHECKBOX',
   DATERANGE = 'DATERANGE',
-}
+};
 
 type FilterKeysType = 'locations' | 'groupedStatuses' | 'submittedDate';
 
@@ -30,20 +29,17 @@ type DatasetType = {
     value: string,
     formControl?: string
   }[]
-}
+};
 
 type FiltersType = {
   key: FilterKeysType,
   title: string,
   showHideStatus: 'opened' | 'closed',
   type: FilterTypeEnum;
-  selected: {
-    label: string,
-    value: string;
-    formControl?: string
-  }[],
+  selected: { label: string, value: string; formControl?: string }[],
   active: boolean
-}
+};
+
 
 @Component({
   selector: 'app-assessment-pages-innovations-list',
@@ -51,10 +47,7 @@ type FiltersType = {
 })
 export class InnovationsListComponent extends CoreComponent implements OnInit {
 
-  innovationsList = new TableModel<
-    InnovationsListDTO['data'][0] & { submittedAtDaysDiff: number },
-    InnovationsListFiltersType
-  >({ pageSize: 20 });
+  innovationsList = new TableModel<InnovationsListDTO['data'][number], InnovationsListFiltersType>({ pageSize: 20 });
 
   form = new FormGroup({
     search: new FormControl('', { updateOn: 'change' }),
@@ -125,42 +118,41 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     this.subscriptions.push(
 
-      this.activatedRoute.queryParams
-        .subscribe(({ status }: Params) => {
+      this.activatedRoute.queryParams.subscribe(({ status }: Params) => {
 
-          this.setPageTitle('Innovations');
-          let preSelectedStatus: InnovationGroupedStatusEnum[] | undefined;
-          this.setDefaultFilters();
+        this.setPageTitle('Innovations');
+        let preSelectedStatus: undefined | InnovationGroupedStatusEnum[];
+        this.setDefaultFilters();
 
-          switch (status) {
-            case 'COMPLETED':
-              this.showOnlyCompleted = true;
-              this.setPageTitle('Assessment completed innovations');
-              this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
-              this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
-              break;
-            case 'NEEDS_ASSESSMENT':
-              this.form.get('assignedToMe')?.setValue(true);
-              preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
-              break;
-            case 'WAITING_NEEDS_ASSESSMENT':
-              preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
-              break;
-            default:
+        switch (status) {
+          case 'COMPLETED':
+            this.showOnlyCompleted = true;
+            this.setPageTitle('Assessment completed innovations');
+            this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
+            this.availableGroupedStatus = [InnovationGroupedStatusEnum.AWAITING_SUPPORT, InnovationGroupedStatusEnum.RECEIVING_SUPPORT, InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT];
+            break;
+          case 'NEEDS_ASSESSMENT':
+            this.form.get('assignedToMe')?.setValue(true);
+            preSelectedStatus = [InnovationGroupedStatusEnum.NEEDS_ASSESSMENT];
+            break;
+          case 'WAITING_NEEDS_ASSESSMENT':
+            preSelectedStatus = [InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT, InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT];
+            break;
+          default:
+        }
+
+        this.setDatasetGroupedStatuses();
+
+        if (preSelectedStatus) {
+          preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
+
+          const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
+          if (groupedStatusesFilter) {
+            groupedStatusesFilter.showHideStatus = 'opened';
           }
+        }
 
-          this.setDatasetGroupedStatuses();
-
-          if (preSelectedStatus) {
-            preSelectedStatus.forEach(status => (this.form.get('groupedStatuses') as FormArray).push(new FormControl(status)));
-
-            const groupedStatusesFilter: FiltersType | undefined = this.filters.find(f => f.key === 'groupedStatuses');
-            if (groupedStatusesFilter) {
-              groupedStatusesFilter.showHideStatus = 'opened';
-            }
-          }
-
-        }),
+      }),
 
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
 
@@ -184,8 +176,11 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       [InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT, 'There are no organisations supporting this innovation.']
     ]);
 
-    this.datasets.groupedStatuses = this.availableGroupedStatus
-      .map(groupedStatus => ({ label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`), value: groupedStatus, description: descriptions.get(groupedStatus) }));
+    this.datasets.groupedStatuses = this.availableGroupedStatus.map(groupedStatus => ({
+      label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`),
+      value: groupedStatus,
+      description: descriptions.get(groupedStatus)
+    }));
   }
 
   getInnovationsList(column?: string): void {
@@ -193,15 +188,12 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.setPageStatus('LOADING');
 
     this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] }).subscribe(response => {
-      this.innovationsList.setData(
-        response.data.map(innovation => ({
-          ...innovation,
-          submittedAtDaysDiff: this.getDateDifferenceInDays(innovation.submittedAt),
-        })
-        ),
-        response.count);
-      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
+      this.innovationsList.setData(response.data, response.count);
+
+      if (this.isRunningOnBrowser() && column) { this.innovationsList.setFocusOnSortedColumnHeader(column) };
+
       this.setPageStatus('READY');
+
     });
 
   }
@@ -226,12 +218,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
         for (const option of this.datasets[filter.key]) {
           const date = this.getDateByControlName(option.formControl!);
-
           if (date !== null) {
-            selected.push({
-              ...option,
-              value: date
-            })
+            selected.push({ ...option, value: date });
           }
         }
 
@@ -301,10 +289,6 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
 
-  }
-
-  getDateDifferenceInDays(date: DateISOType | null) {
-    return DatesHelper.dateDiff(date ?? '', new Date().toISOString());
   }
 
   // Daterange helpers

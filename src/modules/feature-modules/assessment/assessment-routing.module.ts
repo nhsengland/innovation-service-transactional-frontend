@@ -17,6 +17,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
+import { InnovationAssessmentExemptionInfoComponent } from './pages/innovation/assessment/exemption-info.component';
+import { InnovationAssessmentExemptionUpsertComponent } from './pages/innovation/assessment/exemption-upsert.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Innovations.
@@ -156,18 +158,21 @@ const routes: Routes = [
                       { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                       {
                         path: 'edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
-                        data: {
-                          data: { breadcrumb: null },
-                          layout: { type: 'full' }
-                        }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
-                        data: {
-                          breadcrumb: null,
-                          layout: { type: 'full' }
-                        }
-                      }]
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'exemption-info', pathMatch: 'full', component: InnovationAssessmentExemptionInfoComponent,
+                        data: { layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'exemption-upsert', pathMatch: 'full', component: InnovationAssessmentExemptionUpsertComponent,
+                        data: { layout: { type: 'full' } }
+                      }
+                    ]
                   }
                 ]
               },
