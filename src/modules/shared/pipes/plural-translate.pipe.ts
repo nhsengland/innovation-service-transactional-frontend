@@ -7,6 +7,7 @@ export class PluralTranslatePipe implements PipeTransform {
 
     switch (count) {
       case undefined:
+      case null:
       case 0:
         return `${translation}.none`;
       case 1:
