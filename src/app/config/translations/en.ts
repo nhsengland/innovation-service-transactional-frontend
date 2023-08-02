@@ -126,6 +126,20 @@ export const locale = {
             DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
           }
         },
+        assessment_exemptions: {
+          reasons: {
+            NO_RESPONSE: 'No response or inadequate response from innovator',
+            TECHNICAL_DIFFICULTIES: 'Technical difficulties contacting the innovator',
+            INCORRECT_DETAILS: 'Incorrect contact details',
+            SERVICE_UNAVAILABLE: 'NHS Innovation Service system failure with no available workaround',
+            CAPACITY: 'Capacity'
+          },
+          status: {
+            ALMOST_DUE: { label: 'Almost due', cssColorClass: 'nhsuk-tag--yellow' },
+            OVERDUE: { label: 'Overdue', cssColorClass: 'nhsuk-tag--red' },
+            EXEMPT: { label: 'Exempt', cssColorClass: 'nhsuk-tag--grey' }
+          }
+        },
         documents: {
           contextType: {
             INNOVATION: 'Documents',
@@ -373,7 +387,7 @@ export const locale = {
             INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
             INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
-            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.`},
+            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.` },
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
             INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },

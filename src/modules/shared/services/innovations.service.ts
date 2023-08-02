@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-
+import { DatesHelper } from '@app/base/helpers';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
@@ -13,7 +13,7 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, getInnovationCollaboratorsListDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationStatisticsDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, getInnovationCollaboratorsListDTO } from './innovations.dtos';
 import { InnovationStatisticsEnum } from './statistics.enum';
 
 
@@ -196,7 +196,7 @@ export class InnovationsService extends CoreService {
           qp.fields.push('statistics', 'assessment', 'supports');
           break;
         case UserRoleEnum.ASSESSMENT:
-          qp.fields.push('isAssessmentOverdue', 'assessment', 'supports')
+          qp.fields.push('assessment', 'supports')
           break;
         case UserRoleEnum.ACCESSOR:
         case UserRoleEnum.QUALIFYING_ACCESSOR:
@@ -212,26 +212,47 @@ export class InnovationsService extends CoreService {
     }
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
-    return this.http.get<InnovationsListDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(item => ({
-          ...item,
-          mainCategory: item.otherMainCategoryDescription || irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label || '',
-        }))
-      }))
+    return this.http.get<InnovationsListInDTO>(url.buildUrl()).pipe(take(1), map(response => ({
+      count: response.count,
+      data: response.data.map(item => {
 
-    );
+        let daysFromSubmittedAtToToday: null | number = null;
+        let overdueStatus: null | 'ALMOST_DUE' | 'OVERDUE' | 'EXEMPT' = null;
+
+        // These 2 keys, are only relevant for assessments.
+        if (this.stores.authentication.isAssessmentType() && item.submittedAt) {
+
+          // Only show overdues if assessment / reassessment is pending!
+          if ([InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationStatusEnum.NEEDS_ASSESSMENT].includes(item.status)) {
+
+            daysFromSubmittedAtToToday = DatesHelper.dateDiff(item.submittedAt, new Date().toISOString());
+
+            if (item.assessment?.isExempted) { overdueStatus = 'EXEMPT'; }
+            else {
+              if (daysFromSubmittedAtToToday >= 10 && daysFromSubmittedAtToToday < 15) { overdueStatus = 'ALMOST_DUE'; }
+              else if (daysFromSubmittedAtToToday >= 15) { overdueStatus = 'OVERDUE'; }
+            }
+
+          }
+
+        }
+
+        return {
+          ...item,
+          mainCategory: item.otherMainCategoryDescription ?? irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label ?? '',
+          daysFromSubmittedAtToToday,
+          overdueStatus
+        };
+
+      })
+    })));
 
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
 
     const requestUserType = this.stores.authentication.getUserType();
-    const qp: { fields: ('assessment' | 'supports')[] } = {
-      fields: []
-    };
+    const qp: { fields: ('assessment' | 'supports')[] } = { fields: [] };
 
     switch (requestUserType) {
       case UserRoleEnum.INNOVATOR:

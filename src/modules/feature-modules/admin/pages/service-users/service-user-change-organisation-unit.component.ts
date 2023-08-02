@@ -71,27 +71,28 @@ export class PageServiceUserChangeOrganisationUnitComponent extends CoreComponen
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.usersService.getUserFullInfo(this.user.id),
       this.usersValidationRulesService.getOrganisationUnitRules(this.user.id)
-    ]).subscribe(([organisations, userInfo, organisationUnitRules]) => {
+    ]).subscribe({
+      next: ([organisations, userInfo, organisationUnitRules]) => {
 
-      this.rulesList = organisationUnitRules;
-      this.user.role = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role).toLowerCase();
-      this.titleHint = `${this.user.name} (${this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role)})`;
-      this.isRulesValid = this.rulesList.some(rule => rule.valid === false);
-      this.oldOrganisationUnits = userInfo.userOrganisations[0].units;
-      this.organisation = organisations.filter(org => (userInfo.userOrganisations[0].id === org.id))[0];
-      this.wizard.steps[0].parameters[0].items = this.organisation.organisationUnits.map(unit => ({ value: unit.acronym, label: unit.name }));
-      this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
-      this.setPageTitle('Change organisation unit', { hint: this.titleHint })
-      this.setPageStatus('READY');
-    },
-      () => {
+        this.rulesList = organisationUnitRules;
+        this.user.role = this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role).toLowerCase();
+        this.titleHint = `${this.user.name} (${this.stores.authentication.getRoleDescription(userInfo.userOrganisations[0].role)})`;
+        this.isRulesValid = this.rulesList.some(rule => rule.valid === false);
+        this.oldOrganisationUnits = userInfo.userOrganisations[0].units;
+        this.organisation = organisations.filter(org => (userInfo.userOrganisations[0].id === org.id))[0];
+        this.wizard.steps[0].parameters[0].items = this.organisation.organisationUnits.map(unit => ({ value: unit.acronym, label: unit.name }));
+        this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ organisation: this.organisation, assignedUnit: this.oldOrganisationUnits })).runRules();
+
+        this.setPageTitle('Change organisation unit', { hint: this.titleHint })
+        this.setPageStatus('READY');
+
+      },
+      error: () => {
         this.setPageStatus('ERROR');
-        this.alert = {
-          type: 'ERROR',
-          title: 'Unable to fetch the necessary information',
-          message: 'Please try again or contact us for further help'
-        };
-      });
+        this.alert = { type: 'ERROR', title: 'Unable to fetch the necessary information', message: 'Please try again or contact us for further help' };
+      }
+    });
+
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {

@@ -3,7 +3,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'pluralTranslate' })
 export class PluralTranslatePipe implements PipeTransform {
 
-  transform(translation: string, count: undefined | number): string {
+  transform(translation: string, count?: null | number): string {
 
     switch (count) {
       case undefined:
