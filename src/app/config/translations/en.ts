@@ -574,7 +574,8 @@ export const locale = {
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',
-          wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF'
+          wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF',
+          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us'
         }
       }
 
