@@ -36,7 +36,7 @@
 
       </dl>
 
-      <ng-container *ngIf="isLeadershipTeamType">
+      <ng-container *ngIf="isSupportTeamType">
         <button *ngIf="innovationRequest?.status === 'PENDING'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('CANCELLED')">
           Cancel request
         </button>

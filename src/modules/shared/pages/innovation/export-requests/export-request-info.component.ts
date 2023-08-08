@@ -21,7 +21,7 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
 
   // Flags
   isInnovatorType: boolean;
-  isLeadershipTeamType: boolean;
+  isSupportTeamType: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,7 +36,7 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
     this.requestId = this.activatedRoute.snapshot.params.requestId;
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isLeadershipTeamType = this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
+    this.isSupportTeamType = this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
 
   }
 
@@ -61,7 +61,7 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
       next: () => {
 
         if (status === InnovationExportRequestStatusEnum.APPROVED) {
-          this.setRedirectAlertSuccess(`You've approved this request`, { message: 'You have given your permission to share or use your innovation record outside of the service for the reason given by the organisation. The organisation will be notified.', width: '2.thirds' });
+          this.setRedirectAlertSuccess(`You've approved this request`, { message: 'You have given your permission for this organisation to use the data in your innovation record, for the reason they outlined in the request. The organisation will be notified.', width: '2.thirds' });
         }
 
         if (status === InnovationExportRequestStatusEnum.CANCELLED) {
@@ -85,7 +85,7 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
   }
 
   requestAgainRedirect() {
-    if (!this.isLeadershipTeamType) { return; }
+    if (!this.isSupportTeamType) { return; }
     this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/new`, { requestAgainId: this.innovationRequest?.id });
   }
 

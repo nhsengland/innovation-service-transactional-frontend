@@ -25,7 +25,6 @@ export class PageInnovationExportRequestNewComponent extends CoreComponent imple
 
   constructor(
     private activatedRoute: ActivatedRoute,
-
     private innovationsService: InnovationsService
   ) {
 

@@ -42,7 +42,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
   pageInformation: { title: string, leadText: string, historyTableTitle: string };
 
   isInnovatorType: boolean;
-  isLeadershipTeamType: boolean;
+  isSupportTeamType: boolean;
   isHistoryLoading = false;
 
   constructor(
@@ -56,7 +56,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record`;
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isLeadershipTeamType = this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
+    this.isSupportTeamType = this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
 
     switch (this.stores.authentication.getUserType()) {
       case UserRoleEnum.ASSESSMENT:
