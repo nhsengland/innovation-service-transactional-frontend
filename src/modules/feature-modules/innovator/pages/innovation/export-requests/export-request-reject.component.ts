@@ -4,22 +4,26 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { InnovationExportRequestItemType, InnovationsService } from '@modules/shared/services/innovations.service';
+
 import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
+
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationExportRequestInfoDTO } from '@modules/shared/services/innovations.dtos';
+
 
 @Component({
   selector: 'app-innovator-pages-innovation-export-request-reject',
   templateUrl: './export-request-reject.component.html'
 })
-export class InnovationExportRequestRejectComponent extends CoreComponent implements OnInit {
+export class PageInnovationExportRequestRejectComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   requestId: string;
 
-  request?: InnovationExportRequestItemType;
+  innovationRequest?: InnovationExportRequestInfoDTO;
 
   form = new FormGroup({
-    rejectReason: new FormControl<string>('', CustomValidators.required('A reason is required')),
+    rejectReason: new FormControl<string>('', CustomValidators.required('A reason is required'))
   }, { updateOn: 'blur' });
 
   constructor(
@@ -32,16 +36,16 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.requestId = this.activatedRoute.snapshot.params.requestId;
 
+    this.setPageTitle('Reject request', { showPage: false });
+    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/record/export-requests/${this.requestId}`);
+
   }
 
   ngOnInit(): void {
 
-    this.setPageTitle('Reject request', { size: 'l', width: '2.thirds' });
-    this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/export/${this.requestId}`);
-
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
 
-      this.request = response;
+      this.innovationRequest = response;
 
       this.setPageStatus('READY');
 
@@ -63,8 +67,8 @@ export class InnovationExportRequestRejectComponent extends CoreComponent implem
 
     this.innovationsService.updateExportRequestStatus(this.innovationId, this.requestId, body).subscribe(() => {
 
-      this.setRedirectAlertSuccess('You\'ve rejected the export request', { message: `${this.request?.createdBy.name} at ${ this.request?.organisation.organisationUnit.name } will be notified.` });
-      this.redirectTo(`/innovator/innovations/${this.innovationId}/export/list`);
+      this.setRedirectAlertSuccess('You have rejected this request', { message: 'You have not given your permission for this organisation to use the data in your innovation record, for the reason they outlined in the request. The organisation will be notified.', width: '2.thirds' });
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/record/export-requests/list`);
 
     });
 

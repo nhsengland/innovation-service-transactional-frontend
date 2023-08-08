@@ -23,23 +23,40 @@ export const locale = {
     // Single words, ALWAYS lowercased.
     dictionary: {
       action: {
-        _: 'action',
         none: 'action',
         singular: 'action',
         plural: 'actions'
       },
-      yes: 'yes',
       day: {
-        _: 'day',
         none: 'day',
         singular: 'day',
         plural: 'days'
-      }
+      },
+      request: {
+        none: 'request',
+        singular: 'request',
+        plural: 'requests'
+      },
+      yes: 'yes'
+    },
+
+    // Labels.
+    labels: {
+
     },
 
     // Forms (fields) related translations.
     forms: {
       address: { label: 'Address' }
+    },
+
+    messages: {
+      errors: {},
+      informations: {
+        fetching_information: 'Please wait while we fetch information from server.'
+      },
+      notifications: {},
+      warnings: {}
     },
 
     // Specific translations to specific features (modules).
@@ -100,19 +117,6 @@ export const locale = {
         }
       }
 
-    },
-
-    labels: {
-
-    },
-
-    messages: {
-      errors: {},
-      informations: {
-        fetching_information: 'Please wait while we fetch information from server.'
-      },
-      notifications: {},
-      warnings: {}
     },
 
     // Shared translations to serve external / catalog modules.
@@ -497,21 +501,10 @@ export const locale = {
             },
           },
           export_request_status: {
-            PENDING: {
-              name: 'Pending'
-            },
-            APPROVED: {
-              name: 'Approved'
-            },
-            REJECTED: {
-              name: 'Rejected'
-            },
-            CANCELLED: {
-              name: 'Cancelled'
-            },
-            EXPIRED: {
-              name: 'Expired'
-            }
+            PENDING: { name: 'Pending' },
+            APPROVED: { name: 'Approved' },
+            REJECTED: { name: 'Rejected' },
+            CANCELLED: { name: 'Cancelled' }
           }
         },
         user: {

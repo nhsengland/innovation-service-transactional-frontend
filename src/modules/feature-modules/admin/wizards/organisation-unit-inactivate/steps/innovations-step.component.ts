@@ -11,7 +11,7 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { OrganisationUnitStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { InnovationsStepInputType, InnovationsStepOutputType } from './innovations-step.types';
@@ -76,7 +76,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
 
     forkJoin([
       this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
-      this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, { statistics: [InnovationStatisticsEnum.INNOVATIONS_PER_UNIT] }),
+      this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, { statistics: [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT] }),
     ]).subscribe({
       next: ([innovations, statistics]) => {
         this.innovationsList.setData(innovations.data, innovations.count);
@@ -84,11 +84,11 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
         this.innovationStatistics = [
           {
             status: InnovationSupportStatusEnum.ENGAGING,
-            count: statistics[InnovationStatisticsEnum.INNOVATIONS_PER_UNIT].ENGAGING
+            count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].ENGAGING
           },
           {
             status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
-            count: statistics[InnovationStatisticsEnum.INNOVATIONS_PER_UNIT].FURTHER_INFO_REQUIRED
+            count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].FURTHER_INFO_REQUIRED
           }
         ];
         if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);

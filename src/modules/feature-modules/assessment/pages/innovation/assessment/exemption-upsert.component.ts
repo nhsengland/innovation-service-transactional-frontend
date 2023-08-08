@@ -43,7 +43,7 @@ export class InnovationAssessmentExemptionUpsertComponent extends CoreComponent 
     this.formParameters = [
       new FormEngineParameterModel({
         id: 'reason', dataType: 'radio-group', label: 'Select the reason this innovation should be exempt from key performance indicator (KPI) reports',
-        validations: { isRequired: [true, 'Reason is required'] },
+        validations: { isRequired: [true, 'Select a reason'] },
         items: [
           {
             value: 'NO_RESPONSE',

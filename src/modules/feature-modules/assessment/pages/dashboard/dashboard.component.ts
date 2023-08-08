@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
+import { StatisticsCardType } from '@app/base/types';
 
-import { InnovationsListDTO, InnovationsListFiltersType, StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -22,18 +22,17 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     firstTimeSignInAt: string | null;
   };
 
-  cardsList: StatisticsCard[] = [];
+  cardsList: StatisticsCardType[] = [];
 
   latestInnovations: TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     private statisticsService: StatisticsService,
     private innovationsService: InnovationsService
   ) {
 
     super();
-    this.setPageTitle('Home', {hint: `Hello ${this.stores.authentication.getUserInfo().displayName}`});
+    this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
 
 
     this.user = {
@@ -48,8 +47,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    const startTime = new Date();
 
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
@@ -68,22 +65,24 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);
 
-      this.cardsList = [{
-        title: 'Innovations awaiting assessment',
-        label: `Innovations awaiting needs assessment`,
-        link: `/assessment/innovations`,
-        queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' },
-        count: statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].count,
-        overdue: this.getFooter(statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].overdue)
-      }, {
-        title: 'Your innovations',
-        label: `Innovations in needs assessment being assessed by you`,
-        link: `/assessment/innovations`,
-        queryParams: { status: 'NEEDS_ASSESSMENT' },
-        count: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].count,
-        total: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].total,
-        overdue: this.getFooter(statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].overdue)
-      }]
+      this.cardsList = [
+        {
+          title: 'Innovations awaiting assessment',
+          label: `Innovations awaiting needs assessment`,
+          link: `/assessment/innovations`,
+          queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' },
+          count: statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].count,
+          overdue: this.getFooter(statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].overdue)
+        }, {
+          title: 'Your innovations',
+          label: `Innovations in needs assessment being assessed by you`,
+          link: `/assessment/innovations`,
+          queryParams: { status: 'NEEDS_ASSESSMENT' },
+          count: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].count,
+          total: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].total,
+          overdue: this.getFooter(statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].overdue)
+        }
+      ];
 
       this.setPageStatus('READY');
     })
@@ -92,12 +91,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   getFooter(counter: number): string {
     return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`
-  }
-
-  timeDifferInMinutes(startTime: Date, date: null | string ): number{
-    const endTime = new Date(date ?? '');
-    const timediffer = startTime.getTime() - endTime.getTime();
-    return Math.round(timediffer / 60000);
   }
 
 }

@@ -355,7 +355,7 @@ const routes: Routes = [
               },
               {
                 path: 'record',
-                data: { breadcrumb: 'Innovation Record' },
+                data: { breadcrumb: 'Innovation record' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationRecordComponent,

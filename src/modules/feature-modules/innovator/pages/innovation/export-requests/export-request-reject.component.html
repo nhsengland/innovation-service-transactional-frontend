@@ -1,0 +1,14 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <theme-form-textarea controlName="rejectReason" label="Reject request" description="Explain the reason for rejecting this request" [pageUniqueField]="true" lengthLimit="s"></theme-form-textarea>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Reject request</button>
+      </form>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError, concatMap, map } from 'rxjs/operators';
 
@@ -32,11 +31,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   innovationTransfers: GetInnovationTransfersDTO = [];
   inviteCollaborations: GetInnovationCollaboratorInvitesDTO[] = []
 
-
   constructor(
     private innovationsService: InnovationsService,
-    private innovatorService: InnovatorService,
-    private activatedRoute: ActivatedRoute
+    private innovatorService: InnovatorService
   ) {
 
     super();
@@ -92,8 +89,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       this.setPageStatus('READY');
 
     });
-
-    const startTime = new Date();
 
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
@@ -154,12 +149,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       description: this.buildDescriptionString(innovation),
       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
     }));
-  }
-
-  timeDifferInMinutes(startTime: Date, date: null | string ): number{
-    const endTime = new Date(date ?? '');
-    const timediffer = startTime.getTime() - endTime.getTime();
-    return Math.round(timediffer / 60000);
   }
 
 }
