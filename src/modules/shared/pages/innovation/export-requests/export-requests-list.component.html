@@ -1,0 +1,109 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <p innerHTML="{{ pageInformation.leadText }}"></p>
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">View what the innovation record data can be used for, without requesting permission</span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>You can use the data for the purpose of:</p>
+          <ul>
+            <li>providing the health and social care system (or parts of it) in the UK, with information on health technologies, such as guidance, advice and policies</li>
+            <li>commissioning</li>
+            <li>supporting the development or adoption of health technologies</li>
+            <li>for medical or health technology procurement</li>
+            <li>continuous improvement of the NHS Innovation Service and support organisation processes</li>
+          </ul>
+          <p>For more information, read our <a href="{{ CONSTANTS.URLS.TOU }}" target="_blank" rel="noopener noreferrer">terms of use (opens in a new window)</a>.</p>
+        </div>
+      </details>
+
+      <a *ngIf="isSupportTeamType" routerLink="../new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-7">
+        Request permission
+      </a>
+
+      <ng-container *ngIf="isInnovatorType">
+        <h2>Pending requests</h2>
+        <p *ngIf="pendingTable.getTotalRowsNumber() === 0">No new requests.</p>
+        <table *ngIf="pendingTable.getTotalRowsNumber() > 0" class="nhsuk-table-responsive nhsuk-u-padding-bottom-7">
+          <caption class="nhsuk-u-visually-hidden">Pending requests</caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of pendingTable.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                {{ item.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of pendingTable.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel('requestedBy') }}</span>
+                <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
+                <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel('requestedOn') }}</span>
+                {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel('status') }}</span>
+                <span>{{ 'shared.catalog.innovation.export_request_status.' + item.status + '.name' | translate }}</span>
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ pendingTable.getColumnLabel('actions') }}</span>
+                <a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+
+      <h2>{{ pageInformation.historyTableTitle }}</h2>
+
+      <p *ngIf="historyTable.getTotalRowsNumber() === 0">No requests for this innovation.</p>
+
+      <div *ngIf="historyTable.getTotalRowsNumber() > 0">
+        <theme-spinner *ngIf="isHistoryLoading"></theme-spinner>
+        <table *ngIf="!isHistoryLoading" class="nhsuk-table-responsive">
+          <caption class="nhsuk-u-visually-hidden">{{ pageInformation.historyTableTitle }}</caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of historyTable.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                {{ item.label }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of historyTable.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel('requestedBy') }}</span>
+                <p class="nhsuk-u-margin-bottom-0">{{ item.createdBy.displayTeam }}</p>
+                <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0">by {{ item.createdBy.name }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel('requestedOn') }}</span>
+                {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel('status') }}</span>
+                <span>{{ 'shared.catalog.innovation.export_request_status.' + item.status + '.name' | translate }}</span>
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ historyTable.getColumnLabel('actions') }}</span>
+                <a routerLink="../{{ item.id }}" class="nhsuk-link nhsuk-link--no-visited-state">View details</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <theme-pagination [currentPage]="historyTable.page" [pageSize]="historyTable.pageSize" [totalRows]="historyTable.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

@@ -46,10 +46,14 @@ import { PageInnovationDocumentInfoComponent } from '@modules/shared/pages/innov
 import { PageInnovationDocumentsNewditComponent } from '@modules/shared/pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentsListComponent } from '@modules/shared/pages/innovation/documents/documents-list.component';
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
+import { PageInnovationExportRequestInfoComponent } from '@modules/shared/pages/innovation/export-requests/export-request-info.component';
+import { PageInnovationExportRequestNewComponent } from '@modules/shared/pages/innovation/export-requests/export-request-new.component';
+import { PageInnovationExportRequestsListComponent } from '@modules/shared/pages/innovation/export-requests/export-requests-list.component';
 import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
+import { PageInnovationRecordDownloadComponent } from '@modules/shared/pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
@@ -179,11 +183,21 @@ const routes: Routes = [
 
               {
                 path: 'record',
-                data: { breadcrumb: 'Innovation Record' },
+                data: { breadcrumb: 'Innovation record' },
                 children: [
+                  { path: '', pathMatch: 'full', component: PageInnovationRecordComponent, data: { breadcrumb: null } },
+
+                  { path: 'download', pathMatch: 'full', component: PageInnovationRecordDownloadComponent, data: { layout: { type: 'full' } } },
+
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationRecordComponent,
-                    data: { breadcrumb: null }
+                    path: 'export-requests',
+                    data: { breadcrumb: 'Permission requests', layout: { type: 'full' } },
+                    children: [
+                      { path: '', pathMatch: 'full', redirectTo: 'list' },
+                      { path: 'list', pathMatch: 'full', component: PageInnovationExportRequestsListComponent, data: { breadcrumb: null } },
+                      { path: 'new', pathMatch: 'full', component: PageInnovationExportRequestNewComponent },
+                      { path: ':requestId', pathMatch: 'full', component: PageInnovationExportRequestInfoComponent }
+                    ]
                   },
 
                   {

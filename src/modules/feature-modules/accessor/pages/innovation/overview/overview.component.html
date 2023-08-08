@@ -8,7 +8,7 @@
   </div>
 
   <!--TODO: Banner for owner with account delete (new US)-->
- 
+
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-2">{{ innovationSupport.organisationUnit }}</p>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
   <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-3">
@@ -32,40 +32,34 @@
       <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
     </div>
   </dl>
-  
+
   <h2 class="nhsuk-heading-m">Innovator details</h2>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
       <ng-container *ngIf="item.value !== ''">
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>        
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
       </ng-container>
     </div>
   </dl>
 
   <details class="nhsuk-details" *ngIf="innovationCollaborators.length > 0">
     <summary class="nhsuk-details__summary">
-      <span class="nhsuk-details__summary-text">
-        Collaborators
-      </span>
+      <span class="nhsuk-details__summary-text">Collaborators</span>
     </summary>
     <div class="nhsuk-details__text">
       <table class="nhsuk-table">
         <thead role="rowgroup" class="nhsuk-table__head">
           <tr role="row">
-            <th role="columnheader" class="" scope="col">
-              Name
-            </th>
-            <th role="columnheader" class="" scope="col">
-              Role
-            </th>
+            <th role="columnheader" class="" scope="col">Name</th>
+            <th role="columnheader" class="" scope="col">Role</th>
           </tr>
         </thead>
         <tbody class="nhsuk-table__body">
           <ng-container *ngFor="let collaborator of innovationCollaborators">
             <tr role="row" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">{{collaborator.name ?? ''}}</td>
-              <td class="nhsuk-table__cell ">{{collaborator.role ?? ''}}</td>
+              <td class="nhsuk-table__cell">{{ collaborator.name }}</td>
+              <td class="nhsuk-table__cell ">{{ collaborator.role }}</td>
             </tr>
           </ng-container>
         </tbody>

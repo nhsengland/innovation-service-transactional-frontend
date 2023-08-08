@@ -34,12 +34,14 @@ import { PageInnovationDocumentsNewditComponent } from './pages/innovation/docum
 import { PageInnovationDocumentInfoComponent } from './pages/innovation/documents/document-info.component';
 import { PageInnovationDocumentsListComponent } from './pages/innovation/documents/documents-list.component';
 import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
-import { PageExportRecordInfoComponent } from './pages/innovation/export/export-record-info.component';
-import { PageExportRecordListComponent } from './pages/innovation/export/export-record-list.component';
+import { PageInnovationExportRequestInfoComponent } from './pages/innovation/export-requests/export-request-info.component';
+import { PageInnovationExportRequestNewComponent } from './pages/innovation/export-requests/export-request-new.component';
+import { PageInnovationExportRequestsListComponent } from './pages/innovation/export-requests/export-requests-list.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
+import { PageInnovationRecordDownloadComponent } from './pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
@@ -123,12 +125,14 @@ import { UsersService } from './services/users.service';
     PageInnovationDocumentInfoComponent,
     PageInnovationDocumentsListComponent,
     PageEveryoneWorkingOnInnovationComponent,
-    PageExportRecordInfoComponent,
-    PageExportRecordListComponent,
+    PageInnovationExportRequestInfoComponent,
+    PageInnovationExportRequestNewComponent,
+    PageInnovationExportRequestsListComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
+    PageInnovationRecordDownloadComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,

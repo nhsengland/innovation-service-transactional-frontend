@@ -124,7 +124,7 @@
   <ng-container *ngIf="exemption">
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Innovation exempt from KPI reports</dt>
-      <dd class="nhsuk-summary-list__value">Reason: {{ 'shared.catalog.assessment_exemptions.reasons.' + exemption.reason | translate }}</dd>
+      <dd class="nhsuk-summary-list__value">{{ 'shared.catalog.assessment_exemptions.reasons.' + exemption.reason | translate }}</dd>
       <dd class="nhsuk-summary-list__actions">
         <a routerLink="../assessments/{{ innovation?.assessment?.id }}/exemption-info">View details<span class="nhsuk-u-visually-hidden"> regarding exemption</span></a>
       </dd>

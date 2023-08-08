@@ -55,6 +55,10 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   isSortable(): boolean {
     return this.orderBy !== '' ? true : false;
+    // TODO: Maybe the validation below is more accurate.
+    // A table is sortable when any column can be sorted, and not when an API call request information sorted by something (ex: the first request).
+    // Didn't applied yet for concerns around performance.
+    // return Object.entries(this.visibleColumns).some(([_key, value]) => value.orderable);
   }
 
   setFocusOnSortedColumnHeader(column: string): void {

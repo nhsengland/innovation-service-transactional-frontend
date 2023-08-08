@@ -5,13 +5,14 @@ import { forkJoin, of, switchMap } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
+import { StatisticsCardType } from '@app/base/types';
 
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationInfoDTO, StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { InnovationCollaboratorsListDTO, InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { AssessmentExemptionTypeDTO, AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
@@ -28,13 +29,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
-  cardsList: StatisticsCard[] = [];
-  innovationCollaborators: { id: string, status: InnovationCollaboratorStatusEnum, name?: string, email?: string, role?: string, }[] = [];
+  cardsList: StatisticsCardType[] = [];
+  innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
-    private assessmentService: AssessmentService
+    private assessmentService: AssessmentService,
+    private statisticsService: StatisticsService
   ) {
 
     super();
@@ -46,7 +48,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER] };
 
-    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe((innovationCollaborators) => {
+    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
       this.innovationCollaborators = innovationCollaborators.data;
     });
 
@@ -77,7 +79,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         return forkJoin([
           this.innovation.assessment ? this.assessmentService.getInnovationExemption(this.innovationId, this.innovation.assessment.id) : of(null),
-          this.innovationsService.getInnovationStatisticsInfo(this.innovationId, qp)
+          this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp)
         ]);
 
       })).subscribe(([assessmentExemption, statistics]) => {
