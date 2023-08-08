@@ -45,6 +45,12 @@ export class PageInnovationExportRequestRejectComponent extends CoreComponent im
 
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
 
+      // This should not happen, but if it does, silently redirect to export requests list.
+      if (response.status !== InnovationExportRequestStatusEnum.PENDING) {
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/record/export-requests/list`);
+        return;
+      }
+
       this.innovationRequest = response;
 
       this.setPageStatus('READY');
