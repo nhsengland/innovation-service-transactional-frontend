@@ -2,7 +2,23 @@ import { UserRoleEnum } from "@app/base/enums";
 import { DateISOType } from "@app/base/types";
 import { UserRoleType } from "./roles.dto";
 
-export type UserSearchDTO = {  
+export type UserInfo = {
+  id: string;
+  email: string;
+  name: string;
+  phone?: string;
+  isActive: boolean;
+  roles: {
+    id: string;
+    role: UserRoleEnum;
+    isActive: boolean;
+    organisation?: { id: string; name: string; acronym: string | null };
+    organisationUnit?: { id: string; name: string; acronym: string };
+    displayTeam?: string;
+  }[];
+}
+
+export type UserSearchDTO = {
   id: string;
   email: string;
   name: string;
@@ -14,7 +30,7 @@ export type UserSearchDTO = {
     name: string;
     acronym: string;
     role: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR;
-    units?: { 
+    units?: {
       id: string,
       name: string,
       acronym: string,
@@ -29,10 +45,10 @@ export type UsersListDTO = {
   data: {
     id: string,
     isActive: boolean,
-    name: string,  
+    name: string,
     role: UserRoleEnum
     roleDescription: string,
-    lockedAt: null | string,  
+    lockedAt: null | string,
     organisationUnitUserId: string,
     email: string,
   }[];

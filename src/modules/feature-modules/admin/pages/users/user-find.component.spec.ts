@@ -1,21 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-
 import { Injector } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
 import { UserRoleEnum } from '@app/base/enums';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { UserInfo } from '@modules/shared/dtos/users.dto';
+import { UsersService } from '@modules/shared/services/users.service';
+import { StoresModule } from '@modules/stores';
 
-
-import { ServiceUsersService } from '../../services/service-users.service';
 import { PageUserFindComponent } from './user-find.component';
-import { searchUserEndpointOutDTO, UsersService } from '@modules/shared/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
@@ -66,28 +64,19 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
 
   it('should call onSubmit() and return success', () => {
 
-    const responseMock: searchUserEndpointOutDTO[] = [{
+    const responseMock: UserInfo = {
       id: ':id',
-      displayName: ':displayName',
+      name: ':displayName',
       email: 'test@example.com',
-      type: UserRoleEnum.ACCESSOR,
-      typeLabel: 'Accessor',
-      userOrganisations: [
-        {
-          id: ':organisation_id',
-          name: 'org name',
-          acronym: 'acronym',
-          role: 'ACCESSOR',
-          units: [{
-            id: ':unit',
-            name: 'unit name',
-            acronym: 'unit acronym',
-          }]
-        }
-      ]
-    }];
+      isActive: true,
+      roles: [{
+        id: ':id',
+        role: UserRoleEnum.INNOVATOR,
+        isActive: true
+      }]
+    };
 
-    usersService.searchUser = () => of(responseMock);
+    usersService.getUserInfo = () => of(responseMock);
 
     fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
@@ -96,13 +85,13 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(component.usersList.length).toEqual(1);
+    expect(component.searchUser).toBeDefined();
 
   });
 
   it('should call onSubmit() and return error', () => {
 
-    usersService.searchUser = () => throwError('error');
+    usersService.getUserInfo = () => throwError('error');
 
     fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;

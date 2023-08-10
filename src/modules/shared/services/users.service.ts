@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
+import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { CoreService } from '@app/base';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
-import { GetUsersRequestDTO, UserSearchDTO, UsersListDTO } from '../dtos/users.dto';
 import { APIQueryParamsType } from '@app/base/types';
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import { GetUsersRequestDTO, UserInfo, UsersListDTO } from '../dtos/users.dto';
 
 export type UserListFiltersType = {
   onlyActive: boolean,
@@ -96,36 +96,14 @@ export class UsersService extends CoreService {
     );
   }
 
-  searchUser(email: string): Observable<searchUserEndpointOutDTO[]> {
-    const roles =  [UserRoleEnum.ADMIN, UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.INNOVATOR, UserRoleEnum.QUALIFYING_ACCESSOR]
+  /**
+   * Get's the information of a user through is email or id
+   * @param idOrEmail user id or email
+   */
+  getUserInfo(idOrEmail: string): Observable<UserInfo> {
 
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams({ email, userTypes: roles });
-    return this.http.get<UserSearchDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => ({
-        id: item.id,
-        email: item.email,
-        displayName: item.name,
-        type: item.roles[0].role, // TODO: this is a hack while we are supporting only one role in the admin
-        typeLabel: this.stores.authentication.getRoleDescription(item.roles[0].role),
-        ...(item.lockedAt && { lockedAt: item.lockedAt }),
-        ...(item.organisations && {
-          userOrganisations: item.organisations.map(org => ({
-            id: org.id,
-            name: org.name,
-            acronym: org.acronym,
-            role: org.role,
-            ...(org.units && {
-              units: org.units.map(unit => ({
-                id: unit.id,
-                name: unit.name,
-                acronym: unit.acronym
-              }))
-            })
-          }))
-        })
-      })))
-    );
+    const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${idOrEmail}`);
+    return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
 
   }
 

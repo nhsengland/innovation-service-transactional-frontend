@@ -27,10 +27,10 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
-import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
+import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
+import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
@@ -58,8 +58,8 @@ import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
-import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
@@ -71,13 +71,13 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
+import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
+import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
-import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
@@ -207,7 +207,7 @@ const routes: Routes = [
             path: ':userId',
             resolve: { user: ServiceUserDataResolver },
             data: {
-              breadcrumb: (data: { user: { id: string, displayName: string } }) => `${data.user.displayName}`
+              breadcrumb: (data: { user: { id: string, name: string } }) => `${data.user.name}`
             },
             children: [
               {

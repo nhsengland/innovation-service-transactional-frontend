@@ -55,6 +55,12 @@ export class PageOrganisationUnitUserEditComponent extends CoreComponent impleme
   }
 
 
+  /**
+   * IMPORTANT:
+   * While developing the new add_role feature change this call with a two calls (e.g, forkJoin):
+   * 1. users.service function getUserInfo - To get the user information
+   * 2. Admin validations (To be implemented) - To see if the user can be added or not (error from validations from the current implementation)
+   */
   checkUserEmail(): void {
 
     this.user = null;

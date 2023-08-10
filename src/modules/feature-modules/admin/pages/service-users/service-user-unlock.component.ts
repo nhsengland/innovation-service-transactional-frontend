@@ -33,11 +33,11 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
-    this.usersService.getUserFullInfo(this.user.id).subscribe({
+    this.usersService.getUserInfo(this.user.id).subscribe({
 
       next: response => {
 
-        if (!response.lockedAt) {
+        if (response.isActive) {
           this.redirectTo(`/admin/users/${this.user.id}`);
           return;
         }
