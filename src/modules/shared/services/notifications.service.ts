@@ -97,7 +97,14 @@ export class NotificationsService extends CoreService {
 
           switch (item.contextType) {
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
-              link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
+                  link = null;
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
+                  break;
+              }
               break;
             case NotificationContextTypeEnum.INNOVATION:
               switch (item.contextDetail) {
