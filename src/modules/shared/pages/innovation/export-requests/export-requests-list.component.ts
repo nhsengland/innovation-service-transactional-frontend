@@ -7,8 +7,8 @@ import { TableModel } from '@app/base/models';
 
 import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationExportRequestsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -19,6 +19,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
 
   innovationId: string;
   baseUrl: string;
+  touUrl: string;
 
   pendingTable = new TableModel<InnovationExportRequestsListDTO['data'][number]>({
     pageSize: 100,
@@ -58,21 +59,29 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isSupportTeamType = this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
 
+    this.touUrl = this.isInnovatorType ? this.CONSTANTS.URLS.TOU_INNOVATOR : this.CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION;
+
     switch (this.stores.authentication.getUserType()) {
       case UserRoleEnum.ASSESSMENT:
+        this.pageInformation = {
+          title: 'Request permission to use the data in this innovation record',
+          leadText: `If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
+          historyTableTitle: 'Requests made by needs assessment team',
+        };
+        break;
       case UserRoleEnum.QUALIFYING_ACCESSOR:
       case UserRoleEnum.ACCESSOR:
         this.pageInformation = {
           title: 'Request permission to use the data in this innovation record',
-          leadText: `If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our <a href="${ this.CONSTANTS.URLS.TOU }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
-          historyTableTitle: 'Requests made by your organisation'
+          leadText: `If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
+          historyTableTitle: 'Requests made by your organisation',
         };
         break;
       case UserRoleEnum.INNOVATOR:
         this.pageInformation = {
           title: 'Requests to use the data in your innovation record',
-          leadText: `If an organisation wants to use the data in your innovation record for anything outside of our <a href="${ this.CONSTANTS.URLS.TOU }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, they need to request your permission.`,
-          historyTableTitle: 'Previous requests'
+          leadText: `If an organisation wants to use the data in your innovation record for anything outside of our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, they need to request your permission.`,
+          historyTableTitle: 'Previous requests',
         };
         break;
       default:

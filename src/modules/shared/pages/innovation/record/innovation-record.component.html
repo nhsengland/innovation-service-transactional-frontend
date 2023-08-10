@@ -53,29 +53,26 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="innovation.owner?.isActive === true">
 
-        <ng-container *ngIf="showSupportingTeamsShareRequestSection">
-          <a routerLink="./download" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">Download innovation record (PDF)</a>
-          <div class="nhsuk-inset-text">
-            <span class="nhsuk-u-visually-hidden">Information: </span>
-            <p class="nhsuk-body-s">
-              If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our
-              <a href="{{ CONSTANTS.URLS.TOU }}" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.
-            </p>
-            <a routerLink="./export-requests/list" class="nhsuk-link nhsuk-link--no-visited-state">Request permission and view requests</a>
-          </div>
-        </ng-container>
+      <ng-container *ngIf="showSupportingTeamsShareRequestSection">
+        <a routerLink="./download" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">Download innovation record (PDF)</a>
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <p class="nhsuk-body-s">
+            If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our
+            <a href="{{ CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.
+          </p>
+          <a routerLink="./export-requests/list" class="nhsuk-link nhsuk-link--no-visited-state">Request permission and view requests</a>
+        </div>
+      </ng-container>
 
-        <ng-container *ngIf="showInnovatorShareRequestSection">
-          <div class="nhsuk-inset-text">
-            <span class="nhsuk-u-visually-hidden">Information: </span>
-            <a routerLink="./export-requests" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Requests to use your innovation record data for anything outside our terms of use</a>
-            <p *ngIf="!pendingExportRequests" class="nhsuk-body-s">No new requests.</p>
-            <p *ngIf="pendingExportRequests" class="nhsuk-body-s">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
-          </div>
-        </ng-container>
-
+      <ng-container *ngIf="showInnovatorShareRequestSection">
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <a routerLink="./export-requests" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Requests to use your innovation record data for anything outside our terms of use</a>
+          <p *ngIf="!pendingExportRequests" class="nhsuk-body-s">No new requests.</p>
+          <p *ngIf="pendingExportRequests" class="nhsuk-body-s">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
+        </div>
       </ng-container>
 
 

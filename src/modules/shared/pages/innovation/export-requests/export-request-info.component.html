@@ -6,7 +6,7 @@
       <dl class="nhsuk-summary-list">
 
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Request Status</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Request status</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             {{ 'shared.catalog.innovation.export_request_status.' + innovationRequest?.status + '.name' | translate }}
             <span *ngIf="innovationRequest?.status !== 'PENDING'" class="font-color-secondary nhsuk-body-s">
@@ -30,7 +30,7 @@
         </div>
 
         <div class="nhsuk-summary-list__row" *ngIf="innovationRequest?.status === 'REJECTED'">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Rejection reason</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Reason for rejection</dt>
           <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ innovationRequest?.rejectReason }}</dd>
         </div>
 
