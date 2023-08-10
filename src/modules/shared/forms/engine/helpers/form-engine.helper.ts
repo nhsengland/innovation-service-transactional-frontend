@@ -184,6 +184,7 @@ export class FormEngineHelper {
     if (error.maxFileSize) { return { message: 'shared.forms_module.validations.max_file_size', params: {} } }
     if (error.emptyFile) { return { message: 'shared.forms_module.validations.empty_file', params: {} } }
     if (error.wrongFileFormat) { return { message: 'shared.forms_module.validations.wrong_file_format', params: {} } }
+    if (error.uploadError) { return { message: 'shared.forms_module.validations.upload_error', params: {} }}
     if (error.customError) { return { message: error.message, params: {} }; }
     return { message: '', params: {} };
 
