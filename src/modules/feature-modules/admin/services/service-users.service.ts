@@ -6,6 +6,7 @@ import { CoreService } from '@app/base';
 import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
+import { UserInfo } from '@modules/shared/dtos/users.dto';
 
 
 export type changeUserTypeDTO = {
@@ -158,4 +159,14 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
+  /**
+   * Get's the information of a user through is email or id
+   * @param idOrEmail user id or email
+  */
+  getUserInfo(idOrEmail: string): Observable<UserInfo> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${idOrEmail}`);
+    return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
+
+  }
 }

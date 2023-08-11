@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
-import { UsersService } from '@modules/shared/services/users.service';
 
 import { ServiceUsersService } from '../../services/service-users.service';
 
@@ -18,8 +17,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
-    private usersService: UsersService
+    private usersService: ServiceUsersService
   ) {
 
     super();
@@ -57,7 +55,7 @@ export class PageServiceUserUnlockComponent extends CoreComponent implements OnI
 
   onSubmit(): void {
 
-    this.serviceUsersService.unlockUser(this.user.id).subscribe({
+    this.usersService.unlockUser(this.user.id).subscribe({
       next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'unlockSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');

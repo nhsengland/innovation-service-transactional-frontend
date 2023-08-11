@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { UsersService } from '@modules/shared/services/users.service';
+import { ServiceUsersService } from '../services/service-users.service';
 
 type ServiceUserData = Pick<UserInfo, 'id' | 'name'>;
 
 @Injectable()
 export class ServiceUserDataResolver implements Resolve<ServiceUserData> {
 
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: ServiceUsersService) { }
 
 
   resolve(route: ActivatedRouteSnapshot): Observable<ServiceUserData> {

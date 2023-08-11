@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 import { LinkType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { UsersService } from '@modules/shared/services/users.service';
+import { ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: ServiceUsersService
   ) {
 
     super();
