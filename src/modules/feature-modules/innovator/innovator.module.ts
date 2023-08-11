@@ -25,7 +25,7 @@ import { InnovationNewComponent } from './pages/innovation-new/innovation-new.co
 import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
-import { InnovationExportRequestRejectComponent } from './pages/innovation/export/export-request-reject.component';
+import { PageInnovationExportRequestRejectComponent } from './pages/innovation/export-requests/export-request-reject.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
@@ -79,7 +79,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationActionCompleteConfirmationComponent,
     InnovationActionTrackerDeclineComponent,
     InnovationDataSharingChangeComponent,
-    InnovationExportRequestRejectComponent,
+    PageInnovationExportRequestRejectComponent,
     PageInnovationHowToProceedComponent,
     PageInnovationManageCollaboratorsInfoComponent,
     PageInnovationManageCollaboratorsOverviewComponent,

@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { INNOVATION_STATUS, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
+import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
+
+import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -17,69 +21,63 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 })
 export class PageInnovationRecordComponent extends CoreComponent implements OnInit {
 
-  innovation: ContextInnovationType;
-  baseUrl = '';
-  documentUrl = '';
-  pdfDocumentUrl = '';
-
-
   innovationId: string;
-  innovationName: string;
-  innovationStatus: keyof typeof INNOVATION_STATUS = '';
+
+  baseUrl: string;
+  documentUrl: string;
+  pdfDocumentUrl: string;
+
+  innovation: ContextInnovationType;
+  pendingExportRequests = 0;
   innovationSections: SectionsSummaryModel = [];
-  innovationExport: ContextInnovationType['export'];
+  sections: { progressBar: ProgressBarType[], submitted: number, draft: number, notStarted: number } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
 
-  sections: {
-    progressBar: ProgressBarType[];
-    submitted: number;
-    draft: number;
-    notStarted: number;
-  } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
-
-  innovationSectionStatus = this.stores.innovation.INNOVATION_SECTION_STATUS;
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
-
-
-  // Flags
+  // Flags.
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
   isInnovationInCreatedStatus: boolean;
-  isInAssessmentStatus: boolean;
+  showSupportingTeamsShareRequestSection: boolean;
+  showInnovatorShareRequestSection: boolean;
+
   allSectionsSubmitted = false;
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private statisticsService: StatisticsService
   ) {
 
     super();
     this.setPageTitle('Innovation record');
 
-    this.innovation = this.stores.context.getInnovation();
-    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.activatedRoute.snapshot.params.innovationId}/record/sections`;
-    this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
-    this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.activatedRoute.snapshot.params.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovationName = this.innovation.name;
-    this.innovationStatus = this.innovation.status;
-    this.innovationExport = this.innovation.export;
 
-    // Flags
+    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections`;
+    this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
+    this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+
+    this.innovation = this.stores.context.getInnovation();
+
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInAssessmentStatus = this.stores.innovation.isAssessmentStatus(this.innovation.status);
+    this.showSupportingTeamsShareRequestSection = this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
+    this.showInnovatorShareRequestSection = this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;
 
   }
 
 
   ngOnInit(): void {
 
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe({
-      next: response => {
+    forkJoin([
+      this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
+      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] }),
+    ]).subscribe({
+      next: ([response, statistics]) => {
 
         this.innovationSections = response;
+        this.pendingExportRequests = statistics.PENDING_EXPORT_REQUESTS_COUNTER.count;
 
         this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
           return [...acc, ...item.sections.map(s => {
@@ -96,10 +94,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
         this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
-
-        if (!this.innovationName) { // This means that an API error occurred.
-          this.setAlertError('There is a problem', { message: 'Unable to fetch full innovation record information' })
-        }
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 

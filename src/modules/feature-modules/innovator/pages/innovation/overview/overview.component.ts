@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { DateISOType } from '@app/base/types';
-
-import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { DateISOType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 
 @Component({
@@ -32,7 +32,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     lastEndSupportAt: null | DateISOType
   } = null;
 
-  cardsList: StatisticsCard[] = [];
+  cardsList: StatisticsCardType[] = [];
 
   isSubmitted = {
     submittedAllSections: false,
@@ -44,7 +44,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private statisticsService: StatisticsService
   ) {
 
     super();
@@ -59,7 +60,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
-      this.innovationsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER] }),
+      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER] }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 

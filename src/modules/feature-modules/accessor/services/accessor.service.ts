@@ -47,16 +47,6 @@ export class AccessorService extends CoreService {
 
   }
 
-  createExportRequest(innovationId: string, body: { requestReason: string }) {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/export-requests').setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
-
-  }
-
   requestSupportStatusChage(innovationId: string, supportId: string, body: { status: InnovationSupportStatusEnum, message: string }): Observable<{success: boolean}> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId/change-request').setPathParams({ innovationId, supportId });
     return this.http.post<{ success: boolean }>(url.buildUrl(), body).pipe(take(1), map(response => response));

@@ -1,13 +1,9 @@
-import { Params } from '@angular/router';
-
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-
-import { InnovationStatisticsEnum } from './statistics.enum';
+import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 // Innovations.
@@ -30,9 +26,10 @@ export type InnovationsListFiltersType = {
     startDate?: DateISOType,
     endDate?: DateISOType
   }[],
-  fields?: ('isAssessmentOverdue' | 'assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
+  fields?: ('assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[]
 }
-export type InnovationsListDTO = {
+
+export type InnovationsListInDTO = {
   count: number,
   data: {
     id: string,
@@ -46,8 +43,14 @@ export type InnovationsListDTO = {
     postCode: null | string,
     mainCategory: null | string,
     otherMainCategoryDescription: null | string,
-    isAssessmentOverdue?: boolean,
-    assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { name: string; }, reassessmentCount: number },
+    assessment?: null | {
+      id: string,
+      isExempted?: boolean,
+      createdAt: DateISOType,
+      finishedAt: null | DateISOType,
+      assignedTo: { name: string },
+      reassessmentCount: number
+    },
     statusUpdatedAt: null | DateISOType,
     supports?: {
       id: string,
@@ -65,6 +68,13 @@ export type InnovationsListDTO = {
     notifications?: number,
     statistics?: { messages: number, actions: number }
   }[]
+};
+export type InnovationsListDTO = {
+  count: number,
+  data: (
+    InnovationsListInDTO['data'][0]
+    & { overdueStatus: null | string, daysFromSubmittedAtToToday: null | number }
+  )[]
 };
 
 export type InnovationInfoDTO = {
@@ -92,7 +102,6 @@ export type InnovationInfoDTO = {
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
-  export: { canUserExport: boolean, pendingRequestsCount: number },
   assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
   statusUpdatedAt: null | DateISOType,
@@ -104,14 +113,14 @@ export type InnovationSharesListDTO = { organisation: { id: string, name: string
 
 
 // Innovation collaborators.
-export type getInnovationCollaboratorsListDTO = {
+export type InnovationCollaboratorsListDTO = {
   count: number,
   data: {
     id: string,
+    status: InnovationCollaboratorStatusEnum,
     name?: string,
     role?: string,
-    email?: string,
-    status: InnovationCollaboratorStatusEnum
+    email?: string
   }[]
 };
 
@@ -306,29 +315,23 @@ export type InnovationActivityLogListDTO = {
     })[]
 };
 
-export type InnovationStatisticsDTO = {
-  [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER]: { count: number; total: number; lastSubmittedSection: null | string; lastSubmittedAt: null | DateISOType; },
-  [InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]: { count: number; lastSubmittedAt: null | DateISOType; },
-}
-
-export type BaseStatisticsCard = {
-  title: string,
-  label: string,
-  link: string
-  queryParams?: Params;
-};
-
-export type StatisticsCard = {
+// Export requests.
+export type InnovationExportRequestsListDTO = {
   count: number,
-  total?: number,
-  lastMessage?: string;
-  overdue?: string,
-  date?: DateISOType | null,
-  emptyMessageTitle?: string,
-  emptyMessage?: string,
-} & BaseStatisticsCard;
+  data: {
+    id: string,
+    status: InnovationExportRequestStatusEnum,
+    createdAt: DateISOType,
+    createdBy: { name: string, displayRole?: string, displayTeam?: string }
+  }[]
+};
+export type InnovationExportRequestInfoDTO = {
+  id: string,
+  status: InnovationExportRequestStatusEnum,
+  requestReason: string,
+  rejectReason?: string,
+  createdAt: DateISOType,
+  createdBy: { id: string, name: string, displayRole?: string, displayTeam?: string, organisationUnit?: { id: string } },
+  updatedAt: DateISOType,
+  updatedBy: { name: string }
+};

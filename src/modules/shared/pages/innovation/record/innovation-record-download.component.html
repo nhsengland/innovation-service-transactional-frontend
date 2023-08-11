@@ -1,0 +1,36 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <details class="nhsuk-details">
+        <summary class="nhsuk-details__summary">
+          <span class="nhsuk-details__summary-text">View what the innovation record data can be used for, without requesting permission</span>
+        </summary>
+        <div class="nhsuk-details__text">
+          <p>You can use the data for the purpose of:</p>
+          <ul>
+            <li>providing the health and social care system (or parts of it) in the UK with information on health technologies, such as guidance, advice and policies</li>
+            <li>commissioning</li>
+            <li>supporting the development or adoption of health technologies</li>
+            <li>for medical or health technology procurement</li>
+            <li>continuous improvement of the NHS Innovation Service and support organisation processes</li>
+          </ul>
+          <p>For more information, read our <a href="{{ CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer">terms of use (opens in a new window)</a>.</p>
+        </div>
+      </details>
+
+      <div class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+        <p>If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our
+          <a href="{{ CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.
+        </p>
+        <a routerLink="../export-requests/list">Request permission and view requests</a>
+      </div>
+
+      <a [href]="pdfDocumentUrl" class="nhsuk-button">Download record</a>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

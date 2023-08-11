@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { StatisticsCard } from '@modules/shared/services/innovations.dtos';
+import { StatisticsCardType } from '@app/base/types';
+
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
+
 @Component({
   selector: 'app-accessor-pages-dashboard',
   templateUrl: './dashboard.component.html'
@@ -19,13 +22,12 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     firstTimeSignInAt: null | string;
   };
 
-  cardsList: StatisticsCard[] = [];
+  cardsList: StatisticsCardType[] = [];
 
   isQualifyingAccessorRole = false;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService,
+    private statisticsService: StatisticsService
   ) {
 
     super();
@@ -42,39 +44,39 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const startTime = new Date();
-
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER] };
 
-    this.statisticsService.getUserStatisticsInfo(qp)
-    .subscribe({
-      next: (statistics) => {
-        this.cardsList = [{
-          title: 'Your innovations',
-          label: `Engaging innovations are assigned to you`,
-          link: '/accessor/innovations',
-          queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
-          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
-          total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
-          lastMessage: `Last submitted:`,
-          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No engaging innovations assigned to you'
-        }, {
-          title: 'Actions to review',
-          label: `Actions requested by you were responded to by innovators`,
-          link: `/accessor/actions`,
-          queryParams: { openActions: true },
-          count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
-          total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
-          lastMessage: `Last submitted:`,
-          date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No actions opened by you yet',
-          emptyMessage: 'Start requesting actions from innovators'
-        }]
+    this.statisticsService.getUserStatisticsInfo(qp).subscribe({
+      next: statistics => {
+
+        this.cardsList = [
+          {
+            title: 'Your innovations',
+            label: `Engaging innovations are assigned to you`,
+            link: '/accessor/innovations',
+            queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
+            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
+            lastMessage: `Last submitted:`,
+            date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No engaging innovations assigned to you'
+          }, {
+            title: 'Actions to review',
+            label: `Actions requested by you were responded to by innovators`,
+            link: `/accessor/actions`,
+            queryParams: { openActions: true },
+            count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
+            lastMessage: `Last submitted:`,
+            date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No actions opened by you yet',
+            emptyMessage: 'Start requesting actions from innovators'
+          }
+        ];
 
         if (this.isQualifyingAccessorRole) {
           this.cardsList.unshift({
@@ -86,18 +88,14 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             lastMessage: `Last submitted:`,
             date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
             emptyMessageTitle: 'No innovations awaiting status assignment'
-          })
+          });
         }
 
         this.setPageStatus('READY');
-      }
-    })
-  }
 
-  timeDifferInMinutes(startTime: Date, date: null | string ): number{
-    const endTime = new Date(date ?? '');
-    const timediffer = startTime.getTime() - endTime.getTime();
-    return Math.round(timediffer / 60000);
+      }
+    });
+
   }
 
 }

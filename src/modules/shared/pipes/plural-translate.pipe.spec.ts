@@ -5,9 +5,12 @@ describe('Shared/Pipes/PluralTranslatePipe', () => {
   const pipe = new PluralTranslatePipe();
 
   it('should return NONE key with undefined number', () => {
-    expect(pipe.transform('translation.key', undefined)).toBe('translation.key.none');
+    expect(pipe.transform('translation.key')).toBe('translation.key.none');
   });
 
+  it('should return NONE key with null number', () => {
+    expect(pipe.transform('translation.key', null)).toBe('translation.key.none');
+  });
 
   it('should return NONE key with 0 items', () => {
     expect(pipe.transform('translation.key', 0)).toBe('translation.key.none');

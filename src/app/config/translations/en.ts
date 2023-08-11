@@ -23,23 +23,40 @@ export const locale = {
     // Single words, ALWAYS lowercased.
     dictionary: {
       action: {
-        _: 'action',
         none: 'action',
         singular: 'action',
         plural: 'actions'
       },
-      yes: 'yes',
       day: {
-        _: 'day',
         none: 'day',
         singular: 'day',
         plural: 'days'
-      }
+      },
+      request: {
+        none: 'request',
+        singular: 'request',
+        plural: 'requests'
+      },
+      yes: 'yes'
+    },
+
+    // Labels.
+    labels: {
+
     },
 
     // Forms (fields) related translations.
     forms: {
       address: { label: 'Address' }
+    },
+
+    messages: {
+      errors: {},
+      informations: {
+        fetching_information: 'Please wait while we fetch information from server.'
+      },
+      notifications: {},
+      warnings: {}
     },
 
     // Specific translations to specific features (modules).
@@ -102,19 +119,6 @@ export const locale = {
 
     },
 
-    labels: {
-
-    },
-
-    messages: {
-      errors: {},
-      informations: {
-        fetching_information: 'Please wait while we fetch information from server.'
-      },
-      notifications: {},
-      warnings: {}
-    },
-
     // Shared translations to serve external / catalog modules.
     shared: {
 
@@ -124,6 +128,20 @@ export const locale = {
             SCHEDULED: { name: 'Scheduled', cssColorClass: 'nhsuk-tag--yellow' },
             ACTIVE: { name: 'Active', cssColorClass: 'nhsuk-tag--green' },
             DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
+          }
+        },
+        assessment_exemptions: {
+          reasons: {
+            NO_RESPONSE: 'No response or inadequate response from innovator',
+            TECHNICAL_DIFFICULTIES: 'Technical difficulties contacting the innovator',
+            INCORRECT_DETAILS: 'Incorrect contact details',
+            SERVICE_UNAVAILABLE: 'NHS Innovation Service system failure with no available workaround',
+            CAPACITY: 'Capacity'
+          },
+          status: {
+            ALMOST_DUE: { label: 'Almost due', cssColorClass: 'nhsuk-tag--yellow' },
+            OVERDUE: { label: 'Overdue', cssColorClass: 'nhsuk-tag--red' },
+            EXEMPT: { label: 'Exempt', cssColorClass: 'nhsuk-tag--grey' }
           }
         },
         documents: {
@@ -373,7 +391,7 @@ export const locale = {
             INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
             INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
             SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
-            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.`},
+            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.` },
             INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
             INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
             INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },
@@ -483,21 +501,10 @@ export const locale = {
             },
           },
           export_request_status: {
-            PENDING: {
-              name: 'Pending'
-            },
-            APPROVED: {
-              name: 'Approved'
-            },
-            REJECTED: {
-              name: 'Rejected'
-            },
-            CANCELLED: {
-              name: 'Cancelled'
-            },
-            EXPIRED: {
-              name: 'Expired'
-            }
+            PENDING: { name: 'Pending' },
+            APPROVED: { name: 'Approved' },
+            REJECTED: { name: 'Rejected' },
+            CANCELLED: { name: 'Cancelled' }
           }
         },
         user: {
@@ -560,7 +567,8 @@ export const locale = {
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',
-          wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF'
+          wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF',
+          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us'
         }
       }
 

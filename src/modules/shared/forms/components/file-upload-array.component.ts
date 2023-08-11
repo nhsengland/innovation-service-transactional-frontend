@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormArray, FormControl, FormGroup } from '@angular/forms';
 import { NgxDropzoneChangeEvent } from 'ngx-dropzone';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { LoggerService, Severity } from '@modules/core/services/logger.service';
@@ -119,11 +119,7 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
 
     return this.http.post<FileUploadType>(this.fileConfig?.httpUploadUrl || '', formdata).pipe(
       take(1),
-      map(response => response),
-      catchError((error) => {
-        this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
-        return of({ id: '', name: '', size: 0, extension: '', url: '' });
-      })
+      map(response => response)
     );
   }
 
@@ -193,7 +189,12 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
 
           },
           error: error => {
+            // TODO: This isn't removing from the dropbox area, if we start using this component that should be reviewed
+            this.hasError = true;
+            this.hasUploadError = true;
+            this.error = FormEngineHelper.getValidationMessage({ uploadError: 'true' })
             this.isLoadingFile = false;
+            this.cdr.detectChanges();
             this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
           }
         });

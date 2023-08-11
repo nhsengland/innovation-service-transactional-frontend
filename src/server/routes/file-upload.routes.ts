@@ -1,8 +1,8 @@
 import axios, { Method } from 'axios';
 import * as express from 'express';
+import { Router } from 'express';
 import * as multer from 'multer';
 import { extname } from 'path';
-import { Router } from 'express';
 
 import { UrlModel } from '@app/base/models';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
@@ -121,7 +121,12 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
           authenticatedUser: (req.session as any).oid,
         }
       })
-      res.status(500).send();
+
+      if(error instanceof axios.AxiosError && error.isAxiosError && error.response) {
+        res.status(error.response.status).send(error.response.data);
+      } else {
+        res.status(500).send();
+      }
     }
 
   })();

@@ -18,6 +18,8 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationAssessmentEditComponent } from './pages/innovation/assessment/assessment-edit.component';
 import { InnovationAssessmentNewComponent } from './pages/innovation/assessment/assessment-new.component';
+import { InnovationAssessmentExemptionInfoComponent } from './pages/innovation/assessment/exemption-info.component';
+import { InnovationAssessmentExemptionUpsertComponent } from './pages/innovation/assessment/exemption-upsert.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 // // Innovations.
@@ -43,6 +45,8 @@ import { AssessmentService } from './services/assessment.service';
     // // Innovation.
     InnovationAssessmentEditComponent,
     InnovationAssessmentNewComponent,
+    InnovationAssessmentExemptionInfoComponent,
+    InnovationAssessmentExemptionUpsertComponent,
     InnovationOverviewComponent,
     InnovationChangeAssessorComponent,
     // // Innovations.
