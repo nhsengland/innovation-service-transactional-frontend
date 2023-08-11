@@ -1,4 +1,3 @@
-import { getUserMinimalInfoDTO } from './../../../../admin/services/service-users.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';

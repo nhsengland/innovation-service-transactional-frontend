@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
 import { ServiceUsersService } from '../../services/service-users.service';
 import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
-import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -16,7 +14,7 @@ import { UsersService } from '@modules/shared/services/users.service';
 })
 export class PageServiceUserLockComponent extends CoreComponent implements OnInit {
 
-  user: { id: string, name: string, role: null | string };
+  user: { id: string, name: string };
 
   pageStep: 'RULES' | 'LOCK_USER' = 'RULES';
 
@@ -26,7 +24,6 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
   constructor(
     private activatedRoute: ActivatedRoute,
     private serviceUsersService: ServiceUsersService,
-    private usersService: UsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -35,7 +32,6 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
     this.user = {
       id: this.activatedRoute.snapshot.params.userId,
       name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName,
-      role: null
     };
 
     this.setPageTitle('Lock user', { hint: this.user.name });
@@ -45,14 +41,11 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
   ngOnInit(): void {
 
-    forkJoin([
-      this.usersService.getUserFullInfo(this.user.id),
-      this.usersValidationRulesService.getLockUserRules(this.user.id)
-    ]).subscribe({
-      next: ([userInfo, response]) => {
+
+      this.usersValidationRulesService.getLockUserRules(this.user.id).subscribe({
+      next: (response) => {
 
         this.rulesList = response.validations;
-        this.user.role = this.stores.authentication.getRoleDescription(userInfo.type);
 
         if (this.rulesList.length === 0) { this.pageStep = 'LOCK_USER'; }
         else { this.pageStep = 'RULES'; }

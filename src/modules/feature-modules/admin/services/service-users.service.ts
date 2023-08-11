@@ -1,18 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
-
-
-export type getUserMinimalInfoDTO = {
-  id: string;
-  displayName: string;
-};
-
+import { UserInfo } from '@modules/shared/dtos/users.dto';
 
 
 export type changeUserTypeDTO = {
@@ -58,13 +52,6 @@ export class ServiceUsersService extends CoreService {
 
   constructor() { super(); }
 
-
-  getUserMinimalInfo(userId: string): Observable<getUserMinimalInfoDTO> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'minimal' });
-    return this.http.get<getUserMinimalInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
 
   lockUser(userId: string): Observable<{ id: string }> {
 
@@ -172,4 +159,14 @@ export class ServiceUsersService extends CoreService {
     );
   }
 
+  /**
+   * Get's the information of a user through is email or id
+   * @param idOrEmail user id or email
+  */
+  getUserInfo(idOrEmail: string): Observable<UserInfo> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${idOrEmail}`);
+    return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
+
+  }
 }
