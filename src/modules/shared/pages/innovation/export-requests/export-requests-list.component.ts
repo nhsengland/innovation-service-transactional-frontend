@@ -65,7 +65,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
       case UserRoleEnum.ASSESSMENT:
         this.pageInformation = {
           title: 'Request permission to use the data in this innovation record',
-          leadText: `If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
+          leadText: `If you want to use the innovation record for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
           historyTableTitle: 'Requests made by needs assessment team',
         };
         break;
@@ -73,7 +73,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
       case UserRoleEnum.ACCESSOR:
         this.pageInformation = {
           title: 'Request permission to use the data in this innovation record',
-          leadText: `If you want to share this innovation record with anyone outside of the service or use it for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
+          leadText: `If you want to use the innovation record for any other purpose not listed in our <a href="${ this.touUrl }" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.`,
           historyTableTitle: 'Requests made by your organisation',
         };
         break;
