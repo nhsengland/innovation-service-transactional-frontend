@@ -145,7 +145,7 @@ function wizardWithLocationRuntimeRules(steps: WizardStepType[], data: StepPaylo
     steps.push(new FormEngineModel({
       parameters: [{
         id: 'section', dataType: 'radio-group', label: stepsLabels.l2.label,
-        description: `If you want to upload evidence of impact of benefits, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
+        description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
         validations: { isRequired: [true, 'Choose one option'] },
         items: innovationSectionsItems.map(item => ({
           ...item
