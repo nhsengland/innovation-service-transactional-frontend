@@ -53,7 +53,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
         this.setAlertSuccess('User unlocked successfully');
         break;
       case 'userCreationSuccess':
-        this.setAlertSuccess('User created successfully');
+        this.setAlertSuccess('A new user has been added to the service');
         break;
       case 'roleChangeSuccess':
         this.setAlertSuccess('User role changed successfully');
