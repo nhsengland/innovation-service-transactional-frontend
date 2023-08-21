@@ -15,10 +15,6 @@ import { ServiceUsersService } from '../../services/service-users.service';
 })
 export class PageUserFindComponent extends CoreComponent implements OnInit {
 
-  titleActions: LinkType[] = [
-    { type: 'button', label: 'New user', url: '/admin/users/new' }
-  ];
-
   formSubmitted = false;
   form = new FormGroup({
     email: new UntypedFormControl('')
@@ -32,7 +28,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
   ) {
 
     super();
-    this.setPageTitle('Find a user', { actions: this.titleActions });
+    this.setPageTitle('Find or add a user');
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'adminDeletedSuccess':

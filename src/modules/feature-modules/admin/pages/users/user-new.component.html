@@ -1,51 +1,80 @@
-<div class="nhsuk-width-container app-width-container">
+<theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="!wizard.isFirstStep()" class="nhsuk-back-link">
-    <a href="javascript:;" class="nhsuk-back-link__link" (click)="onSubmitStep('previous')">
-      <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M8.5 12c0-.3.1-.5.3-.7l5-5c.4-.4 1-.4 1.4 0s.4 1 0 1.4L10.9 12l4.3 4.3c.4.4.4 1 0 1.4s-1 .4-1.4 0l-5-5c-.2-.2-.3-.4-.3-.7z"></path>
-      </svg>
-      Go back
-    </a>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <ng-container *ngIf="!user && wizard.isQuestionStep()">
+        <theme-form-engine formId="newUserForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <button type="submit" form="newUserForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
+      </ng-container>
+
+      <ng-container *ngIf="!user && wizard.isSummaryStep()">
+
+        <dl class="nhsuk-summary-list">
+          <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a href="javascript:;" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+            </dd>
+          </div>
+        </dl>
+
+        <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitWizard()">{{ submitButton.label }}</button>
+
+        <div>
+          <a routerLink="/admin/users">Cancel</a>
+        </div>
+
+      </ng-container>
+
+      <ng-container *ngIf="user">
+
+        <p>Go to user details if you want to update their information or add their role.</p>
+
+        <dl class="nhsuk-summary-list">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Name</dt>
+            <dd class="nhsuk-summary-list__value">{{ user.name }}</dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Email</dt>
+            <dd class="nhsuk-summary-list__value">{{ user.email }}</dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">{{ user.roles.length > 1 ? 'Roles' : 'Role' }}</dt>
+            <dd class="nhsuk-summary-list__value">
+              <ul class="nhsuk-list">
+                <ng-container *ngFor="let role of user.roles; let i = index">
+                  <li *ngIf="role.isActive">
+
+                    {{ user.rolesDescription[i] }}
+
+                    <ng-container *ngIf="role.role === 'ASSESSMENT' && role.displayTeam">
+                      ({{ role.displayTeam }})
+                    </ng-container>
+
+                    <ng-container *ngIf="role.role === 'QUALIFYING_ACCESSOR' || role.role === 'ACCESSOR'">
+                      ({{ role.organisationUnit?.name }})
+                    </ng-container>
+
+                  </li>
+               </ng-container>
+
+              </ul>
+            </dd>
+          </div>
+        </dl>
+
+        <button routerLink="/admin/users/{{ user.id }}" class="nhsuk-button">Go to user details</button>
+
+        <div>
+          <a routerLink="/admin/users">Cancel</a>
+        </div>
+
+      </ng-container>
+
+    </div>
   </div>
 
-  <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-  <ng-container *ngIf="pageStatus === 'READY'">
-
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
-
-        <ng-container *ngIf="wizard.isQuestionStep()">
-          <theme-form-engine #stepForm formId="ftsForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-          <button type="submit" form="ftsForm" class="nhsuk-button" (click)="onSubmitStep('next')" [disabled]="stepForm.isFormPending()"> {{ stepForm.isFormPending() ? 'Verifying...' : 'Continue' }} </button>
-        </ng-container>
-
-        <ng-container *ngIf="wizard.isSummaryStep()">
-
-          <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-            <p> {{ alert.message }} </p>
-          </theme-alert>
-
-          <h1 class="nhsuk-heading-l"> Check your answers </h1>
-
-          <dl class="nhsuk-summary-list">
-            <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
-              <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-              <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-              <dd class="nhsuk-summary-list__actions">
-                <a href="javascript:;" (click)="wizard.gotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-              </dd>
-            </div>
-          </dl>
-
-          <button type="button" (click)="onSubmitWizard()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3"> Create User </button>
-
-        </ng-container>
-
-      </div>
-    </div>
-
-  </ng-container>
-
-</div>
+</theme-content-wrapper>

@@ -65,7 +65,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
 
     activatedRoute.snapshot.queryParams = { alert: 'userCreationSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'User created successfully', setFocus: true };
+    const expected: AlertType = { type: 'SUCCESS', title: 'A new user has been added to the service', setFocus: true };
 
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
