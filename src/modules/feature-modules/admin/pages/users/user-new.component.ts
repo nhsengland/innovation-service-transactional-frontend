@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 
@@ -67,10 +68,15 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
       next: (response) => {
         this.user = {
           ...response,
-          rolesDescription: response.roles.map((r) => r.role).map(
-            (r) => this.stores.authentication.getRoleDescription(r)
-          ),
+          rolesDescription: response.roles.map(r => {
+            let roleDescription = this.stores.authentication.getRoleDescription(r.role);
+            if(r.displayTeam) {
+              roleDescription += ` (${r.displayTeam})`;
+            }
+            return roleDescription;
+          })
         };
+
         this.setPageTitle('This user already exists on the service', { size: 'l' });
         this.setPageStatus('READY');
       },

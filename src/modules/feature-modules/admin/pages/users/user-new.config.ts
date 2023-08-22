@@ -47,6 +47,7 @@ export const CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineMode
         id: 'email',
         dataType: 'text',
         label: `What is the new user's email?`,
+        description: 'Enter an email with a maximum of 100 characters.',
         validations: {
           isRequired: [true, 'Email is required'],
           validEmail: true,
@@ -59,7 +60,7 @@ export const CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineMode
         id: 'name',
         dataType: 'text',
         label: 'What is the name of the new user?',
-        description: 'Enter the first name and surname. This is how their name will appear on the service.',
+        description: 'Enter a name with a maximum of 100 characters.',
         validations: {
           isRequired: [true, 'Name is required'],
           maxLength: 100
@@ -172,8 +173,8 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
+    { label: 'Name', value: data.name, editStepNumber: 2  },
     { label: 'Email', value: data.email, editStepNumber: 1  },
-    { label: 'Name', value: data.name, editStepNumber: 2  }
   );
 
   if (data.role === UserRoleEnum.ADMIN || data.role === UserRoleEnum.ASSESSMENT) {

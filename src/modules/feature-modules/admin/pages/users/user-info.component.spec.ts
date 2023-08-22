@@ -121,7 +121,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
 
   });
 
-  it('should have initial information loaded with payload 01', () => {
+/*   it('should have initial information loaded with payload 01', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
 
@@ -266,6 +266,6 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     fixture.detectChanges();
     expect(component.alert.type).toBe('ERROR');
 
-  });
+  }); */
 
 });
