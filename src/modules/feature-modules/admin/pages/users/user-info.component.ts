@@ -74,13 +74,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           })
         };
 
-
-        if (this.user.roles[0]?.role === UserRoleEnum.ADMIN) {
-          this.action = { label: 'Delete user', url: `/admin/users/${response.id}/administration-users/delete` };
-        }
-        else {
-          this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
-        }
+        this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
 
         this.setPageTitle('User information');
         this.setPageStatus('READY');
