@@ -17,9 +17,11 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   user: (UserInfo & { rolesDescription: string[] }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [], };
 
-  userIsAdmin: boolean = false;
+  userIsAdminOrInnovator: boolean = false;
   userHasActiveRoles: boolean = false;
   userHasInactiveRoles: boolean = false;
+
+  action: { label: string, url: string } = { label: '', url: '' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -58,26 +60,27 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           ...response,
           rolesDescription: response.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
-            if (r.role === UserRoleEnum.ASSESSMENT && r.displayTeam) {
-              roleDescription = `${roleDescription} (${r.displayTeam})`;
-            }
-            if (r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR) {
-              roleDescription = `${roleDescription} (${r.organisationUnit?.name})`;
+            if(r.displayTeam) {
+              roleDescription += ` (${r.displayTeam})`;
             }
 
-            if(r.role === UserRoleEnum.ADMIN && r.isActive) {
-              this.userIsAdmin = true;
-            }
             if(r.isActive) {
               this.userHasActiveRoles = true;
-            }
-            if(!r.isActive) {
+            } else {
               this.userHasInactiveRoles = true;
             }
 
             return roleDescription;
           })
         };
+
+
+        if (this.user.roles[0]?.role === UserRoleEnum.ADMIN) {
+          this.action = { label: 'Delete user', url: `/admin/users/${response.id}/administration-users/delete` };
+        }
+        else {
+          this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
+        }
 
         this.setPageTitle('User information');
         this.setPageStatus('READY');

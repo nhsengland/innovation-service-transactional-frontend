@@ -70,11 +70,8 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           ...response,
           rolesDescription: response.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
-            if (r.role === UserRoleEnum.ASSESSMENT && r.displayTeam) {
-              roleDescription = `${roleDescription} (${r.displayTeam})`;
-            }
-            if (r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR) {
-              roleDescription = `${roleDescription} (${r.organisationUnit?.name})`;
+            if(r.displayTeam) {
+              roleDescription += ` (${r.displayTeam})`;
             }
             return roleDescription;
           })

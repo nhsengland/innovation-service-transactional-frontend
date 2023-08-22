@@ -20,7 +20,7 @@
           <dt class="nhsuk-summary-list__key">Account status</dt>
           <dd class="nhsuk-summary-list__value">{{ user.isActive ? "Active" : "Inactive" }}</dd>
           <dd class="nhsuk-summary-list__actions">
-            <a routerLink="">Lock user</a>
+            <a routerLink="{{ action.url }}">{{ action.label}}</a>
           </dd>
         </div>
       </dl>
@@ -67,7 +67,7 @@
     </div>
   </section>
 
-  <div *ngIf="!userIsAdmin" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
+  <div *ngIf="!userIsAdminOrInnovator" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
     <a class="nhsuk-action-link__link" routerLink="">
       <theme-svg-icon type="action"></theme-svg-icon>
       <span class="nhsuk-action-link__text">Add role</span>
