@@ -103,8 +103,8 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
     }]);
 
     const expected = {
-      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] },
-      unitText: null
+      info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true }] },
+      unitText: '1 unit attached'
     };
 
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
@@ -121,7 +121,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
     organisationsService.getOrganisationsList = () => throwError(() => new Error());
 
     const expected: AlertType = { type: 'ERROR', title: 'There is a problem', message: 'Unable to fetch organisations information', setFocus: true };
-    
+
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
     component = fixture.componentInstance;
 

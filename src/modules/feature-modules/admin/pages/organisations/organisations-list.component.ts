@@ -58,7 +58,11 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
               isActive: organisation.isActive,
               organisationUnits: organisation.organisationUnits
             },
-            unitText: organisation.organisationUnits.length === 0 ? null : `${organisation.organisationUnits.length} units attached`,
+            unitText: organisation.organisationUnits.length === 0
+            ? null
+            : organisation.organisationUnits.length === 1
+            ? `${organisation.organisationUnits.length} unit attached`
+            : `${organisation.organisationUnits.length} units attached`,
           };
         }
 
