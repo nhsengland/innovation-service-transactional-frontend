@@ -51,7 +51,7 @@ const injector = AppInjector.getInjector();
 const authenticationStore = injector?.get(AuthenticationStore);
 
 const roles = [UserRoleEnum.QUALIFYING_ACCESSOR, UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.ADMIN];
-const roleItems = roles.map(r => ({ value: r, label: authenticationStore.getRoleDescription(r) }));
+const roleItems = roles.map(r => ({ value: r, label: authenticationStore?.getRoleDescription(r) }));
 
 export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
   steps: [
