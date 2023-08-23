@@ -15,7 +15,7 @@
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a href="javascript:;" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+              <a *ngIf="item.editStepNumber" href="javascript:;" (click)="onGotoStep(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
             </dd>
           </div>
         </dl>
@@ -23,7 +23,7 @@
         <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitWizard()">{{ submitButton.label }}</button>
 
         <div>
-          <a routerLink="/admin/users">Cancel</a>
+          <a href="javascript:;" (click)="goBackOrCancel()">Cancel</a>
         </div>
 
       </ng-container>
@@ -57,7 +57,7 @@
         <button routerLink="/admin/users/{{ user.id }}" class="nhsuk-button">Go to user details</button>
 
         <div>
-          <a routerLink="/admin/users">Cancel</a>
+          <a href="javascript:;" (click)="goBackOrCancel()">Cancel</a>
         </div>
 
       </ng-container>
