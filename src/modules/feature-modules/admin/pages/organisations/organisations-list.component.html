@@ -28,67 +28,80 @@
       <div class="nhsuk-u-padding-bottom-5">
 
         <div class="nhsuk-action-link">
-          <h2>All organisations</h2>
+          <h2>All support organisations</h2>
         </div>
-        <div>
-          <ul class="nhsuk-u-margin-left-2">
-            <li>Click through in the table below to <strong>view or change an organisation's information</strong> or
-              <strong>access its attached units</strong>
-            </li>
-          </ul>
+        <div class="nhsuk-body-m">
+            View or update an organisation's information and its attached units.
         </div>
 
-        <div
-          class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          Organisation
+        <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+          <div> Organisation </div>
+          <div class="ml-auto nhsuk-u-text-align-right">
+            Status
+          </div>
         </div>
 
         <dl class="nhsuk-u-margin-0">
           <ng-container *ngFor="let organisation of organisations">
 
-            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
-              [ngClass]="{'bottom-border-separator': organisation.showHideStatus !== 'opened'}">
+            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
 
               <dt class="nhsuk-u-font-weight-normal width-60">
-                {{ organisation.info.name }}
-                <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ organisation.info.acronym }}) </div>
+                <a routerLink="{{ organisation.info.id }}">
+                  <span class="nhsuk-u-visually-hidden">View organisation Info</span>
+                    {{ organisation.info.name }} ({{ organisation.info.acronym }})
+                </a>
+
+                <span *ngIf="organisation.info.organisationUnits.length > 1" class="nhsuk-body-s nhsuk-u-margin-0">
+                  {{ organisation.unitText }}
+                </span>
               </dt>
 
-              <dd class="width-20">
+
+              <dd class="ml-auto nhsuk-u-text-align-right">
                 <theme-tag type="{{ organisation.info.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                   label="{{ organisation.info.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
               </dd>
 
-              <dd class="text-align-right width-20">
-                <a *ngIf="organisation.info.organisationUnits.length > 1" href="javascript:void(0)"
-                  (click)="onShowHideClicked(organisation.info.id)">
-                  {{ organisation.showHideText }}
-                  <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
+            </div>
+
+          </ng-container>
+        </dl>
+
+      </div>
+      <div class="nhsuk-u-padding-bottom-5">
+
+        <div class="nhsuk-action-link">
+          <h2>Other teams</h2>
+        </div>
+        <div class="nhsuk-body-m">
+            View or update a team's information.
+        </div>
+
+        <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+          <div> Team </div>
+          <div class="ml-auto nhsuk-u-text-align-right">
+            Status
+          </div>
+        </div>
+        <dl class="nhsuk-u-margin-0">
+          <ng-container *ngFor="let team of teams">
+
+            <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+
+              <dt class="nhsuk-u-font-weight-normal width-60">
+                <a routerLink="{{ team.link}}">
+                  <span class="nhsuk-u-visually-hidden">View team info</span>
+                    {{ team.name }} 
                 </a>
-                <a routerLink="{{organisation.info.id}}" title="View">View <span
-                    class="nhsuk-u-visually-hidden">organisation</span></a>
+              </dt>
+
+              <dd class="ml-auto nhsuk-u-text-align-right">
+                <theme-tag type="{{ team.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                  label="{{ team.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
               </dd>
 
             </div>
-
-            <ng-container *ngIf="organisation.showHideStatus === 'opened'">
-              <dl class="nhsuk-u-margin-0">
-                <div *ngFor="let organisationUnit of organisation.info.organisationUnits; let i = index;"
-                  class="nhsuk-body-m nhsuk-u-padding-left-4 nhsuk-u-margin-0 border-left-inset-neutral">
-                  <div class="d-flex bottom-border-separator nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3"
-                    [ngClass]="{'top-border-separator': i === 0}">
-                    <dt>
-                      {{ organisationUnit.name }}
-                      <div class="nhsuk-hint nhsuk-u-margin-bottom-0"> ({{ organisationUnit.acronym }}) </div>
-                    </dt>
-                    <dd class="ml-auto">
-                      <theme-tag type="{{ organisationUnit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
-                        label="{{ organisationUnit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
-                    </dd>
-                  </div>
-                </div>
-              </dl>
-            </ng-container>
 
           </ng-container>
         </dl>

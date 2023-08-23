@@ -22,10 +22,17 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
         isActive: boolean;
       }[];
     };
-    showHideStatus: 'hidden' | 'opened' | 'closed';
-    showHideText: null | string;
-    showHideDescription: null | string;
+    unitText: null | string;
   }[] = [];
+
+  teams: {
+    name: string;
+    isActive: boolean;
+    link: string;
+  }[] = [
+      { name: 'Needs assessment team', isActive: true, link: '' },
+      { name: 'Service administrators', isActive: true, link: '' }
+    ];
 
   constructor(
     private organisationsService: OrganisationsService
@@ -41,37 +48,22 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
     this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
       next: (organisationUnits) => {
 
-        this.organisations = organisationUnits.map(organisation => {
-
-          if (organisation.organisationUnits.length === 1) {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                isActive: organisation.isActive,
-                organisationUnits: [],
-              },
-              showHideStatus: 'hidden',
-              showHideText: null,
-              showHideDescription: null
-            };
-          } else {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                isActive: organisation.isActive,
-                organisationUnits: organisation.organisationUnits
-              },
-              showHideStatus: 'closed',
-              showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-              showHideDescription: `that belong to the ${organisation.name}`
-            };
+        this.organisations = organisationUnits.map(organisation => (
+          {
+            info: {
+              id: organisation.id,
+              name: organisation.name,
+              acronym: organisation.acronym,
+              isActive: organisation.isActive,
+              organisationUnits: organisation.organisationUnits
+            },
+            unitText: organisation.organisationUnits.length === 0
+              ? null
+              : organisation.organisationUnits.length === 1
+                ? `${organisation.organisationUnits.length} unit attached`
+                : `${organisation.organisationUnits.length} units attached`,
           }
-
-        });
+        ));
 
         this.setPageStatus('READY');
 
@@ -83,27 +75,4 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
     });
 
   }
-
-
-  onShowHideClicked(organisationId: string): void {
-
-    const organisation = this.organisations.find(i => i.info.id === organisationId);
-
-    switch (organisation?.showHideStatus) {
-      case 'opened':
-        organisation.showHideStatus = 'closed';
-        organisation.showHideText = `Show ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
-        break;
-      case 'closed':
-        organisation.showHideStatus = 'opened';
-        organisation.showHideText = `Hide ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
-        break;
-      default:
-        break;
-    }
-
-  }
-
 }
