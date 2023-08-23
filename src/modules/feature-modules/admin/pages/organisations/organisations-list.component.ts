@@ -28,7 +28,11 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
   teams: {
     name: string;
     isActive: boolean;
-  }[] = [];
+    link: string;
+  }[] = [
+      { name: 'Needs assessment team', isActive: true, link: '' },
+      { name: 'Service administrators', isActive: true, link: '' }
+    ];
 
   constructor(
     private organisationsService: OrganisationsService
