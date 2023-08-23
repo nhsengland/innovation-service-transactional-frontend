@@ -53,9 +53,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
     const expected = {
       info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] },
-      showHideStatus: 'closed',
-      showHideText: null,
-      showHideDescription: 'that belong to the Org name'
+      unitText: null
     };
 
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
@@ -85,9 +83,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
           { id: 'orgUnitId02', name: 'Org Unit name 02', acronym: 'ORGu02', isActive: true }
         ]
       },
-      showHideStatus: 'closed',
-      showHideText: 'Show 2 units',
-      showHideDescription: 'that belong to the Org name'
+      unitText: '2 units attached',
     };
 
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
@@ -108,9 +104,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
     const expected = {
       info: { id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true, organisationUnits: [] },
-      showHideStatus: 'hidden',
-      showHideText: null,
-      showHideDescription: null
+      unitText: null
     };
 
     fixture = TestBed.createComponent(PageOrganisationsListComponent);
@@ -133,63 +127,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationsListComponen
 
     fixture.detectChanges();
     expect(component.alert).toEqual(expected);
-
-  });
-
-  it('should run onShowHideClicked() and do nothing because organisations do not exists', () => {
-
-    fixture = TestBed.createComponent(PageOrganisationsListComponent);
-    component = fixture.componentInstance;
-    component.organisations = [{
-      info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
-        organisationUnits: []
-      },
-      showHideStatus: 'opened',
-      showHideText: 'Hide 0 units',
-      showHideDescription: 'that belong to the Org name'
-    }];
-
-    component.onShowHideClicked('invalidOrg');
-    expect(component.organisations[0].showHideStatus).toEqual('opened');
-
-  });
-
-  it('should run onShowHideClicked() when organisations is opened', () => {
-
-    fixture = TestBed.createComponent(PageOrganisationsListComponent);
-    component = fixture.componentInstance;
-    component.organisations = [{
-      info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
-        organisationUnits: []
-      },
-      showHideStatus: 'opened',
-      showHideText: 'Hide 0 units',
-      showHideDescription: 'that belong to the Org name'
-    }];
-
-    component.onShowHideClicked('orgId');
-    expect(component.organisations[0].showHideStatus).toEqual('closed');
-
-  });
-
-  it('should run onShowHideClicked() when organisation is closed', () => {
-
-    fixture = TestBed.createComponent(PageOrganisationsListComponent);
-    component = fixture.componentInstance;
-    component.organisations = [{
-      info: {
-        id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
-        organisationUnits: []
-      },
-      showHideStatus: 'closed',
-      showHideText: 'Show 0 units',
-      showHideDescription: 'that belong to the Org name'
-    }];
-
-    component.onShowHideClicked('orgId');
-    expect(component.organisations[0].showHideStatus).toEqual('opened');
 
   });
 });
