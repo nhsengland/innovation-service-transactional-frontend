@@ -36,6 +36,7 @@ import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
+import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -228,7 +229,25 @@ const routes: Routes = [
                   { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
                   { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
                   { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
-                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } }
+                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } },
+                  {
+                    path: 'role',
+                    data: { breadcrumb: null },
+                    children: [
+                      {
+                        path: ':roleId',
+                        data: { breadcrumb: null },
+                        children: [
+                          {
+                            path: 'inactivate',
+                            pathMatch: 'full',
+                            component: PageServiceUserInactivateRoleComponent,
+                            data: { breadcrumb: null }
+                          }
+                        ]
+                      }
+                    ]
+                  }
                 ]
               }
             ]
