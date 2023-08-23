@@ -48,9 +48,8 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
     this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
       next: (organisationUnits) => {
 
-        this.organisations = organisationUnits.map(organisation => {
-
-          return {
+        this.organisations = organisationUnits.map(organisation => (
+          {
             info: {
               id: organisation.id,
               name: organisation.name,
@@ -59,14 +58,12 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
               organisationUnits: organisation.organisationUnits
             },
             unitText: organisation.organisationUnits.length === 0
-            ? null
-            : organisation.organisationUnits.length === 1
-            ? `${organisation.organisationUnits.length} unit attached`
-            : `${organisation.organisationUnits.length} units attached`,
-          };
-        }
-
-        );
+              ? null
+              : organisation.organisationUnits.length === 1
+                ? `${organisation.organisationUnits.length} unit attached`
+                : `${organisation.organisationUnits.length} units attached`,
+          }
+        ));
 
         this.setPageStatus('READY');
 
