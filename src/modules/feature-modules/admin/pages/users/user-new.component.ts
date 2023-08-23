@@ -1,15 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
-import { UserInfo } from '@modules/shared/dtos/users.dto';
 
+import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
 import { AdminUsersService } from '../../services/admin-users.service';
 import { ServiceUsersService } from '../../services/service-users.service';
-
-import { CREATE_NEW_USER_QUESTIONS, OutboundPayloadType } from './user-new.config';
+import { OutboundPayloadType, WIZARD_CREATE_USER } from './user-new.config';
 
 @Component({
   selector: 'app-admin-pages-users-user-new',
@@ -23,36 +24,91 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
   submitButton = { isActive: true, label: 'Confirm and add user' };
   continueButton = { isActive: true, label: 'Continue' };
 
-  wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_USER_QUESTIONS);
+  pageData: {
+    flags: {
+      isBaseCreate: boolean,
+      isTeamCreate: boolean,
+      isUnitCreate: boolean
+    },
+    queryParams: {
+      organisationId?: string,
+      unitId?: string,
+      team: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN
+    };
+  }
+
+  wizard = new WizardEngineModel(WIZARD_CREATE_USER);
 
   constructor(
     private adminUsersService: AdminUsersService,
     private organisationsService: OrganisationsService,
-    private usersService: ServiceUsersService
+    private usersService: ServiceUsersService,
+    private activatedRoute: ActivatedRoute
   ) {
+
     super();
+
+    const isTeamCreate = !!this.activatedRoute.snapshot.queryParams.team;
+    const isUnitCreate = !!this.activatedRoute.snapshot.queryParams.organisationId && !!this.activatedRoute.snapshot.queryParams.unitId;
+
+    this.pageData = {
+      flags: {
+        isBaseCreate: !isTeamCreate && !isUnitCreate,
+        isTeamCreate,
+        isUnitCreate
+      },
+      queryParams: {
+        organisationId: this.activatedRoute.snapshot.queryParams.organisationId,
+        unitId: this.activatedRoute.snapshot.queryParams.unitId,
+        team: this.activatedRoute.snapshot.queryParams.team,
+      }
+    }
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
+
   }
 
   ngOnInit(): void {
 
+    // Creating a user from the NA/Admin team
+    if(this.pageData.flags.isTeamCreate) {
+      this.wizard.setInboundParsedAnswers({ contextType: 'TEAM', role: this.pageData.queryParams.team }).runRules();
+
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setPageStatus('READY');
+      return;
+    }
+
+    // Creating a user from Base or Unit
     this.organisationsService
       .getOrganisationsList({ unitsInformation: true, withInactive: true })
       .subscribe({
         next: (response) => {
-          const organisationsList = response.map((o) => ({
+          const organisations = response.map((o) => ({
             id: o.id,
             name: o.name,
             units: o.organisationUnits.map((u) => ({ id: u.id, name: u.name })),
           }));
-          this.wizard.setInboundParsedAnswers({ organisationsList }).runRules();
-          this.wizard.gotoStep(1);
+
+          // Creating a user from the unit
+          if(this.pageData.flags.isUnitCreate) {
+            this.wizard.setInboundParsedAnswers({
+              contextType: 'UNIT',
+              organisations,
+              organisationId: this.pageData.queryParams.organisationId,
+              unitIds: [this.pageData.queryParams.unitId]
+            });
+          } else {
+            this.wizard.setInboundParsedAnswers({ contextType: 'BASE', organisations });
+          }
+
+          this.wizard.runRules();
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
           this.setPageStatus('READY');
         },
         error: () => {
           this.setPageStatus('ERROR');
-          this.logger.error('Error fetching organisations units');
+          this.logger.error('Error fetching organisations and units');
         },
       });
 
@@ -119,7 +175,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           this.user = null;
         }
         else if (this.wizard.isFirstStep()) {
-          this.redirectTo('/admin/users');
+          this.goBackOrCancel();
         } else {
           this.wizard.previousStep();
         }
@@ -152,9 +208,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
     this.adminUsersService.createUser(body).subscribe({
       next: (response) => {
-        this.redirectTo(`/admin/users/${response.id}`, {
-          alert: 'userCreationSuccess',
-        });
+        this.redirectTo(`/admin/users/${response.id}`, { alert: 'userCreationSuccess' });
       },
       error: () => {
         this.setPageStatus('ERROR');
@@ -162,5 +216,18 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
       },
     });
 
+  }
+
+
+  goBackOrCancel(): void {
+    if(this.pageData.flags.isBaseCreate) {
+      this.redirectTo('/admin/users');
+    }
+    if(this.pageData.flags.isUnitCreate) {
+      this.redirectTo(`/admin/organisations/${this.pageData.queryParams.organisationId}/unit/${this.pageData.queryParams.unitId}`);
+    }
+    if(this.pageData.flags.isTeamCreate) {
+      this.redirectTo(`/admin/organisations/${this.pageData.queryParams.team}`);
+    }
   }
 }
