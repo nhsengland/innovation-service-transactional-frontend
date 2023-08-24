@@ -89,7 +89,7 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
     this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, false).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been inactivate`);
+        this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been inactivated`);
         this.redirectTo(`/admin/users/${this.user.id}`);
       },
       error: () => {
