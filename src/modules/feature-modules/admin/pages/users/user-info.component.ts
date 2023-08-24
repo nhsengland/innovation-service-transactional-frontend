@@ -74,7 +74,12 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           })
         };
 
-        this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
+        this.userIsAdminOrInnovator = this.user.roles[0].role === UserRoleEnum.ADMIN || this.user.roles[0].role === UserRoleEnum.INNOVATOR;
+
+
+        if (this.user.roles[0].role !== UserRoleEnum.ADMIN) {
+          this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
+        }
 
         this.setPageTitle('User information');
         this.setPageStatus('READY');
