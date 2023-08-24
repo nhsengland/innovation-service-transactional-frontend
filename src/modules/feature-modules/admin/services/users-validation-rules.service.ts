@@ -91,7 +91,7 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
-export type getInactivateRoleUserRules = {
+export type GetInactivateRoleUserRules = {
   validations: {
     rule: ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser,
     valid: boolean
@@ -143,10 +143,10 @@ export class UsersValidationRulesService extends CoreService {
 
   }
 
-  getInactivateRoleUserRules(userId: string, userRoleId: string): Observable<getInactivateRoleUserRules> {
+  getInactivateRoleUserRules(userId: string, userRoleId: string): Observable<GetInactivateRoleUserRules> {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'INACTIVATE_USER_ROLE', roleId: userRoleId });
-    return this.http.get<getInactivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<GetInactivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

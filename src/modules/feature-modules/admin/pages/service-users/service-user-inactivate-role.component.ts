@@ -1,4 +1,4 @@
-import { getInactivateRoleUserRules } from './../../services/users-validation-rules.service';
+import { GetInactivateRoleUserRules } from './../../services/users-validation-rules.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
@@ -22,12 +22,12 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
     role: {
       id: string;
       description: string;
-    },
-   } = { id: '', name: '', role: { id: '', description: '' } };
+    }
+   };
 
   pageStep: 'RULES' | 'INACTIVATE_ROLE' = 'RULES';
 
-  rulesList: getInactivateRoleUserRules['validations'] = [];
+  rulesList: GetInactivateRoleUserRules['validations'] = [];
 
 
   constructor(
@@ -39,7 +39,6 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
     super();
 
     this.user = {
-      ...this.user,
       id: this.activatedRoute.snapshot.params.userId,
       name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName,
       role: { id: this.activatedRoute.snapshot.params.roleId, description: '' }
@@ -60,10 +59,14 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
         this.user = {
           ...this.user,
-          role: user.roles.map((r) => ({
+          role: user.roles.filter(role => role.id === this.user.role.id).map((r) => ({
             id: r.id,
             description: r.displayTeam ? `${this.stores.authentication.getRoleDescription(r.role)} (${r.displayTeam})` : `${this.stores.authentication.getRoleDescription(r.role)}`
-          })).filter(role => role.id === this.user.role.id)[0]
+          }))[0] || { id: '', description: '' }
+        }
+
+        if (!this.user.role.id) {
+          this.redirectTo(`/admin/users/${this.user.id}`);
         }
 
         this.rulesList = validationRules.validations;
