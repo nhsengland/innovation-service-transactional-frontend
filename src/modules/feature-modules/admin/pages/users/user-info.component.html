@@ -72,7 +72,9 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-4">Innovations</h2>
-        <p class="nhsuk-u-margin-bottom-1" *ngFor="let innovation of user.innovations">{{ innovation.name }}</p>
+        <p class="nhsuk-u-margin-bottom-1" *ngFor="let innovation of user.innovations">
+          <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }}</a>
+        </p>
       </div>
     </div>
   </section>
