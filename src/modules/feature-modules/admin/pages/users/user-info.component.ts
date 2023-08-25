@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { GetInnovationsByOwnerIdDTO, ServiceUsersService } from '../../services/service-users.service';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { UserRoleEnum } from '@app/base/enums';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { UserRoleEnum } from '@app/base/enums';
 })
 export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
-  user: (UserInfo & { rolesDescription: string[] }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [], };
+  user: (UserInfo & { rolesDescription: string[], innovations?: GetInnovationsByOwnerIdDTO }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [] };
 
   userIsAdminOrInnovator: boolean = false;
   userHasActiveRoles: boolean = false;
@@ -54,11 +55,11 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.usersService.getUserInfo(this.activatedRoute.snapshot.params.userId).subscribe({
-      next: (response) => {
+    this.usersService.getUserInfo(this.activatedRoute.snapshot.params.userId).pipe(
+      switchMap(userInfo => {
         this.user = {
-          ...response,
-          rolesDescription: response.roles.map(r => {
+          ...userInfo,
+          rolesDescription: userInfo.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
             if(r.displayTeam) {
               roleDescription += ` (${r.displayTeam})`;
@@ -76,18 +77,24 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
         this.userIsAdminOrInnovator = this.user.roles[0].role === UserRoleEnum.ADMIN || this.user.roles[0].role === UserRoleEnum.INNOVATOR;
 
-
         if (this.user.roles[0].role !== UserRoleEnum.ADMIN) {
-          this.action = { label: response.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${response.id}/service-users/${response.isActive ? 'lock' : 'unlock'}` };
+          this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/service-users/${userInfo.isActive ? 'lock' : 'unlock'}` };
         }
 
+        return this.user.roles[0].role === UserRoleEnum.INNOVATOR ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null);
+
+      })).subscribe({
+        next: (innovations) => {
+        if(innovations) {
+          this.user.innovations = innovations;
+        }
         this.setPageTitle('User information');
         this.setPageStatus('READY');
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'});
-      }
+        },
+        error: () => {
+          this.setPageStatus('ERROR');
+          this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'});
+        }
     });
 
   }

@@ -17,7 +17,8 @@ export enum ValidationRuleEnum {
   UserHasAnyQualifyingAccessorRole = 'UserHasAnyQualifyingAccessorRole',
   UserHasAnyAccessorRoleInOtherOrganisation = 'UserHasAnyAccessorRoleInOtherOrganisation',
   UserAlreadyHasRoleInUnit = 'UserAlreadyHasRoleInUnit',
-  OrganisationUnitIsActive = 'OrganisationUnitIsActive'
+  OrganisationUnitIsActive = 'OrganisationUnitIsActive',
+  CheckIfUserHasAnyAccessorRoleInOtherOrganisation = 'CheckIfUserHasAnyAccessorRoleInOtherOrganisation'
 }
 
 export type AdminValidationResponseDTO = {

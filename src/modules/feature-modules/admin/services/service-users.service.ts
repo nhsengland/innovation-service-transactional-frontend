@@ -47,6 +47,11 @@ type GetListByIdDTO = {
   releasedAt: null | DateISOType
 }
 
+export type GetInnovationsByOwnerIdDTO = {
+  id: string,
+  name: string
+}[]
+
 @Injectable()
 export class ServiceUsersService extends CoreService {
 
@@ -173,6 +178,13 @@ export class ServiceUsersService extends CoreService {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${idOrEmail}`);
     return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
+
+  }
+
+  getInnovationsByOwnerId(userId: string) {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/users/:userId/innovations').setPathParams({ userId });
+    return this.http.get<GetInnovationsByOwnerIdDTO>(url.buildUrl()).pipe(take(1));
 
   }
 }
