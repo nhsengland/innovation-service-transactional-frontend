@@ -3,7 +3,22 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <ng-container *ngIf="pageStep === 'RULES'">
+      <ng-container *ngIf="rulesList.length === 0"; else cannotActivateRole>
+
+        <strong>Activate {{ user.role.description }} role for {{ user.name }}.</strong>
+
+        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit"> {{ submitButton.label }} </button>
+
+      </ng-container>
+
+      <ng-template #cannotActivateRole>
+
+<!-- In my opinion, we are still missing copy and design review for all the validations, figma doesn't cover all the scenarios -->
+
+<!--         <p>You cannot activate {{ user.role.description }} role as {{ user.role.organisationUnit?.name }} organisation unit is inactive.</p>
+        <p>To activate this role you need first to activate {{ user.role.organisationUnit?.name }} organisation unit</p>
+
+        <a routerLink="/admin/organisations/{{ user.role.organisation }}/unit/{{ user.role.organisationUnit?.id }}">Go to {{ user.role.organisationUnit?.name }} </a> -->
 
         <table class="nhsuk-table">
           <caption>All conditions must be valid to activate {{ user.name }} as a {{ user.role.description }}.</caption>
@@ -25,26 +40,10 @@
           </tbody>
         </table>
 
-        <button type="button" [disabled]="!continueButton.isActive" class="nhsuk-button" (click)="nextStep()"> {{ continueButton.label }} </button>
-
-      </ng-container>
-
-      <ng-container *ngIf="pageStep === 'ACTIVATE_ROLE'">
-
-        <!-- Missing copy -->
-<!--         <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
-            <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
-          </div>
-          <p>Roles should only be inactivated in exceptional circumstances. For example, if the user has breached our terms of use.</p>
-        </div> -->
-
-        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()"> {{ submitButton.label }} </button>
-
-      </ng-container>
+      </ng-template>
 
       <div>
-        <a routerLink="/admin/users/{{ user.id }}">Cancel</a>
+        <a routerLink="/admin/users/{{ user.id }}">{{ rulesList.length === 0 ? "Cancel" : "Go back to user information"}} </a>
       </div>
 
     </div>

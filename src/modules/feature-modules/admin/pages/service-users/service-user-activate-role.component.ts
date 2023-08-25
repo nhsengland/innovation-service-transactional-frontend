@@ -20,17 +20,16 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
     id: string,
     name: string,
     role: {
-      id: string;
-      description: string;
+      id: string,
+      organisation?: { id: string; name: string; acronym: string | null },
+      organisationUnit?: { id: string; name: string; acronym: string; },
+      description: string
     }
    };
 
-  pageStep: 'RULES' | 'ACTIVATE_ROLE' = 'RULES';
-
   rulesList: GetActivateRoleUserRules['validations'] = [];
 
-  continueButton = { isActive: true, label: 'Continue' };
-  submitButton = { isActive: true, label: 'Confirm activation' };
+  submitButton = { isActive: true, label: 'Confirm' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -63,6 +62,8 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
           ...this.user,
           role: user.roles.filter(role => role.id === this.user.role.id).map((r) => ({
             id: r.id,
+            organisation: r?.organisation,
+            organisationUnit: r?.organisationUnit,
             description: r.displayTeam ? `${this.stores.authentication.getRoleDescription(r.role)} (${r.displayTeam})` : `${this.stores.authentication.getRoleDescription(r.role)}`
           }))[0] || { id: '', description: '' }
         }
@@ -71,10 +72,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
           this.redirectTo(`/admin/users/${this.user.id}`);
         }
 
-        this.rulesList = validationRules.validations;
-
-        if (this.rulesList.length === 0) { this.pageStep = 'ACTIVATE_ROLE'; }
-        else { this.pageStep = 'RULES'; }
+        this.rulesList = validationRules.validations.filter(v => v.valid === false);
 
         this.setPageStatus('READY');
       },
@@ -86,9 +84,6 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
 
   }
 
-  nextStep(): void {
-    this.pageStep = 'ACTIVATE_ROLE';
-  }
 
   onSubmit(): void {
 

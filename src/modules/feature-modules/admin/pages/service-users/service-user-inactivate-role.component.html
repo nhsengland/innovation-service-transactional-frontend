@@ -43,7 +43,7 @@
       </ng-container>
 
       <div>
-        <a routerLink="/admin/users/{{ user.id }}">Cancel</a>
+        <a routerLink="/admin/users/{{ user.id }}">{{pageStep === 'INACTIVATE_ROLE' ? "Cancel" : "Go back to user details" }}</a>
       </div>
 
     </div>
