@@ -6,6 +6,19 @@ import { CoreService } from '@app/base';
 
 import { UrlModel } from '@app/base/models';
 
+export enum ValidationRuleEnum {
+  AssessmentUserIsNotTheOnlyOne = 'AssessmentUserIsNotTheOnlyOne',
+  LastQualifyingAccessorUserOnOrganisationUnit = 'LastQualifyingAccessorUserOnOrganisationUnit',
+  NoInnovationsSupportedOnlyByThisUser = 'NoInnovationsSupportedOnlyByThisUser',
+  UserHasAnyAdminRole = 'UserHasAnyAdminRole',
+  UserHasAnyInnovatorRole = 'UserHasAnyInnovatorRole',
+  UserHasAnyAssessmentRole = 'UserHasAnyAssessmentRole',
+  UserHasAnyAccessorRole = 'UserHasAnyAccessorRole',
+  UserHasAnyQualifyingAccessorRole = 'UserHasAnyQualifyingAccessorRole',
+  UserHasAnyAccessorRoleInOtherOrganisation = 'UserHasAnyAccessorRoleInOtherOrganisation',
+  UserAlreadyHasRoleInUnit = 'UserAlreadyHasRoleInUnit',
+  OrganisationUnitIsActive = 'OrganisationUnitIsActive'
+}
 
 export type AdminValidationResponseDTO = {
   validations: {
@@ -80,6 +93,29 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
+export type GetActivateRoleUserRules = {
+  validations: {
+    rule: ValidationRuleEnum.UserHasAnyAdminRole
+    | ValidationRuleEnum.UserHasAnyInnovatorRole
+    | ValidationRuleEnum.UserHasAnyAssessmentRole
+    | ValidationRuleEnum.UserHasAnyAccessorRole
+    | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
+    | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
+    | ValidationRuleEnum.OrganisationUnitIsActive
+    | ValidationRuleEnum.UserAlreadyHasRoleInUnit
+    valid: boolean
+  }[]
+};
+
+export type GetInactivateRoleUserRules = {
+  validations: {
+    rule: ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne
+    | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit
+    | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser
+    valid: boolean
+  }[]
+};
+
 
 @Injectable()
 export class UsersValidationRulesService extends CoreService {
@@ -122,6 +158,20 @@ export class UsersValidationRulesService extends CoreService {
       }))
       )
     );
+
+  }
+
+  getActivateRoleUserRules(userId: string, userRoleId: string): Observable<GetActivateRoleUserRules> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ACTIVATE_USER_ROLE', roleId: userRoleId });
+    return this.http.get<GetActivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  getInactivateRoleUserRules(userId: string, userRoleId: string): Observable<GetInactivateRoleUserRules> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'INACTIVATE_USER_ROLE', roleId: userRoleId });
+    return this.http.get<GetInactivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

@@ -108,6 +108,12 @@ export class ServiceUsersService extends CoreService {
 
   }
 
+  updateUserRole(userId: string, roleId: string, enabled?: boolean): Observable<{ roleId: string }> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/users/:userId/roles/:roleId').setPathParams({ userId, roleId });
+    return this.http.patch<{ roleId: string }>(url.buildUrl(), { enabled }).pipe(take(1), map(response => response));
+
+  }
 
   getListOfTerms(queryParams: APIQueryParamsType): Observable<getListOfTerms> {
     const { filters, ...qp } = queryParams;

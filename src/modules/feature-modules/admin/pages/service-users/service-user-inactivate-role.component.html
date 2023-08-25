@@ -1,0 +1,52 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <ng-container *ngIf="pageStep === 'RULES'">
+
+        <table class="nhsuk-table">
+          <caption>All conditions must be valid to inactivate {{ user.name }} as a {{ user.role.description }}.</caption>
+          <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header" scope="col">Condition</th>
+              <th class="nhsuk-table__header" scope="col">Is valid</th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                {{ 'shared.catalog.user.' + item.rule + '.label' | translate }}
+              </td>
+              <td class="nhsuk-table__cell text-align-right">
+                <strong class="nhsuk-tag" [ngClass]="{'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid}">{{ item.valid ? 'Valid' : 'Invalid' }}</strong>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <button type="button" (click)="nextStep()" class="nhsuk-button">Continue</button>
+
+      </ng-container>
+
+      <ng-container *ngIf="pageStep === 'INACTIVATE_ROLE'">
+
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
+          </div>
+          <p>Roles should only be inactivated in exceptional circumstances. For example, if the user has breached our terms of use.</p>
+        </div>
+
+        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()"> {{ submitButton.label }} </button>
+
+      </ng-container>
+
+      <div>
+        <a routerLink="/admin/users/{{ user.id }}">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

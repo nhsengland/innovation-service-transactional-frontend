@@ -64,6 +64,8 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
+import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
+import { PageServiceUserActivateRoleComponent } from './pages/service-users/service-user-activate-role.component';
 
 
 @NgModule({
@@ -107,6 +109,8 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
     PageServiceUserChangeRoleComponent,
     PageServiceUserLockComponent,
     PageServiceUserUnlockComponent,
+    PageServiceUserInactivateRoleComponent,
+    PageServiceUserActivateRoleComponent,
     // // Terms of use.
     PageTermsOfUseInfoComponent,
     PageTermsOfUseListComponent,
