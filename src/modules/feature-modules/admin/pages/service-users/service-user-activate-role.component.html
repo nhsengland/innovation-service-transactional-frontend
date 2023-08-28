@@ -15,13 +15,6 @@
 
       <ng-template #cannotActivateRole>
 
-<!-- In my opinion, we are still missing copy and design review for all the validations, figma doesn't cover all the scenarios -->
-
-<!--         <p>You cannot activate {{ user.role.description }} role as {{ user.role.organisationUnit?.name }} organisation unit is inactive.</p>
-        <p>To activate this role you need first to activate {{ user.role.organisationUnit?.name }} organisation unit</p>
-
-        <a routerLink="/admin/organisations/{{ user.role.organisation }}/unit/{{ user.role.organisationUnit?.id }}">Go to {{ user.role.organisationUnit?.name }} </a> -->
-
         <table class="nhsuk-table">
           <caption>All conditions must be valid to activate {{ user.name }} as a {{ user.role.description }}.</caption>
           <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
