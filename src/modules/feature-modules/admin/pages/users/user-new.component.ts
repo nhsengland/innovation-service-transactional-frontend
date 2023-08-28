@@ -8,6 +8,7 @@ import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
+import { UserInformationComponentState } from '../../components/user-information.component';
 import { AdminUsersService } from '../../services/admin-users.service';
 import { ServiceUsersService } from '../../services/service-users.service';
 import { OutboundPayloadType, WIZARD_CREATE_USER } from './user-new.config';
@@ -71,7 +72,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     // Creating a user from the NA/Admin team
-    if(this.pageData.flags.isTeamCreate) {
+    if (this.pageData.flags.isTeamCreate) {
       this.wizard.setInboundParsedAnswers({ contextType: 'TEAM', role: this.pageData.queryParams.team }).runRules();
 
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
@@ -91,7 +92,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           }));
 
           // Creating a user from the unit
-          if(this.pageData.flags.isUnitCreate) {
+          if (this.pageData.flags.isUnitCreate) {
             this.wizard.setInboundParsedAnswers({
               contextType: 'UNIT',
               organisations,
@@ -126,7 +127,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           ...response,
           rolesDescription: response.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
-            if(r.displayTeam) {
+            if (r.displayTeam) {
               roleDescription += ` (${r.displayTeam})`;
             }
             return roleDescription;
@@ -208,7 +209,17 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
     this.adminUsersService.createUser(body).subscribe({
       next: (response) => {
-        this.redirectTo(`/admin/users/${response.id}`, { alert: 'userCreationSuccess' });
+
+        if (this.pageData.flags.isUnitCreate) {
+          this.setRedirectAlertSuccess('A new user has been added to the unit');
+          this.redirectTo(`/admin/organisations/${this.pageData.queryParams.organisationId}/unit/${this.pageData.queryParams.unitId}`);
+        } else if (this.pageData.flags.isTeamCreate) {
+          this.setRedirectAlertSuccess('A new user has been added to the team');
+          this.redirectTo(`/admin/organisations/${this.pageData.queryParams.team}`);
+        } else {
+          this.redirectTo(`/admin/users/${response.id}`, { alert: 'userCreationSuccess' });
+        }
+
       },
       error: () => {
         this.setPageStatus('ERROR');
@@ -218,15 +229,44 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
   }
 
+  handleComponentStateChange(state: UserInformationComponentState): void {
+
+    switch (state.type) {
+      case 'ERROR':
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+        break;
+
+      case 'CANCEL':
+        this.goBackOrCancel();
+        break;
+
+      case 'SUCCESS':
+        if (state.alertMessage) {
+          this.setRedirectAlertSuccess(state.alertMessage);
+        }
+        this.redirectTo(state.redirectTo, state.queryParams);
+        break;
+
+      case 'CHANGE_TITLE':
+        this.setPageTitle(state.title, { size: 'l' });
+        break;
+
+      case 'PAGE_STATUS':
+        this.setPageStatus(state.isLoading ? 'LOADING' : 'READY');
+        break;
+    }
+
+  }
 
   goBackOrCancel(): void {
-    if(this.pageData.flags.isBaseCreate) {
+    if (this.pageData.flags.isBaseCreate) {
       this.redirectTo('/admin/users');
     }
-    if(this.pageData.flags.isUnitCreate) {
+    if (this.pageData.flags.isUnitCreate) {
       this.redirectTo(`/admin/organisations/${this.pageData.queryParams.organisationId}/unit/${this.pageData.queryParams.unitId}`);
     }
-    if(this.pageData.flags.isTeamCreate) {
+    if (this.pageData.flags.isTeamCreate) {
       this.redirectTo(`/admin/organisations/${this.pageData.queryParams.team}`);
     }
   }

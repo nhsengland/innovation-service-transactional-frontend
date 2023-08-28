@@ -3,12 +3,12 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <ng-container *ngIf="!user && wizard.isQuestionStep()">
+      <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine formId="newUserForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="newUserForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
       </ng-container>
 
-      <ng-container *ngIf="!user && wizard.isSummaryStep()">
+      <ng-container *ngIf="wizard.isSummaryStep()">
 
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
@@ -27,13 +27,6 @@
         </div>
 
       </ng-container>
-
-      <app-admin-pages-user-information
-        *ngIf="user"
-        [user]="user"
-        [parentData]="pageData"
-        (componentStateChangeEmit)="handleComponentStateChange($event)"
-      ></app-admin-pages-user-information>
 
     </div>
   </div>

@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { GetInnovationsByOwnerIdDTO, ServiceUsersService } from '../../services/service-users.service';
-import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { UserRoleEnum } from '@app/base/enums';
-import { switchMap } from 'rxjs/operators';
+import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { GetInnovationsByOwnerIdDTO, ServiceUsersService } from '../../services/service-users.service';
 
 
 @Component({
@@ -44,6 +44,9 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
       case 'roleChangeSuccess':
         this.setAlertSuccess('User role changed successfully');
         break;
+      case 'roleCreationSuccess':
+        this.setAlertSuccess('A new user role was added successfully');
+        break;
       case 'unitChangeSuccess':
         this.setAlertSuccess('Organisation unit has been successfully changed')
         break;
@@ -61,11 +64,11 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           ...userInfo,
           rolesDescription: userInfo.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
-            if(r.displayTeam) {
+            if (r.displayTeam) {
               roleDescription += ` (${r.displayTeam})`;
             }
 
-            if(r.isActive) {
+            if (r.isActive) {
               this.userHasActiveRoles = true;
             } else {
               this.userHasInactiveRoles = true;
@@ -85,17 +88,17 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
       })).subscribe({
         next: (innovations) => {
-        if(innovations) {
-          this.user.innovations = innovations;
-        }
-        this.setPageTitle('User information');
-        this.setPageStatus('READY');
+          if (innovations) {
+            this.user.innovations = innovations;
+          }
+          this.setPageTitle('User information');
+          this.setPageStatus('READY');
         },
         error: () => {
           this.setPageStatus('ERROR');
-          this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'});
+          this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help' });
         }
-    });
+      });
 
   }
 
