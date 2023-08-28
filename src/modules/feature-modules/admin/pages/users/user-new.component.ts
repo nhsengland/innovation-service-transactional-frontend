@@ -8,6 +8,7 @@ import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
+import { UserInformationComponentState } from '../../components/user-information.component';
 import { AdminUsersService } from '../../services/admin-users.service';
 import { ServiceUsersService } from '../../services/service-users.service';
 import { OutboundPayloadType, WIZARD_CREATE_USER } from './user-new.config';
@@ -228,6 +229,35 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
   }
 
+  handleComponentStateChange(state: UserInformationComponentState): void {
+
+    switch (state.type) {
+      case 'ERROR':
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+        break;
+
+      case 'CANCEL':
+        this.goBackOrCancel();
+        break;
+
+      case 'SUCCESS':
+        if (state.alertMessage) {
+          this.setRedirectAlertSuccess(state.alertMessage);
+        }
+        this.redirectTo(state.redirectTo, state.queryParams);
+        break;
+
+      case 'CHANGE_TITLE':
+        this.setPageTitle(state.title, { size: 'l' });
+        break;
+
+      case 'PAGE_STATUS':
+        this.setPageStatus(state.isLoading ? 'LOADING' : 'READY');
+        break;
+    }
+
+  }
 
   goBackOrCancel(): void {
     if (this.pageData.flags.isBaseCreate) {

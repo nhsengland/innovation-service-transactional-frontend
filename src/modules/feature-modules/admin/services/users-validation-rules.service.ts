@@ -157,7 +157,7 @@ export class UsersValidationRulesService extends CoreService {
 
   }
 
-  canAddRole(userId: string, params: { role: UserRoleEnum, organisationUnitId?: string }): Observable<Validations['validations']> {
+  canAddRole(userId: string, params: { role: UserRoleEnum, organisationUnitIds?: string[] }): Observable<Validations['validations']> {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_USER_ROLE', ...params });
     return this.http.get<Validations>(url.buildUrl()).pipe(take(1), map(response => response.validations));

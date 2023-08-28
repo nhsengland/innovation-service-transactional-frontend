@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
+import { MappedObjectType } from '@app/base/types';
 
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+
 import { AdminUsersService } from '../services/admin-users.service';
 import { UsersValidationRulesService, ValidationRuleEnum } from '../services/users-validation-rules.service';
 
@@ -14,11 +15,18 @@ enum SubmitButton {
   CONTINUE = 'Continue'
 }
 
+type CancelState = { type: 'CANCEL' };
+type SuccessState = { type: 'SUCCESS', redirectTo: string, queryParams?: MappedObjectType, alertMessage?: string };
+type ErrorState = { type: 'ERROR' };
+type ChangeTitleState = { type: 'CHANGE_TITLE', title: string };
+type PageLoadingState = { type: 'PAGE_STATUS', isLoading: boolean };
+export type UserInformationComponentState = CancelState | SuccessState | ErrorState | ChangeTitleState | PageLoadingState;
+
 @Component({
   selector: 'app-admin-pages-user-information',
   templateUrl: './user-information.component.html',
 })
-export class UserInformationComponent extends CoreComponent implements OnInit {
+export class UserInformationComponent implements OnInit {
 
   @Input() user: null | (UserInfo & { rolesDescription: string[] }) = null;
 
@@ -35,7 +43,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
     };
   } = null;
 
-  @Output() cancelEmit = new EventEmitter<boolean>();
+  @Output() componentStateChangeEmit = new EventEmitter<UserInformationComponentState>();
 
   componentData: {
     validations: {
@@ -55,7 +63,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
     private usersValidationService: UsersValidationRulesService,
     private organisationsService: OrganisationsService,
     private adminUsersService: AdminUsersService
-  ) { super(); }
+  ) { }
 
   ngOnInit(): void {
 
@@ -109,7 +117,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
 
     switch (this.submitButton.label) {
       case SubmitButton.USER_DETAILS:
-        this.redirectTo(`/admin/users/${this.user.id}`);
+        this.changeComponentState({ type: 'SUCCESS', redirectTo: `/admin/users/${this.user.id}` });
         break;
       case SubmitButton.ADD_USER:
         const role = this.componentData.existingRole;
@@ -121,29 +129,27 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
 
         this.adminUsersService.addRoles(this.user.id, { role, organisationId, unitIds: unitId ? [unitId] : undefined }).subscribe({
           next: () => {
-            if (this.user) {
-              if (this.parentData) {
-                if (this.parentData.flags.isUnitCreate) {
-                  this.setRedirectAlertSuccess('A new user has been added to the unit');
-                  this.redirectTo(`/admin/organisations/${this.parentData.queryParams.organisationId}/unit/${this.parentData.queryParams.unitId}`);
-                } else if (this.parentData.flags.isTeamCreate) {
-                  this.setRedirectAlertSuccess('A new user has been added to the team');
-                  this.redirectTo(`/admin/organisations/${this.parentData.queryParams.team}`);
-                }
-              } else {
-                // This will never happen!
-                this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'roleCreationSuccess' });
+            if (this.user && this.parentData) {
+              if (this.parentData.flags.isUnitCreate) {
+                this.changeComponentState({
+                  type: 'SUCCESS',
+                  redirectTo: `/admin/organisations/${this.parentData.queryParams.organisationId}/unit/${this.parentData.queryParams.unitId}`,
+                  alertMessage: 'A new user has been added to the unit'
+                });
+              } else if (this.parentData.flags.isTeamCreate) {
+                this.changeComponentState({ type: 'SUCCESS', redirectTo: `/admin/organisations/${this.parentData.queryParams.team}`, alertMessage: 'A new user has been added to the team' });
               }
             }
           },
-          error: () => {
-            this.setPageStatus('ERROR');
-            this.setAlertUnknownError();
-          },
+          error: () => { this.changeComponentState({ type: 'ERROR' }); },
         });
         break;
       case SubmitButton.CONTINUE:
-        this.redirectTo(`/admin/users/${this.user?.id}/service-users/role/new`, { organisationId: this.parentData?.queryParams.organisationId, unitId: this.parentData?.queryParams.unitId });
+        this.changeComponentState({
+          type: 'SUCCESS',
+          redirectTo: `/admin/users/${this.user?.id}/service-users/role/new`,
+          queryParams: { organisationId: this.parentData?.queryParams.organisationId, unitId: this.parentData?.queryParams.unitId }
+        });
         break;
     }
 
@@ -151,13 +157,15 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
   }
 
   emitCancel(): void {
-    this.cancelEmit.next(true);
+    this.changeComponentState({ type: 'CANCEL' });
   }
 
   private validateRules(userId: string, role: UserRoleEnum, organisationUnitId?: string): void {
+    this.changeComponentState({ type: 'PAGE_STATUS', isLoading: true });
+
     this.usersValidationService.canAddRole(
       userId,
-      { role, ...((role === UserRoleEnum.ACCESSOR || role === UserRoleEnum.QUALIFYING_ACCESSOR) && { organisationUnitId }) }
+      { role, ...((role === UserRoleEnum.ACCESSOR || role === UserRoleEnum.QUALIFYING_ACCESSOR) && { organisationUnitIds: organisationUnitId ? [organisationUnitId] : [] }) }
     ).subscribe({
       next: (rules) => {
 
@@ -174,13 +182,9 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
         }
 
         this.buildTitle();
-
-        this.setPageStatus('READY');
+        this.changeComponentState({ type: 'PAGE_STATUS', isLoading: false });
       },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
+      error: () => { this.changeComponentState({ type: 'ERROR' }); }
     });
   }
 
@@ -197,10 +201,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
         this.componentData.unitName = unit.name;
         this.buildTitle();
       },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
+      error: () => { this.changeComponentState({ type: 'ERROR' }); }
     })
   }
 
@@ -219,7 +220,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
 
     }
 
-    this.setPageTitle(title, { size: 'l' });
+    this.changeComponentState({ type: 'CHANGE_TITLE', title })
 
   }
 
@@ -228,5 +229,9 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
       return this.parentData.queryParams.team === UserRoleEnum.ASSESSMENT ? 'Needs assessment team' : 'Service administrators';
     }
     return this.componentData.unitName ?? 'Unknown';
+  }
+
+  private changeComponentState(state: UserInformationComponentState): void {
+    this.componentStateChangeEmit.next(state);
   }
 }
