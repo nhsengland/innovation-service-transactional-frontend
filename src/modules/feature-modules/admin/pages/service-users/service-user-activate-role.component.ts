@@ -25,11 +25,13 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
       organisationUnit?: { id: string; name: string; acronym: string; },
       description: string
     }
-   };
+  };
 
-  rulesList: GetActivateRoleUserRules['validations'] = [];
+  invalidValidations: GetActivateRoleUserRules['validations'] = [];
 
   submitButton = { isActive: true, label: 'Confirm' };
+
+  activationFailed = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -46,8 +48,6 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
       name: userInfo.name,
       role: { id: this.activatedRoute.snapshot.params.roleId, description: '' }
     };
-
-    console.log(this.user)
 
     this.setPageTitle('Activate role', { hint: this.user.name });
 
@@ -76,7 +76,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
           this.redirectTo(`/admin/users/${this.user.id}`);
         }
 
-        this.rulesList = validationRules.validations.filter(v => v.valid === false);
+        this.invalidValidations = validationRules.validations.filter(v => v.valid === false);
 
         this.setPageStatus('READY');
       },
@@ -93,17 +93,23 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
 
     this.submitButton = { isActive: true, label: 'Saving...' };
 
-    this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, true).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been activated`);
-        this.redirectTo(`/admin/users/${this.user.id}`);
-      },
-      error: () => {
-        this.submitButton = { isActive: true, label: 'Confirm activation' };
-        this.setAlertUnknownError();
-      }
-    });
+    if (this.invalidValidations.length) {
+      this.setAlertError(`An error occured while activating this user's role`);
+      this.activationFailed = true;
+      this.submitButton = { isActive: false, label: 'Confirm' }
+    } else {
 
+      this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, true).subscribe({
+        next: () => {
+          this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been activated`);
+          this.redirectTo(`/admin/users/${this.user.id}`);
+        },
+        error: () => {
+          this.submitButton = { isActive: true, label: 'Confirm activation' };
+          this.setAlertUnknownError();
+        }
+      });
+    }
   }
 
 }
