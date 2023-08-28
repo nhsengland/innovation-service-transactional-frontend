@@ -7,7 +7,9 @@
 
         <strong>Activate {{ user.role.description }} role for {{ user.name }}.</strong>
 
-        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit"> {{ submitButton.label }} </button>
+        <br>
+
+        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()"> {{ submitButton.label }} </button>
 
       </ng-container>
 
