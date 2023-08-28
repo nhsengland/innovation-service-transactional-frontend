@@ -15,6 +15,9 @@ export enum ValidationRuleEnum {
   UserHasAnyAssessmentRole = 'UserHasAnyAssessmentRole',
   UserHasAnyAccessorRole = 'UserHasAnyAccessorRole',
   UserHasAnyQualifyingAccessorRole = 'UserHasAnyQualifyingAccessorRole',
+  UserHasAnyAccessorRoleInOtherOrganisation = 'UserHasAnyAccessorRoleInOtherOrganisation',
+  UserAlreadyHasRoleInUnit = 'UserAlreadyHasRoleInUnit',
+  OrganisationUnitIsActive = 'OrganisationUnitIsActive',
   CheckIfUserHasAnyAccessorRoleInOtherOrganisation = 'CheckIfUserHasAnyAccessorRoleInOtherOrganisation'
 }
 
@@ -91,9 +94,25 @@ export type changeUserTypeDTO = {
   status: string;
 };
 
+export type GetActivateRoleUserRules = {
+  validations: {
+    rule: ValidationRuleEnum.UserHasAnyAdminRole
+    | ValidationRuleEnum.UserHasAnyInnovatorRole
+    | ValidationRuleEnum.UserHasAnyAssessmentRole
+    | ValidationRuleEnum.UserHasAnyAccessorRole
+    | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
+    | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
+    | ValidationRuleEnum.OrganisationUnitIsActive
+    | ValidationRuleEnum.UserAlreadyHasRoleInUnit
+    valid: boolean
+  }[]
+};
+
 export type GetInactivateRoleUserRules = {
   validations: {
-    rule: ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser,
+    rule: ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne
+    | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit
+    | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser
     valid: boolean
   }[]
 };
@@ -140,6 +159,13 @@ export class UsersValidationRulesService extends CoreService {
       }))
       )
     );
+
+  }
+
+  getActivateRoleUserRules(userId: string, userRoleId: string): Observable<GetActivateRoleUserRules> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ACTIVATE_USER_ROLE', roleId: userRoleId });
+    return this.http.get<GetActivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
 

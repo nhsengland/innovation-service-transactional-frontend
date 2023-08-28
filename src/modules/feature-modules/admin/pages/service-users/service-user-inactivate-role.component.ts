@@ -29,6 +29,8 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
   rulesList: GetInactivateRoleUserRules['validations'] = [];
 
+  submitButton = { isActive: true, label: 'Confirm inactivation' };
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -90,13 +92,15 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
   onSubmit(): void {
 
+    this.submitButton = { isActive: false, label: 'Saving...' };
+
     this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, false).subscribe({
       next: () => {
         this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been inactivated`);
         this.redirectTo(`/admin/users/${this.user.id}`);
       },
       error: () => {
-        this.setPageStatus('ERROR');
+        this.submitButton = { isActive: true, label: 'Confirm inactivation' };
         this.setAlertUnknownError();
       }
     });

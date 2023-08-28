@@ -37,6 +37,7 @@ import { PageServiceUserChangeRoleComponent } from './pages/service-users/servic
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
 import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
+import { PageServiceUserActivateRoleComponent } from './pages/service-users/service-user-activate-role.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -242,6 +243,12 @@ const routes: Routes = [
                             path: 'inactivate',
                             pathMatch: 'full',
                             component: PageServiceUserInactivateRoleComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: 'activate',
+                            pathMatch: 'full',
+                            component: PageServiceUserActivateRoleComponent,
                             data: { breadcrumb: null }
                           }
                         ]
