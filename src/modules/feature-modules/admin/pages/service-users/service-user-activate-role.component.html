@@ -1,0 +1,21 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+        <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-5">
+          Activate {{ user.role.description }} role for {{ user.name }}.
+        </span>
+
+        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()">
+          {{ submitButton.label }}
+        </button>
+
+      <div>
+        <a routerLink="/admin/users/{{ user.id }}">{{ activationFailed ? "Go back to user information" : "Cancel" }} </a>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>

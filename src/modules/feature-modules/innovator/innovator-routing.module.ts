@@ -422,7 +422,7 @@ const routes: Routes = [
 
               {
                 path: 'support',
-                data: { breadcrumb: 'Data Sharing and Support' },
+                data: { breadcrumb: 'Data Sharing' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,

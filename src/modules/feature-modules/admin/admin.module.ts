@@ -37,8 +37,10 @@ import { PageOrganisationUnitUserEditComponent } from './pages/organisations/org
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 
 // // Service Users.
+import { PageServiceUserActivateRoleComponent } from './pages/service-users/service-user-activate-role.component';
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
+import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
 // // Terms of use.
@@ -64,11 +66,11 @@ import { ServiceUsersService } from './services/service-users.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
 
 // Resolvers.
-import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+
 
 
 @NgModule({
@@ -114,6 +116,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageServiceUserLockComponent,
     PageServiceUserUnlockComponent,
     PageServiceUserInactivateRoleComponent,
+    PageServiceUserActivateRoleComponent,
     // // Terms of use.
     PageTermsOfUseInfoComponent,
     PageTermsOfUseListComponent,

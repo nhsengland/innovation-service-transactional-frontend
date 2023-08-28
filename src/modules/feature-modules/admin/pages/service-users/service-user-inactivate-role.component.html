@@ -38,7 +38,7 @@
           <p>Roles should only be inactivated in exceptional circumstances. For example, if the user has breached our terms of use.</p>
         </div>
 
-        <button type="button" (click)="onSubmit()" class="nhsuk-button">Confirm inactivation</button>
+        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()"> {{ submitButton.label }} </button>
 
       </ng-container>
 

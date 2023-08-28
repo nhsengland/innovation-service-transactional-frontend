@@ -33,6 +33,7 @@ import { PageOrganisationUnitNewComponent } from './pages/organisations/organisa
 import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 // // Service Users.
+import { PageServiceUserActivateRoleComponent } from './pages/service-users/service-user-activate-role.component';
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
 import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
@@ -244,6 +245,12 @@ const routes: Routes = [
                             path: 'inactivate',
                             pathMatch: 'full',
                             component: PageServiceUserInactivateRoleComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: 'activate',
+                            pathMatch: 'full',
+                            component: PageServiceUserActivateRoleComponent,
                             data: { breadcrumb: null }
                           }
                         ]
@@ -489,7 +496,7 @@ const routes: Routes = [
 
               {
                 path: 'support',
-                data: { breadcrumb: 'Data Sharing and Support' },
+                data: { breadcrumb: 'Data Sharing' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
