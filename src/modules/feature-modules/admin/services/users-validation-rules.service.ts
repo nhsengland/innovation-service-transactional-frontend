@@ -4,6 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 
+import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 
 export enum ValidationRuleEnum {
@@ -15,8 +16,15 @@ export enum ValidationRuleEnum {
   UserHasAnyAssessmentRole = 'UserHasAnyAssessmentRole',
   UserHasAnyAccessorRole = 'UserHasAnyAccessorRole',
   UserHasAnyQualifyingAccessorRole = 'UserHasAnyQualifyingAccessorRole',
-  CheckIfUserHasAnyAccessorRoleInOtherOrganisation = 'CheckIfUserHasAnyAccessorRoleInOtherOrganisation'
+  UserHasAnyAccessorRoleInOtherOrganisation = 'UserHasAnyAccessorRoleInOtherOrganisation',
+  UserAlreadyHasRoleInUnit = 'UserAlreadyHasRoleInUnit',
 }
+
+export type ValidationResult = {
+  rule: ValidationRuleEnum;
+  valid: boolean;
+};
+export type Validations = { validations: ValidationResult[]; };
 
 export type AdminValidationResponseDTO = {
   validations: {
@@ -98,7 +106,6 @@ export type GetInactivateRoleUserRules = {
   }[]
 };
 
-
 @Injectable()
 export class UsersValidationRulesService extends CoreService {
 
@@ -147,6 +154,13 @@ export class UsersValidationRulesService extends CoreService {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'INACTIVATE_USER_ROLE', roleId: userRoleId });
     return this.http.get<GetInactivateRoleUserRules>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  canAddRole(userId: string, params: { role: UserRoleEnum, organisationUnitId?: string }): Observable<Validations['validations']> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_USER_ROLE', ...params });
+    return this.http.get<Validations>(url.buildUrl()).pipe(take(1), map(response => response.validations));
 
   }
 

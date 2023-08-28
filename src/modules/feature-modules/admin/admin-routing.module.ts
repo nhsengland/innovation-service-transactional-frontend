@@ -10,6 +10,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Users
+import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
@@ -34,9 +35,9 @@ import { PageOrganisationsListComponent } from './pages/organisations/organisati
 // // Service Users.
 import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
 import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
+import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
 import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
 import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
-import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -234,6 +235,7 @@ const routes: Routes = [
                     path: 'role',
                     data: { breadcrumb: null },
                     children: [
+                      { path: 'new', pathMatch: 'full', component: PageRoleNewComponent, data: { breadcrumb: null } },
                       {
                         path: ':roleId',
                         data: { breadcrumb: null },
