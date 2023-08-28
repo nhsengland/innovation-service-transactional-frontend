@@ -41,7 +41,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
 
     super();
 
-    const userInfo = RoutingHelper.getRouteData<any>(this.activatedRoute).user
+    const userInfo = RoutingHelper.getRouteData<any>(this.activatedRoute).user;
 
     this.user = {
       id: this.activatedRoute.snapshot.params.userId,
