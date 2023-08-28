@@ -13,7 +13,7 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO } from './innovations.dtos';
 
 
 export type InnovationsActionsListFilterType = {
@@ -346,37 +346,6 @@ export class InnovationsService extends CoreService {
   deleteSupportSummaryProgressUpdate(innovationId: string, id: string): Observable<void> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-summary/progress-update/:id').setPathParams({ innovationId, id });
     return this.http.delete<void>(url.buildUrl()).pipe(take(1), map(response => response));
-  }
-
-
-  // Support log
-  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogOutDTO[]> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
-    return this.http.get<InnovationSupportsLogInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => {
-
-        let logTitle = '';
-
-        switch (item.type) {
-          case SupportLogType.ACCESSOR_SUGGESTION:
-            logTitle = 'Suggested organisation units';
-            break;
-          case SupportLogType.STATUS_UPDATE:
-            logTitle = 'Updated support status';
-            break;
-          default:
-            break;
-        }
-
-        return {
-          ...item,
-          logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits ?? []).map(o => o.name)
-        };
-
-      }))
-    );
   }
 
 

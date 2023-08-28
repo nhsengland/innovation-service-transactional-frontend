@@ -188,24 +188,6 @@ export enum SupportLogType {
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 
-export type InnovationSupportsLogInDTO = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: DateISOType;
-  innovationSupportStatus?: keyof typeof InnovationSupportStatusEnum;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-export type InnovationSupportsLogOutDTO = InnovationSupportsLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
-
 
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
