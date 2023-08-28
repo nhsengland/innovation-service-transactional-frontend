@@ -73,19 +73,6 @@ export class ServiceUsersService extends CoreService {
   }
 
 
-  deleteAdminAccount(userId: string, securityConfirmation: { id: string, code: string }): Observable<{ id: string }> {
-
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/delete').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<{ id: string }>(url.buildUrl(), {}).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.details.id })))
-    );
-
-  }
-
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
     const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};

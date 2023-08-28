@@ -81,7 +81,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
         this.userIsAdminOrInnovator = this.user.roles[0].role === UserRoleEnum.ADMIN || this.user.roles[0].role === UserRoleEnum.INNOVATOR;
 
         if (this.user.roles[0].role !== UserRoleEnum.ADMIN) {
-          this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/service-users/${userInfo.isActive ? 'lock' : 'unlock'}` };
+          this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/${userInfo.isActive ? 'lock' : 'unlock'}` };
         }
 
         return this.user.roles[0].role === UserRoleEnum.INNOVATOR ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null);

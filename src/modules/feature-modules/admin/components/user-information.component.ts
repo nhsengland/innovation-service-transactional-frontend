@@ -147,7 +147,7 @@ export class UserInformationComponent implements OnInit {
       case SubmitButton.CONTINUE:
         this.changeComponentState({
           type: 'SUCCESS',
-          redirectTo: `/admin/users/${this.user?.id}/service-users/role/new`,
+          redirectTo: `/admin/users/${this.user?.id}/role/new`,
           queryParams: { organisationId: this.parentData?.queryParams.organisationId, unitId: this.parentData?.queryParams.unitId }
         });
         break;

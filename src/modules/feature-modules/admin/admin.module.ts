@@ -17,8 +17,6 @@ import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
-// // Admin Users.
-import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
 // // Announcements.
 import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
@@ -92,8 +90,6 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageUserInfoComponent,
     PageUserNewComponent,
     PageRoleNewComponent,
-    // // Admin Users.
-    PageAdminUserDeleteComponent,
     // // Announcements.
     PageAnnouncementInfoComponent,
     PageAnnouncementNewditComponent,

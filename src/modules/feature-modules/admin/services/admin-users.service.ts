@@ -21,6 +21,7 @@ export class AdminUsersService extends CoreService {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/roles').setPathParams({ userId });
     return this.http.post<{ id: string }[]>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
   }
 
 }

@@ -14,8 +14,6 @@ import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
-// // Admin Users.
-import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
 // // Announcements.
 import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
@@ -201,10 +199,7 @@ const routes: Routes = [
         path: 'users',
         data: { breadcrumb: 'Users' },
         children: [
-          {
-            path: '', pathMatch: 'full', component: PageUserFindComponent,
-            data: { breadcrumb: null }
-          },
+          { path: '', pathMatch: 'full', component: PageUserFindComponent, data: { breadcrumb: null } },
           { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
@@ -213,48 +208,22 @@ const routes: Routes = [
               breadcrumb: (data: { user: { id: string, name: string } }) => `${data.user.name}`
             },
             children: [
+              { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
+              { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
+              { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
+              { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
+              { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } },
               {
-                path: '', pathMatch: 'full', component: PageUserInfoComponent,
-                data: { breadcrumb: null }
-              },
-              {
-                path: 'administration-users',
+                path: 'role',
+                data: { breadcrumb: null },
                 children: [
+                  { path: 'new', pathMatch: 'full', component: PageRoleNewComponent, data: { breadcrumb: null } },
                   {
-                    path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent, data: { breadcrumb: null }
-                  }
-                ]
-              },
-              {
-                path: 'service-users',
-                children: [
-                  { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
-                  { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
-                  { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
-                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } },
-                  {
-                    path: 'role',
+                    path: ':roleId',
                     data: { breadcrumb: null },
                     children: [
-                      { path: 'new', pathMatch: 'full', component: PageRoleNewComponent, data: { breadcrumb: null } },
-                      {
-                        path: ':roleId',
-                        data: { breadcrumb: null },
-                        children: [
-                          {
-                            path: 'inactivate',
-                            pathMatch: 'full',
-                            component: PageServiceUserInactivateRoleComponent,
-                            data: { breadcrumb: null }
-                          },
-                          {
-                            path: 'activate',
-                            pathMatch: 'full',
-                            component: PageServiceUserActivateRoleComponent,
-                            data: { breadcrumb: null }
-                          }
-                        ]
-                      }
+                      { path: 'inactivate', pathMatch: 'full', component: PageServiceUserInactivateRoleComponent, data: { breadcrumb: null } },
+                      { path: 'activate', pathMatch: 'full', component: PageServiceUserActivateRoleComponent, data: { breadcrumb: null } }
                     ]
                   }
                 ]
