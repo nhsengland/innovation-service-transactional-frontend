@@ -35,7 +35,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
     };
   } = null;
 
-  @Output() onCancelEmit = new EventEmitter<boolean>();
+  @Output() cancelEmit = new EventEmitter<boolean>();
 
   componentData: {
     validations: {
@@ -151,7 +151,7 @@ export class UserInformationComponent extends CoreComponent implements OnInit {
   }
 
   emitCancel(): void {
-    this.onCancelEmit.next(true);
+    this.cancelEmit.next(true);
   }
 
   private validateRules(userId: string, role: UserRoleEnum, organisationUnitId?: string): void {
