@@ -7,7 +7,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { GetInnovationsByOwnerIdDTO, ServiceUsersService } from '../../services/service-users.service';
+import { AdminUsersService, GetInnovationsByOwnerIdDTO } from '../../services/users.service';
 
 
 @Component({
@@ -26,7 +26,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: ServiceUsersService
+    private usersService: AdminUsersService
   ) {
 
     super();

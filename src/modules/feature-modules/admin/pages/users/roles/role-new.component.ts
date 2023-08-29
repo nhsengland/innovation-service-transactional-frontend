@@ -7,8 +7,7 @@ import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { AdminUsersService } from '@modules/feature-modules/admin/services/admin-users.service';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 import { OutboundPayloadType, WIZARD_ADD_ROLE } from './role-new.config';
 
@@ -37,9 +36,8 @@ export class PageRoleNewComponent extends CoreComponent implements OnInit {
   wizard = new WizardEngineModel(WIZARD_ADD_ROLE);
 
   constructor(
-    private adminUsersService: AdminUsersService,
     private organisationsService: OrganisationsService,
-    private usersService: ServiceUsersService,
+    private usersService: AdminUsersService,
     private activatedRoute: ActivatedRoute
   ) {
 
@@ -143,7 +141,7 @@ export class PageRoleNewComponent extends CoreComponent implements OnInit {
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    this.adminUsersService.addRoles(this.pageData.params.userId, body).subscribe({
+    this.usersService.addRoles(this.pageData.params.userId, body).subscribe({
       next: (response) => {
         if (response.length > 0) {
           if (this.pageData.flags.isUnitCreate) {

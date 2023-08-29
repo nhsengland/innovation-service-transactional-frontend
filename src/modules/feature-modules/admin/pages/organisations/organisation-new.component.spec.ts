@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { PageOrganisationNewComponent } from './organisation-new.component';
 import { AdminOrganisationsService } from '../../services/admin-organisations.service';
-import { ServiceUsersService } from '../../services/service-users.service';
+import { UsersService } from '../../services/users.service';
+import { PageOrganisationNewComponent } from './organisation-new.component';
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent', () => {
   let component: PageOrganisationNewComponent;
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
 
   let authenticationStore: AuthenticationStore;
   let adminOrganisationsService: AdminOrganisationsService;
-  let serviceUserService: ServiceUsersService;
+  let serviceUserService: UsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,7 +40,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
     routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    serviceUserService = TestBed.inject(ServiceUsersService);
+    serviceUserService = TestBed.inject(UsersService);
     adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
 
   });

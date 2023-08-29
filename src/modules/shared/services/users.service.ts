@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType } from '@app/base/types';
 import { GetUsersRequestDTO, UsersListDTO } from '../dtos/users.dto';
@@ -16,43 +15,6 @@ export type UserListFiltersType = {
   organisationUnitId?: string,
 };
 
-export type searchUserEndpointInDTO = {
-  id: string;
-  email: string;
-  displayName: string;
-  type: UserRoleEnum,
-  lockedAt?: string;
-  userOrganisations?: {
-    id: string;
-    name: string;
-    acronym: string;
-    role: string;
-    units?: { id: string, name: string, acronym: string }[]
-  }[]
-};
-
-export type searchUserEndpointOutDTO = searchUserEndpointInDTO & { typeLabel: string };
-
-export type getUserFullInfoDTO = {
-  id: string;
-  email: string;
-  phone: null | string;
-  displayName: string;
-  type: UserRoleEnum;
-  lockedAt: null | string;
-  innovations: {
-    id: string;
-    name: string;
-  }[];
-  userOrganisations: {
-    id: string;
-    name: string;
-    size: null | string;
-    role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum;
-    isShadow: boolean;
-    units: { id: string, name: string, acronym: string, supportCount: null | number }[];
-  }[];
-};
 
 @Injectable()
 export class UsersService extends CoreService {
@@ -61,7 +23,7 @@ export class UsersService extends CoreService {
 
   getUsersList({ queryParams }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<UsersListDTO> {
     if (!queryParams) {
-      queryParams = { take: 100, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT]} };
+      queryParams = { take: 100, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT] } };
     }
     const { filters, ...qParams } = queryParams;
 
@@ -96,10 +58,4 @@ export class UsersService extends CoreService {
     );
   }
 
-  getUserFullInfo(userId: string): Observable<getUserFullInfoDTO> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/:userId').setPathParams({ userId }).setQueryParams({ model: 'full' });
-    return this.http.get<getUserFullInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
-  }
 }

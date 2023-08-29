@@ -9,8 +9,7 @@ import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { UserInformationComponentState } from '../../components/user-information.component';
-import { AdminUsersService } from '../../services/admin-users.service';
-import { ServiceUsersService } from '../../services/service-users.service';
+import { AdminUsersService } from '../../services/users.service';
 import { OutboundPayloadType, WIZARD_CREATE_USER } from './user-new.config';
 
 @Component({
@@ -41,9 +40,8 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
   wizard = new WizardEngineModel(WIZARD_CREATE_USER);
 
   constructor(
-    private adminUsersService: AdminUsersService,
     private organisationsService: OrganisationsService,
-    private usersService: ServiceUsersService,
+    private usersService: AdminUsersService,
     private activatedRoute: ActivatedRoute
   ) {
 
@@ -207,7 +205,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    this.adminUsersService.createUser(body).subscribe({
+    this.usersService.createUser(body).subscribe({
       next: (response) => {
 
         if (this.pageData.flags.isUnitCreate) {

@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
@@ -53,10 +53,23 @@ export type GetInnovationsByOwnerIdDTO = {
 }[]
 
 @Injectable()
-export class ServiceUsersService extends CoreService {
+export class AdminUsersService extends CoreService {
 
   constructor() { super(); }
 
+  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
+
+  addRoles(userId: string, body: { role: UserRoleEnum, organisationId?: string, unitIds?: string[] }): Observable<{ id: string }[]> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/roles').setPathParams({ userId });
+    return this.http.post<{ id: string }[]>(url.buildUrl(), body).pipe(take(1), map(response => response));
+
+  }
 
   lockUser(userId: string): Observable<{ id: string }> {
 
@@ -72,7 +85,7 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-
+  // TODO: this is not up to date
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
     const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
@@ -86,19 +99,6 @@ export class ServiceUsersService extends CoreService {
 
   }
 
-
-  changeOrganisationUserUnit(body: MappedObjectType, securityConfirmation: { id: string, code: string }, userId: string): Observable<any> {
-
-    const qp = (securityConfirmation.id && securityConfirmation.code) ? securityConfirmation : {};
-
-    const url = new UrlModel(this.API_URL).addPath('user-admin/users/:userId/change-unit').setPathParams({ userId }).setQueryParams(qp);
-    return this.http.patch<any>(url.buildUrl(), { newOrganisationUnitAcronym: body.organisationUnitAcronym, organisationId: body.organisationId }).pipe(
-      take(1),
-      map(response => response),
-      catchError(error => throwError(() => ({ id: error.error?.id })))  // Note this will need to be changed when the backend API is updated to error.error?.details?.id
-    );
-
-  }
 
   updateUserRole(userId: string, roleId: string, enabled?: boolean): Observable<{ roleId: string }> {
 

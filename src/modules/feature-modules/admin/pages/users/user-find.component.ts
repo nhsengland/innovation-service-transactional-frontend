@@ -4,9 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
-import { LinkType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { ServiceUsersService } from '../../services/service-users.service';
+import { AdminUsersService } from '../../services/users.service';
 
 
 @Component({
@@ -24,7 +23,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: ServiceUsersService
+    private usersService: AdminUsersService
   ) {
 
     super();

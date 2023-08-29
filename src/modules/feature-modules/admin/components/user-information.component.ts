@@ -6,8 +6,8 @@ import { MappedObjectType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-import { AdminUsersService } from '../services/admin-users.service';
 import { UsersValidationRulesService, ValidationRuleEnum } from '../services/users-validation-rules.service';
+import { AdminUsersService } from '../services/users.service';
 
 enum SubmitButton {
   USER_DETAILS = 'Go to user details',
@@ -62,7 +62,7 @@ export class UserInformationComponent implements OnInit {
   constructor(
     private usersValidationService: UsersValidationRulesService,
     private organisationsService: OrganisationsService,
-    private adminUsersService: AdminUsersService
+    private usersService: AdminUsersService
   ) { }
 
   ngOnInit(): void {
@@ -127,7 +127,7 @@ export class UserInformationComponent implements OnInit {
           return;
         }
 
-        this.adminUsersService.addRoles(this.user.id, { role, organisationId, unitIds: unitId ? [unitId] : undefined }).subscribe({
+        this.usersService.addRoles(this.user.id, { role, organisationId, unitIds: unitId ? [unitId] : undefined }).subscribe({
           next: () => {
             if (this.user && this.parentData) {
               if (this.parentData.flags.isUnitCreate) {
