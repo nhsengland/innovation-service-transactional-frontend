@@ -13,7 +13,7 @@ import { StoresModule } from '@modules/stores';
 import { PageTermsOfUseListComponent } from './terms-of-use-list.component';
 
 import { AlertType } from '@app/base/types';
-import { UsersService } from '@modules/feature-modules/admin/services/users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
   let component: PageTermsOfUseListComponent;
   let fixture: ComponentFixture<PageTermsOfUseListComponent>;
   let activatedRoute: ActivatedRoute;
-  let userService: UsersService;
+  let userService: AdminUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
     AppInjector.setInjector(TestBed.inject(Injector));
     activatedRoute = TestBed.inject(ActivatedRoute);
-    userService = TestBed.inject(UsersService);
+    userService = TestBed.inject(AdminUsersService);
   });
 
 

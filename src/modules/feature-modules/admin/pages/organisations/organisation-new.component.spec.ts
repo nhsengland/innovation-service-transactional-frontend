@@ -10,7 +10,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { AdminOrganisationsService } from '../../services/admin-organisations.service';
-import { UsersService } from '../../services/users.service';
+import { AdminUsersService } from '../../services/users.service';
 import { PageOrganisationNewComponent } from './organisation-new.component';
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
 
   let authenticationStore: AuthenticationStore;
   let adminOrganisationsService: AdminOrganisationsService;
-  let serviceUserService: UsersService;
+  let usersService: AdminUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,7 +40,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
     routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    serviceUserService = TestBed.inject(UsersService);
+    usersService = TestBed.inject(AdminUsersService);
     adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
 
   });

@@ -13,7 +13,7 @@ import { StoresModule } from '@modules/stores';
 import { PageTermsOfUseNewComponent } from './terms-of-use-new.component';
 
 import { TermsOfUseTypeEnum } from '@app/base/enums';
-import { UsersService } from '@modules/feature-modules/admin/services/users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
   let component: PageTermsOfUseNewComponent;
   let fixture: ComponentFixture<PageTermsOfUseNewComponent>;
   let activatedRoute: ActivatedRoute;
-  let userService: UsersService;
+  let userService: AdminUsersService;
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -41,7 +41,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
-    userService = TestBed.inject(UsersService);
+    userService = TestBed.inject(AdminUsersService);
   });
 
 

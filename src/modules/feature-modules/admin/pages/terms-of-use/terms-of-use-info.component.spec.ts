@@ -13,7 +13,7 @@ import { StoresModule } from '@modules/stores';
 import { PageTermsOfUseInfoComponent } from './terms-of-use-info.component';
 
 import { TermsOfUseTypeEnum } from '@app/base/enums';
-import { UsersService } from '@modules/feature-modules/admin/services/users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
   let component: PageTermsOfUseInfoComponent;
   let fixture: ComponentFixture<PageTermsOfUseInfoComponent>;
   let activatedRoute: ActivatedRoute;
-  let userService: UsersService;
+  let userService: AdminUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
 
     AppInjector.setInjector(TestBed.inject(Injector));
     activatedRoute = TestBed.inject(ActivatedRoute);
-    userService = TestBed.inject(UsersService);
+    userService = TestBed.inject(AdminUsersService);
   });
 
 

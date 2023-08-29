@@ -11,7 +11,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 
-import { UsersService } from '@modules/feature-modules/admin/services/users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { PageUserNewComponent } from './user-new.component';
 
@@ -24,7 +24,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
   let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
-  let serviceUserService: UsersService;
+  let usersService: AdminUsersService;
   let organisationsService: OrganisationsService;
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    serviceUserService = TestBed.inject(UsersService);
+    usersService = TestBed.inject(AdminUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     organisationsService.getOrganisationsList = () => of([
