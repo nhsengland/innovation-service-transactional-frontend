@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private userService: ServiceUsersService
+    private usersService: AdminUsersService
   ) {
 
     super();
@@ -48,7 +48,7 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
 
   getTerms(): void {
     this.setPageStatus('LOADING');
-    this.userService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe({
+    this.usersService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe({
       next: (response) => {
         this.terms.setData(response.data, response.count);
         this.setPageStatus('READY');

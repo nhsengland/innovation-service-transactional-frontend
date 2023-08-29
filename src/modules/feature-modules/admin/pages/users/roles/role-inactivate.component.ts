@@ -1,20 +1,19 @@
-import { GetInactivateRoleUserRules } from './../../services/users-validation-rules.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService } from '../../services/service-users.service';
-import { UsersValidationRulesService } from '../../services/users-validation-rules.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { GetInactivateRoleUserRules, UsersValidationRulesService, Validations } from './../../../services/users-validation-rules.service';
+import { AdminUsersService } from './../../../services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-inactivate-role',
-  templateUrl: './service-user-inactivate-role.component.html'
+  selector: 'app-admin-pages-users-role-inactivate',
+  templateUrl: './role-inactivate.component.html'
 })
-export class PageServiceUserInactivateRoleComponent extends CoreComponent implements OnInit {
+export class PageUsersRoleInactivateComponent extends CoreComponent implements OnInit {
 
   user: {
     id: string,
@@ -27,14 +26,14 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
   pageStep: 'RULES' | 'INACTIVATE_ROLE' = 'RULES';
 
-  rulesList: GetInactivateRoleUserRules['validations'] = [];
+  rulesList: Validations<GetInactivateRoleUserRules>['validations'] = [];
 
   submitButton = { isActive: true, label: 'Confirm inactivation' };
 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
+    private usersService: AdminUsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -54,7 +53,7 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
   ngOnInit(): void {
 
     forkJoin([
-      this.serviceUsersService.getUserInfo(this.user.id),
+      this.usersService.getUserInfo(this.user.id),
       this.usersValidationRulesService.getInactivateRoleUserRules(this.user.id, this.user.role.id),
     ]).subscribe({
       next: ([user, validationRules]) => {
@@ -94,7 +93,7 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, false).subscribe({
+    this.usersService.updateUserRole(this.user.id, this.user.role.id, false).subscribe({
       next: () => {
         this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been inactivated`);
         this.redirectTo(`/admin/users/${this.user.id}`);

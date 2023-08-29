@@ -38,7 +38,7 @@
               <ng-container *ngIf="role.isActive">
                 <td class="nhsuk-table__cell">{{ user.rolesDescription[i] }}</td>
                 <td class="nhsuk-table__cell text-align-right">
-                  <a routerLink="/admin/users/{{ user.id }}/service-users/role/{{ role.id }}/inactivate">Inactivate</a>
+                  <a routerLink="role/{{ role.id }}/inactivate">Inactivate</a>
                 </td>
               </ng-container>
             </tr>
@@ -58,7 +58,7 @@
               <ng-container *ngIf="!role.isActive">
                 <td class="nhsuk-table__cell">{{ user.rolesDescription[i] }}</td>
                 <td class="nhsuk-table__cell text-align-right">
-                  <a routerLink="/admin/users/{{ user.id }}/service-users/role/{{ role.id }}/activate">Activate</a>
+                  <a routerLink="role/{{ role.id }}/activate">Activate</a>
                 </td>
               </ng-container>
             </tr>
@@ -87,7 +87,7 @@
   </section>
 
   <div *ngIf="!userIsAdminOrInnovator" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
-    <a class="nhsuk-action-link__link" routerLink="service-users/role/new">
+    <a class="nhsuk-action-link__link" routerLink="role/new">
       <theme-svg-icon type="action"></theme-svg-icon>
       <span class="nhsuk-action-link__text">Add role</span>
     </a>

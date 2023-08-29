@@ -12,7 +12,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { StoresModule } from '@modules/stores';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { AdminUsersService } from '../../services/users.service';
 import { PageUserFindComponent } from './user-find.component';
 
 
@@ -20,7 +20,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
-  let usersService: ServiceUsersService;
+  let usersService: AdminUsersService;
 
   let component: PageUserFindComponent;
   let fixture: ComponentFixture<PageUserFindComponent>;
@@ -40,7 +40,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    usersService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(AdminUsersService);
 
   });
 
