@@ -34,6 +34,7 @@ import { PageOrganisationNewComponent } from './pages/organisations/organisation
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
+import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -114,13 +115,14 @@ const routes: Routes = [
         path: 'organisations',
         data: { breadcrumb: 'Organisations' },
         children: [
-          {
-            path: '', pathMatch: 'full', component: PageOrganisationsListComponent,
-            data: { breadcrumb: null },
-          },
-          {
-            path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent,
-          },
+
+          { path: '', pathMatch: 'full', component: PageOrganisationsListComponent, data: { breadcrumb: null } },
+
+          { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
+
+          { path: 'ASSESSMENT', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+
           {
             path: ':organisationId',
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
