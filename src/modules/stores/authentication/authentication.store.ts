@@ -160,10 +160,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case 'ADMIN': return 'Administrator';
       // Think this one is not used
       case 'INNOVATOR_OWNER': return 'Owner';
-      case 'ASSESSMENT': return 'Needs Assessor';
+      case 'ASSESSMENT': return 'Needs assessor';
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';
-      case 'QUALIFYING_ACCESSOR': return 'Qualifying Accessor';
+      case 'QUALIFYING_ACCESSOR': return 'Qualifying accessor';
       default: return '';
     }
   }

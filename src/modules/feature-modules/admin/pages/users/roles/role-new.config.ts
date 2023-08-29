@@ -153,11 +153,15 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   }
 
   let existingRole: undefined | UserRole;
+  let isAOrQaFromAllUnits: undefined | boolean;
   if (isAccessor) {
     roles = roles.filter(r => r !== UserRoleEnum.QUALIFYING_ACCESSOR && r !== UserRoleEnum.ACCESSOR);
     existingRole = data.userRoles.find(r => r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR);
 
-    if (roles.includes(UserRoleEnum.ASSESSMENT)) {
+    const nUnits = data.organisations?.find(o => o.id === (data.organisationId ?? existingRole?.orgId))?.units.length;
+    isAOrQaFromAllUnits = data.userRoles.filter(r => r.role === existingRole?.role).length === nUnits;
+
+    if (roles.includes(UserRoleEnum.ASSESSMENT) && !isAOrQaFromAllUnits) {
       roles.push(existingRole!.role);
     }
   }
@@ -172,8 +176,10 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     availableRoles: roles,
 
     organisationId: data.organisationId ?? existingRole?.orgId,
-    unitIds: data.unitId ? [data.unitId] : undefined,
-    role: existingRole?.role ? existingRole.role as AvailableRoles : undefined
+    ...(!isAOrQaFromAllUnits ? {
+      role: existingRole?.role && roles.length === 0 ? existingRole.role as AvailableRoles : undefined,
+      unitIds: data.unitId ? [data.unitId] : undefined
+    } : {})
   };
 }
 

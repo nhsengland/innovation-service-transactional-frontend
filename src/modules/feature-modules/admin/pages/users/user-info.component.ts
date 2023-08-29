@@ -5,8 +5,9 @@ import { CoreComponent } from '@app/base';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { of } from 'rxjs';
+import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { UsersValidationRulesService } from '../../services/users-validation-rules.service';
 import { AdminUsersService, GetInnovationsByOwnerIdDTO } from '../../services/users.service';
 
 
@@ -18,7 +19,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   user: (UserInfo & { rolesDescription: string[], innovations?: GetInnovationsByOwnerIdDTO }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [] };
 
-  userIsAdminOrInnovator: boolean = false;
+  canAddRole: boolean = false;
   userHasActiveRoles: boolean = false;
   userHasInactiveRoles: boolean = false;
 
@@ -26,7 +27,8 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: AdminUsersService
+    private usersService: AdminUsersService,
+    private usersValidationService: UsersValidationRulesService
   ) {
 
     super();
@@ -78,18 +80,25 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           })
         };
 
-        this.userIsAdminOrInnovator = this.user.roles[0].role === UserRoleEnum.ADMIN || this.user.roles[0].role === UserRoleEnum.INNOVATOR;
+        const isAdmin = this.user.roles.some(r => r.role === UserRoleEnum.ADMIN);
+        const isInnovator = this.user.roles.some(r => r.role === UserRoleEnum.INNOVATOR);
+        this.canAddRole = !(isAdmin || isInnovator);
 
-        if (this.user.roles[0].role !== UserRoleEnum.ADMIN) {
+        if (!isAdmin) {
           this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/${userInfo.isActive ? 'lock' : 'unlock'}` };
         }
 
-        return this.user.roles[0].role === UserRoleEnum.INNOVATOR ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null);
-
+        return forkJoin([
+          isInnovator ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null),
+          !(isAdmin || isInnovator) ? this.usersValidationService.canAddAnyRole(userInfo.id) : of(null)
+        ])
       })).subscribe({
-        next: (innovations) => {
+        next: ([innovations, canAddAnyRoleValidations]) => {
           if (innovations) {
             this.user.innovations = innovations;
+          }
+          if(canAddAnyRoleValidations) {
+            this.canAddRole = !canAddAnyRoleValidations.some(v => !v.valid);
           }
           this.setPageTitle('User information');
           this.setPageStatus('READY');

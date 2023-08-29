@@ -19,7 +19,8 @@ export enum ValidationRuleEnum {
   UserHasAnyAccessorRoleInOtherOrganisation = 'UserHasAnyAccessorRoleInOtherOrganisation',
   UserAlreadyHasRoleInUnit = 'UserAlreadyHasRoleInUnit',
   OrganisationUnitIsActive = 'OrganisationUnitIsActive',
-  CheckIfUserHasAnyAccessorRoleInOtherOrganisation = 'CheckIfUserHasAnyAccessorRoleInOtherOrganisation'
+  UserIsAccessorInAllUnitsOfOrg = 'UserIsAccessorInAllUnitsOfOrg',
+  UserCanHaveAssessmentOrAccessorRole = 'UserCanHaveAssessmentOrAccessorRole'
 }
 
 export type GetActivateRoleUserRules = ValidationRuleEnum.UserHasAnyAdminRole
@@ -42,6 +43,10 @@ export type CanAddRoleRules = ValidationRuleEnum.UserHasAnyAdminRole
     | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
     | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
     | ValidationRuleEnum.UserAlreadyHasRoleInUnit;
+
+export type CanAddAnyRoleRules = ValidationRuleEnum.UserHasAnyAdminRole
+    | ValidationRuleEnum.UserHasAnyInnovatorRole
+    | ValidationRuleEnum.UserCanHaveAssessmentOrAccessorRole;
 
 export type ValidationResult<T> = {
   rule: T;
@@ -143,6 +148,13 @@ export class UsersValidationRulesService extends CoreService {
 
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_USER_ROLE', ...params });
     return this.http.get<Validations<CanAddRoleRules>>(url.buildUrl()).pipe(take(1), map(response => response.validations));
+
+  }
+
+  canAddAnyRole(userId: string): Observable<Validations<CanAddAnyRoleRules>['validations']> {
+
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_ANY_USER_ROLE' });
+    return this.http.get<Validations<CanAddAnyRoleRules>>(url.buildUrl()).pipe(take(1), map(response => response.validations));
 
   }
 

@@ -86,7 +86,7 @@
     </div>
   </section>
 
-  <div *ngIf="!userIsAdminOrInnovator" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
+  <div *ngIf="this.canAddRole" class="nhsuk-action-link nhsuk-u-margin-bottom-5">
     <a class="nhsuk-action-link__link" routerLink="role/new">
       <theme-svg-icon type="action"></theme-svg-icon>
       <span class="nhsuk-action-link__text">Add role</span>
