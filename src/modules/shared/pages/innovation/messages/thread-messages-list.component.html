@@ -20,7 +20,7 @@
           {{ threadFollowers?.followers?.length?.toLocaleString() }} {{ followerNumberText }}.
         </span>
         <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
-          {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of thread participants </span>
+          {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
         </a>
 
         <ng-container *ngIf=" showFollowersHideStatus === 'opened'">

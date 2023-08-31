@@ -29,7 +29,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   showFollowersHideStatus: string | null = null;
   threadFollowers: GetThreadFollowersDTO | null = null;
   showFollowersText: 'Show list' | 'Hide list' = 'Show list';
-  followerNumberText: 'participant' | 'participants' = 'participant';
+  followerNumberText: 'recipient' | 'recipients' = 'recipient';
 
   form = new FormGroup({
     message: new FormControl<string>('')
@@ -86,7 +86,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.threadInfo = threadInfo;
         this.threadFollowers= threadFollowers;
 
-        this.followerNumberText = this.threadFollowers.followers.length > 1 ? 'participants' : 'participant';
+        this.followerNumberText = this.threadFollowers.followers.length > 1 ? 'recipients' : 'recipient';
 
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
