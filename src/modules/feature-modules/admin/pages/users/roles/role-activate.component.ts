@@ -49,7 +49,7 @@ export class PageUsersRoleActivateComponent extends CoreComponent implements OnI
       role: { id: this.activatedRoute.snapshot.params.roleId, description: '' }
     };
 
-    this.setPageTitle('Activate role', { hint: this.user.name });
+    this.setPageTitle('Activate role');
 
   }
 

@@ -41,11 +41,11 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
 
     this.user = {
       id: this.activatedRoute.snapshot.params.userId,
-      name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName,
+      name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.name,
       role: { id: this.activatedRoute.snapshot.params.roleId, description: '' }
     };
 
-    this.setPageTitle('Inactivate role', { hint: this.user.name });
+    this.setPageTitle('Inactivate role');
 
   }
 
