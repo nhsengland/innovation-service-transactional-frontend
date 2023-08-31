@@ -46,7 +46,7 @@ export class PageServiceUserInactivateRoleComponent extends CoreComponent implem
       role: { id: this.activatedRoute.snapshot.params.roleId, description: '' }
     };
 
-    this.setPageTitle('Inactivate role', { hint: this.user.name });
+    this.setPageTitle('Inactivate role');
 
   }
 
