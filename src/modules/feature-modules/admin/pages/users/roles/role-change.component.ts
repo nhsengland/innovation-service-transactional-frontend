@@ -4,25 +4,25 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { AccessorOrganisationRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { FormGroup } from '@app/base/forms';
 import { RoutingHelper } from '@app/base/helpers';
 
 
-import { changeUserRoleDTO, ServiceUsersService } from '../../services/service-users.service';
-import { getOrganisationRoleRulesOutDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
-import { getUserFullInfoDTO, UsersService } from '@modules/shared/services/users.service';
+import { UserInfo } from '@modules/shared/dtos/users.dto';
+import { UsersValidationRulesService, getOrganisationRoleRulesOutDTO } from '../../../services/users-validation-rules.service';
+import { AdminUsersService, changeUserRoleDTO } from '../../../services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-change-role',
-  templateUrl: './service-user-change-role.component.html'
+  selector: 'app-admin-pages-users-role-change',
+  templateUrl: './role-change.component.html'
 })
-export class PageServiceUserChangeRoleComponent extends CoreComponent implements OnInit {
+export class PageUsersRoleChangeComponent extends CoreComponent implements OnInit {
 
   user: { id: string, name: string };
 
-  organisation: null | getUserFullInfoDTO['userOrganisations'][0];
+  organisation: null | UserInfo['roles'][0]['organisation'];
 
   role: null | AccessorOrganisationRoleEnum;
 
@@ -40,8 +40,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
-    private usersService: UsersService,
+    private usersService: AdminUsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -58,16 +57,16 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
   ngOnInit(): void {
 
     forkJoin([
-      this.usersService.getUserFullInfo(this.user.id),
+      this.usersService.getUserInfo(this.user.id),
       this.usersValidationRulesService.getUserRoleRules(this.user.id)
     ]).subscribe({
-      next: ([userInfo, rules]) => {
+      next: ([user, rules]) => {
 
         this.rulesList = rules;
 
-        // TODO this needs to be changed when admin supports multiple organisations
-        this.organisation = userInfo.userOrganisations[0]
-        this.role = ( this.organisation.role === AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
+        // TODO: ALl this component needs to be updated for the "roles". This is just to remove a uneeded endpoint
+        this.organisation = user.roles[0].organisation;
+        this.role = user.roles.some(r => r.role === UserRoleEnum.ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
 
         this.roleName = this.stores.authentication.getRoleDescription(this.role);
 
@@ -87,7 +86,7 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
 
   onSubmit(): void {
 
-    if(this.role === null || this.organisation === null) {
+    if (this.role === null || this.organisation === null) {
       return;
     }
 
@@ -98,12 +97,12 @@ export class PageServiceUserChangeRoleComponent extends CoreComponent implements
     const body: changeUserRoleDTO = {
       role: {
         name: this.role,
-        organisationId: this.organisation.id
+        organisationId: this.organisation?.id ?? ''
       },
       securityConfirmation: this.securityConfirmation
     };
 
-    this.serviceUsersService.changeUserRole(this.user.id, body).subscribe(
+    this.usersService.changeUserRole(this.user.id, body).subscribe(
       () => {
 
         this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'roleChangeSuccess' });

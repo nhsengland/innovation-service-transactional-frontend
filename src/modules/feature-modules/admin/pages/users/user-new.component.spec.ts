@@ -1,18 +1,18 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { PageUserNewComponent } from './user-new.component';
 
 
@@ -24,7 +24,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
   let routerSpy: jest.SpyInstance;
 
   let authenticationStore: AuthenticationStore;
-  let serviceUserService: ServiceUsersService;
+  let usersService: AdminUsersService;
   let organisationsService: OrganisationsService;
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-    serviceUserService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(AdminUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     organisationsService.getOrganisationsList = () => of([

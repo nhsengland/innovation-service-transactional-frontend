@@ -4,7 +4,7 @@ import { UntypedFormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
-import { CreateOrganisationBodyDTO, AdminOrganisationsService} from '@modules/feature-modules/admin/services/admin-organisations.service';
+import { CreateOrganisationBodyDTO, AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 import { CREATE_NEW_ORGANISATION_QUESTIONS } from './organisation-new.config';
@@ -14,7 +14,6 @@ import { CREATE_NEW_ORGANISATION_QUESTIONS } from './organisation-new.config';
   selector: 'app-admin-pages-organisations-organisations-new',
   templateUrl: './organisation-new.component.html'
 })
-
 export class PageOrganisationNewComponent extends CoreComponent implements OnInit {
 
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;

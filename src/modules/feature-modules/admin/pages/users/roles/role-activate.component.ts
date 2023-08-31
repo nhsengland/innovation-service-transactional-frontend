@@ -1,20 +1,20 @@
-import { GetActivateRoleUserRules } from './../../services/users-validation-rules.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { GetActivateRoleUserRules, Validations } from '../../../services/users-validation-rules.service';
 
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService } from '../../services/service-users.service';
-import { UsersValidationRulesService } from '../../services/users-validation-rules.service';
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
+import { UsersValidationRulesService } from '../../../services/users-validation-rules.service';
+import { AdminUsersService } from '../../../services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-activate-role',
-  templateUrl: './service-user-activate-role.component.html'
+  selector: 'app-admin-pages-users-role-activate',
+  templateUrl: './role-activate.component.html'
 })
-export class PageServiceUserActivateRoleComponent extends CoreComponent implements OnInit {
+export class PageUsersRoleActivateComponent extends CoreComponent implements OnInit {
 
   user: {
     id: string,
@@ -27,7 +27,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
     }
   };
 
-  invalidValidations: GetActivateRoleUserRules['validations'] = [];
+  invalidValidations: Validations<GetActivateRoleUserRules>['validations'] = [];
 
   submitButton = { isActive: true, label: 'Confirm' };
 
@@ -35,7 +35,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
+    private usersService: AdminUsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -57,7 +57,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
   ngOnInit(): void {
 
     forkJoin([
-      this.serviceUsersService.getUserInfo(this.user.id),
+      this.usersService.getUserInfo(this.user.id),
       this.usersValidationRulesService.getActivateRoleUserRules(this.user.id, this.user.role.id),
     ]).subscribe({
       next: ([user, validationRules]) => {
@@ -99,7 +99,7 @@ export class PageServiceUserActivateRoleComponent extends CoreComponent implemen
       this.submitButton = { isActive: false, label: 'Confirm' }
     } else {
 
-      this.serviceUsersService.updateUserRole(this.user.id, this.user.role.id, true).subscribe({
+      this.usersService.updateUserRole(this.user.id, this.user.role.id, true).subscribe({
         next: () => {
           this.setRedirectAlertSuccess(`The role of ${this.user.role.description} has been activated`);
           this.redirectTo(`/admin/users/${this.user.id}`);

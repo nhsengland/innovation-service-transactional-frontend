@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { GetInnovationsByOwnerIdDTO, ServiceUsersService } from '../../services/service-users.service';
-import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { UserRoleEnum } from '@app/base/enums';
+import { UserInfo } from '@modules/shared/dtos/users.dto';
+import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { UsersValidationRulesService } from '../../services/users-validation-rules.service';
+import { AdminUsersService, GetInnovationsByOwnerIdDTO } from '../../services/users.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   user: (UserInfo & { rolesDescription: string[], innovations?: GetInnovationsByOwnerIdDTO }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [] };
 
-  userIsAdminOrInnovator: boolean = false;
+  canAddRole: boolean = false;
   userHasActiveRoles: boolean = false;
   userHasInactiveRoles: boolean = false;
 
@@ -26,7 +27,8 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: ServiceUsersService
+    private usersService: AdminUsersService,
+    private usersValidationService: UsersValidationRulesService
   ) {
 
     super();
@@ -43,6 +45,9 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
         break;
       case 'roleChangeSuccess':
         this.setAlertSuccess('User role changed successfully');
+        break;
+      case 'roleCreationSuccess':
+        this.setAlertSuccess('A new user role was added successfully');
         break;
       case 'unitChangeSuccess':
         this.setAlertSuccess('Organisation unit has been successfully changed')
@@ -61,11 +66,11 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           ...userInfo,
           rolesDescription: userInfo.roles.map(r => {
             let roleDescription = this.stores.authentication.getRoleDescription(r.role);
-            if(r.displayTeam) {
+            if (r.displayTeam) {
               roleDescription += ` (${r.displayTeam})`;
             }
 
-            if(r.isActive) {
+            if (r.isActive) {
               this.userHasActiveRoles = true;
             } else {
               this.userHasInactiveRoles = true;
@@ -75,27 +80,34 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           })
         };
 
-        this.userIsAdminOrInnovator = this.user.roles[0].role === UserRoleEnum.ADMIN || this.user.roles[0].role === UserRoleEnum.INNOVATOR;
+        const isAdmin = this.user.roles.some(r => r.role === UserRoleEnum.ADMIN);
+        const isInnovator = this.user.roles.some(r => r.role === UserRoleEnum.INNOVATOR);
+        this.canAddRole = !(isAdmin || isInnovator);
 
-        if (this.user.roles[0].role !== UserRoleEnum.ADMIN) {
-          this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/service-users/${userInfo.isActive ? 'lock' : 'unlock'}` };
+        if (!isAdmin) {
+          this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/${userInfo.isActive ? 'lock' : 'unlock'}` };
         }
 
-        return this.user.roles[0].role === UserRoleEnum.INNOVATOR ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null);
-
+        return forkJoin([
+          isInnovator ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null),
+          !(isAdmin || isInnovator) ? this.usersValidationService.canAddAnyRole(userInfo.id) : of(null)
+        ])
       })).subscribe({
-        next: (innovations) => {
-        if(innovations) {
-          this.user.innovations = innovations;
-        }
-        this.setPageTitle('User information');
-        this.setPageStatus('READY');
+        next: ([innovations, canAddAnyRoleValidations]) => {
+          if (innovations) {
+            this.user.innovations = innovations;
+          }
+          if(canAddAnyRoleValidations) {
+            this.canAddRole = !canAddAnyRoleValidations.some(v => !v.valid);
+          }
+          this.setPageTitle('User information');
+          this.setPageStatus('READY');
         },
         error: () => {
           this.setPageStatus('ERROR');
-          this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help'});
+          this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help' });
         }
-    });
+      });
 
   }
 

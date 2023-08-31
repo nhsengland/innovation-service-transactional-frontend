@@ -4,21 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService } from '../../services/service-users.service';
+import { AdminUsersService } from '../../services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-unlock',
-  templateUrl: './service-user-unlock.component.html'
+  selector: 'app-admin-pages-users-user-unlock',
+  templateUrl: './user-unlock.component.html'
 })
-export class PageServiceUserUnlockComponent extends CoreComponent implements OnInit {
+export class PageUserUnlockComponent extends CoreComponent implements OnInit {
 
   user: { id: string, name: string };
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private usersService: ServiceUsersService
-  ) {
+  constructor(private activatedRoute: ActivatedRoute, private usersService: AdminUsersService) {
 
     super();
 

@@ -1,21 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
+import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 
-import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-import { PageUserInfoComponent } from './user-info.component';
-import { getUserFullInfoDTO, UsersService } from '@modules/shared/services/users.service';
 import { AlertType } from '@app/base/types';
+import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UsersService } from '@modules/shared/services/users.service';
+import { PageUserInfoComponent } from './user-info.component';
 
 
 

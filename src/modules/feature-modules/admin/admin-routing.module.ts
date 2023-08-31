@@ -10,11 +10,15 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // // Account.
 import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Users
+import { PageUsersRoleActivateComponent } from './pages/users/roles/role-activate.component';
+import { PageUsersRoleChangeComponent } from './pages/users/roles/role-change.component';
+import { PageUsersRoleInactivateComponent } from './pages/users/roles/role-inactivate.component';
+import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
-// // Admin Users.
-import { PageAdminUserDeleteComponent } from './pages/admin-users/admin-user-delete.component';
+import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
 import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
@@ -29,15 +33,8 @@ import { PageOrganisationInfoComponent } from './pages/organisations/organisatio
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
-import { PageOrganisationUnitUserEditComponent } from './pages/organisations/organisation-unit-user/organisation-unit-user-edit.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-// // Service Users.
-import { PageServiceUserChangeOrganisationUnitComponent } from './pages/service-users/service-user-change-organisation-unit.component';
-import { PageServiceUserChangeRoleComponent } from './pages/service-users/service-user-change-role.component';
-import { PageServiceUserLockComponent } from './pages/service-users/service-user-lock.component';
-import { PageServiceUserUnlockComponent } from './pages/service-users/service-user-unlock.component';
-import { PageServiceUserInactivateRoleComponent } from './pages/service-users/service-user-inactivate-role.component';
-import { PageServiceUserActivateRoleComponent } from './pages/service-users/service-user-activate-role.component';
+import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -118,13 +115,14 @@ const routes: Routes = [
         path: 'organisations',
         data: { breadcrumb: 'Organisations' },
         children: [
-          {
-            path: '', pathMatch: 'full', component: PageOrganisationsListComponent,
-            data: { breadcrumb: null },
-          },
-          {
-            path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent,
-          },
+
+          { path: '', pathMatch: 'full', component: PageOrganisationsListComponent, data: { breadcrumb: null } },
+
+          { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
+
+          { path: 'ASSESSMENT', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+
           {
             path: ':organisationId',
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
@@ -175,17 +173,6 @@ const routes: Routes = [
                         path: 'inactivate',
                         pathMatch: 'full',
                         component: WizardOrganisationUnitInactivateComponent
-                      },
-                      {
-                        path: 'user',
-                        children: [
-                          {
-                            path: 'edit',
-                            pathMatch: 'full',
-                            data: { breadcrumb: null },
-                            component: PageOrganisationUnitUserEditComponent
-                          }
-                        ]
                       }
                     ]
                   }
@@ -200,59 +187,28 @@ const routes: Routes = [
         path: 'users',
         data: { breadcrumb: 'Users' },
         children: [
-          {
-            path: '', pathMatch: 'full', component: PageUserFindComponent,
-            data: { breadcrumb: null }
-          },
+          { path: '', pathMatch: 'full', component: PageUserFindComponent, data: { breadcrumb: null } },
           { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
             resolve: { user: ServiceUserDataResolver },
-            data: {
-              breadcrumb: (data: { user: { id: string, name: string } }) => `${data.user.name}`
-            },
+            data: { breadcrumb: (data: { user: { id: string, name: string } }) => `${data.user.name}` },
             children: [
+              { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
+              { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
+              { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } },
+              { path: 'change-role', pathMatch: 'full', component: PageUsersRoleChangeComponent, data: { breadcrumb: null } },
               {
-                path: '', pathMatch: 'full', component: PageUserInfoComponent,
-                data: { breadcrumb: null }
-              },
-              {
-                path: 'administration-users',
+                path: 'role',
+                data: { breadcrumb: null },
                 children: [
+                  { path: 'new', pathMatch: 'full', component: PageRoleNewComponent, data: { breadcrumb: null } },
                   {
-                    path: 'delete', pathMatch: 'full', component: PageAdminUserDeleteComponent, data: { breadcrumb: null }
-                  }
-                ]
-              },
-              {
-                path: 'service-users',
-                children: [
-                  { path: 'lock', pathMatch: 'full', component: PageServiceUserLockComponent, data: { breadcrumb: null } },
-                  { path: 'unlock', pathMatch: 'full', component: PageServiceUserUnlockComponent, data: { breadcrumb: null } },
-                  { path: 'change-role', pathMatch: 'full', component: PageServiceUserChangeRoleComponent, data: { breadcrumb: null } },
-                  { path: 'change-unit', pathMatch: 'full', component: PageServiceUserChangeOrganisationUnitComponent, data: { breadcrumb: null } },
-                  {
-                    path: 'role',
+                    path: ':roleId',
                     data: { breadcrumb: null },
                     children: [
-                      {
-                        path: ':roleId',
-                        data: { breadcrumb: null },
-                        children: [
-                          {
-                            path: 'inactivate',
-                            pathMatch: 'full',
-                            component: PageServiceUserInactivateRoleComponent,
-                            data: { breadcrumb: null }
-                          },
-                          {
-                            path: 'activate',
-                            pathMatch: 'full',
-                            component: PageServiceUserActivateRoleComponent,
-                            data: { breadcrumb: null }
-                          }
-                        ]
-                      }
+                      { path: 'inactivate', pathMatch: 'full', component: PageUsersRoleInactivateComponent, data: { breadcrumb: null } },
+                      { path: 'activate', pathMatch: 'full', component: PageUsersRoleActivateComponent, data: { breadcrumb: null } }
                     ]
                   }
                 ]

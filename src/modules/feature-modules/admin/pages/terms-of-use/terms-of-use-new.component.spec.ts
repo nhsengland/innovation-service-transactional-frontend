@@ -1,19 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageTermsOfUseNewComponent } from './terms-of-use-new.component';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { TermsOfUseTypeEnum } from '@app/base/enums';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
   let component: PageTermsOfUseNewComponent;
   let fixture: ComponentFixture<PageTermsOfUseNewComponent>;
   let activatedRoute: ActivatedRoute;
-  let userService: ServiceUsersService;
+  let userService: AdminUsersService;
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -41,7 +41,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
-    userService = TestBed.inject(ServiceUsersService);
+    userService = TestBed.inject(AdminUsersService);
   });
 
 
@@ -177,7 +177,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component.form.get('notifyUser')?.setValue(0);
     fixture.detectChanges();
     component.onSubmit();
- 
+
     expect(component.alert.type).toBe('ERROR');
   });
   it('should throw default error while edit existing version', () => {

@@ -4,15 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ServiceUsersService } from '../../services/service-users.service';
 import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
+import { AdminUsersService } from '../../services/users.service';
 
 
 @Component({
-  selector: 'app-admin-pages-service-users-service-user-lock',
-  templateUrl: './service-user-lock.component.html'
+  selector: 'app-admin-pages-users-user-lock',
+  templateUrl: './user-lock.component.html'
 })
-export class PageServiceUserLockComponent extends CoreComponent implements OnInit {
+export class PageUserLockComponent extends CoreComponent implements OnInit {
 
   user: { id: string, name: string };
 
@@ -23,7 +23,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private serviceUsersService: ServiceUsersService,
+    private usersService: AdminUsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
 
@@ -67,7 +67,7 @@ export class PageServiceUserLockComponent extends CoreComponent implements OnIni
 
   onSubmit(): void {
 
-    this.serviceUsersService.lockUser(this.user.id).subscribe({
+    this.usersService.lockUser(this.user.id).subscribe({
       next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'lockSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');

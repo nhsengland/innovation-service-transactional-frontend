@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
+import { AdminUsersService } from '../../services/users.service';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private userService: ServiceUsersService
+    private usersService: AdminUsersService
   ) {
 
     super();
@@ -44,7 +44,7 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
 
     if (this.module === 'Edit') {
 
-      this.userService.getTermsById(this.id).subscribe({
+      this.usersService.getTermsById(this.id).subscribe({
         next: (response) => {
 
           this.form.setValue({
@@ -78,14 +78,14 @@ export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit 
     switch (this.module) {
 
       case 'New':
-        this.userService.createVersion(body).subscribe(
+        this.usersService.createVersion(body).subscribe(
           () => this.redirectTo(`admin/terms-conditions`, { alert: 'versionCreationSuccess' }),
           (error: { code: string }) => this.errorResponse(error.code)
         );
         break;
 
       case 'Edit':
-        this.userService.updateTermsById(this.id, body).subscribe(
+        this.usersService.updateTermsById(this.id, body).subscribe(
           () => this.redirectTo(`admin/terms-conditions`, { alert: 'versionUpdatedSuccess' }),
           (error: { code: string }) => this.errorResponse(error.code)
         );
