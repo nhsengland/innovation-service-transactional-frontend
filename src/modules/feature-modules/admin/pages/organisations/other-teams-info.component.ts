@@ -18,7 +18,7 @@ export class PageOtherTeamsInfoComponent extends CoreComponent implements OnInit
   pageRole: null | UserRoleEnum = null;
 
   usersListFilters: APIQueryParamsType<UserListFiltersType> = {
-    take: 100, skip: 0,
+    take: 500, skip: 0,
     filters: { userTypes: [], onlyActive: false, email: true }
   };
 
