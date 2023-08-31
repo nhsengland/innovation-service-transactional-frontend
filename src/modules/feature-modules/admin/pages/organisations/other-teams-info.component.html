@@ -27,7 +27,7 @@
 
       <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active users</h2>
 
-      <p class="nhsuk-body-m">{{ activeUsers.length }} {{ 'dictionary.user' | pluralTranslate: activeUsers.length | translate }} are assotiated with this team.</p>
+      <p class="nhsuk-body-m">{{ activeUsers.length }} {{ 'dictionary.user' | pluralTranslate: activeUsers.length | translate }} are associated with this team.</p>
 
       <div class="nhsuk-action-link">
         <a routerLink="/admin/users/new" class="nhsuk-action-link__link" [queryParams]="{ team: pageRole }">

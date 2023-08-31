@@ -26,7 +26,7 @@ export class UsersService extends CoreService {
   getUsersList({ queryParams }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<UsersListDTO> {
 
     if (!queryParams) {
-      queryParams = { take: 100, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT] } };
+      queryParams = { take: 500, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT] } };
     }
     const { filters, ...qParams } = queryParams;
 
