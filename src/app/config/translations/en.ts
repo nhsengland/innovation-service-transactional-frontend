@@ -519,7 +519,7 @@ export const locale = {
         },
         user: {
           AssessmentUserIsNotTheOnlyOne: {
-            label: 'Is not the only assessment user on the service'
+            label: 'User is not the only assessment user on the service'
           },
           LastQualifyingAccessorUserOnOrganisationUnit: {
             label: 'User is not the only qualifying accessor within a organisation unit'
