@@ -118,6 +118,11 @@ export type CreateThreadMessageDTO = {
   };
 };
 
+export type InnovationThreadListFiltersType = {
+  subject?: string,
+  following?: boolean
+};
+
 
 @Injectable()
 export class InnovationsService extends CoreService {
@@ -433,12 +438,13 @@ export class InnovationsService extends CoreService {
 
 
   // Threads and messages methods.
-  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{ subject?: string }>): Observable<GetThreadsListDTO> {
+  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<InnovationThreadListFiltersType>): Observable<GetThreadsListDTO> {
 
     const { filters, ...qParams } = queryParams;
     const qp = {
       ...qParams,
       ...(filters.subject && { subject: filters.subject }),
+      ...(filters.following && { following: filters.following })
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);

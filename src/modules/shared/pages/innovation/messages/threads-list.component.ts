@@ -6,11 +6,10 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetThreadsListDTO, InnovationsService, InnovationThreadListFiltersType } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { debounceTime } from 'rxjs';
 
-type InnovationThreadListFiltersType = { subject?: string };
 
 @Component({
   selector: 'shared-pages-innovation-messages-threads-list',
@@ -24,7 +23,8 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   // Filter
   form = new FormGroup({
-    subject: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' })
+    subject: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
+    following: new FormControl(false, { updateOn: 'change' })
   });
 
   // Flags
@@ -107,7 +107,10 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       return;
     }
 
-    this.tableList.setFilters({ subject: this.form.get('subject')?.value ?? undefined });
+    this.tableList.setFilters({
+      subject: this.form.get('subject')?.value ?? undefined,
+      following: this.form.get('following')?.value ?? false
+    });
 
     this.tableList.setPage(1);
     this.getThreadsList();
