@@ -5,9 +5,12 @@ import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GetThreadsListDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { debounceTime } from 'rxjs';
 
+type InnovationThreadListFiltersType = { subject?: string };
 
 @Component({
   selector: 'shared-pages-innovation-messages-threads-list',
@@ -17,7 +20,12 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   selfUser: { id: string, organisationUnitId?: string };
   innovation: ContextInnovationType;
-  tableList = new TableModel<GetThreadsListDTO['data'][0]>({ pageSize: 10 });
+  tableList = new TableModel<GetThreadsListDTO['data'][0], InnovationThreadListFiltersType>({ pageSize: 10 });
+
+  // Filter
+  form = new FormGroup({
+    subject: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' })
+  });
 
   // Flags
   isInnovatorType: boolean;
@@ -25,9 +33,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   isAdmin: boolean;
   isInnovationSubmitted: boolean;
 
-  constructor(
-    private innovationsService: InnovationsService
-  ) {
+  constructor(private innovationsService: InnovationsService) {
 
     super();
     this.setPageTitle('Messages');
@@ -50,14 +56,18 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` })
     }
 
+    this.subscriptions.push(
+      this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
+    )
+
   }
 
 
   ngOnInit(): void {
 
     this.tableList.setVisibleColumns({
-      subject: { label: 'Subject', orderable: true },
-      messageCount: { label: 'Nº messages', orderable: true },
+      subject: { label: 'Message threads', orderable: false },
+      messageCount: { label: 'Total messages', orderable: true },
       latestMessageCreatedAt: { label: 'Latest received', align: 'right', orderable: true }
     }).setOrderBy('latestMessageCreatedAt', 'descending');
 
@@ -71,7 +81,9 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.innovationsService.getThreadsList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
-      if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
+      if (this.isRunningOnBrowser() && column) {
+        this.tableList.setFocusOnSortedColumnHeader(column);
+      }
       this.setPageStatus('READY');
     });
 
@@ -86,6 +98,20 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   onPageChange(event: { pageNumber: number }): void {
     this.tableList.setPage(event.pageNumber);
     this.getThreadsList();
+  }
+
+  onFormChange(): void {
+
+    if(!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.tableList.setFilters({ subject: this.form.get('subject')?.value ?? undefined });
+
+    this.tableList.setPage(1);
+    this.getThreadsList();
+
   }
 
 }

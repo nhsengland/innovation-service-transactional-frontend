@@ -212,7 +212,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           this.setRedirectAlertSuccess('A new user has been added to the unit');
           this.redirectTo(`/admin/organisations/${this.pageData.queryParams.organisationId}/unit/${this.pageData.queryParams.unitId}`);
         } else if (this.pageData.flags.isTeamCreate) {
-          this.setRedirectAlertSuccess('A new user has been added to the team');
+          this.setRedirectAlertSuccess('A new user has been added to this team');
           this.redirectTo(`/admin/organisations/${this.pageData.queryParams.team}`);
         } else {
           this.redirectTo(`/admin/users/${response.id}`, { alert: 'userCreationSuccess' });

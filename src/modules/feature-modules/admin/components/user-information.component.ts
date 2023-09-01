@@ -47,8 +47,7 @@ export class UserInformationComponent implements OnInit {
 
   componentData: {
     validations: {
-      isAdmin?: boolean,
-      isInnovator?: boolean,
+      isNonCompatibleRole?: boolean,
       isFromOtherOrg?: boolean,
       isFromSameUnit?: boolean,
     },
@@ -71,9 +70,12 @@ export class UserInformationComponent implements OnInit {
 
     if (this.parentData && this.user) {
 
-      this.componentData.validations.isAdmin = this.user.roles.some(r => r.role === UserRoleEnum.ADMIN);
-      this.componentData.validations.isInnovator = this.user.roles.some(r => r.role === UserRoleEnum.INNOVATOR);
-      this.componentData.isAddRoleValid = !this.componentData.validations.isAdmin && !this.componentData.validations.isInnovator;
+      const isAdmin = this.user.roles.some(r => r.role === UserRoleEnum.ADMIN);
+      const isInnovator = this.user.roles.some(r => r.role === UserRoleEnum.INNOVATOR);
+      const isNonCompatible = isAdmin || isInnovator || this.parentData.queryParams.team === UserRoleEnum.ADMIN;
+
+      this.componentData.validations.isNonCompatibleRole = isNonCompatible;
+      this.componentData.isAddRoleValid = !isNonCompatible;
 
       if (this.parentData.flags.isBaseCreate) {
         this.buildTitle();
@@ -137,7 +139,7 @@ export class UserInformationComponent implements OnInit {
                   alertMessage: 'A new user has been added to the unit'
                 });
               } else if (this.parentData.flags.isTeamCreate) {
-                this.changeComponentState({ type: 'SUCCESS', redirectTo: `/admin/organisations/${this.parentData.queryParams.team}`, alertMessage: 'A new user has been added to the team' });
+                this.changeComponentState({ type: 'SUCCESS', redirectTo: `/admin/organisations/${this.parentData.queryParams.team}`, alertMessage: 'A new user has been added to this team' });
               }
             }
           },
@@ -179,6 +181,10 @@ export class UserInformationComponent implements OnInit {
 
         if (!this.componentData.isAddRoleValid) {
           this.submitButton.label = SubmitButton.USER_DETAILS;
+
+          if(!this.componentData.validations.isFromOtherOrg && !this.componentData.validations.isFromSameUnit) {
+            this.componentData.validations.isNonCompatibleRole = true;
+          }
         }
 
         this.buildTitle();
