@@ -17,18 +17,18 @@
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
 
         <span>
-          {{ threadParticipants?.participants?.length?.toLocaleString() }} {{ participantNumberText }}.
+          {{ threadFollowers?.followers?.length?.toLocaleString() }} {{ followerNumberText }}.
         </span>
         <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
-          {{ showParticipantsText }} <span class="nhsuk-u-visually-hidden"> of thread participants </span>
+          {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
         </a>
 
-        <ng-container *ngIf=" showParticipantsHideStatus === 'opened'">
+        <ng-container *ngIf=" showFollowersHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-            <dt *ngFor="let participant of threadParticipants?.participants;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <span *ngIf="participant.type === 'INNOVATOR' ; else notInnovator">{{ participant.name }} ({{participant.isOwner ? 'Owner' : 'Collaborator'}})</span>
+            <dt *ngFor="let follower of threadFollowers?.followers;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <span *ngIf="follower.type === 'INNOVATOR' ; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? 'Owner' : 'Collaborator'}})</span>
               <ng-template #notInnovator>
-                <span>{{ participant.name }} ({{ participant.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(participant.type) }})</span>
+                <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.type) }})</span>
               </ng-template>
             </dt>
           </dl>
@@ -39,11 +39,11 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
           <p class="nhsuk-body-s font-color-secondary" *ngIf="isInnovatorType; else notInnovator" >
-            Once sent, all participants in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
+            Once sent, all followers in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
           </p>
           <ng-template #notInnovator>
             <p class="nhsuk-body-s font-color-secondary">
-              Once sent, the innovator and other participants in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
+              Once sent, the innovator and other followers in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
             </p>
           </ng-template>
           <button type="submit" class="nhsuk-button button-small nhsuk-u-margin-bottom-5">

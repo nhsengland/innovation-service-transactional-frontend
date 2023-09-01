@@ -56,8 +56,8 @@ export type GetThreadMessageInfoDTO = {
   createdAt: DateISOType;
 };
 
-export type GetThreadParticipantsDTO = {
-  participants: {
+export type GetThreadFollowersDTO = {
+  followers: {
     id: string;
     identityId: string;
     name: string;
@@ -465,11 +465,11 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getThreadParticipants(innovationId: string, threadId: string): Observable<GetThreadParticipantsDTO> {
+  getThreadFollowers(innovationId: string, threadId: string): Observable<GetThreadFollowersDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/participants').setPathParams({ innovationId, threadId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
 
-    return this.http.get<GetThreadParticipantsDTO>(url.buildUrl()).pipe(take(1),
+    return this.http.get<GetThreadFollowersDTO>(url.buildUrl()).pipe(take(1),
       map(response => response)
     );
   }
