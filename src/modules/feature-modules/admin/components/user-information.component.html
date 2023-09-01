@@ -4,14 +4,9 @@
 
   <ng-container *ngIf="!componentData.isAddRoleValid && !parentData?.flags?.isBaseCreate">
 
-    <ng-container *ngIf="componentData.validations.isAdmin">
-      <p>You cannot add this user to this organisation as they have an administrator account on the service.</p>
-      <p>If their current roles are incorrect, you can update them in user details.</p>
-    </ng-container>
-
-    <ng-container *ngIf="componentData.validations.isInnovator">
-      <p>You cannot add this user to this organisation as they have an innovator account on the service.</p>
-      <p>If their current roles are incorrect, you can update them in user details.</p>
+    <ng-container *ngIf="componentData.validations.isNonCompatibleRole">
+      <p>You can not add this user to this organisation/team as they already exist on the service with a non compatible role.</p>
+      <p>Go to user details if you want to update their information or go back and try to add another user.</p>
     </ng-container>
 
     <ng-container *ngIf="componentData.validations.isFromOtherOrg">
@@ -22,6 +17,7 @@
     <ng-container *ngIf="componentData.validations.isFromSameUnit">
       <p>You cannot add this user to this unit as they are already assigned to this unit.</p>
     </ng-container>
+
   </ng-container>
 
 

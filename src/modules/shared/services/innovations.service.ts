@@ -13,7 +13,7 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
 
 export type InnovationsActionsListFilterType = {
@@ -32,20 +32,14 @@ export type GetThreadsListDTO = {
   data: {
     id: string;
     subject: string;
-    messageCount: number;
-    createdAt: DateISOType;
-    isNew: boolean;
+    createdBy: { id: string; displayTeam?: string };
     lastMessage: {
       id: string;
-      createdAt: DateISOType;
-      createdBy: {
-        id: string;
-        name: string;
-        type: UserRoleEnum;
-        isOwner?: boolean;
-        organisationUnit?: { id: string, name: string, acronym: string; };
-      };
+      createdAt: Date;
+      createdBy: { id: string; displayTeam?: string };
     };
+    messageCount: number;
+    hasUnreadNotifications: boolean;
   }[];
 };
 
@@ -439,17 +433,16 @@ export class InnovationsService extends CoreService {
 
 
   // Threads and messages methods.
-  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadsListDTO> {
+  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{ subject?: string }>): Observable<GetThreadsListDTO> {
 
-    const { filters, ...qp } = queryParams;
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      ...(filters.subject && { subject: filters.subject }),
+    };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);
-    return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data
-      }))
-    );
+    return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1));
 
   }
 
