@@ -45,6 +45,10 @@
               </ng-container>
             </theme-form-input>
 
+            <div *ngIf="!(isAdmin || isInnovatorType)" class="nhsuk-u-margin-bottom-5">
+              <theme-form-checkbox controlName="following" label="Only show threads I am following" size="small"></theme-form-checkbox>
+            </div>
+
           </form>
 
         </div>
