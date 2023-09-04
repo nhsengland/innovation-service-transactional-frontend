@@ -76,7 +76,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       if (this.assessment.reassessment) {
         this.innovationReassessment = [
           {
-            label: 'Did the innovator updated innovation record since submitting it to the previous needs assessment?',
+            label: 'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
             value: yesNoItems.find(item => item.value === response.reassessment?.updatedInnovationRecord)?.label || ''
           },
           {
