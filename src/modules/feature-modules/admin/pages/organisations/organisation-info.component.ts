@@ -2,10 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserRoleEnum } from '@app/base/enums';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { UsersService } from '@modules/shared/services/users.service';
 
 
 @Component({
@@ -28,18 +26,12 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       acronym: string,
       isActive: boolean,
       userCount: number,
-      users: { name: string, roleDescription: string }[],
-      showHideStatus: 'hidden' | 'opened' | 'closed',
-      showHideText: null | string,
-      showHideDescription: null | string,
-      isLoading: boolean
     }[];
   } = { id: '', name: null, acronym: null, isActive: null, hasInactiveUnits: null, organisationUnits: [] };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private organisationsService: OrganisationsService,
-    private usersService: UsersService
   ) {
 
     super();
@@ -76,20 +68,11 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
           ...organisation,
           hasInactiveUnits: organisation.organisationUnits.some(unit => unit.isActive === false),
           organisationUnits: organisation.organisationUnits.map(u => ({
-            ...u,
-            showHideStatus: 'closed',
-            showHideText: `Show users`,
-            showHideDescription: `that belong to the ${u.name}`,
-            isLoading: false,
-            users: []
+            ...u
           }))
         };
 
-        if (this.organisation.organisationUnits.length === 1) {
-          this.onUnitUsersShowHideClicked(this.organisation.organisationUnits[0].id);
-        }
-
-        this.setPageTitle(`${this.organisation.name} (${this.organisation.acronym})`);
+        this.setPageTitle("Organisation information");
 
         this.setPageStatus('READY');
       },
@@ -99,49 +82,6 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
         this.logger.error(error);
       }
     });
-  }
-
-  onUnitUsersShowHideClicked(organisationUnitId: string): void {
-
-    const unit = this.organisation.organisationUnits.find(item => item.id === organisationUnitId);
-
-    if (unit?.showHideStatus === 'closed') { unit.isLoading = true; }
-
-    switch (unit?.showHideStatus) {
-      case 'opened':
-        unit.showHideStatus = 'closed';
-        unit.showHideText = `Show users`;
-        unit.showHideDescription = `that belong to the ${unit.name}`;
-        unit.isLoading = false;
-        break;
-      case 'closed':
-        this.usersService.getUsersList({
-          queryParams: {
-            take: 100,
-            skip: 0,
-            filters: {
-              onlyActive: true,
-              organisationUnitId: organisationUnitId,
-              userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
-            }
-          }}).subscribe(
-          response => {
-            unit.users = response.data.map(item => ({ name: item.name, roleDescription: item.roleDescription }));
-            unit.showHideStatus = 'opened';
-            unit.showHideText = `Hide users`;
-            unit.showHideDescription = `that belong to the ${unit.name}`;
-            unit.isLoading = false;
-          },
-          () => {
-            this.setAlertError('Unable to fetch organisation users information. Please try again or contact us for further help');
-            unit.isLoading = false;
-          }
-        );
-        break;
-      default:
-        break;
-    }
-
   }
 
 }
