@@ -23,18 +23,20 @@
           <dd class="nhsuk-summary-list__value" *ngIf="!isUnitTeamPage">
             <theme-tag type="{{ 'SUCCESS' }}" label="{{ 'Active' }}"></theme-tag>
           </dd>
-          <dd class="nhsuk-summary-list__value" *ngIf="isUnitTeamPage">
-            <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
-              label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
-            <p *ngIf="!unit.isActive && !unit.canActivate" class="font-color-secondary nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2">To activate this organisation unit you need to add at least one qualifying accessor to it.</p>
-          </dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a
-              *ngIf="unit.isActive || unit.canActivate"
-              routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}">
-              {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
-            </a>
-          </dd>
+          <ng-container *ngIf="isUnitTeamPage">
+            <dd class="nhsuk-summary-list__value">
+              <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+                label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              <p *ngIf="!unit.isActive && !unit.canActivate" class="font-color-secondary nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2">To activate this organisation unit you need to add at least one qualifying accessor to it.</p>
+            </dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a
+                *ngIf="unit.isActive || unit.canActivate"
+                routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}">
+                {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
+              </a>
+            </dd>
+          </ng-container>
         </div>
       </dl>
 
@@ -96,7 +98,7 @@
     </div>
   </section>
 
-  <section class="nhsuk-u-padding-bottom-7">
+  <section class="nhsuk-u-padding-bottom-7" *ngIf="isUnitTeamPage">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>

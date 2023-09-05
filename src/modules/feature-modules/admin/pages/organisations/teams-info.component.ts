@@ -17,9 +17,9 @@ import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-
 
 @Component({
   selector: 'app-admin-pages-organisations-other-teams-info',
-  templateUrl: './other-teams-info.component.html'
+  templateUrl: './teams-info.component.html'
 })
-export class PageOtherTeamsInfoComponent extends CoreComponent implements OnInit {
+export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
 
   public unit: ObservedValueOf<ReturnType<OrganisationUnitDataResolver['resolve']>>;
   public organisation: ObservedValueOf<ReturnType<OrganisationDataResolver['resolve']>>;
@@ -93,12 +93,14 @@ export class PageOtherTeamsInfoComponent extends CoreComponent implements OnInit
 
     forkJoin([
       this.usersService.getUsersList({ queryParams: this.usersListFilters }),
-      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
+      ...this.isUnitTeamPage ? [this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })] : []
     ]).subscribe({
       next: ([users, innovations]) => {
         this.activeUsers = users.data.filter(item => item.isActive).map(item => ({ id: item.id, name: item.name, email: item.email }));
         this.inactiveUsers = users.data.filter(item => !item.isActive).map(item => ({ id: item.id, name: item.name, email: item.email }));
-        this.innovationsList.setData(innovations.data, innovations.count);
+        if(this.isUnitTeamPage) {
+          this.innovationsList.setData(innovations.data, innovations.count);
+        }
 
         this.setPageStatus('READY');
       },

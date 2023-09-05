@@ -33,7 +33,7 @@ import { PageOrganisationInfoComponent } from './pages/organisations/organisatio
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
+import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -119,8 +119,8 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
 
-          { path: 'ASSESSMENT', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
-          { path: 'ADMIN', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+          { path: 'ASSESSMENT', pathMatch: 'full', component: PageTeamsInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: PageTeamsInfoComponent },
 
           {
             path: ':organisationId',
@@ -151,17 +151,11 @@ const routes: Routes = [
                     resolve: { organisationUnit: OrganisationUnitDataResolver },
                     data: { breadcrumb: (data: { organisationUnit: { id: string, name: string, acronym: string } }) => `${data.organisationUnit.name}` },
                     children: [
-                      // {
-                      //   path: '',
-                      //   pathMatch: 'full',
-                      //   data: { breadcrumb: null },
-                      //   component: PageOrganisationUnitInfoComponent,
-                      // },
                       {
                         path: '',
                         pathMatch: 'full',
                         data: { breadcrumb: null },
-                        component: PageOtherTeamsInfoComponent,
+                        component: PageTeamsInfoComponent,
                       },
                       {
                         path: 'edit',
