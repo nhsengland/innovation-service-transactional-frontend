@@ -9,12 +9,32 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Name</dt>
           <dd class="nhsuk-summary-list__value">{{ pageTitle }}</dd>
+          <dd class="nhsuk-summary-list__actions" *ngIf="isUnitTeamPage">
+            <a routerLink="edit">
+              Change
+              <span class="nhsuk-u-visually-hidden">
+                {{ unit.name | lowercase }} information
+              </span>
+            </a>
+          </dd>
         </div>
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Status</dt>
-          <dd class="nhsuk-summary-list__value">
+          <dd class="nhsuk-summary-list__value" *ngIf="!isUnitTeamPage">
             <theme-tag type="{{ 'SUCCESS' }}" label="{{ 'Active' }}"></theme-tag>
           </dd>
+          <dd class="nhsuk-summary-list__value" *ngIf="isUnitTeamPage">
+            <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
+              label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+            <p *ngIf="!unit.isActive && !unit.canActivate" class="font-color-secondary nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2">To activate this organisation unit you need to add at least one qualifying accessor to it.</p>
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a
+              *ngIf="unit.isActive || unit.canActivate"
+              routerLink="{{ unit.isActive ? 'inactivate' : 'activate' }}">
+              {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
+            </a>
+          </dd>
         </div>
       </dl>
 
@@ -22,56 +42,98 @@
   </div>
 
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+  <section class="nhsuk-u-padding-bottom-7">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
 
-      <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active users</h2>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active users</h2>
 
-      <p class="nhsuk-body-m">{{ activeUsers.length }} {{ 'dictionary.user' | pluralTranslate: activeUsers.length | translate }} are associated with this team.</p>
+        <p class="nhsuk-body-m">{{ activeUsers.length }} {{ 'dictionary.user' | pluralTranslate: activeUsers.length | translate }} are associated with this team.</p>
 
-      <div class="nhsuk-action-link">
-        <a routerLink="/admin/users/new" class="nhsuk-action-link__link" [queryParams]="{ team: pageRole }">
-          <theme-svg-icon type="action"></theme-svg-icon>
-          <span class="nhsuk-action-link__text">Add user</span>
-        </a>
+        <div class="nhsuk-action-link">
+          <a routerLink="/admin/users/new" class="nhsuk-action-link__link" [queryParams]="addUserQueryParams">
+            <theme-svg-icon type="action"></theme-svg-icon>
+            <span class="nhsuk-action-link__text">Add user</span>
+          </a>
+        </div>
+
+        <dl *ngIf="activeUsers.length > 0" class="nhsuk-summary-list">
+          <div *ngFor="let item of activeUsers" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              {{ item.name }}
+              <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
+            </dt>
+            <dd class="nhsuk-summary-list__actions">
+              <a routerLink="/admin/users/{{ item.id }}">
+                <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
+              </a>
+            </dd>
+          </div>
+        </dl>
+
       </div>
-
-      <dl *ngIf="activeUsers.length > 0" class="nhsuk-summary-list">
-        <div *ngFor="let item of activeUsers" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">
-            {{ item.name }}
-            <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
-          </dt>
-          <dd class="nhsuk-summary-list__actions">
-            <a routerLink="/admin/users/{{ item.id }}">
-              <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
-            </a>
-          </dd>
-        </div>
-      </dl>
-
     </div>
-  </div>
 
-  <div *ngIf="inactiveUsers.length > 0" class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+    <div *ngIf="inactiveUsers.length > 0" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
 
-      <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Inactive users</h2>
-      <dl *ngIf="inactiveUsers.length > 0" class="nhsuk-summary-list">
-        <div *ngFor="let item of inactiveUsers" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">
-            {{ item.name }}
-            <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
-          </dt>
-          <dd class="nhsuk-summary-list__actions">
-            <a routerLink="/admin/users/{{ item.id }}">
-              <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
-            </a>
-          </dd>
-        </div>
-      </dl>
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Inactive users</h2>
+        <dl *ngIf="inactiveUsers.length > 0" class="nhsuk-summary-list">
+          <div *ngFor="let item of inactiveUsers" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              {{ item.name }}
+              <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
+            </dt>
+            <dd class="nhsuk-summary-list__actions">
+              <a routerLink="/admin/users/{{ item.id }}">
+                <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
+              </a>
+            </dd>
+          </div>
+        </dl>
 
+      </div>
     </div>
-  </div>
+  </section>
+
+  <section class="nhsuk-u-padding-bottom-7">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
+        <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.innovations' | pluralTranslate: innovationsList.getTotalRowsNumber() | translate:  { count: innovationsList.getTotalRowsNumber() } }}</p>
+
+        <div *ngIf="innovationsList.getTotalRowsNumber() > 0">
+          <table class="nhsuk-table-responsive app-sortable-table">
+            <caption class="nhsuk-u-visually-hidden"> Innovation list </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                  {{ item.label }}
+                </th>
+              </tr>
+            </thead>
+            <theme-spinner *ngIf="innovationsLoading; else innovations" cssClass="nhsuk-u-margin-9" message="Loading innovations. Please wait..."></theme-spinner>
+          </table>
+        </div>
+
+        <theme-pagination class="d-flex justify-content-center" [currentPage]="innovationsList.page" [pageSize]="innovationsList.pageSize" [totalRows]="innovationsList.getTotalRowsNumber()" (updatePageEvent)="onInnovationsPageChange($event)"></theme-pagination>
+      </div>
+    </div>
+  </section>
 
 </theme-content-wrapper>
+
+<ng-template #innovations>
+  <tbody class="nhsuk-table__body">
+    <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+      <td class="nhsuk-table__cell">
+        <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('innovation') }}</span>
+        <a routerLink="/admin/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> {{ item.name }}</a>
+      </td>
+      <td class="nhsuk-table__cell text-align-right">
+        <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel('status') }}</span>
+        <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.name' | translate }}"></theme-tag>
+      </td>
+    </tr>
+  </tbody>
+</ng-template>

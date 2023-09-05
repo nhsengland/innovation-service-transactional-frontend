@@ -31,7 +31,6 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
-import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
 import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
@@ -152,11 +151,17 @@ const routes: Routes = [
                     resolve: { organisationUnit: OrganisationUnitDataResolver },
                     data: { breadcrumb: (data: { organisationUnit: { id: string, name: string, acronym: string } }) => `${data.organisationUnit.name}` },
                     children: [
+                      // {
+                      //   path: '',
+                      //   pathMatch: 'full',
+                      //   data: { breadcrumb: null },
+                      //   component: PageOrganisationUnitInfoComponent,
+                      // },
                       {
                         path: '',
                         pathMatch: 'full',
                         data: { breadcrumb: null },
-                        component: PageOrganisationUnitInfoComponent,
+                        component: PageOtherTeamsInfoComponent,
                       },
                       {
                         path: 'edit',
