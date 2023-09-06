@@ -49,9 +49,8 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
       }
 
     } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
-      const userContext = this.stores.authentication.getUserContextInfo();
       // this assumes that the user only has one organisation as it's currently the business case
-      const organisation = user.roles.find((r): r is UserRoleType & {organisation: {name: string}} => r.organisation !== undefined)?.organisation.name;
+      const organisation = user.roles.find((r): r is UserRoleType & {organisation: {name: string}} => r.organisation !== undefined)?.organisation?.name;
       const roles = [...new Set(user.roles.map(r => this.stores.authentication.getRoleDescription(r.role)))].join('\n');
 
       this.summaryList = [
