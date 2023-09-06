@@ -1,25 +1,29 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <section class="nhsuk-u-padding-bottom-7">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Unit</h2>
+  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-two-thirds">
 
-        <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
-          <div class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">Name</dt>
-            <dd class="nhsuk-summary-list__value">{{ unit.name }} ({{ unit.acronym }})</dd>
-            <dd class="nhsuk-summary-list__actions">
-              <a routerLink="edit">
-                Change
-                <span class="nhsuk-u-visually-hidden">
-                  {{ unit.name | lowercase }} information
-                </span>
-              </a>
-            </dd>
-          </div>
-          <div class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">Status</dt>
+      <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Organisation</h2>
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Name</dt>
+          <dd class="nhsuk-summary-list__value">{{ pageTitle }}</dd>
+          <dd class="nhsuk-summary-list__actions" *ngIf="isUnitTeamPage">
+            <a routerLink="edit">
+              Change
+              <span class="nhsuk-u-visually-hidden">
+                {{ unit.name | lowercase }} information
+              </span>
+            </a>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Status</dt>
+          <dd class="nhsuk-summary-list__value" *ngIf="!isUnitTeamPage">
+            <theme-tag type="{{ 'SUCCESS' }}" label="{{ 'Active' }}"></theme-tag>
+          </dd>
+          <ng-container *ngIf="isUnitTeamPage">
             <dd class="nhsuk-summary-list__value">
               <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
                 label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
@@ -32,6 +36,61 @@
                 {{ unit.isActive ? 'Inactivate' : 'Activate' }} unit
               </a>
             </dd>
+          </ng-container>
+        </div>
+      </dl>
+
+    </div>
+  </div>
+
+
+  <section class="nhsuk-u-padding-bottom-7">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active users</h2>
+
+        <p class="nhsuk-body-m">{{ activeUsers.length }} {{ 'dictionary.user' | pluralTranslate: activeUsers.length | translate }} are associated with this team.</p>
+
+        <div class="nhsuk-action-link">
+          <a routerLink="/admin/users/new" class="nhsuk-action-link__link" [queryParams]="addUserQueryParams">
+            <theme-svg-icon type="action"></theme-svg-icon>
+            <span class="nhsuk-action-link__text">Add user</span>
+          </a>
+        </div>
+
+        <dl *ngIf="activeUsers.length > 0" class="nhsuk-summary-list">
+          <div *ngFor="let item of activeUsers" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              {{ item.name }}
+              <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
+            </dt>
+            <dd class="nhsuk-summary-list__actions">
+              <a routerLink="/admin/users/{{ item.id }}">
+                <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
+              </a>
+            </dd>
+          </div>
+        </dl>
+
+      </div>
+    </div>
+
+    <div *ngIf="inactiveUsers.length > 0" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Inactive users</h2>
+        <dl *ngIf="inactiveUsers.length > 0" class="nhsuk-summary-list">
+          <div *ngFor="let item of inactiveUsers" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">
+              {{ item.name }}
+              <div class="nhsuk-u-font-weight-normal">{{ item.email }}</div>
+            </dt>
+            <dd class="nhsuk-summary-list__actions">
+              <a routerLink="/admin/users/{{ item.id }}">
+                <span class="nhsuk-u-visually-hidden">Go to {{ item.name | lowercase }} </span>User details
+              </a>
+            </dd>
           </div>
         </dl>
 
@@ -39,39 +98,7 @@
     </div>
   </section>
 
-  <section class="nhsuk-u-padding-bottom-7">
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-two-thirds">
-        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Users</h2>
-        <p class="nhsuk-body-m">{{ 'features.admin.organisation_unit.users' | pluralTranslate: usersList.getTotalRowsNumber() | translate:  { count: usersList.getTotalRowsNumber() } }}</p>
-
-        <div class="nhsuk-action-link nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
-          <a class="nhsuk-action-link__link" routerLink="/admin/users/new" [queryParams]="{ organisationId, unitId: organisationUnitId }">
-            <theme-svg-icon type="action"></theme-svg-icon>
-            <span class="nhsuk-action-link__text">Add user</span>
-          </a>
-        </div>
-
-        <div *ngIf="usersList.getTotalRowsNumber() > 0">
-          <table class="nhsuk-table-responsive app-sortable-table">
-            <caption class="nhsuk-u-visually-hidden"> Users list </caption>
-            <thead class="nhsuk-table__head">
-              <tr>
-                <th *ngFor="let item of usersList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
-                  {{ item.label }}
-                </th>
-              </tr>
-            </thead>
-            <theme-spinner *ngIf="usersLoading; else users" cssClass="nhsuk-u-margin-9" message="Loading users. Please wait..."></theme-spinner>
-          </table>
-        </div>
-
-        <theme-pagination class="d-flex justify-content-center" [currentPage]="usersList.page" [pageSize]="usersList.pageSize" [totalRows]="usersList.getTotalRowsNumber()" (updatePageEvent)="onUsersPageChange($event)"></theme-pagination>
-      </div>
-    </div>
-  </section>
-
-  <section class="nhsuk-u-padding-bottom-7">
+  <section class="nhsuk-u-padding-bottom-7" *ngIf="isUnitTeamPage">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
@@ -95,30 +122,8 @@
       </div>
     </div>
   </section>
+
 </theme-content-wrapper>
-
-
-<ng-template #users>
-  <tbody class="nhsuk-table__body">
-    <tr *ngFor="let item of usersList.getRecords()" class="nhsuk-table__row">
-      <td class="nhsuk-table__cell">
-        <span class="nhsuk-table-responsive__heading">{{ usersList.getColumnLabel('account') }}</span>
-        <span>{{item.name}} ({{item.roleDescription}})</span>
-        <span class="nhsuk-hint nhsuk-u-margin-bottom-0">{{item.email}}</span>
-      </td>
-      <td class="nhsuk-table__cell text-align-right">
-        <!-- TODO: In another US -->
-        <span class="nhsuk-table-responsive__heading"></span>
-        <a routerLink="">
-          Change
-          <span class="nhsuk-u-visually-hidden">
-            {{ item.name | lowercase }} information
-          </span>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</ng-template>
 
 <ng-template #innovations>
   <tbody class="nhsuk-table__body">

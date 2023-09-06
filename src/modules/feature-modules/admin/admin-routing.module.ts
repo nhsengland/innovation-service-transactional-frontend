@@ -31,10 +31,9 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
-import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
+import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -120,8 +119,8 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
 
-          { path: 'ASSESSMENT', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
-          { path: 'ADMIN', pathMatch: 'full', component: PageOtherTeamsInfoComponent },
+          { path: 'ASSESSMENT', pathMatch: 'full', component: PageTeamsInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: PageTeamsInfoComponent },
 
           {
             path: ':organisationId',
@@ -156,7 +155,7 @@ const routes: Routes = [
                         path: '',
                         pathMatch: 'full',
                         data: { breadcrumb: null },
-                        component: PageOrganisationUnitInfoComponent,
+                        component: PageTeamsInfoComponent,
                       },
                       {
                         path: 'edit',

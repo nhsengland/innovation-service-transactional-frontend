@@ -34,10 +34,9 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
-import { PageOrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageOtherTeamsInfoComponent } from './pages/organisations/other-teams-info.component';
+import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
 
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -101,8 +100,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,
     PageOrganisationUnitNewComponent,
-    PageOrganisationUnitInfoComponent,
-    PageOtherTeamsInfoComponent,
+    PageTeamsInfoComponent,
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserLockComponent,
