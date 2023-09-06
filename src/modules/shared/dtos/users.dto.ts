@@ -25,7 +25,8 @@ export type UsersListDTO = {
     id: string,
     isActive: boolean,
     name: string,
-    role: UserRoleEnum
+    role: UserRoleEnum,
+    roleId: string,
     roleDescription: string,
     lockedAt: null | string,
     organisationUnitUserId: string,

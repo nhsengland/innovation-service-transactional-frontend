@@ -14,7 +14,7 @@ export class AccessorService extends CoreService {
 
   saveSupportStatus(
     innovationId: string,
-    body: { status: InnovationSupportStatusEnum, message: string, accessors?: { id: string, organisationUnitUserId: string }[] },
+    body: { status: InnovationSupportStatusEnum, message: string, accessors?: { id: string, userRoleId: string }[] },
     supportId?: string
   ): Observable<{ id: string }> {
 

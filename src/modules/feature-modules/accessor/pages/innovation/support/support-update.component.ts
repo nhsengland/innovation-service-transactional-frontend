@@ -19,7 +19,7 @@ import { AccessorService } from '../../../services/accessor.service';
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
 
-  private accessorsList: { id: string, organisationUnitUserId: string, name: string }[] = [];
+  private accessorsList: { id: string, userRoleId: string, name: string }[] = [];
 
   innovationId: string;
   supportId: string;
@@ -112,7 +112,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.usersService.getUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? '', userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR] } } }).subscribe(
       response => {
 
-        this.accessorsList = response.data.map((item) => ({ id: item.id, organisationUnitUserId: item.organisationUnitUserId, name: item.name }));
+        this.accessorsList = response.data.map((item) => ({ id: item.id, userRoleId: item.roleId, name: item.name }));
         this.formAccessorsList = response.data.map((r) => ({ value: r.id, label: r.name }));
 
       }
@@ -182,7 +182,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
       accessors: this.selectedAccessors.map(item => ({
         id: item.id,
-        organisationUnitUserId: item.organisationUnitUserId
+        userRoleId: item.userRoleId
       })),
       message: this.form.get('message')?.value ?? ''
     }

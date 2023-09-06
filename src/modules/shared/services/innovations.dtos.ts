@@ -143,13 +143,13 @@ export type InnovationSupportsListDTO = {
     id: string, name: string, acronym: string,
     unit: { id: string, name: string, acronym: string; };
   },
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
 }[];
 
 export type InnovationSupportInfoDTO = {
   id: string,
   status: InnovationSupportStatusEnum,
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
 };
 
 
