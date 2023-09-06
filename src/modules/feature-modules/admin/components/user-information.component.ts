@@ -232,7 +232,7 @@ export class UserInformationComponent implements OnInit {
 
   private getDisplayTeam(): string {
     if (this.parentData?.flags.isTeamCreate) {
-      return this.parentData.queryParams.team === UserRoleEnum.ASSESSMENT ? 'Needs assessment team' : 'Service administrators';
+      return this.parentData.queryParams.team === UserRoleEnum.ASSESSMENT ? 'needs assessment team' : 'service administrators';
     }
     return this.componentData.unitName ?? 'Unknown';
   }
