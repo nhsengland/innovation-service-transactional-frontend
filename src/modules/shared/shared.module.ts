@@ -41,6 +41,7 @@ import { PageInnovationExportRequestsListComponent } from './pages/innovation/ex
 import { WizardInnovationThreadNewComponent } from './pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/organisations-step.component';
 import { WizardInnovationThreadNewSubjectMessageStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/subject-message-step.component';
+import { WizardInnovationThreadNewWarningStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/warning-step.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
@@ -137,6 +138,7 @@ import { UsersService } from './services/users.service';
     WizardInnovationThreadNewComponent,
     WizardInnovationThreadNewOrganisationsStepComponent,
     WizardInnovationThreadNewSubjectMessageStepComponent,
+    WizardInnovationThreadNewWarningStepComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
     PageInnovationThreadNewComponent,

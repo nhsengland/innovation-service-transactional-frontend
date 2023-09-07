@@ -102,7 +102,7 @@ export type InnovationInfoDTO = {
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
-  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
+  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo?: { id: string, name: string, userRoleId: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
   statusUpdatedAt: null | DateISOType,
   collaboratorId?: string,

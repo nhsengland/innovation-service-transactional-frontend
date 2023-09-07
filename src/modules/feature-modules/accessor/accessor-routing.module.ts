@@ -50,6 +50,7 @@ import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/
 import { PageInnovationExportRequestInfoComponent } from '@modules/shared/pages/innovation/export-requests/export-request-info.component';
 import { PageInnovationExportRequestNewComponent } from '@modules/shared/pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from '@modules/shared/pages/innovation/export-requests/export-requests-list.component';
+import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/thread-new.component';
@@ -169,7 +170,7 @@ const routes: Routes = [
                     data: { breadcrumb: 'Permission requests', layout: { type: 'full' } },
                     children: [
                       { path: '', pathMatch: 'full', redirectTo: 'list' },
-                      { path: 'list', pathMatch: 'full', component: PageInnovationExportRequestsListComponent, data: { breadcrumb: null }  },
+                      { path: 'list', pathMatch: 'full', component: PageInnovationExportRequestsListComponent, data: { breadcrumb: null } },
                       { path: 'new', pathMatch: 'full', component: PageInnovationExportRequestNewComponent },
                       { path: ':requestId', pathMatch: 'full', component: PageInnovationExportRequestInfoComponent }
                     ]
@@ -313,10 +314,12 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationThreadNewComponent,
-                    data: {
-                      data: { breadcrumb: 'New' }
-                    }
+                    path: 'new_old', pathMatch: 'full', component: PageInnovationThreadNewComponent,
+                    data: { breadcrumb: 'New' }
+                  },
+                  {
+                    path: 'new', pathMatch: 'full', component: WizardInnovationThreadNewComponent,
+                    data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
                     path: ':threadId',

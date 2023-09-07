@@ -7,34 +7,34 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-  <!--TODO: Banner for owner with account delete (new US)-->
 
-  <div class="nhsuk-grid-row">
+  <div *ngIf="!canCreateThread" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
+      <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
+    </div>
+  </div>
 
-      <ng-container *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
+  <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
 
+    <div class="nhsuk-grid-column-full">
+      <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'PAUSED'">
         <p *ngIf="isInnovatorType">Messages is your space to ask support questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="!isInnovatorType">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>
-
         <p>
           Your messages can be seen by everyone who has access to this innovation.
           <a [routerLink]="isAccessorType ? '../support/organisations' : '../support'" target="_blank" rel="noopener noreferrer">
             View a list of this innovation's data sharing preferences (opens in a new window).
           </a>
         </p>
-
-        <button class="nhsuk-button" [disabled]="!isInnovationSubmitted" routerLink="new"> Start a new conversation </button>
-        <p *ngIf="!isInnovationSubmitted">You must submit your innovation record before you can start a new conversation.</p>
-
+        <button type="button" routerLink="new" class="nhsuk-button">Start a new thread</button>
       </ng-container>
+    </div>
+
+    <div *ngIf="canCreateThread || (!canCreateThread && tableList.getTotalRowsNumber() > 0)" class="nhsuk-grid-column-full">
 
       <div class="nhsuk-grid-row">
-
         <div class="nhsuk-grid-column-one-half">
-
           <form [formGroup]="form">
-
             <theme-form-input controlName="subject" [pageUniqueField]="false" label="Search" placeholder="Search by subject">
               <ng-container append>
                 <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
@@ -50,11 +50,8 @@
             </div>
 
           </form>
-
         </div>
-
       </div>
-
 
       <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} conversations of {{ tableList.getTotalRowsNumber() }}</p>
 

@@ -394,11 +394,11 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationThreadNewComponent,
+                    path: 'new_old', pathMatch: 'full', component: PageInnovationThreadNewComponent,
                     data: { breadcrumb: 'New' }
                   },
                   {
-                    path: 'new2', pathMatch: 'full', component: WizardInnovationThreadNewComponent,
+                    path: 'new', pathMatch: 'full', component: WizardInnovationThreadNewComponent,
                     data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
