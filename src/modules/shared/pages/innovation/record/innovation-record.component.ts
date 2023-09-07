@@ -8,8 +8,8 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
-import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -72,12 +72,12 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     forkJoin([
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
-      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] }),
+      ... this.isInnovatorType ? [this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] })] : [],
     ]).subscribe({
       next: ([response, statistics]) => {
 
         this.innovationSections = response;
-        this.pendingExportRequests = statistics.PENDING_EXPORT_REQUESTS_COUNTER.count;
+        this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
         this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
           return [...acc, ...item.sections.map(s => {
