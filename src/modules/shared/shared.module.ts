@@ -44,7 +44,6 @@ import { WizardInnovationThreadNewSubjectMessageStepComponent } from './pages/in
 import { WizardInnovationThreadNewWarningStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/warning-step.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
-import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
 
 import { PageInnovationRecordDownloadComponent } from './pages/innovation/record/innovation-record-download.component';
@@ -141,7 +140,6 @@ import { UsersService } from './services/users.service';
     WizardInnovationThreadNewWarningStepComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
-    PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
 
     PageInnovationRecordDownloadComponent,
