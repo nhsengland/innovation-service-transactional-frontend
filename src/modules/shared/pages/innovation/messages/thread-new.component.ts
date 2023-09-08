@@ -62,6 +62,7 @@ export class PageInnovationThreadNewComponent extends CoreComponent implements O
     }
 
     const body = {
+      followerUserRoleIds: [], // This page will be removed on the next code cleaning!
       subject: this.form.get('subject')?.value,
       message: this.form.get('message')?.value
     };

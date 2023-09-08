@@ -1,18 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { FormArray, FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
-import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-
-import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { OrganisationUnitStatisticsEnum } from '@modules/shared/services/statistics.enum';
-import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organisations-step.types';
 
@@ -26,100 +17,90 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
   @Input() title = '';
   @Input() data: OrganisationsStepInputType = {
     innovation: { id: '' },
-    selectedUsersList: []
+    organisationUnits: [],
+    selectedOrganisationUnits: []
   };
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
 
+  leadText: string = '';
 
   form = new FormGroup({
-    agreeInnovations: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    organisationUnits: new FormArray<FormControl<string>>([], { validators: CustomValidators.requiredCheckboxArray('Choose at least one option'), updateOn: 'change' })
   }, { updateOn: 'blur' });
 
+  formOrganisationUnitsItems: { value: string, label: string, description?: string }[] = [];
 
-  constructor(
-    private innovationsService: InnovationsService,
-    private statisticsService: StatisticsService
-  ) { super(); }
+  constructor() { super(); }
 
   ngOnInit(): void {
 
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.form.get('agreeInnovations')!.setValue(true);
+    this.leadText = this.stores.authentication.isInnovatorType() ? 'You can select organisations that are currently engaging this innovation.' : 'You can select other organisations that are currently engaging to support this innovation.';
 
-    // this.getUsersList();
+    this.data.selectedOrganisationUnits.forEach(item => {
+      (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
+    });
 
-  }
+    this.formOrganisationUnitsItems = this.data.organisationUnits.map(support => ({
+      value: support.organisation.unit.id,
+      label: `${support.organisation.unit.name} (${support.organisation.unit.acronym})`,
+      description: support.engagingAccessors.map(item => item.name).join('<br />')
+    }));
 
-
-  // getUsersList(column?: string): void {
-
-  // forkJoin([
-  //   this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
-  //   this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, { statistics: [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT] }),
-  // ]).subscribe({
-  //   next: ([innovations, statistics]) => {
-  //     this.innovationsList.setData(innovations.data, innovations.count);
-
-  //     this.innovationStatistics = [
-  //       {
-  //         status: InnovationSupportStatusEnum.ENGAGING,
-  //         count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].ENGAGING
-  //       },
-  //       {
-  //         status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
-  //         count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].FURTHER_INFO_REQUIRED
-  //       }
-  //     ];
-  //     if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
-  //     this.setPageStatus('READY');
-  //   },
-  //   error: () => {
-  //     this.setPageStatus('ERROR');
-  //     this.setAlertUnknownError();
-  //   }
-  // });
-  // }
-
-
-
-  verifyOutputData(): boolean {
-
-    if (!this.form.get('agreeInnovations')!.value) {
-      this.form.markAllAsTouched();
-      return false;
+    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+      this.formOrganisationUnitsItems.push(
+        { value: 'SEPARATOR', label: 'SEPARATOR' },
+        { value: 'NO_CHOICE', label: 'No, I only want to notify the innovator about this message' }
+      );
     }
 
-    return true;
+    this.setPageStatus('READY');
 
   }
 
 
-  onPreviousStep(): void {
-    this.previousStepEvent.emit({
-      isComplete: true, data: {
-        usersList: []
-        // agreeInnovations: this.form.get('agreeInnovations')!.value,
+  prepareOutputData(): OrganisationsStepOutputType {
 
-      }
-    });
+    return {
+      organisationUnits: (this.form.value.organisationUnits ?? []).map(formValue => {
+
+        const organisationUnit = this.data.organisationUnits.find(item => item.organisation.unit.id === formValue);
+
+        return {
+          id: formValue,
+          name: organisationUnit?.organisation.unit.name ?? '', // TODO: Change this id to userRoleId
+          users: organisationUnit?.engagingAccessors.map(u => ({ id: u.id, userRoleId: u.userRoleId, name: u.name })) ?? []
+        };
+
+      })
+    };
+
+  }
+
+  onPreviousStep(): void {
+    this.previousStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
   }
 
   onNextStep(): void {
 
-    if (!this.verifyOutputData()) { return; }
-
-    if (this.form.valid) {
-      this.nextStepEvent.emit({
-        isComplete: true, data: {
-          usersList: []
-        }
-      });
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
     }
+
+    const onlyInnovatorsOptionChosen = !!this.form.value.organisationUnits?.find(item => item === 'NO_CHOICE');
+    if (onlyInnovatorsOptionChosen && (this.form.value.organisationUnits ?? []).length > 1) {
+      this.form.get('organisationUnits')!.setErrors({ customError: true, message: `Select organisations, or select "No, I only want to notify the innovator about this message"` });
+      this.form.markAllAsTouched();
+      return;
+    }
+  
+    this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
 
   }
 

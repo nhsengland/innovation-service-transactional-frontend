@@ -54,8 +54,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
 
     forkJoin([
-      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
-      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 } }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0, order: { name: 'ASC' } } }).pipe(map(response => response), catchError(() => of(null))),
+      this.innovationsService.getInnovationsList({ fields: ['groupedStatus', 'statistics'], queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0, order: { name: 'ASC' } } }).pipe(map(response => response), catchError(() => of(null))),
       this.innovatorService.getInnovationTransfers(true).pipe(map(response => response), catchError(() => of(null))),
       this.innovatorService.getInnovationInviteCollaborations().pipe(map(response => response), catchError(() => of(null)))
     ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {

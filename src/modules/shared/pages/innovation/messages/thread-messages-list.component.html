@@ -38,7 +38,7 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
-          <p class="nhsuk-body-s font-color-secondary" *ngIf="isInnovatorType; else notInnovator" >
+          <p class="nhsuk-body-s font-color-secondary" *ngIf="isInnovatorType; else notInnovator">
             Once sent, all followers in this conversation will be notified. Your message can be seen and replied to by everyone who has access to this innovation.
           </p>
           <ng-template #notInnovator>

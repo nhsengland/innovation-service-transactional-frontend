@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
-
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { GetThreadsListDTO, InnovationsService, InnovationThreadListFiltersType } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { debounceTime } from 'rxjs';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { GetThreadsListDTO, InnovationsService, InnovationThreadListFiltersType } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -32,6 +31,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   isAccessorType: boolean;
   isAdmin: boolean;
   isInnovationSubmitted: boolean;
+  canCreateThread: boolean = false;
 
   constructor(private innovationsService: InnovationsService) {
 
@@ -45,12 +45,24 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.innovation = this.stores.context.getInnovation();
 
-
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
+
+    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+      this.canCreateThread = true;
+    } else if (this.stores.authentication.isInnovatorType()) {
+      if (
+        this.innovation.status === InnovationStatusEnum.IN_PROGRESS
+        || ([InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(this.innovation.status) && this.innovation.assignedTo)
+      ) {
+        this.canCreateThread = true;
+      } else {
+        this.canCreateThread = false;
+      }
+    }
 
     if (this.isAdmin) {
       this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` })
@@ -102,7 +114,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   onFormChange(): void {
 
-    if(!this.form.valid) {
+    if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }

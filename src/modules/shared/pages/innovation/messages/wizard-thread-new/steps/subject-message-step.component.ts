@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
-import { UsersService } from '@modules/shared/services/users.service';
 
 import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './subject-message-step.types';
 
@@ -18,6 +17,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
   @Input() title = '';
   @Input() data: SubjectMessageStepInputType = {
+    innovation: { id: '' },
+    teams: [],
     subject: '',
     message: ''
   };
@@ -26,15 +27,16 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
 
+
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
     confirmation: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed'))
   }, { updateOn: 'blur' });
 
-  constructor(
-    private usersService: UsersService
-  ) { super(); }
+  formConfirmationField = { label: '', description: '' };
+
+  constructor() { super(); }
 
   ngOnInit(): void {
 
@@ -43,68 +45,44 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
     this.form.get('subject')?.setValue(this.data.subject);
     this.form.get('message')?.setValue(this.data.message);
+    if (!this.stores.authentication.isInnovatorType()) {
+      this.form.get('confirmation')?.setValue(true);
+    }
+
+    this.formConfirmationField = {
+      label: 'I understand that for transparency reasons, this message can be seen and replied to by everyone who has access to this innovation',
+      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${this.data.innovation.id}/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window)</a>`
+    };
+
+    this.setPageStatus('READY');
 
   }
 
 
-  verifyOutputData(): boolean {
-
-    if (!this.form.value.subject || !this.form.value.message) {
-      this.form.markAllAsTouched();
-      return false;
+  prepareOutputData(): SubjectMessageStepOutputType {
+    return {
+      subject: this.form.value.subject ?? '',
+      message: this.form.value.message ?? ''
     }
-
-    return true;
-
   }
 
   onCancelStep(): void {
-    this.cancelEvent.emit({
-      isComplete: true, data: {
-        subject: this.form.value.subject ?? '',
-        message: this.form.value.message ?? ''
-      }
-    });
+    this.cancelEvent.emit({ isComplete: true, data: this.prepareOutputData() });
   }
 
   onPreviousStep(): void {
-    this.previousStepEvent.emit({
-      isComplete: true, data: {
-        subject: this.form.value.subject ?? '',
-        message: this.form.value.message ?? ''
-      }
-    });
+    this.previousStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
   }
-
-  // onNextStep(): void {
-
-  //   if (!this.verifyOutputData()) { return; }
-
-  //   if (this.form.valid) {
-  //     this.nextStepEvent.emit({
-  //       isComplete: true, data: {
-  //         title: 'bla2',
-  //         message: 'bla2'
-  //         }
-  //     });
-  //   }
-
-  // }
 
   onSubmitStep(): void {
 
-    if (!this.verifyOutputData()) { return; }
-
-    if (this.form.valid) {
-      this.submitEvent.emit({
-        isComplete: true, data: {
-          subject: this.form.value.subject ?? '',
-          message: this.form.value.message ?? ''
-        }
-      });
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
     }
 
-  }
+    this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
 
+  }
 
 }
