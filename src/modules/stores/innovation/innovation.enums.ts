@@ -8,7 +8,7 @@ export enum InnovationStatusEnum {
   ABANDONED = 'ABANDONED',
   COMPLETE = 'COMPLETE',
   WITHDRAWN = 'WITHDRAWN',
-  PAUSED = 'PAUSED'
+  PAUSED = 'PAUSED',
 }
 
 export enum InnovationGroupedStatusEnum {
@@ -19,7 +19,7 @@ export enum InnovationGroupedStatusEnum {
   RECEIVING_SUPPORT = 'RECEIVING_SUPPORT',
   NO_ACTIVE_SUPPORT = 'NO_ACTIVE_SUPPORT',
   AWAITING_NEEDS_REASSESSMENT = 'AWAITING_NEEDS_REASSESSMENT',
-  WITHDRAWN = 'WITHDRAWN'
+  WITHDRAWN = 'WITHDRAWN',
 }
 
 export enum InnovationSupportStatusEnum {
@@ -30,7 +30,7 @@ export enum InnovationSupportStatusEnum {
   NOT_YET = 'NOT_YET',
   UNSUITABLE = 'UNSUITABLE',
   WITHDRAWN = 'WITHDRAWN',
-  COMPLETE = 'COMPLETE'
+  COMPLETE = 'COMPLETE',
 }
 
 export enum InnovationTransferStatusEnum {
@@ -38,7 +38,7 @@ export enum InnovationTransferStatusEnum {
   COMPLETED = 'COMPLETED',
   DECLINED = 'DECLINED',
   CANCELED = 'CANCELED',
-  EXPIRED = 'EXPIRED'
+  EXPIRED = 'EXPIRED',
 }
 
 export enum InnovationSectionEnum {
@@ -55,7 +55,7 @@ export enum InnovationSectionEnum {
   COST_OF_INNOVATION = 'COST_OF_INNOVATION',
   COMPARATIVE_COST_BENEFIT = 'COMPARATIVE_COST_BENEFIT',
   REVENUE_MODEL = 'REVENUE_MODEL',
-  IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN'
+  IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN',
 }
 
 export enum InnovationActionStatusEnum {
@@ -66,7 +66,9 @@ export enum InnovationActionStatusEnum {
   DELETED = 'DELETED',
   DECLINED = 'DECLINED',
   COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  DONE = 'DONE',
+  TASK_TO_DO = 'TASK_TO_DO',
 }
 
 export enum ActivityLogTypesEnum {
@@ -76,7 +78,7 @@ export enum ActivityLogTypesEnum {
   SUPPORT = 'SUPPORT',
   THREADS = 'THREADS',
   COMMENTS = 'COMMENTS',
-  ACTIONS = 'ACTIONS'
+  ACTIONS = 'ACTIONS',
 }
 
 export enum ActivityLogItemsEnum {
@@ -105,14 +107,14 @@ export enum ActivityLogItemsEnum {
   ACTION_STATUS_DECLINED_UPDATE = 'ACTION_STATUS_DECLINED_UPDATE',
   ACTION_STATUS_COMPLETED_UPDATE = 'ACTION_STATUS_COMPLETED_UPDATE',
   ACTION_STATUS_REQUESTED_UPDATE = 'ACTION_STATUS_REQUESTED_UPDATE',
-  ACTION_STATUS_CANCELLED_UPDATE = 'ACTION_STATUS_CANCELLED_UPDATE'
+  ACTION_STATUS_CANCELLED_UPDATE = 'ACTION_STATUS_CANCELLED_UPDATE',
 }
 
 export enum InnovationExportRequestStatusEnum {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
 }
 
 export enum InnovationCollaboratorStatusEnum {
@@ -122,5 +124,5 @@ export enum InnovationCollaboratorStatusEnum {
   CANCELLED = 'CANCELLED',
   REMOVED = 'REMOVED',
   LEFT = 'LEFT',
-  EXPIRED = 'EXPIRED'
+  EXPIRED = 'EXPIRED',
 }

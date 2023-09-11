@@ -4,27 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
-
 @Component({
   selector: 'shared-pages-innovation-action-status-list',
-  templateUrl: './action-status-list.component.html'
+  templateUrl: './action-status-list.component.html',
 })
 export class PageActionStatusListComponent extends CoreComponent {
-
   visibleStatus: InnovationActionStatusEnum[] = [
-    InnovationActionStatusEnum.REQUESTED,
-    InnovationActionStatusEnum.SUBMITTED,
-    InnovationActionStatusEnum.COMPLETED,
+    // InnovationActionStatusEnum.REQUESTED,
+    // InnovationActionStatusEnum.SUBMITTED,
+    // InnovationActionStatusEnum.COMPLETED,
+    // InnovationActionStatusEnum.DELETED,
+    InnovationActionStatusEnum.TASK_TO_DO,
     InnovationActionStatusEnum.DECLINED,
+    InnovationActionStatusEnum.DONE,
     InnovationActionStatusEnum.CANCELLED,
-    InnovationActionStatusEnum.DELETED
   ];
 
-
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {
-
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     const innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -33,14 +29,19 @@ export class PageActionStatusListComponent extends CoreComponent {
     this.setPageTitle('Actions status key');
 
     if (innovationId) {
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
-    }
-    else {
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/actions`);
+      this.setBackLink(
+        'Action tracker',
+        `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${
+          actionId ?? ''
+        }`
+      );
+    } else {
+      this.setBackLink(
+        'Action tracker',
+        `/${this.stores.authentication.userUrlBasePath()}/actions`
+      );
     }
 
     this.setPageStatus('READY');
-
   }
-
 }
