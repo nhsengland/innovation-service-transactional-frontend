@@ -5,9 +5,9 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './steps/organisations-step.types';
@@ -83,7 +83,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         if (response.collaborators) {
           this.wizard.data.innovationOwnerAndCollaborators = [
             ...this.wizard.data.innovationOwnerAndCollaborators,
-            ...response.collaborators.data.map(item => ({ name: item.name ?? '', role: item.role ?? '' }))
+            ...response.collaborators.data.map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
           ];
         }
 
