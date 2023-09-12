@@ -266,21 +266,22 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     cssClass: 'nhsuk-tag--grey',
     description: '',
   },
-  DECLINED: {
-    label: 'Declined',
-    cssClass: 'nhsuk-tag--red',
-    description: 'The innovation owner has declined the action requested.',
-  },
   COMPLETED: {
     label: 'Completed',
     cssClass: 'nhsuk-tag--green',
     description:
       'An accessor has closed the action after reviewing the information.',
   },
+  DECLINED: {
+    label: 'Declined',
+    cssClass: 'nhsuk-tag--red',
+    description: 'The innovator has declined the assigned task.',
+  },
   CANCELLED: {
     label: 'Cancelled',
     cssClass: 'nhsuk-tag--dark-grey',
-    description: 'An accessor has cancelled the action.',
+    description:
+      'The assigned task has been cancelled and it is no longer relevant.',
   },
   TASK_TO_DO: {
     cssClass: 'nhsuk-tag--blue',
