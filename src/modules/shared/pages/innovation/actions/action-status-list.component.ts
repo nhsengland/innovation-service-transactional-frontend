@@ -26,7 +26,7 @@ export class PageActionStatusListComponent extends CoreComponent {
     const innovationId = this.activatedRoute.snapshot.params.innovationId;
     const actionId = this.activatedRoute.snapshot.params.actionId;
 
-    this.setPageTitle('Actions status key');
+    this.setPageTitle('Task status');
 
     if (innovationId) {
       this.setBackLink(
