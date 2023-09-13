@@ -196,7 +196,7 @@ export type InnovationNeedsAssessmentInfoDTO = {
   summary: null | string,
   description: null | string,
   finishedAt: null | DateISOType,
-  assignTo: { id: string, name: string; },
+  assignTo?: { id: string, name: string; },
   maturityLevel: null | string,
   maturityLevelComment: null | string,
   hasRegulatoryApprovals: null | string,
