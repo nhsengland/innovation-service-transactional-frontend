@@ -5,9 +5,9 @@ import { debounceTime } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { GetThreadsListDTO, InnovationsService, InnovationThreadListFiltersType } from '@modules/shared/services/innovations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -44,6 +44,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     };
 
     this.innovation = this.stores.context.getInnovation();
+    console.log('buu')
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -52,13 +53,13 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
 
     if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-      this.canCreateThread = true;
+      this.canCreateThread = this.innovation.owner != null;
     } else if (this.stores.authentication.isInnovatorType()) {
       if (
         this.innovation.status === InnovationStatusEnum.IN_PROGRESS
         || ([InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(this.innovation.status) && this.innovation.assignedTo)
       ) {
-        this.canCreateThread = true;
+        this.canCreateThread = this.innovation.owner != null;
       } else {
         this.canCreateThread = false;
       }
