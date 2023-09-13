@@ -135,7 +135,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         this.wizard.addStep(
           new WizardStepModel<SubjectMessageStepInputType, SubjectMessageStepOutputType>({
             id: 'titleMessageStep',
-            title: 'Start new thread',
+            title: 'Start a new thread',
             component: WizardInnovationThreadNewSubjectMessageStepComponent,
             data: {
               innovation: { id: this.innovation.id },
@@ -259,7 +259,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         return {
           followersUserRoleIds: [this.innovation.assignedTo.userRoleId],
           visibleList: [{
-            name: 'Needs assessment',
+            name: 'Needs assessment team',
             users: [{ name: this.innovation.assignedTo.name }]
           }]
         };
