@@ -7,12 +7,21 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-
-  <div *ngIf="!canCreateThread && !isAdmin" class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
+  <ng-container *ngIf="!canCreateThread && !isAdmin">
+    <div *ngIf="innovation.owner else missingOwner" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
+      </div>
     </div>
-  </div>
+    <ng-template #missingOwner>
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> You cannot start a new message thread </span>
+        </div>
+        <p> Currently this innovation does not have an active owner and a transfer ownership is pending. As soon as the transfer is accepted, you will be able to start a thread.</p>
+      </div>
+    </ng-template>
+  </ng-container>
 
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
 
