@@ -37,10 +37,15 @@ import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/eve
 import { PageInnovationExportRequestInfoComponent } from './pages/innovation/export-requests/export-request-info.component';
 import { PageInnovationExportRequestNewComponent } from './pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from './pages/innovation/export-requests/export-requests-list.component';
+
+import { WizardInnovationThreadNewComponent } from './pages/innovation/messages/wizard-thread-new/thread-new.component';
+import { WizardInnovationThreadNewOrganisationsStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/organisations-step.component';
+import { WizardInnovationThreadNewSubjectMessageStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/subject-message-step.component';
+import { WizardInnovationThreadNewWarningStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/warning-step.component';
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
-import { PageInnovationThreadNewComponent } from './pages/innovation/messages/thread-new.component';
 import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
+
 import { PageInnovationRecordDownloadComponent } from './pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
@@ -128,10 +133,15 @@ import { UsersService } from './services/users.service';
     PageInnovationExportRequestInfoComponent,
     PageInnovationExportRequestNewComponent,
     PageInnovationExportRequestsListComponent,
+
+    WizardInnovationThreadNewComponent,
+    WizardInnovationThreadNewOrganisationsStepComponent,
+    WizardInnovationThreadNewSubjectMessageStepComponent,
+    WizardInnovationThreadNewWarningStepComponent,
     PageInnovationThreadMessageEditComponent,
     PageInnovationThreadMessagesListComponent,
-    PageInnovationThreadNewComponent,
     PageInnovationThreadsListComponent,
+
     PageInnovationRecordDownloadComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,

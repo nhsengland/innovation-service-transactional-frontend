@@ -5,7 +5,6 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { UserRoleEnum } from '@app/base/enums';
 
 
 export type getAccessorsOrganisationsDTO = {
@@ -54,13 +53,6 @@ export type GetOrganisationUnitInnovationsListDTO = {
     name: string,
     status: InnovationSupportStatusEnum
   }[];
-};
-
-export type GetOrganisationUnitUserDTO = {
-  id: string,
-  name: string,
-  email: string,
-  role: null | UserRoleEnum
 };
 
 @Injectable()
@@ -115,17 +107,5 @@ export class OrganisationsService extends CoreService {
     );
   }
 
-  getOrganisationUnitUserByEmail(
-    organisationUnitId: string,
-    email: string,
-  ): Observable<GetOrganisationUnitUserDTO> {
-
-    const url = new UrlModel(this.API_USERS_URL).addPath('/v1/units/:organisationUnitId/user').setPathParams({ organisationUnitId })
-    .setQueryParams({ email: email });
-    return this.http.get<GetOrganisationUnitUserDTO>(url.buildUrl()).pipe(take(1),
-      map(response => response)
-    );
-
-  }
 
 }

@@ -1,0 +1,43 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <div *ngIf="data.teams.length === 0" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <h2 class="nhsuk-warning-callout__label">
+          <span role="text">
+            <span class="nhsuk-u-visually-hidden">Important: </span>
+            There is no one to be notified about this message
+          </span>
+        </h2>
+        <p>Currently, there is no one assigned or actively providing support to your innovation. However, this message is visible to anyone with access to this innovation, including the organisations that may be assigned to support you in the near future.</p>
+      </div>
+
+      <ng-container *ngIf="data.teams.length > 0">
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Who will be notified about this message</h2>
+        <ul class="nhsuk-list">
+          <li *ngFor="let team of data.teams" class="nhsuk-u-margin-0">
+            <span class="nhsuk-u-font-weight-bold">{{ team.name }}</span>
+            <ul class="nhsuk-list">
+              <li *ngFor="let user of team.users" class="nhsuk-u-margin-0">{{ user.name }}</li>
+            </ul>
+          </li>
+        </ul>
+      </ng-container>
+
+      <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
+        <theme-form-input controlName="subject" label="Enter a subject for your thread" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
+        <theme-form-checkbox *ngIf="stores.authentication.isInnovatorType()" controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Send message</button>
+      </form>
+
+      <div>
+        <a href="javascript:void()" (click)="onCancelStep()">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+</theme-content-wrapper>

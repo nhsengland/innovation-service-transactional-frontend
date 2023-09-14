@@ -1,19 +1,19 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
-import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
+import { StoresModule } from '@modules/stores';
 
 import { PageTermsOfUseInfoComponent } from './terms-of-use-info.component';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
 import { TermsOfUseTypeEnum } from '@app/base/enums';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', () => {
@@ -21,7 +21,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
   let component: PageTermsOfUseInfoComponent;
   let fixture: ComponentFixture<PageTermsOfUseInfoComponent>;
   let activatedRoute: ActivatedRoute;
-  let userService: ServiceUsersService;
+  let userService: AdminUsersService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +36,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
 
     AppInjector.setInjector(TestBed.inject(Injector));
     activatedRoute = TestBed.inject(ActivatedRoute);
-    userService = TestBed.inject(ServiceUsersService);
+    userService = TestBed.inject(AdminUsersService);
   });
 
 

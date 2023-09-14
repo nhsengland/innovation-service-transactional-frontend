@@ -1,210 +1,213 @@
-import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { AppInjector } from '@modules/core';
+
+import { UserRoleEnum } from '@app/base/enums';
+
+import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
+import { AuthenticationStore } from '@modules/stores';
+
+// Labels.
+const stepsLabels = {
+  l1: { label: "What is the new user's email?", description: 'Enter an email with a maximum of 100 characters.' },
+  l2: { label: 'What is the name of the new user?', description: 'Enter the first name and surname. This is how their name will appear on the service.' },
+  l3: { label: 'What is their role?' },
+  l4: { label: 'Which organisation is the user associated to?' },
+  l5: { label: 'Which unit is the user associated to?' }
+};
 
 
 // Types.
-type InboundPayloadType = {
-  organisationsList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[],
-};
+type Organisation = { id: string; name: string; units: { id: string; name: string; }[] };
 
-type StepPayloadType = {
-  email: string,
-  name: string,
-  role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
-  type: null | 'ASSESSMENT' | 'AUTHORISED_PERSON' | 'ADMIN',
-  organisationAcronym?: null | string, // Only for QA, A
-  organisationUnitAcronym?: null | string, // Only for A
-  organisationsList: { acronym: string, name: string, units: { acronym: string, name: string }[] }[]
-};
+type CreateUserInBaseInbound = { contextType: 'BASE', organisations: Organisation[] }
+type CreateUserInUnitInbound = { contextType: 'UNIT', organisations: Organisation[], organisationId: string, unitIds: string[] }
+type CreateUserInTeamInbound = { contextType: 'TEAM', role: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN };
+type InboundPayloadType = CreateUserInBaseInbound | CreateUserInUnitInbound | CreateUserInTeamInbound;
 
-type OutboundPayloadType = {
-  email: string,
-  name: string,
-  role?: null | 'QUALIFYING_ACCESSOR' | 'ACCESSOR', // Only for QA, A
-  type: null | undefined | 'ASSESSMENT' | 'ACCESSOR' | 'QUALIFYING_ACCESSOR' | 'ADMIN',
-  organisationAcronym?: null | string, // Only for QA, A
-  organisationUnitAcronym?: null | string, // Only for A
-};
+type LogicFieldsType = {
+  contextType: 'BASE' | 'UNIT' | 'TEAM';
+  organisations?: Organisation[];
+}
+type QuestionFieldsType = {
+  email?: string;
+  name?: string;
+  role?: UserRoleEnum.QUALIFYING_ACCESSOR | UserRoleEnum.ACCESSOR | UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN;
+  organisationId?: string;
+  unitIds?: string[];
+}
+type StepPayloadType = LogicFieldsType & QuestionFieldsType;
 
+type CreateRolesType =
+  | { role: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN | UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR }
+  | {
+      role: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR;
+      organisationId: string;
+      unitIds: string[];
+    };
+type CreateUserType = { email: string; name: string; } & CreateRolesType;
+export type OutboundPayloadType = CreateUserType;
 
-export const CREATE_NEW_USER_QUESTIONS: WizardEngineModel = new WizardEngineModel({
-  showSummary: true,
+// consts.
+const injector = AppInjector.getInjector();
+const authenticationStore = injector?.get(AuthenticationStore);
+
+const roles = [UserRoleEnum.QUALIFYING_ACCESSOR, UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.ADMIN];
+const roleItems = roles.map(r => ({ value: r, label: authenticationStore?.getRoleDescription(r) }));
+
+export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      parameters: [{
-        id: 'type',
-        dataType: 'radio-group',
-        label: 'Select user type',
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: [
-          { value: 'ASSESSMENT', label: 'Needs Assessor' },
-          { value: 'AUTHORISED_PERSON', label: 'Authorised person' },
-          { value: 'ADMIN', label: 'Administrator'}
-        ]
-      }]
+      parameters: [
+        {
+          id: 'email',
+          dataType: 'text',
+          label: stepsLabels.l1.label,
+          description: stepsLabels.l1.description,
+          validations: {
+            isRequired: [true, 'Email is required'],
+            validEmail: true,
+            maxLength: 100,
+          },
+        },
+      ],
     }),
     new FormEngineModel({
-      parameters: [{
-        id: 'email',
-        dataType: 'text',
-        label: 'Provide the new user\'s email address',
-        validations: {
-          isRequired: [true, 'Email is required'],
-          validEmail: true
-        }
-      }]
-    }),
-    new FormEngineModel({
-      parameters: [{
-        id: 'name',
-        dataType: 'text',
-        label: 'Name of the new user',
-        description: 'Include the first name and surname of the user, their name will appear on the service as it is written here.',
-        validations: { isRequired: [true, 'Name is required'] }
-      }]
+      parameters: [
+        {
+          id: 'name',
+          dataType: 'text',
+          label: stepsLabels.l2.label,
+          description: stepsLabels.l2.description,
+          validations: {
+            isRequired: [true, 'Name is required'],
+            maxLength: 100,
+          },
+        },
+      ],
     })
   ],
-  runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
+  showSummary: true,
+  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType) => wizardRuntimeRules(steps, currentValues)],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType, steps?: FormEngineModel[]) => summaryParsing(data, steps || [])
+  summaryParsing: (data: StepPayloadType) => summaryParsing(data),
 });
 
+function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): void {
 
-function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {
+  steps.splice(2);
 
-  steps.splice(3);
-
-  if (data.type === 'ADMIN' || data.type === 'ASSESSMENT') {
-
-    data.organisationAcronym = null;
-    data.organisationUnitAcronym = null;
-    data.role = null;
-
-  } else { // data.type: 'ACCESSOR' | 'QUALIFYING_ACCESSOR'.
-
+  if(data.contextType === 'BASE' || data.contextType === 'UNIT') {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'organisationAcronym',
-          dataType: 'radio-group',
-          label: 'Which organisation is the new user associated to?',
-          validations: { isRequired: [true, 'Organisation is required'] },
-          items: data !== null && data.organisationsList !== null ? data.organisationsList.map(o => ({ value: o.acronym, label: o.name })) : []
-        }]
-      })
-    );
-
-
-    const selectedOrganisationUnits = data !== null && data.organisationsList !== null ? data.organisationsList.find(org => org.acronym === data.organisationAcronym)?.units.map(units => ({ value: units.acronym, label: units.name })) || [] : [];
-    if (selectedOrganisationUnits.length === 1) {
-      data.organisationUnitAcronym = selectedOrganisationUnits[0].value;
-    }
-    else {
-      steps.push(
-        new FormEngineModel({
-          parameters: [{
-            id: 'organisationUnitAcronym',
+        parameters: [
+          {
+            id: 'role',
             dataType: 'radio-group',
-            label: 'Which unit is the new user associated to?',
-            validations: { isRequired: [true, 'Unit is required'] },
-            items: selectedOrganisationUnits.sort((a, b) => {
-              const x = a.label.toUpperCase();
-              const y = b.label.toUpperCase();
-              return x === y ? 0 : x > y ? 1 : -1;
-              })
-          }]
-        }),
-      );
-    }
-
-    steps.push(
-      new FormEngineModel({
-        parameters: [{
-          id: 'role',
-          dataType: 'radio-group',
-          label: 'Which role should the new user have within the organisation?',
-          validations: { isRequired: [true, 'Choose one role'] },
-          items: [
-            { value: 'QUALIFYING_ACCESSOR', label: 'Qualifying Accessor' },
-            { value: 'ACCESSOR', label: 'Accessor' }
-          ]
-        }]
+            label: stepsLabels.l3.label,
+            validations: { isRequired: [true, 'Choose one role'] },
+            items: data.contextType === 'BASE' ? roleItems : roleItems.filter(r => r.value === UserRoleEnum.ACCESSOR || r.value === UserRoleEnum.QUALIFYING_ACCESSOR),
+          },
+        ],
       })
     );
-
   }
 
+  if (data.role === UserRoleEnum.ASSESSMENT || data.role === UserRoleEnum.ADMIN) {
+    data.organisationId = undefined;
+    data.unitIds = undefined;
+  } else if(data.contextType !== 'UNIT'){
+    steps.push(
+      new FormEngineModel({
+        parameters: [
+          {
+            id: 'organisationId',
+            dataType: 'radio-group',
+            label: stepsLabels.l4.label,
+            validations: { isRequired: [true, 'Organisation is required'] },
+            items: (data.organisations ?? []).map((o) => ({
+              value: o.id,
+              label: o.name,
+            })),
+          },
+        ],
+      })
+    );
+
+    if (data.organisationId) {
+      const organisation = (data.organisations ?? []).find(o => o.id === data.organisationId);
+      const units = (organisation?.units ?? []).map(u => ({ value: u.id, label: u.name }));
+
+      if (units.length === 1) {
+        data.unitIds = units.map((u) => u.value);
+      } else {
+        steps.push(
+          new FormEngineModel({
+            parameters: [
+              {
+                id: 'unitIds',
+                dataType: 'checkbox-array',
+                label: stepsLabels.l5.label,
+                validations: { isRequired: [true, 'Unit is required'] },
+                items: units.sort((a, b) => a.value.localeCompare(b.value)),
+              },
+            ],
+          })
+        );
+      }
+    }
+  }
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    email: '',
-    name: '',
-    role: null,
-    type: null,
-    organisationAcronym: null,
-    organisationUnitAcronym: null,
-    organisationsList: data.organisationsList
+    contextType: data.contextType ?? 'BASE',
+    ...(data.contextType === 'BASE' && { organisations: data.organisations }),
+    ...(data.contextType === 'UNIT' && { organisations: data.organisations, organisationId: data.organisationId, unitIds: data.unitIds }),
+    ...(data.contextType === 'TEAM' && { role: data.role })
   };
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    name: data.name,
-    email: data.email,
-    role: data.role,
-    type: data.type === 'AUTHORISED_PERSON' ? 'ACCESSOR' : data.type,
-    organisationAcronym: data.organisationAcronym,
-    organisationUnitAcronym: data.organisationUnitAcronym
+    name: data.name ?? '',
+    email: data.email ?? '',
+    role: data.role ?? UserRoleEnum.ASSESSMENT, // This can't happen, since role is required.
+    ...((data.role === UserRoleEnum.ACCESSOR || data.role === UserRoleEnum.QUALIFYING_ACCESSOR) && { organisationId: data.organisationId, unitIds: data.unitIds })
   };
 }
 
-function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
-
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
-  const organisationAcronym = steps.find(s => s.parameters[0].id === 'organisationAcronym')?.parameters[0].items;
+  let editStepNumber = 1;
 
-  let lastMarkStep;
-  if (data.type === 'ADMIN' || data.type === 'ASSESSMENT'){
-    toReturn.push(
-      { label: 'User Type', value: data.type === 'ADMIN' ? 'Administrator' : 'Needs Assessor' , editStepNumber: 1 },
-      { label: 'Email', value: data.email, editStepNumber: 2  },
-      { label: 'User Name', value: data.name, editStepNumber: 3  },
-    );
-    lastMarkStep = 3 ;
-  }
+  toReturn.push(
+    { label: 'Email', value: data.email, editStepNumber: editStepNumber++ },
+    { label: 'Name', value: data.name, editStepNumber: editStepNumber++ },
+  );
 
-  if (data.type === 'AUTHORISED_PERSON') {
+  const role = authenticationStore.getRoleDescription(data.role ?? UserRoleEnum.ASSESSMENT); // Reaching this point role will be defined
 
-    const unitsList = (data.organisationsList.find((org) => (org.acronym === data.organisationAcronym))?.units.map(units => ({ value: units.acronym, label: units.name })));
+  if(data.role === UserRoleEnum.ADMIN || data.role === UserRoleEnum.ASSESSMENT) {
 
     toReturn.push(
-      { label: 'User Type', value: 'Authorised person'  , editStepNumber: 1 },
-      { label: 'Role', value: data.role === 'QUALIFYING_ACCESSOR' ? 'Qualifying Accessor' : 'Accessor' , editStepNumber: (unitsList as []).length > 1 ? 6 : 5 },
-      { label: 'Email', value: data.email, editStepNumber: 2  },
-      { label: 'User Name', value: data.name, editStepNumber: 3  },
+      { label: 'Role', value: role, editStepNumber: data.contextType === 'BASE' ? editStepNumber++ : undefined }
     );
-    const orgAcronym: { [key: string]: any }[0] = organisationAcronym?.filter((item) => (data.organisationAcronym === item.value))[0];
+
+  } else {
+
+    const org = (data.organisations ?? []).find(o => o.id === data.organisationId);
+    const selectedUnits = (org?.units ?? []).filter(u => data.unitIds?.includes(u.id));
 
     toReturn.push(
-      { label: 'Organisation', value: orgAcronym.label === null ? 'NA' : orgAcronym.label, editStepNumber: 4 },
-    );
-
-    if (unitsList !== undefined) {
-      if ((unitsList as []).length > 1) {
-        const organisationUnitAcronym = steps.find(s => s.parameters[0].id === 'organisationUnitAcronym')?.parameters[0].items;
-        const orgUnitAcronym: { [key: string]: any }[0] = organisationUnitAcronym?.filter((item) => (data.organisationUnitAcronym === item.value))[0];
-        toReturn.push(
-          { label: 'Organisation Unit', value: orgUnitAcronym.label === null ? 'NA' : orgUnitAcronym.label, editStepNumber: 5  }
-        );
+      {
+        label: selectedUnits.length > 1 ? 'Roles' : 'Role',
+        value: selectedUnits.map(u => `${role} (${u.name})`).join('\n'),
+        editStepNumber
       }
-    }
+    );
 
-    lastMarkStep =  (unitsList as []).length > 1 ? 6 : 5 ;
   }
 
   return toReturn;
-
 }
-

@@ -102,7 +102,7 @@ export type InnovationInfoDTO = {
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
-  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo: { id: string, name: string }, reassessmentCount: number },
+  assessment?: null | { id: string, createdAt: DateISOType, finishedAt: null | DateISOType, assignedTo?: { id: string, name: string, userRoleId: string }, reassessmentCount: number },
   supports?: null | { id: string, status: InnovationSupportStatusEnum, organisationUnitId: string }[],
   statusUpdatedAt: null | DateISOType,
   collaboratorId?: string,
@@ -143,13 +143,13 @@ export type InnovationSupportsListDTO = {
     id: string, name: string, acronym: string,
     unit: { id: string, name: string, acronym: string; };
   },
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
 }[];
 
 export type InnovationSupportInfoDTO = {
   id: string,
   status: InnovationSupportStatusEnum,
-  engagingAccessors: { id: string, organisationUnitUserId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
 };
 
 
@@ -188,24 +188,6 @@ export enum SupportLogType {
   STATUS_UPDATE = 'STATUS_UPDATE',
 }
 
-export type InnovationSupportsLogInDTO = {
-  id: string;
-  type: SupportLogType;
-  description: string;
-  createdBy: string;
-  createdAt: DateISOType;
-  innovationSupportStatus?: keyof typeof InnovationSupportStatusEnum;
-  organisationUnit: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  };
-  suggestedOrganisationUnits?: {
-    id: string; name: string; acronym: string;
-    organisation: { id: string; name: string; acronym: string; };
-  }[];
-};
-export type InnovationSupportsLogOutDTO = InnovationSupportsLogInDTO & { logTitle: string; suggestedOrganisationUnitsNames: string[]; };
-
 
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
@@ -214,7 +196,7 @@ export type InnovationNeedsAssessmentInfoDTO = {
   summary: null | string,
   description: null | string,
   finishedAt: null | DateISOType,
-  assignTo: { id: string, name: string; },
+  assignTo?: { id: string, name: string; },
   maturityLevel: null | string,
   maturityLevelComment: null | string,
   hasRegulatoryApprovals: null | string,

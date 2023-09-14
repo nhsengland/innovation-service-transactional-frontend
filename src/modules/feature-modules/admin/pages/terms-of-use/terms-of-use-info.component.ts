@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
 
 @Component({
@@ -17,7 +17,7 @@ export class PageTermsOfUseInfoComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private userService: ServiceUsersService
+    private usersService: AdminUsersService
   ) {
 
     super();
@@ -29,11 +29,11 @@ export class PageTermsOfUseInfoComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    this.userService.getTermsById(this.id).subscribe({
+    this.usersService.getTermsById(this.id).subscribe({
       next: response => {
 
         this.tou = {
-          summary: response.summary || 'This version was released without a summary of the changes',
+          summary: response.summary ?? 'This version was released without a summary of the changes',
           name: response.name
         };
 

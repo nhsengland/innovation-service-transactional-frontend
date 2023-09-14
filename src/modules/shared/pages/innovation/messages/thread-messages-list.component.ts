@@ -10,7 +10,7 @@ import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadParticipantsDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadFollowersDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 
 
 @Component({
@@ -26,10 +26,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadInfo: null | GetThreadInfoDTO = null;
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
-  showParticipantsHideStatus: string | null = null;
-  threadParticipants: GetThreadParticipantsDTO | null = null;
-  showParticipantsText: 'Show list' | 'Hide list' = 'Show list';
-  participantNumberText: 'participant' | 'participants' = 'participant';
+  showFollowersHideStatus: string | null = null;
+  threadFollowers: GetThreadFollowersDTO['followers'] | null = null;
+  showFollowersText: 'Show list' | 'Hide list' = 'Show list';
+  followerNumberText: 'recipient' | 'recipients' = 'recipient';
 
   form = new FormGroup({
     message: new FormControl<string>('')
@@ -78,15 +78,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     forkJoin([
       this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
-      this.innovationsService.getThreadParticipants(this.innovation.id, this.threadId),
+      this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId),
       this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
     ]).subscribe({
-      next: ([threadInfo, threadParticipants, threadMessages]) => {
+      next: ([threadInfo, threadFollowers, threadMessages]) => {
 
         this.threadInfo = threadInfo;
-        this.threadParticipants = threadParticipants;
+        this.threadFollowers= threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users
 
-        this.participantNumberText = this.threadParticipants.participants.length > 1 ? 'participants' : 'participant';
+        this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.
@@ -103,14 +103,14 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   };
 
   onShowParticipantsClick() {
-    if (this.showParticipantsHideStatus !== 'opened') {
+    if (this.showFollowersHideStatus!== 'opened') {
 
-      this.showParticipantsHideStatus = 'opened';
-      this.showParticipantsText = 'Hide list';
+      this.showFollowersHideStatus= 'opened';
+      this.showFollowersText = 'Hide list';
 
     } else {
-      this.showParticipantsHideStatus = 'closed';
-      this.showParticipantsText = 'Show list';
+      this.showFollowersHideStatus= 'closed';
+      this.showFollowersText = 'Show list';
     }
   }
 

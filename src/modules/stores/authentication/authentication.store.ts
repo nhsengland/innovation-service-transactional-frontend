@@ -91,7 +91,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   isAssessmentType(): boolean { return this.state.userContext?.type === UserRoleEnum.ASSESSMENT; }
   isAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.ACCESSOR; }
   isQualifyingAccessorRole(): boolean { return this.state.userContext?.type === UserRoleEnum.QUALIFYING_ACCESSOR; }
-  isAdminRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.ADMIN) || false; }
+  isAdminRole(): boolean { return this.state.userContext?.type === UserRoleEnum.ADMIN; }
   // remove and or change logic to use the other roles
   // isServiceTeamRole(): boolean { return this.state.userContext?.type.includes(UserRoleEnum.SERVICE_TEAM) || false; }
 
@@ -160,10 +160,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
       case 'ADMIN': return 'Administrator';
       // Think this one is not used
       case 'INNOVATOR_OWNER': return 'Owner';
-      case 'ASSESSMENT': return 'Needs Assessor';
+      case 'ASSESSMENT': return 'Needs assessor';
       case 'INNOVATOR': return 'Innovator';
       case 'ACCESSOR': return 'Accessor';
-      case 'QUALIFYING_ACCESSOR': return 'Qualifying Accessor';
+      case 'QUALIFYING_ACCESSOR': return 'Qualifying accessor';
       default: return '';
     }
   }

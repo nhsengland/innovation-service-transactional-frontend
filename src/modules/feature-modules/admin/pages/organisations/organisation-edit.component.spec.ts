@@ -14,7 +14,7 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
 import { AdminOrganisationsService } from '@modules/feature-modules/admin/services/admin-organisations.service';
-import { ServiceUsersService } from '@modules/feature-modules/admin/services/service-users.service';
+import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
 
@@ -26,7 +26,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   let routerSpy: jest.SpyInstance;
   let activatedRoute: ActivatedRoute;
   let authenticationStore: AuthenticationStore;
-  let serviceUserService: ServiceUsersService;
+  let usersService: AdminUsersService;
   let organisationsService: OrganisationsService;
   let adminOrganisationsService: AdminOrganisationsService;
 
@@ -47,7 +47,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
     authenticationStore = TestBed.inject(AuthenticationStore);
-    serviceUserService = TestBed.inject(ServiceUsersService);
+    usersService = TestBed.inject(AdminUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
     adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
   });

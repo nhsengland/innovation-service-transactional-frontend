@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
-  Router, Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot
+  ActivatedRouteSnapshot,
+  Resolve
 } from '@angular/router';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { NGXLogger } from 'ngx-logger';
-import { catchError, map, Observable, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class OrganisationUnitDataResolver implements Resolve<{ id: null | string, name: string }> {
@@ -15,14 +13,16 @@ export class OrganisationUnitDataResolver implements Resolve<{ id: null | string
     private organisationsService: OrganisationsService
   ) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<{ id: string, name: string, acronym: string }> {
+  resolve(route: ActivatedRouteSnapshot): Observable<{ id: string, name: string, acronym: string, isActive: boolean, canActivate: boolean }> {
 
     return this.organisationsService.getOrganisationUnitInfo(route.params.organisationId, route.params.organisationUnitId).pipe(
       map(response => {
         return {
           id: response.id,
           name: response.name,
-          acronym: response.acronym
+          acronym: response.acronym,
+          isActive: response.isActive,
+          canActivate: response.canActivate
         };
       })
     );

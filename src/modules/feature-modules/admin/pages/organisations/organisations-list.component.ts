@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { CoreComponent } from '@app/base';
 
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
+
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+
 
 @Component({
   selector: 'app-admin-pages-organisations-organisations-list',
@@ -9,23 +12,16 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 })
 export class PageOrganisationsListComponent extends CoreComponent implements OnInit {
 
-  organisations: {
-    info: {
-      id: string;
-      name: string;
-      acronym: string;
-      isActive: boolean;
-      organisationUnits: {
-        id: string;
-        name: string;
-        acronym: string;
-        isActive: boolean;
-      }[];
-    };
-    showHideStatus: 'hidden' | 'opened' | 'closed';
-    showHideText: null | string;
-    showHideDescription: null | string;
-  }[] = [];
+  organisations: OrganisationsListDTO[] = [];
+
+  teams: {
+    name: string;
+    isActive: boolean;
+    link: string;
+  }[] = [
+      { name: 'Needs assessment team', isActive: true, link: UserRoleEnum.ASSESSMENT },
+      { name: 'Service administrators', isActive: true, link: UserRoleEnum.ADMIN }
+    ];
 
   constructor(
     private organisationsService: OrganisationsService
@@ -39,70 +35,18 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
   ngOnInit(): void {
 
     this.organisationsService.getOrganisationsList({ unitsInformation: true, withInactive: true }).subscribe({
-      next: (organisationUnits) => {
+      next: response => {
 
-        this.organisations = organisationUnits.map(organisation => {
-
-          if (organisation.organisationUnits.length === 1) {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                isActive: organisation.isActive,
-                organisationUnits: [],
-              },
-              showHideStatus: 'hidden',
-              showHideText: null,
-              showHideDescription: null
-            };
-          } else {
-            return {
-              info: {
-                id: organisation.id,
-                name: organisation.name,
-                acronym: organisation.acronym,
-                isActive: organisation.isActive,
-                organisationUnits: organisation.organisationUnits
-              },
-              showHideStatus: 'closed',
-              showHideText: organisation.organisationUnits.length === 0 ? null : `Show ${organisation.organisationUnits.length} units`,
-              showHideDescription: `that belong to the ${organisation.name}`
-            };
-          }
-
-        });
+        this.organisations = response;
 
         this.setPageStatus('READY');
 
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch organisations information', { message: 'Please try again or contact us for further help' });
+        this.setAlertUnknownError();
       }
     });
-
-  }
-
-
-  onShowHideClicked(organisationId: string): void {
-
-    const organisation = this.organisations.find(i => i.info.id === organisationId);
-
-    switch (organisation?.showHideStatus) {
-      case 'opened':
-        organisation.showHideStatus = 'closed';
-        organisation.showHideText = `Show ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
-        break;
-      case 'closed':
-        organisation.showHideStatus = 'opened';
-        organisation.showHideText = `Hide ${organisation.info.organisationUnits.length} units`;
-        organisation.showHideDescription = `that belong to the ${organisation.info.name}`;
-        break;
-      default:
-        break;
-    }
 
   }
 

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
+import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 
 
 @Component({
@@ -47,14 +48,16 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
         this.summaryList.push({ label: 'Company UK registration number', value: user.organisations[0].registrationNumber ?? '', editStepNumber: 8 });
       }
 
-    } else if (this.stores.authentication.isAccessorType()) {
-      const userContext = this.stores.authentication.getUserContextInfo();
+    } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
+      // this assumes that the user only has one organisation as it's currently the business case
+      const organisation = user.roles.find((r): r is UserRoleType & {organisation: {name: string}} => r.organisation !== undefined)?.organisation?.name;
+      const roles = [...new Set(user.roles.map(r => this.stores.authentication.getRoleDescription(r.role)))].join('\n');
 
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },
         { label: 'Email address', value: user.email },
-        { label: 'Organisation', value: userContext?.organisation?.name ?? '' },
-        { label: 'Service roles', value: user.organisations.map(item => this.stores.authentication.getRoleDescription(item.role)).join('\n') }
+        ...( organisation ? [{ label: 'Organisation', value: organisation }] : []),
+        { label: 'Service roles', value: roles }
       ];
 
     } else if (this.stores.authentication.isAssessmentType()) {

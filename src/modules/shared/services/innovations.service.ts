@@ -13,7 +13,7 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationSupportsLogInDTO, InnovationSupportsLogOutDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportLogType, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
 
 export type InnovationsActionsListFilterType = {
@@ -32,20 +32,14 @@ export type GetThreadsListDTO = {
   data: {
     id: string;
     subject: string;
-    messageCount: number;
-    createdAt: DateISOType;
-    isNew: boolean;
+    createdBy: { id: string; displayTeam?: string };
     lastMessage: {
       id: string;
-      createdAt: DateISOType;
-      createdBy: {
-        id: string;
-        name: string;
-        type: UserRoleEnum;
-        isOwner?: boolean;
-        organisationUnit?: { id: string, name: string, acronym: string; };
-      };
+      createdAt: Date;
+      createdBy: { id: string; displayTeam?: string };
     };
+    messageCount: number;
+    hasUnreadNotifications: boolean;
   }[];
 };
 
@@ -62,12 +56,13 @@ export type GetThreadMessageInfoDTO = {
   createdAt: DateISOType;
 };
 
-export type GetThreadParticipantsDTO = {
-  participants: {
+export type GetThreadFollowersDTO = {
+  followers: {
     id: string;
     identityId: string;
     name: string;
     type: UserRoleEnum;
+    isLocked: boolean;
     isOwner?: boolean;
     organisationUnit?: { id: string, acronym: string }
   }[]
@@ -100,17 +95,6 @@ export type GetThreadMessagesListOutDTO = {
     })[]
 };
 
-export type CreateThreadDTO = {
-  thread: {
-    id: string;
-    subject: string;
-    createdBy: {
-      id: string;
-    };
-    createdAt: DateISOType;
-  }
-};
-
 export type CreateThreadMessageDTO = {
   threadMessage: {
     createdBy: {
@@ -122,6 +106,11 @@ export type CreateThreadMessageDTO = {
     isEditable: boolean;
     createdAt: DateISOType;
   };
+};
+
+export type InnovationThreadListFiltersType = {
+  subject?: string,
+  following?: boolean
 };
 
 
@@ -349,37 +338,6 @@ export class InnovationsService extends CoreService {
   }
 
 
-  // Support log
-  getInnovationSupportLog(innovationId: string): Observable<InnovationSupportsLogOutDTO[]> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/support-logs').setPathParams({ innovationId });
-    return this.http.get<InnovationSupportsLogInDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response.map(item => {
-
-        let logTitle = '';
-
-        switch (item.type) {
-          case SupportLogType.ACCESSOR_SUGGESTION:
-            logTitle = 'Suggested organisation units';
-            break;
-          case SupportLogType.STATUS_UPDATE:
-            logTitle = 'Updated support status';
-            break;
-          default:
-            break;
-        }
-
-        return {
-          ...item,
-          logTitle,
-          suggestedOrganisationUnitsNames: (item.suggestedOrganisationUnits ?? []).map(o => o.name)
-        };
-
-      }))
-    );
-  }
-
-
   // Needs Assessment.
   getInnovationNeedsAssessment(innovationId: string, assessmentId: string): Observable<InnovationNeedsAssessmentInfoDTO> {
 
@@ -470,46 +428,33 @@ export class InnovationsService extends CoreService {
 
 
   // Threads and messages methods.
-  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadsListDTO> {
+  getThreadsList(innovationId: string, queryParams: APIQueryParamsType<InnovationThreadListFiltersType>): Observable<GetThreadsListDTO> {
 
-    const { filters, ...qp } = queryParams;
+    const { filters, ...qParams } = queryParams;
+    const qp = {
+      ...qParams,
+      ...(filters.subject && { subject: filters.subject }),
+      ...(filters.following && { following: filters.following })
+    };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId }).setQueryParams(qp);
-    return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data
-      }))
-    );
+    return this.http.get<GetThreadsListDTO>(url.buildUrl()).pipe(take(1));
 
   }
 
   getThreadInfo(innovationId: string, threadId: string): Observable<GetThreadInfoDTO> {
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId').setPathParams({ innovationId, threadId });
-    return this.http.get<GetThreadInfoDTO>(url.buildUrl()).pipe(take(1),
-      map(response => response)
-    );
-
+    return this.http.get<GetThreadInfoDTO>(url.buildUrl()).pipe(take(1));
   }
 
   getThreadMessageInfo(innovationId: string, threadId: string, messageId: string): Observable<GetThreadMessageInfoDTO> {
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
-
-    return this.http.get<GetThreadMessageInfoDTO>(url.buildUrl()).pipe(take(1),
-      map(response => response)
-    );
-
+    return this.http.get<GetThreadMessageInfoDTO>(url.buildUrl()).pipe(take(1));
   }
 
-  getThreadParticipants(innovationId: string, threadId: string): Observable<GetThreadParticipantsDTO> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/participants').setPathParams({ innovationId, threadId });
-
-    return this.http.get<GetThreadParticipantsDTO>(url.buildUrl()).pipe(take(1),
-      map(response => response)
-    );
+  getThreadFollowers(innovationId: string, threadId: string): Observable<GetThreadFollowersDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
+    return this.http.get<GetThreadFollowersDTO>(url.buildUrl()).pipe(take(1));
   }
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
@@ -533,25 +478,19 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: { subject: string, message: string; }): Observable<CreateThreadDTO> {
-
+  createThread(innovationId: string, body: { followerUserRoleIds: string[], subject: string, message: string; }): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
-    return this.http.post<CreateThreadDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
   }
 
   createThreadMessage(innovationId: string, threadId: string, body: { message: string; }): Observable<CreateThreadMessageDTO> {
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
-    return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
+    return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1));
   }
 
   editThreadMessage(innovationId: string, threadId: string, messageId: string, body: { message: string; }): Observable<{ id: string; }> {
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages/:messageId').setPathParams({ innovationId, threadId, messageId });
-    return this.http.put<{ id: string; }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
+    return this.http.put<{ id: string; }>(url.buildUrl(), body).pipe(take(1));
   }
 
   getInnovationActivityLog(

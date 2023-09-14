@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -58,7 +58,10 @@ export class AssessmentService extends CoreService {
 
   getInnovationExemption(innovationId: string, assessmentId: string): Observable<AssessmentExemptionTypeDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId/exemption').setPathParams({ innovationId, assessmentId });
-    return this.http.get<AssessmentExemptionTypeDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+    return this.http.get<AssessmentExemptionTypeDTO>(url.buildUrl()).pipe(
+      take(1),
+      catchError(() => of({ isExempted: false }))
+    );
   }
 
   updateInnovationExemption(innovationId: string, assessmentId: string, data: { reason: InnovationKPIExemption, message?: string }): Observable<null> {

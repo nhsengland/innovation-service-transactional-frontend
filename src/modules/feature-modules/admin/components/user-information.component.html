@@ -1,0 +1,52 @@
+<ng-container *ngIf="user">
+
+  <p *ngIf="this.parentData?.flags?.isBaseCreate">Go to user details if you want to update their information or add their role.</p>
+
+  <ng-container *ngIf="!componentData.isAddRoleValid && !parentData?.flags?.isBaseCreate">
+
+    <ng-container *ngIf="componentData.validations.isNonCompatibleRole">
+      <p>You can not add this user to this organisation/team as they already exist on the service with a non compatible role.</p>
+      <p>Go to user details if you want to update their information or go back and try to add another user.</p>
+    </ng-container>
+
+    <ng-container *ngIf="componentData.validations.isFromOtherOrg">
+      <p>You cannot add this user to this organisation as they are already assigned to another support organisation.</p>
+      <p>You can inactivate their role in their current support organisation in user details.</p>
+    </ng-container>
+
+    <ng-container *ngIf="componentData.validations.isFromSameUnit">
+      <p>You cannot add this user to this unit as they are already assigned to this unit.</p>
+    </ng-container>
+
+  </ng-container>
+
+
+  <dl class="nhsuk-summary-list">
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Name</dt>
+      <dd class="nhsuk-summary-list__value">{{ user.name }}</dd>
+    </div>
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Email</dt>
+      <dd class="nhsuk-summary-list__value">{{ user.email }}</dd>
+    </div>
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">{{ user.roles.length > 1 ? 'Roles' : 'Role' }}</dt>
+      <dd class="nhsuk-summary-list__value">
+        <ul class="nhsuk-list">
+          <ng-container *ngFor="let roleDescrition of user.rolesDescription">
+            <li>{{ roleDescrition }}</li>
+         </ng-container>
+
+        </ul>
+      </dd>
+    </div>
+  </dl>
+
+  <button class="nhsuk-button" [disabled]="submitButton.isDisabled" (click)="onSubmit()">{{ submitButton.label }}</button>
+
+  <div>
+    <a href="javascript:;" (click)="emitCancel()">Cancel</a>
+  </div>
+
+</ng-container>

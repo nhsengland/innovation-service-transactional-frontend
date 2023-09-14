@@ -1,0 +1,14 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>{{ leadText }}</p>
+    </div>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onNextStep()">
+    <theme-form-checkbox-array arrayName="organisationUnits" label="Engaging organisations" [items]="formOrganisationUnitsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
+    <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+  </form>
+
+</theme-content-wrapper>

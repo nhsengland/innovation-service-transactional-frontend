@@ -1,5 +1,12 @@
 <theme-content-wrapper [status]="pageStatus">
 
+  <div class="nhsuk-action-link nhsuk-u-margin-bottom-5">
+    <a class="nhsuk-action-link__link" routerLink="/admin/users/new">
+      <theme-svg-icon type="action"></theme-svg-icon>
+      <span class="nhsuk-action-link__text">Add new user</span>
+    </a>
+  </div>
+
   <p> Find a specific user by providing an email address </p>
 
   <div class="nhsuk-grid-row">
@@ -21,6 +28,7 @@
         </div>
 
       </form>
+
     </div>
 
 
@@ -30,20 +38,20 @@
 
       <div *ngIf="pageStatus === 'READY'" aria-live="polite">
 
-        <ng-container *ngIf="usersList.length === 0">
+        <ng-container *ngIf="!searchUser">
           <p class="nhsuk-u-padding-top-5">There are no results.</p>
           <p *ngIf="formSubmitted" class="">Please, confirm the provided email.</p>
         </ng-container>
 
-        <ng-container *ngIf="usersList.length > 0">
-          <div *ngFor="let item of usersList" class="d-flex nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
+        <ng-container *ngIf="searchUser">
+          <div class="d-flex nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
             <div class="mr-auto">
-              <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ (item.type === 'ACCESSOR' || item.type === 'QUALIFYING_ACCESSOR') ? 'Authorised person' : item.typeLabel}}</p>
-              <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.displayName }} ({{ item.email }})</p>
+              <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ searchUser.rolesDescription.join(', ') }}</p>
+              <p class="nhsuk-body-s nhsuk-u-margin-0">{{ searchUser.name }} ({{ searchUser.email }})</p>
             </div>
             <div class="d-flex flex-direction-column text-align-center">
-              <strong class="nhsuk-tag nhsuk-u-margin-bottom-2" [ngClass]="{'nhsuk-tag--green': !item.lockedAt, 'nhsuk-tag--red': item.lockedAt}">{{ item.lockedAt ? 'Locked' : 'Active' }}</strong>
-              <a routerLink="{{item.id}}">View</a>
+              <strong class="nhsuk-tag nhsuk-u-margin-bottom-2" [ngClass]="{'nhsuk-tag--green': searchUser.isActive, 'nhsuk-tag--red': !searchUser.isActive}">{{ searchUser.isActive ? 'Active' : 'Locked' }}</strong>
+              <a routerLink="{{ searchUser.id }}">View</a>
             </div>
           </div>
         </ng-container>
