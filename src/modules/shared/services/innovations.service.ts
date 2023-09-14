@@ -62,6 +62,7 @@ export type GetThreadFollowersDTO = {
     identityId: string;
     name: string;
     type: UserRoleEnum;
+    isLocked: boolean;
     isOwner?: boolean;
     organisationUnit?: { id: string, acronym: string }
   }[]
