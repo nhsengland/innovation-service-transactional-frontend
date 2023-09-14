@@ -232,7 +232,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
     this.innovationsService.createThread(this.innovation.id, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully started a thread');
+        this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();
       },
       error: () => this.setAlertUnknownError()
