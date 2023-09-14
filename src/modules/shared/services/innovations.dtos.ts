@@ -120,7 +120,8 @@ export type InnovationCollaboratorsListDTO = {
     status: InnovationCollaboratorStatusEnum,
     name?: string,
     role?: string,
-    email?: string
+    email?: string,
+    isActive?: boolean
   }[]
 };
 

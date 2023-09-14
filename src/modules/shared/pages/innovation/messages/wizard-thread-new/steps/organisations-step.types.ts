@@ -4,7 +4,8 @@ import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.
 export type OrganisationsStepInputType = {
   innovation: { id: string },
   organisationUnits: InnovationSupportsListDTO,
-  selectedOrganisationUnits: string[]
+  selectedOrganisationUnits: string[],
+  activeInnovators: boolean
 };
 
 export type OrganisationsStepOutputType = {
