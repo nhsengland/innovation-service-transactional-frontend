@@ -47,7 +47,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.innovation = this.stores.context.getInnovation();
 
     this.wizard.data = {
-      innovationOwnerAndCollaborators: this.innovation.owner ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
+      innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
       subjectMessageStep: { subject: '', message: '' }
     };
@@ -83,10 +83,11 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         if (response.collaborators) {
           this.wizard.data.innovationOwnerAndCollaborators = [
             ...this.wizard.data.innovationOwnerAndCollaborators,
-            ...response.collaborators.data.map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
+            ...response.collaborators.data.filter(c => c.isActive).map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
           ];
-        }
 
+        }
+        
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -120,7 +121,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
                 data: {
                   innovation: { id: this.innovation.id },
                   organisationUnits: this.datasets.organisationUnits,
-                  selectedOrganisationUnits: []
+                  selectedOrganisationUnits: [],
+                  activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
                 },
                 outputs: {
                   previousStepEvent: data => this.onPreviousStep(data),
@@ -197,7 +199,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.setStepData<OrganisationsStepInputType>('organisationsStep', {
       innovation: { id: this.innovation.id },
       organisationUnits: this.datasets.organisationUnits,
-      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id)
+      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id),
+      activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
     });
   }
   onOrganisationsStepOut(stepData: WizardStepEventType<OrganisationsStepOutputType>): void {
