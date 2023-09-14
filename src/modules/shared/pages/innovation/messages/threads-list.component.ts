@@ -80,7 +80,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.tableList.setVisibleColumns({
       subject: { label: 'Message threads', orderable: false },
-      messageCount: { label: 'Total messages', orderable: true },
+      messageCount: { label: 'Total messages', orderable: false },
       latestMessageCreatedAt: { label: 'Latest received', align: 'right', orderable: true }
     }).setOrderBy('latestMessageCreatedAt', 'descending');
 
