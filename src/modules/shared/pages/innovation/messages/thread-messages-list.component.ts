@@ -114,9 +114,18 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
           // Engaging organisation units except the user unit, if accessor.
           this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING);
+
           if (this.stores.authentication.isAccessorType()) {
             this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
           }
+
+          // Keep only active engaging accessors
+          this.engagingOrganisationUnits = this.engagingOrganisationUnits.map(item => {
+            return {
+              ...item,
+              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
+            }
+          });
 
           // Checks if there's any engaging accessor that's not a follower
           this.showAddRecipientsLink = this.engagingOrganisationUnits.reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], []).some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
