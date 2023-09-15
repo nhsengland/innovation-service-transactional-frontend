@@ -31,7 +31,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    confirmation: new FormControl<boolean>(false, CustomValidators.required('You need to confirm to proceed'))
+    confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
   }, { updateOn: 'blur' });
 
   formConfirmationField = { label: '', description: '' };
@@ -50,8 +50,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     }
 
     this.formConfirmationField = {
-      label: 'I understand that for transparency reasons, this message can be seen and replied to by everyone who has access to this innovation',
-      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${this.data.innovation.id}/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window)</a>`
+      label: 'I understand that for transparency reasons, this message can be seen and replied to by everyone who has access to this innovation.',
+      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${this.data.innovation.id}/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window).</a>`
     };
 
     this.setPageStatus('READY');

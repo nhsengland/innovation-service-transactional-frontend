@@ -25,15 +25,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
 
   wizard = new WizardModel<{
     organisationsStep: {
-      organisationUnits: {
-        id: string,
-        name: string,
-        users: {
-          id: string,
-          userRoleId: string,
-          name: string
-        }[]
-      }[]
+      organisationUnits: { id: string, name: string, users: { id: string, userRoleId: string, name: string }[] }[]
     },
   }>({});
 
@@ -105,7 +97,8 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
               data: {
                 innovation: { id: this.innovation.id },
                 organisationUnits: this.engagingOrganisationUnits,
-                selectedOrganisationUnits: []
+                selectedOrganisationUnits: [],
+                activeInnovators: false
               },
               outputs: {
                 previousStepEvent: () => this.onPreviousStep(),

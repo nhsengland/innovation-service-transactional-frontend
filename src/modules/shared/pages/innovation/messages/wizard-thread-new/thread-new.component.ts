@@ -5,9 +5,9 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './steps/organisations-step.types';
@@ -47,7 +47,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.innovation = this.stores.context.getInnovation();
 
     this.wizard.data = {
-      innovationOwnerAndCollaborators: this.innovation.owner ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
+      innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
       subjectMessageStep: { subject: '', message: '' }
     };
@@ -83,10 +83,11 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         if (response.collaborators) {
           this.wizard.data.innovationOwnerAndCollaborators = [
             ...this.wizard.data.innovationOwnerAndCollaborators,
-            ...response.collaborators.data.map(item => ({ name: item.name ?? '', role: item.role ?? '' }))
+            ...response.collaborators.data.filter(c => c.isActive).map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
           ];
-        }
 
+        }
+        
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -130,7 +131,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
                 data: {
                   innovation: { id: this.innovation.id },
                   organisationUnits: this.datasets.organisationUnits,
-                  selectedOrganisationUnits: []
+                  selectedOrganisationUnits: [],
+                  activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
                 },
                 outputs: {
                   previousStepEvent: data => this.onPreviousStep(data),
@@ -145,7 +147,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         this.wizard.addStep(
           new WizardStepModel<SubjectMessageStepInputType, SubjectMessageStepOutputType>({
             id: 'titleMessageStep',
-            title: 'Start new thread',
+            title: 'Start a new thread',
             component: WizardInnovationThreadNewSubjectMessageStepComponent,
             data: {
               innovation: { id: this.innovation.id },
@@ -207,7 +209,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.setStepData<OrganisationsStepInputType>('organisationsStep', {
       innovation: { id: this.innovation.id },
       organisationUnits: this.datasets.organisationUnits,
-      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id)
+      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id),
+      activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
     });
   }
   onOrganisationsStepOut(stepData: WizardStepEventType<OrganisationsStepOutputType>): void {
@@ -242,7 +245,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
     this.innovationsService.createThread(this.innovation.id, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully started a thread');
+        this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();
       },
       error: () => this.setAlertUnknownError()
@@ -269,7 +272,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         return {
           followersUserRoleIds: [this.innovation.assignedTo.userRoleId],
           visibleList: [{
-            name: 'Needs assessment',
+            name: 'Needs assessment team',
             users: [{ name: this.innovation.assignedTo.name }]
           }]
         };
