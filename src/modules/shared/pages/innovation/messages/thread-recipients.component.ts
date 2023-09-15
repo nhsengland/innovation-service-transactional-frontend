@@ -148,8 +148,6 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
       followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds
     };
 
-    console.log("body", body);
-
     this.innovationsService.addThreadFollowers(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The recipients you selected have been added to this thread.', { message: 'They will be notified when you send the message.' });
@@ -187,7 +185,6 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
       }
 
     } else { // Should never happen!
-      console.error('No one to notify!');
       return { followersUserRoleIds: [] };
     }
 

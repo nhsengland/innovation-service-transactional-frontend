@@ -87,7 +87,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           ];
 
         }
-        
+
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -286,7 +286,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       }
 
     } else { // Should never happen!
-      console.error('No one to notify!');
       return { followersUserRoleIds: [], visibleList: [] };
     }
 
