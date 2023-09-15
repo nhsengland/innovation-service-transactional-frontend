@@ -67,6 +67,7 @@ export class WizardStepModel<InputType = any, OutputType = any> {
 
   id: string;
   title: string;
+  isSubmitStep?: boolean;
   component: Type<any>;
   data: InputType;
   outputs: {
@@ -79,6 +80,7 @@ export class WizardStepModel<InputType = any, OutputType = any> {
   constructor(data: WizardStepModel<InputType, OutputType>) {
     this.id = data.id;
     this.title = data.title;
+    this.isSubmitStep = data.isSubmitStep;
     this.component = data.component;
     this.data = data.data;
     this.outputs = data.outputs;

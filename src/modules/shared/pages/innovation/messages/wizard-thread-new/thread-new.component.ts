@@ -87,7 +87,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           ];
 
         }
-        
+
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -95,6 +95,16 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           if (this.stores.authentication.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
           }
+
+          // Keep only active engaging accessor
+          this.datasets.organisationUnits = this.datasets.organisationUnits.map(item => {
+            return {
+              ...item,
+              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
+            }
+          });
+
+          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.engagingAccessors.length > 0);
 
           // Show first step if there's engaging organisations.
           if (this.stores.authentication.isInnovatorType() && this.datasets.organisationUnits.length === 0) {
@@ -276,7 +286,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       }
 
     } else { // Should never happen!
-      console.error('No one to notify!');
       return { followersUserRoleIds: [], visibleList: [] };
     }
 

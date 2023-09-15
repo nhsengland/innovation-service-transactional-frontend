@@ -144,7 +144,7 @@ export type InnovationSupportsListDTO = {
     id: string, name: string, acronym: string,
     unit: { id: string, name: string, acronym: string; };
   },
-  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; isActive: boolean }[];
 }[];
 
 export type InnovationSupportInfoDTO = {

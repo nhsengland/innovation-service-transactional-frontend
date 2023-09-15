@@ -15,6 +15,7 @@ import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organ
 export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreComponent implements WizardStepComponentType<OrganisationsStepInputType, OrganisationsStepOutputType>, OnInit {
 
   @Input() title = '';
+  @Input() isSubmitStep = false;
   @Input() data: OrganisationsStepInputType = {
     innovation: { id: '' },
     organisationUnits: [],
@@ -104,6 +105,17 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     }
 
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
+
+  }
+
+  onSubmitStep(): void {
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
 
   }
 

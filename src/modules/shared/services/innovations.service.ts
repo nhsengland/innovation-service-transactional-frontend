@@ -59,12 +59,11 @@ export type GetThreadMessageInfoDTO = {
 export type GetThreadFollowersDTO = {
   followers: {
     id: string;
-    identityId: string;
     name: string;
-    type: UserRoleEnum;
     isLocked: boolean;
     isOwner?: boolean;
-    organisationUnit?: { id: string, acronym: string }
+    role: { id: string, role: UserRoleEnum };
+    organisationUnit?: { id: string, acronym: string } | null;
   }[]
 };
 
@@ -455,6 +454,11 @@ export class InnovationsService extends CoreService {
   getThreadFollowers(innovationId: string, threadId: string): Observable<GetThreadFollowersDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
     return this.http.get<GetThreadFollowersDTO>(url.buildUrl()).pipe(take(1));
+  }
+
+  addThreadFollowers(innovationId: string, threadId: string, body: { followerUserRoleIds: string[] }): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
   }
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
