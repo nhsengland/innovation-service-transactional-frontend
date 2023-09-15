@@ -90,6 +90,7 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -409,6 +410,10 @@ const routes: Routes = [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
                         data: { breadcrumb: null }
+                      },
+                      {
+                        path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,

@@ -95,6 +95,16 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
           }
 
+          // Keep only active engaging accessor
+          this.datasets.organisationUnits = this.datasets.organisationUnits.map(item => {
+            return {
+              ...item,
+              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
+            }
+          });
+
+          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.engagingAccessors.length > 0);
+
           // Show first step if there's engaging organisations.
           if (this.stores.authentication.isInnovatorType() && this.datasets.organisationUnits.length === 0) {
 

@@ -17,7 +17,7 @@
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
 
         <span>
-          {{ threadFollowers?.followers?.length?.toLocaleString() }} {{ followerNumberText }}.
+          {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
         </span>
         <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
           {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
@@ -25,11 +25,14 @@
 
         <ng-container *ngIf=" showFollowersHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-            <dt *ngFor="let follower of threadFollowers?.followers;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <span *ngIf="follower.type === 'INNOVATOR' ; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? 'Owner' : 'Collaborator'}})</span>
+            <dt *ngFor="let follower of threadFollowers;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <span *ngIf="follower.role.role === 'INNOVATOR' ; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? 'Owner' : 'Collaborator'}})</span>
               <ng-template #notInnovator>
-                <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.type) }})</span>
+                <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
               </ng-template>
+            </dt>
+            <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+              <a href="/innovator/innovations/{{ innovation.id }}/threads/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>
         </ng-container>

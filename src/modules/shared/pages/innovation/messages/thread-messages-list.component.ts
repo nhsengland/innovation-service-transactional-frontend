@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
@@ -11,6 +11,8 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadFollowersDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -25,11 +27,14 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   threadInfo: null | GetThreadInfoDTO = null;
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
+  engagingOrganisationUnits: InnovationSupportsListDTO;
 
   showFollowersHideStatus: string | null = null;
-  threadFollowers: GetThreadFollowersDTO | null = null;
+  threadFollowers: GetThreadFollowersDTO['followers'] | null = null;
   showFollowersText: 'Show list' | 'Hide list' = 'Show list';
   followerNumberText: 'recipient' | 'recipients' = 'recipient';
+
+  showAddRecipientsLink = false;
 
   form = new FormGroup({
     message: new FormControl<string>('')
@@ -57,6 +62,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
 
+    this.engagingOrganisationUnits = [];
+
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
@@ -76,21 +83,45 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.setPageStatus('LOADING');
 
-    forkJoin([
-      this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
-      this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId),
-      this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams())
-    ]).subscribe({
-      next: ([threadInfo, threadFollowers, threadMessages]) => {
+    const subscriptions: {
+      threadInfo: Observable<GetThreadInfoDTO>,
+      threadFollowers:Observable<GetThreadFollowersDTO>,
+      threadMessages: Observable<GetThreadMessagesListOutDTO>,
+      supports?: Observable<InnovationSupportsListDTO>
+    } = {
+      threadInfo: this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
+      threadFollowers: this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId),
+      threadMessages: this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams()),
+    };
 
-        this.threadInfo = threadInfo;
-        this.threadFollowers= threadFollowers;
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
+      subscriptions.supports = this.innovationsService.getInnovationSupportsList(this.innovation.id, true);
+    }
 
-        this.followerNumberText = this.threadFollowers.followers.length > 1 ? 'recipients' : 'recipient';
+    forkJoin(subscriptions).subscribe({
+      next: (response) => {
 
-        this.messagesList.setData(threadMessages.messages, threadMessages.count);
+        this.threadInfo = response.threadInfo;
+        this.threadFollowers= response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
+
+        this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
+
+        this.messagesList.setData(response.threadMessages.messages, response.threadMessages.count);
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
+
+        if (response.supports) {
+
+          // Engaging organisation units except the user unit, if accessor.
+          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING);
+          if (this.stores.authentication.isAccessorType()) {
+            this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
+          }
+
+          // Checks if there's any engaging accessor that's not a follower
+          this.showAddRecipientsLink = this.engagingOrganisationUnits.reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], []).some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
+
+        }
 
         this.setPageStatus('READY');
 
@@ -113,7 +144,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       this.showFollowersText = 'Show list';
     }
   }
-
 
 
   onTableOrder(column: string): void {
