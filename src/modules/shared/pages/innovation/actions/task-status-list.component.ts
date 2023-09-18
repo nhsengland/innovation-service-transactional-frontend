@@ -6,9 +6,9 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-action-status-list',
-  templateUrl: './action-status-list.component.html',
+  templateUrl: './task-status-list.component.html',
 })
-export class PageActionStatusListComponent extends CoreComponent {
+export class PageTaskStatusListComponent extends CoreComponent {
   visibleStatus: InnovationActionStatusEnum[] = [
     // InnovationActionStatusEnum.REQUESTED,
     // InnovationActionStatusEnum.SUBMITTED,
