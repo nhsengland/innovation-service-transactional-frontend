@@ -228,8 +228,8 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   DECLINED: {
     label: 'Declined',
-    cssClass: 'nhsuk-tag--red',
-    description: 'The innovation owner has declined the action requested.'
+    cssClass: 'nhsuk-tag--yellow',
+    description: 'The innovator has declined the assigned task.',
   },
   COMPLETED: {
     label: 'Completed',
@@ -238,9 +238,20 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
   },
   CANCELLED: {
     label: 'Cancelled',
-    cssClass: 'nhsuk-tag--dark-grey',
-    description: 'An accessor has cancelled the action.'
-  }
+    cssClass: 'nhsuk-tag--grey',
+    description: 'The assigned task has been cancelled as it is no longer relevant.',
+  },
+  TASK_TO_DO: {
+    label: 'Task to do',
+    cssClass: 'nhsuk-tag--blue',
+    description: 'A task has been assigned to the innovator.',
+  },
+  DONE: {
+    label: 'Done',
+    cssClass: 'nhsuk-tag--green',
+    description: 'The innovator has submitted the requested information and has marked the task as done.',
+  },
+
 };
 
 

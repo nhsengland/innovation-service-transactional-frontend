@@ -7,17 +7,15 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-action-status-list',
-  templateUrl: './action-status-list.component.html'
+  templateUrl: './task-status-list.component.html'
 })
-export class PageActionStatusListComponent extends CoreComponent {
+export class PageTaskStatusListComponent extends CoreComponent {
 
   visibleStatus: InnovationActionStatusEnum[] = [
-    InnovationActionStatusEnum.REQUESTED,
-    InnovationActionStatusEnum.SUBMITTED,
-    InnovationActionStatusEnum.COMPLETED,
+    InnovationActionStatusEnum.TASK_TO_DO,
     InnovationActionStatusEnum.DECLINED,
+    InnovationActionStatusEnum.DONE,
     InnovationActionStatusEnum.CANCELLED,
-    InnovationActionStatusEnum.DELETED
   ];
 
 
@@ -30,13 +28,13 @@ export class PageActionStatusListComponent extends CoreComponent {
     const innovationId = this.activatedRoute.snapshot.params.innovationId;
     const actionId = this.activatedRoute.snapshot.params.actionId;
 
-    this.setPageTitle('Actions status key');
+    this.setPageTitle('Task status');
 
     if (innovationId) {
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
+      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
     }
     else {
-      this.setBackLink('Action tracker', `/${this.stores.authentication.userUrlBasePath()}/actions`);
+      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/actions`);
     }
 
     this.setPageStatus('READY');

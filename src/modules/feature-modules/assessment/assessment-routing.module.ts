@@ -34,7 +34,7 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
 import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
 import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
@@ -286,7 +286,7 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                    path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
@@ -403,7 +403,7 @@ const routes: Routes = [
             path: '', pathMatch: 'full', component: PageActionsAdvancedSearchComponent,
             data: { breadcrumb: null }
           },
-          { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
+          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent },
         ]
       },
 

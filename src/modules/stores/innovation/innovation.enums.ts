@@ -66,7 +66,9 @@ export enum InnovationActionStatusEnum {
   DELETED = 'DELETED',
   DECLINED = 'DECLINED',
   COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED'
+  CANCELLED = 'CANCELLED',
+  TASK_TO_DO = 'TASK_TO_DO',
+  DONE = 'DONE'
 }
 
 export enum ActivityLogTypesEnum {
