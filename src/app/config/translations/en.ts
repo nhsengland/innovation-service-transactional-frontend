@@ -214,7 +214,7 @@ export const locale = {
             CANCELLED: {
               name: 'Cancelled',
               description:
-                'The assigned task has been cancelled and it is no longer relevant.',
+                'The assigned task has been cancelled as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey',
             },
             TASK_TO_DO: {

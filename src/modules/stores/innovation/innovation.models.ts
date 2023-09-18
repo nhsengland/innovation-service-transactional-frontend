@@ -281,7 +281,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     label: 'Cancelled',
     cssClass: 'nhsuk-tag--dark-grey',
     description:
-      'The assigned task has been cancelled and it is no longer relevant.',
+      'The assigned task has been cancelled as it is no longer relevant.',
   },
   TASK_TO_DO: {
     cssClass: 'nhsuk-tag--blue',
