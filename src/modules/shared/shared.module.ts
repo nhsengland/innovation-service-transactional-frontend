@@ -22,7 +22,7 @@ import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
-import { PageActionStatusListComponent } from './pages/innovation/actions/action-status-list.component';
+import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
 import { PageInnovationActionTrackerCancelComponent } from './pages/innovation/actions/action-tracker-cancel.component';
 import { PageInnovationActionTrackerEditComponent } from './pages/innovation/actions/action-tracker-edit.component';
 import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
@@ -119,7 +119,7 @@ import { UsersService } from './services/users.service';
     PageNotFoundComponent,
     // // Innovation.
     PageInnovationActionSectionInfoComponent,
-    PageActionStatusListComponent,
+    PageTaskStatusListComponent,
     PageInnovationActionTrackerCancelComponent,
     PageInnovationActionTrackerEditComponent,
     PageInnovationActionTrackerListComponent,

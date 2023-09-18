@@ -189,21 +189,31 @@ export const locale = {
               description: 'The action has been deleted as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey'
             },
-            DECLINED: {
-              name: 'Declined',
-              description: 'The innovator has declined the action request.',
-              cssColorClass: 'nhsuk-tag--red'
-            },
             COMPLETED: {
               name: 'Completed',
               description: 'The information has been reviewed and the action has been marked as completed.',
               cssColorClass: 'nhsuk-tag--green'
             },
+            DECLINED: {
+              name: 'Declined',
+              description: 'The innovator has declined the assigned task.',
+              cssColorClass: 'nhsuk-tag--yellow'
+            },
             CANCELLED: {
               name: 'Cancelled',
-              description: 'The requested action has been cancelled.',
-              cssColorClass: 'nhsuk-tag--dark-grey'
-            }
+              description: 'The assigned task has been cancelled as it is no longer relevant.',
+              cssColorClass: 'nhsuk-tag--grey'
+            },
+            OPEN: {
+              name: 'Task to do',
+              description: 'A task has been assigned to the innovator.',
+              cssColorClass: 'nhsuk-tag--blue',
+            },
+            DONE: {
+              name: 'Done',
+              description: 'The innovator has submitted the requested information and has marked the task as done.',
+              cssColorClass: 'nhsuk-tag--green',
+            },
           },
           activity_log_groups: {
             INNOVATION_MANAGEMENT: {
