@@ -241,7 +241,7 @@ export const INNOVATION_SECTION_ACTION_STATUS = {
     cssClass: 'nhsuk-tag--grey',
     description: 'The assigned task has been cancelled as it is no longer relevant.',
   },
-  TASK_TO_DO: {
+  OPEN: {
     label: 'Task to do',
     cssClass: 'nhsuk-tag--blue',
     description: 'A task has been assigned to the innovator.',

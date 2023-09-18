@@ -67,7 +67,7 @@ export enum InnovationActionStatusEnum {
   DECLINED = 'DECLINED',
   COMPLETED = 'COMPLETED',
   CANCELLED = 'CANCELLED',
-  TASK_TO_DO = 'TASK_TO_DO',
+  OPEN = 'OPEN',
   DONE = 'DONE'
 }
 

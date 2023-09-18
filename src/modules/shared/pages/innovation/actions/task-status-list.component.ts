@@ -12,7 +12,7 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 export class PageTaskStatusListComponent extends CoreComponent {
 
   visibleStatus: InnovationActionStatusEnum[] = [
-    InnovationActionStatusEnum.TASK_TO_DO,
+    InnovationActionStatusEnum.OPEN,
     InnovationActionStatusEnum.DECLINED,
     InnovationActionStatusEnum.DONE,
     InnovationActionStatusEnum.CANCELLED,

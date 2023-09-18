@@ -204,7 +204,7 @@ export const locale = {
               description: 'The assigned task has been cancelled as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey'
             },
-            TASK_TO_DO: {
+            OPEN: {
               name: 'Task to do',
               description: 'A task has been assigned to the innovator.',
               cssColorClass: 'nhsuk-tag--blue',
