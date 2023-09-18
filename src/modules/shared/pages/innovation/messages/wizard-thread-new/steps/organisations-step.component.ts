@@ -27,8 +27,10 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
 
   leadText: string = '';
 
+  validationMessage = this.stores.authentication.isInnovatorType() ? 'Select an organisation you want to be notified about your message' : this.stores.authentication.isAssessmentType() ? "Select organisations, or select 'No, I only want to notify the innovator about this message'" : "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
+
   form = new FormGroup({
-    organisationUnits: new FormArray<FormControl<string>>([], { validators: CustomValidators.requiredCheckboxArray('Choose at least one option'), updateOn: 'change' })
+    organisationUnits: new FormArray<FormControl<string>>([], { validators: CustomValidators.requiredCheckboxArray(this.validationMessage), updateOn: 'change' })
   }, { updateOn: 'blur' });
 
   formOrganisationUnitsItems: { value: string, label: string, description?: string }[] = [];
@@ -40,7 +42,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.leadText = this.stores.authentication.isInnovatorType() ? 'You can select organisations that are currently engaging this innovation.' : 'You can select other organisations that are currently engaging to support this innovation.';
+    this.leadText = this.stores.authentication.isInnovatorType() ||  this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation' : 'You can select other organisations that are currently engaging with this innovation.';
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
@@ -95,11 +97,11 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
 
     const onlyInnovatorsOptionChosen = !!this.form.value.organisationUnits?.find(item => item === 'NO_CHOICE');
     if (onlyInnovatorsOptionChosen && (this.form.value.organisationUnits ?? []).length > 1) {
-      this.form.get('organisationUnits')!.setErrors({ customError: true, message: `Select organisations, or select "No, I only want to notify the innovator about this message"` });
+      this.form.get('organisationUnits')!.setErrors({ customError: true, message: this.validationMessage });
       this.form.markAllAsTouched();
       return;
     }
-  
+
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
 
   }

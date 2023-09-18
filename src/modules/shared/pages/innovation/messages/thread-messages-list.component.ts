@@ -27,7 +27,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
 
   showFollowersHideStatus: string | null = null;
-  threadFollowers: GetThreadFollowersDTO | null = null;
+  threadFollowers: GetThreadFollowersDTO['followers'] | null = null;
   showFollowersText: 'Show list' | 'Hide list' = 'Show list';
   followerNumberText: 'recipient' | 'recipients' = 'recipient';
 
@@ -84,9 +84,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       next: ([threadInfo, threadFollowers, threadMessages]) => {
 
         this.threadInfo = threadInfo;
-        this.threadFollowers= threadFollowers;
+        this.threadFollowers= threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users
 
-        this.followerNumberText = this.threadFollowers.followers.length > 1 ? 'recipients' : 'recipient';
+        this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
         this.messagesList.setData(threadMessages.messages, threadMessages.count);
         // Throw notification read dismiss.

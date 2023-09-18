@@ -7,25 +7,36 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-
-  <div *ngIf="!canCreateThread" class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
+  <ng-container *ngIf="!canCreateThread && !isAdmin">
+    <div *ngIf="innovation.owner else missingOwner" class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
+      </div>
     </div>
-  </div>
+    <ng-template #missingOwner>
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> You cannot start a new message thread </span>
+        </div>
+        <p> Currently this innovation does not have an active owner and a transfer ownership is pending. As soon as the transfer is accepted, you will be able to start a thread.</p>
+      </div>
+    </ng-template>
+  </ng-container>
 
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
 
     <div class="nhsuk-grid-column-full">
       <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'PAUSED'">
-        <p *ngIf="isInnovatorType">Messages is your space to ask support questions and discuss your innovation with the organisations that are supporting you.</p>
-        <p *ngIf="!isInnovatorType">Messages is the space to engage in conversations with the innovator and with other organisations supporting this innovation.</p>
-        <p>
-          Your messages can be seen by everyone who has access to this innovation.
-          <a [routerLink]="isAccessorType ? '../support/organisations' : '../support'" target="_blank" rel="noopener noreferrer">
-            View a list of this innovation's data sharing preferences (opens in a new window).
-          </a>
-        </p>
+        <p *ngIf="isInnovatorType">Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
+        <p *ngIf="!isInnovatorType">Use messages to talk to the innovator and other organisations supporting this innovation.</p>
+        <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>For transparency reasons, all messages can be seen and replied to by everyone who has access to this innovation.
+            <a [routerLink]="isAccessorType ? '../support/organisations' : '../support'" target="_blank" rel="noopener noreferrer">
+              View a list of this innovation's data sharing preferences (opens in a new window).
+            </a>
+          </p>
+        </div>
         <button type="button" routerLink="new" class="nhsuk-button">Start a new thread</button>
       </ng-container>
     </div>

@@ -19,7 +19,7 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Account status</dt>
           <dd class="nhsuk-summary-list__value">{{ user.isActive ? "Active" : "Inactive" }}</dd>
-          <dd class="nhsuk-summary-list__actions">
+          <dd class="nhsuk-summary-list__actions" *ngIf="user.isActive">
             <a routerLink="{{ action.url }}">{{ action.label }}</a>
           </dd>
         </div>
