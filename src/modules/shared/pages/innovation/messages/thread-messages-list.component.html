@@ -32,7 +32,7 @@
               </ng-template>
             </dt>
             <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <a href="/innovator/innovations/{{ innovation.id }}/threads/{{ threadId }}/recipients">Add recipients</a>
+              <a routerLink="/innovator/innovations/{{ innovation.id }}/threads/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>
         </ng-container>
