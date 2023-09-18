@@ -10,7 +10,7 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageTaskStatusListComponent } from './task-status-list.component';
 
-describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
+describe('Shared/Pages/Innovation/PageTaskStatusListComponent', () => {
   let component: PageTaskStatusListComponent;
   let fixture: ComponentFixture<PageTaskStatusListComponent>;
 
