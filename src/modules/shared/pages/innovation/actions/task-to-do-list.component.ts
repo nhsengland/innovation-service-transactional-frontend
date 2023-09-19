@@ -8,7 +8,7 @@ import { InnovationsActionsListFilterType, InnovationsService } from '@modules/s
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
-import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationActionsListDTO,InnovationActionInfoDTO, } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
@@ -21,12 +21,10 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   innovationId: string;
   innovation: ContextInnovationType;
 
-  openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
-  closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+  allTasksList: TableModel<InnovationActionsListDTO['data'][0],InnovationsActionsListFilterType>;
 
-  innovationSummary: { label: string; value: string; }[] = [];
-
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  topList: InnovationActionsListDTO; 
+  bottomList: InnovationActionsListDTO; 
 
   // Flags
   isClosedActionsLoading = false;
@@ -38,56 +36,46 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   ) {
 
     super();
-    this.setPageTitle('Action tracker');
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+
+    this.setPageTitle(this.isInnovatorType ? 'Tasks to do' : 'Tasks');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.innovation = this.stores.context.getInnovation();
 
-    this.openedActionsList = new TableModel({
+    this.allTasksList = new TableModel({
       visibleColumns: {
         id: { label: 'ID' },
-        name: { label: 'Action' },
-        createdAt: { label: 'Requested date' },
-        status: { label: 'Status', align: 'right' }
+        name: { label: 'Task' },
+        status: { label: 'Status', align: 'right' },
       },
-      pageSize: 100
-    })
-
-    this.closedActionsList = new TableModel({
-      visibleColumns: {
-        id: { label: 'ID' },
-        name: { label: 'Action' },
-        createdAt: { label: 'Requested date' },
-        status: { label: 'Status', align: 'right' }
-      },
-      pageSize: 5
+      pageSize: 100,
     });
 
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.topList = {count: 0, data: [] };
+    this.bottomList = {count: 0, data: [] };
   }
-
 
   ngOnInit(): void {
 
-    this.openedActionsList.setFilters({
+    this.allTasksList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
-      status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED],
-      allActions: true
+      status: [
+        InnovationActionStatusEnum.OPEN,
+        InnovationActionStatusEnum.DONE,
+        InnovationActionStatusEnum.DECLINED,
+        InnovationActionStatusEnum.CANCELLED,
+      ],
+      allTasks: true,
     });
 
-    this.closedActionsList.setFilters({
-      innovationId: this.innovationId,
-      fields: ['notifications'],
-      status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED],
-      allActions: true
-    });
+    
+    this.innovationsService.getActionsList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
 
-    this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {
-
-      this.openedActionsList.setData(openedActions.data);
+      this.processTaskList(allTasksResponse);
 
       this.setPageStatus('READY');
 
@@ -95,33 +83,90 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
   }
 
-  onPageChange(event: { pageNumber: number }): void {
-    this.closedActionsList.setPage(event.pageNumber);
-    this.getClosedActionsList();
+  processTaskList(taskList: InnovationActionsListDTO) {
+    for (let task of taskList.data) {
+      console.log(task)
+      if (this.shouldBeOnTopTable(task)) {
+        this.topList.data.push(task);
+      } else{
+        this.bottomList.data.push(task);
+      }
+    }
+    console.log("top list:")
+    console.log(this.topList);
+    console.log("bottom list:")
+    console.log(this.bottomList);
+    this.topList.count = this.topList.data.length;
+    this.bottomList.count = this.bottomList.data.length;
   }
 
-  handleClosedActionsTableClick() {
-    if (this.closedActionsList.getTotalRowsNumber() !== 0) {
-      return;
+  shouldBeOnTopTable(item: InnovationActionInfoDTO): boolean {
+    switch (this.getUserType()) {
+
+      case 'INNOVATOR':
+        return (
+          [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED].includes(item.status)
+        )
+
+      case 'ASSESSMENT':
+        return (!item.createdBy.organisationUnit)
+
+      case 'ACCESSOR':
+        
+        return item.createdBy.organisationUnit?.name ==
+        this.stores.authentication.getAccessorOrganisationUnitName()
+
+      return false;
+
+      case 'QUALIFYING_ACCESSOR':
+        return item.createdBy.organisationUnit?.name ==
+        this.stores.authentication.getAccessorOrganisationUnitName()
+
+      case 'ADMIN':
+        return true;
+
+      default:
+        return false;
     }
-    this.getClosedActionsList();
   }
 
   getUserType() {
     return this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : this.stores.authentication.getUserType();
   }
 
-  private getClosedActionsList() {
-
-    this.isClosedActionsLoading = true;
-
-    this.innovationsService.getActionsList(this.closedActionsList.getAPIQueryParams()).subscribe(closedActions => {
-
-      this.closedActionsList.setData(closedActions.data, closedActions.count);
-
-      this.isClosedActionsLoading = false;
-
-    });
+  tablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
+    switch (this.getUserType()) {
+      case 'INNOVATOR':
+        return {
+          topTableTitle: `You have ${this.topList.count} tasks to do`,
+          bottomTableTitle: 'Previous tasks',
+        };
+      case 'ACCESSOR':
+        return {
+          topTableTitle: 'Tasks assigned by my organisation unit',
+          bottomTableTitle: 'Tasks assigned by others',
+        };
+      case 'QUALIFYING_ACCESSOR':
+        return {
+          topTableTitle: 'Tasks assigned by my organisation unit',
+          bottomTableTitle: 'Tasks assigned by others',
+        };
+      case 'ASSESSMENT':
+        return {
+          topTableTitle: 'Tasks assigned by Needs Assessment team',
+          bottomTableTitle: 'Tasks assigned by others',
+        };
+      case 'ADMIN':
+        return {
+          topTableTitle: '',
+          bottomTableTitle: '',
+        };
+      default:
+        return {
+          topTableTitle: 'Top table title',
+          bottomTableTitle: 'Bottom table title',
+        };
+    }
   }
 
 }

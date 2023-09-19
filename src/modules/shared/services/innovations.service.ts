@@ -23,7 +23,7 @@ export type InnovationsActionsListFilterType = {
   status?: InnovationActionStatusEnum[],
   innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
-  allActions?: boolean,
+  allTasks?: boolean,
   fields?: ('notifications')[]
 };
 
@@ -359,11 +359,11 @@ export class InnovationsService extends CoreService {
       ...(filters.status ? { status: filters.status } : {}),
       ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
       ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
-      ...(filters.allActions ? { allActions: filters.allActions } : {}),
+      ...(filters.allTasks ? { allTasks: filters.allTasks } : {}),
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/actions').setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/tasks').setQueryParams(qp);
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -382,7 +382,7 @@ export class InnovationsService extends CoreService {
 
   getActionInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:actionId').setPathParams({ innovationId, actionId });
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
       map(response => {
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
