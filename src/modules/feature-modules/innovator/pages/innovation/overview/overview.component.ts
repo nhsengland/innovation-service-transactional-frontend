@@ -89,7 +89,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.isSubmitted = { submittedAllSections: submit.submittedAllSections, submittedForNeedsAssessment: submit.submittedForNeedsAssessment };
       this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
-      const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!];
+      const lastTaskSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!];
 
       this.cardsList = [{
         title: 'Innovation record',
@@ -101,13 +101,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
         emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
-        title: 'Actions requested',
+        title: 'Tasks assigned to you',
         label: `Request actions to submit`,
         link: `/innovator/innovations/${this.innovationId}/action-tracker`,
         count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
-        lastMessage: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
+        lastMessage: `Most recent assigned task: "Update '${this.translate('shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-        emptyMessageTitle: 'No action requests yet',
+        emptyMessageTitle: 'No task requests yet',
         emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',

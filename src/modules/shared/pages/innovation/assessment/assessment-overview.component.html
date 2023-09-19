@@ -64,12 +64,12 @@
 
       <div *ngIf="isAdminType">
         <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
-          <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">{{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+          <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</p>
           <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
           <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
         </ng-container>
 
-        <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">{{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
+        <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Created: {{ assessment?.finishedAt | date: ('app.date_formats.long_date' | translate) }}</p>
         <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
         <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
       </div>

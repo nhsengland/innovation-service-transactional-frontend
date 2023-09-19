@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-three-quarters">
 
       <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
         <caption class="nhsuk-u-visually-hidden">Actions status definitions</caption>
@@ -15,7 +15,11 @@
           <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Status</span>
-              <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + status + '.name' | translate }}"></theme-tag>
+              <theme-tag
+                type="{{ 'shared.catalog.innovation.action_status.' + status + '.cssColorClass' | translate }}" 
+                label="{{ 'shared.catalog.innovation.action_status.' + status + '.name' | translate }}" 
+                class="tag-no-wrap"
+                ></theme-tag>
             </td>
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Definition</span>

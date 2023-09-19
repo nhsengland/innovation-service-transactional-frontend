@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
+import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
+import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { GetInnovationEvidenceDTO, InnovationSectionInfoDTO, InnovationSectionsListDTO, INNOVATION_STATUS, OrganisationSuggestionModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, INNOVATION_STATUS, InnovationSectionInfoDTO, InnovationSectionsListDTO, OrganisationSuggestionModel } from './innovation.models';
 
 
 @Injectable()

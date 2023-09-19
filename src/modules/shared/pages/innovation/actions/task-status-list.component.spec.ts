@@ -8,13 +8,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { PageActionStatusListComponent } from './action-status-list.component';
+import { PageTaskStatusListComponent } from './task-status-list.component';
 
 
-describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
+describe('Shared/Pages/Innovation/PageTaskStatusListComponent', () => {
 
-  let component: PageActionStatusListComponent;
-  let fixture: ComponentFixture<PageActionStatusListComponent>;
+  let component: PageTaskStatusListComponent;
+  let fixture: ComponentFixture<PageTaskStatusListComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,7 +34,7 @@ describe('Shared/Pages/Innovation/PageActionStatusListComponent', () => {
 
   it('should create the component', () => {
 
-    fixture = TestBed.createComponent(PageActionStatusListComponent);
+    fixture = TestBed.createComponent(PageTaskStatusListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();

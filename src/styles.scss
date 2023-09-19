@@ -593,6 +593,8 @@ ul.list-vertical-line {
 td {
   .nhsuk-tag { white-space: pre-line; }
 
+  .tag-no-wrap { .nhsuk-tag { white-space: nowrap;} }
+
   &.fixed-width-150, &.fixed-width-175, &.fixed-width-200 {
     max-width: 100%;
   }

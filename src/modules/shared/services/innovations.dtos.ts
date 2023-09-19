@@ -66,7 +66,7 @@ export type InnovationsListInDTO = {
       }
     }[],
     notifications?: number,
-    statistics?: { messages: number, actions: number }
+    statistics?: { messages: number, tasks: number }
   }[]
 };
 export type InnovationsListDTO = {

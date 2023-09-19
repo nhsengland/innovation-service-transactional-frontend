@@ -5,12 +5,12 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
@@ -57,7 +57,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER] };
+    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER] };
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
       this.innovationCollaborators = innovationCollaborators.data
@@ -102,14 +102,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection)}"`,
           date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
           emptyMessage: `No sections have been submitted since support started.`
-        }, {
-          title: 'Actions to review',
-          label: `Actions responded to by the innovator awaiting your review`,
+        },
+        {
+          title: 'TASKS - TODO',
+          label: 'TASKS - TODO',
           link: `/accessor/innovations/${this.innovationId}/action-tracker`,
-          count: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].count,
-          lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].lastSubmittedSection)}"`,
-          date: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No actions to review'
+          count: 0,
+          lastMessage: '',
+          date: '',
+          emptyMessage: ''
         }
       ];
 
