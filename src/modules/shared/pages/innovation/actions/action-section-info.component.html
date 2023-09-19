@@ -92,7 +92,7 @@
 
       </ng-container>
 
-      <ng-container *ngIf="sectionId && actionsIds.length > 1">
+      <ng-container *ngIf="sectionId && tasksIds.length > 1">
 
         <nav class="nhsuk-pagination nhsuk-u-margin-top-3" role="navigation" aria-label="Pagination">
           <ul class="nhsuk-list nhsuk-pagination__list">
@@ -110,7 +110,7 @@
                 </svg>
               </a>
             </li>
-            <li class="nhsuk-pagination-item--next" *ngIf="actionNumber < actionsIds.length - 1">
+            <li class="nhsuk-pagination-item--next" *ngIf="actionNumber < tasksIds.length - 1">
               <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer"
                 (click)="handlePagination('next')">
                 <span class="nhsuk-pagination__title">Next</span>

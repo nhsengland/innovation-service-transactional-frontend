@@ -39,7 +39,7 @@ export type InnovationSectionInfoDTO = {
     name: string,
     isOwner?: boolean,
   },
-  actionsIds?: string[];
+  tasksIds?: string[];
 }
 
 export type getInnovationInfoResponse = {
@@ -61,7 +61,7 @@ export type InnovationSectionsListDTO = {
     name: string,
     isOwner?: boolean
   },
-  openActionsCount: number
+  openTasksCount: number
 }[];
 
 export type GetInnovationEvidenceDTO = {
@@ -86,7 +86,7 @@ export type SectionsSummaryModel = {
       isOwner?: boolean
     },
     isCompleted: boolean,
-    openActionsCount: number
+    openTasksCount: number
   }[]
 }[];
 

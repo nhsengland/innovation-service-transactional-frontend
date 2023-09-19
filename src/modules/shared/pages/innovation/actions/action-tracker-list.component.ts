@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
@@ -21,8 +21,8 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
   innovationId: string;
   innovation: ContextInnovationType;
 
-  openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
-  closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+  openedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>;
+  closedActionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>;
 
   innovationSummary: { label: string; value: string; }[] = [];
 
@@ -75,14 +75,14 @@ export class PageInnovationActionTrackerListComponent extends CoreComponent impl
       innovationId: this.innovationId,
       fields: ['notifications'],
       status: [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED],
-      allActions: true
+      allTasks: true
     });
 
     this.closedActionsList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
       status: [InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DELETED, InnovationActionStatusEnum.CANCELLED],
-      allActions: true
+      allTasks: true
     });
 
     this.innovationsService.getActionsList(this.openedActionsList.getAPIQueryParams()).subscribe((openedActions) => {

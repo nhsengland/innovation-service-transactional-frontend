@@ -37,7 +37,7 @@ export class InnovationService {
 
   }
 
-  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[] }): Observable<InnovationSectionInfoDTO> {
+  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('tasks')[] }): Observable<InnovationSectionInfoDTO> {
 
     const qp = {
       ...(filters.fields ? { fields: filters.fields } : {})

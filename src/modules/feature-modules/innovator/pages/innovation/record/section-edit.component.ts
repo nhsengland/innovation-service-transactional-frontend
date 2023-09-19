@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
@@ -31,9 +31,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
-  submitRequestedActionsButton = { isActive: false, label: 'Submit updates' };
 
-  hasRequestActions: boolean = false;
+  sectionSubmittedText: string = '';
 
 
   constructor(
@@ -63,9 +62,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   ngOnInit(): void {
 
+    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+
+    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'.` : '';
+
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
       next: response => {
-        this.hasRequestActions = response.actionsIds?.length !== 0;
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -178,10 +180,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                 this.setAlertError(`Please verify what's missing with your answers`, { itemsList: this.alertErrorsList, width: '2.thirds' });
               }
 
-              if (this.hasRequestActions && sectionInfo.status === 'DRAFT') {
-                this.submitRequestedActionsButton.isActive = validInformation.valid;
-              } else {
+              if (sectionInfo.status === 'DRAFT') {
                 this.submitButton.isActive = validInformation.valid;
+                if (this.innovation.status !== InnovationStatusEnum.CREATED && this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+                  this.submitButton.label = "Submit updates"
+                }
               }
 
               this.setPageTitle('Check your answers', { size: 'l' });
@@ -211,8 +214,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.stores.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
-        this.redirectTo(this.baseUrl);
+        if (this.innovation.status === InnovationStatusEnum.CREATED || this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+          this.setRedirectAlertSuccess('Your answers have been confirmed for this section', { message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined });
+          this.redirectTo(this.baseUrl);
+        } else {
+          this.setRedirectAlertSuccess(this.sectionSubmittedText);
+          this.redirectTo(`/${this.baseUrl}/submitted`);
+        }
       },
       error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
 

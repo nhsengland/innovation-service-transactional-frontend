@@ -60,7 +60,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
       this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
-      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER] }),
+      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.TASKS_OPEN_COUNTER, InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER, InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER] }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 
@@ -89,7 +89,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.isSubmitted = { submittedAllSections: submit.submittedAllSections, submittedForNeedsAssessment: submit.submittedForNeedsAssessment };
       this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
-      const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].lastSubmittedSection!];
+      const lastActionSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!];
 
       this.cardsList = [{
         title: 'Innovation record',
@@ -104,9 +104,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         title: 'Actions requested',
         label: `Request actions to submit`,
         link: `/innovator/innovations/${this.innovationId}/action-tracker`,
-        count: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].count,
+        count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
         lastMessage: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
-        date: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]?.lastSubmittedAt,
+        date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
         emptyMessageTitle: 'No action requests yet',
         emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {

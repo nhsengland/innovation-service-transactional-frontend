@@ -48,7 +48,7 @@ export class InnovationStore extends Store<InnovationModel> {
             actionStatus: '',
             submittedAt: null,
             submittedBy: null,
-            openActionsCount: 0
+            openTasksCount: 0
           };
           return {
             id: ss.id,
@@ -60,7 +60,7 @@ export class InnovationStore extends Store<InnovationModel> {
               name: sectionState.submittedBy.name,
               isOwner: sectionState.submittedBy.isOwner
             },
-            openActionsCount: sectionState.openActionsCount
+            openTasksCount: sectionState.openTasksCount
           };
         })
       })))
@@ -69,7 +69,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
-    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['actions'] });
+    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['tasks'] });
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {

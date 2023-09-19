@@ -18,7 +18,7 @@ export type UserStatisticsDTO = {
 };
 
 export type InnovationStatisticsDTO = {
-  [InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]: { count: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
+  [InnovationStatisticsEnum.TASKS_OPEN_COUNTER]: { count: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number, total: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]: { count: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },

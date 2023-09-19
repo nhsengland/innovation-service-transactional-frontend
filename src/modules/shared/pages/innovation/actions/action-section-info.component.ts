@@ -22,7 +22,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   action?: InnovationActionInfoDTO;
   sectionTitle = '';
 
-  actionsIds: string[] = [];
+  tasksIds: string[] = [];
 
   actionNumber = 0;
 
@@ -56,11 +56,11 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     if (this.sectionId) {
 
-      this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['actions'] }).subscribe(sectionInfo => {
+      this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
 
-        this.actionsIds = sectionInfo.actionsIds ?? [];
+        this.tasksIds = sectionInfo.tasksIds ?? [];
 
-        if (this.actionsIds.length === 0) {
+        if (this.tasksIds.length === 0) {
           this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
         }
 
@@ -90,7 +90,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.actionNumber--;
         break;
       case 'next':
-        if (this.actionNumber === this.actionsIds.length - 1) { return; }
+        if (this.actionNumber === this.tasksIds.length - 1) { return; }
         this.actionNumber++;
         break;
       default:
@@ -105,7 +105,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.setPageStatus('LOADING');
 
     if (this.sectionId) {
-      this.actionId = this.actionsIds[this.actionNumber];
+      this.actionId = this.tasksIds[this.actionNumber];
     }
 
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
@@ -115,8 +115,8 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
       this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
-      if (this.actionsIds.length > 1) {
-        this.setPageTitle('Requested action', { hint: `${this.actionNumber + 1} of ${this.actionsIds.length}` });
+      if (this.tasksIds.length > 1) {
+        this.setPageTitle('Requested action', { hint: `${this.actionNumber + 1} of ${this.tasksIds.length}` });
       } else {
         this.setPageTitle('Requested action', { hint: this.action.displayId });
       }
