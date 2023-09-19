@@ -25,7 +25,7 @@ import { PageInnovationActionSectionInfoComponent } from './pages/innovation/act
 import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
 import { PageInnovationActionTrackerCancelComponent } from './pages/innovation/actions/action-tracker-cancel.component';
 import { PageInnovationActionTrackerEditComponent } from './pages/innovation/actions/action-tracker-edit.component';
-import { PageInnovationActionTrackerListComponent } from './pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
@@ -122,7 +122,7 @@ import { UsersService } from './services/users.service';
     PageTaskStatusListComponent,
     PageInnovationActionTrackerCancelComponent,
     PageInnovationActionTrackerEditComponent,
-    PageInnovationActionTrackerListComponent,
+    PageInnovationTaskToDoListComponent,
     PageInnovationActionTrackerNewComponent,
     PageInnovationActivityLogComponent,
     PageInnovationAssessmentOverviewComponent,

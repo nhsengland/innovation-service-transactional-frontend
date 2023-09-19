@@ -37,7 +37,7 @@ import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
 import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
-import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
@@ -282,7 +282,7 @@ const routes: Routes = [
                 data: { breadcrumb: 'Action Tracker' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,
                     data: { breadcrumb: null }
                   },
                   {
