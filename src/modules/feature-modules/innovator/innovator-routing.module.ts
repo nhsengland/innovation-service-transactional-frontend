@@ -21,7 +21,6 @@ import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 // // Innovation.
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
 import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationExportRequestRejectComponent } from './pages/innovation/export-requests/export-request-reject.component';
@@ -67,6 +66,7 @@ import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innova
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
+import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
@@ -217,6 +217,11 @@ const routes: Routes = [
                             data: { breadcrumb: null }
                           },
 
+                          {
+                            path: 'submitted', pathMatch: 'full', component: InnovationSectionSubmittedComponent,
+                            data: { layout: { type: 'full' } }
+                          },
+
                           { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                           {
                             path: 'edit/:questionId', pathMatch: 'full', component: InnovationSectionEditComponent,
@@ -264,15 +269,6 @@ const routes: Routes = [
                               }
 
                             ]
-                          },
-                          {
-                            path: 'confirm-update',
-                            pathMatch: 'full',
-                            component: InnovationActionCompleteConfirmationComponent,
-                            data: {
-                              breadcrumb: null,
-                              layout: { type: 'full' }
-                            }
                           },
 
                           {

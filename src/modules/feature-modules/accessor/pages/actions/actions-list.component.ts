@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
@@ -17,7 +17,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };
 
-  actionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>;
+  actionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>;
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 
@@ -63,7 +63,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
-        
+
         this.setPageTitle('Actions');
 
         if (!queryParams.openActions) {

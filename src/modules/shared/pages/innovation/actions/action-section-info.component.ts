@@ -56,7 +56,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     if (this.sectionId) {
 
-      this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['actions'] }).subscribe(sectionInfo => {
+      this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
 
         this.tasksIds = sectionInfo.tasksIds ?? [];
 

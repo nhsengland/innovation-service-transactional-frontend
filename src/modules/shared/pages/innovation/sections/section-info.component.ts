@@ -26,13 +26,15 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     title: string,
     status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
     isNotStarted: boolean,
-    showSubmitButton: boolean,
-    showSubmitUpdatesButton: boolean,
+    submitButton: { show: boolean, label: string },
     hasEvidences: boolean,
     wizard: WizardEngineModel,
     date: string,
-    submittedBy: null | { name: string, isOwner?: boolean }
+    submittedBy: null | { name: string, isOwner?: boolean },
+    openTasksCount: number
   };
+
+  sectionSubmittedText: string = '';
 
   sectionsIdsList: string[];
   summaryList: WizardSummaryType[] = [];
@@ -65,12 +67,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       title: '',
       status: { id: 'UNKNOWN', label: '' },
       isNotStarted: false,
-      showSubmitButton: false,
-      showSubmitUpdatesButton: false,
+      submitButton: { show: false, label: "Confirm section answers" },
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
       date: '',
-      submittedBy: null
+      submittedBy: null,
+      openTasksCount: 0
     };
 
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
@@ -133,13 +135,14 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     const sectionId = this.activatedRoute.snapshot.params.sectionId;
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
+
+    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'.` : '';
+
     const section = this.stores.innovation.getInnovationRecordSection(sectionId);
 
     this.section.id = sectionId;
     this.section.title = section.title;
     this.section.wizard = section.wizard;
-    this.section.showSubmitButton = false;
-    this.section.showSubmitUpdatesButton = false;
     this.shouldShowDocuments =
       this.innovation.status !== InnovationStatusEnum.CREATED ||
       (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section.id));
@@ -161,6 +164,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
       this.section.date = sectionInfo.submittedAt;
       this.section.submittedBy = sectionInfo.submittedBy;
+      this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
       this.getPreviousAndNextPagination();
 
@@ -175,11 +179,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(sectionInfo.data)).runRules();
 
         const validInformation = this.section.wizard.validateData();
-        const nActions = sectionInfo.tasksIds?.length ?? 0;
 
         if (this.section.status.id === 'DRAFT' && validInformation.valid) {
-          this.section.showSubmitButton = nActions === 0;
-          this.section.showSubmitUpdatesButton = nActions > 0;
+          this.section.submitButton.show = true;
+          if (this.innovation.status !== InnovationStatusEnum.CREATED && this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+            this.section.submitButton.label = "Submit updates"
+          }
         }
 
         const data = this.section.wizard.runSummaryParsing();
@@ -201,10 +206,17 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.stores.innovation.submitSections$(this.innovation.id, this.section.id).subscribe({
       next: () => {
-        this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
-        this.section.showSubmitButton = false;
-        this.section.nextSectionId = this.getNextSectionId();
-        this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
+
+        if (this.innovation.status === InnovationStatusEnum.CREATED || this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+          this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
+          this.section.submitButton.show = false;
+          this.section.nextSectionId = this.getNextSectionId();
+          this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
+        } else {
+          this.setRedirectAlertSuccess(this.sectionSubmittedText);
+          this.redirectTo(`/${this.baseUrl}/innovations/${this.innovation.id}/record/sections/${this.section.id}/submitted`);
+        }
+
       },
       error: () => this.setAlertUnknownError()
     });
