@@ -67,7 +67,7 @@ export class InnovationActionTrackerDeclineComponent extends CoreComponent imple
 
     this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe((response) => {
       this.setRedirectAlertSuccess('You have declined this requested action', { message: 'The accessor will be notified' });
-      this.redirectTo(`/innovator/innovations/${this.innovationId}/action-tracker/${response.id}`);
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/tasks/${response.id}`);
     });
 
   }

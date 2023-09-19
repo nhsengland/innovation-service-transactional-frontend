@@ -12,7 +12,7 @@
             <theme-tag
               type="{{ 'shared.catalog.innovation.action_status.' + action.status + '.cssColorClass' | translate }}"
               label="{{ 'shared.catalog.innovation.action_status.' + action.status + '.name' | translate }}"></theme-tag>
-            <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/statuses"
+            <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses"
               class="float-r" arial-label="View actions status keys information"> What does this mean? </a>
           </dd>
         </div>
@@ -65,13 +65,13 @@
           *ngIf="(isAccessorType && stores.authentication.isFromOrganisationUnit(action.createdBy.organisationUnit?.id)) || (isAssessmentType && action.createdBy.role === 'ASSESSMENT')">
 
           <a *ngIf="action.status === 'SUBMITTED'"
-            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/edit"
+            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ action.id }}/edit"
             class="nhsuk-button nhsuk-button--secondary">
             Update status
           </a>
 
           <a *ngIf="action.status === 'REQUESTED'"
-            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/cancel"
+            routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ action.id }}/cancel"
             class="nhsuk-button nhsuk-button--secondary">
             Cancel action
           </a>
@@ -85,7 +85,7 @@
         <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ action.section }}"
           class="nhsuk-button nhsuk-u-margin-right-3"> Go to section </a>
         <a *ngIf="action.status === 'REQUESTED'"
-          routerLink="/innovator/innovations/{{ innovationId }}/action-tracker/{{ action.id }}/decline"
+          routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ action.id }}/decline"
           class="nhsuk-button nhsuk-button--secondary">
           Decline action
         </a>

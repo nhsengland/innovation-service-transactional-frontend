@@ -61,7 +61,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.actionsIds = sectionInfo.actionsIds ?? [];
 
         if (this.actionsIds.length === 0) {
-          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
+          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
         }
 
         this.actionNumber = 0;
@@ -76,7 +76,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
       this.getActionInfo();
 
-      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/tasks`);
 
     }
 

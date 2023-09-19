@@ -350,8 +350,8 @@ const routes: Routes = [
               },
 
               {
-                path: 'action-tracker',
-                data: { breadcrumb: 'Action Tracker' },
+                path: 'tasks',
+                data: { breadcrumb: 'Tasks to do' },
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,

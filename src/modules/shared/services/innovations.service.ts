@@ -560,7 +560,7 @@ export class InnovationsService extends CoreService {
               break;
             case 'ACTION':
               if (['innovator', 'accessor'].includes(userUrlBasePath) && sectionIdentification && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/tasks/${i.params.actionId}` };
               }
               break;
           }

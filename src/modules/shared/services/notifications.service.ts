@@ -136,7 +136,7 @@ export class NotificationsService extends CoreService {
               }
               break;
             case NotificationContextTypeEnum.ACTION:
-              link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/action-tracker/${item.contextId}` };
+              link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
             case NotificationContextTypeEnum.THREAD:
               link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };

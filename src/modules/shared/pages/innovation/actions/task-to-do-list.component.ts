@@ -105,7 +105,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
       case 'INNOVATOR':
         return (
-          [InnovationActionStatusEnum.REQUESTED, InnovationActionStatusEnum.SUBMITTED].includes(item.status)
+          item.status == InnovationActionStatusEnum.OPEN
         )
 
       case 'ASSESSMENT':

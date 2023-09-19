@@ -35,11 +35,11 @@ export class PageInnovationActionTrackerCancelComponent extends CoreComponent im
     this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
 
       if (this.stores.authentication.isAccessorType() && response.createdBy.organisationUnit?.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id) {
-        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${this.actionId}`);
       }
 
       if(this.stores.authentication.isAssessmentType() && (response.createdBy.role === UserRoleEnum.ACCESSOR || response.createdBy.role === UserRoleEnum.QUALIFYING_ACCESSOR)) {
-        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+        return this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${this.actionId}`);
       }
       
       this.setPageTitle(`Cancel action: ${response.name}`);
@@ -59,7 +59,7 @@ export class PageInnovationActionTrackerCancelComponent extends CoreComponent im
     this.innovationsService.updateAction(this.innovationId, this.actionId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess(`You have updated the status of this action to 'Cancelled'`, { message: 'The innovator will be notified of this status change' });
-        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${this.actionId}`);
+        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${this.actionId}`);
       },
       error: () => this.setAlertError('An error occurred when canceling an action. Please try again or contact us for further help')
 

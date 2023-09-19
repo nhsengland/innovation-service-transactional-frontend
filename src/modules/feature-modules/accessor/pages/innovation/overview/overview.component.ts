@@ -105,7 +105,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         }, {
           title: 'Actions to review',
           label: `Actions responded to by the innovator awaiting your review`,
-          link: `/accessor/innovations/${this.innovationId}/action-tracker`,
+          link: `/accessor/innovations/${this.innovationId}/tasks`,
           count: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].count,
           lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER].lastSubmittedSection)}"`,
           date: statistics[InnovationStatisticsEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,

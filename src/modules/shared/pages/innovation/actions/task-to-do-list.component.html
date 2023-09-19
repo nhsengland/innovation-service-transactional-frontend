@@ -73,14 +73,14 @@
                   <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
                     <li class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ task.id }}" attr.aria-label="View {{ task.name }} action"> {{ task.name }} </a>
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action"> {{ task.name }} </a>
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
                       <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole">by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }} </span>
+                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }} </span>
                       <ng-template #requestedByOtherRole>
-                        <span>by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span>
+                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span>
                       </ng-template>
                     </li>
                   </ul>
@@ -129,16 +129,16 @@
                   <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
                     <li class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/{{ task.id }}" attr.aria-label="View {{ task.name }} action">
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action">
                         {{ task.name }}
                       </a>
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
                       <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole">by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }}</span>
+                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }}</span>
                       <ng-template #requestedByOtherRole>
-                        <span>by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }} </span>
+                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }} </span>
                       </ng-template>
                     </li>
                   </ul>
@@ -158,8 +158,8 @@
 
 <ng-template #requestActionBtn>
   <a
-    routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/action-tracker/new"
+    routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/new"
     class="nhsuk-button nhsuk-u-margin-bottom-7">
-    Request new action
+    Assign a task
   </a>
 </ng-template>

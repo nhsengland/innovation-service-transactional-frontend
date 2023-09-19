@@ -86,7 +86,7 @@ export class PageInnovationActionTrackerEditComponent extends CoreComponent impl
           : 'Send a message to innovator and explain why the submitted information is not sufficient.'
 
         this.setRedirectAlertSuccess(`You have updated the status of this action to '${this.statusItems.find(item => item.value === status)?.label}'`, { message });
-        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${response.id}`);
+        this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${response.id}`);
       },
       error: () => this.setAlertError('An error occurred when updating an action. Please try again or contact us for further help')
 

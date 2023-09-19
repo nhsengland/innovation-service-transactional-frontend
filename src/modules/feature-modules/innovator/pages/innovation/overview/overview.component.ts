@@ -103,7 +103,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }, {
         title: 'Actions requested',
         label: `Request actions to submit`,
-        link: `/innovator/innovations/${this.innovationId}/action-tracker`,
+        link: `/innovator/innovations/${this.innovationId}/tasks`,
         count: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER].count,
         lastMessage: `Last requested action: "Submit '${this.translate('shared.catalog.innovation.innovation_sections.' + lastActionSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.ACTIONS_TO_SUBMIT_COUNTER]?.lastSubmittedAt,
