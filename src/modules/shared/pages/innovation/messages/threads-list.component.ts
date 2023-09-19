@@ -44,7 +44,6 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     };
 
     this.innovation = this.stores.context.getInnovation();
-    console.log('buu')
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
