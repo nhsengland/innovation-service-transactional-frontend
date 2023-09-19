@@ -124,15 +124,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   private buildDescriptionString(innovation: InnovationsListDTO['data'][0]): string | null {
-    const { actions, messages } = innovation.statistics!;
+    const { tasks, messages } = innovation.statistics!;
 
-    const actionsStr = `${actions} ${actions > 1 ? 'updates' : 'update'} on actions`;
+    const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
     const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
 
     let description = [];
 
-    if (actions !== 0) {
-      description.push(actionsStr);
+    if (tasks !== 0) {
+      description.push(tasksStr);
     }
 
     if (messages !== 0) {

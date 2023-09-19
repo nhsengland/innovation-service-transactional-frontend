@@ -48,7 +48,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.setAlertSuccess('You have successfully changed your password');
     }
 
-    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER] };
+    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER] };
 
     this.statisticsService.getUserStatisticsInfo(qp).subscribe({
       next: statistics => {
@@ -64,17 +64,21 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             lastMessage: `Last submitted:`,
             date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
             emptyMessageTitle: 'No engaging innovations assigned to you'
-          }, {
-            title: 'Actions to review',
-            label: `Actions requested by you were responded to by innovators`,
+          },
+          {
+            title: 'TODO - TASKS',
+            label: `TODO`,
             link: `/accessor/actions`,
             queryParams: { openActions: true },
-            count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
-            total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
-            lastMessage: `Last submitted:`,
-            date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No actions opened by you yet',
-            emptyMessage: 'Start requesting actions from innovators'
+            // count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
+            // total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
+            lastMessage: '',
+            // date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
+            count: 0,
+            total: 0,
+            date: '',
+            emptyMessageTitle: '',
+            emptyMessage: ''
           }
         ];
 

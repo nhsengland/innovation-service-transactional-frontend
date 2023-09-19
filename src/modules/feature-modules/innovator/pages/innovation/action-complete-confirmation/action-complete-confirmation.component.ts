@@ -36,8 +36,8 @@ export class InnovationActionCompleteConfirmationComponent extends CoreComponent
       next: response => {
 
         this.setPageTitle('Have you completed all actions for this section?');
-        this.requestedActionsCounter = response.actionsIds?.length === 1 ? `${response.actionsIds.length} requested action` : `${response.actionsIds?.length} requested actions`;
-        this.actionsCounter = response.actionsIds?.length ?? 0;
+        this.requestedActionsCounter = response.tasksIds?.length === 1 ? `${response.tasksIds.length} requested action` : `${response.tasksIds?.length} requested actions`;
+        this.actionsCounter = response.tasksIds?.length ?? 0;
         this.setBackLink('Go Back', `innovator/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
         this.setPageStatus('READY');
