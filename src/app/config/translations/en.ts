@@ -22,10 +22,10 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
-      action: {
-        none: 'action',
-        singular: 'action',
-        plural: 'actions'
+      task: {
+        none: 'task',
+        singular: 'task',
+        plural: 'tasks'
       },
       day: {
         none: 'day',
@@ -163,36 +163,16 @@ export const locale = {
           }
         },
         innovation: {
-          action_status: {
-            REQUESTED: {
-              name: 'Requested',
-              description: 'The innovator has been asked to provide additional information on their innovation record.',
-              cssColorClass: 'nhsuk-tag--blue'
+          task_status: {
+            OPEN: {
+              name: 'Task to do',
+              description: 'A task has been assigned to the innovator.',
+              cssColorClass: 'nhsuk-tag--blue',
             },
-            STARTED: {
-              name: 'Started',
-              description: '',
-              cssColorClass: 'nhsuk-tag--green'
-            },
-            CONTINUE: {
-              name: 'Continue',
-              description: '',
-              cssColorClass: 'nhsuk-tag--blue'
-            },
-            SUBMITTED: {
-              name: 'Submitted',
-              description: 'The innovator has submitted the requested information and is waiting for it to be reviewed.',
-              cssColorClass: 'nhsuk-tag--yellow'
-            },
-            DELETED: {
-              name: 'Deleted',
-              description: 'The action has been deleted as it is no longer relevant.',
-              cssColorClass: 'nhsuk-tag--grey'
-            },
-            COMPLETED: {
-              name: 'Completed',
-              description: 'The information has been reviewed and the action has been marked as completed.',
-              cssColorClass: 'nhsuk-tag--green'
+            DONE: {
+              name: 'Done',
+              description: 'The innovator has submitted the requested information and has marked the task as done.',
+              cssColorClass: 'nhsuk-tag--green',
             },
             DECLINED: {
               name: 'Declined',
@@ -203,16 +183,6 @@ export const locale = {
               name: 'Cancelled',
               description: 'The assigned task has been cancelled as it is no longer relevant.',
               cssColorClass: 'nhsuk-tag--grey'
-            },
-            OPEN: {
-              name: 'Task to do',
-              description: 'A task has been assigned to the innovator.',
-              cssColorClass: 'nhsuk-tag--blue',
-            },
-            DONE: {
-              name: 'Done',
-              description: 'The innovator has submitted the requested information and has marked the task as done.',
-              cssColorClass: 'nhsuk-tag--green',
             },
           },
           activity_log_groups: {
@@ -232,8 +202,8 @@ export const locale = {
               title: 'Support',
               description: 'Organisations related activities'
             },
-            ACTIONS: {
-              title: 'Actions',
+            TASKS: {
+              title: 'Tasks',
               description: ''
             },
             COMMENTS: {
@@ -314,37 +284,29 @@ export const locale = {
               title: 'Comment creation',
               message: `{{ actionUserName }} left a comment`
             },
-            ACTION_CREATION: {
-              title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for {{ sectionTitle }} section`
+            TASK_CREATION: {
+              title: 'Task creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created a task for {{ sectionTitle }} section`
             },
-            ACTION_CREATION_DEPRECATED: {
-              title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for a section that is no longer available`
+            TASK_CREATION_DEPRECATED: {
+              title: 'Task creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created a task for a section that is no longer available`
             },
-            ACTION_STATUS_SUBMITTED_UPDATE: {
-              title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to submitted`
+            TASK_STATUS_DONE_UPDATE: {
+              title: 'Tasks changed to done',
+              message: `{{ totalTasks }} tasks for {{ sectionTitle }} section were changed to done`
             },
-            ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: {
-              title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions were changed to submitted for a section that is no longer available`
+            TASK_STATUS_DECLINED_UPDATE: {
+              title: 'Task declined',
+              message: `{{ actionUserName }} {{ actionUserRole }} declined a task from {{ interveningUserName }}`
             },
-            ACTION_STATUS_DECLINED_UPDATE: {
-              title: 'Action declined',
-              message: `{{ actionUserName }} {{ actionUserRole }} declined an action from {{ interveningUserName }}`
+            TASK_STATUS_OPEN_UPDATE: {
+              title: 'Task reopened',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as to do`
             },
-            ACTION_STATUS_COMPLETED_UPDATE: {
-              title: 'Action completed',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as completed`
-            },
-            ACTION_STATUS_REQUESTED_UPDATE: {
-              title: 'Action requested',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as requested`
-            },
-            ACTION_STATUS_CANCELLED_UPDATE: {
-              title: 'Action cancelled',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as cancelled`
+            TASK_STATUS_CANCELLED_UPDATE: {
+              title: 'Task cancelled',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as cancelled`
             },
             INNOVATION_PAUSE: {
               title: 'Innovation stop share',
@@ -389,7 +351,7 @@ export const locale = {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
             INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } },
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
-            ACTION: { title: { singular: 'Action', plural: 'Actions' } },
+            TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
             MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
@@ -401,8 +363,8 @@ export const locale = {
             // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
             THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}".` },
             THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}".` },
-            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
-            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}".` },
+            TASK_CREATION: { title: `New task for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
+            TASK_UPDATE: { title: `Task {{ taskCode }} status updated to "{{ taskStatus }}" on innovation "{{ innovationName }}".` },
             NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
             NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment.` },
             NEEDS_ASSESSMENT_COMPLETED_TO_INNOVATOR: { title: `The needs assessment for innovation "{{ innovationName }}" has been completed.` },

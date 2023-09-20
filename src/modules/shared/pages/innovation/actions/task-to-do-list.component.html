@@ -73,7 +73,7 @@
                   <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
                     <li class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action"> {{ task.name }} </a>
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task"> {{ task.name }} </a>
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
@@ -87,7 +87,7 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
+                  <theme-tag type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
                 </td>
             </tr>
           </tbody>
@@ -129,7 +129,7 @@
                   <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
                     <li class="nhsuk-u-padding-right-1">
                       <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
-                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action">
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} task">
                         {{ task.name }}
                       </a>
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
@@ -145,7 +145,7 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
+                  <theme-tag type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
                 </td>
             </tr>
           </tbody>

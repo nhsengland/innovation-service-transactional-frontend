@@ -269,7 +269,7 @@ export type InnovationActivityLogListInDTO = {
 
       assessmentId?: string,
       sectionId?: InnovationSectionEnum,
-      actionId?: string,
+      taskId?: string,
       innovationSupportStatus?: InnovationSupportStatusEnum,
 
       organisations?: string[],

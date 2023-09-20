@@ -135,8 +135,8 @@ export class NotificationsService extends CoreService {
                   break;
               }
               break;
-            case NotificationContextTypeEnum.ACTION:
-              link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
+            case NotificationContextTypeEnum.TASK:
+              link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
             case NotificationContextTypeEnum.THREAD:
               link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
@@ -173,7 +173,7 @@ export class NotificationsService extends CoreService {
               innovationStatus: item.innovation.status,
               innovationOwnerName: item.innovation.ownerName,
               sectionNumber: section ? `${section.group.number}.${section.section.number}` : undefined,
-              actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.action_status.${item.params?.actionStatus}.name`) : undefined,
+              actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.task_status.${item.params?.actionStatus}.name`) : undefined,
               supportStatusName: item.params?.supportStatus ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`) : undefined,
             },
             link

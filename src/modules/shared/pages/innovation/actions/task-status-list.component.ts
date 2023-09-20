@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { InnovationActionStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -11,30 +11,28 @@ import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 })
 export class PageTaskStatusListComponent extends CoreComponent {
 
-  visibleStatus: InnovationActionStatusEnum[] = [
-    InnovationActionStatusEnum.OPEN,
-    InnovationActionStatusEnum.DECLINED,
-    InnovationActionStatusEnum.DONE,
-    InnovationActionStatusEnum.CANCELLED,
+  visibleStatus: InnovationTaskStatusEnum[] = [
+    InnovationTaskStatusEnum.OPEN,
+    InnovationTaskStatusEnum.DECLINED,
+    InnovationTaskStatusEnum.DONE,
+    InnovationTaskStatusEnum.CANCELLED,
   ];
 
 
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {
+  constructor(private activatedRoute: ActivatedRoute) {
 
     super();
 
     const innovationId = this.activatedRoute.snapshot.params.innovationId;
-    const actionId = this.activatedRoute.snapshot.params.actionId;
+    const taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.setPageTitle('Task status');
 
     if (innovationId) {
-      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/tasks${actionId ?? ''}`);
+      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/tasks/${taskId}`);
     }
     else {
-      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/actions`);
+      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/actions`);
     }
 
     this.setPageStatus('READY');

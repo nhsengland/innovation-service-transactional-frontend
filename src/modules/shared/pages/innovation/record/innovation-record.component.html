@@ -116,15 +116,8 @@
 
               <ng-container *ngIf="isInnovatorType">
                 <span *ngIf="section.openTasksCount >= 1" class="float-r">
-                  <theme-tag routerLink="{{ baseUrl }}/{{section.id}}/actions" class="cursor-pointer" type="{{ 'shared.catalog.innovation.action_status.REQUESTED.cssColorClass' | translate }}"
-                    label="{{ section.openTasksCount + ' ' + ('dictionary.action' | pluralTranslate: section.openTasksCount | translate) + ' ' + ('shared.catalog.innovation.action_status.REQUESTED.name' | translate | lowercase) }}">
-                  </theme-tag>
-                </span>
-              </ng-container>
-              <ng-container *ngIf="isAccessorType || isAssessmentType">
-                <span *ngIf="section.openTasksCount >= 1" class="float-r">
-                  <theme-tag routerLink="{{ baseUrl }}/{{section.id}}/actions" class="cursor-pointer" type="{{ 'shared.catalog.innovation.action_status.SUBMITTED.cssColorClass' | translate }}"
-                    label="{{ section.openTasksCount + ' ' + ('shared.catalog.innovation.action_status.SUBMITTED.name' | translate | lowercase) + ' ' + ('dictionary.action' | pluralTranslate: section.openTasksCount | translate) }}">
+                  <theme-tag routerLink="{{ baseUrl }}/{{section.id}}/tasks" class="cursor-pointer" type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}"
+                    label="{{ section.openTasksCount + ' ' + ('dictionary.task' | pluralTranslate: section.openTasksCount | translate) + ' ' + ('shared.catalog.innovation.task_status.OPEN.name' | translate | lowercase) }}">
                   </theme-tag>
                 </span>
               </ng-container>
