@@ -10,7 +10,7 @@
  <!--TODO: Banner for owner with account delete (new US)-->
 
   <!-- Use this container to orchestrate different states acording to different types -->
-  <ng-container [ngSwitch]="getUserType()">
+  <ng-container [ngSwitch]="userType">
 
       <ng-container *ngSwitchCase="'ASSESSMENT'">
         <ng-container *ngIf="['AWAITING_NEEDS_REASSESSMENT', 'NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
@@ -35,8 +35,8 @@
 
   <ng-template #actionTrackerList>
 
-    <h2 *ngIf="getUserType() !== 'ADMIN'" class="nhsuk-u-margin-bottom-2">
-      {{ tablesTitles().topTableTitle }}
+    <h2 *ngIf="userType !== 'ADMIN'" class="nhsuk-u-margin-bottom-2">
+      {{ tablesTitles.topTableTitle }}
     </h2>
 
     <ng-container *ngIf="topList.count === 0">
@@ -94,8 +94,8 @@
         </table>
       </ng-container>
 
-    <ng-container *ngIf="getUserType() !== 'ADMIN'">
-      <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles().bottomTableTitle }}</h2>
+    <ng-container *ngIf="userType !== 'ADMIN'">
+      <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.bottomTableTitle }}</h2>
 
       <ng-container *ngIf="bottomList.count === 0"> <p class="nhsuk-u-padding-top-5">There are no tasks</p> </ng-container>
 

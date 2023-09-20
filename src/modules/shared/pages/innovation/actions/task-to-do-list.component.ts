@@ -20,6 +20,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
   innovationId: string;
   innovation: ContextInnovationType;
+  userType: UserRoleEnum | undefined;
+  tablesTitles: { topTableTitle: string; bottomTableTitle: string };
 
   allTasksList: TableModel<InnovationActionsListDTO['data'][0],InnovationsActionsListFilterType>;
 
@@ -41,6 +43,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.setPageTitle(this.isInnovatorType ? 'Tasks to do' : 'Tasks');
 
+    this.tablesTitles = {topTableTitle: '', bottomTableTitle: ''};
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.innovation = this.stores.context.getInnovation();
@@ -56,9 +60,14 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.topList = {count: 0, data: [] };
     this.bottomList = {count: 0, data: [] };
+    
   }
 
   ngOnInit(): void {
+
+    this.userType = this.getUserType();
+
+    this.tablesTitles = this.getTablesTitles();
 
     this.allTasksList.setFilters({
       innovationId: this.innovationId,
@@ -71,31 +80,22 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       ],
       allTasks: true,
     });
-
     
     this.innovationsService.getActionsList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
-
       this.processTaskList(allTasksResponse);
-
       this.setPageStatus('READY');
-
     });
 
   }
 
   processTaskList(taskList: InnovationActionsListDTO) {
     for (let task of taskList.data) {
-      console.log(task)
       if (this.shouldBeOnTopTable(task)) {
         this.topList.data.push(task);
       } else{
         this.bottomList.data.push(task);
       }
     }
-    console.log("top list:")
-    console.log(this.topList);
-    console.log("bottom list:")
-    console.log(this.bottomList);
     this.topList.count = this.topList.data.length;
     this.bottomList.count = this.bottomList.data.length;
   }
@@ -134,8 +134,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     return this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : this.stores.authentication.getUserType();
   }
 
-  tablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
-    switch (this.getUserType()) {
+  getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
+    switch (this.userType) {
       case 'INNOVATOR':
         return {
           topTableTitle: `You have ${this.topList.count} tasks to do`,
