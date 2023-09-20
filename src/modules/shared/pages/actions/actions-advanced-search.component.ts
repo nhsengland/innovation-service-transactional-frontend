@@ -9,7 +9,7 @@ import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation
 import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
 type FilterKeysType = 'status' | 'sections' | 'innovationStatus';
@@ -20,7 +20,7 @@ type FilterKeysType = 'status' | 'sections' | 'innovationStatus';
 })
 export class PageActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
 
-  actionsList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsActionsListFilterType>({});
+  actionsList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>({});
 
   innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
 

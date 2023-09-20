@@ -16,7 +16,7 @@ import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.
 import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
 
-export type InnovationsActionsListFilterType = {
+export type InnovationsTasksListFilterType = {
   innovationId?: string,
   innovationName?: string,
   sections?: InnovationSectionEnum[],
@@ -347,7 +347,7 @@ export class InnovationsService extends CoreService {
 
 
   // Actions methods.
-  getActionsList(queryParams: APIQueryParamsType<InnovationsActionsListFilterType>): Observable<InnovationActionsListDTO> {
+  getActionsList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -407,7 +407,7 @@ export class InnovationsService extends CoreService {
 
   createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions').setPathParams({ innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -417,7 +417,7 @@ export class InnovationsService extends CoreService {
 
   updateAction(innovationId: string, actionId: string, body: { status: InnovationActionStatusEnum, message?: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:actionId').setPathParams({ innovationId, actionId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -617,7 +617,7 @@ export class InnovationsService extends CoreService {
 
 
   // Sections
-  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[] }): Observable<InnovationSectionInfoDTO> {
+  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('tasks')[] }): Observable<InnovationSectionInfoDTO> {
 
     const qp = {
       ...(filters.fields ? { fields: filters.fields } : {})

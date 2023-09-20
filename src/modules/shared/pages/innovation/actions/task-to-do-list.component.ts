@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { InnovationsActionsListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
@@ -23,7 +23,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   userType: UserRoleEnum | undefined;
   tablesTitles: { topTableTitle: string; bottomTableTitle: string };
 
-  allTasksList: TableModel<InnovationActionsListDTO['data'][0],InnovationsActionsListFilterType>;
+  allTasksList: TableModel<InnovationActionsListDTO['data'][0],InnovationsTasksListFilterType>;
 
   topList: InnovationActionsListDTO; 
   bottomList: InnovationActionsListDTO; 
