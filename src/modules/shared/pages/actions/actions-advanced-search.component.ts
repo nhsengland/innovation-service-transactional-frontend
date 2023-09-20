@@ -124,11 +124,11 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   }
 
-  getActionsList(column?: string): void {
+  getTasksList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
+    this.innovationsService.getTasksList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
@@ -158,14 +158,14 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
         fields: ['notifications']
       });
 
-    this.getActionsList();
+    this.getTasksList();
 
   }
 
 
   onTableOrder(column: string): void {
     this.actionsList.setOrderBy(column);
-    this.getActionsList(column);
+    this.getTasksList(column);
   }
 
 
@@ -197,7 +197,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   onPageChange(event: { pageNumber: number }): void {
     this.actionsList.setPage(event.pageNumber);
-    this.getActionsList();
+    this.getTasksList();
   }
 
 }

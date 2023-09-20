@@ -31,7 +31,7 @@ export class PageTaskStatusListComponent extends CoreComponent {
     this.setPageTitle('Task status');
 
     if (innovationId) {
-      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/action-tracker${actionId ?? ''}`);
+      this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/tasks${actionId ?? ''}`);
     }
     else {
       this.setBackLink('Tasks to do', `/${this.stores.authentication.userUrlBasePath()}/actions`);

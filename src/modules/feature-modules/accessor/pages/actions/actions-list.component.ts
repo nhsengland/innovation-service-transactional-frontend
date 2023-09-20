@@ -100,16 +100,16 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
             break;
         }
 
-        this.getActionsList();
+        this.getTasksList();
       })
     );
   }
 
 
-  getActionsList(column?: string): void {
+  getTasksList(column?: string): void {
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getActionsList(this.actionsList.getAPIQueryParams()).subscribe(response => {
+    this.innovationsService.getTasksList(this.actionsList.getAPIQueryParams()).subscribe(response => {
       this.actionsList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
       if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
@@ -122,14 +122,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   onTableOrder(column: string): void {
 
     this.actionsList.setOrderBy(column);
-    this.getActionsList(column);
+    this.getTasksList(column);
 
   }
 
   onPageChange(event: { pageNumber: number }): void {
 
     this.actionsList.setPage(event.pageNumber);
-    this.getActionsList();
+    this.getTasksList();
 
   }
 

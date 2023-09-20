@@ -1,0 +1,165 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div *ngIf="innovation.owner && !innovation.owner?.isActive && !isInnovatorType" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+    <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+      <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
+    </div>
+    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+  </div>
+
+ <!--TODO: Banner for owner with account delete (new US)-->
+
+  <!-- Use this container to orchestrate different states acording to different types -->
+  <ng-container [ngSwitch]="userType">
+
+      <ng-container *ngSwitchCase="'ASSESSMENT'">
+        <ng-container *ngIf="['AWAITING_NEEDS_REASSESSMENT', 'NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
+
+        <p *ngIf="['CREATED', 'WAITING_NEEDS_ASSESSMENT'].includes(innovation.status); else actionTrackerList">
+          Once you have started the needs assessment process, you can request innovators
+          to add more information to their innovation record sections here.
+        </p>
+      </ng-container>
+
+      <ng-container *ngSwitchCase="'ACCESSOR'">
+        <ng-container *ngIf="(innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'); then requestActionBtn"></ng-container>
+
+        <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
+      </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
+      </ng-container>
+
+  </ng-container>
+
+  <ng-template #actionTrackerList>
+
+    <h2 *ngIf="userType !== 'ADMIN'" class="nhsuk-u-margin-bottom-2">
+      {{ tablesTitles.topTableTitle }}
+    </h2>
+
+    <ng-container *ngIf="topList.count === 0">
+      <p class="nhsuk-u-padding-top-5">There are no tasks</p>
+    </ng-container>
+
+      <ng-container *ngIf="topList.count > 0">
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-7">
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+            Open actions list
+            <span *ngIf="allTasksList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let task of allTasksList.getHeaderColumns(); let i = index" scope="col" [ngClass]="task.align" [attr.aria-sort]="task.orderDir">
+                <ng-container *ngIf="!task.orderable">{{ task.label }}</ng-container>
+                <button *ngIf="task.orderable" type="button">
+                  {{ task.label }}
+                  <span aria-hidden="true"></span>
+                </button>
+                <ng-container *ngIf="task.key === 'status'">
+                  <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
+                </ng-container>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let task of topList.data" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
+                  <span>{{ task.displayId }}</span>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
+                    <li class="nhsuk-u-padding-right-1">
+                      <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action"> {{ task.name }} </a>
+                      <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
+                    </li>
+                    <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
+                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }}</span>
+                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }} </span>
+                      <ng-template #requestedByOtherRole>
+                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span>
+                      </ng-template>
+                    </li>
+                  </ul>
+                </td>
+                <td class="nhsuk-table__cell text-align-right">
+                  <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
+                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+    <ng-container *ngIf="userType !== 'ADMIN'">
+      <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.bottomTableTitle }}</h2>
+
+      <ng-container *ngIf="bottomList.count === 0"> <p class="nhsuk-u-padding-top-5">There are no tasks</p> </ng-container>
+
+      <ng-container *ngIf="bottomList.count > 0">
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-7">
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden"> Open actions list
+            <span *ngIf="allTasksList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor=" let task of allTasksList.getHeaderColumns(); let i = index" scope="col" [ngClass]="task.align" [attr.aria-sort]="task.orderDir">
+                <ng-container *ngIf="!task.orderable">{{ task.label }}</ng-container>
+                <button *ngIf="task.orderable" type="button">
+                  {{ task.label }}
+                  <span aria-hidden="true"></span>
+                </button>
+                <ng-container *ngIf="task.key === 'status'">
+                  <a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-1" arial-label="View status keys information"> Status key </a>
+                </ng-container>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr
+              *ngFor="let task of bottomList.data" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("id") }}</span>
+                  <span>{{ task.displayId }}</span>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <ul class="nhsuk-list nhsuk-pagination__list nhsuk-u-margin-bottom-0">
+                    <li class="nhsuk-u-padding-right-1">
+                      <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("name") }}</span>
+                      <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}" attr.aria-label="View {{ task.name }} action">
+                        {{ task.name }}
+                      </a>
+                      <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
+                    </li>
+                    <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
+                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }}</span>
+                      <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }}</span>
+                      <ng-template #requestedByOtherRole>
+                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }} </span>
+                      </ng-template>
+                    </li>
+                  </ul>
+                </td>
+                <td class="nhsuk-table__cell text-align-right">
+                  <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
+                  <theme-tag type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+    </ng-container>
+  </ng-template>
+
+</theme-content-wrapper>
+
+<ng-template #requestActionBtn>
+  <a
+    routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/new"
+    class="nhsuk-button nhsuk-u-margin-bottom-7">
+    Assign a task
+  </a>
+</ng-template>

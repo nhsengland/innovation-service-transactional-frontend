@@ -69,7 +69,7 @@ export class PageInnovationActionTrackerNewComponent extends CoreComponent {
     this.innovationsService.createAction(this.innovationId, body).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('Action requested', { message: 'The innovator has been notified of your action request.' });
-        this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker/${response.id}`);
+        this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${response.id}`);
       },
       error: () => this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
     });
