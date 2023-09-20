@@ -347,7 +347,7 @@ export class InnovationsService extends CoreService {
 
 
   // Actions methods.
-  getActionsList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
+  getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
 
     const { filters, ...qParams } = queryParams;
 

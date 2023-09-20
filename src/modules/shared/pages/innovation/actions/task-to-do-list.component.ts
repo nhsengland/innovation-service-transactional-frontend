@@ -67,7 +67,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.userType = this.getUserType();
 
-    this.tablesTitles = this.getTablesTitles();
+    
 
     this.allTasksList.setFilters({
       innovationId: this.innovationId,
@@ -81,8 +81,9 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       allTasks: true,
     });
     
-    this.innovationsService.getActionsList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
+    this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
       this.processTaskList(allTasksResponse);
+      this.tablesTitles = this.getTablesTitles();
       this.setPageStatus('READY');
     });
 
