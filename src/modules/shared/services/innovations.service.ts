@@ -380,7 +380,7 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getActionInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
+  getTaskInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:actionId').setPathParams({ innovationId, actionId });
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),

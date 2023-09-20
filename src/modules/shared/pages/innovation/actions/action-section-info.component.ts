@@ -17,14 +17,14 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   innovationId: string;
   sectionId: InnovationSectionEnum;
-  actionId: string;
+  taskId: string;
 
-  action?: InnovationActionInfoDTO;
+  task?: InnovationActionInfoDTO;
   sectionTitle = '';
 
   tasksIds: string[] = [];
 
-  actionNumber = 0;
+  taskNumber = 0;
 
   // Flags
   isInnovatorType: boolean;
@@ -41,7 +41,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.actionId = this.activatedRoute.snapshot.params.actionId;
+    this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -61,67 +61,67 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.tasksIds = sectionInfo.tasksIds ?? [];
 
         if (this.tasksIds.length === 0) {
-          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
+          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
         }
 
-        this.actionNumber = 0;
+        this.taskNumber = 0;
 
-        this.getActionInfo();
+        this.getTaskInfo();
 
       });
 
       this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record`);
 
-    } else if (this.actionId) {
+    } else if (this.taskId) {
 
-      this.getActionInfo();
+      this.getTaskInfo();
 
-      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/action-tracker`);
+      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/tasks`);
 
     }
 
   }
 
-  handlePagination(action: 'previous' | 'next') {
+  handlePagination(task: 'previous' | 'next') {
 
-    switch (action) {
+    switch (task) {
       case 'previous':
-        if (this.actionNumber === 0) { return; }
-        this.actionNumber--;
+        if (this.taskNumber === 0) { return; }
+        this.taskNumber--;
         break;
       case 'next':
-        if (this.actionNumber === this.tasksIds.length - 1) { return; }
-        this.actionNumber++;
+        if (this.taskNumber === this.tasksIds.length - 1) { return; }
+        this.taskNumber++;
         break;
       default:
     }
 
-    this.getActionInfo();
+    this.getTaskInfo();
 
   }
 
-  private getActionInfo() {
+  private getTaskInfo() {
 
     this.setPageStatus('LOADING');
 
     if (this.sectionId) {
-      this.actionId = this.tasksIds[this.actionNumber];
+      this.taskId = this.tasksIds[this.taskNumber];
     }
 
-    this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
 
-      this.action = response;
+      this.task = response;
 
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
       this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
       if (this.tasksIds.length > 1) {
-        this.setPageTitle('Requested action', { hint: `${this.actionNumber + 1} of ${this.tasksIds.length}` });
+        this.setPageTitle('Requested task', { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });
       } else {
-        this.setPageTitle('Requested action', { hint: this.action.displayId });
+        this.setPageTitle('Requested task', { hint: this.task.displayId });
       }
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.actionId] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.taskId] });
 
       this.setPageStatus('READY');
 
