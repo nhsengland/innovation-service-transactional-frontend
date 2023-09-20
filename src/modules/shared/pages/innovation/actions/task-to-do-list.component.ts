@@ -113,12 +113,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         return (!item.createdBy.organisationUnit)
 
       case 'ACCESSOR':
-        
-        return item.createdBy.organisationUnit?.name ==
-        this.stores.authentication.getAccessorOrganisationUnitName()
-
-      return false;
-
       case 'QUALIFYING_ACCESSOR':
         return item.createdBy.organisationUnit?.name ==
         this.stores.authentication.getAccessorOrganisationUnitName()

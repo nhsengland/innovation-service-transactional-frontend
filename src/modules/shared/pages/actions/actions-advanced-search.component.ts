@@ -124,7 +124,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
   }
 
-  getActionsList(column?: string): void {
+  getTasksList(column?: string): void {
 
     this.setPageStatus('LOADING');
 
