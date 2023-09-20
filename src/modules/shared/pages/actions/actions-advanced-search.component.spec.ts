@@ -51,7 +51,7 @@ describe('Shared/Pages/Actions/PageActionsAdvancedSearchComponent', () => {
   //   fixture = TestBed.createComponent(ActionAdvancedFilterComponent);
   //   component = fixture.componentInstance;
 
-  //   component.getActionsList();
+  //   component.getTasksList();
   //   fixture.detectChanges();
   //   expect(component.actionsList.getRecords()).toEqual([]);
 

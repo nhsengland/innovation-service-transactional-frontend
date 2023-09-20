@@ -22,7 +22,6 @@ import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 // // Innovation.
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationExportRequestRejectComponent } from './pages/innovation/export-requests/export-request-reject.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
@@ -76,7 +75,6 @@ import { InnovatorService } from './services/innovator.service';
     // // First time signin.
     FirstTimeSigninComponent,
     // // Innovation.
-    InnovationActionTrackerDeclineComponent,
     InnovationDataSharingChangeComponent,
     PageInnovationExportRequestRejectComponent,
     PageInnovationHowToProceedComponent,

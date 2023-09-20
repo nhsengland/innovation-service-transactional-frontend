@@ -103,7 +103,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }, {
         title: 'Tasks assigned to you',
         label: `Request actions to submit`,
-        link: `/innovator/innovations/${this.innovationId}/action-tracker`,
+        link: `/innovator/innovations/${this.innovationId}/tasks`,
         count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
         lastMessage: `Most recent assigned task: "Update '${this.translate('shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,

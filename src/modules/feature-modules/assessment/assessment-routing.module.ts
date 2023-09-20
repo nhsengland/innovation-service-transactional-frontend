@@ -34,11 +34,9 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
-import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
-import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
-import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -49,10 +47,10 @@ import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/
 import { PageInnovationExportRequestInfoComponent } from '@modules/shared/pages/innovation/export-requests/export-request-info.component';
 import { PageInnovationExportRequestNewComponent } from '@modules/shared/pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from '@modules/shared/pages/innovation/export-requests/export-requests-list.component';
-import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
+import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationRecordDownloadComponent } from '@modules/shared/pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
@@ -60,6 +58,7 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
+import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -70,6 +69,7 @@ import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
 const header: RoutesDataType['header'] = {
@@ -278,11 +278,11 @@ const routes: Routes = [
               },
 
               {
-                path: 'action-tracker',
-                data: { breadcrumb: 'Action Tracker' },
+                path: 'tasks',
+                data: { breadcrumb: 'Tasks' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,
                     data: { breadcrumb: null }
                   },
                   {
@@ -308,13 +308,13 @@ const routes: Routes = [
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'edit', pathMatch: 'full', component: PageInnovationActionTrackerEditComponent,
-                        data: { breadcrumb: 'Edit' }
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.CANCELLED }
                       },
                       {
-                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
-                        data: { breadcrumb: 'Cancel' }
-                      }
+                        path: 'reopen', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.OPEN }
+                      },
                     ]
                   }
                 ]

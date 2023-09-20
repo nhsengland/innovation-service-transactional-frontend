@@ -11,7 +11,7 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
@@ -347,7 +347,7 @@ export class InnovationsService extends CoreService {
 
 
   // Actions methods.
-  getActionsList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
+  getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -415,13 +415,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  updateAction(innovationId: string, actionId: string, body: { status: InnovationActionStatusEnum, message?: string }): Observable<{ id: string }> {
+  updateTask(innovationId: string, taskId: string, body: { status: InnovationTaskStatusEnum, message?: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:actionId').setPathParams({ innovationId, actionId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1));
 
   }
 
@@ -560,7 +557,7 @@ export class InnovationsService extends CoreService {
               break;
             case 'ACTION':
               if (['innovator', 'accessor'].includes(userUrlBasePath) && sectionIdentification && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/tasks/${i.params.actionId}` };
               }
               break;
           }
