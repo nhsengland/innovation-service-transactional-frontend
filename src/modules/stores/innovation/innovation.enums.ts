@@ -71,6 +71,13 @@ export enum InnovationActionStatusEnum {
   DONE = 'DONE'
 }
 
+export enum InnovationTaskStatusEnum {
+  OPEN = 'OPEN',
+  DONE = 'DONE',
+  DECLINED = 'DECLINED',
+  CANCELLED = 'CANCELLED'
+}
+
 export enum ActivityLogTypesEnum {
   INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
   INNOVATION_RECORD = 'INNOVATION_RECORD',
