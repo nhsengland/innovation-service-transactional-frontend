@@ -3,7 +3,7 @@ import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 // Innovations.
@@ -241,7 +241,7 @@ export type InnovationActionsListDTO = { count: number, data: (InnovationActions
 export type InnovationActionInfoDTO = {
   id: string,
   displayId: string,
-  status: InnovationActionStatusEnum,
+  status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
   section: InnovationSectionEnum,
   name: string,
   description: string,
