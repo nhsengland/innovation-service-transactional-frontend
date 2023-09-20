@@ -12,6 +12,7 @@ export {
   InnovationTransferStatusEnum,
   InnovationSectionEnum,
   InnovationActionStatusEnum,
+  InnovationTaskStatusEnum,
   ActivityLogTypesEnum,
   ActivityLogItemsEnum
 } from './innovation.enums';

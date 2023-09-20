@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { DynamicModule } from 'ng-dynamic-component';
@@ -22,35 +22,34 @@ import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
-import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
-import { PageInnovationActionTrackerCancelComponent } from './pages/innovation/actions/action-tracker-cancel.component';
-import { PageInnovationActionTrackerEditComponent } from './pages/innovation/actions/action-tracker-edit.component';
 import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
+import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
-import { PageInnovationDocumentsNewditComponent } from './pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentInfoComponent } from './pages/innovation/documents/document-info.component';
+import { PageInnovationDocumentsNewditComponent } from './pages/innovation/documents/document-newdit.component';
 import { PageInnovationDocumentsListComponent } from './pages/innovation/documents/documents-list.component';
 import { PageEveryoneWorkingOnInnovationComponent } from './pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationExportRequestInfoComponent } from './pages/innovation/export-requests/export-request-info.component';
 import { PageInnovationExportRequestNewComponent } from './pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from './pages/innovation/export-requests/export-requests-list.component';
+import { PageInnovationTaskActionComponent } from './pages/innovation/tasks/task-action.component';
 
-import { WizardInnovationThreadNewComponent } from './pages/innovation/messages/wizard-thread-new/thread-new.component';
+import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
+import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
+import { PageInnovationThreadRecipientsComponent } from './pages/innovation/messages/thread-recipients.component';
+import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/organisations-step.component';
 import { WizardInnovationThreadNewSubjectMessageStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/subject-message-step.component';
 import { WizardInnovationThreadNewWarningStepComponent } from './pages/innovation/messages/wizard-thread-new/steps/warning-step.component';
-import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
-import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
-import { PageInnovationThreadsListComponent } from './pages/innovation/messages/threads-list.component';
-import { PageInnovationThreadRecipientsComponent } from './pages/innovation/messages/thread-recipients.component';
+import { WizardInnovationThreadNewComponent } from './pages/innovation/messages/wizard-thread-new/thread-new.component';
 
 import { PageInnovationRecordDownloadComponent } from './pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
-import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
+import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
 import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
@@ -84,12 +83,12 @@ import { InnovationSectionEvidenceDataResolver } from './resolvers/innovation-se
 import { InnovationThreadDataResolver } from './resolvers/innovation-thread-data.resolver';
 
 // Services.
-import { InnovationsService } from './services/innovations.service';
 import { InnovationDocumentsService } from './services/innovation-documents.service';
+import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
 import { OrganisationsService } from './services/organisations.service';
-import { TermsOfUseService } from './services/terms-of-use.service';
 import { StatisticsService } from './services/statistics.service';
+import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
 
 
@@ -120,8 +119,6 @@ import { UsersService } from './services/users.service';
     // // Innovation.
     PageInnovationActionSectionInfoComponent,
     PageTaskStatusListComponent,
-    PageInnovationActionTrackerCancelComponent,
-    PageInnovationActionTrackerEditComponent,
     PageInnovationTaskToDoListComponent,
     PageInnovationActionTrackerNewComponent,
     PageInnovationActivityLogComponent,
@@ -134,6 +131,7 @@ import { UsersService } from './services/users.service';
     PageInnovationExportRequestInfoComponent,
     PageInnovationExportRequestNewComponent,
     PageInnovationExportRequestsListComponent,
+    PageInnovationTaskActionComponent,
 
     WizardInnovationThreadNewComponent,
     WizardInnovationThreadNewOrganisationsStepComponent,
