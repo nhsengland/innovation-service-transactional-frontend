@@ -234,6 +234,7 @@ export type InnovationActionsListInDTO = {
     updatedBy: { name: string, role: UserRoleEnum },
     createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
     notifications: number;
+    sameOrganisation: boolean;
   }[];
 };
 export type InnovationActionsListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
@@ -256,16 +257,17 @@ export type InnovationTaskInfoDTO = {
   id: string,
   displayId: string,
   status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
-  descriptions: [
-    { description: string, createdAt: DateISOType, name: string, displayTag: string }
-  ],
+  descriptions: InnovationDescription[],
   section: InnovationSectionEnum,
   name: string
   createdAt: DateISOType,
   updatedAt: DateISOType,
   updatedBy: { name: string, displayTag: string },
   createdBy: { name: string, displayTag: string },
+  sameOrganisation: boolean;
 };
+
+export type InnovationDescription = { description: string, createdAt: DateISOType, name: string, displayTag: string };
 
 
 export type InnovationActivityLogListInDTO = {

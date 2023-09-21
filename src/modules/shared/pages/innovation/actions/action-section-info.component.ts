@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { DateISOType } from '@app/base/types';
-import { InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
@@ -109,6 +108,10 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   }
 
+  private sortDescriptionsByDateDesc(descriptions: InnovationDescription[]){
+    return descriptions.sort((a,b)=> b.createdAt.localeCompare(a.createdAt));
+  }
+
   private getTaskInfo() {
 
     this.setPageStatus('LOADING');
@@ -120,8 +123,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
 
       this.task = response;
-      console.log("response:");
-      console.log(response);
+      this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
 
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
       this.sectionTitle = section ? `${section.group.number}.${section.section.number}: ${section.section.title}` : 'Section no longer available';

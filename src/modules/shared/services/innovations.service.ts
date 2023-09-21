@@ -422,6 +422,7 @@ export class InnovationsService extends CoreService {
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
+          sameOrganisation: response.sameOrganisation
         })
       })
     );
