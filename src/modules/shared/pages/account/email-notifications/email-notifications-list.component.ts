@@ -27,7 +27,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     super();
     this.setPageTitle('Email notifications');
-    
+
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 
     const currentUserContext = this.authenticationStore.getUserContextInfo();
@@ -76,7 +76,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     const user = this.authenticationStore.getUserInfo();
 
     this.hasMultipleRoles = user.roles.length > 1;
-    
+
   }
 
 
@@ -85,7 +85,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     this.setPageStatus('LOADING');
 
     const body = [
-      { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.NEVER },
+      { notificationType: EmailNotificationsTypeEnum.TASK, preference: EmailNotificationsPreferencesEnum.NEVER },
       { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
       { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.NEVER }
     ];
