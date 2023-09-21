@@ -73,7 +73,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
-import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/actions/wizard-task-new/task-new.component';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 
 
 const header: RoutesDataType['header'] = {

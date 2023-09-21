@@ -58,7 +58,7 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
-import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/actions/wizard-task-new/task-new.component';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.

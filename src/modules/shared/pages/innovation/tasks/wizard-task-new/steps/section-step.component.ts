@@ -40,15 +40,6 @@ export class WizardTaskNewSectionStepComponent extends CoreComponent implements 
 
     this.form.get('section')?.setValue(this.data.selectedSection);
 
-    this.sectionItems = this.data.sections.reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
-      return [
-        ...sectionGroupAcc,
-        ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
-          return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
-        }, [])
-      ];
-    }, []);
-
     this.setPageStatus('READY');
 
   }
