@@ -4,9 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationActionStatusEnum } from '@modules/stores/innovation';
+import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
+import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
+/**
+ * TODO: This page will probably be removed, waiting confirmation
+ */
 
 @Component({
   selector: 'app-accessor-pages-actions-actions-list',
@@ -32,14 +35,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     this.tabs = [
       {
         key: 'openActions',
-        title: 'Open actions',
-        link: '/accessor/actions',
+        title: 'Open tasks',
+        link: '/accessor/tasks',
         queryParams: { openActions: 'true' }
       },
       {
         key: 'closedActions',
-        title: 'Closed actions',
-        link: '/accessor/actions',
+        title: 'Closed tasks',
+        link: '/accessor/tasks',
         queryParams: { openActions: 'false' }
       }
     ];
@@ -64,10 +67,10 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
 
-        this.setPageTitle('Actions');
+        this.setPageTitle('Tasks');
 
         if (!queryParams.openActions) {
-          this.router.navigate(['/accessor/actions'], { queryParams: { openActions: 'true' } });
+          this.router.navigate(['/accessor/tasks'], { queryParams: { openActions: 'true' } });
           return;
         }
 
@@ -78,11 +81,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         switch (queryParams.openActions) {
           case 'true':
             this.actionsList.clearData().setFilters({
-              status: [
-                InnovationActionStatusEnum.REQUESTED,
-                // InnovationActionStatusEnum.STARTED,
-                // InnovationActionStatusEnum.CONTINUE,
-                InnovationActionStatusEnum.SUBMITTED],
+              status: [InnovationTaskStatusEnum.OPEN, InnovationTaskStatusEnum.DONE],
               createdByMe: true,
               fields: ['notifications']
             });
@@ -90,7 +89,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
           case 'false':
             this.actionsList.clearData().setFilters({
-              status: [InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.DELETED],
+              status: [InnovationTaskStatusEnum.CANCELLED, InnovationTaskStatusEnum.DECLINED],
               createdByMe: true,
               fields: ['notifications']
             });

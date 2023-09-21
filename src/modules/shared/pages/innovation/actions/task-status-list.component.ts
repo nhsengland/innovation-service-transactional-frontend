@@ -32,7 +32,7 @@ export class PageTaskStatusListComponent extends CoreComponent {
       this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/tasks/${taskId}`);
     }
     else {
-      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/actions`);
+      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/tasks`);
     }
 
     this.setPageStatus('READY');

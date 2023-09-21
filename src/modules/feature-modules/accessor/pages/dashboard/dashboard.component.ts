@@ -68,7 +68,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           {
             title: 'TODO - TASKS',
             label: `TODO`,
-            link: `/accessor/actions`,
+            link: `/accessor/tasks`,
             queryParams: { openActions: true },
             // count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
             // total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,

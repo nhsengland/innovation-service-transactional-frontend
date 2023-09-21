@@ -5,28 +5,25 @@ import { debounceTime } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { INNOVATION_SECTION_ACTION_STATUS } from '@modules/stores/innovation/innovation.models';
+import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 type FilterKeysType = 'status' | 'sections' | 'innovationStatus';
 
 @Component({
-  selector: 'shared-pages-actions-advanced-search',
-  templateUrl: './actions-advanced-search.component.html'
+  selector: 'shared-pages-tasks-advanced-search',
+  templateUrl: './tasks-advanced-search.component.html'
 })
-export class PageActionsAdvancedSearchComponent extends CoreComponent implements OnInit {
+export class PageTasksAdvancedSearchComponent extends CoreComponent implements OnInit {
 
-  actionsList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>({});
-
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  tasksList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>({});
 
   form = new FormGroup({
     innovationName: new FormControl<string>(''),
-    status: new FormArray<FormControl<InnovationActionStatusEnum>>([]),
+    status: new FormArray<FormControl<InnovationTaskStatusEnum>>([]),
     sections: new FormArray<FormControl<InnovationSectionEnum>>([]),
     innovationStatus: new FormArray<FormControl<InnovationStatusEnum>>([]),
     createdByMe: new FormControl(false),
@@ -40,44 +37,35 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
     selected: { label: string, value: string }[],
     active: boolean,
   }[] = [
-      { key: 'status', title: 'Status', showHideStatus: 'closed', selected: [], active: false },
+      { key: 'status', title: 'Task status', showHideStatus: 'closed', selected: [], active: false },
       { key: 'sections', title: 'Innovation record section', showHideStatus: 'closed', selected: [], active: false },
       { key: 'innovationStatus', title: 'Needs assessment status', showHideStatus: 'closed', selected: [], active: false }
     ];
 
-  datasets: { [key in FilterKeysType]: { label: string, value: InnovationActionStatusEnum | InnovationStatusEnum |  string }[] } = {
+  datasets: { [key in FilterKeysType]: { label: string, value: InnovationTaskStatusEnum | InnovationStatusEnum |  string }[] } = {
     status: [],
     sections: [],
     innovationStatus: []
   };
 
-  innovationsList: any;
+  pageInformation: { leadText: string };
 
-  // Flags
-  isAssessmentType: boolean;
-
-  constructor(
-    private innovationsService: InnovationsService
-  ) {
+  constructor(private innovationsService: InnovationsService) {
 
     super();
 
-    let title = 'Actions advanced search';
+    this.setPageTitle('Tasks');
 
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-
-    if(this.isAssessmentType) {
-      title = 'Actions';
-    }
-
-    this.setPageTitle(title);
-
-    this.actionsList.setVisibleColumns({
-      section: { label: 'Actions', orderable: true },
+    this.tasksList.setVisibleColumns({
+      section: { label: 'Tasks', orderable: true },
       innovationName: { label: 'Innovations', orderable: true },
       updatedAt: { label: 'Updated', orderable: true },
       status: { label: 'Status', align: 'right', orderable: true }
     }).setOrderBy('updatedAt', 'descending');
+
+    this.pageInformation = {
+      leadText: this.stores.authentication.isAssessmentType() ? 'Tasks assigned by needs assessment team' : `Tasks assigned by ${this.stores.authentication.getAccessorOrganisationUnitName()}`
+    }
 
   }
 
@@ -85,25 +73,10 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
     let filters: FilterKeysType[] = ['status', 'sections'];
 
-    this.datasets.status = Object.entries(INNOVATION_SECTION_ACTION_STATUS).
-      map(([key, item]) => ({ label: item.label, value: key })).
-      filter(i => [
-        InnovationActionStatusEnum.REQUESTED,
-        InnovationActionStatusEnum.SUBMITTED,
-        InnovationActionStatusEnum.COMPLETED,
-        InnovationActionStatusEnum.DECLINED,
-        InnovationActionStatusEnum.DELETED,
-        InnovationActionStatusEnum.CANCELLED
-      ].includes(i.value as InnovationActionStatusEnum));
+    this.datasets.status = [InnovationTaskStatusEnum.OPEN, InnovationTaskStatusEnum.DONE, InnovationTaskStatusEnum.CANCELLED, InnovationTaskStatusEnum.DECLINED]
+      .map(status => ({ label: this.translate(`shared.catalog.innovation.task_status.${status}.name`), value: status }));
 
-    this.datasets.sections = getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
-      return [
-        ...sectionGroupAcc,
-        ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
-          return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
-        }, [])
-      ];
-    }, []);
+    this.datasets.sections = getAllSectionsList();
 
     if(this.stores.authentication.isAssessmentType()) {
       filters.push('innovationStatus');
@@ -128,9 +101,9 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getTasksList(this.actionsList.getAPIQueryParams()).subscribe(response => {
-      this.actionsList.setData(response.data, response.count);
-      if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
+    this.innovationsService.getTasksList(this.tasksList.getAPIQueryParams()).subscribe(response => {
+      this.tasksList.setData(response.data, response.count);
+      if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
 
@@ -144,17 +117,16 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
       const f = this.form.get(filter.key)!.value as string[];
       filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
     });
-    /* istanbul ignore next */
     this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
 
-    this.actionsList
+    this.tasksList
       .clearData()
       .setFilters({
-        ...(this.form.get('innovationName')?.value ? { innovationName: this.form.get('innovationName')?.value || '' } : {}),
+        ...(this.form.get('innovationName')?.value ? { innovationName: this.form.get('innovationName')?.value ?? '' } : {}),
         ...(this.form.get('status')?.value ? { status: this.form.get('status')?.value } : {}),
         ...(this.form.get('sections')?.value ? { sections: this.form.get('sections')?.value } : {}),
         ...(this.form.get('innovationStatus')?.value ? { innovationStatus: this.form.get('innovationStatus')?.value } : {}),
-        createdByMe: this.stores.authentication.isAssessmentType() ? this.form.get('createdByMe')?.value ?? true : true,
+        createdByMe: this.form.get('createdByMe')?.value ?? false,
         fields: ['notifications']
       });
 
@@ -164,7 +136,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
 
 
   onTableOrder(column: string): void {
-    this.actionsList.setOrderBy(column);
+    this.tasksList.setOrderBy(column);
     this.getTasksList(column);
   }
 
@@ -196,7 +168,7 @@ export class PageActionsAdvancedSearchComponent extends CoreComponent implements
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.actionsList.setPage(event.pageNumber);
+    this.tasksList.setPage(event.pageNumber);
     this.getTasksList();
   }
 

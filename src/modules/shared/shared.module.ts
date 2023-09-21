@@ -16,15 +16,15 @@ import { PageAccountEmailNotificationsListComponent } from './pages/account/emai
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 // // Actions.
-import { PageActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
+import { PageTasksAdvancedSearchComponent } from './pages/tasks/tasks-advanced-search.component';
 // // Error.
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
-import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -111,8 +111,8 @@ import { UsersService } from './services/users.service';
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsEditComponent,
     PageAccountManageDetailsInfoComponent,
-    // // Actions.
-    PageActionsAdvancedSearchComponent,
+    // // Tasks.
+    PageTasksAdvancedSearchComponent,
     // // Error.
     PageErrorComponent,
     PageNotFoundComponent,
