@@ -127,7 +127,7 @@
               <ng-container *ngIf="isInnovatorType">
                 <span *ngIf="section.openTasksCount >= 1" class="float-r">
                   <theme-tag routerLink="{{ baseUrl }}/{{section.id}}/tasks" class="cursor-pointer" type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}"
-                    label="{{ section.openTasksCount + ' ' + ('dictionary.task' | pluralTranslate: section.openTasksCount | translate) + ' ' + ('shared.catalog.innovation.task_status.OPEN.name' | translate | lowercase) }}">
+                    label="{{ section.openTasksCount + ' ' + ('dictionary.task' | pluralTranslate: section.openTasksCount | translate) + ' to do' }}">
                   </theme-tag>
                 </span>
               </ng-container>
