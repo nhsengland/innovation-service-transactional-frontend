@@ -19,7 +19,6 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   innovationId: string;
   sectionId: InnovationSectionEnum;
   taskId: string;
-  taskId: string;
 
   task?: InnovationActionInfoDTO;
   sectionTitle = '';
