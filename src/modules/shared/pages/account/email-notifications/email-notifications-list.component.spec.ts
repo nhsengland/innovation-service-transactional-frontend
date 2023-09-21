@@ -16,7 +16,7 @@ import { PageAccountEmailNotificationsListComponent } from './email-notification
 
 
 const EmailNotificationsListMock = [
-  { notificationType: EmailNotificationsTypeEnum.ACTION, preference: EmailNotificationsPreferencesEnum.INSTANTLY },
+  { notificationType: EmailNotificationsTypeEnum.TASK, preference: EmailNotificationsPreferencesEnum.INSTANTLY },
   { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
   { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.DAILY }
 ];
