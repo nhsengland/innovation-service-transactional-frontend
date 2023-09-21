@@ -11,9 +11,9 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-action-section-info',
-  templateUrl: './action-section-info.component.html'
+  templateUrl: './task-details.component.html'
 })
-export class PageInnovationActionSectionInfoComponent extends CoreComponent implements OnInit {
+export class PageInnovationTaskDetailsComponent extends CoreComponent implements OnInit {
 
   innovationId: string;
   sectionId: InnovationSectionEnum;
