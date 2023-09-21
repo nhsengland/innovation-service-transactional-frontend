@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
@@ -20,12 +20,10 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   sectionId: InnovationSectionEnum;
   taskId: string;
 
-  task?: InnovationActionInfoDTO;
+  task?: InnovationTaskInfoDTO;
   sectionTitle = '';
 
   tasksIds: string[] = [];
-
-  descriptions: { description: string; date: DateISOType }[];
 
   taskNumber = 0;
 
@@ -47,15 +45,9 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.taskId = this.activatedRoute.snapshot.params.actionId;
+    this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.userUrlBase = this.userUrlBasePath();
-
-    // description mock
-    this.descriptions = [
-      { description: 'Test Description', date: '2023-09-11T12:03:34.550Z' },
-      { description: 'Another description', date: '2023-07-11T15:22:05.550Z' },
-    ];
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -125,14 +117,14 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
       this.taskId = this.tasksIds[this.taskNumber];
     }
 
-    this.innovationsService.getActionInfo(this.innovationId, this.taskId).subscribe(response => {
+    this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
 
       this.task = response;
       console.log("response:");
       console.log(response);
 
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-      this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
+      this.sectionTitle = section ? `${section.group.number}.${section.section.number}: ${section.section.title}` : 'Section no longer available';
 
       if (this.tasksIds.length > 1) {
         this.setPageTitle('Requested task', { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });

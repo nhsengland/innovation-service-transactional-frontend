@@ -252,6 +252,21 @@ export type InnovationActionInfoDTO = {
   declineReason?: string,
 };
 
+export type InnovationTaskInfoDTO = {
+  id: string,
+  displayId: string,
+  status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
+  descriptions: [
+    { description: string, createdAt: DateISOType, name: string, displayTag: string }
+  ],
+  section: InnovationSectionEnum,
+  name: string
+  createdAt: DateISOType,
+  updatedAt: DateISOType,
+  updatedBy: { name: string, displayTag: string },
+  createdBy: { name: string, displayTag: string },
+};
+
 
 export type InnovationActivityLogListInDTO = {
   count: number,

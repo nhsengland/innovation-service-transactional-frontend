@@ -18,13 +18,7 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Last update</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <p>{{ task.updatedAt | date : ("app.date_formats.long_date" | translate) }}
-              <span *ngIf="task.updatedBy.role === 'INNOVATOR'; else notInnovator">by {{ task.updatedBy.name }}
-                <ng-container *ngIf="task.updatedBy.isOwner">, ({{ task.updatedBy.isOwner ? "Owner" : "Collaborator" }})</ng-container>
-              </span>
-              <ng-template #notInnovator>
-                <span>by {{ task.updatedBy.name }}, <span *ngIf="task.updatedBy.role">{{ this.stores.authentication.getRoleDescription(task.updatedBy.role) }}</span>
-                </span>
-              </ng-template>
+              <span>by {{ task.updatedBy.name }}, {{ task.updatedBy.displayTag}}</span>
             </p>
           </dd>
         </div>
@@ -35,10 +29,7 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Assigned by</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            <span *ngIf="task.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ task.createdBy.name }}<ng-container *ngIf="task.createdBy.organisationUnit?.name">, {{ task.createdBy.organisationUnit?.name }}</ng-container></span>
-            <ng-template #requestedByOtherRole>
-              <span>{{ task.createdBy.name }}, <span *ngIf="task.createdBy.role">{{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span></span>
-            </ng-template>
+            <span>{{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
@@ -53,24 +44,20 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Description</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">
             <ul class="nhsuk-list">
-              <li *ngFor="let description of descriptions" class="nhsuk-u-margin-bottom-3">
-                <span class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0"> {{ description.date | date : ("app.date_formats.long_date" | translate) }} by
-                  <span *ngIf="task.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ task.createdBy.name }}
-                    <ng-container *ngIf="task.createdBy.organisationUnit?.name">, {{ task.createdBy.organisationUnit?.name}}</ng-container>
+              <li *ngFor="let description of task.descriptions" class="nhsuk-u-margin-bottom-3">
+                <span class="nhsuk-body-s font-color-secondary task-details__text-xsm nhsuk-u-margin-bottom-0">{{ description.createdAt | date : ("app.date_formats.long_date" | translate) }} by, {{ description.name}} ({{ description.displayTag}})
+                  
+                  <!-- <span *ngIf="task.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ task.createdBy.name }}
+                    <ng-container *ngIf="task.createdBy.organisationUnit?.name">, {{ task.createdBy.displayTag}}</ng-container>
                     </span>
                   <ng-template #requestedByOtherRole>
                     <span>{{ task.createdBy.name }} <ng-container *ngIf="task.createdBy.role">({{ this.stores.authentication.getRoleDescription(task.createdBy.role) }})</ng-container></span>
-                  </ng-template>
+                  </ng-template> -->
                 </span>
                 <span class="nhsuk-u-margin-bottom-0">{{ description.description }}</span>
               </li>
             </ul>
           </dd>
-        </div>
-
-        <div class="nhsuk-summary-list__row" *ngIf="task.status === 'DECLINED'">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Reason for declining</dt>
-          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ task.declineReason ?? "" }}</dd>
         </div>
       </dl>
 
@@ -132,7 +119,7 @@
           <ng-container *ngIf="isAccessorType || isAssessmentType || isQualifyingAccessorRole">
             <ul class="nhsuk-list">
               <li>
-                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                <a *ngIf="task.status !== 'OPEN'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
                   Reopen task
                 </a>
               </li>
