@@ -214,7 +214,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
         } else {
           this.setRedirectAlertSuccess(this.sectionSubmittedText);
-          this.redirectTo(`/${this.baseUrl}/innovations/${this.innovation.id}/record/sections/${this.section.id}/submitted`);
+          this.redirectTo(`/${this.baseUrl}/record/sections/${this.section.id}/submitted`);
         }
 
       },

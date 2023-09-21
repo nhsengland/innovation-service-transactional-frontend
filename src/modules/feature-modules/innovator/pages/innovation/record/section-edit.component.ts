@@ -43,7 +43,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
+    this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
@@ -219,7 +219,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.redirectTo(this.baseUrl);
         } else {
           this.setRedirectAlertSuccess(this.sectionSubmittedText);
-          this.redirectTo(`/${this.baseUrl}/submitted`);
+          this.redirectTo(`${this.baseUrl}/submitted`);
         }
       },
       error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
