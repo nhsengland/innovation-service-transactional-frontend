@@ -67,11 +67,14 @@
       </ng-container>
 
       <ng-container *ngIf="showInnovatorShareRequestSection">
-        <div class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">Information: </span>
-          <a routerLink="./export-requests" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Requests to use your innovation record data for anything outside our terms of use</a>
-          <p *ngIf="!pendingExportRequests" class="nhsuk-body-s">No new requests.</p>
-          <p *ngIf="pendingExportRequests" class="nhsuk-body-s">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">
+              <a routerLink="./export-requests" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-action-link__text nhsuk-u-margin-top-2">Requests to use your innovation record data for anything outside our terms of use</a>
+            </h2>
+            <p *ngIf="!pendingExportRequests" class="nhsuk-card__description nhsuk-u-margin-bottom-0">No new requests.</p>
+            <p *ngIf="pendingExportRequests" class="nhsuk-card__description nhsuk-u-margin-bottom-0">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
+          </div>
         </div>
       </ng-container>
 
