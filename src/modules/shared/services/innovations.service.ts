@@ -380,9 +380,9 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getActionInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
+  getActionInfo(innovationId: string, taskId: string): Observable<InnovationActionInfoDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:actionId').setPathParams({ innovationId, actionId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
       map(response => {
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
@@ -529,11 +529,8 @@ export class InnovationsService extends CoreService {
               case ActivityLogItemsEnum.SECTION_SUBMISSION:
                 i.activity = ActivityLogItemsEnum.SECTION_SUBMISSION_DEPRECATED;
                 break;
-              case ActivityLogItemsEnum.ACTION_CREATION:
-                i.activity = ActivityLogItemsEnum.ACTION_CREATION_DEPRECATED;
-                break;
-              case ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE:
-                i.activity = ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED;
+              case ActivityLogItemsEnum.TASK_CREATION:
+                i.activity = ActivityLogItemsEnum.TASK_CREATION_DEPRECATED;
                 break;
             }
 
@@ -555,9 +552,9 @@ export class InnovationsService extends CoreService {
             case 'THREAD':
               link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
-            case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && sectionIdentification && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/tasks/${i.params.actionId}` };
+            case 'TASK':
+              if (['innovator', 'accessor', 'assessment'].includes(userUrlBasePath) && sectionIdentification && i.params.taskId) {
+                link = { label: 'View task', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/tasks/${i.params.taskId}` };
               }
               break;
           }

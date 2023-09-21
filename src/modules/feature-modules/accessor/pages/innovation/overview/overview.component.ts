@@ -106,7 +106,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         {
           title: 'TASKS - TODO',
           label: 'TASKS - TODO',
-          link: `/accessor/innovations/${this.innovationId}/action-tracker`,
+          link: `/accessor/innovations/${this.innovationId}/tasks`,
           count: 0,
           lastMessage: '',
           date: '',

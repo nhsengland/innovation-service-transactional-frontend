@@ -17,7 +17,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   innovationId: string;
   sectionId: InnovationSectionEnum;
-  actionId: string;
+  taskId: string;
 
   action?: InnovationActionInfoDTO;
   sectionTitle = '';
@@ -41,7 +41,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.actionId = this.activatedRoute.snapshot.params.actionId;
+    this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -72,7 +72,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
       this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record`);
 
-    } else if (this.actionId) {
+    } else if (this.taskId) {
 
       this.getActionInfo();
 
@@ -105,10 +105,10 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.setPageStatus('LOADING');
 
     if (this.sectionId) {
-      this.actionId = this.tasksIds[this.actionNumber];
+      this.taskId = this.tasksIds[this.actionNumber];
     }
 
-    this.innovationsService.getActionInfo(this.innovationId, this.actionId).subscribe(response => {
+    this.innovationsService.getActionInfo(this.innovationId, this.taskId).subscribe(response => {
 
       this.action = response;
 
@@ -121,7 +121,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.setPageTitle('Requested action', { hint: this.action.displayId });
       }
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.actionId] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.TASK], contextIds: [this.taskId] });
 
       this.setPageStatus('READY');
 
