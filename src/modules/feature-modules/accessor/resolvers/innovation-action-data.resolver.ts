@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { Observable, map } from 'rxjs';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -15,7 +15,7 @@ export class InnovationActionDataResolver implements Resolve<{ id: null | string
 
   resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string, name: string }> {
 
-    return this.innovationsService.getTaskInfo(route.params.innovationId, route.params.actionId).pipe(
+    return this.innovationsService.getActionInfo(route.params.innovationId, route.params.taskId).pipe(
       map(response => {
 
         return {

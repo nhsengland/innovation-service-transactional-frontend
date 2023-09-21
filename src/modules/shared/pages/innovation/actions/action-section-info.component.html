@@ -8,10 +8,10 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Status</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <theme-tag
-              type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" 
-              label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
-            <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/statuses"
-              class="float-r" arial-label="View actions status keys information"> What does this mean? </a>
+              type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+              label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
+            <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses"
+              class="float-r" arial-label="View task status keys information"> What does this mean? </a>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">

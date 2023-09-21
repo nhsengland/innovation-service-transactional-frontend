@@ -259,7 +259,7 @@ export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
-    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
+    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'TASK' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
   INNOVATION_CREATION: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
@@ -280,12 +280,10 @@ export const ACTIVITY_LOG_ITEMS: {
   COMMENT_CREATION: { type: ActivityLogTypesEnum.COMMENTS, details: 'COMMENT', link: null },
   THREAD_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
   THREAD_MESSAGE_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
-  ACTION_CREATION: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
-  ACTION_CREATION_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_SUBMITTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_DECLINED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
-  ACTION_STATUS_COMPLETED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
-  ACTION_STATUS_REQUESTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
-  ACTION_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null }
+  TASK_CREATION: { type: ActivityLogTypesEnum.TASKS, details: 'COMMENT', link: 'TASK' },
+  TASK_CREATION_DEPRECATED: { type: ActivityLogTypesEnum.TASKS, details: null, link: null },
+  TASK_STATUS_DONE_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
+  TASK_STATUS_DECLINED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: 'COMMENT', link: 'TASK' },
+  TASK_STATUS_OPEN_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
+  TASK_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
 };

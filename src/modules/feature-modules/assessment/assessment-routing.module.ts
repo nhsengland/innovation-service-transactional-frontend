@@ -34,9 +34,9 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -224,15 +224,6 @@ const routes: Routes = [
                                 data: { breadcrumb: 'Evidence Info' },
                               }
                             ]
-                          },
-                          {
-                            path: 'actions',
-                            pathMatch: 'full',
-                            component: PageInnovationActionSectionInfoComponent,
-                            data: {
-                              breadcrumb: null,
-                              layout: { type: 'full' }
-                            }
                           }
                         ]
                       }
@@ -294,7 +285,7 @@ const routes: Routes = [
                     data: { breadcrumb: 'New' }
                   },
                   {
-                    path: ':actionId',
+                    path: ':taskId',
                     resolve: { innovationActionData: InnovationActionDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {

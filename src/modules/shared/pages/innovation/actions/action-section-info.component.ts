@@ -19,6 +19,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   innovationId: string;
   sectionId: InnovationSectionEnum;
   taskId: string;
+  taskId: string;
 
   task?: InnovationActionInfoDTO;
   sectionTitle = '';
@@ -125,7 +126,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
       this.taskId = this.tasksIds[this.taskNumber];
     }
 
-    this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
+    this.innovationsService.getActionInfo(this.innovationId, this.taskId).subscribe(response => {
 
       this.task = response;
       console.log("response:");
@@ -140,7 +141,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.setPageTitle('Requested task', { hint: this.task.displayId });
       }
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.ACTION], contextIds: [this.taskId] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.TASK], contextIds: [this.taskId] });
 
       this.setPageStatus('READY');
 
