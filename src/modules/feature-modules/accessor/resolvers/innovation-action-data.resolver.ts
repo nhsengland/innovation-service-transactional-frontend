@@ -15,7 +15,7 @@ export class InnovationActionDataResolver implements Resolve<{ id: null | string
 
   resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string, name: string }> {
 
-    return this.innovationsService.getActionInfo(route.params.innovationId, route.params.actionId).pipe(
+    return this.innovationsService.getTaskInfo(route.params.innovationId, route.params.actionId).pipe(
       map(response => {
 
         return {

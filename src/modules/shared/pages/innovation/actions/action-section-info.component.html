@@ -5,45 +5,44 @@
 
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Status</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Status</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <theme-tag
               type="{{ 'shared.catalog.innovation.action_status.' + task.status + '.cssColorClass' | translate }}" 
               label="{{ 'shared.catalog.innovation.action_status.' + task.status + '.name' | translate }}"></theme-tag>
-            <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses"
+            <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/statuses"
               class="float-r" arial-label="View actions status keys information"> What does this mean? </a>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Last update</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <p>{{ task.updatedAt | date : ("app.date_formats.long_date" | translate) }}
               <span *ngIf="task.updatedBy.role === 'INNOVATOR'; else notInnovator">by {{ task.updatedBy.name }}
                 <ng-container *ngIf="task.updatedBy.isOwner">, ({{ task.updatedBy.isOwner ? "Owner" : "Collaborator" }})</ng-container>
               </span>
               <ng-template #notInnovator>
-                <span>by {{ task.updatedBy.name }}
-                  <ng-container *ngIf="task.updatedBy.role">({{ this.stores.authentication.getRoleDescription(task.updatedBy.role) }})</ng-container>
+                <span>by {{ task.updatedBy.name }}, <span *ngIf="task.updatedBy.role">{{ this.stores.authentication.getRoleDescription(task.updatedBy.role) }}</span>
                 </span>
               </ng-template>
             </p>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned on</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Assigned on</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3"> {{ task.createdAt | date : ("app.date_formats.long_date" | translate) }}</dd>
         </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned by</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Assigned by</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <span *ngIf="task.createdBy.role === 'ACCESSOR'; else requestedByOtherRole">{{ task.createdBy.name }}<ng-container *ngIf="task.createdBy.organisationUnit?.name">, {{ task.createdBy.organisationUnit?.name }}</ng-container></span>
             <ng-template #requestedByOtherRole>
-              <span>{{ task.createdBy.name }}<ng-container *ngIf="task.createdBy.role">({{ this.stores.authentication.getRoleDescription(task.createdBy.role) }})</ng-container></span>
+              <span>{{ task.createdBy.name }}, <span *ngIf="task.createdBy.role">{{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span></span>
             </ng-template>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Section</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
               {{ sectionTitle }}
@@ -51,7 +50,7 @@
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Description</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Description</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">
             <ul class="nhsuk-list">
               <li *ngFor="let description of descriptions" class="nhsuk-u-margin-bottom-3">
@@ -70,7 +69,7 @@
         </div>
 
         <div class="nhsuk-summary-list__row" *ngIf="task.status === 'DECLINED'">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Reason for declining</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3 task-details__row">Reason for declining</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">{{ task.declineReason ?? "" }}</dd>
         </div>
       </dl>
@@ -114,14 +113,14 @@
           <ng-container *ngIf="isInnovatorType">
             <ul class="nhsuk-list">
               <li>
-                <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/accept" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
                   Mark task as done
                 </a>
-                <a *ngIf="task.status === 'REQUESTED'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
+                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
                   Decline action
                 </a>
               </li>
-              <li>
+              <li class="nhsuk-u-margin-bottom-4">
                 <a routerLink="/innovator/innovations/{{ innovationId }}/threads"> View messages about this task and send a reply</a>
               </li>
               <li>
@@ -133,14 +132,16 @@
           <ng-container *ngIf="isAccessorType || isAssessmentType || isQualifyingAccessorRole">
             <ul class="nhsuk-list">
               <li>
-                <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
                   Reopen task
-                </a>
-                <a *ngIf="task.status === 'REQUESTED'" routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
-                  Cancel task
                 </a>
               </li>
               <li>
+                <a *ngIf="task.status === 'OPEN'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
+                  Cancel task
+                </a>
+              </li>
+              <li class="nhsuk-u-margin-bottom-4">
                 <a routerLink="/innovator/innovations/{{ innovationId }}/threads"> View messages about this task and send a reply </a>
               </li>
               <li>
@@ -152,4 +153,6 @@
       </div>
     </div>
   </div>
+
+  
 </theme-content-wrapper>

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { DateISOType } from '@app/base/types';
 import { InnovationActionInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -24,13 +25,18 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
   tasksIds: string[] = [];
 
+  descriptions: { description: string; date: DateISOType }[];
+
   taskNumber = 0;
+
+  userUrlBase: string = '';
 
   // Flags
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
   isAdmin: boolean;
+  isQualifyingAccessorRole: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -41,13 +47,23 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.taskId = this.activatedRoute.snapshot.params.taskId;
+    this.taskId = this.activatedRoute.snapshot.params.actionId;
+
+    this.userUrlBase = this.userUrlBasePath();
+
+    // description mock
+    this.descriptions = [
+      { description: 'Test Description', date: '2023-09-11T12:03:34.550Z' },
+      { description: 'Another description', date: '2023-07-11T15:22:05.550Z' },
+    ];
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
+    this.isQualifyingAccessorRole =
+      this.stores.authentication.isQualifyingAccessorRole();
 
   }
 
@@ -58,10 +74,11 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
 
+        
         this.tasksIds = sectionInfo.tasksIds ?? [];
 
         if (this.tasksIds.length === 0) {
-          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
+          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
         }
 
         this.taskNumber = 0;
@@ -111,6 +128,8 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
 
       this.task = response;
+      console.log("response:");
+      console.log(response);
 
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
       this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
