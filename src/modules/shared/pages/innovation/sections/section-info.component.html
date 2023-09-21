@@ -55,7 +55,7 @@
         <div *ngIf="isInnovatorType && section.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
           <p>
             <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
-            This section has {{ section.openTasksCount }} {{ section.openTasksCount === 1 ? 'task' : 'tasks'  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{section.id}}/tasks">View tasks.</a>
+            This section has {{ section.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: section.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{section.id}}/tasks">View tasks.</a>
           </p>
         </div>
 

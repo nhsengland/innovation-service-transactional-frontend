@@ -22,6 +22,11 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
+      section: {
+        none: 'section',
+        singular: 'section',
+        plural: 'sections'
+      },
       task: {
         none: 'task',
         singular: 'task',

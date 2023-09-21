@@ -45,6 +45,15 @@
       </p>
 
       <ng-container *ngIf="isInnovatorType">
+
+        <div *ngIf="sections.withOpenTasksCount > 0" class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <p>
+            {{ sections.withOpenTasksCount }} {{ ('dictionary.section' | pluralTranslate: sections.withOpenTasksCount | translate)  }} with {{ ('dictionary.task' | pluralTranslate: sections.openTasksCount | translate)  }} to do.
+            <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/{{ baseUrl }}/tasks">Go to tasks.</a>
+          </p>
+        </div>
+
         <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
           Submit record for needs assessment
         </button>
@@ -66,13 +75,12 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="showInnovatorShareRequestSection">
+      <ng-container *ngIf="showInnovatorShareRequestSection && pendingExportRequests">
         <div class="nhsuk-card">
           <div class="nhsuk-card__content">
             <h2 class="nhsuk-card__heading nhsuk-heading-m">
               <a routerLink="./export-requests" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-action-link__text nhsuk-u-margin-top-2">Requests to use your innovation record data for anything outside our terms of use</a>
             </h2>
-            <p *ngIf="!pendingExportRequests" class="nhsuk-card__description nhsuk-u-margin-bottom-0">No new requests.</p>
             <p *ngIf="pendingExportRequests" class="nhsuk-card__description nhsuk-u-margin-bottom-0">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
           </div>
         </div>
@@ -84,10 +92,6 @@
         <p *ngIf="isInnovationInCreatedStatus">
           This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.
         </p>
-        <ul class="nhsuk-u-margin-bottom-7">
-          <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
-        </ul>
       </ng-container>
 
 
@@ -140,6 +144,13 @@
 
         </li>
       </ol>
+
+      <ng-container *ngIf="isInnovatorType">
+        <ul class="nhsuk-u-margin-bottom-7">
+          <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
+          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
+        </ul>
+      </ng-container>
 
     </div>
 
