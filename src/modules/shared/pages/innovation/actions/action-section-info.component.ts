@@ -61,7 +61,7 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
         this.tasksIds = sectionInfo.tasksIds ?? [];
 
         if (this.tasksIds.length === 0) {
-          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
+          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
         }
 
         this.actionNumber = 0;

@@ -133,7 +133,7 @@
         (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && isAccessorType ||
         (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
       ">
-        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Create action for this section</button>
+        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for this section</button>
       </ng-container>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">

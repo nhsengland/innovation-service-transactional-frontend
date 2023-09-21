@@ -23,8 +23,10 @@ import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
 import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
-import { PageInnovationActionTrackerNewComponent } from './pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
+import { PageInnovationTaskNewComponent } from './pages/innovation/actions/wizard-task-new/task-new.component';
+import { WizardTaskNewSectionStepComponent } from './pages/innovation/actions/wizard-task-new/steps/section-step.component';
+import { WizardTaskNewMessageStepComponent } from './pages/innovation/actions/wizard-task-new/steps/message-step.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -120,7 +122,9 @@ import { UsersService } from './services/users.service';
     PageInnovationActionSectionInfoComponent,
     PageTaskStatusListComponent,
     PageInnovationTaskToDoListComponent,
-    PageInnovationActionTrackerNewComponent,
+    PageInnovationTaskNewComponent,
+    WizardTaskNewSectionStepComponent,
+    WizardTaskNewMessageStepComponent,
     PageInnovationActivityLogComponent,
     PageInnovationAssessmentOverviewComponent,
     PageInnovationDataSharingAndSupportComponent,
