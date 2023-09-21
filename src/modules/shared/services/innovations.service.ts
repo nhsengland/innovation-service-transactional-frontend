@@ -409,7 +409,6 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
       map(response => {
-        console.log(response)
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
         return ({
           id: response.id,

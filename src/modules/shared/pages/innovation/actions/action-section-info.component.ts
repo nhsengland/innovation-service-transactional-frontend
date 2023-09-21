@@ -33,7 +33,6 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
   isAccessorType: boolean;
   isAssessmentType: boolean;
   isAdmin: boolean;
-  isQualifyingAccessorRole: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,8 +52,6 @@ export class PageInnovationActionSectionInfoComponent extends CoreComponent impl
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isQualifyingAccessorRole =
-      this.stores.authentication.isQualifyingAccessorRole();
 
   }
 
