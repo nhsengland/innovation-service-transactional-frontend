@@ -77,11 +77,7 @@
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
-                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span>
-                      <!-- <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }} </span>
-                      <ng-template #requestedByOtherRole>
-                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }}</span>
-                      </ng-template> -->
+                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span> 
                     </li>
                   </ul>
                 </td>
@@ -136,10 +132,6 @@
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
                       <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{task.createdBy.name}}, {{task.createdBy.displayTag}}</span>
-                      <!-- <span *ngIf="task.createdBy.role === 'ACCESSOR' || task.createdBy.role === 'QUALIFYING_ACCESSOR'; else requestedByOtherRole"> by {{ task.createdBy.name }}, {{ task.createdBy.organisationUnit?.name }}</span>
-                      <ng-template #requestedByOtherRole>
-                        <span> by {{ task.createdBy.name }}, {{ this.stores.authentication.getRoleDescription(task.createdBy.role) }} </span>
-                      </ng-template> -->
                     </li>
                   </ul>
                 </td>
