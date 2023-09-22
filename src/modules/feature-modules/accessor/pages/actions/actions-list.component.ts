@@ -3,13 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
+
 import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-
-/**
- * TODO: This page will probably be removed, waiting confirmation
- */
 
 @Component({
   selector: 'app-accessor-pages-actions-actions-list',
@@ -17,7 +14,7 @@ import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 })
 export class ActionsListComponent extends CoreComponent implements OnInit {
 
-  tabs: { key: string, title: string, link: string, queryParams: { openActions: 'true' | 'false' } }[] = [];
+  tabs: { key: string, title: string, link: string, queryParams: { openTasks: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };
 
   actionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>;
@@ -34,16 +31,16 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.tabs = [
       {
-        key: 'openActions',
+        key: 'openTasks',
         title: 'Open tasks',
         link: '/accessor/tasks',
-        queryParams: { openActions: 'true' }
+        queryParams: { openTasks: 'true' }
       },
       {
         key: 'closedActions',
         title: 'Closed tasks',
         link: '/accessor/tasks',
-        queryParams: { openActions: 'false' }
+        queryParams: { openTasks: 'false' }
       }
     ];
 
@@ -51,7 +48,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.actionsList = new TableModel({
       visibleColumns: {
-        section: { label: 'Action', orderable: true },
+        section: { label: 'Tasks', orderable: true },
         innovationName: { label: 'Innovation', orderable: true },
         createdAt: { label: 'Initiated', orderable: true },
         status: { label: 'Status', align: 'right', orderable: true }
@@ -69,19 +66,19 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
         this.setPageTitle('Tasks');
 
-        if (!queryParams.openActions) {
-          this.router.navigate(['/accessor/tasks'], { queryParams: { openActions: 'true' } });
+        if (!queryParams.openTasks) {
+          this.router.navigate(['/accessor/tasks'], { queryParams: { openTasks: 'true' } });
           return;
         }
 
-        this.currentTab.index = this.tabs.findIndex(tab => tab.queryParams.openActions === queryParams.openActions);
+        this.currentTab.index = this.tabs.findIndex(tab => tab.queryParams.openTasks === queryParams.openTasks);
         this.currentTab.key = this.tabs[this.currentTab.index].key;
         this.currentTab.contentTitle = `${this.tabs[this.currentTab.index].title} list`;
 
-        switch (queryParams.openActions) {
+        switch (queryParams.openTasks) {
           case 'true':
             this.actionsList.clearData().setFilters({
-              status: [InnovationTaskStatusEnum.OPEN, InnovationTaskStatusEnum.DONE],
+              status: [InnovationTaskStatusEnum.OPEN],
               createdByMe: true,
               fields: ['notifications']
             });
