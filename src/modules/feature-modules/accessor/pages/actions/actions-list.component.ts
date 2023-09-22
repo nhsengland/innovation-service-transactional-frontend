@@ -79,10 +79,8 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
           case 'true':
             this.actionsList.clearData().setFilters({
               status: [
-                InnovationActionStatusEnum.REQUESTED,
-                // InnovationActionStatusEnum.STARTED,
-                // InnovationActionStatusEnum.CONTINUE,
-                InnovationActionStatusEnum.SUBMITTED],
+                InnovationActionStatusEnum.OPEN,
+                InnovationActionStatusEnum.DONE],
               createdByMe: true,
               fields: ['notifications']
             });
@@ -90,7 +88,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
           case 'false':
             this.actionsList.clearData().setFilters({
-              status: [InnovationActionStatusEnum.COMPLETED, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.DELETED],
+              status: [InnovationActionStatusEnum.DONE, InnovationActionStatusEnum.DECLINED, InnovationActionStatusEnum.CANCELLED],
               createdByMe: true,
               fields: ['notifications']
             });

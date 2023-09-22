@@ -35,7 +35,6 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -74,6 +73,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -263,8 +263,8 @@ const routes: Routes = [
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
-                    data: { breadcrumb: 'New' }
+                    path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
+                    data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
                     path: ':taskId',

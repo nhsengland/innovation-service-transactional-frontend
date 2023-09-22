@@ -1,0 +1,18 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
+        <theme-form-textarea controlName="message" label="Describe the information you want the innovator to provide" description="Enter message" [pageUniqueField]="false" lengthLimit="s"></theme-form-textarea>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Assign task</button>
+      </form>
+
+      <div>
+        <a href="javascript:void(0)" (click)="onCancelStep()">Cancel</a>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper>
