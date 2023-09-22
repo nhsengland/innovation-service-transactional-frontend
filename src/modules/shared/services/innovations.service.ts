@@ -47,6 +47,10 @@ export type GetThreadsListDTO = {
 export type GetThreadInfoDTO = {
   id: string;
   subject: string;
+  context?: {
+    id: string;
+    type: 'TASK' | 'SUPPORT' | 'NEEDS_ASSESSMENT'
+  };
   createdAt: DateISOType;
   createdBy: { id: string, name: string, type: UserRoleEnum; };
 };
