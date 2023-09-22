@@ -117,7 +117,7 @@
                 </a>
               </li>
               <li>
-                <a *ngIf="task.status === 'OPEN'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
+                <a *ngIf="task.status === 'OPEN' && task.sameOrganisation" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
                   Cancel task
                 </a>
               </li>
