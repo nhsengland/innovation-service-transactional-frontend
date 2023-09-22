@@ -7,10 +7,6 @@ import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dto
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
-/**
- * TODO: This page will probably be removed, waiting confirmation
- */
-
 @Component({
   selector: 'app-accessor-pages-tasks-tasks-list',
   templateUrl: './tasks-list.component.html'
@@ -51,7 +47,7 @@ export class TasksListComponent extends CoreComponent implements OnInit {
 
     this.tasksList = new TableModel({
       visibleColumns: {
-        section: { label: 'Task', orderable: true },
+        section: { label: 'Tasks', orderable: true },
         innovationName: { label: 'Innovation', orderable: true },
         createdAt: { label: 'Initiated', orderable: true },
         status: { label: 'Status', align: 'right', orderable: true }
@@ -81,7 +77,7 @@ export class TasksListComponent extends CoreComponent implements OnInit {
         switch (queryParams.openTasks) {
           case 'true':
             this.tasksList.clearData().setFilters({
-              status: [InnovationTaskStatusEnum.OPEN, InnovationTaskStatusEnum.DONE],
+              status: [InnovationTaskStatusEnum.OPEN],
               createdByMe: true,
               fields: ['notifications']
             });
