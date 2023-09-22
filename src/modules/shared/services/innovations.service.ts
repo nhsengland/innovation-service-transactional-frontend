@@ -398,7 +398,7 @@ export class InnovationsService extends CoreService {
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
-          declineReason: response.declineReason
+          sameOrganisation: response.sameOrganisation,
         })
       })
     );
@@ -429,6 +429,7 @@ export class InnovationsService extends CoreService {
     );
 
   }
+
 
   createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 
