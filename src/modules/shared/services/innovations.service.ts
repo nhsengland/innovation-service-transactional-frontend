@@ -398,7 +398,7 @@ export class InnovationsService extends CoreService {
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
-          declineReason: response.declineReason
+          sameOrganisation: response.sameOrganisation,
         })
       })
     );
