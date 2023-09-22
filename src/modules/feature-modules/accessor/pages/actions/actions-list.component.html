@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <p>
-    If you are looking for specific actions, use the <a routerLink="advanced-filter">actions advanced search</a>.
+    If you are looking for specific task, use the <a routerLink="advanced-filter">task advanced search</a>.
   </p>
 
   <div class="app-tabs">
@@ -19,7 +19,7 @@
       <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
       <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() === 0">
-        <p> There are no actions </p>
+        <p>There are no tasks</p>
       </ng-container>
 
       <ng-container *ngIf="pageStatus === 'READY' && actionsList.getTotalRowsNumber() > 0">
@@ -52,7 +52,7 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
-                    <a routerLink="/accessor/innovations/{{ item.innovation.id }}/tasks/{{ item.id }}" attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
+                    <a routerLink="/accessor/innovations/{{ item.innovation.id }}/tasks/{{ item.id }}" attr.aria-label="View task named {{ item.name }} for innovation {{ item.innovation.name }}">
                       {{ item.name }}
                     </a>
                   </div>

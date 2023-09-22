@@ -16,17 +16,14 @@ import { PageAccountEmailNotificationsListComponent } from './pages/account/emai
 import { PageAccountManageDetailsEditComponent } from './pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from './pages/account/manage-details/manage-details-info.component';
 // // Actions.
-import { PageActionsAdvancedSearchComponent } from './pages/actions/actions-advanced-search.component';
+import { PageTasksAdvancedSearchComponent } from './pages/tasks/tasks-advanced-search.component';
 // // Error.
 import { PageErrorComponent } from './pages/error/error.component';
 import { PageNotFoundComponent } from './pages/error/not-found.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from './pages/innovation/actions/action-section-info.component';
-import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageTaskStatusListComponent } from './pages/innovation/actions/task-status-list.component';
-import { PageInnovationTaskNewComponent } from './pages/innovation/tasks/wizard-task-new/task-new.component';
-import { WizardTaskNewSectionStepComponent } from './pages/innovation/tasks/wizard-task-new/steps/section-step.component';
-import { WizardTaskNewMessageStepComponent } from './pages/innovation/tasks/wizard-task-new/steps/message-step.component';
+import { PageInnovationTaskToDoListComponent } from './pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from './pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from './pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from './pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -38,6 +35,9 @@ import { PageInnovationExportRequestInfoComponent } from './pages/innovation/exp
 import { PageInnovationExportRequestNewComponent } from './pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from './pages/innovation/export-requests/export-requests-list.component';
 import { PageInnovationTaskActionComponent } from './pages/innovation/tasks/task-action.component';
+import { WizardTaskNewMessageStepComponent } from './pages/innovation/tasks/wizard-task-new/steps/message-step.component';
+import { WizardTaskNewSectionStepComponent } from './pages/innovation/tasks/wizard-task-new/steps/section-step.component';
+import { PageInnovationTaskNewComponent } from './pages/innovation/tasks/wizard-task-new/task-new.component';
 
 import { PageInnovationThreadMessageEditComponent } from './pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from './pages/innovation/messages/thread-messages-list.component';
@@ -113,8 +113,8 @@ import { UsersService } from './services/users.service';
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsEditComponent,
     PageAccountManageDetailsInfoComponent,
-    // // Actions.
-    PageActionsAdvancedSearchComponent,
+    // // Tasks.
+    PageTasksAdvancedSearchComponent,
     // // Error.
     PageErrorComponent,
     PageNotFoundComponent,

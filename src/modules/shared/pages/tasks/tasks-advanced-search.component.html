@@ -2,16 +2,16 @@
 
   <div class="nhsuk-grid-row">
 
-    <div class="nhsuk-grid-column-full">
-      <p *ngIf="isAssessmentType">Actions requested by needs assessment team</p>
+    <div class="nhsuk-grid-column-full nhsuk-u-margin-bottom-3">
+      <p>{{ pageInformation.leadText }}</p>
     </div>
 
     <div class="nhsuk-grid-column-one-quarter">
 
       <form [formGroup]="form">
-        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search by innovation name</h2>
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
 
-        <theme-form-input controlName="innovationName" [pageUniqueField]="false">
+        <theme-form-input controlName="innovationName" [pageUniqueField]="false" label="Search by innovation name">
           <ng-container append>
             <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
               <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
@@ -21,9 +21,7 @@
           </ng-container>
         </theme-form-input>
 
-        <ng-container *ngIf="isAssessmentType">
-          <theme-form-checkbox controlName="createdByMe" label="Show only actions requested by me" size="small"></theme-form-checkbox>
-        </ng-container>
+        <theme-form-checkbox controlName="createdByMe" label="Show only tasks assigned by me" size="small"></theme-form-checkbox>
 
         <ng-container *ngFor="let filter of filters">
 
@@ -51,7 +49,7 @@
 
     <div class="nhsuk-grid-column-three-quarters">
 
-      <p class="nhsuk-u-margin-bottom-0">{{ actionsList.getTotalRowsNumber() }} actions found</p>
+      <p class="nhsuk-u-margin-bottom-0">{{ tasksList.getTotalRowsNumber() }} tasks found</p>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
 
@@ -83,7 +81,7 @@
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
 
-      <ng-container *ngIf="actionsList.getTotalRowsNumber() === 0">
+      <ng-container *ngIf="tasksList.getTotalRowsNumber() === 0">
         <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
         <p class="nhsuk-u-margin-bottom-2">Improve your search results by:</p>
         <ul>
@@ -94,15 +92,15 @@
         </ul>
       </ng-container>
 
-      <ng-container *ngIf="actionsList.getTotalRowsNumber() > 0">
+      <ng-container *ngIf="tasksList.getTotalRowsNumber() > 0">
         <table class="nhsuk-table-responsive app-sortable-table">
           <caption class="nhsuk-u-visually-hidden">
-            Action list
-            <span *ngIf="actionsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+            Task list
+            <span *ngIf="tasksList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
           </caption>
           <thead class="nhsuk-table__head">
             <tr>
-              <th *ngFor="let item of actionsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+              <th *ngFor="let item of tasksList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                 <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
                   {{ item.label }}
@@ -116,37 +114,40 @@
           </thead>
 
           <tbody class="nhsuk-table__body">
-            <tr *ngFor="let item of actionsList.getRecords()" class="nhsuk-table__row">
+            <tr *ngFor="let item of tasksList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <div class="d-flex nhsuk-u-padding-right-1">
-                  <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('section') }}</span>
-                  <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}/tasks/{{ item.id }}" attr.aria-label="View action named {{ item.name }} for innovation {{ item.innovation.name }}">
+                  <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel('section') }}</span>
+                  <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}/tasks/{{ item.id }}" attr.aria-label="View task named {{ item.name }} for innovation {{ item.innovation.name }}">
                     {{ item.name }}
                   </a>
                   <theme-notification-tag label="dot" *ngIf="item.notifications"></theme-notification-tag>
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('innovationName') }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel('innovationName') }}</span>
                 <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ item.innovation.id }}" attr.aria-label="View innovation {{ item.innovation.name }} details"> {{ item.innovation.name }}
                 </a>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('updatedAt') }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel('updatedAt') }}</span>
                 <span>{{ item.updatedAt | date: ('app.date_formats.medium_date' | translate) }}</span>
-                <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} <ng-container *ngIf="item.updatedBy.role">({{ this.stores.authentication.getRoleDescription(item.updatedBy.role) }})</ng-container></span>
+                <span class="nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">by {{ item.updatedBy.name }} ({{ item.updatedBy.displayTag }})</span>
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ actionsList.getColumnLabel('status') }}</span>
-                <strong class="nhsuk-tag" [ngClass]="innovationSectionActionStatus[item.status].cssClass || ''">{{
-                  innovationSectionActionStatus[item.status].label || '' }}</strong>
+                <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel('status') }}</span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.task_status.' + item.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.task_status.' + item.status + '.name' | translate }}"
+                  class="tag-no-wrap"
+                ></theme-tag>
               </td>
             </tr>
           </tbody>
         </table>
 
         <div class="nhsuk-u-padding-bottom-4">
-          <theme-pagination [currentPage]="actionsList.page" [pageSize]="actionsList.pageSize" [totalRows]="actionsList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+          <theme-pagination [currentPage]="tasksList.page" [pageSize]="tasksList.pageSize" [totalRows]="tasksList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
         </div>
 
       </ng-container>

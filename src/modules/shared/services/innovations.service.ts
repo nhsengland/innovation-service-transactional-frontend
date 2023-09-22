@@ -20,7 +20,7 @@ export type InnovationsTasksListFilterType = {
   innovationId?: string,
   innovationName?: string,
   sections?: InnovationSectionEnum[],
-  status?: InnovationActionStatusEnum[],
+  status?: InnovationActionStatusEnum[] | InnovationTaskStatusEnum[],
   innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
   allTasks?: boolean,
