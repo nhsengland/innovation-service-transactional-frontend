@@ -67,7 +67,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           },
           {
             title: 'Tasks to review',
-            label: `Tasks requested by you were responded to by innovators`,
+            label: `Tasks requested by you were responded by innovators`,
             link: `/accessor/tasks`,
             queryParams: { openTasks: false },
             count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
