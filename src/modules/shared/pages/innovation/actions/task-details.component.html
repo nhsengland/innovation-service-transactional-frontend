@@ -96,11 +96,11 @@
                   Mark task as done
                 </a>
                 <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
-                  Decline action
+                  Decline task
                 </a>
               </li>
               <li class="nhsuk-u-margin-bottom-4">
-                <a routerLink="/innovator/innovations/{{ innovationId }}/threads"> View messages about this task and send a reply</a>
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task and send a reply</a>
               </li>
               <li>
                 <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
@@ -112,7 +112,7 @@
           <ng-container *ngIf="isAccessorType || isAssessmentType">
             <ul class="nhsuk-list">
               <li>
-                <a *ngIf="task.status !== 'OPEN' && task.sameOrganisation" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                <a *ngIf="['DONE', 'DECLINED'].includes(task.status) && task.sameOrganisation" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
                   Reopen task
                 </a>
               </li>
@@ -122,7 +122,7 @@
                 </a>
               </li>
               <li class="nhsuk-u-margin-bottom-4">
-                <a  routerLink="/innovator/innovations/{{ innovationId }}/threads"> View messages about this task and send a reply </a>
+                <a  routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task and send a reply </a>
               </li>
               <li [ngSwitch]="task.status">
                 <a *ngSwitchCase="'DONE'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>

@@ -251,6 +251,7 @@ export type InnovationActionInfoDTO = {
   updatedBy: { name: string, role: UserRoleEnum, isOwner?: boolean },
   createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
   declineReason?: string,
+  
 };
 
 export type InnovationTaskInfoDTO = {
@@ -259,12 +260,13 @@ export type InnovationTaskInfoDTO = {
   status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
   descriptions: InnovationDescription[],
   section: InnovationSectionEnum,
-  name: string
+  name: string,
   createdAt: DateISOType,
   updatedAt: DateISOType,
   updatedBy: { name: string, displayTag: string },
   createdBy: { name: string, displayTag: string },
-  sameOrganisation: boolean;
+  sameOrganisation: boolean,
+  threadId: string,
 };
 
 export type InnovationDescription = { description: string, createdAt: DateISOType, name: string, displayTag: string };

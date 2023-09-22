@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { Console } from 'console';
 
 
 @Component({
@@ -28,13 +29,8 @@ export class PageTaskStatusListComponent extends CoreComponent {
 
     this.setPageTitle('Task status');
 
-    if (innovationId) {
-      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/tasks/${taskId}`);
-    }
-    else {
-      this.setBackLink('Go back', `/${this.stores.authentication.userUrlBasePath()}/actions`);
-    }
-
+    this.setBackLink('Go back');
+    
     this.setPageStatus('READY');
 
   }

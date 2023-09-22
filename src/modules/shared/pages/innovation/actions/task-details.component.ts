@@ -10,7 +10,7 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
 @Component({
-  selector: 'shared-pages-innovation-action-section-info',
+  selector: 'shared-pages-innovation-task-section-info',
   templateUrl: './task-details.component.html'
 })
 export class PageInnovationTaskDetailsComponent extends CoreComponent implements OnInit {
@@ -65,8 +65,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         
         this.tasksIds = sectionInfo.tasksIds ?? [];
 
+
         if (this.tasksIds.length === 0) {
-          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/action-tracker`);
+          this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
         }
 
         this.taskNumber = 0;
@@ -126,9 +127,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
       this.sectionTitle = section ? `${section.group.number}.${section.section.number}: ${section.section.title}` : 'Section no longer available';
 
       if (this.tasksIds.length > 1) {
-        this.setPageTitle('Requested task', { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });
+        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.group.title}'`, { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });
       } else {
-        this.setPageTitle('Requested task', { hint: this.task.displayId });
+        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.group.title}'`, { hint: `Task Id: ${this.task.displayId}` });
       }
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.TASK], contextIds: [this.taskId] });
