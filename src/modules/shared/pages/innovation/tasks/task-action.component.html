@@ -12,7 +12,7 @@
 
 
       <form [formGroup]="form">
-        <theme-form-textarea controlName="message" [label]="pageInformation?.leadText" description="Enter a message" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
+        <theme-form-textarea controlName="message" [label]="pageInformation?.leadText" description="Enter a message" [pageUniqueField]="false" lengthLimit="s"></theme-form-textarea>
         <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()" [disabled]="submitBtn.isDisabled">{{ submitBtn.label }}</button>
       </form>
 
