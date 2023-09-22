@@ -13,8 +13,8 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
-// // Actions.
-import { ActionsListComponent } from './pages/actions/actions-list.component';
+// // Tasks.
+import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -49,7 +49,7 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     // // Account.
     PageAccessorAccountManageAccountInfoComponent,
     // // Actions.
-    ActionsListComponent,
+    TasksListComponent,
     // // Dashboard.
     DashboardComponent,
     // // Innovation.

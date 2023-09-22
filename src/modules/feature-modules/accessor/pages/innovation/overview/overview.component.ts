@@ -104,8 +104,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: `No sections have been submitted since support started.`
         },
         {
-          title: 'TASKS - TODO',
-          label: 'TASKS - TODO',
+          title: 'TODO - TASKS',
+          label: 'TODO - TASKS',
           link: `/accessor/innovations/${this.innovationId}/tasks`,
           count: 0,
           lastMessage: '',

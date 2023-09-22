@@ -13,7 +13,7 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationTasksListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 import { ResponseMode } from '@azure/msal-node';
 
 
@@ -348,7 +348,7 @@ export class InnovationsService extends CoreService {
 
 
   // Actions methods.
-  getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationActionsListDTO> {
+  getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationTasksListDTO> {
 
     const { filters, ...qParams } = queryParams;
 

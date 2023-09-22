@@ -12,8 +12,8 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Accessor module pages.
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
-// // Actions.
-import { ActionsListComponent } from './pages/actions/actions-list.component';
+// // Tasks.
+import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -397,7 +397,7 @@ const routes: Routes = [
         },
         children: [
           {
-            path: '', pathMatch: 'full', component: ActionsListComponent,
+            path: '', pathMatch: 'full', component: TasksListComponent,
             data: { breadcrumb: null }
           },
           { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent },

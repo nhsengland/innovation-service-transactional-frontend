@@ -237,7 +237,7 @@ export type InnovationActionsListInDTO = {
     sameOrganisation: boolean;
   }[];
 };
-export type InnovationActionsListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
+export type InnovationTasksListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
 
 export type InnovationActionInfoDTO = {
   id: string,
@@ -251,7 +251,7 @@ export type InnovationActionInfoDTO = {
   updatedBy: { name: string, role: UserRoleEnum, isOwner?: boolean },
   createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
   declineReason?: string,
-  
+
 };
 
 export type InnovationTaskInfoDTO = {
