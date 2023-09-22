@@ -6,7 +6,7 @@
         <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
       </div>
     </div>
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4" />
+    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4">
   </ng-container>
 
   <div class="nhsuk-grid-row">
@@ -15,6 +15,9 @@
       <div class="bg-color-white nhsuk-u-padding-4 nhsuk-u-margin-bottom-5">
 
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
+        <p *ngIf="threadInfo?.context?.type === 'TASK'">
+          <a routerLink="/{{selfUser.urlBasePath}}/innovations/{{innovation.id}}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
+        </p>
 
         <span>
           {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
@@ -37,7 +40,7 @@
           </dl>
         </ng-container>
 
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
+        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
