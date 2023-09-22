@@ -57,7 +57,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER] };
+    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.TASKS_OPEN_COUNTER] };
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
       this.innovationCollaborators = innovationCollaborators.data
@@ -104,13 +104,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: `No sections have been submitted since support started.`
         },
         {
-          title: 'TASKS - TODO',
-          label: 'TASKS - TODO',
+          title: 'Tasks to review',
+          label: `Tasks responded by the innovator awaiting your review`,
           link: `/accessor/innovations/${this.innovationId}/tasks`,
-          count: 0,
-          lastMessage: '',
-          date: '',
-          emptyMessage: ''
+          count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
+          lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection)}"`,
+          date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
+          emptyMessage: 'No tasks to review'
         }
       ];
 

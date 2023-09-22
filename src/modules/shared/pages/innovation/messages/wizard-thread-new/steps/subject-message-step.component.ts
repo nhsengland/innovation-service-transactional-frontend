@@ -50,7 +50,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     }
 
     this.formConfirmationField = {
-      label: 'I understand that for transparency reasons, this message can be seen and replied to by everyone who has access to this innovation.',
+      label: 'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
       description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${this.data.innovation.id}/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window).</a>`
     };
 

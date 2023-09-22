@@ -48,7 +48,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.setAlertSuccess('You have successfully changed your password');
     }
 
-    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER] };
+    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER] };
 
     this.statisticsService.getUserStatisticsInfo(qp).subscribe({
       next: statistics => {
@@ -66,19 +66,16 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             emptyMessageTitle: 'No engaging innovations assigned to you'
           },
           {
-            title: 'TODO - TASKS',
-            label: `TODO`,
+            title: 'Tasks to review',
+            label: `Tasks requested by you were responded by innovators`,
             link: `/accessor/tasks`,
-            queryParams: { openTasks: true },
-            // count: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].count,
-            // total: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER].total,
-            lastMessage: '',
-            // date: statistics[UserStatisticsTypeEnum.ACTIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-            count: 0,
-            total: 0,
-            date: '',
-            emptyMessageTitle: '',
-            emptyMessage: ''
+            queryParams: { openTasks: false },
+            count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
+            lastMessage: 'Last submitted:',
+            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No tasks opened by you yet',
+            emptyMessage: 'Start requesting tasks from innovators'
           }
         ];
 

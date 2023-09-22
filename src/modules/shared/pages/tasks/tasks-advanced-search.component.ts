@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
-import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
@@ -19,7 +19,7 @@ type FilterKeysType = 'status' | 'sections' | 'innovationStatus';
 })
 export class PageTasksAdvancedSearchComponent extends CoreComponent implements OnInit {
 
-  tasksList = new TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>({});
+  tasksList = new TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>({});
 
   form = new FormGroup({
     innovationName: new FormControl<string>(''),

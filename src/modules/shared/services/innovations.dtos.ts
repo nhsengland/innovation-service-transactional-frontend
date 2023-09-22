@@ -224,6 +224,7 @@ export type InnovationActionsListInDTO = {
   count: number,
   data: InnovationTaskData[];
 };
+export type InnovationTasksListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
 
 export type InnovationTaskData = {
   id: string,
@@ -240,8 +241,6 @@ export type InnovationTaskData = {
   sameOrganisation: boolean;
 }
 
-export type InnovationActionsListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
-
 export type InnovationActionInfoDTO = {
   id: string,
   displayId: string,
@@ -254,7 +253,7 @@ export type InnovationActionInfoDTO = {
   updatedBy: { name: string, displayTag: string },
   createdBy: { name: string, displayTag: string },
   sameOrganisation: boolean;
-  
+
 };
 
 export type InnovationTaskInfoDTO = {

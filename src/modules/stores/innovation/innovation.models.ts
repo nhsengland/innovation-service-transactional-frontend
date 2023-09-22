@@ -199,7 +199,7 @@ export const INNOVATION_SECTION_STATUS = {
   SUBMITTED: { label: 'Submitted', isCompleteState: true }
 };
 
-export const INNOVATION_SECTION_ACTION_STATUS = {
+export const INNOVATION_SECTION_TASK_STATUS = {
   '': { label: '', cssClass: '', description: '' },
   REQUESTED: {
     label: 'Requested',

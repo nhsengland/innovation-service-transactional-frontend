@@ -8,7 +8,7 @@ import { InnovationsTasksListFilterType, InnovationsService } from '@modules/sha
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
-import { InnovationActionsListDTO,InnovationActionInfoDTO, InnovationTaskData, } from '@modules/shared/services/innovations.dtos';
+import { InnovationTasksListDTO, InnovationTaskData, } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
@@ -23,10 +23,10 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   userType: UserRoleEnum | undefined;
   tablesTitles: { topTableTitle: string; bottomTableTitle: string };
 
-  allTasksList: TableModel<InnovationActionsListDTO['data'][0],InnovationsTasksListFilterType>;
+  allTasksList: TableModel<InnovationTasksListDTO['data'][0],InnovationsTasksListFilterType>;
 
-  topList: InnovationActionsListDTO; 
-  bottomList: InnovationActionsListDTO; 
+  topList: InnovationTasksListDTO;
+  bottomList: InnovationTasksListDTO;
 
   // Flags
   isClosedActionsLoading = false;
@@ -60,14 +60,14 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.topList = {count: 0, data: [] };
     this.bottomList = {count: 0, data: [] };
-    
+
   }
 
   ngOnInit(): void {
 
     this.userType = this.getUserType();
 
-    
+
 
     this.allTasksList.setFilters({
       innovationId: this.innovationId,
@@ -80,7 +80,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       ],
       allTasks: true,
     });
-    
+
     this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
       this.processTaskList(allTasksResponse);
       this.tablesTitles = this.getTablesTitles();
@@ -89,7 +89,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
   }
 
-  processTaskList(taskList: InnovationActionsListDTO ) {
+  processTaskList(taskList: InnovationTasksListDTO) {
     for (let task of taskList.data) {
       if (this.shouldBeOnTopTable(task)) {
         this.topList.data.push(task);

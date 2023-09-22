@@ -12,7 +12,7 @@ import { InnovationService } from './innovation.service';
 
 import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
 import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
-import { GetInnovationEvidenceDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, INNOVATION_SECTION_TASK_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
@@ -27,7 +27,7 @@ export class InnovationStore extends Store<InnovationModel> {
   get INNOVATION_STATUS(): typeof INNOVATION_STATUS { return INNOVATION_STATUS; }
   get INNOVATION_SUPPORT_STATUS(): typeof INNOVATION_SUPPORT_STATUS { return INNOVATION_SUPPORT_STATUS; }
   get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS { return INNOVATION_SECTION_STATUS; }
-  get INNOVATION_SECTION_ACTION_STATUS(): typeof INNOVATION_SECTION_ACTION_STATUS { return INNOVATION_SECTION_ACTION_STATUS; }
+  get INNOVATION_SECTION_TASK_STATUS(): typeof INNOVATION_SECTION_TASK_STATUS { return INNOVATION_SECTION_TASK_STATUS; }
 
   isAssessmentStatus(status: keyof typeof INNOVATION_STATUS | string): boolean {
     return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(status);

@@ -3,23 +3,22 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-
-import { InnovationActionsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
-  selector: 'app-accessor-pages-actions-actions-list',
-  templateUrl: './actions-list.component.html'
+  selector: 'app-accessor-pages-tasks-tasks-list',
+  templateUrl: './tasks-list.component.html'
 })
-export class ActionsListComponent extends CoreComponent implements OnInit {
+export class TasksListComponent extends CoreComponent implements OnInit {
 
   tabs: { key: string, title: string, link: string, queryParams: { openTasks: 'true' | 'false' } }[] = [];
   currentTab: { index: number, key: string, contentTitle: string, description: string };
 
-  actionsList: TableModel<InnovationActionsListDTO['data'][0], InnovationsTasksListFilterType>;
+  tasksList: TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>;
 
-  innovationSectionActionStatus = this.stores.innovation.INNOVATION_SECTION_ACTION_STATUS;
+  innovationSectionTaskStatus = this.stores.innovation.INNOVATION_SECTION_TASK_STATUS;
 
 
   constructor(
@@ -37,7 +36,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
         queryParams: { openTasks: 'true' }
       },
       {
-        key: 'closedActions',
+        key: 'closedTasks',
         title: 'Closed tasks',
         link: '/accessor/tasks',
         queryParams: { openTasks: 'false' }
@@ -46,7 +45,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
     this.currentTab = { index: 0, key: '', contentTitle: '', description: '' };
 
-    this.actionsList = new TableModel({
+    this.tasksList = new TableModel({
       visibleColumns: {
         section: { label: 'Tasks', orderable: true },
         innovationName: { label: 'Innovation', orderable: true },
@@ -77,7 +76,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
         switch (queryParams.openTasks) {
           case 'true':
-            this.actionsList.clearData().setFilters({
+            this.tasksList.clearData().setFilters({
               status: [InnovationTaskStatusEnum.OPEN],
               createdByMe: true,
               fields: ['notifications']
@@ -85,7 +84,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
             break;
 
           case 'false':
-            this.actionsList.clearData().setFilters({
+            this.tasksList.clearData().setFilters({
               status: [InnovationTaskStatusEnum.DONE, InnovationTaskStatusEnum.DECLINED, InnovationTaskStatusEnum.CANCELLED],
               createdByMe: true,
               fields: ['notifications']
@@ -105,10 +104,10 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
   getTasksList(column?: string): void {
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getTasksList(this.actionsList.getAPIQueryParams()).subscribe(response => {
-      this.actionsList.setData(response.data, response.count);
+    this.innovationsService.getTasksList(this.tasksList.getAPIQueryParams()).subscribe(response => {
+      this.tasksList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
-      if (this.isRunningOnBrowser() && column) this.actionsList.setFocusOnSortedColumnHeader(column);
+      if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     }
 
@@ -117,14 +116,14 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
   onTableOrder(column: string): void {
 
-    this.actionsList.setOrderBy(column);
+    this.tasksList.setOrderBy(column);
     this.getTasksList(column);
 
   }
 
   onPageChange(event: { pageNumber: number }): void {
 
-    this.actionsList.setPage(event.pageNumber);
+    this.tasksList.setPage(event.pageNumber);
     this.getTasksList();
 
   }
