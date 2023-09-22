@@ -1,0 +1,139 @@
+<theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row" *ngIf="task">
+    <div class="nhsuk-grid-column-two-thirds">
+
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Status</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <theme-tag
+              type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+              label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
+            <a routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses"
+              class="float-r" arial-label="View task status keys information"> What does this mean? </a>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <p>{{ task.updatedAt | date : ("app.date_formats.long_date" | translate) }}
+              <span>by {{ task.updatedBy.name }}, {{ task.updatedBy.displayTag}}</span>
+            </p>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned on</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3"> {{ task.createdAt | date : ("app.date_formats.long_date" | translate) }}</dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned by</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <span>{{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
+              {{ sectionTitle }}
+            </a>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Description</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3 textarea-info-section">
+            <ul class="nhsuk-list">
+              <li *ngFor="let description of task.descriptions" class="nhsuk-u-margin-bottom-3">
+                <span class="nhsuk-u-font-size-14 font-color-secondary nhsuk-u-margin-bottom-0">{{ description.createdAt | date : ("app.date_formats.long_date" | translate) }} by {{ description.name}} ({{ description.displayTag}})</span>
+                <p class="nhsuk-u-margin-bottom-0">{{ description.description }}</p>
+              </li>
+            </ul>
+          </dd>
+        </div>
+      </dl>
+
+      <ng-container *ngIf="sectionId && tasksIds.length > 1">
+        <nav class="nhsuk-pagination nhsuk-u-margin-top-3" role="navigation" aria-label="Pagination">
+          <ul class="nhsuk-list nhsuk-pagination__list">
+            <li class="nhsuk-pagination-item--previous" *ngIf="taskNumber > 0">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="handlePagination('previous')">
+                <span class="nhsuk-pagination__title">Previous</span>
+                <span class="nhsuk-u-visually-hidden">:</span>
+                <span class="nhsuk-pagination__page">Requested task</span>
+                <svg class="nhsuk-icon nhsuk-icon__arrow-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="34" height="34">
+                  <path
+                    d="M4.1 12.3l2.7 3c.2.2.5.2.7 0 .1-.1.1-.2.1-.3v-2h11c.6 0 1-.4 1-1s-.4-1-1-1h-11V9c0-.2-.1-.4-.3-.5h-.2c-.1 0-.3.1-.4.2l-2.7 3c0 .2 0 .4.1.6z"
+                  ></path>
+                </svg>
+              </a>
+            </li>
+            <li class="nhsuk-pagination-item--next" *ngIf="taskNumber < tasksIds.length - 1">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="handlePagination('next')">
+                <span class="nhsuk-pagination__title">Next</span>
+                <span class="nhsuk-u-visually-hidden">:</span>
+                <span class="nhsuk-pagination__page">Requested task</span>
+                <svg class="nhsuk-icon nhsuk-icon__arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="34" height="34">
+                  <path 
+                    d="M19.6 11.66l-2.73-3A.51.51 0 0 0 16 9v2H5a1 1 0 0 0 0 2h11v2a.5.5 0 0 0 .32.46.39.39 0 0 0 .18 0 .52.52 0 0 0 .37-.16l2.73-3a.5.5 0 0 0 0-.64z">
+                  </path>
+                </svg>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </ng-container>
+    </div>
+
+    <div class="nhsuk-grid-column-one-third" *ngIf="!isAdmin">
+      <div class="nhsuk-card x-card-top-border">
+        <div class="nhsuk-card__content">
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">What you can do</h2>
+          <ng-container *ngIf="isInnovatorType">
+            <ul class="nhsuk-list">
+              <li>
+                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/accept" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                  Mark task as done
+                </a>
+                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/tasks/{{ task.id }}/decline" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
+                  Decline task
+                </a>
+              </li>
+              <li class="nhsuk-u-margin-bottom-4">
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task and send a reply</a>
+              </li>
+              <li>
+                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
+                <a *ngIf="task.status !== 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
+              </li>
+            </ul>
+          </ng-container>
+
+          <ng-container *ngIf="isAccessorType || isAssessmentType">
+            <ul class="nhsuk-list">
+              <li>
+                <a *ngIf="['DONE', 'DECLINED'].includes(task.status) && task.sameOrganisation" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen" class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3">
+                  Reopen task
+                </a>
+              </li>
+              <li>
+                <a *ngIf="task.status === 'OPEN'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3">
+                  Cancel task
+                </a>
+              </li>
+              <li class="nhsuk-u-margin-bottom-4">
+                <a  routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task and send a reply </a>
+              </li>
+              <li [ngSwitch]="task.status">
+                <a *ngSwitchCase="'DONE'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
+                <a *ngSwitchCase="'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section</a>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</theme-content-wrapper>

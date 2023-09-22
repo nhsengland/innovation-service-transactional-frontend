@@ -10,17 +10,17 @@ import { StoresModule } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { SharedModule } from '@modules/shared/shared.module';
-import { PageInnovationActionSectionInfoComponent } from './action-section-info.component';
+import { PageInnovationTaskDetailsComponent } from './task-details.component';
 
 
-describe('Shared/Pages/Innovation/PageInnovationActionSectionInfoComponent', () => {
+describe('Shared/Pages/Innovation/PageInnovationTaskDetailsComponent', () => {
 
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
 
-  let component: PageInnovationActionSectionInfoComponent;
-  let fixture: ComponentFixture<PageInnovationActionSectionInfoComponent>;
+  let component: PageInnovationTaskDetailsComponent;
+  let fixture: ComponentFixture<PageInnovationTaskDetailsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,7 +43,7 @@ describe('Shared/Pages/Innovation/PageInnovationActionSectionInfoComponent', () 
 
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageInnovationActionSectionInfoComponent);
+    fixture = TestBed.createComponent(PageInnovationTaskDetailsComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

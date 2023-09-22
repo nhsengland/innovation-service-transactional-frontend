@@ -13,7 +13,8 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
+import { ResponseMode } from '@azure/msal-node';
 
 
 export type InnovationsTasksListFilterType = {
@@ -372,7 +373,7 @@ export class InnovationsService extends CoreService {
 
           return {
             ...item,
-            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available' }
+            ...{ name: sectionIdentification ? `Update ${sectionIdentification.group.number}.${sectionIdentification.section.number} '${sectionIdentification.section.title}'` : 'Section no longer available' }
           }
         })
       }))
@@ -386,7 +387,6 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
       map(response => {
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-
         return ({
           id: response.id,
           displayId: response.displayId,
@@ -399,6 +399,31 @@ export class InnovationsService extends CoreService {
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
           declineReason: response.declineReason
+        })
+      })
+    );
+
+  }
+
+  getTaskInfo(innovationId: string, taskId: string): Observable<InnovationTaskInfoDTO> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
+    return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
+      map(response => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+        return ({
+          id: response.id,
+          displayId: response.displayId,
+          status: response.status,
+          descriptions: response.descriptions,
+          section: response.section,
+          name: sectionIdentification ? `Update'${sectionIdentification.section.title}'` : 'Section no longer available',
+          createdAt: response.createdAt,
+          updatedAt: response.updatedAt,
+          updatedBy: response.updatedBy,
+          createdBy: response.createdBy,
+          sameOrganisation: response.sameOrganisation,
+          threadId: response.threadId,
         })
       })
     );
