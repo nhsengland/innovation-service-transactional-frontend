@@ -30,7 +30,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovation: ContextInnovationType;
   pendingExportRequests = 0;
   innovationSections: SectionsSummaryModel = [];
-  sections: { progressBar: ProgressBarType[], submitted: number, draft: number, notStarted: number } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0 };
+  sections: { progressBar: ProgressBarType[], submitted: number, draft: number, notStarted: number, withOpenTasksCount: number, openTasksCount: number } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0,  withOpenTasksCount: 0, openTasksCount: 0};
 
   // Flags.
   isInnovatorType: boolean;
@@ -90,6 +90,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
         this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
         this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+        this.sections.withOpenTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.openTasksCount > 0).length, 0);
+        this.sections.openTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.reduce((acc: number, section) => acc + section.openTasksCount, 0), 0);
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 

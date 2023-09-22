@@ -33,18 +33,30 @@
 
       <p class="d-flex nhsuk-u-margin-0">
         <theme-svg-icon type="success"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>{{ sections.submitted === 0 ? 'No' : sections.submitted }} sections completed
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.submitted }} of {{ sections.progressBar.length }} {{ ('dictionary.section' | pluralTranslate: sections.progressBar.length | translate) }} completed
       </p>
-      <p class="d-flex nhsuk-u-margin-0">
+      <p *ngIf="sections.draft > 0" class="d-flex nhsuk-u-margin-0">
         <theme-svg-icon type="edit"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>{{ sections.draft === 0 ? 'No' : sections.draft }} sections in draft
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.draft }} {{ ('dictionary.section' | pluralTranslate: sections.draft | translate) }} in draft
       </p>
-      <p class="d-flex">
+      <p *ngIf="sections.notStarted > 0" class="d-flex">
         <theme-svg-icon type="error"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>{{ sections.notStarted === 0 ? 'No' : sections.notStarted }} sections not started
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.notStarted }} {{ ('dictionary.section' | pluralTranslate: sections.notStarted | translate) }} not started
       </p>
 
       <ng-container *ngIf="isInnovatorType">
+
+        <div *ngIf="sections.withOpenTasksCount > 0" class="nhsuk-inset-text nhsuk-u-margin-top-3">
+          <span class="nhsuk-u-visually-hidden">Information: </span>
+          <p>
+            {{ sections.withOpenTasksCount }} {{ ('dictionary.section' | pluralTranslate: sections.withOpenTasksCount | translate)  }} with {{ ('dictionary.task' | pluralTranslate: sections.openTasksCount | translate)  }} to do.
+            <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/innovator/innovations/{{ innovationId }}/tasks">Go to tasks.</a>
+          </p>
+        </div>
+
         <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
           Submit record for needs assessment
         </button>
@@ -66,12 +78,14 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="showInnovatorShareRequestSection">
-        <div class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">Information: </span>
-          <a routerLink="./export-requests" class="nhsuk-link--no-visited-state nhsuk-u-font-size-22 text-decoration-none nhsuk-u-font-weight-bold">Requests to use your innovation record data for anything outside our terms of use</a>
-          <p *ngIf="!pendingExportRequests" class="nhsuk-body-s">No new requests.</p>
-          <p *ngIf="pendingExportRequests" class="nhsuk-body-s">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
+      <ng-container *ngIf="showInnovatorShareRequestSection && pendingExportRequests">
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <h2 class="nhsuk-card__heading nhsuk-heading-m">
+              <a routerLink="./export-requests" class="nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-action-link__text nhsuk-u-margin-top-2">Requests to use your innovation record data for anything outside our terms of use</a>
+            </h2>
+            <p class="nhsuk-card__description nhsuk-u-margin-bottom-0">{{ pendingExportRequests }} pending {{ ('dictionary.request' | pluralTranslate: pendingExportRequests | translate) }}.</p>
+          </div>
         </div>
       </ng-container>
 
@@ -81,10 +95,6 @@
         <p *ngIf="isInnovationInCreatedStatus">
           This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.
         </p>
-        <ul class="nhsuk-u-margin-bottom-7">
-          <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
-        </ul>
       </ng-container>
 
 
@@ -137,6 +147,13 @@
 
         </li>
       </ol>
+
+      <ng-container *ngIf="isInnovatorType">
+        <ul class="nhsuk-u-margin-bottom-7">
+          <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
+          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
+        </ul>
+      </ng-container>
 
     </div>
 

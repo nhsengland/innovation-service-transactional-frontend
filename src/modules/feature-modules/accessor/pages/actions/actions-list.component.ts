@@ -89,7 +89,7 @@ export class ActionsListComponent extends CoreComponent implements OnInit {
 
           case 'false':
             this.actionsList.clearData().setFilters({
-              status: [InnovationTaskStatusEnum.CANCELLED, InnovationTaskStatusEnum.DECLINED],
+              status: [InnovationTaskStatusEnum.DONE, InnovationTaskStatusEnum.DECLINED, InnovationTaskStatusEnum.CANCELLED],
               createdByMe: true,
               fields: ['notifications']
             });

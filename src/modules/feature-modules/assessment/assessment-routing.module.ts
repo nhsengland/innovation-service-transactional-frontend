@@ -34,7 +34,6 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
 import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -59,6 +58,7 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -281,8 +281,8 @@ const routes: Routes = [
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
-                    data: { breadcrumb: 'New' }
+                    path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
+                    data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
                     path: ':taskId',
