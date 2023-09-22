@@ -8,7 +8,7 @@ import { InnovationsTasksListFilterType, InnovationsService } from '@modules/sha
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
-import { InnovationTasksListDTO,InnovationActionInfoDTO, } from '@modules/shared/services/innovations.dtos';
+import { InnovationTasksListDTO, InnovationTaskData, } from '@modules/shared/services/innovations.dtos';
 import { InnovationActionStatusEnum } from '@modules/stores/innovation';
 
 
@@ -101,7 +101,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     this.bottomList.count = this.bottomList.data.length;
   }
 
-  shouldBeOnTopTable(item: InnovationActionInfoDTO): boolean {
+  shouldBeOnTopTable(item: InnovationTaskData ): boolean {
     switch (this.getUserType()) {
 
       case 'INNOVATOR':
@@ -110,12 +110,9 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         )
 
       case 'ASSESSMENT':
-        return (!item.createdBy.organisationUnit)
-
       case 'ACCESSOR':
       case 'QUALIFYING_ACCESSOR':
-        return item.createdBy.organisationUnit?.name ==
-        this.stores.authentication.getAccessorOrganisationUnitName()
+        return item.sameOrganisation
 
       case 'ADMIN':
         return true;
