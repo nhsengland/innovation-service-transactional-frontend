@@ -430,30 +430,6 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getTaskInfo(innovationId: string, taskId: string): Observable<InnovationTaskInfoDTO> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
-    return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
-      map(response => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-        return ({
-          id: response.id,
-          displayId: response.displayId,
-          status: response.status,
-          descriptions: response.descriptions,
-          section: response.section,
-          name: sectionIdentification ? `Update'${sectionIdentification.section.title}'` : 'Section no longer available',
-          createdAt: response.createdAt,
-          updatedAt: response.updatedAt,
-          updatedBy: response.updatedBy,
-          createdBy: response.createdBy,
-          sameOrganisation: response.sameOrganisation,
-          threadId: response.threadId,
-        })
-      })
-    );
-
-  }
 
   createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 
