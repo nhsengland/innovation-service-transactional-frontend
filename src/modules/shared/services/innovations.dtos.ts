@@ -231,7 +231,7 @@ export type InnovationActionsListInDTO = {
     section: InnovationSectionEnum,
     createdAt: DateISOType,
     updatedAt: DateISOType,
-    updatedBy: { name: string, role: UserRoleEnum },
+    updatedBy: { name: string, role: UserRoleEnum, displayTag: string },
     createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
     notifications: number;
     sameOrganisation: boolean;

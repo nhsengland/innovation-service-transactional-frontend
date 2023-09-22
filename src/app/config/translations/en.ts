@@ -22,6 +22,11 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
+      section: {
+        none: 'section',
+        singular: 'section',
+        plural: 'sections'
+      },
       task: {
         none: 'task',
         singular: 'task',
@@ -293,8 +298,8 @@ export const locale = {
               message: `{{ actionUserName }} {{ actionUserRole }} created a task for a section that is no longer available`
             },
             TASK_STATUS_DONE_UPDATE: {
-              title: 'Tasks changed to done',
-              message: `{{ totalTasks }} tasks for {{ sectionTitle }} section were changed to done`
+              title: 'Task done',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as done`
             },
             TASK_STATUS_DECLINED_UPDATE: {
               title: 'Task declined',

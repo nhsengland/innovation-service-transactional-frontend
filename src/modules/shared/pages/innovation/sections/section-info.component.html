@@ -55,7 +55,7 @@
         <div *ngIf="isInnovatorType && section.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
           <p>
             <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
-            This section has {{ section.openTasksCount }} {{ section.openTasksCount === 1 ? 'task' : 'tasks'  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{section.id}}/tasks">View tasks.</a>
+            This section has {{ section.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: section.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{section.id}}/tasks">View tasks.</a>
           </p>
         </div>
 
@@ -133,7 +133,7 @@
         (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED') && isAccessorType ||
         (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
       ">
-        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Create action for this section</button>
+        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for this section</button>
       </ng-container>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">

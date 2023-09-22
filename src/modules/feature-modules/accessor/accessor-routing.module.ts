@@ -31,11 +31,10 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
-// // Actions.
-import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
+// // Tasks.
+import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
 import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/actions/task-details.component';
-import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
 import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -61,6 +60,7 @@ import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -80,7 +80,7 @@ const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
-      { id: 'actions', label: 'Actions', url: '/accessor/actions' },
+      { id: 'tasks', label: 'Tasks', url: '/accessor/tasks' },
       { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
       { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' }
     ],
@@ -263,8 +263,8 @@ const routes: Routes = [
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
-                    data: { breadcrumb: 'New' }
+                    path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
+                    data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
                     path: ':taskId',
@@ -390,10 +390,10 @@ const routes: Routes = [
       { path: 'organisations/referral-criteria', pathMatch: 'full', component: InnovationSupportOrganisationReferralCriteriaComponent },
 
       {
-        path: 'actions',
+        path: 'tasks',
         data: {
-          breadcrumb: 'Actions',
-          layout: { type: 'full', chosenMenu: 'actions', backgroundColor: 'bg-color-white' }
+          breadcrumb: 'Tasks',
+          layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
         children: [
           {
@@ -401,7 +401,7 @@ const routes: Routes = [
             data: { breadcrumb: null }
           },
           { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent },
-          { path: 'advanced-filter', pathMatch: 'full', component: PageActionsAdvancedSearchComponent }
+          { path: 'advanced-filter', pathMatch: 'full', component: PageTasksAdvancedSearchComponent }
         ]
       },
 

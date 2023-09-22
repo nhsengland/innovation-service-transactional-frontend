@@ -138,16 +138,16 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
 
         switch(this.status) {
           case InnovationTaskStatusEnum.DONE:
-            this.setRedirectAlertError('You have marked this task as done', { message: 'Your message has been sent and the accessor will be notified about it.' })
+            this.setRedirectAlertSuccess('You have marked this task as done', { message: 'Your message has been sent and the accessor will be notified about it.' })
             break;
           case InnovationTaskStatusEnum.DECLINED:
-            this.setRedirectAlertError('You have declined this task', { message: 'Your message has been sent and the accessor will be notified.' })
+            this.setRedirectAlertSuccess('You have declined this task', { message: 'Your message has been sent and the accessor will be notified.' })
             break;
           case InnovationTaskStatusEnum.CANCELLED:
-            this.setRedirectAlertError('You have cancelled this task', { message: 'Your message has been sent and the innovator will be notified about it.' })
+            this.setRedirectAlertSuccess('You have cancelled this task', { message: 'Your message has been sent and the innovator will be notified about it.' })
             break;
           case InnovationTaskStatusEnum.OPEN:
-            this.setRedirectAlertError('You have reopened this task', { message: 'The innovator will be notified.' })
+            this.setRedirectAlertSuccess('You have reopened this task', { message: 'The innovator will be notified.' })
             break;
         }
 

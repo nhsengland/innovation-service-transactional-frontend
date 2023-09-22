@@ -11,7 +11,7 @@ import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum
 
 
 export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
-  ACTION = 'ACTION',
+  TASK = 'TASK',
   MESSAGE = 'MESSAGE',
   SUPPORT = 'SUPPORT'
 }
