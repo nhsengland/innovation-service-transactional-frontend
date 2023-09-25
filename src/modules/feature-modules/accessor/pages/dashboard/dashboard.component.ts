@@ -66,16 +66,15 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             emptyMessageTitle: 'No engaging innovations assigned to you'
           },
           {
-            title: 'Tasks to review',
-            label: `Tasks requested by you were responded by innovators`,
+            title: 'Tasks',
+            label: `Tasks assigned by you have been done or declined`,
             link: `/accessor/tasks`,
             queryParams: { openTasks: false },
             count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
             total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
-            lastMessage: 'Last submitted:',
+            lastMessage: 'Last task update:',
             date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No tasks opened by you yet',
-            emptyMessage: 'Start requesting tasks from innovators'
+            emptyMessage: 'No tasks assigned by your organisation yet'
           }
         ];
 

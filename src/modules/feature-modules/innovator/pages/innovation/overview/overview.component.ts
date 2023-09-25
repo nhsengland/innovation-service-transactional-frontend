@@ -102,12 +102,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
         title: 'Tasks assigned to you',
-        label: `Request tasks to submit`,
+        label: `tasks to do`,
         link: `/innovator/innovations/${this.innovationId}/tasks`,
         count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
         lastMessage: `Most recent assigned task: "Update '${this.translate('shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-        emptyMessageTitle: 'No task requests yet',
+        emptyMessageTitle: 'No tasks assigned to you yet',
         emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',
