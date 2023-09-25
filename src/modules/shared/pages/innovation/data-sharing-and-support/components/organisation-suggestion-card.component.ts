@@ -1,6 +1,9 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
 import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { timingSafeEqual } from 'crypto';
+import { filter } from 'lodash';
+import { elementAt } from 'rxjs';
 
 // import { NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -18,67 +21,55 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     organisations: string[]
   };
 
-  accessors: {
-    suggestors: string,
-    organisations: string[]
-  };
+  accessors: AccessorSuggestionModel[] | undefined;
 
-  showAssessmentsCard: boolean;
-  showAccessorsCard: boolean;
+  showAssessments: boolean;
+  showAccessors: boolean;
 
   // hasNewSuggestions = false;
 
   constructor(
     // private notificationsService: NotificationsService,
   ) {
-    this.showAccessorsCard = false;
-    this.showAssessmentsCard = false;
+    this.showAccessors = false;
+    this.showAssessments = false;
 
     this.assessments = {
       organisations: [],
     };
 
-    this.accessors = {
-      suggestors: '',
-      organisations: []
-    };
+    this.accessors = [];
+    ;
   }
 
   ngOnChanges(): void {
     if (this.suggestions) {
-      this.accessors = this.parseAccessors(this.suggestions.accessors ?? []);
       this.assessments = this.parseAssessments(this.suggestions.assessment);
-
       if (this.assessments && this.assessments.organisations.length > 0) {
-        this.showAssessmentsCard = true;
+        this.showAssessments = true;
       }
 
-      if (this.accessors && this.accessors.organisations.length > 0) {
-        this.showAccessorsCard = true;
+      this.accessors = this.parseAccessors2(this.suggestions.accessors);
+      if(this.accessors && this.accessors.length > 0){
+        this.showAccessors = true
       }
     }
 
     // this.hasNewSuggestions = this.notificationsService.notifications[NotificationContextTypeEnum.DATA_SHARING] ? true : false;
   }
 
-  private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): { suggestors: string, organisations: string[] } {
+  private parseAccessors2(accessorsSuggestions: AccessorSuggestionModel[]): AccessorSuggestionModel[] {
     const shares = new Set(this.shares?.map(s => s.organisationId) || []);
-    const accessorsUnits = accessorsSuggestions.map(as => `${as.organisationUnit.name} (${as.organisationUnit.organisation.acronym})`);
-    const suggestedOrganisations = accessorsSuggestions
-      .flatMap(as => as.suggestedOrganisationUnits
-        .map(ou => ou.organisation)
-        .filter(so => !shares.has(so.id))
-        .map(so => `${so.name} (${so.acronym})`)
-      );
+    
+    let filteredSuggestions: AccessorSuggestionModel[] = accessorsSuggestions.map((element) => {
+      return {
+      ...element, suggestedOrganisationUnits: element.suggestedOrganisationUnits.filter(org => !shares.has(org.organisation.id))
+      }
+    })
 
-    // removes duplicate entries
-    const organisations = [...new Set(suggestedOrganisations)];
-    const accessors = [... new Set(accessorsUnits)];
-    return {
-      suggestors: accessors.join(', '),
-      organisations,
-    };
+    return filteredSuggestions;
   }
+
 
   private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
 
@@ -91,9 +82,13 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     // removes duplicate entries
     const organisations = [...new Set(suggestedOrganisations)];
 
+    organisations.sort((a,b)=>a.localeCompare(b));
+    
     return {
       organisations,
     };
   }
+
+
 
 }
