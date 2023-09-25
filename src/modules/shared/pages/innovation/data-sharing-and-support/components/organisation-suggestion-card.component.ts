@@ -1,9 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
 import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
-import { timingSafeEqual } from 'crypto';
-import { each, filter } from 'lodash';
-import { elementAt } from 'rxjs';
 
 // import { NotificationsService } from '@modules/shared/services/notifications.service';
 
