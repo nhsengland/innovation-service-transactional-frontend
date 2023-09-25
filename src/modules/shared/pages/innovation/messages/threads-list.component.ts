@@ -28,7 +28,6 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   // Flags
   isInnovatorType: boolean;
-  isAccessorType: boolean;
   isAdmin: boolean;
   isInnovationSubmitted: boolean;
   canCreateThread: boolean = false;
@@ -47,7 +46,6 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
 
