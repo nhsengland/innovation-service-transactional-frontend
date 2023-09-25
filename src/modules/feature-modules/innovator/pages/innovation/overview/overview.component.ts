@@ -107,7 +107,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
         lastMessage: `Most recent assigned task: "Update '${this.translate('shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-        emptyMessageTitle: 'No task requests yet',
+        emptyMessageTitle: 'No tasks assigned to you yet',
         emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',
