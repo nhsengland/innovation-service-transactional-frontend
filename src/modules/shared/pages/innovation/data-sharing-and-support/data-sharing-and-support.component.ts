@@ -75,7 +75,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
 
-    this.setPageTitle('Data sharing preferences', { hint: 'All organisations'});
+    this.setPageTitle('Data sharing preferences', { hint: 'All organisations' });
 
   }
 
