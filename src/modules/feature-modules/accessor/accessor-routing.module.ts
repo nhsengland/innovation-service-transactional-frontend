@@ -19,7 +19,6 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
-import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
 import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
@@ -331,16 +330,15 @@ const routes: Routes = [
 
               {
                 path: 'support',
-                data: { breadcrumb: 'Data Sharing' },
+                data: { breadcrumb: 'Data sharing preferences' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: InnovationSupportInfoComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
-                  { path: 'organisations', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent },
-                  { path: 'organisations/suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
+                  { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent },
                   {
                     path: ':supportId/request-update', pathMatch: 'full', component: InnovationSupportRequestUpdateStatusComponent,
