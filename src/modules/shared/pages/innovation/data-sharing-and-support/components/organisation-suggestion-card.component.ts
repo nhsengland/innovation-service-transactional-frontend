@@ -61,10 +61,9 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     let filteredSuggestions: AccessorSuggestionModel[] = accessorsSuggestions.map((element) => {
       return {
       ...element, suggestedOrganisationUnits: element.suggestedOrganisationUnits.filter(org => !shares.has(org.organisation.id))
+        .sort((a,b) => a.name.localeCompare(b.name))
       }
     });
-
-    filteredSuggestions.forEach(entry => entry.suggestedOrganisationUnits.sort((a,b) => a.name.localeCompare(b.name)));
 
     return filteredSuggestions;
   }
