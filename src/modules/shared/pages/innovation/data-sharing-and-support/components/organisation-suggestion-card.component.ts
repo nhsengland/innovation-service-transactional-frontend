@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 
 import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 import { timingSafeEqual } from 'crypto';
-import { filter } from 'lodash';
+import { each, filter } from 'lodash';
 import { elementAt } from 'rxjs';
 
 // import { NotificationsService } from '@modules/shared/services/notifications.service';
@@ -47,12 +47,12 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
       this.assessments = this.parseAssessments(this.suggestions.assessment);
       if (this.assessments && this.assessments.organisations.length > 0) {
         this.showAssessments = true;
-      }
+      };
 
       this.accessors = this.parseAccessors2(this.suggestions.accessors);
       if(this.accessors && this.accessors.length > 0){
         this.showAccessors = true
-      }
+      };
     }
 
     // this.hasNewSuggestions = this.notificationsService.notifications[NotificationContextTypeEnum.DATA_SHARING] ? true : false;
@@ -65,7 +65,9 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
       return {
       ...element, suggestedOrganisationUnits: element.suggestedOrganisationUnits.filter(org => !shares.has(org.organisation.id))
       }
-    })
+    });
+
+    filteredSuggestions.forEach(entry => entry.suggestedOrganisationUnits.sort((a,b) => a.name.localeCompare(b.name)));
 
     return filteredSuggestions;
   }
@@ -88,7 +90,5 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
       organisations,
     };
   }
-
-
 
 }
