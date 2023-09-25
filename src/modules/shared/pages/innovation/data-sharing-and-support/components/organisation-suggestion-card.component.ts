@@ -49,7 +49,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
         this.showAssessments = true;
       };
 
-      this.accessors = this.parseAccessors2(this.suggestions.accessors);
+      this.accessors = this.parseAccessors(this.suggestions.accessors);
       if(this.accessors && this.accessors.length > 0){
         this.showAccessors = true
       };
@@ -58,7 +58,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     // this.hasNewSuggestions = this.notificationsService.notifications[NotificationContextTypeEnum.DATA_SHARING] ? true : false;
   }
 
-  private parseAccessors2(accessorsSuggestions: AccessorSuggestionModel[]): AccessorSuggestionModel[] {
+  private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): AccessorSuggestionModel[] {
     const shares = new Set(this.shares?.map(s => s.organisationId) || []);
     
     let filteredSuggestions: AccessorSuggestionModel[] = accessorsSuggestions.map((element) => {
