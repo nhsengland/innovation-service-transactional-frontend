@@ -210,7 +210,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     const suggestOrganisations = this.form.get('suggestOrganisations')?.value;
 
     if (suggestOrganisations === 'YES') {
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/support/organisations/suggest`);
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/support/suggest`);
     } else {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
     }

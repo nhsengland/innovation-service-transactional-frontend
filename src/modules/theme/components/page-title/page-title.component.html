@@ -1,5 +1,5 @@
 <div class="nhsuk-grid-row">
-  <div [ngClass]="{'nhsuk-grid-column-two-thirds': (actions ?? []).length > 0, 'nhsuk-grid-column-full': (actions ?? []).length === 0}">
+  <div [ngClass]="{'nhsuk-grid-column-two-thirds': (actions ?? []).length > 0, 'nhsuk-grid-column-full': (actions ?? []).length === 0}" >
     <span *ngIf="titleHint" class="nhsuk-caption-l nhsuk-u-margin-0">{{ titleHint }}</span>
     <h1 [ngClass]="{'nhsuk-heading-l nhsuk-u-padding-0': size === 'l'}">{{ title }}</h1>
   </div>
@@ -17,4 +17,4 @@
 
     </div>
   </ng-container>
-</div>
+

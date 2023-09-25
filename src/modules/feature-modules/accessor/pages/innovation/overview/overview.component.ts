@@ -95,7 +95,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.cardsList = [
         {
           title: 'Innovation record',
-          label: `Sections submitted since your organisation unit started support`,
+          label: `sections submitted since your organisation unit started support`,
           link: `/accessor/innovations/${this.innovationId}/record`,
           count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].count,
           total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
@@ -104,13 +104,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: `No sections have been submitted since support started.`
         },
         {
-          title: 'Tasks to review',
-          label: `Tasks responded by the innovator awaiting your review`,
+          title: 'Tasks',
+          label: `tasks assigned by your organisation have been done or declined by the innovator`,
           link: `/accessor/innovations/${this.innovationId}/tasks`,
           count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
-          lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection)}"`,
+          lastMessage: `Last updated task: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection)}"`,
           date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No tasks to review'
+          emptyMessage: 'No tasks assigned by your organisation yet'
         }
       ];
 
