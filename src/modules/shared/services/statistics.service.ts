@@ -14,12 +14,12 @@ export type UserStatisticsDTO = {
   [UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER]: { count: number, total: number, overdue: number },
   [UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]: { count: number, total: number, lastSubmittedAt: null | DateISOType },
   [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]: { count: number, lastSubmittedAt: null | DateISOType },
-  [UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]: { count: number; total: number; lastSubmittedAt: null | DateISOType; };
+  [UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]: { count: number; total: number; lastUpdatedSection: null | string; lastUpdatedAt: null | DateISOType; };
 };
 
 export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.TASKS_OPEN_COUNTER]: { count: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
-  [InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER]: { count: number; total: number; lastSubmittedAt: null | DateISOType; };
+  [InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER]: { count: number; total: number; lastUpdatedSection: null | string; lastUpdatedAt: null | DateISOType; };
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]: { count: number, total: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]: { count: number, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number, total: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },

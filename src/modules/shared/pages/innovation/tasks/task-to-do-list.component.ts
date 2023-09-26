@@ -143,7 +143,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         };
       case 'ASSESSMENT':
         return {
-          topTableTitle: 'Tasks assigned by Needs Assessment team',
+          topTableTitle: 'Tasks assigned by needs assessment team',
           bottomTableTitle: 'Tasks assigned by others',
         };
       case 'ADMIN':

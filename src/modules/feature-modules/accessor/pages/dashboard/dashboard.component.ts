@@ -63,7 +63,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
             lastMessage: `Last submitted:`,
             date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No engaging innovations assigned to you.'
+            emptyMessageTitle: 'No engaging innovations assigned to you'
           },
           {
             title: 'Tasks',
@@ -73,8 +73,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
             total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
             lastMessage: 'Last task update:',
-            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
-            emptyMessage: 'No tasks assigned by your organisation yet.'
+            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastUpdatedAt,
+            emptyMessage: 'No tasks assigned by your organisation yet'
           }
         ];
 
@@ -87,7 +87,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
             lastMessage: `Last submitted:`,
             date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No innovations awaiting status assignment.'
+            emptyMessageTitle: 'No innovations awaiting status assignment'
           });
         }
 
