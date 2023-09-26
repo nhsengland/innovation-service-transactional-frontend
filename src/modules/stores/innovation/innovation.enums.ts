@@ -58,19 +58,6 @@ export enum InnovationSectionEnum {
   IMPLEMENTATION_PLAN = 'IMPLEMENTATION_PLAN'
 }
 
-export enum InnovationActionStatusEnum {
-  REQUESTED = 'REQUESTED',
-  // STARTED = 'STARTED',
-  // CONTINUE = 'CONTINUE',
-  SUBMITTED = 'SUBMITTED',
-  DELETED = 'DELETED',
-  DECLINED = 'DECLINED',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
-  OPEN = 'OPEN',
-  DONE = 'DONE'
-}
-
 export enum InnovationTaskStatusEnum {
   OPEN = 'OPEN',
   DONE = 'DONE',

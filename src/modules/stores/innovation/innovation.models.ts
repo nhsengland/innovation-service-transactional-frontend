@@ -199,61 +199,6 @@ export const INNOVATION_SECTION_STATUS = {
   SUBMITTED: { label: 'Submitted', isCompleteState: true }
 };
 
-export const INNOVATION_SECTION_TASK_STATUS = {
-  '': { label: '', cssClass: '', description: '' },
-  REQUESTED: {
-    label: 'Requested',
-    cssClass: 'nhsuk-tag--blue',
-    description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.'
-  },
-  STARTED: {
-    label: 'Started',
-    cssClass: 'nhsuk-tag--green',
-    description: ''
-  },
-  CONTINUE: {
-    label: 'Continue',
-    cssClass: 'nhsuk-tag--blue',
-    description: ''
-  },
-  SUBMITTED: {
-    label: 'Submitted',
-    cssClass: 'nhsuk-tag--yellow',
-    description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
-  },
-  DELETED: {
-    label: 'Deleted',
-    cssClass: 'nhsuk-tag--grey',
-    description: ''
-  },
-  DECLINED: {
-    label: 'Declined',
-    cssClass: 'nhsuk-tag--yellow',
-    description: 'The innovator has declined the assigned task.',
-  },
-  COMPLETED: {
-    label: 'Completed',
-    cssClass: 'nhsuk-tag--green',
-    description: 'An accessor has closed the action after reviewing the information.'
-  },
-  CANCELLED: {
-    label: 'Cancelled',
-    cssClass: 'nhsuk-tag--grey',
-    description: 'The assigned task has been cancelled as it is no longer relevant.',
-  },
-  OPEN: {
-    label: 'Task to do',
-    cssClass: 'nhsuk-tag--blue',
-    description: 'A task has been assigned to the innovator.',
-  },
-  DONE: {
-    label: 'Done',
-    cssClass: 'nhsuk-tag--green',
-    description: 'The innovator has submitted the requested information and has marked the task as done.',
-  },
-
-};
-
 
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {

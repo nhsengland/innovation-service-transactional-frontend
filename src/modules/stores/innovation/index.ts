@@ -11,7 +11,6 @@ export {
   InnovationSupportStatusEnum,
   InnovationTransferStatusEnum,
   InnovationSectionEnum,
-  InnovationActionStatusEnum,
   InnovationTaskStatusEnum,
   ActivityLogTypesEnum,
   ActivityLogItemsEnum
@@ -22,6 +21,5 @@ export {
   ACTIVITY_LOG_ITEMS,
   INNOVATION_STATUS,
   INNOVATION_SUPPORT_STATUS,
-  INNOVATION_SECTION_STATUS,
-  INNOVATION_SECTION_TASK_STATUS
+  INNOVATION_SECTION_STATUS
 } from './innovation.models';

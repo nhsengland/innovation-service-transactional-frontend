@@ -54,11 +54,11 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
       this.form.controls.message.updateValueAndValidity();
     }
 
-    this.innovationsService.getActionInfo(this.innovationId, this.taskId).pipe(
+    this.innovationsService.getTaskInfo(this.innovationId, this.taskId).pipe(
       switchMap(task => {
         return forkJoin([
           of(task),
-          task.status === InnovationTaskStatusEnum.DONE ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section) : of(null)
+          this.status === InnovationTaskStatusEnum.DONE ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section) : of(null)
         ])
       })
     ).subscribe({

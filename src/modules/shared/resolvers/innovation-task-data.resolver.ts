@@ -6,23 +6,14 @@ import { InnovationsService } from '../services/innovations.service';
 
 
 @Injectable()
-export class InnovationActionDataResolver implements Resolve<{ id: null | string, name: string }> {
+export class InnovationTaskDataResolver implements Resolve<{ id: null | string, name: string }> {
 
   constructor(private innovationsService: InnovationsService) { }
 
-
   resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string, name: string }> {
 
-    return this.innovationsService.getActionInfo(route.params.innovationId, route.params.taskId).pipe(
-      map(response => {
-
-        return {
-          id: response.id,
-          name: response.name,
-        };
-
-      })
-
+    return this.innovationsService.getTaskInfo(route.params.innovationId, route.params.taskId).pipe(
+      map(response => ({ id: response.id, name: response.name }))
     );
 
   }

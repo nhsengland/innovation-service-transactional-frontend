@@ -71,7 +71,11 @@
               </td>
               <td class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ tasksList.getColumnLabel('status') }}</span>
-                <strong class="nhsuk-tag" [ngClass]="innovationSectionTaskStatus[item.status].cssClass || ''">{{ innovationSectionTaskStatus[item.status].label || '' }}</strong>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.task_status.' + item.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.task_status.' + item.status + '.name' | translate }}"
+                  class="tag-no-wrap"
+                  ></theme-tag>
               </td>
             </tr>
           </tbody>
