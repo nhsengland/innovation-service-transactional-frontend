@@ -73,7 +73,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
             total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
             lastMessage: 'Last task update:',
-            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastUpdatedAt,
+            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
             emptyMessage: 'No tasks assigned by your organisation yet'
           }
         ];
