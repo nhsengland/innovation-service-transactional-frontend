@@ -126,7 +126,6 @@
               </li>
               <li [ngSwitch]="task.status">
                 <a *ngSwitchCase="'DONE'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
-                <a *ngSwitchCase="'OPEN'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section</a>
               </li>
             </ul>
           </ng-container>
