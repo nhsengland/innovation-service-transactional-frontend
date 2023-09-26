@@ -33,9 +33,6 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 // // Tasks.
 import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
-import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/actions/task-details.component';
-import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
-import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -59,6 +56,9 @@ import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
+import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/tasks/task-details.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
 import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
@@ -70,9 +70,9 @@ import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-o
 // Resolvers.
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
 
 const header: RoutesDataType['header'] = {
@@ -267,7 +267,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    resolve: { innovationActionData: InnovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';

@@ -33,9 +33,6 @@ import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/acc
 // // Tasks.
 import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
-import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/actions/task-details.component';
-import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/actions/task-status-list.component';
-import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/actions/task-to-do-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -58,6 +55,9 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
+import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/tasks/task-details.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
 import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
@@ -65,9 +65,9 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
@@ -286,7 +286,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    resolve: { innovationActionData: InnovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';

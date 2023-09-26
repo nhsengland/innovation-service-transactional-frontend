@@ -4,12 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { InnovationsTasksListFilterType, InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { UserRoleEnum } from '@app/base/enums';
-import { InnovationTasksListDTO, InnovationTaskData, } from '@modules/shared/services/innovations.dtos';
-import { InnovationActionStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskData, InnovationTasksListDTO, } from '@modules/shared/services/innovations.dtos';
+import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
 @Component({
@@ -73,10 +73,10 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       innovationId: this.innovationId,
       fields: ['notifications'],
       status: [
-        InnovationActionStatusEnum.OPEN,
-        InnovationActionStatusEnum.DONE,
-        InnovationActionStatusEnum.DECLINED,
-        InnovationActionStatusEnum.CANCELLED,
+        InnovationTaskStatusEnum.OPEN,
+        InnovationTaskStatusEnum.DONE,
+        InnovationTaskStatusEnum.DECLINED,
+        InnovationTaskStatusEnum.CANCELLED,
       ],
       allTasks: true,
     });
@@ -105,14 +105,12 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     switch (this.getUserType()) {
 
       case 'INNOVATOR':
-        return (
-          item.status == InnovationActionStatusEnum.OPEN
-        )
+        return item.status == InnovationTaskStatusEnum.OPEN;
 
       case 'ASSESSMENT':
       case 'ACCESSOR':
       case 'QUALIFYING_ACCESSOR':
-        return item.sameOrganisation
+        return item.sameOrganisation;
 
       case 'ADMIN':
         return true;
