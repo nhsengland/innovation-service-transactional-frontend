@@ -136,7 +136,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const sectionId = this.activatedRoute.snapshot.params.sectionId;
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
 
-    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'.` : '';
+    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
 
     const section = this.stores.innovation.getInnovationRecordSection(sectionId);
 
