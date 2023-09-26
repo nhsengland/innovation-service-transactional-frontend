@@ -25,9 +25,9 @@
     </div>
     <div class="d-flex flex-direction-column nhsuk-u-padding-left-7 nhsuk-u-padding-right-7">
       <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"></theme-tag>
-      <ng-container *ngIf="innovation?.organisationsStatusDescription">
+      <ng-container *ngIf="innovation?.engagingOrganisationsCount">
         <div class="nhsuk-u-margin-top-1 nhsuk-u-font-size-14 font-color-secondary">
-          Organisations: {{ innovation?.organisationsStatusDescription }}.
+          {{ innovation?.engagingOrganisationsCount }} engaging {{ ('dictionary.organisation' | pluralTranslate: innovation?.engagingOrganisationsCount | translate) }}.
           <a *ngIf="innovation?.groupedStatus === 'RECEIVING_SUPPORT'" routerLink="/innovator/innovations/{{ innovationId }}/support" arial-label="View innovation support status information">View support status</a>
         </div>
       </ng-container>
