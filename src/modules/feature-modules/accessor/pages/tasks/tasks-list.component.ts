@@ -18,8 +18,6 @@ export class TasksListComponent extends CoreComponent implements OnInit {
 
   tasksList: TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>;
 
-  innovationSectionTaskStatus = this.stores.innovation.INNOVATION_SECTION_TASK_STATUS;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
