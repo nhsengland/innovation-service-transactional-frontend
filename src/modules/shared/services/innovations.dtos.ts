@@ -1,9 +1,9 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 // Innovations.
@@ -231,7 +231,7 @@ export type InnovationTaskData = {
   displayId: string,
   description: string,
   innovation: { id: string, name: string; },
-  status: InnovationActionStatusEnum,
+  status: InnovationTaskStatusEnum,
   section: InnovationSectionEnum,
   createdAt: DateISOType,
   updatedAt: DateISOType,
@@ -241,25 +241,10 @@ export type InnovationTaskData = {
   sameOrganisation: boolean;
 }
 
-export type InnovationActionInfoDTO = {
-  id: string,
-  displayId: string,
-  status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
-  section: InnovationSectionEnum,
-  name: string,
-  description: string,
-  createdAt: DateISOType,
-  updatedAt: DateISOType,
-  updatedBy: { name: string, displayTag: string },
-  createdBy: { name: string, displayTag: string },
-  sameOrganisation: boolean;
-
-};
-
 export type InnovationTaskInfoDTO = {
   id: string,
   displayId: string,
-  status: InnovationActionStatusEnum | InnovationTaskStatusEnum,
+  status: InnovationTaskStatusEnum,
   descriptions: InnovationDescription[],
   section: InnovationSectionEnum,
   name: string,

@@ -11,17 +11,16 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationTasksListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
-import { ResponseMode } from '@azure/msal-node';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationTasksListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string,
   innovationName?: string,
   sections?: InnovationSectionEnum[],
-  status?: InnovationActionStatusEnum[] | InnovationTaskStatusEnum[],
+  status?: InnovationTaskStatusEnum[],
   innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
   allTasks?: boolean,
@@ -351,7 +350,7 @@ export class InnovationsService extends CoreService {
   }
 
 
-  // Actions methods.
+  // Tasks methods.
   getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationTasksListDTO> {
 
     const { filters, ...qParams } = queryParams;
@@ -385,30 +384,6 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getActionInfo(innovationId: string, taskId: string): Observable<InnovationActionInfoDTO> {
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
-    return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
-      map(response => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-        return ({
-          id: response.id,
-          displayId: response.displayId,
-          status: response.status,
-          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available',
-          description: response.description,
-          section: response.section,
-          createdAt: response.createdAt,
-          updatedAt: response.updatedAt,
-          updatedBy: response.updatedBy,
-          createdBy: response.createdBy,
-          sameOrganisation: response.sameOrganisation,
-        })
-      })
-    );
-
-  }
-
   getTaskInfo(innovationId: string, taskId: string): Observable<InnovationTaskInfoDTO> {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
@@ -433,7 +408,6 @@ export class InnovationsService extends CoreService {
     );
 
   }
-
 
   createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 

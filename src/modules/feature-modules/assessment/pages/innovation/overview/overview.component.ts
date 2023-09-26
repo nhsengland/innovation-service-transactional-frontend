@@ -10,8 +10,8 @@ import { StatisticsCardType } from '@app/base/types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationCollaboratorsListDTO, InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { AssessmentExemptionTypeDTO, AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
@@ -97,7 +97,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].total,
             lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedSection)}"`,
             date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER].lastSubmittedAt,
-            emptyMessage: `No sections have been submitted since the assessment started`
+            emptyMessage: `No sections have been submitted since the assessment started.`
           }, {
             title: 'Messages',
             label: `Unread replies to conversations you have started`,
@@ -105,7 +105,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER].count,
             lastMessage: `Last received message`,
             date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]?.lastSubmittedAt,
-            emptyMessage: 'No replies to read'
+            emptyMessage: 'No replies to read.'
           }
         ];
 
