@@ -46,7 +46,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   ) {
 
     super();
-    this.setPageTitle('Suggest organisations for support');
+    this.setPageTitle('Suggest support organisations');
 
     this.innovation = this.stores.context.getInnovation();
 
