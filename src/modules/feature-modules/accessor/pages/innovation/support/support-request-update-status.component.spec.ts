@@ -26,7 +26,7 @@ describe('SupportUpdateStatusComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ InnovationSupportRequestUpdateStatusComponent ],
-      imports: [ 
+      imports: [
         HttpClientTestingModule,
         RouterTestingModule,
         CoreModule,
@@ -35,7 +35,7 @@ describe('SupportUpdateStatusComponent', () => {
       ]
     })
     .compileComponents();
-    
+
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
@@ -60,7 +60,7 @@ describe('SupportUpdateStatusComponent', () => {
 
    it('should run onSubmitStep() being on STEP 1, and move to step 2 when status is ENGAGING', () => {
     component.stepNumber = 1;
-    component.form.get('status')?.setValue(InnovationSupportStatusEnum.COMPLETE);
+    component.form.get('status')?.setValue(InnovationSupportStatusEnum.CLOSED);
 
     fixture.detectChanges();
     component.onSubmitStep();

@@ -69,7 +69,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       const innovationContext = this.stores.context.getInnovation();
 
       const occurrences = (innovationInfo.supports ?? []).map(item => item.status)
-        .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
+        .filter(status => [InnovationSupportStatusEnum.ENGAGING].includes(status))
         .reduce((acc, status) => (
           acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
           {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });

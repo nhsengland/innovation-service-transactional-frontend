@@ -142,28 +142,17 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
+  // SUPPORT STATUS - TO DO
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
     description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
     innovatorDescription: 'Ready to support, assess or provide guidance.',
     hidden: false
   },
-  FURTHER_INFO_REQUIRED: {
-    label: 'Further info', cssClass: 'nhsuk-tag--white',
-    description: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-    innovatorDescription: 'The organisation needs further information from you to make a decision.',
-    hidden: false
-  },
   WAITING: {
     label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
     description: 'Waiting for an internal decision to progress.',
     innovatorDescription: 'The organisation is waiting for an internal decision to progress.',
-    hidden: false
-  },
-  NOT_YET: {
-    label: 'Not yet', cssClass: 'nhsuk-tag--blue',
-    description: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-    innovatorDescription: 'Your innovation is not yet ready for the organisation\'s support offer.',
     hidden: false
   },
   UNASSIGNED: {
@@ -184,7 +173,7 @@ export const INNOVATION_SUPPORT_STATUS = {
     innovatorDescription: '',
     hidden: true
   },
-  COMPLETE: {
+  CLOSED: {
     label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
     description: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
     innovatorDescription: 'The organisation has completed their engagement with your innovation.',

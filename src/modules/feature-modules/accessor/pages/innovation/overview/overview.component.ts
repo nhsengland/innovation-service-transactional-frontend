@@ -84,7 +84,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         { label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' },
       ];
 
-      this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(this.innovationSupport.status);
+      this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(this.innovationSupport.status);
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION] });
 

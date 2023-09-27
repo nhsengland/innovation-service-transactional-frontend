@@ -22,7 +22,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="'ACCESSOR'">
-        <ng-container *ngIf="(innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'); then requestActionBtn"></ng-container>
+        <ng-container *ngIf="(innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'); then requestActionBtn"></ng-container>
 
         <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
       </ng-container>
@@ -77,7 +77,7 @@
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
-                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span> 
+                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span>
                     </li>
                   </ul>
                 </td>

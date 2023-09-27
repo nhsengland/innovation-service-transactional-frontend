@@ -49,10 +49,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ) {
 
     super();
-    
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
-    
+
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}`});
   }
 
@@ -89,7 +89,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
 
       this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
-      
+
       this.innovation = {
         ...this.innovation,
         groupedStatus: innovation.groupedStatus,

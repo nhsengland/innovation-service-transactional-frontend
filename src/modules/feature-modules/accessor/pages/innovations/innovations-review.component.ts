@@ -60,6 +60,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     if (this.stores.authentication.isAccessorRole()) {
 
       this.defaultStatus = 'ENGAGING';
+      // SUPPORT STATUS - TO DO
       this.tabs = [
         {
           key: InnovationSupportStatusEnum.ENGAGING,
@@ -72,13 +73,13 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         },
         {
-          key: InnovationSupportStatusEnum.COMPLETE,
+          key: InnovationSupportStatusEnum.CLOSED,
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           numberDescription: 'innovations with completed engagements',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.COMPLETE },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
@@ -108,30 +109,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         },
         {
-          key: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
-          title: 'Further info',
-          mainDescription: 'Further information is needed from the innovator to make a decision.',
-          showAssignedToMeFilter: false,
-          showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED },
-          notifications: null
-        },
-        {
           key: InnovationSupportStatusEnum.WAITING,
           title: 'Waiting',
           mainDescription: 'Waiting for an internal decision to progress.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.WAITING },
-          notifications: null
-        },
-        {
-          key: InnovationSupportStatusEnum.NOT_YET,
-          title: 'Not yet',
-          mainDescription: 'Innovations not yet ready for your support offer.',
-          showAssignedToMeFilter: false,
-          showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.NOT_YET },
           notifications: null
         },
         {
@@ -144,12 +127,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         },
         {
-          key: InnovationSupportStatusEnum.COMPLETE,
+          key: InnovationSupportStatusEnum.CLOSED,
           title: 'Completed',
           mainDescription: 'Your organisation has completed an engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.COMPLETE },
+          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
@@ -249,11 +232,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setOrderBy('updatedAt', 'descending');
         break;
 
-      case InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED:
       case InnovationSupportStatusEnum.WAITING:
-      case InnovationSupportStatusEnum.NOT_YET:
       case InnovationSupportStatusEnum.UNSUITABLE:
-      case InnovationSupportStatusEnum.COMPLETE:
+      case InnovationSupportStatusEnum.CLOSED:
         this.innovationsList
           .clearData()
           .setFilters({

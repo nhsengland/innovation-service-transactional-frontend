@@ -25,12 +25,9 @@ export enum InnovationGroupedStatusEnum {
 export enum InnovationSupportStatusEnum {
   UNASSIGNED = 'UNASSIGNED',
   ENGAGING = 'ENGAGING',
-  FURTHER_INFO_REQUIRED = 'FURTHER_INFO_REQUIRED',
   WAITING = 'WAITING',
-  NOT_YET = 'NOT_YET',
   UNSUITABLE = 'UNSUITABLE',
-  WITHDRAWN = 'WITHDRAWN',
-  COMPLETE = 'COMPLETE'
+  CLOSED = 'CLOSED'
 }
 
 export enum InnovationTransferStatusEnum {
