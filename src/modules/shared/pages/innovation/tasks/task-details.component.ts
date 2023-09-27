@@ -57,11 +57,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
 
   ngOnInit(): void {
-    console.log('section id: ')
-    console.log(this.sectionId);
-    console.log('task id: ')
-    console.log(this.taskId)
-
     if (this.sectionId) {
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
