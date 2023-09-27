@@ -42,6 +42,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.section;
+    console.log(this.sectionId);
 
     this.baseUrl = this.stores.authentication.userUrlBasePath();
 
@@ -191,7 +192,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
     this.innovationsService.createAction(this.innovationId, body).subscribe({
       next: response => {
         this.setRedirectAlertSuccess('You have assigned a task', {message: 'The innovator will be notified and it will be added to their to do list.'});
-        this.redirectTo(`${this.taskUrl}/${response.id}`);
+        this.redirectTo(`${this.taskUrl}/${response.id}`, {sectionId: this.sectionId});
       },
       error: () => this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
     });
