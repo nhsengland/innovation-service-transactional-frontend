@@ -98,7 +98,7 @@ export type InnovationInfoDTO = {
     mobilePhone?: null | string,
     contactDetails?: null | string,
     isActive: boolean,
-    organisations: null | { name: string, size: null | string }[],
+    organisation?: { name: string, size: null | string },
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
