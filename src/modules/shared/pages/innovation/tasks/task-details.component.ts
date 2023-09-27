@@ -42,7 +42,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId;
+    this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId ?? this.activatedRoute.snapshot.params.sectionId;
     this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.userUrlBase = this.userUrlBasePath();
