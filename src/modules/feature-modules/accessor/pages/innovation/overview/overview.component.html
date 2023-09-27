@@ -20,7 +20,15 @@
     </div>
   </dl>
 
-  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-bottom-7"> Update status </a>
+  <a *ngIf="isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-7"> Update status </a>
+
+  <ng-container *ngIf="isAccessorRole">
+    <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">Request status update</a>
+  
+    <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-7">
+      Request a status update to the qualifying accessor if you want to change the engaging support status to a more suitable one.
+    </p>
+  </ng-container>
 
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'" *ngIf="showCards"></app-statistics-cards>
 
