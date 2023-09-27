@@ -42,8 +42,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.section;
-    console.log(this.sectionId);
-
+    
     this.baseUrl = this.stores.authentication.userUrlBasePath();
 
     this.taskUrl = `/${this.baseUrl}/innovations/${this.innovationId}/tasks`;
