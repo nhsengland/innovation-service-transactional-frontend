@@ -27,7 +27,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     collaborators: { nameOrEmail: string }[],
     status: InnovationStatusEnum,
     groupedStatus: InnovationGroupedStatusEnum,
-    organisationsStatusDescription: string,
+    engagingOrganisationsCount: number,
     statusUpdatedAt: null | DateISOType,
     lastEndSupportAt: null | DateISOType
   } = null;
@@ -68,12 +68,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       const innovationContext = this.stores.context.getInnovation();
 
-      const occurrences = (innovationInfo.supports ?? []).map(item => item.status)
-        .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
-        .reduce((acc, status) => (
-          acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
-          {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
-      // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
+      const engagingOrganisationsCount = (innovationInfo.supports ?? []).filter(supports => [InnovationSupportStatusEnum.ENGAGING].includes(supports.status)).length;
+
 
       this.innovation = {
         owner: { name: innovationInfo.owner?.name ?? '' },
@@ -81,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email} ${item.role ? `(${item.role})` : ''}` })),
         status: innovationInfo.status,
         groupedStatus: innovationInfo.groupedStatus,
-        organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),
+        engagingOrganisationsCount: engagingOrganisationsCount,
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
         lastEndSupportAt: innovationInfo.lastEndSupportAt
       };
@@ -99,7 +95,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
         lastMessage: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection ? `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection)}"` : '',
         date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
-        emptyMessage: "You haven't submitted any section of your innovation record yet."
+        emptyMessage: "You haven't submitted any section of your innovation record yet"
       }, {
         title: 'Tasks assigned to you',
         label: `tasks to do`,
@@ -108,7 +104,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         lastMessage: `Most recent assigned task: "Update '${this.translate('shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted)}'"`,
         date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
         emptyMessageTitle: 'No tasks assigned to you yet',
-        emptyMessage: 'We might send a request to add more information to your innovation record here.'
+        emptyMessage: 'We might send a request to add more information to your innovation record here'
       }, {
         title: 'Messages',
         label: `Unread messages`,
@@ -116,7 +112,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
         lastMessage: `Last received message`,
         date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
-        emptyMessage: 'No messages yet.'
+        emptyMessage: 'No messages yet'
       }];
 
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {

@@ -22,6 +22,8 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
   taskId: string;
   status: InnovationTaskStatusEnum;
 
+  taskCreatedBy: null | 'accessor' | 'needs assessor';
+
   pageInformation?: { title: string, leadText: string };
   submitBtn: { label: string, isDisabled: boolean };
 
@@ -38,6 +40,8 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.taskId = this.activatedRoute.snapshot.params.taskId;
     this.status = this.activatedRoute.snapshot.data.status;
+
+    this.taskCreatedBy = null;
 
     this.submitBtn = { label: '', isDisabled: true };
     this.sectionInDraft = false;
@@ -63,6 +67,8 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
       })
     ).subscribe({
       next: ([task, section]) => {
+
+        this.taskCreatedBy = task.createdBy.displayTag.toLowerCase().includes('assessment') ? 'needs assessor' : 'accessor';
 
         switch(this.status) {
           case InnovationTaskStatusEnum.DONE:
@@ -99,7 +105,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
         }
 
         const sectionInfo = this.stores.innovation.getInnovationRecordSectionIdentification(task.section);
-        this.pageInformation.title += ` for section ${sectionInfo?.section.number}. '${sectionInfo?.section.title}'`;
+        this.pageInformation.title += ` for section ${sectionInfo?.group.number}.${sectionInfo?.section.number} '${sectionInfo?.section.title}'`;
 
 
         if(section?.status === 'DRAFT') {
@@ -138,10 +144,10 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
 
         switch(this.status) {
           case InnovationTaskStatusEnum.DONE:
-            this.setRedirectAlertSuccess('You have marked this task as done', { message: 'Your message has been sent and the accessor will be notified about it.' })
+            this.setRedirectAlertSuccess('You have marked this task as done', { message: `Your message has been sent and the ${this.taskCreatedBy} will be notified about it.` })
             break;
           case InnovationTaskStatusEnum.DECLINED:
-            this.setRedirectAlertSuccess('You have declined this task', { message: 'Your message has been sent and the accessor will be notified.' })
+            this.setRedirectAlertSuccess('You have declined this task', { message: `Your message has been sent and the ${this.taskCreatedBy} will be notified.` })
             break;
           case InnovationTaskStatusEnum.CANCELLED:
             this.setRedirectAlertSuccess('You have cancelled this task', { message: 'Your message has been sent and the innovator will be notified about it.' })

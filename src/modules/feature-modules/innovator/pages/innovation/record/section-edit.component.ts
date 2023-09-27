@@ -64,7 +64,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
-    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'.` : '';
+    this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
       next: response => {

@@ -62,7 +62,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
 
-        
+
         this.tasksIds = sectionInfo.tasksIds ?? [];
 
 
@@ -124,12 +124,12 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
       this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
 
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-      this.sectionTitle = section ? `${section.group.number}.${section.section.number}: ${section.section.title}` : 'Section no longer available';
+      this.sectionTitle = section ? `${section.group.number}.${section.section.number} ${section.section.title}` : 'Section no longer available';
 
       if (this.tasksIds.length > 1) {
-        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.group.title}'`, { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });
+        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.section.title}'`, { hint: `${this.taskNumber + 1} of ${this.tasksIds.length}` });
       } else {
-        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.group.title}'`, { hint: `Task Id: ${this.task.displayId}` });
+        this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.section.title}'`, { hint: `Task Id: ${this.task.displayId}` });
       }
 
       this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.TASK], contextIds: [this.taskId] });

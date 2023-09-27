@@ -35,7 +35,7 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
+            <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
               {{ sectionTitle }}
             </a>
           </dd>
@@ -74,7 +74,7 @@
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">Requested task</span>
                 <svg class="nhsuk-icon nhsuk-icon__arrow-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="34" height="34">
-                  <path 
+                  <path
                     d="M19.6 11.66l-2.73-3A.51.51 0 0 0 16 9v2H5a1 1 0 0 0 0 2h11v2a.5.5 0 0 0 .32.46.39.39 0 0 0 .18 0 .52.52 0 0 0 .37-.16l2.73-3a.5.5 0 0 0 0-.64z">
                   </path>
                 </svg>
@@ -125,8 +125,7 @@
                 <a  routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task and send a reply </a>
               </li>
               <li [ngSwitch]="task.status">
-                <a *ngSwitchCase="'DONE'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
-                <a *ngSwitchCase="'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section</a>
+                <a *ngSwitchCase="'DONE'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
               </li>
             </ul>
           </ng-container>
@@ -135,5 +134,5 @@
     </div>
   </div>
 
-  
+
 </theme-content-wrapper>

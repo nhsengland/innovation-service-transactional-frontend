@@ -11,7 +11,7 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovati
 
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 
@@ -26,6 +26,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   isQualifyingAccessorRole = false;
+  isAccessorRole = false;
 
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
@@ -50,6 +51,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    this.isAccessorRole = this.stores.authentication.isAccessorRole();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
@@ -57,7 +59,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   ngOnInit(): void {
 
-    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.TASKS_OPEN_COUNTER] };
+    const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER] };
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
       this.innovationCollaborators = innovationCollaborators.data
@@ -92,6 +94,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.SUPPORT], contextIds: [this.innovation.support.id] });
       }
 
+
       this.cardsList = [
         {
           title: 'Innovation record',
@@ -101,16 +104,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
           lastMessage: `Last submitted section: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection)}"`,
           date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
-          emptyMessage: `No sections have been submitted since support started.`
+          emptyMessage: `No sections have been submitted since support started`
         },
         {
           title: 'Tasks',
           label: `tasks assigned by your organisation have been done or declined by the innovator`,
           link: `/accessor/innovations/${this.innovationId}/tasks`,
-          count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
-          lastMessage: `Last updated task: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection)}"`,
-          date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No tasks assigned by your organisation yet.'
+          count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
+          total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
+          lastMessage: `Last updated task: "${this.translate('shared.catalog.innovation.innovation_sections.' + statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER].lastUpdatedSection)}"`,
+          date: statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER]?.lastUpdatedAt,
+          emptyMessage: 'No tasks assigned by your organisation yet'
         }
       ];
 
