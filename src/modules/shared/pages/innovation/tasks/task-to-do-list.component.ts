@@ -125,10 +125,23 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
+
+    let tasksToDoTitle: string = '';
+    switch (this.topList.count) {
+      case 0: 
+        tasksToDoTitle = 'You have no tasks to do';
+        break;
+      case 1:
+        tasksToDoTitle = `You have 1 task to do`;
+        break;
+      default:
+        tasksToDoTitle = `You have ${this.topList.count} tasks to do`
+    }
+
     switch (this.userType) {
       case 'INNOVATOR':
         return {
-          topTableTitle: `You have ${this.topList.count} tasks to do`,
+          topTableTitle: tasksToDoTitle,
           bottomTableTitle: 'Previous tasks',
         };
       case 'ACCESSOR':
