@@ -48,7 +48,7 @@
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p *ngIf="isInnovatorType">This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.</p>
           <p *ngIf="isAccessorType">
-            You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create an action or send a message to the innovator asking them to resubmit it.</span>
+            You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'FURTHER_INFO_REQUIRED'"> If you need to see this section, create a task or send a message to the innovator asking them to resubmit it.</span>
           </p>
         </div>
 
