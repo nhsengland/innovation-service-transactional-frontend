@@ -26,6 +26,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   isQualifyingAccessorRole = false;
+  isAccessorRole = false;
 
   innovationSummary: { label: string; value: null | string; }[] = [];
   innovatorSummary: { label: string; value: string; }[] = [];
@@ -50,6 +51,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    this.isAccessorRole = this.stores.authentication.isAccessorRole();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
@@ -74,7 +76,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
-        { label: 'Company', value: innovationInfo.owner?.organisations ? innovationInfo.owner.organisations[0].name : '' },
+        { label: 'Company', value: innovationInfo.owner?.organisation?.name ??  'No company' },
         { label: 'Location', value: `${innovationInfo.countryName}${innovationInfo.postCode ? ', ' + innovationInfo.postCode : ''}` },
         { label: 'Description', value: innovationInfo.description },
         { label: 'Categories', value: innovationInfo.categories.map(v => v === 'OTHER' ? innovationInfo.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }

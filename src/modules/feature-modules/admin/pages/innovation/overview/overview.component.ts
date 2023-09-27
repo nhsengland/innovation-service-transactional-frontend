@@ -8,10 +8,10 @@ import { NotificationContextTypeEnum } from '@modules/stores/context/context.enu
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 @Component({
@@ -67,8 +67,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
-        { label: 'Company', value: innovation.owner && innovation.owner.organisations ? innovation.owner.organisations[0].name : '' },
-        { label: 'Location', value: `${innovation.countryName}${innovation.postCode ? ', ' + innovation.postCode : ''}` },
+        { label: 'Company', value: innovation.owner?.organisation?.name ?? 'No company' },
+        ...innovation.owner?.organisation?.size ? [
+          { label: 'Company size', value: innovation.owner?.organisation?.size ?? '' }
+        ] : [],
         { label: 'Description', value: innovation.description },
         { label: 'Categories', value: innovation.categories.map(v => v === 'OTHER' ? innovation.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }
       ];

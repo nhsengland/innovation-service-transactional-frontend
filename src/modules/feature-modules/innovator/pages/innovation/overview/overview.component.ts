@@ -27,7 +27,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     collaborators: { nameOrEmail: string }[],
     status: InnovationStatusEnum,
     groupedStatus: InnovationGroupedStatusEnum,
-    organisationsStatusDescription: string,
+    engagingOrganisationsCount: number,
     statusUpdatedAt: null | DateISOType,
     lastEndSupportAt: null | DateISOType
   } = null;
@@ -68,12 +68,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       const innovationContext = this.stores.context.getInnovation();
 
-      const occurrences = (innovationInfo.supports ?? []).map(item => item.status)
-        .filter(status => [InnovationSupportStatusEnum.ENGAGING].includes(status))
-        .reduce((acc, status) => (
-          acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
-          {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
-      // console.log(occurrences) // => {2: 5, 4: 1, 5: 3, 9: 1}
+      const engagingOrganisationsCount = (innovationInfo.supports ?? []).filter(supports => [InnovationSupportStatusEnum.ENGAGING].includes(supports.status)).length;
+
 
       this.innovation = {
         owner: { name: innovationInfo.owner?.name ?? '' },
@@ -81,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         collaborators: innovationCollaborators.data.map(item => ({ nameOrEmail: `${item.name ?? item.email} ${item.role ? `(${item.role})` : ''}` })),
         status: innovationInfo.status,
         groupedStatus: innovationInfo.groupedStatus,
-        organisationsStatusDescription: Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', '),
+        engagingOrganisationsCount: engagingOrganisationsCount,
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
         lastEndSupportAt: innovationInfo.lastEndSupportAt
       };

@@ -60,8 +60,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
         this.innovationSummary = [
-          { label: 'Company', value: this.innovation.owner?.organisations ? this.innovation.owner.organisations[0].name : '' },
-          { label: 'Company size', value: this.innovation.owner?.organisations ? this.innovation.owner.organisations[0].size : '' },
+          { label: 'Company', value: this.innovation.owner?.organisation?.name ?? 'No company' },
+          ...this.innovation.owner?.organisation?.size ? [
+            { label: 'Company size', value: this.innovation.owner?.organisation?.size ?? '' }
+          ] : [],
           { label: 'Location', value: `${this.innovation.countryName}${this.innovation.postCode ? ', ' + this.innovation.postCode : ''}` },
           { label: 'Description', value: this.innovation.description },
           { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }

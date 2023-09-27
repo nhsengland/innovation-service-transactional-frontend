@@ -42,7 +42,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.sectionId = this.activatedRoute.snapshot.params.sectionId;
+    this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId ?? this.activatedRoute.snapshot.params.sectionId;
     this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.userUrlBase = this.userUrlBasePath();
@@ -57,7 +57,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
 
   ngOnInit(): void {
-
     if (this.sectionId) {
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
@@ -76,7 +75,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
       });
 
-      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record`);
+      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
 
     } else if (this.taskId) {
 
