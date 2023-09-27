@@ -54,12 +54,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }] : []),
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }] : []),
         { label: 'Tasks', url: `/assessment/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing', url: `/assessment/innovations/${innovation.id}/support` },
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }] : []),
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Needs assessment', url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []),
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }] : []),
+        { label: 'Data sharing preferences', url: `/assessment/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
       ];
 
