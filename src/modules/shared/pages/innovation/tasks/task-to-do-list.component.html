@@ -35,13 +35,31 @@
 
   <ng-template #actionTrackerList>
     
-    <ng-container *ngIf="topList.count === 0 && bottomList.count === 0">
+    <ng-container *ngIf="userType === 'INNOVATOR' && topList.count === 0 && bottomList.count === 0">
       <p class="nhsuk-u-padding-top-5">There are no tasks assigned to you yet.</p>
     </ng-container>
 
-    <h2 *ngIf="userType !== 'ADMIN'" [ngClass]="topList.count > 0 ? 'nhsuk-u-margin-bottom-2' : 'nhsuk-u-margin-bottom-8'">
-      {{ tablesTitles.topTableTitle }}
-    </h2>
+    <!-- <ng-container *ngIf="userType !== 'INNOVATOR'">
+      <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.topTableTitle }}</h2>
+      <ng-container *ngIf="topList.count === 0"> <p class="nhsuk-u-padding-top-5">There are no tasks.</p> </ng-container>
+    </ng-container> -->
+
+    <ng-container  *ngIf="userType !== 'ADMIN'">
+
+      <ng-container *ngIf="userType === 'INNOVATOR'">
+        <h2 [ngClass]="topList.count > 0 ? 'nhsuk-u-margin-bottom-2' : 'nhsuk-u-margin-bottom-8'">  
+          {{ tablesTitles.topTableTitle }}
+        </h2>
+      </ng-container>
+
+      <ng-container *ngIf="userType !== 'INNOVATOR'"> 
+        <h2 class="nhsuk-u-margin-bottom-2">  
+          {{ tablesTitles.topTableTitle }}
+        </h2>
+        <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
+      </ng-container>
+      
+    </ng-container>
 
       <ng-container *ngIf="topList.count > 0">
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-7">
@@ -91,13 +109,15 @@
       </ng-container>
 
     <ng-container *ngIf="userType !== 'ADMIN'">
-      <ng-container *ngIf="userType === 'INNOVATOR' && bottomList.count > 0">
-        <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.bottomTableTitle }}</h2>
-      </ng-container>"
+
       <ng-container *ngIf="userType !== 'INNOVATOR'">
         <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.bottomTableTitle }}</h2>
         <ng-container *ngIf="bottomList.count === 0"> <p class="nhsuk-u-padding-top-5">There are no tasks.</p> </ng-container>
-      </ng-container>"
+      </ng-container>
+
+      <ng-container *ngIf="userType === 'INNOVATOR' && bottomList.count > 0">
+        <h2 class="nhsuk-u-margin-bottom-2">{{ tablesTitles.bottomTableTitle }}</h2>
+      </ng-container>
 
       <ng-container *ngIf="bottomList.count > 0">
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-7">
