@@ -34,9 +34,9 @@
   </ng-container>
 
   <ng-template #actionTrackerList>
-    
+
     <ng-container *ngIf="userType === 'INNOVATOR'">
-      <h2 class="nhsuk-u-margin-bottom-2">  
+      <h2 class="nhsuk-u-margin-bottom-2">
         {{ tablesTitles.topTableTitle }}
       </h2>
 
@@ -50,11 +50,11 @@
 
     </ng-container>
 
-    <ng-container *ngIf="userType !== 'INNOVATOR'"> 
-      <h2 class="nhsuk-u-margin-bottom-2">  
+    <ng-container *ngIf="userType !== 'INNOVATOR'">
+      <h2 class="nhsuk-u-margin-bottom-2">
         {{ tablesTitles.topTableTitle }}
       </h2>
-      <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
+      <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p>
     </ng-container>
 
       <ng-container *ngIf="topList.count > 0">
@@ -91,13 +91,17 @@
                       <theme-notification-tag label="dot" *ngIf="task.notifications"></theme-notification-tag>
                     </li>
                     <li class="nhsuk-u-padding-right-1 nhsuk-body-s nhsuk-u-margin-bottom-0 font-color-secondary">
-                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span> 
+                      <span>Assigned on {{ task.createdAt | date: ("app.date_formats.medium_date" | translate) }} by {{ task.createdBy.name }}, {{task.createdBy.displayTag}}</span>
                     </li>
                   </ul>
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
+                  <theme-tag
+                  type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
+                  class="tag-no-wrap"
+                  ></theme-tag>
                 </td>
             </tr>
           </tbody>
@@ -157,7 +161,11 @@
                 </td>
                 <td class="nhsuk-table__cell text-align-right">
                   <span class="nhsuk-table-responsive__heading">{{ allTasksList.getColumnLabel("status") }}</span>
-                  <theme-tag type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"></theme-tag>
+                  <theme-tag
+                  type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
+                  class="tag-no-wrap"
+                  ></theme-tag>
                 </td>
             </tr>
           </tbody>
