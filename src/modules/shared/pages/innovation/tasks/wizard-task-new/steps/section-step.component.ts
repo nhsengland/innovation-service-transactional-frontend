@@ -24,7 +24,7 @@ export class WizardTaskNewSectionStepComponent extends CoreComponent implements 
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SectionStepOutputType>>();
 
   form = new FormGroup({
-    section: new FormControl<null | InnovationSectionEnum>(null, { validators: CustomValidators.required('Choose at least one section'), updateOn: 'change' })
+    section: new FormControl<null | InnovationSectionEnum>(null, { validators: CustomValidators.required('Choose one section'), updateOn: 'change' })
   }, { updateOn: 'blur' });
 
   sectionItems: { value: string, label: string }[] = [];
