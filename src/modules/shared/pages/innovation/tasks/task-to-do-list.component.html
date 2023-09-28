@@ -50,15 +50,11 @@
 
     </ng-container>
 
-    <ng-container  *ngIf="userType !== 'ADMIN'">
-
-      <ng-container *ngIf="userType !== 'INNOVATOR'"> 
-        <h2 class="nhsuk-u-margin-bottom-2">  
-          {{ tablesTitles.topTableTitle }}
-        </h2>
-        <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
-      </ng-container>
-      
+    <ng-container *ngIf="userType !== 'INNOVATOR'"> 
+      <h2 class="nhsuk-u-margin-bottom-2">  
+        {{ tablesTitles.topTableTitle }}
+      </h2>
+      <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
     </ng-container>
 
       <ng-container *ngIf="topList.count > 0">
