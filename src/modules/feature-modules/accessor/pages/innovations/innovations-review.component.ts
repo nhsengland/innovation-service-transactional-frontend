@@ -72,7 +72,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         {
           key: InnovationSupportStatusEnum.CLOSED,
           title: 'Closed',
-          mainDescription: 'Your organisation has closed an engagement with these innovations.',
+          mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
@@ -124,7 +124,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         {
           key: InnovationSupportStatusEnum.CLOSED,
           title: 'Closed',
-          mainDescription: 'Your organisation has closed an engagement with these innovations.',
+          mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
