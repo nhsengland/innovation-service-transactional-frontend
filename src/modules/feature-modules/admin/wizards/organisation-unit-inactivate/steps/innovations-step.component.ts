@@ -158,8 +158,6 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
       }
     }
   }[]): InnovationSupportStatusEnum {
-    // SUPPORT STATUS - TO DO
-    // InnovationSupportStatusEnum.NOT_YET
     return supports && supports.length > 0 ? supports[0].status :  InnovationSupportStatusEnum.WAITING;
   }
 
