@@ -87,6 +87,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
 
       this.defaultStatus = 'UNASSIGNED';
+      // SUPPORT STATUS - TO DO
       this.tabs = [
         {
           key: InnovationSupportStatusEnum.UNASSIGNED,
