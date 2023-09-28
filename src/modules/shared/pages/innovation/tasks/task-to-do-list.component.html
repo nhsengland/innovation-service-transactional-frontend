@@ -35,27 +35,26 @@
 
   <ng-template #actionTrackerList>
     
-    <ng-container *ngIf="userType === 'INNOVATOR' && topList.count === 0 && bottomList.count === 0">
-      <p class="nhsuk-u-padding-top-5">There are no tasks assigned to you yet.</p>
+    <ng-container *ngIf="userType === 'INNOVATOR'">
+      <h2 class="nhsuk-u-margin-bottom-2">  
+        {{ tablesTitles.topTableTitle }}
+      </h2>
+
+      <ng-container *ngIf="topList.count === 0 && bottomList.count === 0">
+        <p class="nhsuk-u-padding-top-3">There are no tasks assigned to you yet.</p>
+      </ng-container>
+
+      <ng-container *ngIf="topList.count === 0 && bottomList.count !== 0">
+        <p class="nhsuk-u-padding-top-3">There are currently no tasks to do.</p>
+      </ng-container>
+
     </ng-container>
 
-    <ng-container  *ngIf="userType !== 'ADMIN'">
-
-      <ng-container *ngIf="userType === 'INNOVATOR'">
-
-        <h2 class="nhsuk-u-margin-bottom-2">  
-          {{ tablesTitles.topTableTitle }}
-        </h2>
-        <ng-container *ngIf="topList.count === 0"> <p class="nhsuk-u-padding-top-3git">There are currently no tasks to do.</p> </ng-container>
-      </ng-container>
-
-      <ng-container *ngIf="userType !== 'INNOVATOR'"> 
-        <h2 class="nhsuk-u-margin-bottom-2">  
-          {{ tablesTitles.topTableTitle }}
-        </h2>
-        <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
-      </ng-container>
-      
+    <ng-container *ngIf="userType !== 'INNOVATOR'"> 
+      <h2 class="nhsuk-u-margin-bottom-2">  
+        {{ tablesTitles.topTableTitle }}
+      </h2>
+      <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p> 
     </ng-container>
 
       <ng-container *ngIf="topList.count > 0">
