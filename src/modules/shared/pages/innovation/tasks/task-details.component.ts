@@ -61,9 +61,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
       this.innovationsService.getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] }).subscribe(sectionInfo => {
 
-
         this.tasksIds = sectionInfo.tasksIds ?? [];
-
 
         if (this.tasksIds.length === 0) {
           this.redirectTo(`${this.userUrlBasePath}/innovations/${this.innovationId}/tasks`);
@@ -75,15 +73,13 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
       });
 
-      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections/${this.sectionId}`);
-
     } else if (this.taskId) {
 
       this.getTaskInfo();
 
-      this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/tasks`);
-
     }
+
+    this.setBackLink('Go back');
 
   }
 
