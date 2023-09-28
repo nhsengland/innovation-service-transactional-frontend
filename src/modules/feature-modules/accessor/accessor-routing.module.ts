@@ -259,7 +259,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
-                    data: { breadcrumb: 'Statuses' }
+                    data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
                   },
                   {
                     path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
@@ -336,7 +336,9 @@ const routes: Routes = [
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
-                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent },
+                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
+                  },
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
                   { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent },
@@ -398,7 +400,9 @@ const routes: Routes = [
             path: '', pathMatch: 'full', component: TasksListComponent,
             data: { breadcrumb: null }
           },
-          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent },
+          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
+            data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
+          },
           { path: 'advanced-filter', pathMatch: 'full', component: PageTasksAdvancedSearchComponent }
         ]
       },

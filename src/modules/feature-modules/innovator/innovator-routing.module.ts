@@ -356,7 +356,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
-                    data: { breadcrumb: 'Statuses' }
+                    data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
                   },
                   {
                     path: ':taskId',
@@ -434,7 +434,10 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   { path: 'edit', pathMatch: 'full', component: InnovationDataSharingChangeComponent },
-                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent }
+                  { 
+                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
+                  }
                 ]
               },
 
