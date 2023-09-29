@@ -437,6 +437,12 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--dark-grey',
               description: 'The organisation has completed their engagement with the innovation.',
               accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
+            },
+            COMPLETE: {
+              name: 'Completed',
+              cssColorClass: 'nhsuk-tag--dark-grey',
+              description: 'The organisation has completed their engagement with the innovation.',
+              accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
             }
           },
           grouped_status: {
