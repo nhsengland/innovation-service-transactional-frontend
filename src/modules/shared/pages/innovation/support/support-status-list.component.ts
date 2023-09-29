@@ -23,8 +23,8 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent {
     super();
 
     this.setPageTitle('Support status key');
+    this.setBackLink('Go back');
     this.setPageStatus('READY');
-
   }
 
 }
