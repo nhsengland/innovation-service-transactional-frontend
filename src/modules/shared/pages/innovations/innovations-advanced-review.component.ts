@@ -109,7 +109,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     } else if (this.stores.authentication.isAccessorRole()) {
 
-      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'COMPLETE'].includes(i.value));
+      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'CLOSED'].includes(i.value));
 
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
 

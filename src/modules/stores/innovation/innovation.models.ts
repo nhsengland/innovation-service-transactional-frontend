@@ -142,41 +142,29 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
-  // SUPPORT STATUS - TO DO
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
-    description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-    innovatorDescription: 'Ready to support, assess or provide guidance.',
+    description: 'Ready to support, assess or provide guidance.',
     hidden: false
   },
   WAITING: {
     label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
-    description: 'Waiting for an internal decision to progress.',
-    innovatorDescription: 'The organisation is waiting for an internal decision to progress.',
+    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
     hidden: false
   },
   UNASSIGNED: {
     label: 'Unassigned', cssClass: 'nhsuk-tag--red',
-    description: 'No status assigned yet.',
-    innovatorDescription: 'No status assigned yet.',
+    description: 'A support status has not been assigned yet.',
     hidden: true
   },
   UNSUITABLE: {
     label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
-    description: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-    innovatorDescription: 'The organisation has no suitable support offer for your innovation.',
+    description: 'The organisation has no suitable support offer for the innovation.',
     hidden: false,
   },
-  WITHDRAWN: {
-    label: 'Withdrawn', cssClass: 'nhsuk-tag--red',
-    description: '',
-    innovatorDescription: '',
-    hidden: true
-  },
   CLOSED: {
-    label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
-    description: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-    innovatorDescription: 'The organisation has completed their engagement with your innovation.',
+    label: 'Closed', cssClass: 'nhsuk-tag--dark-grey',
+    description: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
     hidden: false
   }
 };
