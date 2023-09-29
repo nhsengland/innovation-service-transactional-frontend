@@ -356,7 +356,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
-                    data: { breadcrumb: 'Statuses' }
+                    data: { breadcrumb: 'Statuses', layout: { type: 'full' } }
                   },
                   {
                     path: ':taskId',
