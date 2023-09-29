@@ -104,7 +104,7 @@ export class TasksListComponent extends CoreComponent implements OnInit {
 
     this.innovationsService.getTasksList(this.tasksList.getAPIQueryParams()).subscribe(response => {
       this.tasksList.setData(response.data, response.count);
-      this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} created by you`;
+      this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} assigned by you`;
       if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     }
