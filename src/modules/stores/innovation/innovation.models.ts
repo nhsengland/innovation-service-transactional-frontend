@@ -142,41 +142,29 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
-  // SUPPORT STATUS - TO DO
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
     description: 'Ready to support, assess or provide guidance.',
-    innovatorDescription: 'Ready to support, assess or provide guidance.',
     hidden: false
   },
   WAITING: {
     label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
-    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
-    innovatorDescription: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
+    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation close their support offer.',
     hidden: false
   },
   UNASSIGNED: {
     label: 'Unassigned', cssClass: 'nhsuk-tag--red',
     description: 'A support status has not been assigned yet.',
-    innovatorDescription: 'A support status has not been assigned yet.',
     hidden: true
   },
   UNSUITABLE: {
     label: 'Unsuitable', cssClass: 'nhsuk-tag--grey',
     description: 'The organisation has no suitable support offer for the innovation.',
-    innovatorDescription: 'The organisation has no suitable support offer for the innovation.',
     hidden: false,
-  },
-  WITHDRAWN: {
-    label: 'Withdrawn', cssClass: 'nhsuk-tag--red',
-    description: '',
-    innovatorDescription: '',
-    hidden: true
   },
   CLOSED: {
     label: 'Closed', cssClass: 'nhsuk-tag--dark-grey',
     description: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
-    innovatorDescription: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
     hidden: false
   }
 };
