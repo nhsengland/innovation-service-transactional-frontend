@@ -28,7 +28,7 @@
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
                   </svg>
-                  {{ unitItem.name }}
+                  {{ unitItem.name }} <span *ngIf="unitItem.name === unitItem.name"> (your organisation)</span>
                 </button>
                 <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
                   <span>Status: <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"></theme-tag></span>
@@ -129,6 +129,14 @@
           Completed at {{ innovation.assessment.finishedAt | date: 'MMMM y' }}
         </div>
       </ng-container>
+
+      <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link">
+        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
+        <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
+          <theme-svg-icon type="action"></theme-svg-icon>
+          <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
+        </a>
+      </div>
 
     </div>
   </div>

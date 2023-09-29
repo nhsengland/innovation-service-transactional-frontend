@@ -37,13 +37,15 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   innovation: ContextInnovationType;
   lsCache: Set<string>;
 
+  // Flags
+  isQualifyingAccessorRole: boolean;
   isAdmin: boolean;
   isInnovatorType: boolean;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
-    { id: 'SUGGESTED', title: 'Suggested support organisations', unitsList: [] }
+    { id: 'SUGGESTED', title: 'Other suggested support organisations', unitsList: [] }
   ];
 
 
@@ -66,6 +68,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     if (this.isAdmin) {
       this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
@@ -92,7 +95,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
           canDoProgressUpdates: false,
-          temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
+          temporalDescription: item.support.start ? `Date suggested: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
