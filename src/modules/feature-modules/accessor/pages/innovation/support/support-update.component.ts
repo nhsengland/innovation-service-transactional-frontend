@@ -54,7 +54,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   };
 
   private currentStatus: null | InnovationSupportStatusEnum = null;
-  // SUPPORT STATUS - TO DO
   private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]: 'Provide the innovator with clear details of changes to their support status and that your organisation is ready to actively engage with this innovation. Provide details of at least one person from your organisation assigned to this innovation.',
     [InnovationSupportStatusEnum.WAITING]: 'Provide the innovator with clear details of changes to their support status and that an internal decision is pending for the progression of their status.',
