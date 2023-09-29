@@ -149,7 +149,7 @@ export const INNOVATION_SUPPORT_STATUS = {
   },
   WAITING: {
     label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
-    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
+    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation close their support offer.',
     hidden: false
   },
   UNASSIGNED: {
@@ -158,7 +158,7 @@ export const INNOVATION_SUPPORT_STATUS = {
     hidden: true
   },
   UNSUITABLE: {
-    label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
+    label: 'Unsuitable', cssClass: 'nhsuk-tag--grey',
     description: 'The organisation has no suitable support offer for the innovation.',
     hidden: false,
   },
