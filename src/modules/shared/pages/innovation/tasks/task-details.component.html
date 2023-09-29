@@ -18,7 +18,7 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Last update</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <p>{{ task.updatedAt | date : ("app.date_formats.long_date" | translate) }}
-              <span>by {{ task.updatedBy.name }}<span *ngIf="task.updatedBy.name !== '[deleted user]'">, {{ task.updatedBy.displayTag}}</span></span>
+              <span>by {{ task.updatedBy.name }}, {{ task.updatedBy.displayTag}}</span>
             </p>
           </dd>
         </div>
