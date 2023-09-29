@@ -17,7 +17,6 @@ type TabType = {
   title: string,
   mainDescription: string,
   secondaryDescription?: string,
-  numberDescription?: string,
   showAssignedToMeFilter: boolean,
   showSuggestedOnlyFilter: boolean,
   link: string,
@@ -60,13 +59,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     if (this.stores.authentication.isAccessorRole()) {
 
       this.defaultStatus = 'ENGAGING';
-      // SUPPORT STATUS - TO DO
       this.tabs = [
         {
           key: InnovationSupportStatusEnum.ENGAGING,
           title: 'Engaging',
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
-          numberDescription: 'innovations in active engagement',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
@@ -74,9 +71,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         },
         {
           key: InnovationSupportStatusEnum.CLOSED,
-          title: 'Completed',
-          mainDescription: 'Your organisation has completed an engagement with these innovations.',
-          numberDescription: 'innovations with completed engagements',
+          title: 'Closed',
+          mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
@@ -87,14 +83,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
 
       this.defaultStatus = 'UNASSIGNED';
-      // SUPPORT STATUS - TO DO
       this.tabs = [
         {
           key: InnovationSupportStatusEnum.UNASSIGNED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
           secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
-          numberDescription: 'unassigned innovations',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
@@ -129,8 +123,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         },
         {
           key: InnovationSupportStatusEnum.CLOSED,
-          title: 'Completed',
-          mainDescription: 'Your organisation has completed an engagement with these innovations.',
+          title: 'Closed',
+          mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
@@ -186,7 +180,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
         }),
         response.count);
-      this.currentTab.numberDescription = `${response.count} ${this.currentTab.numberDescription}`;
       if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
       this.setPageStatus('READY');
     });
