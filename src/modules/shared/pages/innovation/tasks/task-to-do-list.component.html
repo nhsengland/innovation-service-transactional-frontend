@@ -15,10 +15,14 @@
       <ng-container *ngSwitchCase="'ASSESSMENT'">
         <ng-container *ngIf="['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
 
-        <p *ngIf="['CREATED', 'WAITING_NEEDS_ASSESSMENT'].includes(innovation.status); else actionTrackerList">
-          Once you have started the needs assessment process, you can request innovators
-          to add more information to their innovation record sections here.
+        <p *ngIf="['CREATED', 'WAITING_NEEDS_ASSESSMENT', 'AWAITING_NEEDS_REASSESSMENT'].includes(innovation.status)">
+          Once you have started the needs {{ innovation.status === 'AWAITING_NEEDS_REASSESSMENT' ? 'reassessment' : 'assessment' }} process, you can request innovators to add more information to their innovation record sections here.
         </p>
+
+        <ng-container *ngIf="!['CREATED', 'WAITING_NEEDS_ASSESSMENT'].includes(innovation.status)">
+          <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
+        </ng-container>
+
       </ng-container>
 
       <ng-container *ngSwitchCase="'ACCESSOR'">
