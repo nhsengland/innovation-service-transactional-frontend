@@ -56,11 +56,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   private currentStatus: null | InnovationSupportStatusEnum = null;
   private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]: 'Provide the innovator with clear details of changes to their support status and that your organisation is ready to actively engage with this innovation. Provide details of at least one person from your organisation assigned to this innovation.',
-    [InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED]: 'Provide the innovator with clear details of changes to their support status and that further information is needed from the innovator in order to make a decision on their status. Provide a message on what specific information is needed.',
     [InnovationSupportStatusEnum.WAITING]: 'Provide the innovator with clear details of changes to their support status and that an internal decision is pending for the progression of their status.',
-    [InnovationSupportStatusEnum.NOT_YET]: 'Provide the innovator with clear details of changes to their support status and that their Innovation Record is not ready for your organisation to provide just yet. Provide a message outlining this decision.',
     [InnovationSupportStatusEnum.UNSUITABLE]: 'Provide the innovator with clear details of changes to their support status and that your organisation has no suitable support offer for their innovation. Provide a message and feedback on why you organisation has made this decision.',
-    [InnovationSupportStatusEnum.COMPLETE]: 'Provide the innovator with clear details of changes to their support status and that you have completed the engagement process. Provide an outline of the completion of the engagement process with you organisation.'
+    [InnovationSupportStatusEnum.CLOSED]: 'Provide the innovator with clear details of changes to their support status and that you have completed the engagement process. Provide an outline of the completion of the engagement process with you organisation.'
   };
 
 
@@ -191,7 +189,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
       // this.setAlertSuccess('Support status updated and organisation suggestions sent', { message: 'The Innovation Support status has been successfully updated and the Innovator has been notified of your accompanying suggestions and feedback.' });
 
-      if (this.chosenStatus && this.currentStatus === InnovationSupportStatusEnum.ENGAGING && [InnovationSupportStatusEnum.COMPLETE, InnovationSupportStatusEnum.NOT_YET, InnovationSupportStatusEnum.UNSUITABLE].includes(this.chosenStatus)) {
+      if (this.chosenStatus && this.currentStatus === InnovationSupportStatusEnum.ENGAGING && [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.UNSUITABLE].includes(this.chosenStatus)) {
         this.setAlertSuccess('Support status updated', { message: 'The innovation support status has been successfully updated.' });
         this.setPageTitle('Suggest other organisations', { showPage: false });
         this.stepNumber = 4;

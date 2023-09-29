@@ -355,7 +355,9 @@ const routes: Routes = [
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
-                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent }
+                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
+                  }
                 ]
               },
 
@@ -391,7 +393,9 @@ const routes: Routes = [
         },
         children: [
           { path: '', pathMatch: 'full', component: PageTasksAdvancedSearchComponent, data: { breadcrumb: null } },
-          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent },
+          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
+            data: { breadcrumb: 'Statuses' }
+          },
         ]
       },
 

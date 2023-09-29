@@ -17,8 +17,8 @@
 
     <ul class="nhsuk-list nhsuk-list--bullet">
       <li>These innovations will be notified: "This unit has been inactivated and will no longer support your innovation"</li>
-      <li>The support status of these innovations will change to 'completed'</li>
-      <li>Tasks opened in these innovations will change to 'deleted'</li>
+      <li>The support status of these innovations will change to 'closed'</li>
+      <li>Tasks opened in these innovations will change to 'cancelled'</li>
     </ul>
 
     <hr class="nhsuk-section-break nhsuk-section-break--visible" />
@@ -88,7 +88,7 @@
 
     <form [formGroup]="form" (ngSubmit)="onNextStep()">
       <theme-form-checkbox controlName="agreeInnovations"
-        label="I understand that these innovations will be sent a message about ending support from this unit, their support status will be changed to 'completed' and tasks opened will be changed to 'cancelled', if I confirm inactivation"
+        label="I understand that these innovations will be sent a message about ending support from this unit, their support status will be changed to 'closed' and tasks opened will be changed to 'cancelled', if I confirm inactivation"
         size="small"></theme-form-checkbox>
       <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
     </form>

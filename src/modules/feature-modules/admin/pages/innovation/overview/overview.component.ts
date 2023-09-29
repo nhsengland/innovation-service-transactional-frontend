@@ -49,10 +49,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ) {
 
     super();
-    
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
-    
+
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}`});
   }
 
@@ -85,13 +85,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ]
 
       const occurrences = (innovation.supports ?? []).map(item => item.status)
-        .filter(status => [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED].includes(status))
+        .filter(status => [InnovationSupportStatusEnum.ENGAGING].includes(status))
         .reduce((acc, status) => (
           acc[status] ? ++acc[status].count : acc[status] = { count: 1, text: this.translate('shared.catalog.innovation.support_status.' + status + '.name').toLowerCase() }, acc),
           {} as { [a in InnovationSupportStatusEnum]: { count: number, text: string } });
 
       this.innovation.organisationsStatusDescription = Object.entries(occurrences).map(([status, item]) => `${item.count} ${item.text}`).join(', ');
-      
+
       this.innovation = {
         ...this.innovation,
         groupedStatus: innovation.groupedStatus,

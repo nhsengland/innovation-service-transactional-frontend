@@ -61,7 +61,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
     }).setFilters({
       supportStatuses: [
         InnovationSupportStatusEnum.ENGAGING,
-        InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED
+        InnovationSupportStatusEnum.WAITING
       ],
       engagingOrganisationUnits: [this.data.organisationUnit.id]
     });
@@ -87,8 +87,8 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
             count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].ENGAGING
           },
           {
-            status: InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
-            count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].FURTHER_INFO_REQUIRED
+            status: InnovationSupportStatusEnum.WAITING,
+            count: statistics[OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT].WAITING
           }
         ];
         if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
@@ -158,7 +158,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
       }
     }
   }[]): InnovationSupportStatusEnum {
-    return supports && supports.length > 0 ? supports[0].status :  InnovationSupportStatusEnum.NOT_YET;
+    return supports && supports.length > 0 ? supports[0].status :  InnovationSupportStatusEnum.WAITING;
   }
 
 }

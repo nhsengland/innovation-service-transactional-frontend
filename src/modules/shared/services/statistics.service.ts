@@ -29,7 +29,7 @@ export type InnovationStatisticsDTO = {
 };
 
 export type OrganisationUnitStatisticsDTO = {
-  [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT]: { ENGAGING: number, FURTHER_INFO_REQUIRED: number },
+  [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT]: { ENGAGING: number, WAITING: number },
 };
 
 

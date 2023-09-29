@@ -23,7 +23,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
 
   public unit: ObservedValueOf<ReturnType<OrganisationUnitDataResolver['resolve']>>;
   public organisation: ObservedValueOf<ReturnType<OrganisationDataResolver['resolve']>>;
-  
+
   isAssessmentTeamPage: boolean;
   isServiceAdministratorPage: boolean;
   isUnitTeamPage: boolean;
@@ -81,7 +81,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
         status: { label: 'Status', orderable: false, align: 'right' }
       }).setFilters({
         engagingOrganisationUnits: [this.unit.id],
-        supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED]
+        supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING]
       });
     } else {
       this.redirectTo('admin/organisations');
