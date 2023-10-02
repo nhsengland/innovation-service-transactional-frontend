@@ -462,7 +462,7 @@ export const locale = {
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is supporting is engaging with this organisation.'
+              description: 'At least one organisation unit is engaging with this organisation.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
