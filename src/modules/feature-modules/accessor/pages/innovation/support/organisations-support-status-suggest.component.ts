@@ -139,7 +139,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Organisation suggestions sent', { message: 'Your suggestions were saved and notifications sent.' });
-        this.redirectTo(`/accessor/innovations/${this.innovation.id}/support`);
+        this.redirectTo(`/accessor/innovations/${this.innovation.id}/overview`);
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };

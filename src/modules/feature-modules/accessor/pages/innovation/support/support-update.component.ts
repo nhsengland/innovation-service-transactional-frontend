@@ -195,7 +195,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.stepNumber = 4;
       } else {
         this.setRedirectAlertSuccess('Support status updated', { message: 'The innovation support status has been successfully updated.' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
       }
 
     });
@@ -210,7 +210,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     if (suggestOrganisations === 'YES') {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/support/suggest`);
     } else {
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     }
 
 

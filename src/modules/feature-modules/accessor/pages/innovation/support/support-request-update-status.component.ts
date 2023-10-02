@@ -73,8 +73,8 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
     }
 
     this.accessorService.requestSupportStatusChange(this.innovationId, this.supportId, body).subscribe(() => {
-      this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request' });
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
+      this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request.' });
+      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     });
   }
 }
