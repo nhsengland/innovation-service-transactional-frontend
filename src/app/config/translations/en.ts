@@ -442,7 +442,7 @@ export const locale = {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              description: 'The innovator has not yet shared the innovation record for a needs assessment review.'
+              description: 'The innovator has not yet shared the innovation record for a needs assessment review yet.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
@@ -457,22 +457,22 @@ export const locale = {
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              description: 'Needs assessment is completed. Waiting for an organisation unit to start supporting this innovation.'
+              description: 'The needs assessment is complete. The innovation is waiting for a support organisation to be assigned to it.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is supporting  this innovation with an "engaging" or "further info" support status.'
+              description: 'At least one organisation unit is supporting is engaging with this organisation.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
               cssColorClass: 'nhsuk-tag--white',
-              description: 'There are no organisations units providing support for this innovation anymore. The organisations support status are "unassigned", "waiting", "not yet", "unsuitable" or "completed".'
+              description: 'There are no organisation units engaging with this innovation right now. Their support statuses are either waiting, unsuitable or closed.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              description: 'The innovation has been resent for needs assessment review.'
+              description: 'The innovation has been sent for needs reassessment.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',
