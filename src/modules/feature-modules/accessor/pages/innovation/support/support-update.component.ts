@@ -195,7 +195,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.stepNumber = 4;
       } else {
         this.setRedirectAlertSuccess('Support status updated', { message: 'The innovation support status has been successfully updated.' });
-        this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+        this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
       }
 
     });

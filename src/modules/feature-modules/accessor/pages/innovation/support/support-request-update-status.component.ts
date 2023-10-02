@@ -72,9 +72,9 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       message: this.form.get('message')?.value ?? ''
     }
 
-    this.accessorService.requestSupportStatusChage(this.innovationId, this.supportId, body).subscribe(() => {
+    this.accessorService.requestSupportStatusChange(this.innovationId, this.supportId, body).subscribe(() => {
       this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request' });
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
     });
   }
 }
