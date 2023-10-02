@@ -142,7 +142,6 @@ export const INNOVATION_STATUS = {
 };
 
 export const INNOVATION_SUPPORT_STATUS = {
-  // SUPPORT STATUS - TO DO
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
     description: 'Ready to support, assess or provide guidance.',

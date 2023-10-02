@@ -400,7 +400,6 @@ export const locale = {
             SUBMITTED: { name: 'Submitted', cssColorClass: 'nhsuk-tag--green' }
 
           },
-          // SUPPORT STATUS - TO DO
           support_status: {
             ENGAGING: {
               name: 'Engaging',

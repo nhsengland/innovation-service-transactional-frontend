@@ -65,8 +65,6 @@
                         <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.name' | translate }}"></theme-tag>
                         <p class="nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">Message</p>
                         <p *ngIf="historyItem.params.message" class="nhsuk-body-s nhsuk-u-margin-bottom-2">{{ historyItem.params.message }}</p>
-                        <p *ngIf="isInnovatorType && historyItem.params.message" class="nhsuk-body-s"><a routerLink="">View or reply to this on messages</a></p>
-
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'SUGGESTED_ORGANISATION'">
