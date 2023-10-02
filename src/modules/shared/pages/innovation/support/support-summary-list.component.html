@@ -124,7 +124,7 @@
 
       <ng-container *ngIf="innovation.assessment">
         <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
-        <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">Needs assessment complete</a>
+        <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">{{innovation.reassessmentCount > 0 ? 'Needs reassessment complete' : 'Needs assessment complete'}}</a>
         <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">
           Completed at {{ innovation.assessment.finishedAt | date: 'MMMM y' }}
         </div>

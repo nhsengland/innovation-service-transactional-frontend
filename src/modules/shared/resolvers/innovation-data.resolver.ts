@@ -52,7 +52,8 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo.id, userRoleId: response.assessment.assignedTo.userRoleId, name: response.assessment.assignedTo.name } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           collaboratorId: response.collaboratorId ? response.collaboratorId : undefined,
-          createdAt: response.createdAt
+          createdAt: response.createdAt,
+          reassessmentCount: response.assessment?.reassessmentCount ? response.assessment.reassessmentCount : 0
         });
 
         return {
