@@ -95,7 +95,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
           canDoProgressUpdates: false,
-          temporalDescription: item.support.start ? `Date suggested: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
+          temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
