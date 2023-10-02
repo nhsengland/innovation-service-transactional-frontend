@@ -5,8 +5,8 @@ import { map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 @Injectable()
 export class AccessorService extends CoreService {
 
@@ -47,7 +47,7 @@ export class AccessorService extends CoreService {
 
   }
 
-  requestSupportStatusChage(innovationId: string, supportId: string, body: { status: InnovationSupportStatusEnum, message: string }): Observable<{success: boolean}> {
+  requestSupportStatusChange(innovationId: string, supportId: string, body: { status: InnovationSupportStatusEnum, message: string }): Observable<{success: boolean}> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/:supportId/change-request').setPathParams({ innovationId, supportId });
     return this.http.post<{ success: boolean }>(url.buildUrl(), body).pipe(take(1), map(response => response));
   }
