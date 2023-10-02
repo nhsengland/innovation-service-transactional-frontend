@@ -456,7 +456,8 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
+                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
                   }
                 ]
               },

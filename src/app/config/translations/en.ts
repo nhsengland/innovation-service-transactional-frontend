@@ -406,25 +406,25 @@ export const locale = {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
               description: 'Ready to support, assess or provide guidance.',
-              accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
+              accessorTypeDescription: 'Ready to support, assess or provide guidance.',
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
-              description: 'The organisation is waiting for an internal decision to progress.',
-              accessorTypeDescription: 'Waiting for an internal decision to progress.',
+              description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
+              accessorTypeDescription: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
-              description: 'No status has been assigned yet.',
-              accessorTypeDescription: 'No status assigned yet.',
+              description: 'A support status has not been assigned yet.',
+              accessorTypeDescription: 'A support status has not been assigned yet.',
             },
             UNSUITABLE: {
               name: 'Unsuitable',
-              cssColorClass: 'nhsuk-tag--red',
+              cssColorClass: 'nhsuk-tag--grey',
               description: 'The organisation has no suitable support offer for the innovation.',
-              accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
+              accessorTypeDescription: 'The organisation has no suitable support offer for the innovation.',
             },
             WITHDRAWN: {
               name: 'Withdrawn',
@@ -433,17 +433,11 @@ export const locale = {
               accessorTypeDescription: '',
             },
             CLOSED: {
-              name: 'Completed',
+              name: 'Closed',
               cssColorClass: 'nhsuk-tag--dark-grey',
-              description: 'The organisation has completed their engagement with the innovation.',
-              accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-            },
-            // COMPLETE: {
-            //   name: 'Completed',
-            //   cssColorClass: 'nhsuk-tag--dark-grey',
-            //   description: 'The organisation has completed their engagement with the innovation.',
-            //   accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-            // }
+              description: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
+              accessorTypeDescription: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
+            }
           },
           grouped_status: {
             RECORD_NOT_SHARED: {
