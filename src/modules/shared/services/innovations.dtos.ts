@@ -160,7 +160,8 @@ export type SupportSummarySectionType = typeof SupportSummarySectionType[number]
 export type SupportSummaryOrganisationsListDTO = {
   [key in SupportSummarySectionType]: {
     id: string,
-    name: string
+    name: string,
+    sameOrganisation: boolean,
     support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
   }[]
 };
