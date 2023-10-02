@@ -9,7 +9,7 @@
 
         <ng-container *ngIf="showAssessments">
           <div class="d-flex">
-            <p class="nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2"><strong>Suggested organisations by the need assessment team: </strong></p>
+            <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">Suggested organisations by the need assessment team:</p>
           </div>
           <ul class="nhsuk-list">
             <li *ngFor="let item of assessments.organisations"> {{ item }} </li>
@@ -19,7 +19,7 @@
         <ng-container *ngIf="showAccessors">
           <ng-container *ngFor="let suggestion of accessors">
             <div class="d-flex">
-              <p class="nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2"><strong>Suggested organisations by {{suggestion.organisationUnit.name}} ({{ suggestion.organisationUnit.acronym}})</strong></p>
+              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">Suggested organisations by {{suggestion.organisationUnit.name}} ({{ suggestion.organisationUnit.acronym}}):</p>
             </div>
             <ul class="nhsuk-list">
               <li *ngFor="let suggestedOrg of suggestion.suggestedOrganisationUnits"> {{ suggestedOrg.name }} ({{ suggestedOrg.acronym }}) </li>
