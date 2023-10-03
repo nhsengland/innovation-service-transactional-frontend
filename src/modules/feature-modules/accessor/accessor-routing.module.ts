@@ -339,7 +339,9 @@ const routes: Routes = [
                   { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   },
-                  { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent },
+                  { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
+                    data: { layout: { type: 'full' } }  
+                  },
                   { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                     data: { layout: { type: 'full' } }
