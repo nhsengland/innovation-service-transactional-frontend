@@ -141,7 +141,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(
       availableStatuses => {
         this.availableSupportStatuses = availableStatuses.availableStatus;
-        console.log(this.availableSupportStatuses);
       }
     );
   }
