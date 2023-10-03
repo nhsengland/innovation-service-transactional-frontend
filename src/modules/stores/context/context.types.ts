@@ -52,5 +52,5 @@ export type ContextInnovationType = {
   notifications?: { [key in NotificationContextTypeEnum]?: number },
   collaboratorId?: string,
   createdAt?: DateISOType,
-  reassessmentCount?: number
+  reassessmentCount: number
 };
