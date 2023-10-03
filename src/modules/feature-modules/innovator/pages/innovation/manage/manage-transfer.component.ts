@@ -47,7 +47,8 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS);
+    const myEmail = this.stores.authentication.getUserInfo().email;
+    this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS(myEmail));
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {
 
@@ -62,7 +63,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
         }))
 
         //add collaborators
-        this.wizard.steps[0].parameters[0].items = [...collaborators, otherEmailItem];
+        this.wizard.steps[0].parameters[0].items = [...collaborators, otherEmailItem(myEmail)];
 
         // Updates wizard configuration step 1 description.
         this.wizard.setAnswers(this.wizard.runInboundParsing({})).runRules();
