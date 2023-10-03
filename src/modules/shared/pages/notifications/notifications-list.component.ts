@@ -65,7 +65,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     }).setOrderBy('createdAt', 'descending');
 
     const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
-      [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT, NotificationContextTypeEnum.THREAD] :
+      [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT, NotificationContextTypeEnum.TASK, NotificationContextTypeEnum.THREAD] :
       Object.values(NotificationContextTypeEnum);
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
