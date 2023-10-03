@@ -19,7 +19,7 @@ type OutboundPayloadType = {
 };
 
 
-export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel({
+export const NO_COLLABORATORS_TRANSFERS = (ownEmail: string) => new WizardEngineModel({
   steps: [
     new FormEngineModel({
       label: 'Transfer ownership of this innovation',
@@ -30,7 +30,8 @@ export const NO_COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineMod
         description: 'Enter new owner\'s email',
         validations: {
           isRequired: [true, 'Email is required'],
-          validEmail: true
+          validEmail: true,
+          existsIn: [[ownEmail], 'Cannot transfer to own email']
         }
       }]
     }),
@@ -85,7 +86,7 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
 });
 
-export const otherEmailItem = {
+export const otherEmailItem = (ownEmail: string) => ({
   value: 'other',
   label: 'Other',
   conditional: new FormEngineParameterModel({
@@ -94,10 +95,11 @@ export const otherEmailItem = {
     label: 'Enter new owner\'s email',
     validations: {
       isRequired: [true, 'Email is required'],
-      validEmail: true
+      validEmail: true,
+      existsIn: [[ownEmail], 'Cannot transfer to own email']
     }
   })
-};
+});
 
 function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary'): void {}
 
