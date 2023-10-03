@@ -73,7 +73,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private messageStatusUpdated: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]: 'The innovator and collaborators will be notified and your message has been sent.',
-    [InnovationSupportStatusEnum.WAITING]: `The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task. <a [routerLink]="" >Go to tasks.</a>`,
+    [InnovationSupportStatusEnum.WAITING]: `The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.`,
     [InnovationSupportStatusEnum.UNSUITABLE]: 'The innovator and collaborators will be notified.',
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
   };
