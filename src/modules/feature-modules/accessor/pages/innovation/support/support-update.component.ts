@@ -105,7 +105,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.setPageTitle('Update support status', { showPage: false, size: 'l'});
 
-    this.setBackLink('Go back');
+    this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     if (!this.supportId) {
 
@@ -167,12 +167,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           this.stepNumber = 2;
         } else {
           this.selectedAccessors = [];
-          this.setPageTitle('Change support status to engaging', { width: 'full', size: 'l' });
-          this.stepNumber = 3;
-        }
-
-        if (this.chosenStatus === InnovationSupportStatusEnum.WAITING){
           this.setPageTitle(`Change support status to ${this.chosenStatus?.toLowerCase()}`, { width: 'full', size: 'l' });
+          this.stepNumber = 3;
         }
 
         break;
@@ -264,6 +260,16 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   getMessageStatusUpdated() {
     const status = this.form.get('status')?.value;
     return status ? this.messageStatusUpdated[status] : '';
+  }
+
+  private handleGoBack() {
+
+    this.stepNumber--;
+
+    if (this.stepNumber === 0) {
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
+    }
+
   }
 
 }
