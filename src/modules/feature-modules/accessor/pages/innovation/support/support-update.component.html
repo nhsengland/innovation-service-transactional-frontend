@@ -1,9 +1,9 @@
 <theme-content-wrapper [status]="pageStatus">
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+    <div class="nhsuk-grid-column-three-quarters">
 
-      <form [formGroup]="form">
+      <form [formGroup]="form" class="nhsuk-grid-column-three-quarters nhsuk-u-padding-left-0">
 
         <ng-container *ngIf="stepNumber === 1">
 
@@ -11,7 +11,7 @@
             <fieldset class="nhsuk-fieldset">
 
               <legend class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
-                <h1>Choose a support status</h1>
+                <h1>Select a support status</h1>
               </legend>
 
               <ng-container *ngIf="form.get('status')?.invalid && form.get('status')?.touched">
@@ -20,12 +20,12 @@
               </ng-container>
 
               <div class="nhsuk-radios">
-                <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
-                  <input formControlName="status" id="status-{{ i }}" type="radio" name="status" [value]="item.key" class="nhsuk-radios__input" attr.aria-describedby="status-{{ i }}-hint" />
+                <div *ngFor="let status of availableSupportStatuses; let i = index" class="nhsuk-radios__item nhsuk-u-margin-bottom-4">
+                  <input formControlName="status" id="status-{{ i }}" type="radio" name="status" [value]="status" class="nhsuk-radios__input" attr.aria-describedby="status-{{ i }}-hint" />
                   <label for="status-{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
-                    <strong class="nhsuk-tag" [ngClass]="item.cssClass"> {{ item.label }} </strong>
+                    <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + status + '.name' | translate }}"></theme-tag>
                   </label>
-                  <div class="nhsuk-hint nhsuk-radios__hint" id="status-{{ i }}-hint"> {{ item.description }} </div>
+                  <div class="nhsuk-hint nhsuk-radios__hint" id="status-{{ i }}-hint"> {{ 'shared.catalog.innovation.support_status.' + status + '.description' | translate }} </div>
                 </div>
               </div>
 
@@ -39,32 +39,26 @@
 
         <ng-container *ngIf="stepNumber === 2">
 
-          <div class="nhsuk-heading-m">
-            <div>You selected:</div>
-            <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.name' | translate }}"></theme-tag>
-          </div>
 
-          <p class="nhsuk-hint">{{ 'shared.catalog.innovation.support_status.' + chosenStatus + '.accessorTypeDescription' | translate }}</p>
-
-          <theme-form-checkbox-array arrayName="accessors" label="Assign one or more accessors from {{ userOrganisationUnit?.name }}" [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
+          <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="accessors" label="Select 1 or more accessors from {{ userOrganisationUnit?.name }} to support this innovation." [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 3">
+          <div *ngIf="selectedAccessors.length > 0" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
+            <p class="nhsuk-heading-m nhsuk-u-margin-bottom-2"> Assigned accessors: </p>
+            <p *ngFor="let item of selectedAccessors" class="nhsuk-u-margin-bottom-2">{{ item.name }}</p>
+          </div>
 
-          <p *ngIf="selectedAccessors.length > 0" class="nhsuk-heading-m nhsuk-u-margin-0"> You assigned </p>
-          <ul>
-            <li *ngFor="let item of selectedAccessors" class="d-flex align-items-center nhsuk-u-margin-0">
-              <theme-svg-icon type="success" class="nhsuk-u-margin-top-2 nhsuk-u-margin-right-1"></theme-svg-icon>
-              <div> {{ item.name }} </div>
-            </li>
-          </ul>
+          <theme-form-textarea controlName="message" [cssOverride]="" [label]="getMessageLabel()" [description]="getMessageDescription()" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
+          
+          <div *ngIf="chosenStatus !== 'ENGAGING'" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+            <p>Everyone will be able to see this message. It will appear on the innovation’s support summary.</p>
+          </div>
 
-          <theme-form-textarea controlName="message" [label]="getMessageLabel()" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">Save and post message</button>
-
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">{{form.get('status')?.value === 'ENGAGING' ? 'Save and post message' : 'Confirm'}}</button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 4">

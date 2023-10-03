@@ -11,7 +11,7 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { CreateSupportSummaryProgressUpdateType, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationTasksListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
@@ -625,5 +625,10 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
+
+  getInnovationAvailableSupportStatuses(innovationId: string): Observable<{ availableStatus: InnovationSupportStatusEnum[] }>{
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/available-status').setPathParams({innovationId});
+    return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
+  };
 
 }
