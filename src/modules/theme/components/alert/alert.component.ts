@@ -56,7 +56,7 @@ export class AlertComponent implements OnChanges {
         case '':
         default:
           this.borderColorCSS = '';
-          this.fontItemColorCSS = 'font-color-text';
+          this.fontItemColorCSS = '';
           break;
       }
 
