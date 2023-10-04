@@ -193,17 +193,17 @@ export class CoreComponent implements OnDestroy {
   setRedirectAlertSuccess(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
     this.stores.context.setPageAlert({ type: 'SUCCESS', title, message: options?.message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
   }
-  setRedirectAlertInformation(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.stores.context.setPageAlert({ type: 'INFORMATION', title, message: options?.message, width: options?.width, persistOneRedirect: true });
+  setRedirectAlertInformation(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.stores.context.setPageAlert({ type: 'INFORMATION', title, message: options?.message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
   }
   setRedirectAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.stores.context.setPageAlert({ type: 'ERROR', title: 'There is a problem', message, width: options?.width, persistOneRedirect: true });
+    this.stores.context.setPageAlert({ type: 'ERROR', title: 'There is a problem', message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
   }
-  setAlertSuccess(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.setAlert({ type: 'SUCCESS', title, message: options?.message, width: options?.width });
+  setAlertSuccess(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.setAlert({ type: 'SUCCESS', title, message: options?.message, itemsList: options?.itemsList, width: options?.width });
   }
-  setAlertWarning(title: string, options?: { message?: string, width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.setAlert({ type: 'WARNING', title, message: options?.message, width: options?.width });
+  setAlertWarning(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
+    this.setAlert({ type: 'WARNING', title, message: options?.message, itemsList: options?.itemsList, width: options?.width });
   }
   setAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
     this.setAlert({ type: 'ERROR', title: 'There is a problem', message, itemsList: options?.itemsList, width: options?.width });
