@@ -49,7 +49,11 @@
         <ng-container *ngIf="stepNumber === 3">
           <div *ngIf="selectedAccessors.length > 0" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
             <p class="nhsuk-heading-m nhsuk-u-margin-bottom-2"> Assigned accessors: </p>
-            <p *ngFor="let item of selectedAccessors" class="nhsuk-u-margin-bottom-2">{{ item.name }}</p>
+            <ul class="nhsuk-list">
+              <li *ngFor="let item of selectedAccessors" >
+                <p class="nhsuk-u-margin-bottom-2">{{ item.name }}</p>
+              </li>
+            </ul>
           </div>
 
           <theme-form-textarea controlName="message" [cssOverride]="" [label]="getMessageLabel()" [description]="getMessageDescription()" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>

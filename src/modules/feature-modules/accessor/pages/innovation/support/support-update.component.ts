@@ -228,10 +228,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
         this.stepNumber = 4;
       } else {
-        // this.setRedirectAlertSuccess('Support status updated', 
-        // { message: "The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.", 
-        //   itemsList: [{title: ' Go to tasks.', callback: `/accessor/innovations/${this.innovationId}/tasks` }]
-        // });
         this.setRedirectAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated()?.message, itemsList: this.getMessageStatusUpdated()?.itemsList})
         this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
       }
@@ -239,7 +235,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     });
 
   }
-
 
   onSubmitRedirect() {
 
