@@ -7,9 +7,9 @@ import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -39,6 +39,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   showCards: boolean = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
+  innovationSupports: InnovationSupportsListDTO;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,6 +54,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
 
+    this.innovationSupports = [];
+
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
   }
@@ -61,9 +64,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER] };
 
+    if ( this.innovation.support?.status === 'ENGAGING' || this.innovation.support?.status === InnovationSupportStatusEnum.WAITING ){
+      this.innovationsService.getInnovationSupportsList(this.innovation.id, true).subscribe(
+        innovationSupportsList => this.innovationSupports = innovationSupportsList );
+    }
+
+
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
       this.innovationCollaborators = innovationCollaborators.data
     });
+
+    
 
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovationId),
