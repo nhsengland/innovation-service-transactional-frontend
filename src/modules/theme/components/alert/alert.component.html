@@ -13,6 +13,9 @@
                 <span *ngIf="item.callback === undefined">{{ item.title }}<br />{{ (item.description || '') | translate }}</span>
             </li>
           </ul>
+          <ng-container *ngIf="itemsList && type === 'SUCCESS'">
+            <a *ngIf="itemsList[0].callback !== undefined" [ngClass]="'font-color-text'"  routerLink="{{itemsList[0].callback}}">{{ itemsList[0].title}}</a>
+          </ng-container>
 
         </div>
       </div>
