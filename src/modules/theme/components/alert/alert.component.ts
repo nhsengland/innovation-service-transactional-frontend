@@ -46,7 +46,6 @@ export class AlertComponent implements OnChanges {
         case 'SUCCESS': 
           this.borderColorCSS = 'border-color-success'; 
           this.fontItemColorCSS = 'font-color-text';
-          console.log('successsssssss activated') 
           break;
         case 'WARNING': this.borderColorCSS = 'border-color-warning'; break;
         case 'ERROR':
