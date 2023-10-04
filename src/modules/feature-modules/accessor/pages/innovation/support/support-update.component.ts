@@ -11,6 +11,7 @@ import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
+import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 
 @Component({
@@ -71,13 +72,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
   };
 
-  private messageStatusUpdated: { [key in InnovationSupportStatusEnum]?: string } = {
-    [InnovationSupportStatusEnum.ENGAGING]: 'The innovator and collaborators will be notified and your message has been sent.',
-    [InnovationSupportStatusEnum.WAITING]: `The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.`,
-    [InnovationSupportStatusEnum.UNSUITABLE]: 'The innovator and collaborators will be notified.',
-    [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
-  };
-
+  private messageStatusUpdated: { [key in InnovationSupportStatusEnum]?: { message: string, itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined };
 
 
   constructor(
@@ -98,6 +93,17 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
 
+    this.messageStatusUpdated = {
+      [InnovationSupportStatusEnum.ENGAGING]: 
+        { message: 'The innovator and collaborators will be notified and your message has been sent.'},
+      [InnovationSupportStatusEnum.WAITING]:  
+        { message: "The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.", 
+          itemsList: [{ title: ' Go to tasks.', callback: `/accessor/innovations/${this.innovationId}/tasks` }]
+        },
+      [InnovationSupportStatusEnum.UNSUITABLE]: { message: 'The innovator and collaborators will be notified.' },
+      [InnovationSupportStatusEnum.CLOSED]: { message: 'The innovator and collaborators will be notified.' },
+    };
+  
   }
 
 
@@ -218,18 +224,17 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       // this.setAlertSuccess('Support status updated and organisation suggestions sent', { message: 'The Innovation Support status has been successfully updated and the Innovator has been notified of your accompanying suggestions and feedback.' });
 
       if (this.chosenStatus && this.currentStatus === InnovationSupportStatusEnum.ENGAGING && [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.UNSUITABLE].includes(this.chosenStatus)) {
-        this.setAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated() });
+        this.setAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated()?.message });
         this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
         this.stepNumber = 4;
       } else {
-        this.setRedirectAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated() });
+        this.setRedirectAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated()?.message, itemsList: this.getMessageStatusUpdated()?.itemsList})
         this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
       }
 
     });
 
   }
-
 
   onSubmitRedirect() {
 
@@ -256,9 +261,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return status ? this.messageStatusDescriptions[status] : '';
   }
 
-  getMessageStatusUpdated() {
+  getMessageStatusUpdated(): { message: string, itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined {
     const status = this.form.get('status')?.value;
-    return status ? this.messageStatusUpdated[status] : '';
+    return status ? this.messageStatusUpdated[status] : undefined;
   }
 
   private handleGoBack() {
