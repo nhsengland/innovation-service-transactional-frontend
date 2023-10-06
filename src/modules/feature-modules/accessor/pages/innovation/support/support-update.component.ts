@@ -157,8 +157,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       case 1:
 
         this.chosenStatus = this.form.get('status')?.value ?? null;
-        console.log('chosenStatus: '+ this.chosenStatus)
-
+        
         const formStatusField = this.form.get('status');
         if (!formStatusField?.valid) {
           formStatusField?.markAsTouched();
