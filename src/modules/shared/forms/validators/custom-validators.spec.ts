@@ -237,5 +237,43 @@ describe('CustomValidators', () => {
 
   })
 
+  describe('postcodeFormatValidator', () => {
+    beforeAll(() => {
+      formControl = new FormControl();
+      validatorFn = CustomValidators.postcodeFormatValidator();
+    });
+
+    it('should return error when control value is null', () => {
+      formControl.setValue(null);
+      validator = validatorFn(formControl);
+      expect(validator).toEqual({ postcodeFormat: true });
+    });
+
+    it('should return error when control value is invalid postcode', () => {
+      formControl.setValue('1234');
+      validator = validatorFn(formControl);
+      expect(validator).toEqual({ postcodeFormat: true });
+    });
+
+    it('should return null when control value is valid postcode SW1W 0NY', () => {
+      formControl.setValue('SW1W 0NY');
+      validator = validatorFn(formControl);
+      expect(validator).toBeNull();
+    });
+
+    it('should return null when control value is valid postcode PO16 7GZ', () => {
+      formControl.setValue('PO16 7GZ');
+      validator = validatorFn(formControl);
+      expect(validator).toBeNull();
+    });
+
+    it('should return null when control value is valid half postcode SW1W', () => {
+      formControl.setValue('SW1W');
+      validator = validatorFn(formControl);
+      expect(validator).toBeNull();
+    });
+
+  })
+
 
 });
