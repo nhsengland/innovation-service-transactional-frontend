@@ -106,18 +106,12 @@ export type OrganisationUnitModel = {
 export type OrganisationUnitModelWithOrganisation = OrganisationUnitModel & { organisation: Omit<OrganisationModel, 'organisationUnits'> };
 
 export type AssessmentSuggestionModel = {
-  id: string;
-  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
+  suggestedOrganisations: OrganisationModel[];
 };
 
 export type AccessorSuggestionModel = {
-  organisationUnit: {
-    id: string;
-    name: string;
-    acronym: string;
-    organisation: OrganisationModel,
-  };
-  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
+  organisation: OrganisationModel,
+  suggestedOrganisations: OrganisationModel[];
 };
 
 export type OrganisationSuggestionModel = {
