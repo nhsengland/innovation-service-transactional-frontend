@@ -22,12 +22,12 @@
       </dd>
     </div>
 
-    <div class="nhsuk-summary-list__row">
+    <div *ngIf="innovationSupport.engagingAccessors.length > 0" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
       <dd class="nhsuk-summary-list__value nhsuk-u-padding-right-0">
         <div class="d-flex">
-          <ul class="nhsuk-list nhsuk-u-margin-bottom-2" *ngFor="let organisation of innovationSupports" >
-            <li *ngFor="let accessor of organisation.engagingAccessors">
+          <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
+            <li *ngFor="let accessor of innovationSupport.engagingAccessors">
               {{accessor.name}}
             </li>
           </ul>

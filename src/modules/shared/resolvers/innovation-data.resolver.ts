@@ -46,14 +46,19 @@ export class InnovationDataResolver implements Resolve<null | { id: string, name
           name: response.name,
           status: response.groupedStatus === InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
-          ...(response.owner ? { owner: { isActive: response.owner.isActive, name: response.owner.name } } : {}),
+          ...(response.owner ? { owner: { isActive: response.owner.isActive, name: response.owner.name, organisation: response.owner.organisation } } : {}),
           loggedUser: { isOwner: response.owner ? response.owner?.id === userContext?.id : false },
           ...(response.assessment ? { assessment: { id: response.assessment.id, createdAt: response.assessment.createdAt, finishedAt: response.assessment.finishedAt } } : {}),
           ...(response.assessment?.assignedTo ? { assignedTo: { id: response.assessment.assignedTo.id, userRoleId: response.assessment.assignedTo.userRoleId, name: response.assessment.assignedTo.name } } : {}),
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           collaboratorId: response.collaboratorId ? response.collaboratorId : undefined,
           createdAt: response.createdAt,
-          reassessmentCount: response.assessment?.reassessmentCount ? response.assessment.reassessmentCount : 0
+          reassessmentCount: response.assessment?.reassessmentCount ? response.assessment.reassessmentCount : 0,
+          categories: response.categories,
+          otherCategoryDescription: response.otherCategoryDescription,
+          countryName: response.countryName,
+          description: response.description,
+          postCode: response.postCode,
         });
 
         return {
