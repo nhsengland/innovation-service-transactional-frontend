@@ -1,8 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
-import { AccessorSuggestionModel, AssessmentSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
-
-// import { NotificationsService } from '@modules/shared/services/notifications.service';
+import { AccessorSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
 @Component({
   selector: 'app-organisation-suggestions-card',
@@ -23,10 +21,7 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   showAssessments: boolean;
   showAccessors: boolean;
 
-  // hasNewSuggestions = false;
-
   constructor(
-    // private notificationsService: NotificationsService,
   ) {
     this.showAccessors = false;
     this.showAssessments = false;
@@ -41,50 +36,15 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.suggestions) {
-      this.assessments = this.parseAssessments(this.suggestions.assessment);
+      this.assessments.organisations = this.suggestions.assessment.suggestedOrganisations.map(i => i.name);
       if (this.assessments && this.assessments.organisations.length > 0) {
         this.showAssessments = true;
       };
 
-      this.accessors = this.parseAccessors(this.suggestions.accessors);
+      this.accessors = this.suggestions.accessors;
       if(this.accessors && this.accessors.length > 0){
         this.showAccessors = true
       };
     }
-
-    // this.hasNewSuggestions = this.notificationsService.notifications[NotificationContextTypeEnum.DATA_SHARING] ? true : false;
   }
-
-  private parseAccessors(accessorsSuggestions: AccessorSuggestionModel[]): AccessorSuggestionModel[] {
-    const shares = new Set(this.shares?.map(s => s.organisationId) || []);
-    
-    let filteredSuggestions: AccessorSuggestionModel[] = accessorsSuggestions.map((element) => {
-      return {
-      ...element, suggestedOrganisationUnits: element.suggestedOrganisationUnits.filter(org => !shares.has(org.organisation.id))
-        .sort((a,b) => a.name.localeCompare(b.name))
-      }
-    });
-
-    return filteredSuggestions;
-  }
-
-
-  private parseAssessments(assessmentsSuggestions: AssessmentSuggestionModel): { organisations: string[] } {
-
-    const shares = new Set(this.shares?.map(s => s.organisationId) || []);
-    const suggestedOrganisations = (assessmentsSuggestions.suggestedOrganisationUnits ?? [])
-      .map(ou => ou.organisation)
-      .filter(so => !shares.has(so.id))
-      .map(so => `${so.name} (${so.acronym})`);
-
-    // removes duplicate entries
-    const organisations = [...new Set(suggestedOrganisations)];
-
-    organisations.sort((a,b)=>a.localeCompare(b));
-    
-    return {
-      organisations,
-    };
-  }
-
 }
