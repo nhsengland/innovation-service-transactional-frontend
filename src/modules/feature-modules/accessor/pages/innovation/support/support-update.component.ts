@@ -42,7 +42,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   chosenStatus: null | InnovationSupportStatusEnum = null;
 
   form = new FormGroup({
-    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(null, { validators: Validators.required, updateOn: 'change' }),
+    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>( null, { validators: Validators.required, updateOn: 'change' }),
     accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
     suggestOrganisations: new FormControl<string>('YES', { validators: Validators.required, updateOn: 'change' })
@@ -123,8 +123,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
         this.currentStatus = response.status;
 
-        this.form.get('status')?.setValue(response.status);
-
         response.engagingAccessors.forEach(accessor => {
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
@@ -159,7 +157,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       case 1:
 
         this.chosenStatus = this.form.get('status')?.value ?? null;
-
+        
         const formStatusField = this.form.get('status');
         if (!formStatusField?.valid) {
           formStatusField?.markAsTouched();
@@ -268,8 +266,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private handleGoBack() {
 
-    this.stepNumber--;
-
+    if (this.stepNumber === 3 && this.chosenStatus !== InnovationSupportStatusEnum.ENGAGING) {
+      this.stepNumber = 1;
+    } else {
+      this.stepNumber--;
+    }
+    
     if (this.stepNumber === 0) {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
     }
