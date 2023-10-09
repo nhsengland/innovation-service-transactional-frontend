@@ -7,9 +7,9 @@ import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -34,12 +34,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationSupport: {
     organisationUnit: string,
     status: InnovationSupportStatusEnum,
-  } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
+    engagingAccessors: {name: string}[]
+  } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED, engagingAccessors: [] };
 
   showCards: boolean = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
-  innovationSupports: InnovationSupportsListDTO;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -54,8 +54,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
 
-    this.innovationSupports = [];
-
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
   }
@@ -64,27 +62,18 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     const qp: { statistics: InnovationStatisticsEnum[] } = { statistics: [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER, InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER] };
 
-    if ( this.innovation.support?.status === 'ENGAGING' || this.innovation.support?.status === InnovationSupportStatusEnum.WAITING ){
-      this.innovationsService.getInnovationSupportsList(this.innovation.id, true).subscribe(
-        innovationSupportsList => this.innovationSupports = innovationSupportsList );
-    }
-
-
-    this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(innovationCollaborators => {
-      this.innovationCollaborators = innovationCollaborators.data
-    });
-
-    
-
-    forkJoin([
-      this.innovationsService.getInnovationInfo(this.innovationId),
-      this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp),
-    ]).subscribe(([innovationInfo, statistics]) => {
+    forkJoin({
+      statistics: this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp),
+      collaborators: this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
+      ...this.innovation.support?.id && {support: this.innovationsService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id)},
+    }).subscribe(({support, statistics, collaborators}) => {
+      const innovationInfo = this.innovation;
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: this.innovation.support?.status ?? InnovationSupportStatusEnum.UNASSIGNED
-      };
+        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
+        engagingAccessors: support?.engagingAccessors ?? []
+      }
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ??  'No company' },
@@ -105,6 +94,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.SUPPORT], contextIds: [this.innovation.support.id] });
       }
 
+      this.innovationCollaborators = collaborators.data;
 
       this.cardsList = [
         {

@@ -129,7 +129,7 @@ export class ContextStore extends Store<ContextModel> {
   getInnovation(): ContextInnovationType {
     if (!this.state.innovation) {
       console.error('Context has NO innovation');
-      return { id: '', name: '', status: InnovationStatusEnum.CREATED, statusUpdatedAt: null, loggedUser: { isOwner: false }, reassessmentCount: 0 };
+      return { id: '', name: '', status: InnovationStatusEnum.CREATED, statusUpdatedAt: null, loggedUser: { isOwner: false }, reassessmentCount: 0, categories: [], otherCategoryDescription: '', countryName: '', description: '', postCode: '' };
     }
     return this.state.innovation;
   }
