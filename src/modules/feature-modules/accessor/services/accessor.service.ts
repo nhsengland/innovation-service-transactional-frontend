@@ -52,4 +52,12 @@ export class AccessorService extends CoreService {
     return this.http.post<{ success: boolean }>(url.buildUrl(), body).pipe(take(1), map(response => response));
   }
 
+  changeAccessors(innovationId: string, body: {message?: string, accessors: { id: string; userRoleId: string }[]}): Observable<{ id: string }> {
+
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/{innovationId}/supports/{supportId}/accessors').setPathParams({ innovationId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+    
+  };
+  
+
 }
