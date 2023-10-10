@@ -219,8 +219,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe(() => {
 
-      // this.setAlertSuccess('Support status updated and organisation suggestions sent', { message: 'The Innovation Support status has been successfully updated and the Innovator has been notified of your accompanying suggestions and feedback.' });
-
       if (this.chosenStatus && this.currentStatus === InnovationSupportStatusEnum.ENGAGING && [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.UNSUITABLE].includes(this.chosenStatus)) {
         this.setAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated()?.message, itemsList: this.getMessageStatusUpdated()?.itemsList });
         this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });

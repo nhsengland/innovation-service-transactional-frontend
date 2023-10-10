@@ -37,9 +37,7 @@ export class TrainingAndResourcesComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
-
-    this.setPageStatus('LOADING');
-
+    
     this.setPageTitle('Training and resources');
 
     this.setPageStatus('READY');
