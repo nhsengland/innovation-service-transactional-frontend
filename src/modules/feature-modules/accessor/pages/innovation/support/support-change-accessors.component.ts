@@ -4,14 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
-import { CustomValidators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UsersService } from '@modules/shared/services/users.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { AccessorService } from '../../../services/accessor.service';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 
 @Component({
@@ -29,15 +26,6 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   formAccessorsList: { value: string, label: string }[] = [];
   selectedAccessors: typeof this.accessorsList = [];
   userOrganisationUnit: null | { id: string, name: string, acronym: string };
-
-  supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  supportStatus = Object.entries(this.supportStatusObj).map(([key, item]) => ({
-    key,
-    checked: false,
-    ...item
-  })).filter(x => !x.hidden);
-
-  chosenStatus: null | InnovationSupportStatusEnum = null;
 
   form = new FormGroup({
     accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
