@@ -81,7 +81,6 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
         response.engagingAccessors.forEach(accessor => {
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
-
       });
     }
 
@@ -90,6 +89,8 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
         this.accessorsList = response.data.map((item) => ({ id: item.id, userRoleId: item.roleId, name: item.name }));
         this.formAccessorsList = response.data.map((r) => ({ value: r.id, label: r.name }));
+
+        this.setPageStatus('READY');
 
       }
     );
