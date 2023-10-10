@@ -16,16 +16,15 @@ export type TrainingAndResourcesCard = {
 })
 export class TrainingAndResourcesComponent extends CoreComponent implements OnInit {
 
-  cardsList: TrainingAndResourcesCard[]
+  cardsList: TrainingAndResourcesCard[];
   
-
   constructor() {
     super();
 
     this.cardsList = [
       {
         title: 'Innovators',
-        label:'Guidance for innovators when using the NHS Innovation Service.',
+        label: 'Guidance for innovators when using the NHS Innovation Service.',
         link: `${ this.CONSTANTS.URLS.TRAINING_AND_RESOURCES_INNOVATOR_GUIDANCE }`
       },
       {
@@ -33,7 +32,7 @@ export class TrainingAndResourcesComponent extends CoreComponent implements OnIn
         label: 'Guidance for qualifying accessors and accessors on how to use the NHS Innovation Service.',
         link: `${ this.CONSTANTS.URLS.TRAINING_AND_RESOURCES_INNOVATOR_GUIDANCE }`
       },
-    ]
+    ];
 
   }
 
