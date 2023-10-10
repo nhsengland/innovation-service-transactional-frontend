@@ -73,6 +73,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 
 
@@ -82,7 +83,8 @@ const header: RoutesDataType['header'] = {
       { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
       { id: 'tasks', label: 'Tasks', url: '/accessor/tasks' },
       { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-      { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' }
+      { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' },
+      { id: 'account', label: 'Training and resources', url: '/accessor/training-and-resources' }
     ],
     right: []
   },
@@ -479,6 +481,17 @@ const routes: Routes = [
               }
             ]
           }
+        ]
+      },
+
+      {
+        path: 'training-and-resources',
+        data: {
+          breadcrumb: 'Training and resources',
+          layout: { type: 'full'}
+        },
+        children: [
+          { path: '', pathMatch: 'full', component: TrainingAndResourcesComponent }
         ]
       }
     ]
