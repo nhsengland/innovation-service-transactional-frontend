@@ -149,11 +149,6 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
     return 'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.';
   }
 
-  // getMessageStatusUpdated(): { message: string, itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined {
-  //   const status = this.form.get('status')?.value;
-  //   return status ? this.messageStatusUpdated[status] : undefined;
-  // }
-
   private handleGoBack() {
 
     if (this.stepNumber > 0){
