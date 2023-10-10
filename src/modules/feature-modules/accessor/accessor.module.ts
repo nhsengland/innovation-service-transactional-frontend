@@ -55,6 +55,7 @@ import { TrainingAndResourcesComponent } from './pages/training-and-resources/tr
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportRequestUpdateStatusComponent,
+    InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
     TrainingAndResourcesComponent

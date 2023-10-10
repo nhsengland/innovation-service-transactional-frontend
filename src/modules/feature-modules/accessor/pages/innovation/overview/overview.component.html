@@ -7,8 +7,6 @@
     <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
   </div>
 
-  <!--TODO: Banner for owner with account delete (new US)-->
-
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-8">
 
@@ -26,11 +24,14 @@
       <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
       <dd class="nhsuk-summary-list__value nhsuk-u-padding-right-0">
         <div class="d-flex">
-          <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
+          <ul class="nhsuk-list width-60 nhsuk-u-margin-bottom-2">
             <li *ngFor="let accessor of innovationSupport.engagingAccessors">
               {{accessor.name}}
             </li>
           </ul>
+          <div class="d-flex ml-auto nhsuk-u-text-align-right ">
+            <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
+          </div>
         </div>
       </dd>
     </div>

@@ -74,6 +74,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
+import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -349,6 +350,9 @@ const routes: Routes = [
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   },
                   { path: ':supportId/request-update', pathMatch: 'full', component: InnovationSupportRequestUpdateStatusComponent,
+                    
+                  },
+                  { path: ':supportId/change-accessors', pathMatch: 'full', component: InnovationChangeAccessorsComponent, 
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   }
                 ]
