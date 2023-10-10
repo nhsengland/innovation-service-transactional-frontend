@@ -31,7 +31,7 @@
               {{accessor.name}}
             </li>
           </ul>
-          <a *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'" class="ml-auto" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
+          <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" class="ml-auto" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
         </div>
       </dd>
     </div>

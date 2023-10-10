@@ -40,35 +40,9 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   chosenStatus: null | InnovationSupportStatusEnum = null;
 
   form = new FormGroup({
-    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>( null, { validators: Validators.required, updateOn: 'change' }),
     accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
-    message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    suggestOrganisations: new FormControl<string>('YES', { validators: Validators.required, updateOn: 'change' })
+    message: new FormControl<string>(''),
   }, { updateOn: 'blur' });
-
-  // formfieldSuggestOrganisations = {
-  //   description: `Based on the innovation's current support status, can you refer another organisation to continue supporting this Innovation at this moment in time?`,
-  //   items: [
-  //     { value: 'YES', label: `Yes` },
-  //     { value: 'NO', label: `No` }
-  //   ]
-  // };
-
-  private currentStatus: null | InnovationSupportStatusEnum = null;
-
-  // private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
-  //   [InnovationSupportStatusEnum.ENGAGING]: 'Describe the support you plan to provide.',
-  //   [InnovationSupportStatusEnum.WAITING]: 'Explain the information or decisions you need, before you can support this innovation.',
-  //   [InnovationSupportStatusEnum.UNSUITABLE]: 'Explain why your organisation has no suitable support offer for this innovation.',
-  //   [InnovationSupportStatusEnum.CLOSED]: 'Explain why your organisation has closed its engagement with this innovation.'
-  // };
-  
-  // private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
-  //   [InnovationSupportStatusEnum.ENGAGING]: 'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.',
-  //   [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
-  //   [InnovationSupportStatusEnum.UNSUITABLE]: 'The innovator and collaborators will be notified.',
-  //   [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
-  // };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -104,16 +78,11 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
       this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
 
-        this.currentStatus = response.status;
-
         response.engagingAccessors.forEach(accessor => {
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
 
-        this.setPageStatus('READY');
-
       });
-
     }
 
     this.usersService.getUsersList({ queryParams: { take: 100, skip: 0, filters: { email: false, onlyActive: true, organisationUnitId: this.userOrganisationUnit?.id ?? '', userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR] } } }).subscribe(
@@ -162,42 +131,23 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
-    }
-
+    };
+    
     const body = {
       accessors: this.selectedAccessors.map(item => ({
         id: item.id,
         userRoleId: item.userRoleId
       })),
-      message: this.form.get('message')?.value ?? ''
-    }
+      message: this.form.get('message')?.value ?? undefined
+    };
 
-    // this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe(() => {
-
-    //   // this.setAlertSuccess('Support status updated and organisation suggestions sent', { message: 'The Innovation Support status has been successfully updated and the Innovator has been notified of your accompanying suggestions and feedback.' });
-
-    //   if (this.chosenStatus && this.currentStatus === InnovationSupportStatusEnum.ENGAGING && [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.UNSUITABLE].includes(this.chosenStatus)) {
-    //     this.setAlertSuccess('Support status updated', { message: this.getMessageStatusUpdated()?.message });
-    //     this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
-    //     this.stepNumber = 4;
-    //   } else {
-    //     this.setRedirectAlertSuccess('You have changed the accessors assigned to this innovation', { message: 'The innovator and collaborators will be notified and your message has been sent.'})
-    //     this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
-    //   }
-
-    // });
-
-    this.accessorService.changeAccessors(this.innovationId, body).subscribe(() =>{
+    this.accessorService.changeAccessors(this.innovationId, this.supportId, body).subscribe(() =>{
 
       this.setRedirectAlertSuccess('You have changed the accessors assigned to this innovation', { message: 'The innovator and collaborators will be notified and your message has been sent.'})
-      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
 
     })
   }
-
-  // onSubmitRedirect() {
-  //     this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
-  // }
 
   getMessageLabel() {
 
