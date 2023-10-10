@@ -30,7 +30,7 @@ export class TrainingAndResourcesComponent extends CoreComponent implements OnIn
       {
         title: 'Support organisations',
         label: 'Guidance for qualifying accessors and accessors on how to use the NHS Innovation Service.',
-        link: `${ this.CONSTANTS.URLS.TRAINING_AND_RESOURCES_INNOVATOR_GUIDANCE }`
+        link: `${ this.CONSTANTS.URLS.TRAINING_AND_RESOURCES_SUPPORT_ORGANISATION }`
       },
     ];
 
