@@ -1,0 +1,43 @@
+<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
+
+  <ng-container *ngIf="label && pageUniqueField">
+    <h1 class="nhsuk-label-wrapper">
+      <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1"> {{ label }} </div>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="label && !pageUniqueField">
+    <label class="nhsuk-label" [for]="id"> {{ label }} </label>
+  </ng-container>
+
+  <ng-container *ngIf="description">
+    <div class="nhsuk-hint" id="{{ id }}-hint" [innerHTML]="description"></div>
+  </ng-container>
+
+  <ng-container *ngIf="hasError">
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
+      <span class="nhsuk-u-visually-hidden">Error: </span>{{ error.message | translate: error.params }}
+    </span>
+  </ng-container>
+
+  <ng-container *ngIf="!uploadedFile">
+    <input class="nhsuk-label nhsuk-u-margin-bottom-3" type="file" id="file" name="file" (change)="onChange($event)" [accept]="inputFileConfig.acceptedFiles">
+  </ng-container>
+
+  <ng-container *ngIf="uploadedFile">
+    <hr class="nhsuk-section-break nhsuk-section-break--visible">
+    <div class="nhsuk-label nhsuk-u-margin-top-2">Uploaded file</div>
+    <dl class="nhsuk-summary-list nhsuk-summary-list--no-border">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__value"><a href="javascript:void(0)" (click)="downloadFile(uploadedFile.file)"> {{ uploadedFile.file.name }} </a></dt>
+        <dd class="nhsuk-summary-list__actions">
+          <a href="javascript:void(0)" (click)="removeUploadedFile()">Remove <span class="nhsuk-u-visually-hidden">{{ uploadedFile.file.name }}</span></a>
+        </dd>
+      </div>
+    </dl>
+
+
+  </ng-container>
+
+<!--   <theme-form-input label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" [pageUniqueField]="false"></theme-form-input> -->
+
+</div>

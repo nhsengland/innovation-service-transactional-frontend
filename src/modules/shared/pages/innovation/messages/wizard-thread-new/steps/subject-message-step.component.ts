@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FileTypes, FormControl, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 
@@ -35,6 +35,11 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   }, { updateOn: 'blur' });
 
   formConfirmationField = { label: '', description: '' };
+
+  configInputFile = {
+    acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
+    maxFileSize: 1 // In Mb.
+  }
 
   constructor() { super(); }
 
