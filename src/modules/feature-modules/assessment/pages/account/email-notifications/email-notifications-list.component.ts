@@ -8,7 +8,18 @@ import { AuthenticationStore } from '@modules/stores';
 
 export type Preferences = {
   AssessmentEmailNotificationsTypeEnum: {}
-} 
+} ;
+
+export type CategoryMessages = {
+  [category: string] : { 
+    title: string, 
+    label: string 
+  }
+};
+
+export type MockedResponse = {
+  [category: string] : boolean
+};
 
 @Component({
   selector: 'app-assessment-account-email-notifications-list',
@@ -24,13 +35,16 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
   currentRole: null | { id: string, description: string };
   displayName: string;
 
-  preferencesItems: AssessmentEmailNotificationsTypeEnum[] = [
-    AssessmentEmailNotificationsTypeEnum.RECORD,
-    AssessmentEmailNotificationsTypeEnum.TASKS,
-    AssessmentEmailNotificationsTypeEnum.MESSAGES,
-    AssessmentEmailNotificationsTypeEnum.MANAGEMENT,
-    AssessmentEmailNotificationsTypeEnum.ASSIGNED
+  notificationsCategories: string[] = [
+    AssessmentEmailNotificationsTypeEnum.RECORD.toString(),
+    AssessmentEmailNotificationsTypeEnum.TASKS.toString(),
+    AssessmentEmailNotificationsTypeEnum.MESSAGES.toString(),
+    AssessmentEmailNotificationsTypeEnum.MANAGEMENT.toString(),
+    AssessmentEmailNotificationsTypeEnum.ASSIGNED.toString()
   ]
+
+  preferencesMessages: CategoryMessages;
+  mockedResponse : MockedResponse;
 
   constructor(
     private notificationsService: NotificationsService,
@@ -38,7 +52,7 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
   ) {
 
     super();
-    this.setPageTitle('Email notifications');
+    this.setPageTitle('Email notifications preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 
@@ -52,16 +66,15 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
       };
     }
 
-  }
+    this.mockedResponse = {
+      'RECORD' : true,
+      'TASKS' : false,
+      'MESSAGES' : false,
+      'MANAGEMENT' : true,
+      'ASSIGNED' : true,
+    }
 
-  ngOnInit(): void {
-
-    this.getEmailNotificationTypes();
-    this.checkMultipleRoles();
-
-
-
-    let preferencesMessages = {
+    this.preferencesMessages = {
       'RECORD' : {
         title: 'Innovator submits innovation record',
         label: 'Get notified when an innovation is submitted for needs assessment.',
@@ -84,28 +97,14 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
       },
     };
 
-    let mockedResponse = [
-      { 
-        notificationType: AssessmentEmailNotificationsTypeEnum.RECORD,
-        preference: true
-      },
-      { 
-        notificationType: AssessmentEmailNotificationsTypeEnum.TASKS,
-        preference: true
-      },
-      { 
-        notificationType: AssessmentEmailNotificationsTypeEnum.MESSAGES,
-        preference: true
-      },
-      { 
-        notificationType: AssessmentEmailNotificationsTypeEnum.MANAGEMENT,
-        preference: true
-      },
-      { 
-        notificationType: AssessmentEmailNotificationsTypeEnum.ASSIGNED,
-        preference: true
-      },
-    ];
+  }
+
+  ngOnInit(): void {
+
+    this.getEmailNotificationTypes();
+    this.checkMultipleRoles();
+
+
   }
 
   private getEmailNotificationTypes(): void {

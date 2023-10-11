@@ -1,4 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
+  <p>
+    Notification preferences by category
+  </p>
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -9,18 +12,22 @@
         </div>
   
         <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
-          <div *ngFor="let item of preferencesList" class="nhsuk-summary-list__row">
+          <div *ngFor="let category of notificationsCategories" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key"> 
               <ul class="nhsuk-list">
                 <li>
-                  {{ item. }}
+                  {{ preferencesMessages[category].title }}
+                </li>
+                <li class="font-color-secondary">
+                  {{ preferencesMessages[category].label }}
                 </li>
               </ul>
               <!-- {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }}  -->
             </dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
+            <!-- <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd> -->
+            
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="edit/{{ item.type }}"> Change </a>
+              <strong class="nhsuk-tag nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="mockedResponse[category] ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ mockedResponse[category] ? 'On' : 'Off'}}</strong>
             </dd>
           </div>
         </dl>
