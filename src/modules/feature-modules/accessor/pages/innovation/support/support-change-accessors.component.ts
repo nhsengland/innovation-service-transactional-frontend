@@ -155,14 +155,16 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
   private handleGoBack() {
 
-    if (this.stepNumber === 2){
-      this.onSubmitStep();
-      
-    }
-    
-    if (this.stepNumber === 0) {
+    if (this.stepNumber === 1) {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
     }
+
+    if (this.stepNumber === 2){
+      this.onSubmitStep();
+    }
+
+    
+    
 
   }
 
