@@ -21,6 +21,15 @@ export enum EmailNotificationsPreferencesEnum {
   DAILY = 'DAILY'
 }
 
+export enum AssessmentEmailNotificationsTypeEnum {
+  RECORD = 'RECORD',
+  TASKS = 'TASKS',
+  MESSAGES = 'MESSAGES',
+  MANAGEMENT = 'MANAGEMENT',
+  ASSIGNED = 'ASSIGNED'
+}
+
+
 
 export type NotificationsListInDTO = {
   count: number;
@@ -68,6 +77,12 @@ type EmailNotificationPreferencesDTO = {
   notificationType: EmailNotificationsTypeEnum,
   preference: EmailNotificationsPreferencesEnum
 };
+
+type AssessmentEmailNotificationPreferencesDTO = {
+  notificationType: AssessmentEmailNotificationsTypeEnum,
+  preference: boolean
+};
+
 
 
 @Injectable()
@@ -211,6 +226,13 @@ export class NotificationsService extends CoreService {
   }
 
   updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
+    return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));
+
+  }
+
+  updateAssessmentEmailNotificationsPreferences(body: AssessmentEmailNotificationPreferencesDTO[]): Observable<boolean> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));

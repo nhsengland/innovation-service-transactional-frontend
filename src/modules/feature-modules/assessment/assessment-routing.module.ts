@@ -70,6 +70,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -453,7 +454,7 @@ const routes: Routes = [
             data: { breadcrumb: 'Email notifications' },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsListComponent,
+                path: '', pathMatch: 'full', component: AssessmentPageAccountEmailNotificationsListComponent,
                 data: { breadcrumb: null }
               },
               {

@@ -27,6 +27,7 @@ import { InnovationsListComponent } from './pages/innovations/innovations-list.c
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
+import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { AssessmentService } from './services/assessment.service';
     // Pages.
     // // Account.
     PageAssessmentAccountManageAccountInfoComponent,
+    AssessmentPageAccountEmailNotificationsListComponent,
     // // Dashboard.
     DashboardComponent,
     // // Innovation.
