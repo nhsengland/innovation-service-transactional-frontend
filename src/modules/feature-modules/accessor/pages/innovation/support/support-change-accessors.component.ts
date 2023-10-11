@@ -48,7 +48,6 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
     this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
 
-  
   }
 
 
@@ -108,6 +107,11 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
         break;
 
+      case 2:
+        this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+        this.stepNumber = 1;
+        break;
+
       default:
         break;
 
@@ -151,8 +155,9 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
   private handleGoBack() {
 
-    if (this.stepNumber > 0){
-      this.stepNumber--;
+    if (this.stepNumber === 2){
+      this.onSubmitStep();
+      
     }
     
     if (this.stepNumber === 0) {
