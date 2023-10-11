@@ -30,7 +30,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     organisationsStep: {
       organisationUnits: { id: string, name: string, users: { id: string, userRoleId: string, name: string }[] }[]
     },
-    subjectMessageStep: { subject: string, message: string }
+    subjectMessageStep: { subject: string, message: string, document: null | File, documentDescriptiveName: string }
   }>({});
 
   datasets: {
@@ -49,7 +49,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.data = {
       innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
-      subjectMessageStep: { subject: '', message: '' }
+      subjectMessageStep: { subject: '', message: '', document: null, documentDescriptiveName: '' }
     };
 
     this.datasets = {
@@ -153,7 +153,9 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
               innovation: { id: this.innovation.id },
               teams: this.getNotifiableTeamsList().visibleList,
               subject: '',
-              message: ''
+              message: '',
+              document: null,
+              documentDescriptiveName: ''
             },
             outputs: {
               previousStepEvent: data => this.onPreviousStep(data, this.onSubjectMessageStepOut, this.onOrganisationsStepIn),
@@ -224,26 +226,40 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       innovation: { id: this.innovation.id },
       teams: this.getNotifiableTeamsList().visibleList,
       subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message
+      message: this.wizard.data.subjectMessageStep.message,
+      document: this.wizard.data.subjectMessageStep.document,
+      documentDescriptiveName: this.wizard.data.subjectMessageStep.documentDescriptiveName
     });
   }
   onSubjectMessageStepOut(stepData: WizardStepEventType<SubjectMessageStepOutputType>): void {
     this.wizard.data.subjectMessageStep = {
       subject: stepData.data.subject,
-      message: stepData.data.message
+      message: stepData.data.message,
+      document: stepData.data.document,
+      documentDescriptiveName: stepData.data.documentDescriptiveName
     };
   }
 
 
   onSubmit(): void {
 
-    const body = {
+    const formData: FormData = new FormData();
+
+    const data = {
       followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
       subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message
+      message: this.wizard.data.subjectMessageStep.message,
+      documentDescriptiveName: this.wizard.data.subjectMessageStep.documentDescriptiveName
     };
 
-    this.innovationsService.createThread(this.innovation.id, body).subscribe({
+    formData.append('data', JSON.stringify(data));
+
+    const document = this.wizard.data.subjectMessageStep.document;
+    if (document) {
+      formData.append('document', document, document.name);
+    }
+
+    this.innovationsService.createThread(this.innovation.id, formData).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();

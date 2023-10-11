@@ -483,9 +483,9 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: { followerUserRoleIds: string[], subject: string, message: string; }): Observable<{ id: string }> {
+  createThread(innovationId: string, formData: FormData): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
+    return this.http.post<{ id: string }>(url.buildUrl(), formData).pipe(take(1));
   }
 
   createThreadMessage(innovationId: string, threadId: string, body: { message: string; }): Observable<CreateThreadMessageDTO> {

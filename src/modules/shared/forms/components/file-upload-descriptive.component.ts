@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { LoggerService, Severity } from '@modules/core/services/logger.service';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { AbstractControl, ControlContainer, FormControl } from '@angular/forms';
+import { RandomGeneratorHelper } from '@app/base/helpers';
 import { saveAs } from 'file-saver';
-import { FileTypes, FileUploadType } from '../engine/config/form-engine.config';
+import { FileTypes } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 @Component({
@@ -14,10 +13,10 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
+  @Input() name?: string;
   @Input() label?: string;
   @Input() description?: string;
   @Input() pageUniqueField = true;
-
   @Input()
   set config(c: undefined | {
     acceptedFiles?: FileTypes[],
@@ -39,27 +38,40 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   uploadedFile: null | { file: File, url: string } = null;
 
   hasError = false;
-  hasUploadError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
-  isLoadingFile = false;
+
+  // Form controls.
+  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
+  get fieldControl(): FormControl { return this.parentFieldControl?.get(this.name!) as FormControl; }
+
+  // Accessibility.
+  get ariaDescribedBy(): null | string {
+    let s = '';
+    if (this.description) { s += `hint-${this.id}`; }
+    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    return s || null;
+  }
 
   constructor(
     private injector: Injector,
-    private cdr: ChangeDetectorRef,
-    private http: HttpClient,
-    private loggerService: LoggerService,
-    private sanitizer:DomSanitizer
-  ) { }
+    private cdr: ChangeDetectorRef
+  ) {
 
-  ngOnInit() {
-    console.log();
+  }
+
+  ngOnInit(): void {
+
+    this.id = this.id || RandomGeneratorHelper.generateRandom();
+
   }
 
   ngDoCheck(): void {
-    console.log();
+    this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
+    this.cdr.detectChanges();
   }
 
-  onChange(event: any) {
+  onChange(event: any): void {
 
     this.hasError = false;
 
@@ -79,16 +91,18 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
     this.uploadedFile = { file: file, url: window.URL.createObjectURL(file) };
 
-    console.log('uploaded files', this.uploadedFile);
+    //this.parentFieldControl?.patchValue({file: file});
+    this.fieldControl.setValue(file);
 
   }
 
-  downloadFile(file: File) {
+  downloadFile(file: File): void {
     saveAs(file, file.name);
   }
 
-  removeUploadedFile() {
+  removeUploadedFile(): void {
     this.uploadedFile = null;
+    this.fieldControl.setValue(null);
   }
 
 }

@@ -20,7 +20,9 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     innovation: { id: '' },
     teams: [],
     subject: '',
-    message: ''
+    message: '',
+    document: null,
+    documentDescriptiveName: ''
   };
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
@@ -31,6 +33,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
+    document: new FormControl<File | null>(null),
+    documentDescriptiveName: new FormControl<string>('', [Validators.maxLength(100)]),
     confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
   }, { updateOn: 'blur' });
 
@@ -38,7 +42,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
   configInputFile = {
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
-    maxFileSize: 1 // In Mb.
+    maxFileSize: 9 // In Mb.
   }
 
   constructor() { super(); }
@@ -50,6 +54,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
     this.form.get('subject')?.setValue(this.data.subject);
     this.form.get('message')?.setValue(this.data.message);
+    this.form.get('document')?.setValue(this.data.document);
+    this.form.get('documentDescriptiveName')?.setValue(this.data.documentDescriptiveName);
     if (!this.stores.authentication.isInnovatorType()) {
       this.form.get('confirmation')?.setValue(true);
     }
@@ -63,11 +69,12 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
   }
 
-
   prepareOutputData(): SubjectMessageStepOutputType {
     return {
       subject: this.form.value.subject ?? '',
-      message: this.form.value.message ?? ''
+      message: this.form.value.message ?? '',
+      document: this.form.value.document ?? null,
+      documentDescriptiveName: this.form.value.documentDescriptiveName ?? ''
     }
   }
 

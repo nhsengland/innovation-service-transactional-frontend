@@ -2,7 +2,7 @@
 
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
-      <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1"> {{ label }} </div>
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
     </h1>
   </ng-container>
   <ng-container *ngIf="label && !pageUniqueField">
@@ -15,12 +15,12 @@
 
   <ng-container *ngIf="hasError">
     <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-      <span class="nhsuk-u-visually-hidden">Error: </span>{{ error.message | translate: error.params }}
+      <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
     </span>
   </ng-container>
 
   <ng-container *ngIf="!uploadedFile">
-    <input class="nhsuk-label nhsuk-u-margin-bottom-3" type="file" id="file" name="file" (change)="onChange($event)" [accept]="inputFileConfig.acceptedFiles">
+    <input [id]="id" [name]="name" type="file" [accept]="inputFileConfig.acceptedFiles" [attr.aria-invalid]="hasError ? 'true' : null" [attr.aria-describedby]="ariaDescribedBy"  class="nhsuk-label nhsuk-u-margin-bottom-3" (change)="onChange($event)" />
   </ng-container>
 
   <ng-container *ngIf="uploadedFile">
@@ -34,10 +34,6 @@
         </dd>
       </div>
     </dl>
-
-
   </ng-container>
-
-<!--   <theme-form-input label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" [pageUniqueField]="false"></theme-form-input> -->
 
 </div>
