@@ -33,22 +33,6 @@
             <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
       </dd>
     </div>
-
-    <!-- <div *ngIf="innovationSupport.engagingAccessors.length > 0" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
-      <dd class="nhsuk-summary-list__value nhsuk-u-padding-right-0">
-        <div class="d-flex">
-          <ul class="nhsuk-list width-60 nhsuk-u-margin-bottom-2">
-            <li *ngFor="let accessor of innovationSupport.engagingAccessors">
-              {{accessor.name}}
-            </li>
-          </ul>
-          <div class="d-flex ml-auto nhsuk-u-text-align-right ">
-            <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
-          </div>
-        </div>
-      </dd>
-    </div> -->
   </dl>
 
   <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-7"> Change support status </a>
