@@ -50,7 +50,9 @@
       <div class="d-flex">
         <theme-svg-icon type="success"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
-        <h2 class="nhsuk-heading-m">Needs assessment complete</h2>
+        <h2 *ngIf="innovation?.assessment" class="nhsuk-heading-m">
+          {{ innovation!.assessment!.reassessmentCount > 0 ? 'Needs reassessment complete' : 'Needs assessment complete' }}
+        </h2>
       </div>
 
       <div *ngIf="!assessmentExemption" class="nhsuk-u-margin-bottom-5">
