@@ -54,7 +54,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     this.innovationsService.getInnovationInfo(this.innovationId).pipe(
       switchMap(innovationInfo => {
-        console.log(innovationInfo);
 
         this.innovation = innovationInfo;
 
