@@ -79,5 +79,11 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   statusUpdatedAt: '2020-01-01T00:00:00.000Z',
   owner: { name: 'User name 01', isActive: true },
   loggedUser: { isOwner: true },
-  assessment: { id: 'assessment01', createdAt: '2020-01-01T00:00:00.000Z', finishedAt: null }
+  assessment: { id: 'assessment01', createdAt: '2020-01-01T00:00:00.000Z', finishedAt: null },
+  reassessmentCount: 0,
+  categories: [],
+  countryName: 'England',
+  description: 'Description',
+  otherCategoryDescription: null,
+  postCode: null,
 };

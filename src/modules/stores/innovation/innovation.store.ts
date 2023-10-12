@@ -12,7 +12,7 @@ import { InnovationService } from './innovation.service';
 
 import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
 import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
-import { GetInnovationEvidenceDTO, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
@@ -27,7 +27,6 @@ export class InnovationStore extends Store<InnovationModel> {
   get INNOVATION_STATUS(): typeof INNOVATION_STATUS { return INNOVATION_STATUS; }
   get INNOVATION_SUPPORT_STATUS(): typeof INNOVATION_SUPPORT_STATUS { return INNOVATION_SUPPORT_STATUS; }
   get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS { return INNOVATION_SECTION_STATUS; }
-  get INNOVATION_SECTION_ACTION_STATUS(): typeof INNOVATION_SECTION_ACTION_STATUS { return INNOVATION_SECTION_ACTION_STATUS; }
 
   isAssessmentStatus(status: keyof typeof INNOVATION_STATUS | string): boolean {
     return ['WAITING_NEEDS_ASSESSMENT', 'NEEDS_ASSESSMENT'].includes(status);
@@ -48,7 +47,7 @@ export class InnovationStore extends Store<InnovationModel> {
             actionStatus: '',
             submittedAt: null,
             submittedBy: null,
-            openActionsCount: 0
+            openTasksCount: 0
           };
           return {
             id: ss.id,
@@ -60,7 +59,7 @@ export class InnovationStore extends Store<InnovationModel> {
               name: sectionState.submittedBy.name,
               isOwner: sectionState.submittedBy.isOwner
             },
-            openActionsCount: sectionState.openActionsCount
+            openTasksCount: sectionState.openTasksCount
           };
         })
       })))
@@ -69,7 +68,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
-    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['actions'] });
+    return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['tasks'] });
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {

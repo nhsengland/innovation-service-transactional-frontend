@@ -15,10 +15,12 @@ import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organ
 export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreComponent implements WizardStepComponentType<OrganisationsStepInputType, OrganisationsStepOutputType>, OnInit {
 
   @Input() title = '';
+  @Input() isSubmitStep = false;
   @Input() data: OrganisationsStepInputType = {
     innovation: { id: '' },
     organisationUnits: [],
-    selectedOrganisationUnits: []
+    selectedOrganisationUnits: [],
+    activeInnovators: false
   };
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
@@ -42,7 +44,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.leadText = this.stores.authentication.isInnovatorType() ||  this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation' : 'You can select other organisations that are currently engaging with this innovation.';
+    this.leadText = this.stores.authentication.isInnovatorType() ||  this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation.' : 'You can select other organisations that are currently engaging with this innovation.';
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
@@ -54,7 +56,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
       description: support.engagingAccessors.map(item => item.name).join('<br />')
     }));
 
-    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+    if (this.data.activeInnovators && (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType())) {
       this.formOrganisationUnitsItems.push(
         { value: 'SEPARATOR', label: 'SEPARATOR' },
         { value: 'NO_CHOICE', label: 'No, I only want to notify the innovator about this message' }
@@ -103,6 +105,17 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     }
 
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
+
+  }
+
+  onSubmitStep(): void {
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
 
   }
 

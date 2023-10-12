@@ -109,7 +109,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     } else if (this.stores.authentication.isAccessorRole()) {
 
-      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'COMPLETE'].includes(i.value));
+      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ label: item.label, value: key })).filter(i => ['ENGAGING', 'CLOSED'].includes(i.value));
 
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
 
@@ -195,7 +195,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       engagingOrganisations: this.form.get('engagingOrganisations')?.value,
       supportStatuses: this.form.get('supportStatuses')?.value,
       groupedStatuses: this.form.get('groupedStatuses')?.value,
-      ...this.stores.authentication.isAccessorRole() && {
+      ...this.stores.authentication.isAccessorType() && {
         assignedToMe: this.form.get('assignedToMe')?.value ?? false,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
       },

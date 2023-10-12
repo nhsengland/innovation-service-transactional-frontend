@@ -30,15 +30,9 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
-// // Actions.
-import { PageActionsAdvancedSearchComponent } from '@modules/shared/pages/actions/actions-advanced-search.component';
+// // Tasks.
+import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
-import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
-import { PageInnovationActionTrackerCancelComponent } from '@modules/shared/pages/innovation/actions/action-tracker-cancel.component';
-import { PageInnovationActionTrackerEditComponent } from '@modules/shared/pages/innovation/actions/action-tracker-edit.component';
-import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
-import { PageInnovationActionTrackerNewComponent } from '@modules/shared/pages/innovation/actions/action-tracker-new.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -49,10 +43,10 @@ import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/
 import { PageInnovationExportRequestInfoComponent } from '@modules/shared/pages/innovation/export-requests/export-request-info.component';
 import { PageInnovationExportRequestNewComponent } from '@modules/shared/pages/innovation/export-requests/export-request-new.component';
 import { PageInnovationExportRequestsListComponent } from '@modules/shared/pages/innovation/export-requests/export-requests-list.component';
-import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationThreadMessageEditComponent } from '@modules/shared/pages/innovation/messages/thread-message-edit.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
+import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationRecordDownloadComponent } from '@modules/shared/pages/innovation/record/innovation-record-download.component';
 import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
@@ -60,23 +54,29 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
+import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
+import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/tasks/task-details.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
+import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
-      { id: 'actions', label: 'Actions', url: '/assessment/actions', },
+      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks', },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
       { id: 'account', label: 'Your account', url: '/assessment/account/manage-details' },
     ],
@@ -224,15 +224,6 @@ const routes: Routes = [
                                 data: { breadcrumb: 'Evidence Info' },
                               }
                             ]
-                          },
-                          {
-                            path: 'actions',
-                            pathMatch: 'full',
-                            component: PageInnovationActionSectionInfoComponent,
-                            data: {
-                              breadcrumb: null,
-                              layout: { type: 'full' }
-                            }
                           }
                         ]
                       }
@@ -278,24 +269,24 @@ const routes: Routes = [
               },
 
               {
-                path: 'action-tracker',
-                data: { breadcrumb: 'Action Tracker' },
+                path: 'tasks',
+                data: { breadcrumb: 'Tasks' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                    path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationActionTrackerNewComponent,
-                    data: { breadcrumb: 'New' }
+                    path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
+                    data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
-                    path: ':actionId',
-                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    path: ':taskId',
+                    resolve: { innovationActionData: InnovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -304,17 +295,17 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationTaskDetailsComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'edit', pathMatch: 'full', component: PageInnovationActionTrackerEditComponent,
-                        data: { breadcrumb: 'Edit' }
+                        path: 'cancel', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.CANCELLED }
                       },
                       {
-                        path: 'cancel', pathMatch: 'full', component: PageInnovationActionTrackerCancelComponent,
-                        data: { breadcrumb: 'Cancel' }
-                      }
+                        path: 'reopen', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.OPEN }
+                      },
                     ]
                   }
                 ]
@@ -364,7 +355,9 @@ const routes: Routes = [
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
-                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent }
+                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
+                  }
                 ]
               },
 
@@ -393,17 +386,16 @@ const routes: Routes = [
       },
 
       {
-        path: 'actions',
+        path: 'tasks',
         data: {
-          breadcrumb: 'Actions',
-          layout: { type: 'full', chosenMenu: 'actions', backgroundColor: 'bg-color-white' }
+          breadcrumb: 'Tasks',
+          layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
         children: [
-          {
-            path: '', pathMatch: 'full', component: PageActionsAdvancedSearchComponent,
-            data: { breadcrumb: null }
+          { path: '', pathMatch: 'full', component: PageTasksAdvancedSearchComponent, data: { breadcrumb: null } },
+          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
+            data: { breadcrumb: 'Statuses' }
           },
-          { path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent },
         ]
       },
 

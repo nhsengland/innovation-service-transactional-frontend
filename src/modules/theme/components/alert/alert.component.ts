@@ -43,7 +43,10 @@ export class AlertComponent implements OnChanges {
       switch (this.type) {
         case 'ACTION': this.borderColorCSS = 'border-color-primary'; break;
         case 'INFORMATION': this.borderColorCSS = 'border-color-neutral'; break;
-        case 'SUCCESS': this.borderColorCSS = 'border-color-success'; break;
+        case 'SUCCESS': 
+          this.borderColorCSS = 'border-color-success'; 
+          this.fontItemColorCSS = 'font-color-text';
+          break;
         case 'WARNING': this.borderColorCSS = 'border-color-warning'; break;
         case 'ERROR':
           this.borderColorCSS = 'border-color-error';
@@ -86,7 +89,6 @@ export class AlertComponent implements OnChanges {
   }
 
   onItemClick(callback?: string | ((...p: any) => void)) {
-
     if (!callback) {
       return;
     }

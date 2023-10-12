@@ -26,7 +26,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   chosenStatus: null | InnovationSupportStatusEnum = null;
 
   form = new FormGroup({
-    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.COMPLETE, { validators: Validators.required, updateOn: 'change' }),
+    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.CLOSED, { validators: Validators.required, updateOn: 'change' }),
     message: new FormControl<string>('', CustomValidators.required('A comment is required')),
   }, { updateOn: 'blur' });
 
@@ -72,9 +72,9 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       message: this.form.get('message')?.value ?? ''
     }
 
-    this.accessorService.requestSupportStatusChage(this.innovationId, this.supportId, body).subscribe(() => {
-      this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request' });
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/support`);
+    this.accessorService.requestSupportStatusChange(this.innovationId, this.supportId, body).subscribe(() => {
+      this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request.' });
+      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     });
   }
 }

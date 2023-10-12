@@ -13,11 +13,9 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent {
   visibleStatus: InnovationSupportStatusEnum[] = [
     InnovationSupportStatusEnum.UNASSIGNED,
     InnovationSupportStatusEnum.ENGAGING,
-    InnovationSupportStatusEnum.FURTHER_INFO_REQUIRED,
     InnovationSupportStatusEnum.WAITING,
-    InnovationSupportStatusEnum.NOT_YET,
     InnovationSupportStatusEnum.UNSUITABLE,
-    InnovationSupportStatusEnum.COMPLETE
+    InnovationSupportStatusEnum.CLOSED
   ]
 
   constructor() {
@@ -25,8 +23,8 @@ export class PageInnovationSupportStatusListComponent extends CoreComponent {
     super();
 
     this.setPageTitle('Support status key');
+    this.setBackLink('Go back');
     this.setPageStatus('READY');
-
   }
 
 }

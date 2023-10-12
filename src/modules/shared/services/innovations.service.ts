@@ -11,19 +11,19 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
-import { CreateSupportSummaryProgressUpdateType, InnovationActionInfoDTO, InnovationActionsListDTO, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
+import { CreateSupportSummaryProgressUpdateType, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationTasksListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
 
 
-export type InnovationsActionsListFilterType = {
+export type InnovationsTasksListFilterType = {
   innovationId?: string,
   innovationName?: string,
   sections?: InnovationSectionEnum[],
-  status?: InnovationActionStatusEnum[],
+  status?: InnovationTaskStatusEnum[],
   innovationStatus?: InnovationStatusEnum[],
   createdByMe?: boolean,
-  allActions?: boolean,
+  allTasks?: boolean,
   fields?: ('notifications')[]
 };
 
@@ -46,6 +46,10 @@ export type GetThreadsListDTO = {
 export type GetThreadInfoDTO = {
   id: string;
   subject: string;
+  context?: {
+    id: string;
+    type: 'TASK' | 'SUPPORT' | 'NEEDS_ASSESSMENT'
+  };
   createdAt: DateISOType;
   createdBy: { id: string, name: string, type: UserRoleEnum; };
 };
@@ -59,12 +63,11 @@ export type GetThreadMessageInfoDTO = {
 export type GetThreadFollowersDTO = {
   followers: {
     id: string;
-    identityId: string;
     name: string;
-    type: UserRoleEnum;
     isLocked: boolean;
     isOwner?: boolean;
-    organisationUnit?: { id: string, acronym: string }
+    role: { id: string, role: UserRoleEnum };
+    organisationUnit?: { id: string, acronym: string } | null;
   }[]
 };
 
@@ -347,8 +350,8 @@ export class InnovationsService extends CoreService {
   }
 
 
-  // Actions methods.
-  getActionsList(queryParams: APIQueryParamsType<InnovationsActionsListFilterType>): Observable<InnovationActionsListDTO> {
+  // Tasks methods.
+  getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationTasksListDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -360,11 +363,11 @@ export class InnovationsService extends CoreService {
       ...(filters.status ? { status: filters.status } : {}),
       ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
       ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
-      ...(filters.allActions ? { allActions: filters.allActions } : {}),
+      ...(filters.allTasks ? { allTasks: filters.allTasks } : {}),
       ...(filters.fields ? { fields: filters.fields } : {})
     };
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/actions').setQueryParams(qp);
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/tasks').setQueryParams(qp);
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(take(1),
       map(response => ({
         count: response.count,
@@ -373,7 +376,7 @@ export class InnovationsService extends CoreService {
 
           return {
             ...item,
-            ...{ name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available' }
+            ...{ name: sectionIdentification ? `Update ${sectionIdentification.group.number}.${sectionIdentification.section.number} '${sectionIdentification.section.title}'` : 'Section no longer available' }
           }
         })
       }))
@@ -381,25 +384,25 @@ export class InnovationsService extends CoreService {
 
   }
 
-  getActionInfo(innovationId: string, actionId: string): Observable<InnovationActionInfoDTO> {
+  getTaskInfo(innovationId: string, taskId: string): Observable<InnovationTaskInfoDTO> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
-    return this.http.get<Omit<InnovationActionInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
+    return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(take(1),
       map(response => {
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-
         return ({
           id: response.id,
           displayId: response.displayId,
           status: response.status,
-          name: sectionIdentification ? `Update '${sectionIdentification.section.title}'` : 'Section no longer available',
-          description: response.description,
+          descriptions: response.descriptions,
           section: response.section,
+          name: sectionIdentification ? `Update'${sectionIdentification.section.title}'` : 'Section no longer available',
           createdAt: response.createdAt,
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
-          declineReason: response.declineReason
+          sameOrganisation: response.sameOrganisation,
+          threadId: response.threadId,
         })
       })
     );
@@ -408,7 +411,7 @@ export class InnovationsService extends CoreService {
 
   createAction(innovationId: string, body: { section: InnovationSectionEnum, description: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions').setPathParams({ innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
@@ -416,13 +419,10 @@ export class InnovationsService extends CoreService {
 
   }
 
-  updateAction(innovationId: string, actionId: string, body: { status: InnovationActionStatusEnum, message?: string }): Observable<{ id: string }> {
+  updateTask(innovationId: string, taskId: string, body: { status: InnovationTaskStatusEnum, message?: string }): Observable<{ id: string }> {
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/actions/:actionId').setPathParams({ innovationId, actionId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/tasks/:taskId').setPathParams({ innovationId, taskId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1));
 
   }
 
@@ -455,6 +455,11 @@ export class InnovationsService extends CoreService {
   getThreadFollowers(innovationId: string, threadId: string): Observable<GetThreadFollowersDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
     return this.http.get<GetThreadFollowersDTO>(url.buildUrl()).pipe(take(1));
+  }
+
+  addThreadFollowers(innovationId: string, threadId: string, body: { followerUserRoleIds: string[] }): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers').setPathParams({ innovationId, threadId });
+    return this.http.patch<void>(url.buildUrl(), body).pipe(take(1));
   }
 
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
@@ -528,11 +533,8 @@ export class InnovationsService extends CoreService {
               case ActivityLogItemsEnum.SECTION_SUBMISSION:
                 i.activity = ActivityLogItemsEnum.SECTION_SUBMISSION_DEPRECATED;
                 break;
-              case ActivityLogItemsEnum.ACTION_CREATION:
-                i.activity = ActivityLogItemsEnum.ACTION_CREATION_DEPRECATED;
-                break;
-              case ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE:
-                i.activity = ActivityLogItemsEnum.ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED;
+              case ActivityLogItemsEnum.TASK_CREATION:
+                i.activity = ActivityLogItemsEnum.TASK_CREATION_DEPRECATED;
                 break;
             }
 
@@ -554,9 +556,9 @@ export class InnovationsService extends CoreService {
             case 'THREAD':
               link = { label: 'View messages', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/threads/${i.params.thread?.id}` };
               break;
-            case 'ACTION':
-              if (['innovator', 'accessor'].includes(userUrlBasePath) && sectionIdentification && i.params.actionId) { // Don't make sense for assessment users.
-                link = { label: 'View action', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/action-tracker/${i.params.actionId}` };
+            case 'TASK':
+              if (['innovator', 'accessor', 'assessment'].includes(userUrlBasePath) && sectionIdentification && i.params.taskId) {
+                link = { label: 'View task', url: `/${userUrlBasePath}/innovations/${response.innovation.id}/tasks/${i.params.taskId}` };
               }
               break;
           }
@@ -613,7 +615,7 @@ export class InnovationsService extends CoreService {
 
 
   // Sections
-  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('actions')[] }): Observable<InnovationSectionInfoDTO> {
+  getSectionInfo(innovationId: string, sectionId: string, filters: { fields?: ('tasks')[] }): Observable<InnovationSectionInfoDTO> {
 
     const qp = {
       ...(filters.fields ? { fields: filters.fields } : {})
@@ -623,5 +625,10 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
 
   }
+
+  getInnovationAvailableSupportStatuses(innovationId: string): Observable<{ availableStatus: InnovationSupportStatusEnum[] }>{
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/supports/available-status').setPathParams({innovationId});
+    return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
+  };
 
 }

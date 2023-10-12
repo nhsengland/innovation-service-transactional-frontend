@@ -44,9 +44,6 @@ import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-ne
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
 // // Innovation.
-import { PageInnovationActionSectionInfoComponent } from '@modules/shared/pages/innovation/actions/action-section-info.component';
-import { PageActionStatusListComponent } from '@modules/shared/pages/innovation/actions/action-status-list.component';
-import { PageInnovationActionTrackerListComponent } from '@modules/shared/pages/innovation/actions/action-tracker-list.component';
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
 import { PageInnovationDataSharingAndSupportComponent } from '@modules/shared/pages/innovation/data-sharing-and-support/data-sharing-and-support.component';
@@ -61,6 +58,9 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
+import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/tasks/task-details.component';
+import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
+import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 
@@ -69,8 +69,8 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
-import { InnovationActionDataResolver } from '@modules/shared/resolvers/innovation-action-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
@@ -390,20 +390,20 @@ const routes: Routes = [
                 ]
               },
               {
-                path: 'action-tracker',
-                data: { breadcrumb: 'Action Tracker' },
+                path: 'tasks',
+                data: { breadcrumb: 'Tasks' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationActionTrackerListComponent,
+                    path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageActionStatusListComponent,
+                    path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: ':actionId',
-                    resolve: { innovationActionData: InnovationActionDataResolver },
+                    path: ':taskId',
+                    resolve: { innovationActionData: InnovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -412,7 +412,7 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationActionSectionInfoComponent,
+                        path: '', pathMatch: 'full', component: PageInnovationTaskDetailsComponent,
                         data: { breadcrumb: null }
                       }
                     ]
@@ -456,7 +456,8 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent
+                    path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                    data: { breadcrumb: 'Statuses' }
                   }
                 ]
               },

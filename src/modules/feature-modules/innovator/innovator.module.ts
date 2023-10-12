@@ -22,8 +22,6 @@ import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 import { FirstTimeSigninComponent } from './pages/first-time-signin/first-time-signin.component';
 // // Innovation.
 import { InnovationNewComponent } from './pages/innovation-new/innovation-new.component';
-import { InnovationActionCompleteConfirmationComponent } from './pages/innovation/action-complete-confirmation/action-complete-confirmation.component';
-import { InnovationActionTrackerDeclineComponent } from './pages/innovation/action-tracker/action-tracker-decline.component';
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationExportRequestRejectComponent } from './pages/innovation/export-requests/export-request-reject.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
@@ -42,6 +40,7 @@ import { InnovationOverviewComponent } from './pages/innovation/overview/overvie
 import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
+import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -76,8 +75,6 @@ import { InnovatorService } from './services/innovator.service';
     // // First time signin.
     FirstTimeSigninComponent,
     // // Innovation.
-    InnovationActionCompleteConfirmationComponent,
-    InnovationActionTrackerDeclineComponent,
     InnovationDataSharingChangeComponent,
     PageInnovationExportRequestRejectComponent,
     PageInnovationHowToProceedComponent,
@@ -93,6 +90,7 @@ import { InnovatorService } from './services/innovator.service';
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
+    InnovationSectionSubmittedComponent,
     InnovationNewComponent,
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,

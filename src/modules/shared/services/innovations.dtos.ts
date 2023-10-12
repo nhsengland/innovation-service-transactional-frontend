@@ -1,9 +1,9 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { ActivityLogItemsEnum, InnovationActionStatusEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ActivityLogItemsEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 
 // Innovations.
@@ -66,7 +66,7 @@ export type InnovationsListInDTO = {
       }
     }[],
     notifications?: number,
-    statistics?: { messages: number, actions: number }
+    statistics?: { messages: number, tasks: number }
   }[]
 };
 export type InnovationsListDTO = {
@@ -98,7 +98,7 @@ export type InnovationInfoDTO = {
     mobilePhone?: null | string,
     contactDetails?: null | string,
     isActive: boolean,
-    organisations: null | { name: string, size: null | string }[],
+    organisation?: { name: string, size: null | string },
     lastLoginAt?: DateISOType
   },
   lastEndSupportAt: null | DateISOType,
@@ -120,7 +120,8 @@ export type InnovationCollaboratorsListDTO = {
     status: InnovationCollaboratorStatusEnum,
     name?: string,
     role?: string,
-    email?: string
+    email?: string,
+    isActive?: boolean
   }[]
 };
 
@@ -143,7 +144,7 @@ export type InnovationSupportsListDTO = {
     id: string, name: string, acronym: string,
     unit: { id: string, name: string, acronym: string; };
   },
-  engagingAccessors: { id: string, userRoleId: string, name: string; }[];
+  engagingAccessors: { id: string, userRoleId: string, name: string; isActive: boolean }[];
 }[];
 
 export type InnovationSupportInfoDTO = {
@@ -159,7 +160,8 @@ export type SupportSummarySectionType = typeof SupportSummarySectionType[number]
 export type SupportSummaryOrganisationsListDTO = {
   [key in SupportSummarySectionType]: {
     id: string,
-    name: string
+    name: string,
+    sameOrganisation: boolean,
     support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
   }[]
 };
@@ -221,35 +223,41 @@ export type InnovationNeedsAssessmentInfoDTO = {
 
 export type InnovationActionsListInDTO = {
   count: number,
-  data: {
-    id: string,
-    displayId: string,
-    description: string,
-    innovation: { id: string, name: string; },
-    status: InnovationActionStatusEnum,
-    section: InnovationSectionEnum,
-    createdAt: DateISOType,
-    updatedAt: DateISOType,
-    updatedBy: { name: string, role: UserRoleEnum },
-    createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
-    notifications: number;
-  }[];
+  data: InnovationTaskData[];
 };
-export type InnovationActionsListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
+export type InnovationTasksListDTO = { count: number, data: (InnovationActionsListInDTO['data'][0] & { name: string; })[]; };
 
-export type InnovationActionInfoDTO = {
+export type InnovationTaskData = {
   id: string,
   displayId: string,
-  status: InnovationActionStatusEnum,
-  section: InnovationSectionEnum,
-  name: string,
   description: string,
+  innovation: { id: string, name: string; },
+  status: InnovationTaskStatusEnum,
+  section: InnovationSectionEnum,
   createdAt: DateISOType,
   updatedAt: DateISOType,
-  updatedBy: { name: string, role: UserRoleEnum, isOwner?: boolean },
-  createdBy: { id: string, name: string, role: UserRoleEnum, organisationUnit?: { id: string, name: string, acronym?: string } },
-  declineReason?: string,
+  updatedBy: { name: string, displayTag: string },
+  createdBy: { name: string, displayTag: string },
+  notifications: number;
+  sameOrganisation: boolean;
+}
+
+export type InnovationTaskInfoDTO = {
+  id: string,
+  displayId: string,
+  status: InnovationTaskStatusEnum,
+  descriptions: InnovationDescription[],
+  section: InnovationSectionEnum,
+  name: string,
+  createdAt: DateISOType,
+  updatedAt: DateISOType,
+  updatedBy: { name: string, displayTag: string },
+  createdBy: { name: string, displayTag: string },
+  sameOrganisation: boolean,
+  threadId: string,
 };
+
+export type InnovationDescription = { description: string, createdAt: DateISOType, name: string, displayTag: string };
 
 
 export type InnovationActivityLogListInDTO = {
@@ -268,7 +276,7 @@ export type InnovationActivityLogListInDTO = {
 
       assessmentId?: string,
       sectionId?: InnovationSectionEnum,
-      actionId?: string,
+      taskId?: string,
       innovationSupportStatus?: InnovationSupportStatusEnum,
 
       organisations?: string[],

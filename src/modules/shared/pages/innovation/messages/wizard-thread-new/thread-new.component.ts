@@ -47,7 +47,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.innovation = this.stores.context.getInnovation();
 
     this.wizard.data = {
-      innovationOwnerAndCollaborators: this.innovation.owner ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
+      innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
       subjectMessageStep: { subject: '', message: '' }
     };
@@ -83,8 +83,9 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         if (response.collaborators) {
           this.wizard.data.innovationOwnerAndCollaborators = [
             ...this.wizard.data.innovationOwnerAndCollaborators,
-            ...response.collaborators.data.map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
+            ...response.collaborators.data.filter(c => c.isActive).map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
           ];
+
         }
 
         if (response.supports) {
@@ -94,6 +95,16 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           if (this.stores.authentication.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
           }
+
+          // Keep only active engaging accessor
+          this.datasets.organisationUnits = this.datasets.organisationUnits.map(item => {
+            return {
+              ...item,
+              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
+            }
+          });
+
+          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.engagingAccessors.length > 0);
 
           // Show first step if there's engaging organisations.
           if (this.stores.authentication.isInnovatorType() && this.datasets.organisationUnits.length === 0) {
@@ -120,7 +131,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
                 data: {
                   innovation: { id: this.innovation.id },
                   organisationUnits: this.datasets.organisationUnits,
-                  selectedOrganisationUnits: []
+                  selectedOrganisationUnits: [],
+                  activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
                 },
                 outputs: {
                   previousStepEvent: data => this.onPreviousStep(data),
@@ -197,7 +209,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.setStepData<OrganisationsStepInputType>('organisationsStep', {
       innovation: { id: this.innovation.id },
       organisationUnits: this.datasets.organisationUnits,
-      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id)
+      selectedOrganisationUnits: this.wizard.data.organisationsStep.organisationUnits.map(item => item.id),
+      activeInnovators: this.wizard.data.innovationOwnerAndCollaborators.length > 0
     });
   }
   onOrganisationsStepOut(stepData: WizardStepEventType<OrganisationsStepOutputType>): void {
@@ -273,7 +286,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       }
 
     } else { // Should never happen!
-      console.error('No one to notify!');
       return { followersUserRoleIds: [], visibleList: [] };
     }
 

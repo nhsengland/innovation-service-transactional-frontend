@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ThemeModule } from '@modules/theme/theme.module';
 import { SharedModule } from '@modules/shared/shared.module';
+import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AccessorRoutingModule } from './accessor-routing.module';
 
@@ -13,24 +13,23 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
-// // Actions.
-import { ActionsListComponent } from './pages/actions/actions-list.component';
+// // Tasks.
+import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
-import { InnovationSupportInfoComponent } from './pages/innovation/support/support-info.component';
-import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
+import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
 
 // Services.
 import { AccessorService } from './services/accessor.service';
+import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
+import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 
-// Resolvers.
-import { InnovationActionDataResolver } from './resolvers/innovation-action-data.resolver';
 
 @NgModule({
   imports: [
@@ -49,24 +48,22 @@ import { InnovationActionDataResolver } from './resolvers/innovation-action-data
     // // Account.
     PageAccessorAccountManageAccountInfoComponent,
     // // Actions.
-    ActionsListComponent,
+    TasksListComponent,
     // // Dashboard.
     DashboardComponent,
     // // Innovation.
     InnovationOverviewComponent,
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
-    InnovationSupportInfoComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportRequestUpdateStatusComponent,
+    InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
-    InnovationSupportOrganisationReferralCriteriaComponent
+    InnovationSupportOrganisationReferralCriteriaComponent,
+    TrainingAndResourcesComponent
   ],
   providers: [
     // Services.
     AccessorService,
-
-    // Resolvers.
-    InnovationActionDataResolver,
   ]
 })
 export class AccessorModule { }

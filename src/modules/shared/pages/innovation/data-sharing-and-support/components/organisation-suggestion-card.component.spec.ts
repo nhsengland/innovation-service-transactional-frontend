@@ -70,15 +70,13 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
     hostComponent.suggestions = {
       assessment: {
-        id: '',
-        suggestedOrganisationUnits: []
+        suggestedOrganisations: []
       },
       accessors: [{
-        organisationUnit: {
-          id: '', name: '', acronym: '',
-          organisation: { id: '', name: '', acronym: '' }
+        organisation: {
+          id: '', name: '', acronym: ''
         },
-        suggestedOrganisationUnits: []
+        suggestedOrganisations: []
 
       }]
     };

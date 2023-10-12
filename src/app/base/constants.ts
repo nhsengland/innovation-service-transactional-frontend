@@ -20,6 +20,10 @@ export const URLS = {
   INNOVATION_GUIDES_REGULATION: `${PROD_DOMAIN}/innovation-guides/regulation`,
   INNOVATION_GUIDES_STARTER_GUIDE: `${PROD_DOMAIN}/innovation-guides/starter-innovation-guide`,
 
+  // Training and resources.
+  TRAINING_AND_RESOURCES_INNOVATOR_GUIDANCE: `${PROD_DOMAIN}/training-and-resources/innovator-guidance`,
+  TRAINING_AND_RESOURCES_SUPPORT_ORGANISATION: `${PROD_DOMAIN}/training-and-resources/support-organisation`,
+
   // External links.
   USER_RESEARCH_FORM: 'https://forms.office.com/Pages/ResponsePage.aspx?id=kp4VA8ZyI0umSq9Q55CtvztdgIut6i1ClsC8hAncvh9UN0E2UEVON09BNjNMS1daRjZVMFJHRkNaMCQlQCN0PWcu',
 

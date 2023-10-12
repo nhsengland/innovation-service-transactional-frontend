@@ -53,15 +53,15 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }] : []),
-        { label: 'Action tracker', url: `/admin/innovations/${innovation.id}/action-tracker` },
-        { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing', url: `/admin/innovations/${innovation.id}/support` },
         ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/admin/innovations/${innovation.id}/support-summary` }] : []),
-        ...(innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT ?
-          [{ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []
-        ),
-        { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
+        { label: 'Tasks', url: `/admin/innovations/${innovation.id}/tasks` },
+        { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }] : []),
+        { label: 'Data sharing preferences', url: `/admin/innovations/${innovation.id}/support` },
+        { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` },
+        // ...(innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT ?
+        //   [{ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []
+        // ),
       ];
 
     }

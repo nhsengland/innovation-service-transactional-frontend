@@ -22,10 +22,20 @@ export const locale = {
 
     // Single words, ALWAYS lowercased.
     dictionary: {
-      action: {
-        none: 'action',
-        singular: 'action',
-        plural: 'actions'
+      organisation: {
+        none: 'organisation',
+        singular: 'organisation',
+        plural: 'organisations'
+      },
+      section: {
+        none: 'section',
+        singular: 'section',
+        plural: 'sections'
+      },
+      task: {
+        none: 'task',
+        singular: 'task',
+        plural: 'tasks'
       },
       day: {
         none: 'day',
@@ -163,47 +173,27 @@ export const locale = {
           }
         },
         innovation: {
-          action_status: {
-            REQUESTED: {
-              name: 'Requested',
-              description: 'The innovator has been asked to provide additional information on their innovation record.',
-              cssColorClass: 'nhsuk-tag--blue'
+          task_status: {
+            OPEN: {
+              name: 'Task to do',
+              description: 'A task has been assigned to the innovator.',
+              cssColorClass: 'nhsuk-tag--blue',
             },
-            STARTED: {
-              name: 'Started',
-              description: '',
-              cssColorClass: 'nhsuk-tag--green'
-            },
-            CONTINUE: {
-              name: 'Continue',
-              description: '',
-              cssColorClass: 'nhsuk-tag--blue'
-            },
-            SUBMITTED: {
-              name: 'Submitted',
-              description: 'The innovator has submitted the requested information and is waiting for it to be reviewed.',
-              cssColorClass: 'nhsuk-tag--yellow'
-            },
-            DELETED: {
-              name: 'Deleted',
-              description: 'The action has been deleted as it is no longer relevant.',
-              cssColorClass: 'nhsuk-tag--grey'
+            DONE: {
+              name: 'Done',
+              description: 'The innovator has submitted the requested information and has marked the task as done.',
+              cssColorClass: 'nhsuk-tag--green',
             },
             DECLINED: {
               name: 'Declined',
-              description: 'The innovator has declined the action request.',
-              cssColorClass: 'nhsuk-tag--red'
-            },
-            COMPLETED: {
-              name: 'Completed',
-              description: 'The information has been reviewed and the action has been marked as completed.',
-              cssColorClass: 'nhsuk-tag--green'
+              description: 'The innovator has declined the assigned task.',
+              cssColorClass: 'nhsuk-tag--yellow'
             },
             CANCELLED: {
               name: 'Cancelled',
-              description: 'The requested action has been cancelled.',
-              cssColorClass: 'nhsuk-tag--dark-grey'
-            }
+              description: 'The assigned task has been cancelled as it is no longer relevant.',
+              cssColorClass: 'nhsuk-tag--grey'
+            },
           },
           activity_log_groups: {
             INNOVATION_MANAGEMENT: {
@@ -222,8 +212,8 @@ export const locale = {
               title: 'Support',
               description: 'Organisations related activities'
             },
-            ACTIONS: {
-              title: 'Actions',
+            TASKS: {
+              title: 'Tasks',
               description: ''
             },
             COMMENTS: {
@@ -304,37 +294,29 @@ export const locale = {
               title: 'Comment creation',
               message: `{{ actionUserName }} left a comment`
             },
-            ACTION_CREATION: {
-              title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for {{ sectionTitle }} section`
+            TASK_CREATION: {
+              title: 'Task creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created a task for {{ sectionTitle }} section`
             },
-            ACTION_CREATION_DEPRECATED: {
-              title: 'Action creation',
-              message: `{{ actionUserName }} {{ actionUserRole }} created an action for a section that is no longer available`
+            TASK_CREATION_DEPRECATED: {
+              title: 'Task creation',
+              message: `{{ actionUserName }} {{ actionUserRole }} created a task for a section that is no longer available`
             },
-            ACTION_STATUS_SUBMITTED_UPDATE: {
-              title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions for {{ sectionTitle }} section were changed to submitted`
+            TASK_STATUS_DONE_UPDATE: {
+              title: 'Task done',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as done`
             },
-            ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: {
-              title: 'Action changed to submitted',
-              message: `{{ totalActions }} actions were changed to submitted for a section that is no longer available`
+            TASK_STATUS_DECLINED_UPDATE: {
+              title: 'Task declined',
+              message: `{{ actionUserName }} {{ actionUserRole }} declined a task from {{ interveningUserName }}`
             },
-            ACTION_STATUS_DECLINED_UPDATE: {
-              title: 'Action declined',
-              message: `{{ actionUserName }} {{ actionUserRole }} declined an action from {{ interveningUserName }}`
+            TASK_STATUS_OPEN_UPDATE: {
+              title: 'Task reopened',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as to do`
             },
-            ACTION_STATUS_COMPLETED_UPDATE: {
-              title: 'Action completed',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as completed`
-            },
-            ACTION_STATUS_REQUESTED_UPDATE: {
-              title: 'Action requested',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as requested`
-            },
-            ACTION_STATUS_CANCELLED_UPDATE: {
-              title: 'Action cancelled',
-              message: `{{ actionUserName }} {{ actionUserRole }} marked an action as cancelled`
+            TASK_STATUS_CANCELLED_UPDATE: {
+              title: 'Task cancelled',
+              message: `{{ actionUserName }} {{ actionUserRole }} marked a task as cancelled`
             },
             INNOVATION_PAUSE: {
               title: 'Innovation stop share',
@@ -379,7 +361,7 @@ export const locale = {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
             INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } },
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
-            ACTION: { title: { singular: 'Action', plural: 'Actions' } },
+            TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } },
             COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
             MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
@@ -391,8 +373,8 @@ export const locale = {
             // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
             THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}".` },
             THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}".` },
-            ACTION_CREATION: { title: `New action for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
-            ACTION_UPDATE: { title: `Action {{ actionCode }} status updated to "{{ actionStatusName }}" on innovation "{{ innovationName }}".` },
+            TASK_CREATION: { title: `New task for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
+            TASK_UPDATE: { title: `Task {{ taskCode }} status updated to "{{ taskStatusName }}" on innovation "{{ innovationName }}".` },
             NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
             NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment.` },
             NEEDS_ASSESSMENT_COMPLETED_TO_INNOVATOR: { title: `The needs assessment for innovation "{{ innovationName }}" has been completed.` },
@@ -423,37 +405,25 @@ export const locale = {
               name: 'Engaging',
               cssColorClass: 'nhsuk-tag--green',
               description: 'Ready to support, assess or provide guidance.',
-              accessorTypeDescription: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-            },
-            FURTHER_INFO_REQUIRED: {
-              name: 'Further info',
-              cssColorClass: 'nhsuk-tag--white',
-              description: 'The organisation needs further information from the innovator to make a decision.',
-              accessorTypeDescription: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
+              accessorTypeDescription: 'Ready to support, assess or provide guidance.',
             },
             WAITING: {
               name: 'Waiting',
               cssColorClass: 'nhsuk-tag--yellow',
-              description: 'The organisation is waiting for an internal decision to progress.',
-              accessorTypeDescription: 'Waiting for an internal decision to progress.',
-            },
-            NOT_YET: {
-              name: 'Not yet',
-              cssColorClass: 'nhsuk-tag--blue',
-              description: 'The innovation is not yet ready for the organisation\'s support offer.',
-              accessorTypeDescription: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
+              description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
+              accessorTypeDescription: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation to close their support offer.',
             },
             UNASSIGNED: {
               name: 'Unassigned',
               cssColorClass: 'nhsuk-tag--red',
-              description: 'No status has been assigned yet.',
-              accessorTypeDescription: 'No status assigned yet.',
+              description: 'A support status has not been assigned yet.',
+              accessorTypeDescription: 'A support status has not been assigned yet.',
             },
             UNSUITABLE: {
               name: 'Unsuitable',
-              cssColorClass: 'nhsuk-tag--red',
+              cssColorClass: 'nhsuk-tag--grey',
               description: 'The organisation has no suitable support offer for the innovation.',
-              accessorTypeDescription: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
+              accessorTypeDescription: 'The organisation has no suitable support offer for the innovation.',
             },
             WITHDRAWN: {
               name: 'Withdrawn',
@@ -461,18 +431,18 @@ export const locale = {
               description: '',
               accessorTypeDescription: '',
             },
-            COMPLETE: {
-              name: 'Completed',
+            CLOSED: {
+              name: 'Closed',
               cssColorClass: 'nhsuk-tag--dark-grey',
-              description: 'The organisation has completed their engagement with the innovation.',
-              accessorTypeDescription: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
+              description: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
+              accessorTypeDescription: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
             }
           },
           grouped_status: {
             RECORD_NOT_SHARED: {
               name: 'Record not shared',
               cssColorClass: 'nhsuk-tag--orange',
-              description: 'The innovator has not yet shared the innovation record for a needs assessment review.'
+              description: 'The innovator has not yet shared the innovation record for a needs assessment review yet.'
             },
             AWAITING_NEEDS_ASSESSMENT: {
               name: 'Awaiting needs assessment',
@@ -487,22 +457,22 @@ export const locale = {
             AWAITING_SUPPORT: {
               name: 'Awaiting support',
               cssColorClass: 'nhsuk-tag--grey',
-              description: 'Needs assessment is completed. Waiting for an organisation unit to start supporting this innovation.'
+              description: 'The needs assessment is complete. The innovation is waiting for a support organisation to be assigned to it.'
             },
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is supporting  this innovation with an "engaging" or "further info" support status.'
+              description: 'At least one organisation unit is engaging with this organisation.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
               cssColorClass: 'nhsuk-tag--white',
-              description: 'There are no organisations units providing support for this innovation anymore. The organisations support status are "unassigned", "waiting", "not yet", "unsuitable" or "completed".'
+              description: 'There are no organisation units engaging with this innovation right now. Their support statuses are either waiting, unsuitable or closed.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
-              description: 'The innovation has been resent for needs assessment review.'
+              description: 'The innovation has been sent for needs reassessment.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',

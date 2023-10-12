@@ -39,7 +39,7 @@ export type InnovationSectionInfoDTO = {
     name: string,
     isOwner?: boolean,
   },
-  actionsIds?: string[];
+  tasksIds?: string[];
 }
 
 export type getInnovationInfoResponse = {
@@ -61,7 +61,7 @@ export type InnovationSectionsListDTO = {
     name: string,
     isOwner?: boolean
   },
-  openActionsCount: number
+  openTasksCount: number
 }[];
 
 export type GetInnovationEvidenceDTO = {
@@ -86,7 +86,7 @@ export type SectionsSummaryModel = {
       isOwner?: boolean
     },
     isCompleted: boolean,
-    openActionsCount: number
+    openTasksCount: number
   }[]
 }[];
 
@@ -106,18 +106,12 @@ export type OrganisationUnitModel = {
 export type OrganisationUnitModelWithOrganisation = OrganisationUnitModel & { organisation: Omit<OrganisationModel, 'organisationUnits'> };
 
 export type AssessmentSuggestionModel = {
-  id: string;
-  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
+  suggestedOrganisations: OrganisationModel[];
 };
 
 export type AccessorSuggestionModel = {
-  organisationUnit: {
-    id: string;
-    name: string;
-    acronym: string;
-    organisation: OrganisationModel,
-  };
-  suggestedOrganisationUnits: OrganisationUnitModelWithOrganisation[];
+  organisation: OrganisationModel,
+  suggestedOrganisations: OrganisationModel[];
 };
 
 export type OrganisationSuggestionModel = {
@@ -144,50 +138,27 @@ export const INNOVATION_STATUS = {
 export const INNOVATION_SUPPORT_STATUS = {
   ENGAGING: {
     label: 'Engaging', cssClass: 'nhsuk-tag--green',
-    description: 'Your organisation is ready to actively engage with this innovation through providing support, guidance, or assessment. You have to assign at least one person from your organisation to this innovation.',
-    innovatorDescription: 'Ready to support, assess or provide guidance.',
-    hidden: false
-  },
-  FURTHER_INFO_REQUIRED: {
-    label: 'Further info', cssClass: 'nhsuk-tag--white',
-    description: 'Further info is needed from the innovator to make a decision. You must provide a message on what information is needed.',
-    innovatorDescription: 'The organisation needs further information from you to make a decision.',
+    description: 'Ready to support, assess or provide guidance.',
     hidden: false
   },
   WAITING: {
     label: 'Waiting', cssClass: 'nhsuk-tag--yellow',
-    description: 'Waiting for an internal decision to progress.',
-    innovatorDescription: 'The organisation is waiting for an internal decision to progress.',
-    hidden: false
-  },
-  NOT_YET: {
-    label: 'Not yet', cssClass: 'nhsuk-tag--blue',
-    description: 'The innovation is not yet ready for your support offer. You must provide a message outlining your decision.',
-    innovatorDescription: 'Your innovation is not yet ready for the organisation\'s support offer.',
+    description: 'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation close their support offer.',
     hidden: false
   },
   UNASSIGNED: {
     label: 'Unassigned', cssClass: 'nhsuk-tag--red',
-    description: 'No status assigned yet.',
-    innovatorDescription: 'No status assigned yet.',
+    description: 'A support status has not been assigned yet.',
     hidden: true
   },
   UNSUITABLE: {
-    label: 'Unsuitable', cssClass: 'nhsuk-tag--red',
-    description: 'You have no suitable support offer for the innovation. You must provide a message outlining your decision.',
-    innovatorDescription: 'The organisation has no suitable support offer for your innovation.',
+    label: 'Unsuitable', cssClass: 'nhsuk-tag--grey',
+    description: 'The organisation has no suitable support offer for the innovation.',
     hidden: false,
   },
-  WITHDRAWN: {
-    label: 'Withdrawn', cssClass: 'nhsuk-tag--red',
-    description: '',
-    innovatorDescription: '',
-    hidden: true
-  },
-  COMPLETE: {
-    label: 'Completed', cssClass: 'nhsuk-tag--dark-grey',
-    description: 'Your organisation has completed this engagement. You must provide a message outlining your decision.',
-    innovatorDescription: 'The organisation has completed their engagement with your innovation.',
+  CLOSED: {
+    label: 'Closed', cssClass: 'nhsuk-tag--dark-grey',
+    description: 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
     hidden: false
   }
 };
@@ -199,56 +170,12 @@ export const INNOVATION_SECTION_STATUS = {
   SUBMITTED: { label: 'Submitted', isCompleteState: true }
 };
 
-export const INNOVATION_SECTION_ACTION_STATUS = {
-  '': { label: '', cssClass: '', description: '' },
-  REQUESTED: {
-    label: 'Requested',
-    cssClass: 'nhsuk-tag--blue',
-    description: 'An accessor has requested that the innovation owner submit information to a specific section of their innovation record.'
-  },
-  STARTED: {
-    label: 'Started',
-    cssClass: 'nhsuk-tag--green',
-    description: ''
-  },
-  CONTINUE: {
-    label: 'Continue',
-    cssClass: 'nhsuk-tag--blue',
-    description: ''
-  },
-  SUBMITTED: {
-    label: 'Submitted',
-    cssClass: 'nhsuk-tag--yellow',
-    description: 'The innovation owner has submitted information requested by an accessor and are waiting for them to review it.'
-  },
-  DELETED: {
-    label: 'Deleted',
-    cssClass: 'nhsuk-tag--grey',
-    description: ''
-  },
-  DECLINED: {
-    label: 'Declined',
-    cssClass: 'nhsuk-tag--red',
-    description: 'The innovation owner has declined the action requested.'
-  },
-  COMPLETED: {
-    label: 'Completed',
-    cssClass: 'nhsuk-tag--green',
-    description: 'An accessor has closed the action after reviewing the information.'
-  },
-  CANCELLED: {
-    label: 'Cancelled',
-    cssClass: 'nhsuk-tag--dark-grey',
-    description: 'An accessor has cancelled the action.'
-  }
-};
-
 
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
-    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'ACTION' | 'THREAD' | 'NEEDS_REASSESSMENT';
+    link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'TASK' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 } = {
   INNOVATION_CREATION: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
@@ -269,12 +196,10 @@ export const ACTIVITY_LOG_ITEMS: {
   COMMENT_CREATION: { type: ActivityLogTypesEnum.COMMENTS, details: 'COMMENT', link: null },
   THREAD_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
   THREAD_MESSAGE_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
-  ACTION_CREATION: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
-  ACTION_CREATION_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_SUBMITTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_SUBMITTED_UPDATE_DEPRECATED: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null },
-  ACTION_STATUS_DECLINED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: 'COMMENT', link: 'ACTION' },
-  ACTION_STATUS_COMPLETED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
-  ACTION_STATUS_REQUESTED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: 'ACTION' },
-  ACTION_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.ACTIONS, details: null, link: null }
+  TASK_CREATION: { type: ActivityLogTypesEnum.TASKS, details: 'COMMENT', link: 'TASK' },
+  TASK_CREATION_DEPRECATED: { type: ActivityLogTypesEnum.TASKS, details: null, link: null },
+  TASK_STATUS_DONE_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
+  TASK_STATUS_DECLINED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: 'COMMENT', link: 'TASK' },
+  TASK_STATUS_OPEN_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
+  TASK_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
 };

@@ -1,5 +1,5 @@
 <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
-  
+
   <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
 
     <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
@@ -7,7 +7,7 @@
       <ng-container *ngIf="pageUniqueField">
         <h1 class="nhsuk-fieldset__heading"> {{ label }} </h1>
       </ng-container>
-      <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+      <ng-container *ngIf="!pageUniqueField"><span class="nhsuk-u-font-weight-bold">{{ label }}</span></ng-container>
 
       <ng-container *ngIf="hasError"> <!-- Add error to legend for accessibility purposes -->
         <div class="nhsuk-u-visually-hidden">Error: {{ error.message | translate: error.params }} </div>
@@ -25,13 +25,13 @@
       </span>
     </ng-container>
 
-    <ul class="nhsuk-checkboxes nhsuk-u-padding-top-3">
+    <ul class="nhsuk-checkboxes nhsuk-u-padding-top-3 nhsuk-u-padding-left-0">
 
       <ng-container *ngFor="let fgi of filteredGI; let i = index;">
 
-        <li class="nhsuk-checkboxes__item">
+        <li class="nhsuk-checkboxes__item nhsuk-u-margin-bottom-4">
           <input id="{{ id }}{{ fgi.gItem.value }}" type="checkbox" [value]="fgi.gItem.value" [checked]="isChecked(fgi.gItem.value) || fgi.selectedChildren > 0"
-            [disabled]="fgi.gItem.isEditable !== undefined && fgi.gItem.isEditable === false" (change)="onChanged($event)" class="nhsuk-checkboxes__input" 
+            [disabled]="fgi.gItem.isEditable !== undefined && fgi.gItem.isEditable === false" (change)="onChanged($event)" class="nhsuk-checkboxes__input"
             [attr.aria-describedby]="fgi.gItem.description ? '{{ id }}{{ fgi.gItem.value }}-hint' : null" />
           <label for="{{ id }}{{ fgi.gItem.value }}" class="nhsuk-label nhsuk-checkboxes__label d-flex" [ngClass]="{'undertermined-checkbox': fgi.selectedChildren > 0 && fgi.selectedChildren < fgi.gItem.items.length }">
             <div> {{ fgi.gItem.label }}</div>
@@ -52,8 +52,6 @@
             </li>
           </ng-container>
         </ul>
-
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
 
       </ng-container>
 

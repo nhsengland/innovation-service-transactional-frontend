@@ -52,12 +52,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` }] : []),
-        { label: 'Action tracker', url: `/innovator/innovations/${innovation.id}/action-tracker` },
-        { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
-        { label: 'Data sharing', url: `/innovator/innovations/${innovation.id}/support` },
         ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }] : []),
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ? [{ label: 'Needs assessment', url: `/innovator/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []),
+        { label: 'Tasks to do', url: `/innovator/innovations/${innovation.id}/tasks` },
+        { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
+        ...(innovation.status !== InnovationStatusEnum.CREATED ? [{ label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` }] : []),
+        { label: 'Data sharing preferences', url: `/innovator/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` },
         ...(innovation.loggedUser.isOwner
           ? [{ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage/innovation` }]

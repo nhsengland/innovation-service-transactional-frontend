@@ -7,11 +7,11 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
-import { InnovationActionStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
 export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
-  ACTION = 'ACTION',
+  TASK = 'TASK',
   MESSAGE = 'MESSAGE',
   SUPPORT = 'SUPPORT'
 }
@@ -36,7 +36,7 @@ export type NotificationsListInDTO = {
     params: null | {
       section?: InnovationSectionEnum;
       actionCode?: string;
-      actionStatus?: InnovationActionStatusEnum;
+      taskStatus?: InnovationTaskStatusEnum;
       supportStatus?: InnovationSupportStatusEnum;
       organisationUnitName?: string;
       // Messages.
@@ -57,7 +57,7 @@ export type NotificationsListOutDTO = {
         innovationOwnerName: string;
         innovationStatus: string;
         sectionNumber?: string;
-        actionStatusName?: string;
+        taskStatusName?: string;
         supportStatusName?: string;
       } & NotificationsListInDTO['data'][0]['params'];
     }
@@ -135,8 +135,8 @@ export class NotificationsService extends CoreService {
                   break;
               }
               break;
-            case NotificationContextTypeEnum.ACTION:
-              link = { label: 'Click to go to action', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/action-tracker/${item.contextId}` };
+            case NotificationContextTypeEnum.TASK:
+              link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
             case NotificationContextTypeEnum.THREAD:
               link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
@@ -173,7 +173,7 @@ export class NotificationsService extends CoreService {
               innovationStatus: item.innovation.status,
               innovationOwnerName: item.innovation.ownerName,
               sectionNumber: section ? `${section.group.number}.${section.section.number}` : undefined,
-              actionStatusName: item.params?.actionStatus ? this.translate(`shared.catalog.innovation.action_status.${item.params?.actionStatus}.name`) : undefined,
+              taskStatusName: item.params?.taskStatus ? this.translate(`shared.catalog.innovation.task_status.${item.params?.taskStatus}.name`) : undefined,
               supportStatusName: item.params?.supportStatus ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`) : undefined,
             },
             link

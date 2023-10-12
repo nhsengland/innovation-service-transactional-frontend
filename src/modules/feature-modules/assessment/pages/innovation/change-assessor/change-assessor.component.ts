@@ -45,6 +45,7 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
 
   onSubmit(): void {
     if (!this.form.valid) {
+      this.form.get('assessor')?.setErrors({ customError: true, message: 'Choose one assessor'})
       this.form.markAllAsTouched();
       return;
     }

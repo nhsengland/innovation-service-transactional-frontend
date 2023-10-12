@@ -10,8 +10,8 @@ import { StatisticsCardType } from '@app/base/types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { InnovationCollaboratorsListDTO, InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { AssessmentExemptionTypeDTO, AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
@@ -60,8 +60,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
         this.innovationSummary = [
-          { label: 'Company', value: this.innovation.owner?.organisations ? this.innovation.owner.organisations[0].name : '' },
-          { label: 'Company size', value: this.innovation.owner?.organisations ? this.innovation.owner.organisations[0].size : '' },
+          { label: 'Company', value: this.innovation.owner?.organisation?.name ?? 'No company' },
+          ...this.innovation.owner?.organisation?.size ? [
+            { label: 'Company size', value: this.innovation.owner?.organisation?.size ?? '' }
+          ] : [],
           { label: 'Location', value: `${this.innovation.countryName}${this.innovation.postCode ? ', ' + this.innovation.postCode : ''}` },
           { label: 'Description', value: this.innovation.description },
           { label: 'Categories', value: this.innovation.categories.map(v => v === 'OTHER' ? this.innovation?.otherCategoryDescription : irVersionsMainCategoryItems.find(item => item.value === v)?.label).join('\n') }

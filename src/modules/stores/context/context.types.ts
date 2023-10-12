@@ -44,12 +44,18 @@ export type ContextInnovationType = {
   name: string,
   status: InnovationStatusEnum,
   statusUpdatedAt: null | DateISOType,
-  owner?: { name: string, isActive: boolean },
+  countryName: string | null,
+  description: string | null,
+  postCode: string | null,
+  categories: string[],
+  otherCategoryDescription: string | null,
+  owner?: { name: string, isActive: boolean, organisation?: { name: string, size: null | string } },
   loggedUser: { isOwner: boolean },
   assessment?: { id: string, createdAt: DateISOType, finishedAt: null | DateISOType },
   assignedTo?: { id: string, userRoleId: string, name: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
   notifications?: { [key in NotificationContextTypeEnum]?: number },
   collaboratorId?: string,
-  createdAt?: DateISOType
+  createdAt?: DateISOType,
+  reassessmentCount: number
 };

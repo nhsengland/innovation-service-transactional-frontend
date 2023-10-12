@@ -1,15 +1,13 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationStore } from '@modules/stores';
-import { InnovationSectionEnum, INNOVATION_SECTION_STATUS, INNOVATION_SECTION_ACTION_STATUS, INNOVATION_SUPPORT_STATUS, INNOVATION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
+import { InnovationStore, StoresModule } from '@modules/stores';
 
 import { InnovationOverviewComponent } from './overview.component';
 
