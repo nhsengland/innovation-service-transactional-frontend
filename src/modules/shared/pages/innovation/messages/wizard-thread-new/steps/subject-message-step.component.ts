@@ -42,7 +42,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
   configInputFile = {
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
-    maxFileSize: 9 // In Mb.
+    maxFileSize: 20 // In Mb.
   }
 
   constructor() { super(); }

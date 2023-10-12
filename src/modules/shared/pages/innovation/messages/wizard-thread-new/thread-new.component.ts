@@ -271,7 +271,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           return this.innovationsService.createThread(this.innovation.id, body);
         })).subscribe({
           next: () => {
-            this.setRedirectAlertSuccess('The message has been sent successfully and your file has been added to file library');
+            this.setRedirectAlertSuccess('The message has been sent successfully', { message: 'Your file has been added to file library.' });
             this.redirectToThreadsList();
           },
           error: () => this.setAlertUnknownError()
