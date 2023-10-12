@@ -63,7 +63,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     this.form.get('file')?.valueChanges
         .subscribe(value => {
           if (value) {
-            this.form.get('fileName')?.setValidators([Validators.maxLength(100)].concat(CustomValidators.required('A descriptive name is required')));
+            this.form.get('fileName')?.setValidators([Validators.maxLength(100)].concat(CustomValidators.required('A name is required')));
           }
         }
     );

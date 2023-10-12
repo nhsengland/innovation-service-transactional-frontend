@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, forwardRef, Injector, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
 import { saveAs } from 'file-saver';
@@ -14,6 +14,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
   @Input() name?: string;
+  @Input() value?: File | null;
   @Input() label?: string;
   @Input() description?: string;
   @Input() pageUniqueField = true;
@@ -35,7 +36,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
     maxFileSize: number; // In bytes
   } = { acceptedFiles: '*', maxFileSize: 1000000 };
 
-  uploadedFile: null | { file: File, url: string } = null;
+
 
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
@@ -89,11 +90,9 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
       return;
     }
 
-    this.uploadedFile = { file: file, url: window.URL.createObjectURL(file) };
-
     this.fieldControl.setValue(file);
 
-    this.setAuxMessageAndFocus(`${file.name} added.`);
+    this.setFocus();
 
   }
 
@@ -102,26 +101,22 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   }
 
   removeUploadedFile(): void {
-    this.uploadedFile = null;
     this.fieldControl.setValue(null);
   }
 
-  setAuxMessageAndFocus(text: string): void {
+  setFocus(): void {
 
-    const element = document.getElementById('aux-upload-message');
-
-    if (element) {
-      element.textContent = text;
-      setTimeout(() => { // Await for the html injection if needed.
-        element.setAttribute('tabIndex', '-1');
-        element.focus();
-        element.addEventListener('blur', (e: any) => {
+    setTimeout(() => { // Await for the html injection if needed.
+      const h = document.getElementById('file-uploaded');
+      if (h) {
+        h.focus();
+        h.addEventListener('blur', (e) => {
           e.preventDefault();
-          element.removeAttribute('tabIndex');
         });
-      });
-    }
+      }
+    });
 
   }
+
 
 }
