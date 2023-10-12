@@ -15,7 +15,7 @@
       <dd class="nhsuk-summary-list__value">
           <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"></theme-tag>
       </dd>
-      <dd class="nhsuk-summary-list__actions width-max-content">
+      <dd class="nhsuk-summary-list__actions width-25">
         <a *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}">Change support status</a>
       </dd>
     </div>
@@ -35,7 +35,7 @@
     </div>
   </dl>
 
-  <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-7"> Change support status </a>
+  <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"> Change support status </a>
 
   <ng-container *ngIf="isAccessorRole">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">Request status update</a>
