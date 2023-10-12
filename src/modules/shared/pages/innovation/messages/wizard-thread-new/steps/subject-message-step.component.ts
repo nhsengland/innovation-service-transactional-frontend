@@ -21,8 +21,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     teams: [],
     subject: '',
     message: '',
-    document: null,
-    documentDescriptiveName: ''
+    file: null,
+    fileName: ''
   };
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
@@ -33,8 +33,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    document: new FormControl<File | null>(null),
-    documentDescriptiveName: new FormControl<string>('', [Validators.maxLength(100)]),
+    file: new FormControl<File | null>(null),
+    fileName: new FormControl<string>('', [Validators.maxLength(100)]),
     confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
   }, { updateOn: 'blur' });
 
@@ -54,11 +54,19 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
     this.form.get('subject')?.setValue(this.data.subject);
     this.form.get('message')?.setValue(this.data.message);
-    this.form.get('document')?.setValue(this.data.document);
-    this.form.get('documentDescriptiveName')?.setValue(this.data.documentDescriptiveName);
+    this.form.get('file')?.setValue(this.data.file);
+    this.form.get('fileName')?.setValue(this.data.fileName);
     if (!this.stores.authentication.isInnovatorType()) {
       this.form.get('confirmation')?.setValue(true);
     }
+
+    this.form.get('file')?.valueChanges
+        .subscribe(value => {
+          if (value) {
+            this.form.get('fileName')?.setValidators([Validators.maxLength(100)].concat(CustomValidators.required('A descriptive name is required')));
+          }
+        }
+    );
 
     this.formConfirmationField = {
       label: 'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
@@ -73,8 +81,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     return {
       subject: this.form.value.subject ?? '',
       message: this.form.value.message ?? '',
-      document: this.form.value.document ?? null,
-      documentDescriptiveName: this.form.value.documentDescriptiveName ?? ''
+      file: this.form.value.file ?? null,
+      fileName: this.form.value.fileName ?? ''
     }
   }
 

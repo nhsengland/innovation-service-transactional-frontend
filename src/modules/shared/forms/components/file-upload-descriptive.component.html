@@ -25,8 +25,8 @@
 
   <ng-container *ngIf="uploadedFile">
     <hr class="nhsuk-section-break nhsuk-section-break--visible">
-    <div class="nhsuk-label nhsuk-u-margin-top-2">Uploaded file</div>
-    <dl class="nhsuk-summary-list nhsuk-summary-list--no-border">
+    <div class="nhsuk-label nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0" aria-label="File uploaded" tabindex="-1">Uploaded file</div>
+    <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-0">
       <div class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__value"><a href="javascript:void(0)" (click)="downloadFile(uploadedFile.file)"> {{ uploadedFile.file.name }} </a></dt>
         <dd class="nhsuk-summary-list__actions">
@@ -35,5 +35,7 @@
       </div>
     </dl>
   </ng-container>
+
+  <span class="nhsuk-u-visually-hidden" id="aux-upload-message"></span>
 
 </div>

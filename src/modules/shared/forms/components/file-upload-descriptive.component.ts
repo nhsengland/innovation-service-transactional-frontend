@@ -91,8 +91,9 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
     this.uploadedFile = { file: file, url: window.URL.createObjectURL(file) };
 
-    //this.parentFieldControl?.patchValue({file: file});
     this.fieldControl.setValue(file);
+
+    this.setAuxMessageAndFocus(`${file.name} added.`);
 
   }
 
@@ -103,6 +104,24 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   removeUploadedFile(): void {
     this.uploadedFile = null;
     this.fieldControl.setValue(null);
+  }
+
+  setAuxMessageAndFocus(text: string): void {
+
+    const element = document.getElementById('aux-upload-message');
+
+    if (element) {
+      element.textContent = text;
+      setTimeout(() => { // Await for the html injection if needed.
+        element.setAttribute('tabIndex', '-1');
+        element.focus();
+        element.addEventListener('blur', (e: any) => {
+          e.preventDefault();
+          element.removeAttribute('tabIndex');
+        });
+      });
+    }
+
   }
 
 }

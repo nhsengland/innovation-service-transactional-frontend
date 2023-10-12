@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, forkJoin, of, take, map, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { WizardModel, WizardStepModel } from '@app/base/models';
+import { UrlModel, WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
@@ -15,6 +15,8 @@ import { WizardInnovationThreadNewSubjectMessageStepComponent } from './steps/su
 import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './steps/subject-message-step.types';
 import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-step.component';
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
+import { FileUploadType } from '@app/base/forms';
+import { HttpClient } from '@angular/common/http';
 
 
 @Component({
@@ -30,16 +32,21 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     organisationsStep: {
       organisationUnits: { id: string, name: string, users: { id: string, userRoleId: string, name: string }[] }[]
     },
-    subjectMessageStep: { subject: string, message: string, document: null | File, documentDescriptiveName: string }
+    subjectMessageStep: {
+      subject: string,
+      message: string,
+      file: null | File,
+      fileName: string
+    }
   }>({});
 
   datasets: {
     organisationUnits: InnovationSupportsListDTO
   };
 
-
   constructor(
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private http: HttpClient
   ) {
 
     super();
@@ -49,7 +56,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.data = {
       innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
-      subjectMessageStep: { subject: '', message: '', document: null, documentDescriptiveName: '' }
+      subjectMessageStep: { subject: '', message: '', file: null, fileName: '' }
     };
 
     this.datasets = {
@@ -154,8 +161,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
               teams: this.getNotifiableTeamsList().visibleList,
               subject: '',
               message: '',
-              document: null,
-              documentDescriptiveName: ''
+              file: null,
+              fileName: ''
             },
             outputs: {
               previousStepEvent: data => this.onPreviousStep(data, this.onSubjectMessageStepOut, this.onOrganisationsStepIn),
@@ -227,48 +234,76 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       teams: this.getNotifiableTeamsList().visibleList,
       subject: this.wizard.data.subjectMessageStep.subject,
       message: this.wizard.data.subjectMessageStep.message,
-      document: this.wizard.data.subjectMessageStep.document,
-      documentDescriptiveName: this.wizard.data.subjectMessageStep.documentDescriptiveName
+      file: this.wizard.data.subjectMessageStep.file,
+      fileName: this.wizard.data.subjectMessageStep.fileName
     });
   }
   onSubjectMessageStepOut(stepData: WizardStepEventType<SubjectMessageStepOutputType>): void {
     this.wizard.data.subjectMessageStep = {
       subject: stepData.data.subject,
       message: stepData.data.message,
-      document: stepData.data.document,
-      documentDescriptiveName: stepData.data.documentDescriptiveName
+      file: stepData.data.file,
+      fileName: stepData.data.fileName
     };
   }
 
+  private uploadFile(file: File): Observable<FileUploadType> {
 
-  onSubmit(): void {
+    const httpUploadUrl = new UrlModel(this.CONSTANTS.APP_URL).addPath('upload-file').buildUrl();
+    const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
 
-    const formData: FormData = new FormData();
+    const formdata = new FormData();
+    formdata.append('file', file, file.name);
+    Object.entries(httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
 
-    const data = {
-      followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
-      subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message,
-      documentDescriptiveName: this.wizard.data.subjectMessageStep.documentDescriptiveName
-    };
+    return this.http.post<FileUploadType>(httpUploadUrl || '', formdata).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
 
-    formData.append('data', JSON.stringify(data));
-
-    const document = this.wizard.data.subjectMessageStep.document;
-    if (document) {
-      formData.append('document', document, document.name);
-    }
-
-    this.innovationsService.createThread(this.innovation.id, formData).subscribe({
+  createThread(body: any) {
+    this.innovationsService.createThread(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();
       },
       error: () => this.setAlertUnknownError()
     });
-
   }
 
+  onSubmit(): void {
+
+    const file = this.wizard.data.subjectMessageStep.file;
+
+    let body: UploadThreadMessageDocumentType = {
+      followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
+      subject: this.wizard.data.subjectMessageStep.subject,
+      message: this.wizard.data.subjectMessageStep.message,
+      fileName: this.wizard.data.subjectMessageStep.fileName
+    };
+
+    if (file) {
+
+      this.uploadFile(file).pipe(
+        switchMap(response => {
+          body = {
+            ...body,
+            file: response as Omit<FileUploadType, "url">
+          }
+          return this.innovationsService.createThread(this.innovation.id, body)
+        })).subscribe({
+          next: () => {
+            this.setRedirectAlertSuccess('The message has been sent successfully and your file has been added to file library');
+            this.redirectToThreadsList();
+          },
+          error: () => this.setAlertUnknownError()
+        });
+    } else {
+      this.createThread(body);
+    }
+
+  }
 
   private getNotifiableTeamsList(): { followersUserRoleIds: string[], visibleList: SubjectMessageStepInputType['teams'] } {
 
@@ -311,5 +346,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   private redirectToThreadsList(): void {
     this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/threads`);
   }
+
 
 }

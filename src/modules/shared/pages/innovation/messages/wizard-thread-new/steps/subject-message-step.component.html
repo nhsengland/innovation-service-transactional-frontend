@@ -29,15 +29,26 @@
 
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
 
-        <theme-form-input controlName="subject" label="Enter a subject for your thread" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-input controlName="subject" label="Enter a subject for your thread" width="full" [pageUniqueField]="false"></theme-form-input>
+
         <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 
         <theme-form-file-upload-descriptive name="document" description="You can upload 1 document up to 9MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
-        <theme-form-input controlName="documentDescriptiveName" label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" [pageUniqueField]="false"></theme-form-input>
 
-        <theme-form-checkbox *ngIf="stores.authentication.isInnovatorType()" controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+        <ng-container *ngIf="form.controls.file.value">
+          <div class="nhsuk-details__text nhsuk-u-margin-0">
+            <theme-form-input controlName="documentDescriptiveName" label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" width="full" [pageUniqueField]="false"></theme-form-input>
+          </div>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5">
+        </ng-container>
+
+        <div *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
+          <theme-form-checkbox controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+        </div>
+
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Send message</button>
       </form>
 

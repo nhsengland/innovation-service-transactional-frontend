@@ -6,13 +6,13 @@ export type SubjectMessageStepInputType = {
   }[],
   subject: string,
   message: string,
-  document: null | File,
-  documentDescriptiveName: string
+  file: null | File,
+  fileName: string
 };
 
 export type SubjectMessageStepOutputType = {
   subject: string,
   message: string,
-  document: null | File,
-  documentDescriptiveName: string
+  file: null | File,
+  fileName: string
 };
