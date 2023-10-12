@@ -1,7 +1,9 @@
-<form [formGroup]="form" class="nhsuk-grid-column-three-quarters nhsuk-u-padding-left-0">
-
-    <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="preferences" label="" [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
-
-    <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Confirm</button>
-
-</form>
+<theme-content-wrapper [status]="pageStatus">
+    <form [formGroup]="form" class="nhsuk-grid-column-three-quarters nhsuk-u-padding-left-0">
+        
+        <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="preferencesEnabled" label="" [items]="formPreferencesList" [pageUniqueField]="false"></theme-form-checkbox-array>
+        
+        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Confirm</button>
+        
+    </form>
+</theme-content-wrapper>

@@ -1,5 +1,5 @@
 <theme-content-wrapper [status]="pageStatus">
-  <p>
+  <p class="nhsuk-heading-m">
     Notification preferences by category
   </p>
 
@@ -16,15 +16,13 @@
             <dt class="nhsuk-summary-list__key nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6  width-75 "> 
               <ul class="nhsuk-list nhsuk-u-margin-0">
                 <li class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal">
-                  <span>{{ preferencesMessages[category].title }}</span>
+                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + category + '.title' | translate}}</span>
                 </li>
                 <li class="nhsuk-u-font-weight-normal font-color-secondary">
-                  <span>{{ preferencesMessages[category].label }}</span>
+                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + category + '.description' | translate}}</span>
                 </li>
               </ul>
-              <!-- {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }}  -->
             </dt>
-            <!-- <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd> -->
             
             <dd class="nhsuk-summary-list__actions">
                 <span class="ml-auto nhsuk-tag nhsuk-u-font-weight-bold nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="mockedResponse[category] ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ mockedResponse[category] ? 'On' : 'Off'}}</span>
@@ -32,7 +30,7 @@
           </div>
         </dl>
 
-        <a routerLink="/change" class="nhsuk-action-link__link nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+        <a routerLink="/assessment/account/email-notifications/change" class="nhsuk-action-link__link nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
           <theme-svg-icon type="action"></theme-svg-icon>
           <span class="nhsuk-action-link__text"> Change preferences </span>
         </a>

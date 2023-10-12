@@ -17,17 +17,13 @@ export type CategoryMessages = {
   }
 };
 
-export type MockedResponse = {
-  [category: string] : boolean
-};
-
 @Component({
   selector: 'app-assessment-account-email-notifications-list',
   templateUrl: './email-notifications-list.component.html'
 })
 export class AssessmentPageAccountEmailNotificationsListComponent extends CoreComponent implements OnInit {
 
-  notificationTypeList: { type: EmailNotificationsTypeEnum, preference: EmailNotificationsPreferencesEnum }[] = [];
+  notificationTypeList: { type: AssessmentEmailNotificationsTypeEnum, preference: EmailNotificationsPreferencesEnum }[] = [];
 
   isAnySubscribed = true;
 
@@ -36,15 +32,16 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
   displayName: string;
 
   notificationsCategories: string[] = [
-    AssessmentEmailNotificationsTypeEnum.RECORD.toString(),
-    AssessmentEmailNotificationsTypeEnum.TASKS.toString(),
-    AssessmentEmailNotificationsTypeEnum.MESSAGES.toString(),
-    AssessmentEmailNotificationsTypeEnum.MANAGEMENT.toString(),
-    AssessmentEmailNotificationsTypeEnum.ASSIGNED.toString()
+    AssessmentEmailNotificationsTypeEnum.RECORD,
+    AssessmentEmailNotificationsTypeEnum.TASKS,
+    AssessmentEmailNotificationsTypeEnum.MESSAGES,
+    AssessmentEmailNotificationsTypeEnum.MANAGEMENT,
+    AssessmentEmailNotificationsTypeEnum.ASSIGNED
   ]
 
-  preferencesMessages: CategoryMessages;
-  mockedResponse : MockedResponse;
+  formPreferencesList: { value: string, label: string, description: string }[] = [];
+  // mockedResponse: { "notificationType": AssessmentEmailNotificationsTypeEnum, "preference": boolean }[]
+  mockedResponse: { [preference: string]: boolean }
 
   constructor(
     private notificationsService: NotificationsService,
@@ -66,44 +63,28 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
       };
     }
 
-    this.mockedResponse = {
-      'RECORD' : true,
-      'TASKS' : false,
-      'MESSAGES' : false,
-      'MANAGEMENT' : true,
-      'ASSIGNED' : true,
-    }
 
-    this.preferencesMessages = {
-      'RECORD' : {
-        title: 'Innovator submits innovation record',
-        label: 'Get notified when an innovation is submitted for needs assessment.',
-      },
-      'TASKS' : {
-        title: 'Tasks',
-        label: 'Get notified when an innovator completes or declines tasks you have assign to them.',
-      },
-      'MESSAGES' : {
-        title: 'Messages',
-        label: 'Get notified about new messages and replies.',
-      },
-      'MANAGEMENT' : {
-        title: 'Innovation management',
-        label: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
-      },
-      'ASSIGNED' : {
-        title: 'Assigned needs assessor',
-        label: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.',
-      },
-    };
+   
+     this.mockedResponse = {
+      'RECORD': true,
+      'TASKS': false,
+      'MESSAGES': false,
+      'MANAGEMENT': true,
+      'ASSIGNED': false
+     }
+
 
   }
 
   ngOnInit(): void {
 
+
     this.getEmailNotificationTypes();
     this.checkMultipleRoles();
-
+    
+    console.log(this.checkIsOn('MESSAGES'));
+    
+    this.setPageStatus('READY')
 
   }
 
@@ -111,20 +92,20 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
 
     this.setPageStatus('LOADING');
 
-    this.notificationsService.getEmailNotificationsPreferences().subscribe(
-      response => {
+    // this.notificationsService.getEmailNotificationsPreferences().subscribe(
+    //   response => {
 
-        this.notificationTypeList = response.map(item => ({
-          type: item.notificationType,
-          preference: item.preference
-        })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
+    //     this.notificationTypeList = response.map(item => ({
+    //       type: item.notificationType,
+    //       preference: item.preference
+    //     })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
 
-        this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
+    //     this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
 
-        this.setPageStatus('READY');
+    //     this.setPageStatus('READY');
 
-      }
-    );
+    //   }
+    // );
   }
 
   private checkMultipleRoles(): void {
@@ -135,8 +116,14 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
 
     this.hasMultipleRoles = user.roles.length > 1;
 
+    
   }
 
+  checkIsOn(notificationType: string): boolean {
+    // let index = this.mockedResponse.map(item => item.notificationType.toString()).indexOf(notificationType);
+    // return this.mockedResponse[index].preference;
+    return false
+  }
 
   unsubscribeAllNotifications(): void {
 

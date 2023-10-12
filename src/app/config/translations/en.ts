@@ -336,8 +336,30 @@ export const locale = {
             DAILY: {
               me: 'Send me daily summary updates',
               you: 'You get daily summary updates'
-            }
+            },
+            RECORD: {
+              title: 'Innovator submits innovation record',
+              description: 'Get notified when an innovation is submitted for needs assessment.',
+            },
+            TASKS: {
+              title: 'Tasks',
+              description: 'Get notified when an innovator completes or declines tasks you have assign to them.',
+            },
+            MESSAGES: {
+              title: 'Messages',
+              description: 'Get notified about new messages and replies.',
+            },
+            MANAGEMENT: {
+              title: 'Innovation management',
+              description: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
+            },
+            ASSIGNED: {
+              title: 'Assigned needs assessor',
+              description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.',
+            },
           },
+
+
 
           innovation_sections: {
             INNOVATION_DESCRIPTION: 'Description of innovation',
@@ -552,6 +574,7 @@ export const locale = {
         }
       }
 
-    }
+    },
+
   }
 };
