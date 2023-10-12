@@ -7,7 +7,7 @@
   </div>
 
   <form [formGroup]="form" (ngSubmit)="isSubmitStep ? onSubmitStep() : onNextStep()">
-    <theme-form-checkbox-array arrayName="organisationUnits" label="Engaging organisations" [items]="formOrganisationUnitsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
+    <theme-form-checkbox-array arrayName="organisationUnits" [items]="formOrganisationUnitsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
     <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">{{ isSubmitStep ? "Add recipients" : "Continue" }}</button>
   </form>
 
