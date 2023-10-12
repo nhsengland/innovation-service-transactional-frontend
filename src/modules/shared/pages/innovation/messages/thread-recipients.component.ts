@@ -8,7 +8,7 @@ import { OrganisationsStepInputType, OrganisationsStepOutputType } from '@module
 import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { GetThreadFollowersDTO, InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { forkJoin, Observable, of } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
     private innovationsService: InnovationsService
   ) {
 
-    super ();
+    super();
 
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
@@ -71,7 +71,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
-          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING);
+          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING || item.status === InnovationSupportStatusEnum.WAITING);
 
           if (this.stores.authentication.isAccessorType()) {
             this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);

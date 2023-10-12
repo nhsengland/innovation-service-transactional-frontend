@@ -38,9 +38,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   };
 
 
-  constructor(
-    private innovationsService: InnovationsService
-  ) {
+  constructor(private innovationsService: InnovationsService) {
 
     super();
 
@@ -91,7 +89,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
-          this.datasets.organisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING);
+          this.datasets.organisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING || item.status === InnovationSupportStatusEnum.WAITING);
           if (this.stores.authentication.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
           }
