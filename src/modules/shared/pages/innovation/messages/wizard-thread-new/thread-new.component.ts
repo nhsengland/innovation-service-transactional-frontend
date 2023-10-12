@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, forkJoin, of, take, map, switchMap } from 'rxjs';
+import { Observable, forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { UrlModel, WizardModel, WizardStepModel } from '@app/base/models';
+import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
@@ -16,7 +16,7 @@ import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './ste
 import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-step.component';
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
 import { FileUploadType } from '@app/base/forms';
-import { HttpClient } from '@angular/common/http';
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
 
 
 @Component({
@@ -46,7 +46,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
   constructor(
     private innovationsService: InnovationsService,
-    private http: HttpClient
+    private fileUploadService: FileUploadService
   ) {
 
     super();
@@ -247,31 +247,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     };
   }
 
-  private uploadFile(file: File): Observable<FileUploadType> {
-
-    const httpUploadUrl = new UrlModel(this.CONSTANTS.APP_URL).addPath('upload-file').buildUrl();
-    const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
-
-    const formdata = new FormData();
-    formdata.append('file', file, file.name);
-    Object.entries(httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
-
-    return this.http.post<FileUploadType>(httpUploadUrl || '', formdata).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
-  createThread(body: any) {
-    this.innovationsService.createThread(this.innovation.id, body).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess('The message has been sent successfully');
-        this.redirectToThreadsList();
-      },
-      error: () => this.setAlertUnknownError()
-    });
-  }
-
   onSubmit(): void {
 
     const file = this.wizard.data.subjectMessageStep.file;
@@ -285,13 +260,15 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
     if (file) {
 
-      this.uploadFile(file).pipe(
+      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+
+      this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
         switchMap(response => {
           body = {
             ...body,
             file: response as Omit<FileUploadType, "url">
           }
-          return this.innovationsService.createThread(this.innovation.id, body)
+          return this.innovationsService.createThread(this.innovation.id, body);
         })).subscribe({
           next: () => {
             this.setRedirectAlertSuccess('The message has been sent successfully and your file has been added to file library');
@@ -303,6 +280,16 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       this.createThread(body);
     }
 
+  }
+
+  createThread(body: any) {
+    this.innovationsService.createThread(this.innovation.id, body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('The message has been sent successfully');
+        this.redirectToThreadsList();
+      },
+      error: () => this.setAlertUnknownError()
+    });
   }
 
   private getNotifiableTeamsList(): { followersUserRoleIds: string[], visibleList: SubjectMessageStepInputType['teams'] } {
