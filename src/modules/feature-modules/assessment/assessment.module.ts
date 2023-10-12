@@ -13,6 +13,9 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAssessmentAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
+import { AssessmentPageAccountEmailNotificationsEditComponent } from './pages/account/email-notifications/email-notifications-edit.component';
+
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -27,7 +30,6 @@ import { InnovationsListComponent } from './pages/innovations/innovations-list.c
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
-import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
 
 
 @NgModule({
@@ -42,6 +44,7 @@ import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/ac
     // // Account.
     PageAssessmentAccountManageAccountInfoComponent,
     AssessmentPageAccountEmailNotificationsListComponent,
+    AssessmentPageAccountEmailNotificationsEditComponent,
     // // Dashboard.
     DashboardComponent,
     // // Innovation.

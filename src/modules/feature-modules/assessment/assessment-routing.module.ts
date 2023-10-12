@@ -71,6 +71,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
+import { AssessmentPageAccountEmailNotificationsEditComponent } from './pages/account/email-notifications/email-notifications-edit.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -458,9 +459,9 @@ const routes: Routes = [
                 data: { breadcrumb: null }
               },
               {
-                path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
+                path: 'change', pathMatch: 'full', component: AssessmentPageAccountEmailNotificationsEditComponent,
                 data: {
-                  breadcrumb: 'Edit',
+                  breadcrumb: 'Change preferences',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }
                 }
               }
