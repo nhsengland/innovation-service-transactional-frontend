@@ -13,21 +13,23 @@
   
         <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
           <div *ngFor="let category of notificationsCategories" class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key"> 
-              <ul class="nhsuk-list nhsuk-body-s">
-                <li>
-                  {{ preferencesMessages[category].title }}
+            <dt class="nhsuk-summary-list__key nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6  width-75 "> 
+              <ul class="nhsuk-list nhsuk-u-margin-0">
+                <li class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal">
+                  <span>{{ preferencesMessages[category].title }}</span>
                 </li>
-                <li class="font-color-secondary">
-                  {{ preferencesMessages[category].label }}
+                <li class="nhsuk-u-font-weight-normal font-color-secondary">
+                  <span>{{ preferencesMessages[category].label }}</span>
                 </li>
               </ul>
               <!-- {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }}  -->
             </dt>
             <!-- <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd> -->
             
-            <dd class="nhsuk-summary-list__actions">
-              <strong class="nhsuk-tag nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="mockedResponse[category] ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ mockedResponse[category] ? 'On' : 'Off'}}</strong>
+            <dd class="nhsuk-summary-list__actions height-100">
+              <div class="d-flex">
+                <span class="ml-auto nhsuk-tag nhsuk-u-font-weight-bold nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="mockedResponse[category] ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ mockedResponse[category] ? 'On' : 'Off'}}</span>
+              </div>
             </dd>
           </div>
         </dl>
