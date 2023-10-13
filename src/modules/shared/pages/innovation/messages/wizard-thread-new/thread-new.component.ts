@@ -6,7 +6,7 @@ import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
+import { InnovationsService, UploadThreadDocumentType } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
@@ -15,7 +15,6 @@ import { WizardInnovationThreadNewSubjectMessageStepComponent } from './steps/su
 import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './steps/subject-message-step.types';
 import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-step.component';
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
-import { FileUploadType } from '@app/base/forms';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { omit } from 'lodash';
 
@@ -250,9 +249,11 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
   onSubmit(): void {
 
+    this.setPageStatus('LOADING');
+
     const file = this.wizard.data.subjectMessageStep.file;
 
-    let body: UploadThreadMessageDocumentType = {
+    let body: UploadThreadDocumentType = {
       followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
       subject: this.wizard.data.subjectMessageStep.subject,
       message: this.wizard.data.subjectMessageStep.message
@@ -278,7 +279,10 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             this.setRedirectAlertSuccess('The message has been sent successfully', { message: 'Your file has been added to file library.' });
             this.redirectToThreadsList();
           },
-          error: () => this.setAlertUnknownError()
+          error: () => {
+            this.setAlertUnknownError();
+            this.setPageStatus('READY');
+          }
         });
     } else {
       this.createThread(body);
@@ -286,13 +290,16 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
   }
 
-  createThread(body: any) {
+  createThread(body: UploadThreadDocumentType) {
     this.innovationsService.createThread(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();
       },
-      error: () => this.setAlertUnknownError()
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('READY');
+      }
     });
   }
 

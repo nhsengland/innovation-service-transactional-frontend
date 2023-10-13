@@ -122,7 +122,7 @@ export type InnovationThreadListFiltersType = {
   following?: boolean
 };
 
-export type UploadThreadMessageDocumentType = {
+export type UploadThreadDocumentType = {
     followerUserRoleIds: string[],
     subject: string,
     message: string,
@@ -131,6 +131,15 @@ export type UploadThreadMessageDocumentType = {
       description?: string;
       file: Omit<FileUploadType, "url">
     };
+}
+
+export type UploadThreadMessageDocumentType = {
+  message: string,
+  file?: {
+    name: string;
+    description?: string;
+    file: Omit<FileUploadType, "url">
+  };
 }
 
 
@@ -500,12 +509,12 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: UploadThreadMessageDocumentType): Observable<{ id: string }> {
+  createThread(innovationId: string, body: UploadThreadDocumentType): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
   }
 
-  createThreadMessage(innovationId: string, threadId: string, body: { message: string; }): Observable<CreateThreadMessageDTO> {
+  createThreadMessage(innovationId: string, threadId: string, body: UploadThreadMessageDocumentType): Observable<CreateThreadMessageDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1));
   }
