@@ -325,18 +325,18 @@ export const locale = {
           },
 
           email_notification_preferences: {
-            NEVER: {
-              me: 'Never send me notifications',
-              you: 'You do not get updates',
-            },
-            INSTANTLY: {
-              me: 'Send me instant updates',
-              you: 'You get instant updates',
-            },
-            DAILY: {
-              me: 'Send me daily summary updates',
-              you: 'You get daily summary updates'
-            },
+            // NEVER: {
+            //   me: 'Never send me notifications',
+            //   you: 'You do not get updates',
+            // },
+            // INSTANTLY: {
+            //   me: 'Send me instant updates',
+            //   you: 'You get instant updates',
+            // },
+            // DAILY: {
+            //   me: 'Send me daily summary updates',
+            //   you: 'You get daily summary updates'
+            // },
             // Shared
             RECORD: {
               title: 'Innovator submits innovation record',
@@ -402,13 +402,7 @@ export const locale = {
               title: 'Assigned needs assessor',
               description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
             }
-
-
-
-
           },
-
-
 
           innovation_sections: {
             INNOVATION_DESCRIPTION: 'Description of innovation',

@@ -1,0 +1,30 @@
+{% comment %} <theme-content-wrapper [status]="pageStatus">
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+
+      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
+        <p>If you update your email preferences they will only apply to the profile you are logged in with.</p>
+        <p>You are logged in as {{this.displayName}}, {{currentRole.description}}.</p>
+      </div>
+
+      <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
+        <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
+          <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a routerLink="edit/{{ item.type }}"> Change </a>
+          </dd>
+        </div>
+      </dl>
+
+      <div *ngIf="isAnySubscribed" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
+        <p class="nhsuk-u-margin-0">
+          <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</theme-content-wrapper> {% endcomment %}

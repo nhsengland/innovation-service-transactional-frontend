@@ -2,17 +2,28 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { AssessmentEmailNotificationsTypeEnum, EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 
 
+export type Preferences = {
+  AssessmentEmailNotificationsTypeEnum: {}
+} ;
+
+export type CategoryMessages = {
+  [category: string] : { 
+    title: string, 
+    label: string 
+  }
+};
+
 @Component({
-  selector: 'shared-pages-account-email-notifications-list',
+  selector: 'app-assessment-account-email-notifications-list',
   templateUrl: './email-notifications-list.component.html'
 })
 export class PageAccountEmailNotificationsListComponent extends CoreComponent implements OnInit {
 
-  notificationTypeList: { type: EmailNotificationsTypeEnum, preference: EmailNotificationsPreferencesEnum }[] = [];
+  notificationTypeList: { type: AssessmentEmailNotificationsTypeEnum, preference: EmailNotificationsPreferencesEnum }[] = [];
 
   isAnySubscribed = true;
 
@@ -20,13 +31,26 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   currentRole: null | { id: string, description: string };
   displayName: string;
 
+  notificationsCategories: string[] = [
+    AssessmentEmailNotificationsTypeEnum.RECORD,
+    AssessmentEmailNotificationsTypeEnum.TASKS,
+    AssessmentEmailNotificationsTypeEnum.MESSAGES,
+    AssessmentEmailNotificationsTypeEnum.MANAGEMENT,
+    AssessmentEmailNotificationsTypeEnum.ASSIGNED
+  ]
+
+  formPreferencesList: { value: string, label: string, description: string }[] = [];
+  mockedResponse: { [preference: string]: boolean }
+  preferencesReponse: { [preference: string]: boolean }
+
+
   constructor(
     private notificationsService: NotificationsService,
     private authenticationStore: AuthenticationStore
   ) {
 
     super();
-    this.setPageTitle('Email notifications');
+    this.setPageTitle('Email notifications preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 
@@ -39,13 +63,24 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
       };
     }
+   
+     this.mockedResponse = {
+      'RECORD': true,
+      'TASKS': false,
+      'MESSAGES': false,
+      'MANAGEMENT': true,
+      'ASSIGNED': false
+     };
+     
+     this.preferencesReponse = {};
+
 
   }
 
   ngOnInit(): void {
 
     this.getEmailNotificationTypes();
-    this.checkMultipleRoles();
+    this.checkMultipleRoles(); 
 
   }
 
@@ -53,20 +88,23 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.setPageStatus('LOADING');
 
-    this.notificationsService.getEmailNotificationsPreferences().subscribe(
-      response => {
+    this.preferencesReponse = this.mockedResponse;
 
-        this.notificationTypeList = response.map(item => ({
-          type: item.notificationType,
-          preference: item.preference
-        })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
+    // this.notificationsService.getEmailNotificationsPreferences().subscribe(
+    //   response => {
 
-        this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
+    //     this.notificationTypeList = response.map(item => ({
+    //       type: item.notificationType,
+    //       preference: item.preference
+    //     })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
 
-        this.setPageStatus('READY');
+    //     this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
 
-      }
-    );
+    //     this.setPageStatus('READY');
+
+    //   }
+    // );
+    this.setPageStatus('READY')
   }
 
   private checkMultipleRoles(): void {
@@ -77,28 +115,35 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.hasMultipleRoles = user.roles.length > 1;
 
+    this.setPageStatus('READY');
   }
-
 
   unsubscribeAllNotifications(): void {
 
     this.setPageStatus('LOADING');
 
-    const body = [
-      { notificationType: EmailNotificationsTypeEnum.TASK, preference: EmailNotificationsPreferencesEnum.NEVER },
-      { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
-      { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.NEVER }
-    ];
+    const body: { [preference: string]: boolean } = {};
+    Object.keys(this.preferencesReponse).forEach(key => {
+            body[key] = false;
+    });
 
-    this.notificationsService.updateEmailNotificationsPreferences(body).subscribe(
-      () => {
-        this.getEmailNotificationTypes();
-        this.setAlertSuccess('Your notification preferences have been saved');
-      },
-      () => {
-        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
-      }
-    );
+    // mock update
+    this.mockedResponse = body;
+
+    this.getEmailNotificationTypes();
+    this.setAlertSuccess('Your notification preferences have been saved');
+
+    // this.notificationsService.updateAssessmentEmailNotificationsPreferences(body).subscribe({
+    //   next: () => {
+    //     this.getEmailNotificationTypes();
+    //   },
+    //   complete: () => {
+    //     this.setAlertSuccess('Your notification preferences have been saved');
+    //   },
+    //   error: () => {
+    //     this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
+    //   }
+    // });
   }
 
 }

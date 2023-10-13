@@ -1,30 +1,48 @@
 <theme-content-wrapper [status]="pageStatus">
+  <p class="nhsuk-heading-m">
+    Notification preferences by category
+  </p>
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-
-      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
-        <p>If you update your email preferences they will only apply to the profile you are logged in with.</p>
-        <p>You are logged in as {{this.displayName}}, {{currentRole.description}}.</p>
-      </div>
-
-      <dl class="nhsuk-summary-list nhsuk-u-padding-top-3">
-        <div *ngFor="let item of notificationTypeList" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key"> {{ 'shared.catalog.innovation.notification_context_types.' + item.type + '.title.plural' | translate }} </dt>
-          <dd class="nhsuk-summary-list__value text-pre-wrap"> {{ 'shared.catalog.innovation.email_notification_preferences.' + item.preference + '.you' | translate  }} </dd>
-          <dd class="nhsuk-summary-list__actions">
-            <a routerLink="edit/{{ item.type }}"> Change </a>
-          </dd>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+  
+        <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
+          <p>If you update your email preferences they will only apply to the profile you are logged in with.</p>
+          <p>You are logged in as {{this.displayName}}, {{currentRole.description}}.</p>
         </div>
-      </dl>
+  
+        <dl class="nhsuk-summary-list nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">
+          <div *ngFor="let item of preferencesReponse | keyvalue" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6  width-75 "> 
+              <ul class="nhsuk-list nhsuk-u-margin-0">
+                <li class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal">
+                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + item.key + '.title' | translate}}</span>
+                </li>
+                <li class="nhsuk-u-font-weight-normal font-color-secondary">
+                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + item.key + '.description' | translate}}</span>
+                </li>
+              </ul>
+            </dt>
+            
+            <dd class="nhsuk-summary-list__actions vertical-align-middle">
+                <span class="ml-auto nhsuk-tag nhsuk-u-font-weight-bold nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="item.value ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ item.value ? 'On' : 'Off'}}</span>
+            </dd>
+          </div>
+        </dl>
 
-      <div *ngIf="isAnySubscribed" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
-        <p class="nhsuk-u-margin-0">
-          <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
-        </p>
+        <a routerLink="edit" class="nhsuk-action-link__link nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
+          <theme-svg-icon type="action"></theme-svg-icon>
+          <span class="nhsuk-action-link__text"> Change preferences </span>
+        </a>
+  
+        <div *ngIf="isAnySubscribed" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
+          <p class="nhsuk-u-margin-0">
+            <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
+          </p>
+        </div>
+  
       </div>
-
     </div>
-  </div>
-
-</theme-content-wrapper>
+  
+  </theme-content-wrapper>
+  

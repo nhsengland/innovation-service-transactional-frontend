@@ -74,8 +74,7 @@ export type NotificationsListOutDTO = {
 };
 
 type EmailNotificationPreferencesDTO = {
-  notificationType: EmailNotificationsTypeEnum,
-  preference: EmailNotificationsPreferencesEnum
+  [preference: string]: boolean
 };
 
 type AssessmentEmailNotificationPreferencesDTO = {
@@ -215,17 +214,17 @@ export class NotificationsService extends CoreService {
   }
 
 
-  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO[]> {
+  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
-    return this.http.get<EmailNotificationPreferencesDTO[]>(url.buildUrl()).pipe(
+    return this.http.get<EmailNotificationPreferencesDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
 
-  updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
+  updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO): Observable<boolean> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));

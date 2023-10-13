@@ -70,8 +70,6 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { AssessmentPageAccountEmailNotificationsListComponent } from './pages/account/email-notifications/email-notifications-list.component';
-import { AssessmentPageAccountEmailNotificationsEditComponent } from './pages/account/email-notifications/email-notifications-edit.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -455,13 +453,13 @@ const routes: Routes = [
             data: { breadcrumb: 'Email notifications' },
             children: [
               {
-                path: '', pathMatch: 'full', component: AssessmentPageAccountEmailNotificationsListComponent,
+                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsListComponent,
                 data: { breadcrumb: null }
               },
               {
-                path: 'change', pathMatch: 'full', component: AssessmentPageAccountEmailNotificationsEditComponent,
+                path: 'edit', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
                 data: {
-                  breadcrumb: 'Change preferences',
+                  breadcrumb: 'Edit',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }
                 }
               }
