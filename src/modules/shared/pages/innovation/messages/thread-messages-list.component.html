@@ -44,14 +44,9 @@
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
-          <p class="nhsuk-body-s font-color-secondary" *ngIf="isInnovatorType; else notInnovator">
-            Once sent, all followers in this conversation will be notified. Your message can be seen and replied by everyone who has access to this innovation.
+          <p class="nhsuk-body-s font-color-secondary">
+            Once sent, all recipients in this thread will be notified. For transparency reasons, this message can be seen and replied to by everyone who has access to this innovation.
           </p>
-          <ng-template #notInnovator>
-            <p class="nhsuk-body-s font-color-secondary">
-              Once sent, the innovator and other followers in this conversation will be notified. Your message can be seen and replied by everyone who has access to this innovation.
-            </p>
-          </ng-template>
           <button type="submit" class="nhsuk-button button-small nhsuk-u-margin-bottom-5">
             Send message <span class="nhsuk-u-visually-hidden"> for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>
           </button>
@@ -60,7 +55,7 @@
         <ng-container *ngIf="messagesList.getTotalRowsNumber() > 0">
           <div *ngFor="let message of messagesList.getRecords()" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-padding-3">
 
-            <div class="d-flex justify-content-space-between nhsuk-u-padding-bottom-3">
+            <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
               <div>
                 <div class="d-flex align-items-center">
                   <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-right-2">
@@ -68,7 +63,6 @@
                   </p>
                   <theme-notification-tag label="new" *ngIf="message.isNew" class=""></theme-notification-tag>
                 </div>
-                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ message.createdBy.typeDescription }}</p>
               </div>
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">
                 {{ message.createdAt | date: ('app.date_formats.long_date_time' | translate) }}
@@ -80,13 +74,13 @@
                 {{ message.updatedAt | date: ('app.date_formats.long_date_time' | translate) }})</span>
             </p>
 
-            <div *ngIf="message.file" class="nhsuk-u-font-size-19 nhsuk-u-margin-bottom-4"  [ngClass]="{
-              'nhsuk-u-font-size-19': true,
-              'nhsuk-u-margin-bottom-0': true,
+            <p *ngIf="message.file" [ngClass]="{
+              'nhsuk-body-s': true,
               'nhsuk-u-margin-bottom-4': message.showEditMessageLink}"
-            >
-              <a [href]="message.file.url" attr.aria-label="Download {{ message.file.name }} file">{{ message.file.name }}</a>
-            </div>
+              >
+              <span class="d-block nhsuk-u-font-weight-bold">Document</span>
+              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/documents/{{ message.id }}"> {{ message.file.name }} </a>
+            </p>
 
             <div *ngIf="message.showEditMessageLink" class="nhsuk-body-s nhsuk-u-margin-bottom-0">
               <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}">
