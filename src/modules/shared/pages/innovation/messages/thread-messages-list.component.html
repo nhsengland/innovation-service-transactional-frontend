@@ -79,7 +79,7 @@
               'nhsuk-u-margin-bottom-4': message.showEditMessageLink}"
               >
               <span class="d-block nhsuk-u-font-weight-bold">Document</span>
-              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/documents/{{ message.id }}"> {{ message.file.name }} </a>
+              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/documents/{{ message.file.id }}"> {{ message.file.name }} </a>
             </p>
 
             <div *ngIf="message.showEditMessageLink" class="nhsuk-body-s nhsuk-u-margin-bottom-0">

@@ -76,7 +76,11 @@ export type GetThreadMessagesListInDTO = {
   count: number;
   messages: {
     id: string;
-    file: FileUploadType;
+    file: {
+      id: string;
+      name: string;
+      url: string;
+    };
     message: string;
     createdAt: DateISOType;
     createdBy: {
