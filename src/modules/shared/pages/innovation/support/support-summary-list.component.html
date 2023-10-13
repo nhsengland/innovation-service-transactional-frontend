@@ -28,7 +28,7 @@
                     <circle cx="12" cy="12" r="10"></circle>
                     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
                   </svg>
-                  <span>{{ unitItem.name }} <ng-container *ngIf="unitItem.sameOrganisation">{{' (your organisation)'}}</ng-container></span>
+                  <span> {{ unitItem.sameOrganisation ? unitItem.name + ' (your organisation)' : unitItem.name }}</span>
                 </button>
                 <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
                   <span>Status: <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"></theme-tag></span>
