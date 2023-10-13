@@ -1,7 +1,15 @@
 <theme-content-wrapper [status]="pageStatus">
-    <form [formGroup]="form" class="nhsuk-grid-column-three-quarters nhsuk-u-padding-left-0">
+    <form [formGroup]="form" class="nhsuk-grid-column-two-thirds nhsuk-u-padding-left-0">
         
-        <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="preferencesEnabled" label="" [items]="formPreferencesList" [pageUniqueField]="false"></theme-form-checkbox-array>
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-6">
+            <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+                <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span>You could miss time sensitive service reminders</span>
+            </div>
+            <p *ngIf="isAssessmentType">If you do not select ‘innovator submits innovation record’ or ‘assigned needs assessor’ notifications, you could miss time sensitive service reminders. </p>
+            <p *ngIf="isQualifyingAccessorRole">If you do not select ‘suggestions to support’, you could miss time sensitive service reminders.</p>
+        </div>
+
+        <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="preferencesEnabled" [items]="formPreferencesList" [pageUniqueField]="false"></theme-form-checkbox-array>
         
         <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Confirm</button>
         

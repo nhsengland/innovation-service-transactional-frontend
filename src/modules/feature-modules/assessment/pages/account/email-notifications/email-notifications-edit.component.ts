@@ -15,9 +15,13 @@ import { EmailNotificationsTypeEnum, EmailNotificationsPreferencesEnum, Notifica
 export class AssessmentPageAccountEmailNotificationsEditComponent extends CoreComponent implements OnInit {
 
 //   notificationType: EmailNotificationsTypeEnum;
-//   notificationListLink: string;
+  notificationListLink: string;
 
 //   notificationPreferences: { question: string, items: { value: string, label: string }[] };
+
+// Flags
+isAssessmentType: boolean;
+isQualifyingAccessorRole: boolean;
 
 
 //   form = new FormGroup({
@@ -27,27 +31,42 @@ formPreferencesList: { value: string, label: string, description: string }[] = [
 selectedPreferences: { "notificationType": AssessmentEmailNotificationsTypeEnum, "preference": boolean }[] = [];
 preferencesMessages: {[preference: string]: {title: string, description: string}};
 
+mockedResponse: { [preference: string]: boolean }
+
 form = new FormGroup({
     preferencesEnabled: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
   }, { updateOn: 'blur' });
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
   ) {
 
     super();
 
     // this.notificationType = this.activatedRoute.snapshot.params.notificationType;
-    // this.notificationListLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    this.notificationListLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
     // this.notificationPreferences = {
     //   question: `How often do you want to get email notifications about ${this.translate(`shared.catalog.innovation.notification_context_types.${this.notificationType}.title.plural`).toLowerCase()}?`,
     //   items: Object.values(EmailNotificationsPreferencesEnum).map(key => ({ value: key, label: this.translate(`shared.catalog.innovation.email_notification_preferences.${key}.me`) }))
     // };
 
-    this.setPageTitle('Select the email notifications you want to turn off to stop receiving them',  { width: '2.thirds', size: 'l' });
+
+    this.setPageTitle('Select the email notifications you want to receive',  { width: '2.thirds', size: 'l' });
     this.setBackLink('Go back')
+
+    this.mockedResponse = {
+        'RECORD': true,
+        'TASKS': false,
+        'MESSAGES': false,
+        'MANAGEMENT': true,
+        'ASSIGNED': false
+       }
+  
 
     this.preferencesMessages ={
         'RECORD' : {
@@ -76,43 +95,11 @@ form = new FormGroup({
 
   ngOnInit(): void {
 
-    console.log('')
-    
-    // const MockedResponse = [
-    //     {
-    //         "notificationType": AssessmentEmailNotificationsTypeEnum.RECORD,
-    //         "preference": true
-    //     },
-    //     {
-    //         "notificationType": AssessmentEmailNotificationsTypeEnum.TASKS,
-    //         "preference": false
-    //     },
-    //     {
-    //         "notificationType": AssessmentEmailNotificationsTypeEnum.MESSAGES,
-    //         "preference": false
-    //     },
-    //     {
-    //         "notificationType": AssessmentEmailNotificationsTypeEnum.MANAGEMENT,
-    //         "preference": true
-    //     },
-    //     {
-    //         "notificationType": AssessmentEmailNotificationsTypeEnum.ASSIGNED,
-    //         "preference": false
-    //     },
-    // ]
 
-    const MockedResponse = {
-        'RECORD': true,
-        'TASKS': false,
-        'MESSAGES': false,
-        'MANAGEMENT': true,
-        'ASSIGNED': false
-       }
-
-    Object.entries(MockedResponse).filter((item) => item[1] === true)
+    Object.entries(this.mockedResponse).filter((item) => item[1] === true)
     .map((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
 
-    this.formPreferencesList = Object.keys(MockedResponse).map((preference) => ({ value: preference, label: this.preferencesMessages[preference].title, description: this.preferencesMessages[preference].description }))
+    this.formPreferencesList = Object.keys(this.mockedResponse).map((preference) => ({ value: preference, label: this.preferencesMessages[preference].title, description: this.preferencesMessages[preference].description }))
 
     console.log('formPreferencesList: ')
     console.log(this.formPreferencesList)
@@ -140,21 +127,17 @@ form = new FormGroup({
 
     this.selectedPreferences
 
-    const body = {
-        preferences: this.formPreferencesList.map(item => ({
-            notificationType: item.value,
-            preference: (this.form.get('preferencesEnabled')?.value)?.includes(item.value) ? true : false
-        }))
-    }
-
-
+    const body: { [preference: string]: boolean } = {};
+    Object.keys(this.mockedResponse).forEach(value => {
+            body[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? true : false
+    });
 
     console.log("body: ");
     console.log(body);
-    // if (!this.form.valid) {
-    //   this.form.markAllAsTouched();
-    //   return;
-    // }
+
+    this.setRedirectAlertSuccess('Your notification preference has been saved');
+    this.redirectTo(this.notificationListLink, { alert: 'editSuccess' })
+    
 
     // this.notificationsService.updateEmailNotificationsPreferences(
     //   [{ notificationType: this.notificationType, preference: this.form.get('notificationPreference')!.value }]
@@ -168,6 +151,7 @@ form = new FormGroup({
     //     // this.redirectTo(this.notificationListLink, { alert: 'editError' })
     //   }
     // });
+
 
   }
 

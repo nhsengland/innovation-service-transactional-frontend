@@ -40,8 +40,9 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
   ]
 
   formPreferencesList: { value: string, label: string, description: string }[] = [];
-  // mockedResponse: { "notificationType": AssessmentEmailNotificationsTypeEnum, "preference": boolean }[]
   mockedResponse: { [preference: string]: boolean }
+  preferencesReponse: { [preference: string]: boolean }
+
 
   constructor(
     private notificationsService: NotificationsService,
@@ -62,8 +63,6 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
         description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
       };
     }
-
-
    
      this.mockedResponse = {
       'RECORD': true,
@@ -71,26 +70,25 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
       'MESSAGES': false,
       'MANAGEMENT': true,
       'ASSIGNED': false
-     }
+     };
+     
+     this.preferencesReponse = {};
 
 
   }
 
   ngOnInit(): void {
 
-
     this.getEmailNotificationTypes();
-    this.checkMultipleRoles();
-    
-    console.log(this.checkIsOn('MESSAGES'));
-    
-    this.setPageStatus('READY')
+    this.checkMultipleRoles(); 
 
   }
 
   private getEmailNotificationTypes(): void {
 
     this.setPageStatus('LOADING');
+
+    this.preferencesReponse = this.mockedResponse;
 
     // this.notificationsService.getEmailNotificationsPreferences().subscribe(
     //   response => {
@@ -106,6 +104,7 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
 
     //   }
     // );
+    this.setPageStatus('READY')
   }
 
   private checkMultipleRoles(): void {
@@ -116,38 +115,35 @@ export class AssessmentPageAccountEmailNotificationsListComponent extends CoreCo
 
     this.hasMultipleRoles = user.roles.length > 1;
 
-    
-  }
-
-  checkIsOn(notificationType: string): boolean {
-    // let index = this.mockedResponse.map(item => item.notificationType.toString()).indexOf(notificationType);
-    // return this.mockedResponse[index].preference;
-    return false
+    this.setPageStatus('READY');
   }
 
   unsubscribeAllNotifications(): void {
 
     this.setPageStatus('LOADING');
 
-    const body = [
-      { notificationType: AssessmentEmailNotificationsTypeEnum.RECORD, preference: false },
-      { notificationType: AssessmentEmailNotificationsTypeEnum.TASKS, preference: false },
-      { notificationType: AssessmentEmailNotificationsTypeEnum.MESSAGES, preference: false },
-      { notificationType: AssessmentEmailNotificationsTypeEnum.MANAGEMENT, preference: false },
-      { notificationType: AssessmentEmailNotificationsTypeEnum.ASSIGNED, preference: false },
-    ];
-
-    this.notificationsService.updateAssessmentEmailNotificationsPreferences(body).subscribe({
-      next: () => {
-        this.getEmailNotificationTypes();
-      },
-      complete: () => {
-        this.setAlertSuccess('Your notification preferences have been saved');
-      },
-      error: () => {
-        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
-      }
+    const body: { [preference: string]: boolean } = {};
+    Object.keys(this.preferencesReponse).forEach(key => {
+            body[key] = false;
     });
+
+    // mock update
+    this.mockedResponse = body;
+
+    this.getEmailNotificationTypes();
+    this.setAlertSuccess('Your notification preferences have been saved');
+
+    // this.notificationsService.updateAssessmentEmailNotificationsPreferences(body).subscribe({
+    //   next: () => {
+    //     this.getEmailNotificationTypes();
+    //   },
+    //   complete: () => {
+    //     this.setAlertSuccess('Your notification preferences have been saved');
+    //   },
+    //   error: () => {
+    //     this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
+    //   }
+    // });
   }
 
 }

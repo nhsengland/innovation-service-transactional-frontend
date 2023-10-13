@@ -337,6 +337,7 @@ export const locale = {
               me: 'Send me daily summary updates',
               you: 'You get daily summary updates'
             },
+            // Shared
             RECORD: {
               title: 'Innovator submits innovation record',
               description: 'Get notified when an innovation is submitted for needs assessment.',
@@ -357,6 +358,54 @@ export const locale = {
               title: 'Assigned needs assessor',
               description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.',
             },
+            // A/QA
+            IR_EXPORT_REQUESTS: {
+              title: 'Innovation record export requests',
+              description: 'Get notified when a innovator accepts or rejects your request to export their innovation record.',
+            },
+            YOUR_ACCOUNT: {
+              title: 'Your account',
+              description: 'Get notified when a user is removed or added to your organisation unit.',
+            },
+            REMINDERS: {
+              title: 'Reminders',
+              description: 'Get notified with reminders for you to interact with innovations you are supporting.'
+            },
+            // QA
+            SUGGESTIONS_TO_SUPPORT: {
+              title: 'Suggestions to support',
+              description: 'Get notified when your organisation is suggested to support an innovation.'
+            },
+            // Innovator
+            SUPPORT_STATUS_AND_UPDATES: {
+              title: 'Support status and updates',
+              description: 'Get notified about updates to your support status and support summary.'
+            },
+            TASKS_TO_DO: {
+              title: 'Tasks to do',
+              description: 'Get notified when a task is assigned to you, reopened or cancelled.'
+            },
+            DOCUMENTS: {
+              title: 'Documents',
+              description: 'Get notified when a support organisation uploads a document for you.'
+            },
+            SYSTEM_REMINDERS: {
+              title: 'System reminders',
+              description: 'Get notified when your innovation record is incomplete or when your innovation is not receiving support.'
+            },
+            // Needs assessment
+            INNOVATOR_SUBMITS_IR: {
+              title: 'Innovator submits innovation record',
+              description: 'Get notified when an innovation is submitted for needs assessment. '
+            },
+            ASSIGNED_NA: {
+              title: 'Assigned needs assessor',
+              description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
+            }
+
+
+
+
           },
 
 
