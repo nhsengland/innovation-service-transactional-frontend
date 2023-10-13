@@ -64,8 +64,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.setPageTitle('Messages', { showPage: false });
     this.setBackLink();
 
-    console.log("cheguei aqui")
-
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
       urlBasePath: this.stores.authentication.userUrlBasePath(),
