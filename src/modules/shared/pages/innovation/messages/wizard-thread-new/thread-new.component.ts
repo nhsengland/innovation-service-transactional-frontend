@@ -17,6 +17,7 @@ import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-s
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
 import { FileUploadType } from '@app/base/forms';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { omit } from 'lodash';
 
 
 @Component({
@@ -254,8 +255,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     let body: UploadThreadMessageDocumentType = {
       followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
       subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message,
-      fileName: this.wizard.data.subjectMessageStep.fileName
+      message: this.wizard.data.subjectMessageStep.message
     };
 
     if (file) {
@@ -264,9 +264,13 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
       this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
         switchMap(response => {
+          const fileData = omit(response, 'url');
           body = {
             ...body,
-            file: response as Omit<FileUploadType, "url">
+            file: {
+              name: this.wizard.data.subjectMessageStep.fileName,
+              file: fileData
+            }
           }
           return this.innovationsService.createThread(this.innovation.id, body);
         })).subscribe({

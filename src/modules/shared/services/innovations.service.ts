@@ -122,8 +122,11 @@ export type UploadThreadMessageDocumentType = {
     followerUserRoleIds: string[],
     subject: string,
     message: string,
-    fileName: string,
-    file?: Omit<FileUploadType, "url">
+    file?: {
+      name: string;
+      description?: string;
+      file: Omit<FileUploadType, "url">
+    };
 }
 
 
