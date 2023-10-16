@@ -82,7 +82,7 @@ form = new FormGroup({
           title: 'Messages',
           description: 'Get notified about new messages and replies.',
         },
-        MANAGEMENT: {
+        INNOVATION_MANAGEMENT: {
           title: 'Innovation management',
           description: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
         },
@@ -126,11 +126,11 @@ form = new FormGroup({
           description: 'Get notified when your innovation record is incomplete or when your innovation is not receiving support.'
         },
         // Needs assessment
-        INNOVATOR_SUBMITS_IR: {
+        INNOVATOR_SUBMIT_IR: {
           title: 'Innovator submits innovation record',
           description: 'Get notified when an innovation is submitted for needs assessment. '
         },
-        ASSIGNED_NA: {
+        ASSIGN_NA: {
           title: 'Assigned needs assessor',
           description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
         }

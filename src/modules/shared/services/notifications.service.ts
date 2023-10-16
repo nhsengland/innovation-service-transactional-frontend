@@ -16,9 +16,26 @@ export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnu
   SUPPORT = 'SUPPORT'
 }
 export enum EmailNotificationsPreferencesEnum {
-  NEVER = 'NEVER',
-  INSTANTLY = 'INSTANTLY',
-  DAILY = 'DAILY'
+  //Shared
+  RECORD = 'RECORD',
+  TASKS = 'TASKS',
+  MESSAGES = 'MESSAGES',
+  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
+  ASSIGNED = 'ASSIGNED',
+  // A/QA
+  IR_EXPORT_REQUESTS = 'IR_EXPORT_REQUESTS',
+  YOUR_ACCOUNT = 'YOUR_ACCOUNT',
+  REMINDERS = 'REMINDERS',
+  // QA
+  SUGGESTIONS_TO_SUPPORT = 'SUGGESTIONS_TO_SUPPORT',
+  // Innovator
+  SUPPORT_STATUS_AND_UPDATES = 'SUPPORT_STATUS_AND_UPDATES',
+  TASKS_TO_DO = 'TASKS_TO_DO',
+  DOCUMENTS = 'DOCUMENTS',
+  SYSTEM_REMINDERS = 'SYSTEM_REMINDERS',
+  // Needs assessment
+  INNOVATOR_SUBMIT_IR = 'INNOVATOR_SUBMIT_IR',
+  ASSIGN_NA = 'ASSIGN_NA',
 }
 
 export enum AssessmentEmailNotificationsTypeEnum {
