@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
-import { saveAs } from 'file-saver';
 import { FileTypes } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
@@ -35,8 +34,6 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
     acceptedFiles: string;
     maxFileSize: number; // In bytes
   } = { acceptedFiles: '*', maxFileSize: 1000000 };
-
-
 
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
@@ -97,7 +94,12 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   }
 
   downloadFile(file: File): void {
-    saveAs(file, file.name);
+    const a = document.createElement('a');
+    const objectUrl = URL.createObjectURL(file);
+    a.href = objectUrl;
+    a.download = file.name;
+    a.click();
+    URL.revokeObjectURL(objectUrl);
   }
 
   removeUploadedFile(): void {
