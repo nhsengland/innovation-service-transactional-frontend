@@ -28,7 +28,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
-  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { showEditMessageLink: boolean }>({ pageSize: 10 });
+  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
   engagingOrganisationUnits: InnovationSupportsListDTO;
 
   showFollowersHideStatus: string | null = null;
@@ -125,12 +125,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
-        const threadMessages = response.threadMessages.messages.map(message => ({
-          ...message,
-          showEditMessageLink: this.innovation.status !== 'PAUSED' && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role
-        }));
 
-        this.messagesList.setData(threadMessages, response.threadMessages.count);
+        this.messagesList.setData(response.threadMessages.messages, response.threadMessages.count);
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
 
