@@ -88,7 +88,11 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.form.get('file')?.valueChanges.subscribe(
       value => {
         if (value) {
-          this.form.get('fileName')?.setValidators([Validators.maxLength(100)].concat(CustomValidators.required('A name is required')));
+          this.form.get('fileName')?.setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
+          this.form.get('fileName')?.updateValueAndValidity();
+        } else {
+          this.form.get('fileName')?.clearValidators();
+          this.form.get('fileName')?.updateValueAndValidity();
         }
       }
     );

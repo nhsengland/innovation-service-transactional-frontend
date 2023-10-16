@@ -46,15 +46,7 @@
 
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 
-          <theme-form-file-upload-descriptive name="file" description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
-
-          <ng-container *ngIf="form.controls.file.value">
-            <div class="nhsuk-details__text nhsuk-u-margin-0">
-              <theme-form-input controlName="fileName" label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" width="full" [pageUniqueField]="false"></theme-form-input>
-            </div>
-
-            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5">
-          </ng-container>
+          <theme-form-file-upload-descriptive description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
 
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">
             Send message <span class="nhsuk-u-visually-hidden"> for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ('app.date_formats.long_date_time' | translate) }} </span>

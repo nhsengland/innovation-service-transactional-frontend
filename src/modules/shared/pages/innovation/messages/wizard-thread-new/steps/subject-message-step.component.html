@@ -35,15 +35,7 @@
 
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 
-        <theme-form-file-upload-descriptive name="file" description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
-
-        <ng-container *ngIf="form.controls.file.value">
-          <div class="nhsuk-details__text nhsuk-u-margin-0">
-            <theme-form-input controlName="fileName" label="This document will be added to your innovation's document library." description="Enter a descriptive name for this document" width="full" [pageUniqueField]="false"></theme-form-input>
-          </div>
-
-          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-5">
-        </ng-container>
+        <theme-form-file-upload-descriptive description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
 
         <div *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
           <theme-form-checkbox controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>

@@ -12,7 +12,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
   @Input() id?: string;
-  @Input() name?: string;
+  @Input() inputsNames = ['file', 'fileName'];
   @Input() value?: File | null;
   @Input() label?: string;
   @Input() description?: string;
@@ -39,8 +39,15 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   // Form controls.
-  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldControl(): FormControl { return this.parentFieldControl?.get(this.name!) as FormControl; }
+  get parentFieldControl(): AbstractControl | null {
+    return this.injector.get(ControlContainer).control;
+  }
+  get fieldControl(): FormControl[] {
+    return [this.parentFieldControl?.get(this.inputsNames[0]) as FormControl, this.parentFieldControl?.get(this.inputsNames[1]) as FormControl];
+  }
+
+  // Get hold of the control being used.
+  createFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
@@ -64,8 +71,8 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
+    this.hasError = (this.fieldControl[0].invalid && (this.fieldControl[0].touched || this.fieldControl[0].dirty));
+    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl[0].errors) : { message: '', params: {} };
     this.cdr.detectChanges();
   }
 
@@ -87,7 +94,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
       return;
     }
 
-    this.fieldControl.setValue(file);
+    this.fieldControl[0].setValue(file);
 
     this.setFocus();
 
@@ -103,7 +110,8 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   }
 
   removeUploadedFile(): void {
-    this.fieldControl.setValue(null);
+    this.fieldControl[0].setValue(null);
+    this.fieldControl[1].setValue('');
   }
 
   setFocus(): void {
