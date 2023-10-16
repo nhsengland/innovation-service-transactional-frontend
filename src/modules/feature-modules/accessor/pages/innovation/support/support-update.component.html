@@ -62,7 +62,7 @@
             <p>Everyone will be able to see this message. It will appear on the innovation’s support summary.</p>
           </div>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">{{form.get('status')?.value === 'ENGAGING' ? 'Save and post message' : 'Confirm'}}</button>
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">{{form.get('status')?.value === 'ENGAGING' ? 'Confirm and send message' : 'Confirm'}}</button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 4">

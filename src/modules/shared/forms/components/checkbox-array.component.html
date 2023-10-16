@@ -24,13 +24,17 @@
       <ng-container *ngFor="let item of items; let i = index; let first = first">
 
         <ng-container *ngIf="item.group && (first || (item.group !== items![i-1]?.group))">
-          <li class="nhsuk-radios__divider form-items-group nhsuk-u-font-weight-bold" [ngClass]="{'nhsuk-u-padding-top-3': !first}" tabindex="0">{{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span> </li>
+          <li class="nhsuk-checkboxes__divider form-items-group nhsuk-u-font-weight-bold" [ngClass]="{'nhsuk-u-padding-top-3': !first}" tabindex="0">{{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span> </li>
         </ng-container>
 
         <ng-container [ngSwitch]="item.label">
 
           <ng-container *ngSwitchCase="'SEPARATOR'">
-            <li class="nhsuk-radios__divider">or</li>
+            <li class="nhsuk-checkboxes__divider">or</li>
+          </ng-container>
+
+          <ng-container *ngSwitchCase="'HEADING'">
+            <li class="nhsuk-checkboxes__divider form-items-group nhsuk-u-font-weight-bold">{{ item.value }}</li>
           </ng-container>
 
           <ng-container *ngSwitchDefault>

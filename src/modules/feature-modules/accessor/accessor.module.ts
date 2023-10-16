@@ -27,6 +27,8 @@ import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/
 
 // Services.
 import { AccessorService } from './services/accessor.service';
+import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
+import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 
 
 @NgModule({
@@ -54,8 +56,10 @@ import { AccessorService } from './services/accessor.service';
     InnovationSupportOrganisationsSupportStatusSuggestComponent,
     InnovationSupportUpdateComponent,
     InnovationSupportRequestUpdateStatusComponent,
+    InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
-    InnovationSupportOrganisationReferralCriteriaComponent
+    InnovationSupportOrganisationReferralCriteriaComponent,
+    TrainingAndResourcesComponent
   ],
   providers: [
     // Services.

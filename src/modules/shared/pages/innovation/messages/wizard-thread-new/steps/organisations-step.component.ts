@@ -2,9 +2,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
+import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organisations-step.types';
 
 
@@ -35,7 +37,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     organisationUnits: new FormArray<FormControl<string>>([], { validators: CustomValidators.requiredCheckboxArray(this.validationMessage), updateOn: 'change' })
   }, { updateOn: 'blur' });
 
-  formOrganisationUnitsItems: { value: string, label: string, description?: string }[] = [];
+  formOrganisationUnitsItems: Required<FormEngineParameterModel>['items'] = [];
 
   constructor() { super(); }
 
@@ -44,17 +46,43 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.leadText = this.stores.authentication.isInnovatorType() ||  this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation.' : 'You can select other organisations that are currently engaging with this innovation.';
+    this.leadText = this.stores.authentication.isInnovatorType() || this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation.' : 'You can select other organisations that are currently engaging with this innovation.';
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
     });
 
-    this.formOrganisationUnitsItems = this.data.organisationUnits.map(support => ({
-      value: support.organisation.unit.id,
-      label: `${support.organisation.unit.name} (${support.organisation.unit.acronym})`,
-      description: support.engagingAccessors.map(item => item.name).join('<br />')
-    }));
+    const engagingSupports: InnovationSupportsListDTO = [];
+    const waitingSupports: InnovationSupportsListDTO = [];
+    for (const unit of this.data.organisationUnits) {
+      unit.status === InnovationSupportStatusEnum.ENGAGING && engagingSupports.push(unit);
+      unit.status === InnovationSupportStatusEnum.WAITING && waitingSupports.push(unit);
+    }
+
+
+    if (engagingSupports.length > 0) {
+      this.formOrganisationUnitsItems.push(
+        { value: 'Engaging organisations', label: 'HEADING' },
+        ...engagingSupports.map(support => ({
+          value: support.organisation.unit.id,
+          label: `${support.organisation.unit.name} (${support.organisation.unit.acronym})`,
+          description: support.engagingAccessors.map(item => item.name).join('<br />')
+        }))
+      );
+    }
+
+
+    if (waitingSupports.length > 0) {
+      this.formOrganisationUnitsItems.push(
+        { value: 'Waiting organisations', label: 'HEADING' },
+        ...waitingSupports.map(s => ({
+          value: s.organisation.unit.id,
+          label: `${s.organisation.unit.name} (${s.organisation.unit.acronym})`,
+          description: s.engagingAccessors.map(item => item.name).join('<br />')
+        }))
+      )
+    }
+
 
     if (this.data.activeInnovators && (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType())) {
       this.formOrganisationUnitsItems.push(
