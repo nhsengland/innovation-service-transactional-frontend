@@ -48,6 +48,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     super();
     this.setPageTitle('Suggest support organisations');
 
+    this.setBackLink('Go back');
+
     this.innovation = this.stores.context.getInnovation();
 
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
@@ -139,7 +141,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Organisation suggestions sent', { message: 'Your suggestions were saved and notifications sent.' });
-        this.redirectTo(`/accessor/innovations/${this.innovation.id}/overview`);
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/overview`);
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };

@@ -345,7 +345,9 @@ const routes: Routes = [
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                     data: { layout: { type: 'full' }, breadcrumb: null }  
                   },
-                  { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent },
+                  { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent, 
+                    data: {  layout: { type: 'full' }, breadcrumb: null }
+                  },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   },
