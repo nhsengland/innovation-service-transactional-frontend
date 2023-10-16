@@ -93,17 +93,13 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     // this.notificationsService.getEmailNotificationsPreferences().subscribe(
     //   response => {
 
-    //     this.notificationTypeList = response.map(item => ({
-    //       type: item.notificationType,
-    //       preference: item.preference
-    //     })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
-
-    //     this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
+    //     this.preferencesReponse = response
 
     //     this.setPageStatus('READY');
 
     //   }
     // );
+
     this.setPageStatus('READY')
   }
 
@@ -133,17 +129,17 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     this.getEmailNotificationTypes();
     this.setAlertSuccess('Your notification preferences have been saved');
 
-    // this.notificationsService.updateAssessmentEmailNotificationsPreferences(body).subscribe({
-    //   next: () => {
-    //     this.getEmailNotificationTypes();
-    //   },
-    //   complete: () => {
-    //     this.setAlertSuccess('Your notification preferences have been saved');
-    //   },
-    //   error: () => {
-    //     this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
-    //   }
-    // });
+    this.notificationsService.updateAssessmentEmailNotificationsPreferences(body).subscribe({
+      next: () => {
+        this.getEmailNotificationTypes();
+      },
+      complete: () => {
+        this.setAlertSuccess('Your notification preferences have been saved');
+      },
+      error: () => {
+        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
+      }
+    });
   }
 
 }

@@ -231,7 +231,7 @@ export class NotificationsService extends CoreService {
 
   }
 
-  updateAssessmentEmailNotificationsPreferences(body: AssessmentEmailNotificationPreferencesDTO[]): Observable<boolean> {
+  updateAssessmentEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO): Observable<boolean> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));

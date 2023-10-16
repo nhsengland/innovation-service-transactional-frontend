@@ -150,15 +150,15 @@ form = new FormGroup({
     console.log(this.formPreferencesList)
 
 
-    this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
+    // this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-      Object.entries(response)
-        .filter((item) => item[1] === true)
-        .map((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
+    //   Object.entries(response)
+    //     .filter((item) => item[1] === true)
+    //     .map((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
 
-      this.setPageStatus('READY');
+    //   this.setPageStatus('READY');
 
-    });
+    // });
 
   }
 
