@@ -36,6 +36,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   showFollowersText: 'Show list' | 'Hide list' = 'Show list';
   followerNumberText: 'recipient' | 'recipients' = 'recipient';
 
+  threadsLink = '';
   showAddRecipientsLink = false;
 
   form = new FormGroup({
@@ -62,7 +63,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     super();
     this.setPageTitle('Messages', { showPage: false });
-    this.setBackLink();
 
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
@@ -72,6 +72,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
+
+    this.threadsLink = `/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`;
+
+    this.setBackLink('Go back', this.stores.context.getPreviousUrl() ? (this.stores.context.getPreviousUrl()?.endsWith('recipients') ? this.threadsLink : this.stores.context.getPreviousUrl()!) : this.threadsLink);
 
     this.engagingOrganisationUnits = [];
 
