@@ -25,12 +25,22 @@
         </ul>
       </ng-container>
 
-      <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
-
       <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
-        <theme-form-input controlName="subject" label="Enter a subject for your thread" [pageUniqueField]="false"></theme-form-input>
+
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
+
+        <theme-form-input controlName="subject" label="Enter a subject for your thread" width="full" [pageUniqueField]="false"></theme-form-input>
+
         <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
-        <theme-form-checkbox *ngIf="stores.authentication.isInnovatorType()" controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+
+        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
+
+        <theme-form-file-upload-descriptive description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
+
+        <div *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
+          <theme-form-checkbox controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+        </div>
+
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Send message</button>
       </form>
 

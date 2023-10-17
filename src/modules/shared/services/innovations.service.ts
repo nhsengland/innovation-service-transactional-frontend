@@ -14,6 +14,7 @@ import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovati
 import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationCollaboratorStatusEnum, InnovationExportRequestStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
 import { CreateSupportSummaryProgressUpdateType, InnovationActionsListInDTO, InnovationActivityLogListDTO, InnovationActivityLogListInDTO, InnovationCollaboratorsListDTO, InnovationExportRequestInfoDTO, InnovationExportRequestsListDTO, InnovationInfoDTO, InnovationNeedsAssessmentInfoDTO, InnovationSharesListDTO, InnovationSupportInfoDTO, InnovationSupportsListDTO, InnovationTaskInfoDTO, InnovationTasksListDTO, InnovationsListDTO, InnovationsListFiltersType, InnovationsListInDTO, SupportSummaryOrganisationHistoryDTO, SupportSummaryOrganisationsListDTO, getInnovationCollaboratorInfoDTO } from './innovations.dtos';
+import { FileUploadType } from '../forms/engine/config/form-engine.config';
 
 
 export type InnovationsTasksListFilterType = {
@@ -75,6 +76,11 @@ export type GetThreadMessagesListInDTO = {
   count: number;
   messages: {
     id: string;
+    file: {
+      id: string;
+      name: string;
+      url: string;
+    };
     message: string;
     createdAt: DateISOType;
     createdBy: {
@@ -115,6 +121,26 @@ export type InnovationThreadListFiltersType = {
   subject?: string,
   following?: boolean
 };
+
+export type UploadThreadDocumentType = {
+    followerUserRoleIds: string[],
+    subject: string,
+    message: string,
+    file?: {
+      name: string;
+      description?: string;
+      file: Omit<FileUploadType, "url">
+    };
+}
+
+export type UploadThreadMessageDocumentType = {
+  message: string,
+  file?: {
+    name: string;
+    description?: string;
+    file: Omit<FileUploadType, "url">
+  };
+}
 
 
 @Injectable()
@@ -483,12 +509,12 @@ export class InnovationsService extends CoreService {
 
   }
 
-  createThread(innovationId: string, body: { followerUserRoleIds: string[], subject: string, message: string; }): Observable<{ id: string }> {
+  createThread(innovationId: string, body: UploadThreadDocumentType): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads').setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
   }
 
-  createThreadMessage(innovationId: string, threadId: string, body: { message: string; }): Observable<CreateThreadMessageDTO> {
+  createThreadMessage(innovationId: string, threadId: string, body: UploadThreadMessageDocumentType): Observable<CreateThreadMessageDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/messages').setPathParams({ innovationId, threadId });
     return this.http.post<CreateThreadMessageDTO>(url.buildUrl(), body).pipe(take(1));
   }

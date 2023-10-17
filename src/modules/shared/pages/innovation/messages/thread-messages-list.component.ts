@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, Observable, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
-import { FormGroup } from '@app/base/forms';
+import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadFollowersDTO, InnovationsService } from '@modules/shared/services/innovations.service';
+import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadFollowersDTO, InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
 import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { omit } from 'lodash';
 
 
 @Component({
@@ -37,8 +39,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   showAddRecipientsLink = false;
 
   form = new FormGroup({
-    message: new FormControl<string>('')
+    message: new FormControl<string>('', CustomValidators.required('A message is required')),
+    file: new FormControl<File | null>(null),
+    fileName: new FormControl<string>('', [Validators.maxLength(100)]),
   }, { updateOn: 'blur' });
+
+  configInputFile = {
+    acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
+    maxFileSize: 20 // In Mb.
+  }
 
   // Flags
   isInnovatorType: boolean;
@@ -47,11 +56,13 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private fileUploadService: FileUploadService
   ) {
 
     super();
     this.setPageTitle('Messages', { showPage: false });
+    this.setBackLink();
 
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
@@ -73,6 +84,18 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
 
   ngOnInit(): void {
+
+    this.form.get('file')?.valueChanges.subscribe(
+      value => {
+        if (value) {
+          this.form.get('fileName')?.setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
+          this.form.get('fileName')?.updateValueAndValidity();
+        } else {
+          this.form.get('fileName')?.clearValidators();
+          this.form.get('fileName')?.updateValueAndValidity();
+        }
+      }
+    );
 
     this.messagesList.setOrderBy('createdAt', 'descending');
     this.getThreadsList();
@@ -105,6 +128,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.threadFollowers= response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
+
 
         this.messagesList.setData(response.threadMessages.messages, response.threadMessages.count);
         // Throw notification read dismiss.
@@ -168,23 +192,60 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   onSubmit(): void {
 
-    const messageField = this.form.get('message')!;
-
-    if (!messageField.value) {
-      messageField.setErrors({ customError: true, message: 'A message is required' });
-      messageField.markAsTouched();
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
       return;
     }
 
     this.setPageStatus('LOADING');
 
-    const body = { message: messageField.value };
+    const file = this.form.value.file;
 
+    let body: UploadThreadMessageDocumentType = { message: this.form.value.message! };
+
+    if (file) {
+
+      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+
+      this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
+        switchMap(response => {
+          const fileData = omit(response, 'url');
+          body = {
+            ...body,
+            file: {
+              name: this.form.value.fileName!,
+              file: fileData
+            }
+          }
+          return this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body);
+        })).subscribe({
+          next: () => {
+
+            this.form.reset();
+            this.form.markAsPristine();
+
+            this.setAlertSuccess('You have successfully sent a message', { message: 'All participants in this conversation will be notified.' });
+
+            this.getThreadsList();
+
+          },
+          error: () => {
+            this.setPageStatus('READY');
+            this.setAlertUnknownError();
+          }
+        });
+    } else {
+      this.createThreadMessage(body);
+    }
+
+  }
+
+  createThreadMessage(body: UploadThreadMessageDocumentType) {
     this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
 
-        messageField.setValue('');
-        messageField.markAsPristine();
+        this.form.reset();
+        this.form.markAsPristine();
 
         this.setAlertSuccess('You have successfully sent a message', { message: 'All participants in this conversation will be notified.' });
 
@@ -196,7 +257,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.setAlertUnknownError();
       }
     });
-
   }
 
 }

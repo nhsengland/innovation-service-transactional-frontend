@@ -5,10 +5,14 @@ export type SubjectMessageStepInputType = {
     users: { name: string }[]
   }[],
   subject: string,
-  message: string
+  message: string,
+  file: null | File,
+  fileName: string
 };
 
 export type SubjectMessageStepOutputType = {
   subject: string,
-  message: string
+  message: string,
+  file: null | File,
+  fileName: string
 };

@@ -320,7 +320,7 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { breadcrumb: null }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,
@@ -343,7 +343,7 @@ const routes: Routes = [
                     data: { breadcrumb: 'Statuses' }
                   },
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
-                    data: { layout: { type: 'full' }, breadcrumb: null }  
+                    data: { layout: { type: 'full' }, breadcrumb: null }
                   },
                   { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent, 
                     data: {  layout: { type: 'full' }, breadcrumb: null }

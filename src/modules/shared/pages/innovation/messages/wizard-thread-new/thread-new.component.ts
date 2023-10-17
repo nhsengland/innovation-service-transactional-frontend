@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, forkJoin, of } from 'rxjs';
+import { Observable, forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
 import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationsService, UploadThreadDocumentType } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
@@ -15,6 +15,8 @@ import { WizardInnovationThreadNewSubjectMessageStepComponent } from './steps/su
 import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './steps/subject-message-step.types';
 import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-step.component';
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { omit } from 'lodash';
 
 
 @Component({
@@ -30,15 +32,22 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     organisationsStep: {
       organisationUnits: { id: string, name: string, users: { id: string, userRoleId: string, name: string }[] }[]
     },
-    subjectMessageStep: { subject: string, message: string }
+    subjectMessageStep: {
+      subject: string,
+      message: string,
+      file: null | File,
+      fileName: string
+    }
   }>({});
 
   datasets: {
     organisationUnits: InnovationSupportsListDTO
   };
 
-
-  constructor(private innovationsService: InnovationsService) {
+  constructor(
+    private innovationsService: InnovationsService,
+    private fileUploadService: FileUploadService
+  ) {
 
     super();
 
@@ -47,7 +56,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.data = {
       innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
       organisationsStep: { organisationUnits: [] },
-      subjectMessageStep: { subject: '', message: '' }
+      subjectMessageStep: { subject: '', message: '', file: null, fileName: '' }
     };
 
     this.datasets = {
@@ -151,7 +160,9 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
               innovation: { id: this.innovation.id },
               teams: this.getNotifiableTeamsList().visibleList,
               subject: '',
-              message: ''
+              message: '',
+              file: null,
+              fileName: ''
             },
             outputs: {
               previousStepEvent: data => this.onPreviousStep(data, this.onSubjectMessageStepOut, this.onOrganisationsStepIn),
@@ -222,35 +233,75 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       innovation: { id: this.innovation.id },
       teams: this.getNotifiableTeamsList().visibleList,
       subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message
+      message: this.wizard.data.subjectMessageStep.message,
+      file: this.wizard.data.subjectMessageStep.file,
+      fileName: this.wizard.data.subjectMessageStep.fileName
     });
   }
   onSubjectMessageStepOut(stepData: WizardStepEventType<SubjectMessageStepOutputType>): void {
     this.wizard.data.subjectMessageStep = {
       subject: stepData.data.subject,
-      message: stepData.data.message
+      message: stepData.data.message,
+      file: stepData.data.file,
+      fileName: stepData.data.fileName
     };
   }
 
-
   onSubmit(): void {
 
-    const body = {
+    this.setPageStatus('LOADING');
+
+    const file = this.wizard.data.subjectMessageStep.file;
+
+    let body: UploadThreadDocumentType = {
       followerUserRoleIds: this.getNotifiableTeamsList().followersUserRoleIds,
       subject: this.wizard.data.subjectMessageStep.subject,
       message: this.wizard.data.subjectMessageStep.message
     };
 
+    if (file) {
+
+      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+
+      this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
+        switchMap(response => {
+          const fileData = omit(response, 'url');
+          body = {
+            ...body,
+            file: {
+              name: this.wizard.data.subjectMessageStep.fileName,
+              file: fileData
+            }
+          }
+          return this.innovationsService.createThread(this.innovation.id, body);
+        })).subscribe({
+          next: () => {
+            this.setRedirectAlertSuccess('The message has been sent successfully', { message: 'Your file has been added to file library.' });
+            this.redirectToThreadsList();
+          },
+          error: () => {
+            this.setAlertUnknownError();
+            this.setPageStatus('READY');
+          }
+        });
+    } else {
+      this.createThread(body);
+    }
+
+  }
+
+  createThread(body: UploadThreadDocumentType) {
     this.innovationsService.createThread(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The message has been sent successfully');
         this.redirectToThreadsList();
       },
-      error: () => this.setAlertUnknownError()
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('READY');
+      }
     });
-
   }
-
 
   private getNotifiableTeamsList(): { followersUserRoleIds: string[], visibleList: SubjectMessageStepInputType['teams'] } {
 
@@ -293,5 +344,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   private redirectToThreadsList(): void {
     this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/threads`);
   }
+
 
 }
