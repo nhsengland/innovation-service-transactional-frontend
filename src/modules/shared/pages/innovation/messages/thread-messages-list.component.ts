@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, Observable, switchMap } from 'rxjs';
+import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextTypeEnum } from '@app/base/enums';
@@ -10,10 +10,10 @@ import { TableModel } from '@app/base/models';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { GetThreadInfoDTO, GetThreadMessagesListOutDTO, GetThreadFollowersDTO, InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
-import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { GetThreadFollowersDTO, GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { omit } from 'lodash';
 
 
@@ -108,7 +108,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     const subscriptions: {
       threadInfo: Observable<GetThreadInfoDTO>,
-      threadFollowers:Observable<GetThreadFollowersDTO>,
+      threadFollowers: Observable<GetThreadFollowersDTO>,
       threadMessages: Observable<GetThreadMessagesListOutDTO>,
       supports?: Observable<InnovationSupportsListDTO>
     } = {
@@ -125,7 +125,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       next: (response) => {
 
         this.threadInfo = response.threadInfo;
-        this.threadFollowers= response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
+        this.threadFollowers = response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
@@ -137,7 +137,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
-          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING);
+          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING || item.status === InnovationSupportStatusEnum.WAITING);
 
           if (this.stores.authentication.isAccessorType()) {
             this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
@@ -167,13 +167,13 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   };
 
   onShowParticipantsClick() {
-    if (this.showFollowersHideStatus!== 'opened') {
+    if (this.showFollowersHideStatus !== 'opened') {
 
-      this.showFollowersHideStatus= 'opened';
+      this.showFollowersHideStatus = 'opened';
       this.showFollowersText = 'Hide list';
 
     } else {
-      this.showFollowersHideStatus= 'closed';
+      this.showFollowersHideStatus = 'closed';
       this.showFollowersText = 'Show list';
     }
   }

@@ -46,7 +46,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.leadText = this.stores.authentication.isInnovatorType() || this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging with this innovation.' : 'You can select other organisations that are currently engaging with this innovation.';
+    this.leadText = this.stores.authentication.isInnovatorType() || this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging or waiting to support this innovation.' : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
