@@ -55,7 +55,7 @@ export type catalogCareSettings = typeof catalogCareSettings[number];
 export const catalogMainPurpose = ['PREVENT_CONDITION', 'PREDICT_CONDITION', 'DIAGNOSE_CONDITION', 'MONITOR_CONDITION', 'PROVIDE_TREATMENT', 'MANAGE_CONDITION', 'ENABLING_CARE', 'RISKS_CLIMATE_CHANGE'] as const;
 export type catalogMainPurpose = typeof catalogMainPurpose[number];
 
-export const catalogInvolvedAACProgrammes = ['No', 'Academic Health Science Network', 'Artificial Intelligence in Health and Care Award', 'Clinical Entrepreneur Programme', 'Early Access to Medicines Scheme', 'Innovation for Healthcare Inequalities Programme', 'Innovation and Technology Payment Programme', 'NHS Innovation Accelerator', 'NHS Insights Prioritisation Programme', 'Pathway Transformation Fund', 'Rapid Uptake Products Programme', 'Small Business Research Initiative for Healthcare', 'Test beds'] as const;
+export const catalogInvolvedAACProgrammes = ['No', 'Health Innovation Network', 'Artificial Intelligence in Health and Care Award', 'Clinical Entrepreneur Programme', 'Early Access to Medicines Scheme', 'Innovation for Healthcare Inequalities Programme', 'Innovation and Technology Payment Programme', 'NHS Innovation Accelerator', 'NHS Insights Prioritisation Programme', 'Pathway Transformation Fund', 'Rapid Uptake Products Programme', 'Small Business Research Initiative for Healthcare', 'Test beds'] as const;
 export type catalogInvolvedAACProgrammes = typeof catalogInvolvedAACProgrammes[number];
 
 

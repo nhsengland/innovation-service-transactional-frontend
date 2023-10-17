@@ -18,8 +18,8 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     }[]
   }[] = [
       {
-        name: 'The Academic Health Science Network (AHSN)',
-        link: this.CONSTANTS.URLS.AHSN_NETWORK,
+        name: 'The Health Innovation Network (HIN)',
+        link: this.CONSTANTS.URLS.HIN_NETWORK,
         information: [
           {
             type: 'BULLET_LIST',
