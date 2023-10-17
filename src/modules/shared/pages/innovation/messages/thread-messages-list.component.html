@@ -35,7 +35,7 @@
               </ng-template>
             </dt>
             <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <a routerLink="/innovator/innovations/{{ innovation.id }}/threads/{{ threadId }}/recipients">Add recipients</a>
+              <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>
         </ng-container>
@@ -87,7 +87,7 @@
               'nhsuk-body-s': true,
               'nhsuk-u-margin-bottom-0': true,
               'nhsuk-u-margin-bottom-4': message.file}">
-              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}">
+              <a routerLink="{{ threadsLink }}/{{ threadInfo?.id }}/messages/{{ message.id }}">
               Edit this message
               </a>
             </div>
