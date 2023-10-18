@@ -92,7 +92,7 @@ import { OrganisationsService } from './services/organisations.service';
 import { StatisticsService } from './services/statistics.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
-
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
 
 @NgModule({
   imports: [
@@ -190,7 +190,8 @@ import { UsersService } from './services/users.service';
     OrganisationsService,
     TermsOfUseService,
     StatisticsService,
-    UsersService
+    UsersService,
+    FileUploadService
   ],
   exports: [
     CommonModule,

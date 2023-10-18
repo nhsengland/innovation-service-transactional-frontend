@@ -410,7 +410,7 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { breadcrumb: null }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
@@ -434,7 +434,7 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   { path: 'edit', pathMatch: 'full', component: InnovationDataSharingChangeComponent },
-                  { 
+                  {
                     path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   }

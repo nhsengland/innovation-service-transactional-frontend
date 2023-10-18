@@ -12,32 +12,30 @@
 
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Support status</dt>
-      <dd class="nhsuk-summary-list__value nhsuk-u-padding-right-0">
-        <div class="d-flex">
+      <dd class="nhsuk-summary-list__value">
           <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"></theme-tag>
-          <a *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'" class="ml-auto" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}">Change support status</a>
-        </div>
+      </dd>
+      <dd class="nhsuk-summary-list__actions width-25">
+        <a *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}">Change support status</a>
       </dd>
     </div>
 
     <div *ngIf="innovationSupport.engagingAccessors.length > 0" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
-      <dd class="nhsuk-summary-list__value nhsuk-u-padding-right-0">
-        <div class="d-flex">
-          <ul class="nhsuk-list width-60 nhsuk-u-margin-bottom-2">
+      <dd class="nhsuk-summary-list__value">
+          <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
             <li *ngFor="let accessor of innovationSupport.engagingAccessors">
               {{accessor.name}}
             </li>
           </ul>
-          <div class="d-flex ml-auto nhsuk-u-text-align-right ">
+      </dd>
+      <dd class="nhsuk-summary-list__actions">
             <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
-          </div>
-        </div>
       </dd>
     </div>
   </dl>
 
-  <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-7"> Change support status </a>
+  <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"> Change support status </a>
 
   <ng-container *ngIf="isAccessorRole">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">Request status update</a>

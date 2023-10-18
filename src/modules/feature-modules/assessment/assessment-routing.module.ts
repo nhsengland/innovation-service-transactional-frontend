@@ -335,7 +335,7 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { breadcrumb: null }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,

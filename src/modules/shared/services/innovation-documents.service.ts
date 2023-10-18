@@ -11,7 +11,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
-type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE';
+type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE' | 'INNOVATION_MESSAGE';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
@@ -23,7 +23,7 @@ type InnovationDocumentsListInDTO = {
   count: number,
   data: {
     id: string,
-    context: { type: ContextTypeType, id: string, name?: string },
+    context: { type: ContextTypeType, id: string, name?: string, threadId?: string },
     name: string,
     description?: string;
     createdAt: DateISOType,
@@ -41,7 +41,7 @@ export type InnovationDocumentsListOutDTO = {
 
 type InnovationDocumentInfoInDTO = {
   id: string,
-  context: { type: ContextTypeType, id: string, name?: string },
+  context: { type: ContextTypeType, id: string, name?: string, threadId?: string },
   name: string,
   description?: string,
   createdAt: DateISOType,
@@ -93,6 +93,9 @@ export class InnovationDocumentsService extends CoreService {
             case 'INNOVATION_EVIDENCE':
               description = item.context.name ?? '';
               break;
+            case 'INNOVATION_MESSAGE':
+              description = item.context.name ?? '';
+              break;
             default:
               break;
           }
@@ -141,6 +144,10 @@ export class InnovationDocumentsService extends CoreService {
           case 'INNOVATION_EVIDENCE':
             description = item.context.name ?? '';
             descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${item.context.id}`;
+            break;
+          case 'INNOVATION_MESSAGE':
+            description = item.context.name ?? '';
+            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/threads/${item.context.threadId}`;
             break;
           default:
             break;

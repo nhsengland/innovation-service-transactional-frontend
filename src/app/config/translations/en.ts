@@ -169,7 +169,8 @@ export const locale = {
             INNOVATION: 'Documents',
             INNOVATION_SECTION: 'Innovation section',
             INNOVATION_EVIDENCE: 'Innovation evidence',
-            INNOVATION_PROGRESS_UPDATE: 'Support summary'
+            INNOVATION_PROGRESS_UPDATE: 'Support summary',
+            INNOVATION_MESSAGE: "Messages"
           }
         },
         innovation: {
