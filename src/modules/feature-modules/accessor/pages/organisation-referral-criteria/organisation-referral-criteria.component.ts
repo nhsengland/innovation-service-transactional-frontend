@@ -18,7 +18,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     }[]
   }[] = [
       {
-        name: 'The Health Innovation Network (HIN)',
+        name: 'The Health Innovation Network (HIN, formerly known as AHSN)',
         link: this.CONSTANTS.URLS.HIN_NETWORK,
         information: [
           {
