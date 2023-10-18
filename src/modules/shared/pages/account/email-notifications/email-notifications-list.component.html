@@ -12,20 +12,20 @@
         </div>
   
         <dl class="nhsuk-summary-list nhsuk-u-padding-top-3 nhsuk-u-margin-bottom-0">
-          <div *ngFor="let item of preferencesReponse | keyvalue" class="nhsuk-summary-list__row">
+          <div *ngFor="let category of formPreferencesList" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6  width-75 "> 
               <ul class="nhsuk-list nhsuk-u-margin-0">
                 <li class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal">
-                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + item.key + '.title' | translate}}</span>
+                  <span>{{ category.title }}</span>
                 </li>
                 <li class="nhsuk-u-font-weight-normal font-color-secondary">
-                  <span>{{ 'shared.catalog.innovation.email_notification_preferences.' + item.key + '.description' | translate}}</span>
+                  <span>{{ category.description }}</span>
                 </li>
               </ul>
             </dt>
             
             <dd class="nhsuk-summary-list__actions vertical-align-middle">
-                <span class="ml-auto nhsuk-tag nhsuk-u-font-weight-bold nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="item.value ? 'nhsuk-tag--green' : 'nhsuk-tag--grey'">{{ item.value ? 'On' : 'Off'}}</span>
+                <span class="ml-auto nhsuk-tag nhsuk-u-font-weight-bold nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2" [ngClass]="category.cssClass">{{ category.preference }}</span>
             </dd>
           </div>
         </dl>
@@ -35,7 +35,7 @@
           <span class="nhsuk-action-link__text"> Change preferences </span>
         </a>
   
-        <div *ngIf="isAnySubscribed" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
+        <div *ngIf="isAnyOn" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
           <p class="nhsuk-u-margin-0">
             <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
           </p>

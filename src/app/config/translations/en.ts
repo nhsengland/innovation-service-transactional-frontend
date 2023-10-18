@@ -325,83 +325,123 @@ export const locale = {
           },
 
           email_notification_preferences: {
-            // NEVER: {
-            //   me: 'Never send me notifications',
-            //   you: 'You do not get updates',
-            // },
-            // INSTANTLY: {
-            //   me: 'Send me instant updates',
-            //   you: 'You get instant updates',
-            // },
-            // DAILY: {
-            //   me: 'Send me daily summary updates',
-            //   you: 'You get daily summary updates'
-            // },
-            // Shared
-            RECORD: {
-              title: 'Innovator submits innovation record',
-              description: 'Get notified when an innovation is submitted for needs assessment.',
+
+            ACCOUNT: {
+              QUALIFYING_ACCESSOR: {
+                title: 'Your account',
+                description: 'Get notified when a user is removed or added to your organisation unit.'
+              },
+              ACCESSOR: {
+                title: 'Your account',
+                description: 'Get notified when a user is removed or added to your organisation unit.',
+              }
             },
-            TASKS: {
-              title: 'Tasks',
-              description: 'Get notified when an innovator completes or declines tasks you have assign to them.',
-            },
-            MESSAGES: {
-              title: 'Messages',
-              description: 'Get notified about new messages and replies.',
-            },
-            INNOVATION_MANAGEMENT: {
-              title: 'Innovation management',
-              description: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
-            },
-            ASSIGNED: {
-              title: 'Assigned needs assessor',
-              description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.',
-            },
-            // A/QA
-            IR_EXPORT_REQUESTS: {
-              title: 'Innovation record export requests',
-              description: 'Get notified when a innovator accepts or rejects your request to export their innovation record.',
-            },
-            YOUR_ACCOUNT: {
-              title: 'Your account',
-              description: 'Get notified when a user is removed or added to your organisation unit.',
-            },
-            REMINDERS: {
-              title: 'Reminders',
-              description: 'Get notified with reminders for you to interact with innovations you are supporting.'
-            },
-            // QA
-            SUGGESTIONS_TO_SUPPORT: {
-              title: 'Suggestions to support',
-              description: 'Get notified when your organisation is suggested to support an innovation.'
-            },
-            // Innovator
-            SUPPORT_STATUS_AND_UPDATES: {
-              title: 'Support status and updates',
-              description: 'Get notified about updates to your support status and support summary.'
-            },
-            TASKS_TO_DO: {
-              title: 'Tasks to do',
-              description: 'Get notified when a task is assigned to you, reopened or cancelled.'
-            },
-            DOCUMENTS: {
-              title: 'Documents',
-              description: 'Get notified when a support organisation uploads a document for you.'
-            },
-            SYSTEM_REMINDERS: {
-              title: 'System reminders',
-              description: 'Get notified when your innovation record is incomplete or when your innovation is not receiving support.'
-            },
-            // Needs assessment
-            INNOVATOR_SUBMIT_IR: {
-              title: 'Innovator submits innovation record',
-              description: 'Get notified when an innovation is submitted for needs assessment. '
-            },
+
             ASSIGN_NA: {
-              title: 'Assigned needs assessor',
-              description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
-            }
+              ASSESSMENT: {
+                title: 'Assigned needs assessor',
+                description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
+              }
+            },
+
+            DOCUMENT: {
+              INNOVATOR: {
+                title: 'Documents',
+                description: 'Get notified when a support organisation uploads a document for you.'
+              },
+            },
+          
+            EXPORT_REQUEST: {
+              SHARED: {
+                title: 'Innovation record export requests',
+                description: 'Get notified when an innovator accepts or rejects your request to export their innovation record.',
+              }
+            },
+
+            INNOVATION_MANAGEMENT: {
+              SHARED: {
+                title: 'Innovation management',
+                description: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
+              },
+              QUALIFYING_ACCESSOR: {
+                title: 'Innovation management',
+                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
+              },
+              ACCESSOR: {
+                title: 'Innovation management',
+                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
+              },
+
+            },
+
+            INNOVATOR_SUBMIT_IR: {
+              SHARED: {
+                title: 'Innovator submits innovation record',
+                description: 'Get notified when an innovation is submitted for needs assessment. '
+              }
+            },
+
+            MESSAGE: {
+              SHARED:{
+                title: 'Messages',
+                description: 'Get notified about new messages and replies.',
+              }
+            },         
+
+            REMINDER: {
+              SHARED: {
+                title: 'Reminders',
+                description: 'Get notified with reminders for you to interact with innovations you are supporting.'
+              },
+              INNOVATOR: {
+                title: 'System reminders',
+                description: 'Get notified when your innovation record is incomplete or when your innovation is not receiving support.'
+              }
+            },
+
+            SUGGEST_SUPPORT: {
+              QUALIFYING_ACCESSOR: {
+                title: 'Suggestions to support',
+                description: 'Get notified when your organisation is suggested to support an innovation.'
+              }
+            },
+
+            SUPPORT: {
+              QUALIFYING_ACCESSOR: {
+                title: 'Support status and updates',
+                description: 'Get notified about support status or support summary updates for innovations you are supporting.'
+              },
+              ACCESSOR: {
+                title: 'Support status and updates',
+                description: 'Get notified about support status or support summary updates for innovations you are supporting.'
+              },
+              INNOVATOR: {
+                title: 'Support status and updates',
+                description: 'Get notified about updates to your support status and support summary.'
+              }
+            },
+
+            TASK: {
+              ASSESSMENT: {
+                title: 'Tasks',
+                description: 'Get notified when an innovator completes or declines tasks you have assigned them.',
+              },
+              INNOVATOR: {
+                title: 'Tasks to do',
+                description: 'Get notified when a task is assigned to you, reopened or cancelled.'
+              },
+              QUALIFYING_ACCESSOR: {
+                title: 'Tasks',
+                description: 'Get notified when an innovator completes or declines a task you have given them.'
+              },
+              ACCESSOR: {
+                title: 'Tasks',
+                description: 'Get notified when an innovator completes or declines a task you have given them.',
+              }
+            },
+
+         
+            
           },
 
           innovation_sections: {
