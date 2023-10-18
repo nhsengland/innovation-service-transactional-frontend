@@ -21,7 +21,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   formPreferencesList: { value: string, cssClass: string, preference: string, title: string, description: string }[] = [];
 
-  preferencesReponse: EmailNotificationPreferencesDTO
+  preferencesResponse: EmailNotificationPreferencesDTO;
 
 
   constructor(
@@ -46,7 +46,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
       };
     }
 
-    this.preferencesReponse = {};
+    this.preferencesResponse = {};
 
   }
 
@@ -63,7 +63,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        this.isAnyOn = Object.values(response).some(item => item === 'YES')
+        this.isAnyOn = Object.values(response).some(item => item === EmailNotificationsPreferencesEnum.YES)
 
         this.formPreferencesList = Object.keys(response).map((category) => ({
           value: category, 
@@ -73,7 +73,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
           description: this.getCategoryMessages(category).description
         })).sort((a, b) => a.title.localeCompare(b.title));
 
-        this.preferencesReponse = response;
+        this.preferencesResponse = response;
 
         this.setPageStatus('READY');
       });
@@ -86,8 +86,8 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
 
-    Object.keys(this.preferencesReponse).forEach(key => {
-            body.preferences[key] = 'NO';
+    Object.keys(this.preferencesResponse).forEach(key => {
+            body.preferences[key] = EmailNotificationsPreferencesEnum.NO;
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({
@@ -95,7 +95,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.getEmailNotificationTypes();
       },
       complete: () => {
-        this.setAlertSuccess('Your notification preferences have been saved');
+        this.setAlertSuccess('Your email notification preferences have been updated');
       },
       error: () => {
         this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');

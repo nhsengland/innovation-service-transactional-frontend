@@ -84,7 +84,7 @@ export type NotificationsListOutDTO = {
 };
 
 export type EmailNotificationPreferencesDTO = {
-  [category: string]: string
+  [category: string]: EmailNotificationsPreferencesEnum
 };
 
 @Injectable()

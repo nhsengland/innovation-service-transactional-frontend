@@ -25,7 +25,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
   currentUserContext: AuthenticationModel['userContext'];
 
   formPreferencesList: { value: string, label: string, description: string }[] = [];
-  preferencesReponse: EmailNotificationPreferencesDTO = {};
+  preferencesResponse: EmailNotificationPreferencesDTO = {};
 
   form = new FormGroup({
     preferencesEnabled: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
@@ -57,9 +57,9 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-      Object.entries(response).filter((item) => item[1] === 'YES').map((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
+      Object.entries(response).filter((item) => item[1] === EmailNotificationsPreferencesEnum.YES).forEach((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
 
-      this.preferencesReponse = response;
+      this.preferencesResponse = response;
       
       this.formPreferencesList = Object.keys(response).map((category) => ({ 
         value: category, 
@@ -78,7 +78,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
 
-    Object.keys(this.preferencesReponse).forEach(value => {
+    Object.keys(this.preferencesResponse).forEach(value => {
             body.preferences[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? EmailNotificationsPreferencesEnum.YES : EmailNotificationsPreferencesEnum.NO
     });
 
@@ -86,7 +86,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
       body
     ).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your notification preference has been saved');
+        this.setRedirectAlertSuccess('Your email notification preferences have been updated');
         this.redirectTo(this.notificationListLink, { alert: 'editSuccess' })
       },
       error: () => {
