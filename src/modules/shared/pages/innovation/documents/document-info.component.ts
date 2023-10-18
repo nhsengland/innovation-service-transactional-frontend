@@ -87,7 +87,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`);
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');

@@ -72,10 +72,13 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
+    const documentAction = this.activatedRoute.snapshot.queryParams.action;
 
     this.threadsLink = `/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`;
 
-    this.setBackLink('Go back', this.stores.context.getPreviousUrl() ? (this.stores.context.getPreviousUrl()?.endsWith('recipients') ? this.threadsLink : this.stores.context.getPreviousUrl()!) : this.threadsLink);
+    const previousUrl = this.stores.context.getPreviousUrl();
+
+    this.setBackLink('Go back', previousUrl ? (previousUrl?.endsWith('recipients') ? this.threadsLink : (documentAction ? this.threadsLink : previousUrl!)) : this.threadsLink);
 
     this.engagingOrganisationUnits = [];
 
