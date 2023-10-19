@@ -13,7 +13,7 @@ const stepsLabels = {
   },
   l2: {
     label: 'Add an inset text (optional)',
-    description: 'Use inset text for content that needs to stand out from the rest of the page. For example, "South West AHSN has been added to the Innovation Service".'
+    description: 'Use inset text for content that needs to stand out from the rest of the page. For example, "Health Innovation South West has been added to the Innovation Service".'
   },
   l3: {
     label: 'Add body content (optional)',

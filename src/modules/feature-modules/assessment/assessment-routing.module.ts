@@ -457,7 +457,7 @@ const routes: Routes = [
                 data: { breadcrumb: null }
               },
               {
-                path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
+                path: 'edit', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }

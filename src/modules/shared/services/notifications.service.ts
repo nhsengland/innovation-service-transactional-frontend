@@ -15,10 +15,29 @@ export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnu
   MESSAGE = 'MESSAGE',
   SUPPORT = 'SUPPORT'
 }
+
 export enum EmailNotificationsPreferencesEnum {
-  NEVER = 'NEVER',
-  INSTANTLY = 'INSTANTLY',
-  DAILY = 'DAILY'
+  YES = 'YES',
+  NO = 'NO'
+}
+
+export enum EmailNotificationCategoryEnum {
+  // GENERAL
+  // A are only composed by GENERAL ones (not all)
+  TASK = 'TASK',
+  MESSAGE = 'MESSAGE',
+  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
+  SUPPORT = 'SUPPORT',
+  EXPORT_REQUEST = 'EXPORT_REQUEST',
+  ACCOUNT = 'ACCOUNT',
+  REMINDER = 'REMINDER',
+  // NA
+  INNOVATOR_SUBMIT_IR = 'INNOVATOR_SUBMIT_IR',
+  ASSIGN_NA = 'ASSIGN_NA',
+  // QA
+  SUGGEST_SUPPORT = 'SUGGEST_SUPPORT',
+  // I
+  DOCUMENT = 'DOCUMENT'
 }
 
 
@@ -64,11 +83,9 @@ export type NotificationsListOutDTO = {
   )[]
 };
 
-type EmailNotificationPreferencesDTO = {
-  notificationType: EmailNotificationsTypeEnum,
-  preference: EmailNotificationsPreferencesEnum
+export type EmailNotificationPreferencesDTO = {
+  [category: string]: EmailNotificationsPreferencesEnum
 };
-
 
 @Injectable()
 export class NotificationsService extends CoreService {
@@ -200,17 +217,17 @@ export class NotificationsService extends CoreService {
   }
 
 
-  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO[]> {
+  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
-    return this.http.get<EmailNotificationPreferencesDTO[]>(url.buildUrl()).pipe(
+    return this.http.get<EmailNotificationPreferencesDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
 
-  updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
+  updateEmailNotificationsPreferences(body: {preferences: EmailNotificationPreferencesDTO}): Observable<boolean> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));

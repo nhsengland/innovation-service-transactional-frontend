@@ -12,7 +12,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-      <div class="bg-color-white nhsuk-u-margin-bottom-5">
+      <div class="bg-color-white nhsuk-u-padding-4 nhsuk-u-margin-bottom-5">
 
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3"> Subject: {{ threadInfo?.subject }} </h1>
         <p *ngIf="threadInfo?.context?.type === 'TASK'">
@@ -26,7 +26,7 @@
           {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
         </a>
 
-        <ng-container *ngIf=" showFollowersHideStatus === 'opened'">
+        <ng-container *ngIf="showFollowersHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
             <dt *ngFor="let follower of threadFollowers;" class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
               <span *ngIf="follower.role.role === 'INNOVATOR' ; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? 'Owner' : 'Collaborator'}})</span>
@@ -35,7 +35,7 @@
               </ng-template>
             </dt>
             <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
-              <a routerLink="/innovator/innovations/{{ innovation.id }}/threads/{{ threadId }}/recipients">Add recipients</a>
+              <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>
         </ng-container>
@@ -45,6 +45,8 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
 
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
+
+          <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 
           <theme-form-file-upload-descriptive description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
 
@@ -85,7 +87,7 @@
               'nhsuk-body-s': true,
               'nhsuk-u-margin-bottom-0': true,
               'nhsuk-u-margin-bottom-4': message.file}">
-              <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/threads/{{ threadInfo?.id }}/messages/{{ message.id }}">
+              <a routerLink="{{ threadsLink }}/{{ threadInfo?.id }}/messages/{{ message.id }}">
               Edit this message
               </a>
             </div>

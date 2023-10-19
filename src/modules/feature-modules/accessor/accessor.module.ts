@@ -59,7 +59,8 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
-    TrainingAndResourcesComponent
+    // // Training.
+    TrainingAndResourcesComponent,
   ],
   providers: [
     // Services.

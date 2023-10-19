@@ -53,11 +53,6 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
 
   ngOnInit(): void {
 
-    if(this.status === InnovationTaskStatusEnum.CANCELLED) {
-      this.form.controls.message.clearValidators();
-      this.form.controls.message.updateValueAndValidity();
-    }
-
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).pipe(
       switchMap(task => {
         return forkJoin([
@@ -90,7 +85,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
           case InnovationTaskStatusEnum.CANCELLED:
             this.pageInformation = {
               title: 'Cancel task',
-              leadText: 'Explain the reason you are cancelling this task (optional)'
+              leadText: 'Explain the reason you are cancelling this task'
             };
             this.submitBtn = { label: 'Cancel task', isDisabled: false };
             break;
