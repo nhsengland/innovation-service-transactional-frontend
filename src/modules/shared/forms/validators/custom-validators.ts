@@ -109,6 +109,20 @@ export class CustomValidators {
     }
   }
 
+  static emptyFileValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      return control.value.size > 0 ? null : { emptyFile: message ? { message } : true };
+    }
+  }
+
+  static maxFileSizeValidator(maxFileSize: number, message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) { return null; }
+      return control.value.size <= maxFileSize * 1000000 ? null : { maxFileSize: (message ? { message, maxFileSize } : { maxFileSize }) };
+    }
+  }
+
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };
