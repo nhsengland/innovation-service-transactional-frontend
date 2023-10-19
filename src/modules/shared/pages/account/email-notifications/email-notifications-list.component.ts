@@ -88,7 +88,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     
     Object.keys(this.preferencesResponse).forEach(key => {
-            body.preferences[key] = this.isAnyOn? EmailNotificationsPreferencesEnum.NO : EmailNotificationsPreferencesEnum.YES ;
+            body.preferences[key] = this.isAnyOn ? EmailNotificationsPreferencesEnum.NO : EmailNotificationsPreferencesEnum.YES ;
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({
