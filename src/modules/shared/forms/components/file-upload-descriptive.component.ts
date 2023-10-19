@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, Validators } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
+import { Subscription } from 'rxjs';
 import { FileTypes } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { CustomValidators } from '../validators/custom-validators';
@@ -10,7 +11,7 @@ import { CustomValidators } from '../validators/custom-validators';
   templateUrl: './file-upload-descriptive.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
+export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDestroy {
 
   @Input() id?: string;
   @Input() inputsNames = ['file', 'fileName'];
@@ -39,6 +40,8 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   hasError = false;
   hasUploadError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+
+  private fieldChangeSubscription = new Subscription();
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
@@ -69,16 +72,18 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
-    this.fieldControl[0].valueChanges.subscribe(
-      value => {
-        if (value && this.fieldControl[0].valid) {
-          this.fieldControl[1].setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
-          this.fieldControl[1].updateValueAndValidity();
-        } else {
-          this.fieldControl[1].clearValidators();
-          this.fieldControl[1].reset();
+    this.fieldChangeSubscription.add(
+      this.fieldControl[0].valueChanges.subscribe(
+        value => {
+          if (value && this.fieldControl[0].valid) {
+            this.fieldControl[1].setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
+            this.fieldControl[1].updateValueAndValidity();
+          } else {
+            this.fieldControl[1].clearValidators();
+            this.fieldControl[1].reset();
+          }
         }
-      }
+      )
     );
 
   }
@@ -143,5 +148,8 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
 
   }
 
+  ngOnDestroy(): void {
+    this.fieldChangeSubscription.unsubscribe();
+  }
 
 }
