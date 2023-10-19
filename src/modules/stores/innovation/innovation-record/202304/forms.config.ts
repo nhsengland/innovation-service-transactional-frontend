@@ -290,7 +290,7 @@ export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
 
 export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolvedAACProgrammes> = [
   { value: 'No', label: 'No' },
-  { value: 'Academic Health Science Network', label: 'Academic Health Science Network' },
+  { value: 'Health Innovation Network', label: 'Health Innovation Network' },
   { value: 'Artificial Intelligence in Health and Care Award', label: 'Artificial Intelligence in Health and Care Award' },
   { value: 'Clinical Entrepreneur Programme', label: 'Clinical Entrepreneur Programme' },
   { value: 'Early Access to Medicines Scheme', label: 'Early Access to Medicines Scheme' },
