@@ -33,8 +33,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    file: new FormControl<File | null>(null),
-    fileName: new FormControl<string>('', [Validators.maxLength(100)]),
+    file: new FormControl<File | null>(null, [CustomValidators.emptyFileValidator(), CustomValidators.maxFileSizeValidator(20)]),
+    fileName: new FormControl<string>(''),
     confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
   }, { updateOn: 'blur' });
 
@@ -59,18 +59,6 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     if (!this.stores.authentication.isInnovatorType()) {
       this.form.get('confirmation')?.setValue(true);
     }
-
-    this.form.get('file')?.valueChanges.subscribe(
-      value => {
-        if (value) {
-          this.form.get('fileName')?.setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
-          this.form.get('fileName')?.updateValueAndValidity();
-        } else {
-          this.form.get('fileName')?.clearValidators();
-          this.form.get('fileName')?.updateValueAndValidity();
-        }
-      }
-    );
 
     this.formConfirmationField = {
       label: 'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
