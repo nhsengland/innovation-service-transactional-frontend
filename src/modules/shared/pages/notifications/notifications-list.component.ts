@@ -8,7 +8,7 @@ import { TableModel } from '@app/base/models';
 
 import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
-import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationCategoryEnum, NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 
 
 type FilterKeysType = 'contextTypes';
@@ -25,7 +25,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   notificationsList = new TableModel<
     NotificationsListOutDTO['data'][0],
-    { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    { contextTypes: EmailNotificationCategoryEnum[], unreadOnly: boolean }
   >();
 
   form = new FormGroup({
