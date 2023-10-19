@@ -76,7 +76,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
           this.fieldControl[1].updateValueAndValidity();
         } else {
           this.fieldControl[1].clearValidators();
-          this.fieldControl[1].updateValueAndValidity();
+          this.fieldControl[1].reset();
         }
       }
     );
