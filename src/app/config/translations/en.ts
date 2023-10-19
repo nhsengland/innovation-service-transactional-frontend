@@ -425,7 +425,7 @@ export const locale = {
             TASK: {
               ASSESSMENT: {
                 title: 'Tasks',
-                description: 'Get notified when an innovator completes or declines tasks you have assigned them.',
+                description: 'Get notified when an innovator completes or declines tasks you have assigned to them.',
               },
               INNOVATOR: {
                 title: 'Tasks to do',

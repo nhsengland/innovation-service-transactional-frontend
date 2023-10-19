@@ -35,9 +35,9 @@
           <span class="nhsuk-action-link__text"> Change preferences </span>
         </a>
   
-        <div *ngIf="isAnyOn" class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
+        <div class="nhsuk-u-margin-bottom-3"><span class="nhsuk-u-visually-hidden">Information:</span>
           <p class="nhsuk-u-margin-0">
-            <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> Unsubscribe from everything </a>
+            <a href="javascript:void(0)" (click)="unsubscribeAllNotifications()"> {{ this.isAnyOn ? 'Unsubscribe from everything' : 'Subscribe to everything' }} </a>
           </p>
         </div>
   
