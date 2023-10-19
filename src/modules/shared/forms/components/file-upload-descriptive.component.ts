@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnInit } from '@angular/core';
-import { AbstractControl, ControlContainer, FormControl } from '@angular/forms';
+import { AbstractControl, ControlContainer, FormControl, Validators } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
 import { FileTypes } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
+import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
   selector: 'theme-form-file-upload-descriptive',
@@ -36,6 +37,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
   } = { acceptedFiles: '*', maxFileSize: 1000000 };
 
   hasError = false;
+  hasUploadError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
 
   // Form controls.
@@ -61,42 +63,55 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck {
     private injector: Injector,
     private cdr: ChangeDetectorRef
   ) {
-
   }
 
   ngOnInit(): void {
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
+    this.fieldControl[0].valueChanges.subscribe(
+      value => {
+        if (value && this.fieldControl[0].valid) {
+          this.fieldControl[1].setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
+          this.fieldControl[1].updateValueAndValidity();
+        } else {
+          this.fieldControl[1].clearValidators();
+          this.fieldControl[1].updateValueAndValidity();
+        }
+      }
+    );
+
   }
 
   ngDoCheck(): void {
+
     this.hasError = (this.fieldControl[0].invalid && (this.fieldControl[0].touched || this.fieldControl[0].dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl[0].errors) : { message: '', params: {} };
     this.cdr.detectChanges();
+
   }
 
   onChange(event: any): void {
 
-    this.hasError = false;
+    this.hasUploadError = false;
+
+    this.fieldControl[0].markAsTouched();
 
     const file = event.target.files[0];
 
     if (file.size === 0) {
-      this.hasError = true;
-      this.error = FormEngineHelper.getValidationMessage({ emptyFile: 'true' });
-      return;
+      this.hasUploadError = true;
     }
 
     if(file.size > this.inputFileConfig.maxFileSize) {
-      this.hasError = true;
-      this.error = FormEngineHelper.getValidationMessage({ maxFileSize: 'true' });
-      return;
+      this.hasUploadError = true;
     }
 
     this.fieldControl[0].setValue(file);
 
-    this.setFocus();
+    if (!this.hasUploadError) {
+      this.setFocus();
+    }
 
   }
 
