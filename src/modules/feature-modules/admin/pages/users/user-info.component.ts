@@ -23,6 +23,10 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
   userHasActiveRoles: boolean = false;
   userHasInactiveRoles: boolean = false;
 
+  accessorRolesCount: number = 0;
+  hasActiveAccessorRole: boolean = false;
+  isActiveQualifyingAccessor: boolean = false;
+
   action: { label: string, url: string } = { label: '', url: '' };
 
   constructor(
@@ -86,6 +90,13 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
 
         if (!isAdmin) {
           this.action = { label: userInfo.isActive ? 'Lock user' : 'Unlock user', url: `/admin/users/${userInfo.id}/${userInfo.isActive ? 'lock' : 'unlock'}` };
+        }
+
+        const accessorRoles = this.user.roles.filter(r => r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR);
+        if (accessorRoles.length) {
+          this.accessorRolesCount = accessorRoles.length;
+          this.hasActiveAccessorRole = accessorRoles.some(r => r.isActive === true);
+          this.isActiveQualifyingAccessor = accessorRoles.some(r => r.isActive === true && r.role === UserRoleEnum.QUALIFYING_ACCESSOR);
         }
 
         return forkJoin([
