@@ -19,8 +19,8 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Account status</dt>
           <dd class="nhsuk-summary-list__value">{{ user.isActive ? "Active" : "Inactive" }}</dd>
-          <dd class="nhsuk-summary-list__actions" *ngIf="user.isActive">
-            <a routerLink="{{ action.url }}">{{ action.label }}</a>
+          <dd class="nhsuk-summary-list__actions">
+            <a *ngIf="user.isActive" routerLink="{{ action.url }}">{{ action.label }}</a>
           </dd>
         </div>
       </dl>
@@ -32,6 +32,9 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active roles</h2>
+        <div *ngIf="hasActiveAccessorRole">
+          <a routerLink="/admin/users/{{ user.id }}/change-role">Change {{ isActiveQualifyingAccessor ? 'qualifying accessor' :'accessor' }} {{ 'dictionary.role' | pluralTranslate: accessorRolesCount | translate }} to {{ isActiveQualifyingAccessor ? 'accessor' : 'qualifying accessor' }} </a>
+        </div>
         <table class="nhsuk-table">
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let role of user.roles; let i = index" role="row" class="nhsuk-table__row">
