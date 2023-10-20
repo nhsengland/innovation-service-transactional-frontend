@@ -1,17 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
-import { FormGroup } from '@app/base/forms';
-import { RoutingHelper } from '@app/base/helpers';
-
 
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { UsersValidationRulesService, getOrganisationRoleRulesOutDTO } from '../../../services/users-validation-rules.service';
-import { AdminUsersService, changeUserRoleDTO } from '../../../services/users.service';
+import { AdminUsersService, changeUserRoleDTO, GetInnovationsByOwnerIdDTO } from '../../../services/users.service';
 
 
 @Component({
@@ -20,57 +14,61 @@ import { AdminUsersService, changeUserRoleDTO } from '../../../services/users.se
 })
 export class PageUsersRoleChangeComponent extends CoreComponent implements OnInit {
 
-  user: { id: string, name: string };
+  user: (UserInfo & { rolesDescription: string[], innovations?: GetInnovationsByOwnerIdDTO }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [] };
 
-  organisation: null | UserInfo['roles'][0]['organisation'];
+  currentRole: string = '';
+  newRole: string = '';
 
-  role: null | AccessorOrganisationRoleEnum;
+  userHasActiveRoles: boolean = false;
+  userHasInactiveRoles: boolean = false;
 
-  roleName: string | null;
-
-  pageStep: 'RULES_LIST' | 'CODE_REQUEST' | 'SUCCESS' = 'RULES_LIST';
-
-  rulesList: getOrganisationRoleRulesOutDTO[] = [];
-
-  securityConfirmation = { id: '', code: '' };
-
-  form = new FormGroup({
-    code: new UntypedFormControl('')
-  }, { updateOn: 'blur' });
+  submitButton = { isActive: true, label: 'Change role' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private usersService: AdminUsersService,
-    private usersValidationRulesService: UsersValidationRulesService
+    private usersService: AdminUsersService
   ) {
 
     super();
-    this.user = {
-      id: this.activatedRoute.snapshot.params.userId,
-      name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName,
-    };
-    this.roleName = null;
-    this.role = null;
-    this.organisation = null;
+
+    this.user.id = this.activatedRoute.snapshot.params.userId;
+
   }
 
   ngOnInit(): void {
 
-    forkJoin([
-      this.usersService.getUserInfo(this.user.id),
-      this.usersValidationRulesService.getUserRoleRules(this.user.id)
-    ]).subscribe({
-      next: ([user, rules]) => {
+    this.usersService.getUserInfo(this.user.id).subscribe({
+      next: userInfo => {
 
-        this.rulesList = rules;
+        userInfo.roles = userInfo.roles.filter(r => r.role === UserRoleEnum.ACCESSOR || r.role === UserRoleEnum.QUALIFYING_ACCESSOR);
 
-        // TODO: ALl this component needs to be updated for the "roles". This is just to remove a uneeded endpoint
-        this.organisation = user.roles[0].organisation;
-        this.role = user.roles.some(r => r.role === UserRoleEnum.ACCESSOR) ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR;
+        if(userInfo.roles.filter(r => r.isActive).length === 0){
+          this.redirectTo('/admin/dashboard');
+          return;
+        }
 
-        this.roleName = this.stores.authentication.getRoleDescription(this.role);
+        this.currentRole = userInfo.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'qualifying accessor' : 'accessor';
+        this.newRole = userInfo.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'accessor' : 'qualifying accessor';
 
-        this.setPageTitle(`Change role to ${this.roleName}`, { hint: this.user.name });
+        this.user = {
+          ...userInfo,
+          rolesDescription: userInfo.roles.map(r => {
+            let roleDescription = this.stores.authentication.getRoleDescription(r.role);
+            if (r.displayTeam) {
+              roleDescription += ` (${r.displayTeam})`;
+            }
+
+            if (r.isActive) {
+              this.userHasActiveRoles = true;
+            } else {
+              this.userHasInactiveRoles = true;
+            }
+
+            return roleDescription;
+          })
+        };
+
+        this.setPageTitle(`Change ${this.currentRole} ${userInfo.roles.length > 1 ? 'roles' : 'role'} to ${this.newRole}`);
 
         this.setPageStatus('READY');
       },
@@ -86,43 +84,24 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
 
   onSubmit(): void {
 
-    if (this.role === null || this.organisation === null) {
-      return;
-    }
-
-    this.form.markAllAsTouched(); // Form is always valid.
-
-    this.securityConfirmation.code = this.form.get('code')!.value;
+    this.submitButton = { isActive: true, label: 'Saving...' };
 
     const body: changeUserRoleDTO = {
       role: {
-        name: this.role,
-        organisationId: this.organisation?.id ?? ''
+        name: this.user.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
+        organisationId: this.user.roles[0].organisation?.id!
       },
-      securityConfirmation: this.securityConfirmation
     };
 
-    this.usersService.changeUserRole(this.user.id, body).subscribe(
-      () => {
-
+    this.usersService.changeUserRole(this.user.id, body).subscribe({
+      next: () => {
         this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'roleChangeSuccess' });
-
       },
-      (error: { id: string }) => {
-
-        if (!this.securityConfirmation.id && error.id) {
-
-          this.securityConfirmation.id = error.id;
-          this.pageStep = 'CODE_REQUEST';
-
-        } else {
-
-          this.form.get('code')!.setErrors({ customError: true, message: 'The code is invalid. Please, verify if you are entering the code received on your email' });
-
-        }
-
+      error: () => {
+        this.submitButton = { isActive: true, label: 'Change role' };
+        this.setAlertUnknownError();
       }
-    );
+    });
 
   }
 

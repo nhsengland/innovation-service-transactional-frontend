@@ -17,12 +17,8 @@ export type changeUserTypeDTO = {
 
 export type changeUserRoleDTO = {
   role: {
-    name: AccessorOrganisationRoleEnum, // this used to have InnovatorOrganisationRoleEnum but I don't think it is used
+    name: AccessorOrganisationRoleEnum,
     organisationId: string,
-  },
-  securityConfirmation: {
-    id: string,
-    code: string
   }
 };
 
@@ -85,12 +81,9 @@ export class AdminUsersService extends CoreService {
 
   }
 
-  // TODO: this is not up to date
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
 
-    const qp = (body.securityConfirmation.id && body.securityConfirmation.code) ? body.securityConfirmation : {};
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId }).setQueryParams(qp);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
       take(1),
       map(response => response),

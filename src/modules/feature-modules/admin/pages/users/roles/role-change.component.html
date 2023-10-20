@@ -1,41 +1,36 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <div *ngIf="role === 'ACCESSOR'"  class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
-      <table class="nhsuk-table">
-        <caption>Condition must be valid for changing role of {{ user.name }}</caption>
-        <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
-          <tr class="nhsuk-table__row">
-            <th class="nhsuk-table__header" scope="col"> Condition </th>
-            <th class="nhsuk-table__header" scope="col"> Is valid </th>
-          </tr>
-        </thead>
-        <tbody class="nhsuk-table__body">
-          <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
-            <td class="nhsuk-table__cell">
-              {{ 'shared.catalog.user.' + item.key + '.label' | translate }}
-            </td>
-            <td class="nhsuk-table__cell text-align-right">
-              <strong class="nhsuk-tag" [ngClass]="{'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid}">{{ item.valid ? 'Valid' : 'Invalid' }}</strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        
-      <ng-container *ngIf="pageStep === 'CODE_REQUEST'">
-        <theme-form-input controlName="code" label="Enter the confirmation code" [pageUniqueField]="false"></theme-form-input>
-      </ng-container>
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
+        </div>
+        <p>The following {{ 'dictionary.role' | pluralTranslate: user.roles.length | translate }} will be changed from {{ currentRole }} to {{ newRole }}:</p>
+        <div *ngIf="userHasActiveRoles">
+          <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2">Active roles</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            <ng-container *ngFor="let role of user.roles; let i = index">
+              <li *ngIf="role.isActive"> {{ user.rolesDescription[i] }} </li>
+            </ng-container>
+          </ul>
+        </div>
+        <div *ngIf="userHasInactiveRoles">
+          <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2">Inactive roles</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            <ng-container *ngFor="let role of user.roles; let i = index">
+              <li *ngIf="!role.isActive"> {{ user.rolesDescription[i] }} </li>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
 
-      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="rulesList.length > 0 && !rulesList[0].valid">Change Role</button>
+      <button type="button" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()">{{ submitButton.label }}</button>
 
-    </form>
+      <div>
+        <a routerLink="/admin/users/{{ user.id }}">{{ "Cancel" }} </a>
+      </div>
 
     </div>
   </div>
