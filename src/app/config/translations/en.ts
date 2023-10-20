@@ -501,16 +501,16 @@ export const locale = {
             TRANSFER_EXPIRED: { title: `The invitation to transfer your innovation ownership has expired. Manage your innovation.` },
             TRANSFER_REMINDER: { title: `The invitation to accept ownership of {{ innovationName }} is about to expire. Accept or decline now.` },
             INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED: { title: 'An organisation has been suggested to support your innovation but will not able to view it until you update your data sharing preferences.' },
-            // NEW - TASKS
+            //// NEW - TASKS
             TA01_TASK_CREATION_TO_INNOVATOR: { title: `You have been assigned a task for innovation {{innovationName}} by {{unitName}}. View task.`},
             TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS: { title: `A task has been {{status}} by {{requestUserName}}. View message about this task.`},
             TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT: { title: `A task you assigned on innovation {{innovationName}} has been done by {{requestUserName}}. View message about this task.`},
             TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT: { title: `A task you assigned on innovation {{innovationName}} has been declined by {{requestUserName}}. View message about this task.`},
             TA05_TASK_CANCELLED_TO_INNOVATOR: { title: `A task for innovation {{innovationName}} has been cancelled by {{requestUserName}} at {{unitName}}. View message about this task.`},
             TA06_TASK_REOPEN_TO_INNOVATOR: { title: `A task for innovation {{innovationName}} has been reopened by {{requestUserName}} at {{unitName}}. View message about this task.`},
-            // NEW - DOCUMENT
+            //// NEW - DOCUMENT
             DC01_UPLOADED_DOCUMENT_TO_INNOVATOR: { title: `{{unitName}} has uploaded a document for you to review. View document.`},
-            // // NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables // 
+            //// NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables // 
             // ST01_ : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. View message from {{unitName}}.`},
             // ST02_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.`},
             // ST03_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.`},
@@ -518,8 +518,15 @@ export const locale = {
             // ST05_ : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
             // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
             // ST07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.`},
-            // // New - MESSAGES - // TODO - Fix enum and check description variables // 
+            //// New - MESSAGES - // TODO - Fix enum and check description variables // 
             // ME01_ : { title: `You have been added to a message thread about innovation {{innovationName}}. View message thread.`},
+            // ME02_ : { title: `You have been added to a message thread about innovation {{innovationName}} by {{unitName}}. View message thread.`},
+            // ME03_ : { title: `You have been added to a message thread about innovation {{innovationName}}. View message thread.`},
+            // ME04_ : { title: `You have a new message from {{unitName}} about innovation {{innovationName}}. View message thread.`},
+            // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables // 
+            // SS01_ : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
+            // SS02_ : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
+            // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables // 
 
 
 
