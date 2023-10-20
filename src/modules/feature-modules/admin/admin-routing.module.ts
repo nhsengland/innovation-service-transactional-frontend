@@ -149,6 +149,7 @@ const routes: Routes = [
                   {
                     path: ':organisationUnitId',
                     resolve: { organisationUnit: OrganisationUnitDataResolver },
+                    runGuardsAndResolvers: 'always',
                     data: { breadcrumb: (data: { organisationUnit: { id: string, name: string, acronym: string } }) => `${data.organisationUnit.name}` },
                     children: [
                       {

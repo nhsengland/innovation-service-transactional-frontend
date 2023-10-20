@@ -41,8 +41,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   form = new FormGroup({
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    file: new FormControl<File | null>(null),
-    fileName: new FormControl<string>('', [Validators.maxLength(100)]),
+    file: new FormControl<File | null>(null, [CustomValidators.emptyFileValidator(), CustomValidators.maxFileSizeValidator(20)]),
+    fileName: new FormControl<string>(''),
   }, { updateOn: 'blur' });
 
   configInputFile = {
@@ -91,18 +91,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
 
   ngOnInit(): void {
-
-    this.form.get('file')?.valueChanges.subscribe(
-      value => {
-        if (value) {
-          this.form.get('fileName')?.setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
-          this.form.get('fileName')?.updateValueAndValidity();
-        } else {
-          this.form.get('fileName')?.clearValidators();
-          this.form.get('fileName')?.updateValueAndValidity();
-        }
-      }
-    );
 
     this.messagesList.setOrderBy('createdAt', 'descending');
     this.getThreadsList();
