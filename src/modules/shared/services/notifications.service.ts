@@ -61,6 +61,9 @@ export type NotificationsListInDTO = {
       // Messages.
       subject?: string;
       messageId?: string;
+      // Documents.
+      fileId?: string;
+
     }
   }[];
 };
@@ -115,15 +118,15 @@ export class NotificationsService extends CoreService {
           switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
             //// NEW NOTIFICATIONS:
             case EmailNotificationCategoryEnum.DOCUMENT:
-              link = { label: 'View document.', url: 'javascript:void(0);'};
+              link = { label: 'Click to view document.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents/${item.params?.fileId}`};
               break;
             case EmailNotificationCategoryEnum.TASK:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR:
-                  link = { label: 'View task.', url: 'javascript:void(0);' };
+                  link = { label: 'Click to view task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
                   break;
                 default:
-                  link = { label: 'View message about this task.', url: 'javascript:void(0);' };
+                  link = { label: 'Click to view message about this task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
                   break;
                 }
               break;
