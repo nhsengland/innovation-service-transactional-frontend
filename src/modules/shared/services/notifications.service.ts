@@ -112,7 +112,8 @@ export class NotificationsService extends CoreService {
 
           let link: null | { label: string; url: string; queryParams?: Record<string, string> } = null;
 
-          switch (item.contextType) {
+          switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
+            //// NEW NOTIFICATIONS:
             case EmailNotificationCategoryEnum.DOCUMENT:
               link = { label: 'View document.', url: 'javascript:void(0);'};
               break;
@@ -124,63 +125,65 @@ export class NotificationsService extends CoreService {
                 default:
                   link = { label: 'View message about this task.', url: 'javascript:void(0);' };
                   break;
+                }
+              break;
+
+            //// OLD - TO BE REMOVED
+            case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
+                  link = null;
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
+                  break;
               }
-            
-            // case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
-            //   switch (item.contextDetail) {
-            //     case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
-            //       link = null;
-            //       break;
-            //     default:
-            //       link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
-            //       break;
-            //   }
-            //   break;
-            // case NotificationContextTypeEnum.INNOVATION:
-            //   switch (item.contextDetail) {
-            //     case NotificationContextDetailEnum.COLLABORATOR_INVITE:
-            //       link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
-            //       break;
-            //     case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
-            //       link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
-            //       break;
-            //     case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
-            //       link = null;
-            //       break;
-            //     case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
-            //       link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
-            //       break;
-            //     default:
-            //       link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
-            //       break;
-            //   };
-            //   break;
-            // case NotificationContextTypeEnum.SUPPORT:
-            //   switch (item.contextDetail) {
-            //     case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
-            //       link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
-            //       break;
-            //     default:
-            //       link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
-            //       break;
-            //   }
-            //   break;
-            // case NotificationContextTypeEnum.TASK:
-            //   link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
-            //   break;
-            // case NotificationContextTypeEnum.THREAD:
-            //   link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
-            //   break;
-            // case NotificationContextTypeEnum.DATA_SHARING:
-            //   switch (item.contextDetail) {
-            //     case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
-            //       link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
-            //       break;
-            //     default:
-            //       link = { label: 'Click to go to innovation data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
-            //       break;
-            //   };
-            //   break;
+              break;
+            case NotificationContextTypeEnum.INNOVATION:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.COLLABORATOR_INVITE:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                  break;
+                case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                  break;
+                case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
+                  link = null;
+                  break;
+                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
+                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+                  break;
+              };
+              break;
+            case NotificationContextTypeEnum.SUPPORT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+                  break;
+              }
+              break;
+            case NotificationContextTypeEnum.TASK:
+              link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
+              break;
+            case NotificationContextTypeEnum.THREAD:
+              link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
+              break;
+            case NotificationContextTypeEnum.DATA_SHARING:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
+                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                  break;
+              };
+              break;
             // case NotificationContextTypeEnum.COMMENT:
             //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
             //   break;
