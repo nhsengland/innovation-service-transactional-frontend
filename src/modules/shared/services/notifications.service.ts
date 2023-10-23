@@ -46,7 +46,7 @@ export type NotificationsListInDTO = {
   data: {
     id: string;
     innovation: { id: string, name: string, status: InnovationStatusEnum, ownerName: string };
-    contextType: NotificationContextTypeEnum;
+    contextType: EmailNotificationCategoryEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
     createdAt: DateISOType;
@@ -61,6 +61,9 @@ export type NotificationsListInDTO = {
       // Messages.
       subject?: string;
       messageId?: string;
+      // Documents.
+      fileId?: string;
+
     }
   }[];
 };
@@ -93,7 +96,7 @@ export class NotificationsService extends CoreService {
   constructor() { super(); }
 
 
-  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
+  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: EmailNotificationCategoryEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -112,7 +115,23 @@ export class NotificationsService extends CoreService {
 
           let link: null | { label: string; url: string; queryParams?: Record<string, string> } = null;
 
-          switch (item.contextType) {
+          switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
+            //// NEW NOTIFICATIONS:
+            case EmailNotificationCategoryEnum.DOCUMENT:
+              link = { label: 'Click to view document.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents/${item.params?.fileId}`};
+              break;
+            case EmailNotificationCategoryEnum.TASK:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR:
+                  link = { label: 'Click to view task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
+                  break;
+                default:
+                  link = { label: 'Click to view message about this task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
+                  break;
+                }
+              break;
+
+            //// OLD - TO BE REMOVED
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
@@ -171,6 +190,7 @@ export class NotificationsService extends CoreService {
             // case NotificationContextTypeEnum.COMMENT:
             //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
             //   break;
+            
           }
 
           const section = item.params?.section ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section) : undefined;

@@ -12,7 +12,7 @@ import { SharedModule } from '@modules/shared/shared.module';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
 
-import { NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationCategoryEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageNotificationsListComponent } from './notifications-list.component';
 
@@ -48,8 +48,8 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
       data: [{
         id: 'Notification001',
         innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
-        contextType: NotificationContextTypeEnum.INNOVATION,
-        contextDetail: NotificationContextDetailEnum.INNOVATION_SUBMISSION,
+        contextType: EmailNotificationCategoryEnum.DOCUMENT,
+        contextDetail: NotificationContextDetailEnum.DC01_UPLOADED_DOCUMENT_TO_INNOVATOR,
         contextId: 'Innovation001',
         createdAt: '2020-01-01T00:00:00.000Z',
         createdBy: 'User001',
