@@ -64,6 +64,7 @@ export type NotificationsListInDTO = {
       // Documents.
       fileId?: string;
 
+      threadId?: string;
     }
   }[];
 };
@@ -126,7 +127,7 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to view task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
                   break;
                 default:
-                  link = { label: 'Click to view message about this task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
+                  link = { label: 'Click to view message about this task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
                   break;
                 }
               break;
@@ -190,7 +191,7 @@ export class NotificationsService extends CoreService {
             // case NotificationContextTypeEnum.COMMENT:
             //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
             //   break;
-            
+
           }
 
           const section = item.params?.section ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section) : undefined;
