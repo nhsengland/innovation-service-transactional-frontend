@@ -131,6 +131,9 @@ export class NotificationsService extends CoreService {
                   break;
                 }
               break;
+            case EmailNotificationCategoryEnum.MESSAGE:
+                link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
+                break;
 
             //// OLD - TO BE REMOVED
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
