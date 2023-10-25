@@ -28,7 +28,7 @@ export const URLS = {
   USER_RESEARCH_FORM: 'https://forms.office.com/Pages/ResponsePage.aspx?id=kp4VA8ZyI0umSq9Q55CtvztdgIut6i1ClsC8hAncvh9UN0E2UEVON09BNjNMS1daRjZVMFJHRkNaMCQlQCN0PWcu',
 
   // Organisations.
-  HIN_NETWORK: 'javascript:void(0)',
+  HIN_NETWORK: 'https://www.thehealthinnovationnetwork.co.uk',
   HEALTH_TECHNOLOGY: 'https://www.healthtechnology.wales',
   LIFE_SCIENCES_ORGANISATION: 'https://www.gov.uk/government/organisations/life-sciences-organisation',
   LSHUBWALES: 'https://lshubwales.com',
