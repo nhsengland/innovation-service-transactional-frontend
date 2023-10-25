@@ -65,6 +65,7 @@ export type NotificationsListInDTO = {
       fileId?: string;
 
       threadId?: string;
+      unitId?: string
     }
   }[];
 };
@@ -135,6 +136,22 @@ export class NotificationsService extends CoreService {
                 link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
                 break;
 
+            case EmailNotificationCategoryEnum.SUPPORT:
+              switch (item.contextDetail) {
+                // This case will probably be changed (just work for now)
+                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
+                  break;
+                case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}`}
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
+                  break;
+              }
+              break;
+
+
             //// OLD - TO BE REMOVED
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
               switch (item.contextDetail) {
@@ -165,16 +182,7 @@ export class NotificationsService extends CoreService {
                   break;
               };
               break;
-            case NotificationContextTypeEnum.SUPPORT:
-              switch (item.contextDetail) {
-                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
-                  break;
-                default:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
-                  break;
-              }
-              break;
+
             case NotificationContextTypeEnum.TASK:
               link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
