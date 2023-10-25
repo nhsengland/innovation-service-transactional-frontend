@@ -519,10 +519,11 @@ export const locale = {
             ME01_THREAD_CREATION : { title: `You have been added to a message thread about innovation {{innovationName}} by {{senderDisplayInformation}}. View message thread.` },
             ME02_THREAD_ADD_FOLLOWERS : { title: `You have been added to a message thread about innovation {{innovationName}} by {{senderDisplayInformation}}. View message thread.` },
             ME03_THREAD_MESSAGE_CREATION : { title: `You have a new message from {{senderDisplayInformation}} about innovation {{innovationName}}. View message thread.` },
+            // NEW - SUPPORT
+            ST01_SUPPORT_STATUS_TO_ENGAGING : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. View message.` },
+            ST02_SUPPORT_STATUS_TO_OTHER : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
+            ST03_SUPPORT_STATUS_TO_WAITING : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
             // // NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables //
-            // ST01_ : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. View message from {{unitName}}.`},
-            // ST02_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.`},
-            // ST03_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.`},
             // ST04_ : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message from {{unitName}}.`},
             // ST05_ : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
             // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
