@@ -282,7 +282,7 @@ export const locale = {
             },
             ORGANISATION_SUGGESTION: {
               title: 'Organisation suggestion',
-              message: `{{ actionUserName }} suggested one or more organisation units to support`
+              message: `{{ actionUserName }} suggested one or more organisations to support`
             },
             SUPPORT_STATUS_UPDATE: {
               title: 'Support status update',
