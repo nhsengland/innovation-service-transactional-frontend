@@ -99,7 +99,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     // To avoid missing vital information for SR, position the focus at the top of newly generated content
     if (isPlatformBrowser(this.platformId) && this.onlyOneField) {
       setTimeout(() => {
-        const h = document.querySelector(`#${this.formId}`) as HTMLFormElement;
+        const h = document.getElementById(this.formId) as HTMLFormElement;
         if (h) {
           h.setAttribute('tabIndex', '-1');
           h.focus();
