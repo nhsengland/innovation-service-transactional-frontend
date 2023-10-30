@@ -102,11 +102,7 @@ export class InnovationDocumentsService extends CoreService {
 
           let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
           if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-            switch (item.createdBy.isOwner) {
-              case undefined: userDescription += ''; break;
-              case true: userDescription += ' (Owner)'; break;
-              case false: userDescription += ' (Collaborator)'; break;
-            }
+            item.createdBy.name === '[deleted user]' ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
           } else {
             userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
           }
@@ -155,11 +151,7 @@ export class InnovationDocumentsService extends CoreService {
 
         let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-          switch (item.createdBy.isOwner) {
-            case undefined: userDescription += ''; break;
-            case true: userDescription += ' (Owner)'; break;
-            case false: userDescription += ' (Collaborator)'; break;
-          }
+          item.createdBy.isOwner === undefined ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
         } else {
           userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
         }
