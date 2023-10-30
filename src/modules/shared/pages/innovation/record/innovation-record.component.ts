@@ -10,9 +10,27 @@ import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.mode
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { DateISOType } from '@app/base/types';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
+
+type exportQuestion = {
+  [section: string]: {
+    question: string,
+    answer: string
+  } 
+}
+
+type exportPayload = {
+  document_title: string,
+  innovation_name: string,
+  export_date: DateISOType,
+  innovation_sections: {
+
+  }
+
+}
 
 
 @Component({
@@ -104,6 +122,11 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       }
 
     });
+
+  }
+
+  
+  generateExportPayload() {
 
   }
 
