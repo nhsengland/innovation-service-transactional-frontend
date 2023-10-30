@@ -9,6 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { UsersService } from '@modules/shared/services/users.service';
 
 import { AccessorService } from '../../../services/accessor.service';
+import { CustomValidators } from '@modules/shared/forms';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
   form = new FormGroup({
     accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
-    message: new FormControl<string>(''),
+    message: new FormControl<string>('', { validators: CustomValidators.required('Please enter a message') }),
   }, { updateOn: 'blur' });
 
   constructor(
@@ -143,9 +144,8 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   }
 
   getMessageLabel() {
-
     const status = this.form.get('status')?.value;
-    return 'Explain the reason you have changed the assigned accessors for this innovation (optional).';
+    return 'Explain the reason you have changed the assigned accessors for this innovation.';
   }
 
   getMessageDescription() {
