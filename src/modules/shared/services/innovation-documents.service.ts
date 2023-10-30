@@ -151,7 +151,7 @@ export class InnovationDocumentsService extends CoreService {
 
         let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-          item.createdBy.isOwner === undefined ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
+          item.createdBy.name === '[deleted user]' ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
         } else {
           userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
         }
