@@ -37,7 +37,12 @@ export enum EmailNotificationCategoryEnum {
   // QA
   SUGGEST_SUPPORT = 'SUGGEST_SUPPORT',
   // I
-  DOCUMENT = 'DOCUMENT'
+  DOCUMENT = 'DOCUMENT',
+  // OTHER BUCKET (THIS NEEDS TO BE REVISED)
+  INNOVATION = 'INNOVATION',
+  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
+  SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
+  AUTOMATIC = 'AUTOMATIC',
 }
 
 
@@ -145,10 +150,10 @@ export class NotificationsService extends CoreService {
                   break;
                 case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
                 case NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR:
-                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}`}
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
                   break;
                 case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
-                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`}
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
                 default:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
@@ -157,11 +162,30 @@ export class NotificationsService extends CoreService {
               break;
 
             case EmailNotificationCategoryEnum.ASSIGN_NA:
-                switch (item.contextDetail) {
-                  case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
-                    link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
-                }
-                break;
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+              }
+              break;
+
+            case EmailNotificationCategoryEnum.AUTOMATIC:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
+                case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+              }
+              break;
+
+            case EmailNotificationCategoryEnum.SUGGEST_SUPPORT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+              }
+              break;
+                
+            case EmailNotificationCategoryEnum.SUPPORT_SUMMARY:
+              link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
+              break;
 
             //// OLD - TO BE REMOVED
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
