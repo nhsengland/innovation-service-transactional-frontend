@@ -65,7 +65,8 @@ export type NotificationsListInDTO = {
       fileId?: string;
 
       threadId?: string;
-      unitId?: string
+      unitId?: string;
+
     }
   }[];
 };
@@ -143,7 +144,11 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
                   break;
                 case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
+                case NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR:
                   link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}`}
+                  break;
+                case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`}
                   break;
                 default:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
@@ -151,6 +156,12 @@ export class NotificationsService extends CoreService {
               }
               break;
 
+            case EmailNotificationCategoryEnum.ASSIGN_NA:
+                switch (item.contextDetail) {
+                  case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
+                    link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                }
+                break;
 
             //// OLD - TO BE REMOVED
             case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
