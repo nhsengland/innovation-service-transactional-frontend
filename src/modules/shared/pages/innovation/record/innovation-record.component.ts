@@ -11,6 +11,9 @@ import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.mode
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { DateISOType } from '@app/base/types';
+import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202209/main.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { getSections } from 'src/server/utils/pdf/parser';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -27,7 +30,9 @@ type exportPayload = {
   innovation_name: string,
   export_date: DateISOType,
   innovation_sections: {
-
+    [section: string]: {
+      
+    }
   }
 
 }
@@ -60,7 +65,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private innovationsService: InnovationsService
   ) {
 
     super();
@@ -113,6 +119,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 
+        this.generateExportPayload();
         this.setPageStatus('READY');
 
       },
@@ -126,8 +133,10 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   }
 
   
-  generateExportPayload() {
-
+  async generateExportPayload() {
+    console.log("payload: ")
+    console.log(this.innovationSections)
+    // const bla = await getSections(this.innovationId,{})
   }
 
 }
