@@ -524,7 +524,7 @@ export const locale = {
             ST02_SUPPORT_STATUS_TO_OTHER : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
             ST03_SUPPORT_STATUS_TO_WAITING : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
             // // NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables //
-            ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message from {{unitName}}.`},
+            ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message.`},
             ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
             ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
             // ST07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.`},
@@ -540,9 +540,9 @@ export const locale = {
             // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
             // // New - NEEDS ASSESSMENT - // TODO - Fix enum and check description variables //
             NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.`},
-            NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT : { title: `Innovation {{innovationName}} has been submitted for a needs assessment. Review the record and make contact with the innovator within 2 working days.`},
+            NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}. Review the the innovation record and make contact with the innovator within 2 working days.`},
             NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} has started. View message from the needs assessment team.`},
-            NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR : { title: `The needs assessment for innovation "{{innovationName}}" is complete. View needs assessment.`},
+            NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} is complete. View needs assessment.`},
             NA05_NEEDS_ASSESSOR_REMOVED : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
             NA06_NEEDS_ASSESSOR_ASSIGNED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
             // NA07_ : { title: `You have been assigned as the needs assessor for {{innovationName}}. Complete the needs assessment within 5 working days.`},
