@@ -148,16 +148,22 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
                   break;
+
                 case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
                 case NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR:
                   link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
                   break;
-                case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
-                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
-                  break;
-                default:
+
+                case NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER:
+                case NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
                   break;
+
+                case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
+                case NotificationContextDetailEnum.ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+                
               }
               break;
 
