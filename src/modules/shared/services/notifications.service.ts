@@ -67,9 +67,6 @@ export type NotificationsListInDTO = {
       threadId?: string;
       unitId?: string;
 
-      needsAssessment?: string;
-
-
     }
   }[];
 };
