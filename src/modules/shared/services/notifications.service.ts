@@ -171,6 +171,18 @@ export class NotificationsService extends CoreService {
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
                   link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
+                case NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR:
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}/${item.params?.messageId}` }
+                  break;
+                case NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR:
+                  link = { label: 'Click to go to needs assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  break;
+                case NotificationContextDetailEnum.NA05_NEEDS_ASSESSOR_REMOVED:
+                case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_ASSIGNED:
+                case NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
               }
               break;
 
