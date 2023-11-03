@@ -72,6 +72,7 @@ export type NotificationsListInDTO = {
       threadId?: string;
       unitId?: string;
 
+      assessmentId?: string;
     }
   }[];
 };
@@ -167,21 +168,32 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.ASSIGN_NA:
+            case EmailNotificationCategoryEnum.NEEDS_ASSESSMENT:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR:
+                  link = null;
+                  break;
                 case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
-                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
                 case NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR:
-                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}/${item.params?.messageId}` }
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
                   break;
                 case NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR:
-                  link = { label: 'Click to go to needs assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  link = { label: 'Click to go to needs assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.params?.assessmentId}` }
                   break;
-                case NotificationContextDetailEnum.NA05_NEEDS_ASSESSOR_REMOVED:
-                case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_ASSIGNED:
+                // case NotificationContextDetailEnum.NA05_NEEDS_ASSESSOR_REMOVED:
+                case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED:
                 case NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+
+                //// OLD - TO BE REMOVED
+                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
+                  link = null;
+                  break;
+                default:
+                  link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
                   break;
               }
               break;
@@ -205,16 +217,6 @@ export class NotificationsService extends CoreService {
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
 
-            //// OLD - TO BE REMOVED
-            case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
-              switch (item.contextDetail) {
-                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
-                  link = null;
-                  break;
-                default:
-                  link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
-                  break;
-              }
               break;
             case NotificationContextTypeEnum.INNOVATION:
               switch (item.contextDetail) {
