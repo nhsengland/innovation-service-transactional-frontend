@@ -544,7 +544,7 @@ export const locale = {
             NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} has started. View message from the needs assessment team.`},
             NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} is complete. View needs assessment.`},
             NA05_NEEDS_ASSESSOR_REMOVED : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
-            NA06_NEEDS_ASSESSOR_ASSIGNED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
+            NA06_NEEDS_ASSESSOR_REMOVED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
             NA07_NEEDS_ASSESSOR_ASSIGNED : { title: `You have been assigned as the needs assessor for {{innovationName}}. Review the innovation record and make contact with the innovator within 2 working days.`},
             // // New - ORGANISATIONS SUGGESTIONS - // TODO - Fix enum and check description variables //
             // OS01_ : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
