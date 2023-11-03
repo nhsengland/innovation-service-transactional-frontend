@@ -68,6 +68,7 @@
 
       <ng-container *ngIf="showSupportingTeamsShareRequestSection">
         <a routerLink="./download" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">Download innovation record (PDF)</a>
+        <a routerLink="./download" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">Download innovation record (CSV)</a>
         <div class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information: </span>
           <p class="nhsuk-body-s">
@@ -151,7 +152,9 @@
       <ng-container *ngIf="isInnovatorType">
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li>
+          <!-- <li><a [href]="pdfDocumentUrl">Export your current innovation record (PDF)</a></li> -->
+          <li><app-innovation-record-export [innovationId]="this.innovationId" [fileType]="'pdf'"></app-innovation-record-export></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" [fileType]="'csv'"></app-innovation-record-export></li>
         </ul>
       </ng-container>
 
