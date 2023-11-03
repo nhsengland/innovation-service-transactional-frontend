@@ -203,13 +203,19 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
               }
               break;
 
             case EmailNotificationCategoryEnum.SUGGEST_SUPPORT:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA:
                 case NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+                case NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR:
+                  link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  break;
               }
               break;
                 

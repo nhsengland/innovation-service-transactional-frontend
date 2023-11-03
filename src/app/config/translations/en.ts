@@ -547,7 +547,8 @@ export const locale = {
             NA06_NEEDS_ASSESSOR_REMOVED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
             NA07_NEEDS_ASSESSOR_ASSIGNED : { title: `You have been assigned as the needs assessor for {{innovationName}}. Review the innovation record and make contact with the innovator within 2 working days.`},
             // // New - ORGANISATIONS SUGGESTIONS - // TODO - Fix enum and check description variables //
-            // OS01_ : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
+            OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA : { title: `Your organisation has been suggested to support {{innovationName}} by {{senderDisplayInformation}}. Review the innovation and assign a support status within 5 working days.`},
+            OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you update your data sharing preferences.`},
             OS03_INNOVATION_DELAYED_SHARED_SUGGESTION : { title: `Your organisation has been suggested to support innovation {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
             // OS04_ : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you update your data sharing preferences.`},
             // // New - ADMIN PORTAL - // TODO - Fix enum and check description variables //
