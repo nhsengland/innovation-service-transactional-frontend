@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
@@ -19,6 +20,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   // Flags
   isAdmin: boolean;
   isInnovatorType: boolean;
+
+  // Filter
+  form = new FormGroup({
+    name: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
+
+  });
+  
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -74,5 +82,22 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.tableList.setPage(event.pageNumber);
     this.getDocumentsList();
   }
+
+  onFormChange(): void {
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.tableList.setFilters({
+      name: this.form.get('name')?.value ?? undefined,
+    });
+
+    this.tableList.setPage(1);
+    this.getDocumentsList();
+
+  }
+
 
 }
