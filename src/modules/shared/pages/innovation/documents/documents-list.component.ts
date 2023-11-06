@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
+import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
+import { CustomValidators } from '@modules/shared/forms';
 
 import { InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
@@ -24,9 +26,11 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   // Filter
   form = new FormGroup({
     name: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
-
+    startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
+    endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   });
   
+  showFiltersHideStatus: 'opened' | 'closed' = 'closed';
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -67,11 +71,20 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.innovationDocumentsService.getDocumentList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
+      console.log(this.tableList.getRecords());
       this.setPageStatus('READY');
     });
 
   }
 
+  onClearFilters(): void{
+    this.tableList.setFilters({
+      name: this.form.get('name')?.value ?? undefined,
+      ... {datefilter:[{field:'createdAt', startDate: undefined, endDate: undefined}]}
+    });
+    this.tableList.setPage(1);
+    this.getDocumentsList();
+  };
 
   onTableOrder(column: string): void {
     this.tableList.setOrderBy(column);
@@ -90,13 +103,29 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       return;
     }
 
+    // const startDate = this.getDateByControlName('startDate') ?? undefined;
+    // const endDate = this.getDateByControlName('endDate') ?? undefined;
+
+    const startDate = '2023/10/05';
+    const endDate = '2023/10/29';
+
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
+      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate: startDate, endDate: endDate }] } : {}),
     });
 
     this.tableList.setPage(1);
     this.getDocumentsList();
 
+  }
+
+  onShowFiltersClick(){
+    this.showFiltersHideStatus === 'closed' ? 'open' : 'closed';
+  }
+
+  getDateByControlName(formControlName: string) {
+    const value = this.form.get(formControlName)!.value;
+    return DatesHelper.parseIntoValidFormat(value);
   }
 
 

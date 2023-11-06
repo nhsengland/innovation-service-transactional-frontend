@@ -28,6 +28,17 @@
                 </button>
               </ng-container>
             </theme-form-input>
+            <details class="nhsuk-details" *ngIf="showFiltersHideStatus">
+              <summary class="nhkus-details__summary" (click)="onShowFiltersClick()">
+                <span class="nhsuk-details__summary-text">Filter documents</span>
+              </summary>
+              <div class="nhsuk-details__text">
+                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by date range</p>
+                <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                <button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button>
+              </div>
+            </details>
           </form>
         </div>
       </div>
