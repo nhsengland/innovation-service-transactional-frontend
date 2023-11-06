@@ -3,5 +3,5 @@
 </ng-container>
 
 <ng-container *ngIf="button">
-    <a [href]="exportDocumentUrl" class="nhsuk-button">{{ label ? label : 'Download record' }}</a>
+    <a [href]="exportDocumentUrl" [ngClass]="btnStyle === 'primary'? 'nhsuk-button' : 'nhsuk-button nhsuk-button--secondary'" class="nhsuk-u-margin-bottom-0">{{ label ? label : 'Download record' }} ({{ fileType | uppercase }})</a>
 </ng-container>
