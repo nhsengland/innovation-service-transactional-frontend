@@ -28,7 +28,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     name: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
     startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
-  });
+  }, { updateOn: 'blur' });
   
   showFiltersHideStatus: 'opened' | 'closed' = 'closed';
 
@@ -103,15 +103,16 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       return;
     }
 
-    // const startDate = this.getDateByControlName('startDate') ?? undefined;
-    // const endDate = this.getDateByControlName('endDate') ?? undefined;
+    const startDate = this.getDateByControlName('startDate') ?? undefined;
+    const endDate = this.getDateByControlName('endDate') ?? undefined;
 
-    const startDate = '2023/10/05';
-    const endDate = '2023/10/29';
+    console.log(startDate)
+    console.log(endDate)
+    
 
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
-      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate: startDate, endDate: endDate }] } : {}),
+      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 
     this.tableList.setPage(1);

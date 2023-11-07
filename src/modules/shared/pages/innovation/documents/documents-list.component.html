@@ -38,6 +38,11 @@
                 <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                 <button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button>
               </div>
+              <span>
+                <a href="javascript:void(0)" (click)="onClearFilters()">
+                  Clear filters
+                </a>
+              </span>
             </details>
           </form>
         </div>
