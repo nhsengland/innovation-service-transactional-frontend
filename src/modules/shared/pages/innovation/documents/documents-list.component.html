@@ -39,11 +39,6 @@
                   <div>
                     <div class="nhsuk-grid-column-full nhsuk-u-padding-0 nhsuk-u-margin-bottom-4">
                       <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
-                      <!-- <ul class="nhsuk-u-padding-0">
-                        <li *ngFor="let item of documentsLocations" class="d-inline-block nhsuk-u-margin-1">
-                          <a href="javascript:void(0)" class="app-tag nhsuk-u-font-size-14">{{ item }}</a>
-                        </li>
-                      </ul> -->
                       <theme-filter-tags #locationTagsComponent [responseLocations]="responseDocumentsLocations" (locationTagsChange)="setSelectedLocations($event)"></theme-filter-tags>
                     </div>
                   </div>

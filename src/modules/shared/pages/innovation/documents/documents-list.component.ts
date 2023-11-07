@@ -59,6 +59,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
+    this.responseDocumentsLocations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE']
+
     this.tableList.setVisibleColumns({
       name: { label: 'Name', orderable: true },
       createdAt: { label: 'Uploaded', orderable: true },
@@ -77,12 +79,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.innovationDocumentsService.getDocumentList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
-
-      for (let document of response.data){
-        this.responseDocumentsLocations.push(document.context.type)
-      }
-      this.responseDocumentsLocations = [... new Set(this.responseDocumentsLocations)]
-
       this.setPageStatus('READY');
     });
 
