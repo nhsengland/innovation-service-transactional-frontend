@@ -71,20 +71,22 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.innovationDocumentsService.getDocumentList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
-      console.log(this.tableList.getRecords());
       this.setPageStatus('READY');
     });
 
   }
 
   onClearFilters(): void{
-    this.tableList.setFilters({
-      name: this.form.get('name')?.value ?? undefined,
-      ... {datefilter:[{field:'createdAt', startDate: undefined, endDate: undefined}]}
-    });
+
+    this.form.get('startDate')?.reset()
+    this.form.get('endDate')?.reset()
+
+    this.setFilters();
+
     this.tableList.setPage(1);
     this.getDocumentsList();
-  };
+
+  }
 
   onTableOrder(column: string): void {
     this.tableList.setOrderBy(column);
@@ -103,17 +105,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       return;
     }
 
-    const startDate = this.getDateByControlName('startDate') ?? undefined;
-    const endDate = this.getDateByControlName('endDate') ?? undefined;
 
-    console.log(startDate)
-    console.log(endDate)
-    
-
-    this.tableList.setFilters({
-      name: this.form.get('name')?.value ?? undefined,
-      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
-    });
+    this.setFilters();
 
     this.tableList.setPage(1);
     this.getDocumentsList();
@@ -121,13 +114,29 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   }
 
   onShowFiltersClick(){
+
     this.showFiltersHideStatus === 'closed' ? 'open' : 'closed';
+
   }
 
-  getDateByControlName(formControlName: string) {
+  private setFilters() {
+
+    const startDate = this.getDateByControlName('startDate') ?? undefined;
+    const endDate = this.getDateByControlName('endDate') ?? undefined;
+
+    this.tableList.setFilters({
+      name: this.form.get('name')?.value ?? undefined,
+      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
+    });
+
+  }
+
+  private getDateByControlName(formControlName: string) {
     const value = this.form.get(formControlName)!.value;
     return DatesHelper.parseIntoValidFormat(value);
   }
+
+
 
 
 }
