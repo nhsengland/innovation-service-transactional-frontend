@@ -32,7 +32,7 @@
     "@ngx-translate/core": "^14.0.0",
     "applicationinsights": "^2.3.4",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.0.2",
+    "dotenv": "^16.3.1",
     "express": "^4.15.2",
     "express-session": "^1.17.3",
     "govuk-frontend": "^4.6.0",
