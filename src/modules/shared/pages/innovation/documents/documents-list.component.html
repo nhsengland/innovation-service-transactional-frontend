@@ -17,41 +17,46 @@
       <button *ngIf="!isAdmin" class="nhsuk-button nhsuk-u-margin-bottom-9" routerLink="new">Upload a new document</button>
       
       <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-one-half">
-          <form [formGroup]="form">
-            <theme-form-input controlName="name" [pageUniqueField]="false" label="Search by document name" placeholder="Search by document name">
-              <ng-container append>
-                <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
-                  <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
-                    <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
-                  </svg>
-                </button>
-              </ng-container>
-            </theme-form-input>
-            <details class="nhsuk-details" *ngIf="showFiltersHideStatus">
-              <summary class="nhkus-details__summary" (click)="onShowFiltersClick()">
-                <span class="nhsuk-details__summary-text">Filter documents</span>
-              </summary>
-              <div class="nhsuk-details__text">
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
-                <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
-                  <ul class="nhsuk-u-padding-0">
-                    <li *ngFor="let item of documentsLocations" class="app-tag">
-                      <a></a>{{ item }}
-                    </li>
-                  </ul>
+        <div class="nhsuk-grid-column-full">
+          <form [formGroup]="form" class="d-flex flex-direction-column">
+            <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+              <theme-form-input controlName="name" [pageUniqueField]="false" label="Search by document name" placeholder="Search by document name" >
+                <ng-container append>
+                  <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
+                    <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
+                      <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+                    </svg>
+                  </button>
+                </ng-container>
+              </theme-form-input>
+            </div>
+            <div>
+              <details class="nhsuk-details" *ngIf="showFiltersHideStatus">
+                <summary class="nhkus-details__summary" (click)="onShowFiltersClick()">
+                  <span class="nhsuk-details__summary-text">Filter documents</span>
+                </summary>
+                <div class="nhsuk-details__text d-flex flex-direction-column">
+                  <div>
+                    <div class="nhsuk-grid-column-full nhsuk-u-padding-0 nhsuk-u-margin-bottom-4">
+                      <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
+                      <!-- <ul class="nhsuk-u-padding-0">
+                        <li *ngFor="let item of documentsLocations" class="d-inline-block nhsuk-u-margin-1">
+                          <a href="javascript:void(0)" class="app-tag nhsuk-u-font-size-14">{{ item }}</a>
+                        </li>
+                      </ul> -->
+                      <theme-filter-tags #locationTagsComponent [responseLocations]="responseDocumentsLocations" (locationTagsChange)="setSelectedLocations($event)"></theme-filter-tags>
+                    </div>
+                  </div>
+                  <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+                    <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by date range</p>
+                    <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                    <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                  </div>
+                  <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear all</a></div>
+                  <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button></div>
                 </div>
-                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by date range</p>
-                <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-                <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-                <p>
-                  <a href="javascript:void(0)" (click)="onClearFilters()">
-                    Clear all
-                  </a>
-                </p>
-                <button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button>
-              </div>
-            </details>
+              </details>
+            </div>
           </form>
         </div>
       </div>

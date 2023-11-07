@@ -32,6 +32,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TagComponent } from './components/tag/tag.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
+import { FilterTagsComponent } from './components/filter-tags/filter-tags.component';
 
 
 @NgModule({
@@ -69,7 +70,9 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
-    StatisticsCardsComponent
+    StatisticsCardsComponent,
+
+    FilterTagsComponent
   ],
   providers: [],
   exports: [
@@ -100,7 +103,9 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
-    StatisticsCardsComponent
+    StatisticsCardsComponent,
+    
+    FilterTagsComponent
   ]
 })
 export class ThemeModule { }

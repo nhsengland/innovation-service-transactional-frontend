@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
@@ -8,6 +8,7 @@ import { CustomValidators } from '@modules/shared/forms';
 
 import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { FilterTagsComponent } from '@modules/theme/components/filter-tags/filter-tags.component';
 
 
 @Component({
@@ -15,6 +16,8 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
   templateUrl: './documents-list.component.html'
 })
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
+
+  @ViewChild('locationTagsComponent') locationTagsComponent?: FilterTagsComponent;
 
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
@@ -32,7 +35,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   
   showFiltersHideStatus: 'opened' | 'closed' = 'closed';
 
-  documentsLocations: ContextTypeType[] = [];
+  responseDocumentsLocations: ContextTypeType[] = [];
+  selectedLocationFilters: ContextTypeType[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -73,7 +77,12 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.innovationDocumentsService.getDocumentList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
-      this.documentsLocations.push('INNOVATION', 'INNOVATION_EVIDENCE');
+
+      for (let document of response.data){
+        this.responseDocumentsLocations.push(document.context.type)
+      }
+      this.responseDocumentsLocations = [... new Set(this.responseDocumentsLocations)]
+
       this.setPageStatus('READY');
     });
 
@@ -81,9 +90,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   onClearFilters(): void{
 
+    // Set values to default
     this.form.get('startDate')?.reset()
     this.form.get('endDate')?.reset()
 
+    this.locationTagsComponent?.clearSelectedTags();
+
+    // Set filters
     this.setFilters();
 
     this.tableList.setPage(1);
@@ -128,6 +141,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
+      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters} : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 
@@ -136,6 +150,12 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   private getDateByControlName(formControlName: string) {
     const value = this.form.get(formControlName)!.value;
     return DatesHelper.parseIntoValidFormat(value);
+  }
+
+  setSelectedLocations(locations: ContextTypeType[]){
+    this.selectedLocationFilters = locations;
+    console.log("received selected locations:");
+    console.log(this.selectedLocationFilters)
   }
 
 

@@ -1,0 +1,7 @@
+<ul class="nhsuk-u-padding-0">
+    <li *ngFor="let item of responseLocations" class="d-inline-block nhsuk-u-margin-1">
+      <a href="javascript:void(0)" (click)="onClickTag(item)" class="app-tag nhsuk-u-font-size-14" [ngClass]= "selectedLocations.includes(item) ? 'app-tag__selected' : ''">
+        {{ 'shared.catalog.documents.contextType.' + item | translate }}
+    </a>
+    </li>
+</ul>
