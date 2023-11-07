@@ -227,8 +227,15 @@ export class NotificationsService extends CoreService {
               break;
 
             case EmailNotificationCategoryEnum.ADMIN:
-              link = null;
-              break;
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
+                  link = null;
+                  break;
+                case NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS:
+                  link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  break;
+                
+              }
 
             case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
               switch (item.contextDetail) {
