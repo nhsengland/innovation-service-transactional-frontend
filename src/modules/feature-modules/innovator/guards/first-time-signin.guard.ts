@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
 @Injectable()
-export class FirstTimeSigninGuard implements CanActivateChild {
+export class FirstTimeSigninGuard  {
 
   constructor(
     private router: Router,

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToResolve, RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -120,7 +120,7 @@ const routes: Routes = [
           {
             path: ':innovationId',
             runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
-            resolve: { innovationData: InnovationDataResolver },
+            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             data: {
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
@@ -251,7 +251,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: InnovationDocumentDataResolver },
+                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string, name: string } }) => `${data.document.name}`
@@ -286,7 +286,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationTaskDataResolver },
+                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -325,7 +325,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -349,7 +349,7 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Support status' },
-                resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
+                resolve: { innovationData: mapToResolve(InnovationDataResolver) }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,

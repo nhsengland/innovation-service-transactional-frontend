@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToResolve, RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -135,7 +135,7 @@ const routes: Routes = [
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: InnovationDataResolver },
+            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             children: [
 
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
@@ -235,7 +235,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: InnovationDocumentDataResolver },
+                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string, name: string } }) => `${data.document.name}`
@@ -270,7 +270,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationTaskDataResolver },
+                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -310,7 +310,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -345,16 +345,16 @@ const routes: Routes = [
                   { path: 'new', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   },
-                  { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent, 
+                  { path: 'suggest', pathMatch: 'full', component: InnovationSupportOrganisationsSupportStatusSuggestComponent,
                     data: {  layout: { type: 'full' }, breadcrumb: null }
                   },
                   { path: ':supportId', pathMatch: 'full', component: InnovationSupportUpdateComponent,
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   },
                   { path: ':supportId/request-update', pathMatch: 'full', component: InnovationSupportRequestUpdateStatusComponent,
-                    
+
                   },
-                  { path: ':supportId/change-accessors', pathMatch: 'full', component: InnovationChangeAccessorsComponent, 
+                  { path: ':supportId/change-accessors', pathMatch: 'full', component: InnovationChangeAccessorsComponent,
                     data: { layout: { type: 'full' }, breadcrumb: null }
                   }
                 ]

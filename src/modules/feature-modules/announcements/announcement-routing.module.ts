@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, mapToCanActivate } from '@angular/router';
 
 // Layout.
 import { TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -14,7 +14,7 @@ import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
 const routes: Routes = [
   {
     path: '', component: TransactionalLayoutComponent,
-    canActivate: [AnnouncementsAccessGuard],
+    canActivate: mapToCanActivate([AnnouncementsAccessGuard]),
     children: [
       {
         path: '', pathMatch: 'full', component: AnnouncementsListComponent,
