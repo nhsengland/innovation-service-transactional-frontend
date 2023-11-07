@@ -234,8 +234,8 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS:
                   link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
                   break;
-                
               }
+              break;
 
             case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
               switch (item.contextDetail) {
