@@ -587,7 +587,8 @@ export const locale = {
             // MC07_ : { title: `{{collaboratorName}} has left innovation {{innovationName}}. Manage collaborators.`},
             // MC08_ : { title: `You have successfully removed yourself as a collaborator on innovation {{innovationName}}.`},
             // DA08_ : { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.`},
-
+            // // New - ADMIN
+            AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS: { title: `The owner's account for innovation {{innovationName}} has been locked.`}
 
           },
           section_status: {

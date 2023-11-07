@@ -43,6 +43,7 @@ export enum EmailNotificationCategoryEnum {
   NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
   SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
   AUTOMATIC = 'AUTOMATIC',
+  ADMIN = 'ADMIN'
 }
 
 
@@ -223,6 +224,10 @@ export class NotificationsService extends CoreService {
                 
             case EmailNotificationCategoryEnum.SUPPORT_SUMMARY:
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
+              break;
+
+            case EmailNotificationCategoryEnum.ADMIN:
+              link = null;
               break;
 
             case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
