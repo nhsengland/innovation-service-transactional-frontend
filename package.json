@@ -30,7 +30,7 @@
     "@azure/msal-node": "^1.18.4",
     "@nguniversal/express-engine": "^16.2.0",
     "@ngx-translate/core": "^14.0.0",
-    "applicationinsights": "^2.9.0",
+    "applicationinsights": "^2.3.4",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
