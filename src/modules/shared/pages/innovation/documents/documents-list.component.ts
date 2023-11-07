@@ -6,7 +6,7 @@ import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 import { CustomValidators } from '@modules/shared/forms';
 
-import { InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 
@@ -31,6 +31,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   }, { updateOn: 'blur' });
   
   showFiltersHideStatus: 'opened' | 'closed' = 'closed';
+
+  documentsLocations: ContextTypeType[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -71,6 +73,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.innovationDocumentsService.getDocumentList(this.innovation.id, this.tableList.getAPIQueryParams()).subscribe(response => {
       this.tableList.setData(response.data, response.count);
       if (this.isRunningOnBrowser() && column) this.tableList.setFocusOnSortedColumnHeader(column);
+      this.documentsLocations.push('INNOVATION', 'INNOVATION_EVIDENCE');
       this.setPageStatus('READY');
     });
 
@@ -104,7 +107,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       this.form.markAllAsTouched();
       return;
     }
-
 
     this.setFilters();
 

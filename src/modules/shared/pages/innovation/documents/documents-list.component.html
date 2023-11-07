@@ -33,6 +33,14 @@
                 <span class="nhsuk-details__summary-text">Filter documents</span>
               </summary>
               <div class="nhsuk-details__text">
+                <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
+                <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
+                  <ul class="nhsuk-u-padding-0">
+                    <li *ngFor="let item of documentsLocations" class="app-tag">
+                      <a></a>{{ item }}
+                    </li>
+                  </ul>
+                </div>
                 <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by date range</p>
                 <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                 <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
