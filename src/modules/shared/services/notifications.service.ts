@@ -73,6 +73,8 @@ export type NotificationsListInDTO = {
       unitId?: string;
 
       assessmentId?: string;
+
+      exportRequestId?: string;
     }
   }[];
 };
@@ -223,7 +225,20 @@ export class NotificationsService extends CoreService {
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
 
+            case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED:
+                  link = { label: 'Click to go to request', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
+                case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
+                  link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+              }
               break;
+
             case NotificationContextTypeEnum.INNOVATION:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.COLLABORATOR_INVITE:
