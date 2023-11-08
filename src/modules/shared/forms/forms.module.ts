@@ -5,7 +5,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
 // Angular Material.
-import { MatLegacyAutocompleteModule as MatAutocompleteModule } from '@angular/material/legacy-autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // Components.
 import { FormEngineComponent } from './engine/form-engine.component';
