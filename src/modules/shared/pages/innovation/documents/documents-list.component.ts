@@ -2,14 +2,14 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 import { CustomValidators } from '@modules/shared/forms';
 
 import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { FilterTagsComponent } from '@modules/theme/components/filter-tags/filter-tags.component';
-
+import { ChipsDocumentLocationComponent } from '@modules/theme/components/chips/document-location/chips-document-location.component';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -17,7 +17,7 @@ import { FilterTagsComponent } from '@modules/theme/components/filter-tags/filte
 })
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
 
-  @ViewChild('locationTagsComponent') locationTagsComponent?: FilterTagsComponent;
+  @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsDocumentLocationComponent;
 
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
@@ -37,6 +37,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   responseDocumentsLocations: ContextTypeType[] = [];
   selectedLocationFilters: ContextTypeType[] = [];
+
+  selectedUploadedByFilters: UserRoleEnum[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -86,13 +88,11 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   onClearFilters(): void{
 
-    // Set values to default
     this.form.get('startDate')?.reset()
     this.form.get('endDate')?.reset()
 
-    this.locationTagsComponent?.clearSelectedTags();
+    this.locationTagsComponent?.clearSelectedChips();
 
-    // Set filters
     this.setFilters();
 
     this.tableList.setPage(1);
@@ -137,7 +137,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
-      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters} : {}),
+      ...(this.selectedUploadedByFilters.length > 0 ? {uploadedBy: this.selectedUploadedByFilters } : {}),
+      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters } : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 

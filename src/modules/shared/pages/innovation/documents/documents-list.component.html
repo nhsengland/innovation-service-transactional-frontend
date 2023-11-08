@@ -39,7 +39,7 @@
                   <div>
                     <div class="nhsuk-grid-column-full nhsuk-u-padding-0 nhsuk-u-margin-bottom-4">
                       <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
-                      <theme-filter-tags #locationTagsComponent [responseLocations]="responseDocumentsLocations" (locationTagsChange)="setSelectedLocations($event)"></theme-filter-tags>
+                      <theme-chips-document-location #locationTagsComponent [responseLocations]="responseDocumentsLocations" (locationChipsChange)="setSelectedLocations($event)"></theme-chips-document-location>
                     </div>
                   </div>
                   <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">

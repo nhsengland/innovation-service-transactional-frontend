@@ -2,13 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { ContextTypeType } from "@modules/shared/services/innovation-documents.service";
 
 @Component({
-    selector: 'theme-filter-tags',
-    templateUrl: './filter-tags.component.html'
+    selector: 'theme-chips-document-location',
+    templateUrl: './chips-document-location.component.html'
 })
-export class FilterTagsComponent {
+export class ChipsDocumentLocationComponent {
 
     @Input() responseLocations: ContextTypeType[] = [];
-    @Output() locationTagsChange = new EventEmitter<ContextTypeType[]>();
+    @Output() locationChipsChange = new EventEmitter<ContextTypeType[]>();
     
     locations: { locationEnum: string, label: string }[] = [];
 
@@ -17,22 +17,19 @@ export class FilterTagsComponent {
     constructor(){
     }
     
-    onClickTag(location: ContextTypeType) {
-
-        console.log('location:')
-        console.log(location)
+    onClickChip(location: ContextTypeType) {
 
         if (!this.selectedLocations.includes(location)) {
             this.selectedLocations.push(location)
         } else {
             this.selectedLocations = this.selectedLocations.filter (item => location !== item)
         }
-        this.locationTagsChange.emit(this.selectedLocations);
+        this.locationChipsChange.emit(this.selectedLocations);
 
     }
 
-    clearSelectedTags(){
+    clearSelectedChips(){
         this.selectedLocations = [];
-        this.locationTagsChange.emit(this.selectedLocations);
+        this.locationChipsChange.emit(this.selectedLocations);
     }
 }
