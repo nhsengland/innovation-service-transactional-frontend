@@ -565,7 +565,7 @@ export const locale = {
             RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. View request.`},
             RE02_EXPORT_REQUEST_APPROVED: { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. View and export the innovation record.`},
             RE03_EXPORT_REQUEST_REJECTED: { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. View reason.`},
-            // WI01_ : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`},
+            WI01_INNOVATION_WITHDRAWN : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`},
             // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.`},
             // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.`},
             // TO05_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.`},

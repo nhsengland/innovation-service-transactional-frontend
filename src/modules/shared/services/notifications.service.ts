@@ -253,6 +253,9 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
                   link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
                   break;
+                case NotificationContextDetailEnum.WI01_INNOVATION_WITHDRAWN:
+                  link = null
+                  break;
               }
               break;
 
