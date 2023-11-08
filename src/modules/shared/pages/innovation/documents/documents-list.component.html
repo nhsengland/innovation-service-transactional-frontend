@@ -37,13 +37,13 @@
                 </summary>
                 <div class="nhsuk-details__text d-flex flex-direction-column">
                   <div>
-                    <div class="nhsuk-grid-column-full nhsuk-u-padding-0 nhsuk-u-margin-bottom-4">
-                      <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by location</p>
+                    <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
+                      <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by location</p>
                       <theme-chips-document-location #locationTagsComponent [responseLocations]="responseDocumentsLocations" (locationChipsChange)="setSelectedLocations($event)"></theme-chips-document-location>
                     </div>
                   </div>
                   <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-                    <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3">Filter by date range</p>
+                    <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by date range</p>
                     <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                     <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                   </div>
