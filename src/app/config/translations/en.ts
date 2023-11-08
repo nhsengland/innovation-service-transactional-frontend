@@ -524,13 +524,13 @@ export const locale = {
             ST02_SUPPORT_STATUS_TO_OTHER : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
             ST03_SUPPORT_STATUS_TO_WAITING : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. View support summary.` },
             // // NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables //
-            // ST04_ : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message from {{unitName}}.`},
-            // ST05_ : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
-            // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
+            ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message.`},
+            ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
+            ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
             // ST07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.`},
             // // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables //
-            // SS01_ : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
-            // SS02_ : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
+            SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
+            SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.`},
             // // New - SUPPORT STATUS - // TODO - Fix enum and check description variables //
             // ST01_ : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. View message from {{unitName}}.`},
             // ST02_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.`},
@@ -539,28 +539,32 @@ export const locale = {
             // ST05_ : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.`},
             // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.`},
             // // New - NEEDS ASSESSMENT - // TODO - Fix enum and check description variables //
-            // NA01_ : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.`},
-            // NA02_ : { title: `Innovation {{innovationName}} has been submitted for a needs assessment. Review the record and make contact with the innovator within 2 working days.`},
-            // NA03_ : { title: `The needs assessment for innovation {{innovationName}} has started. View message from the needs assessment team.`},
-            // NA04_ : { title: `The needs assessment for innovation "{{innovationName}}" is complete. View needs assessment.`},
-            // NA05_ : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
-            // NA06_ : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
-            // NA07_ : { title: `You have been assigned as the needs assessor for {{innovationName}}. Complete the needs assessment within 5 working days.`},
+            NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.`},
+            NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}. Review the innovation record and make contact with the innovator within 2 working days.`},
+            NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} has started. View message from the needs assessment team.`},
+            NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} is complete. View needs assessment.`},
+            NA05_NEEDS_ASSESSOR_REMOVED : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
+            NA06_NEEDS_ASSESSOR_REMOVED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in innovation overview.`},
+            NA07_NEEDS_ASSESSOR_ASSIGNED : { title: `You have been assigned as the needs assessor for {{innovationName}}. Review the innovation record and make contact with the innovator within 2 working days.`},
             // // New - ORGANISATIONS SUGGESTIONS - // TODO - Fix enum and check description variables //
-            // OS01_ : { title: `Your organisation has been suggested to support {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
-            // OS03_ : { title: `An innovation that was suggested to your organisation but was not sharing is now sharing with you so you can review this innovation.`},
+            OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA : { title: `Your organisation has been suggested to support {{innovationName}} by {{senderDisplayInformation}}. Review the innovation and assign a support status within 5 working days.`},
+            OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you update your data sharing preferences.`},
+            OS03_INNOVATION_DELAYED_SHARED_SUGGESTION : { title: `Your organisation has been suggested to support innovation {{innovationName}}. Review the innovation and assign a support status within 5 working days.`},
             // OS04_ : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you update your data sharing preferences.`},
             // // New - ADMIN PORTAL - // TODO - Fix enum and check description variables //
             // AP02_ : { title: `Innovation "{{innovationName}}" owner has been locked.`},
             // AP04_ : { title: `Innovation "{{innovationName}}" Your account has been moved from {{previousUnit}} to {{newUnit}}.`},
             // // New - AUTOMATIC - // TODO - Fix enum and check description variables //
             // AU01_ : { title: `Your innovation record remains in draft. Review and update your innovation record.`},
-            // AU02_ : { title: `You last interacted with innovation (innovation name) at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
-            // AU03_ : { title: `Innovation (innovation name) is not receiving an active support on the service. Find out more about your options and decide how you want to progress.`},
-            // AU04_ : { title: `Innovation (innovation name) is waiting to be reviewed. Review the innovation and assign a support status by the end of the next working day.`},
-            // AU05_ : { title: `Your organisation was suggested to support innovation (innovation name) over 5 working days ago. Review the innovation and assign a support status as soon as possible.`},
+            // AU02_ : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
+            // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.`},
+            AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and assign a support status by the end of the next working day.`},
+            AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and assign a support status as soon as possible.`},
             // AU07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.`},
             // // New - ACCOUNT MANAGEMENT - // TODO - Fix enum and check description variables //
+            RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. View request.`},
+            RE02_EXPORT_REQUEST_APPROVED: { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. View and export the innovation record.`},
+            RE03_EXPORT_REQUEST_REJECTED: { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. View reason.`},
             // WI01_ : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`},
             // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.`},
             // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.`},
@@ -583,7 +587,9 @@ export const locale = {
             // MC07_ : { title: `{{collaboratorName}} has left innovation {{innovationName}}. Manage collaborators.`},
             // MC08_ : { title: `You have successfully removed yourself as a collaborator on innovation {{innovationName}}.`},
             // DA08_ : { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.`},
-
+            // // New - ADMIN
+            AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS: { title: `The owner's account for innovation {{innovationName}} has been locked.`},
+            AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS: { title: `{{unitName}} are no longer supporting innovations through the NHS Innovation Service. This means they will no longer be supporting innovation {{innovationName}}. View your current support organisations.`},
 
           },
           section_status: {
