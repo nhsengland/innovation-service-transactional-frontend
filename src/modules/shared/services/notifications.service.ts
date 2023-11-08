@@ -76,6 +76,8 @@ export type NotificationsListInDTO = {
       assessmentId?: string;
 
       exportRequestId?: string;
+
+      supportId?: string;
     }
   }[];
 };
@@ -203,6 +205,9 @@ export class NotificationsService extends CoreService {
 
             case EmailNotificationCategoryEnum.AUTOMATIC:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
+                  link = { label: 'Click to go to support status', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support/${item.params?.supportId}` }
+                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
@@ -247,6 +252,9 @@ export class NotificationsService extends CoreService {
                   break;
                 case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
                   link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.WI01_INNOVATION_WITHDRAWN:
+                  link = null
                   break;
               }
               break;

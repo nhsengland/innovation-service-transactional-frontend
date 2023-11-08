@@ -556,7 +556,7 @@ export const locale = {
             // AP04_ : { title: `Innovation "{{innovationName}}" Your account has been moved from {{previousUnit}} to {{newUnit}}.`},
             // // New - AUTOMATIC - // TODO - Fix enum and check description variables //
             // AU01_ : { title: `Your innovation record remains in draft. Review and update your innovation record.`},
-            // AU02_ : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
+            AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
             // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.`},
             AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and assign a support status by the end of the next working day.`},
             AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and assign a support status as soon as possible.`},
@@ -565,7 +565,7 @@ export const locale = {
             RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. View request.`},
             RE02_EXPORT_REQUEST_APPROVED: { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. View and export the innovation record.`},
             RE03_EXPORT_REQUEST_REJECTED: { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. View reason.`},
-            // WI01_ : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`},
+            WI01_INNOVATION_WITHDRAWN : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`},
             // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.`},
             // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.`},
             // TO05_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.`},
