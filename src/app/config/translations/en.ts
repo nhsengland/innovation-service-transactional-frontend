@@ -556,7 +556,7 @@ export const locale = {
             // AP04_ : { title: `Innovation "{{innovationName}}" Your account has been moved from {{previousUnit}} to {{newUnit}}.`},
             // // New - AUTOMATIC - // TODO - Fix enum and check description variables //
             // AU01_ : { title: `Your innovation record remains in draft. Review and update your innovation record.`},
-            // AU02_ : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
+            AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation add a progress update to their support summary.\nIf you are no longer supporting this innovation, update the support status.`},
             // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.`},
             AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and assign a support status by the end of the next working day.`},
             AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and assign a support status as soon as possible.`},
