@@ -43,6 +43,7 @@ export enum EmailNotificationCategoryEnum {
   NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
   SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
   AUTOMATIC = 'AUTOMATIC',
+  ADMIN = 'ADMIN'
 }
 
 
@@ -73,6 +74,10 @@ export type NotificationsListInDTO = {
       unitId?: string;
 
       assessmentId?: string;
+
+      exportRequestId?: string;
+
+      supportId?: string;
     }
   }[];
 };
@@ -200,6 +205,9 @@ export class NotificationsService extends CoreService {
 
             case EmailNotificationCategoryEnum.AUTOMATIC:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
+                  link = { label: 'Click to go to support status', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support/${item.params?.supportId}` }
+                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
@@ -223,7 +231,34 @@ export class NotificationsService extends CoreService {
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
 
+            case EmailNotificationCategoryEnum.ADMIN:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
+                  link = null;
+                  break;
+                case NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS:
+                  link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  break;
+              }
               break;
+
+            case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED:
+                  link = { label: 'Click to go to request', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
+                case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
+                  link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.WI01_INNOVATION_WITHDRAWN:
+                  link = null
+                  break;
+              }
+              break;
+
             case NotificationContextTypeEnum.INNOVATION:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.COLLABORATOR_INVITE:
