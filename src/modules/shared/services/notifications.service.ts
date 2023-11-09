@@ -254,8 +254,13 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
                   break;
                 case NotificationContextDetailEnum.WI01_INNOVATION_WITHDRAWN:
+                case NotificationContextDetailEnum.SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS:
                   link = null
                   break;
+                case NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+
               }
               break;
 
