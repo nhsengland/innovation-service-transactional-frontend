@@ -35,7 +35,6 @@ export const URLS = {
   NICE: 'https://www.nice.org.uk/about',
   NIHR: 'https://www.nihr.ac.uk',
   NHR: 'https://www.hra.nhs.uk/about-us',
-  NHSRHO: 'https://www.nhsrho.org',
   SUPPLY_CHAIN: 'https://www.supplychain.nhs.uk',
   SHTG: 'https://shtg.scot',
 
@@ -49,6 +48,7 @@ export const URLS = {
   SUPPLIERS: 'https://www.england.nhs.uk/greenernhs/get-involved/suppliers/',
   UNDERSTANDING_CQC_REGULATIONS: 'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device',
   UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES: 'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device',
+  EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA: 'https://www.england.nhs.uk/long-read/nhs-england-equality-and-health-inequalities-impact-assessment-ehia/',
 
   // Others.
   ENABLE_JAVASCRIPT_SUPPORT: 'https://support.microsoft.com/en-us/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361',
