@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
 
 import { InnovationDocumentsService } from '../services/innovation-documents.service';
 
 
 @Injectable()
-export class InnovationDocumentDataResolver implements Resolve<null | { id: null | string, name: string }> {
+export class InnovationDocumentDataResolver  {
 
   constructor(
     private router: Router,

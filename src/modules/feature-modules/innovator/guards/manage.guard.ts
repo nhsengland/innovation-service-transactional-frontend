@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 
 import { AuthenticationStore } from '@modules/stores';
@@ -7,7 +7,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 
 @Injectable()
-export class ManageGuard implements CanActivate {
+export class ManageGuard  {
 
   constructor(
     private router: Router,

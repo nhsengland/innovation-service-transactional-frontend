@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stor
  * as it is also assuming that responsibility now (verifying access to the innovation).
  */
 @Injectable()
-export class InnovationDataResolver implements Resolve<null | { id: string, name: string }> {
+export class InnovationDataResolver  {
 
   constructor(
     private router: Router,

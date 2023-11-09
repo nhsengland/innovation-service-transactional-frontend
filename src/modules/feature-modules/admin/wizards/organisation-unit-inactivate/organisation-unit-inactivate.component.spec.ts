@@ -29,14 +29,6 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponen
         StoresModule,
         AdminModule
       ]
-    }).overrideModule(BrowserDynamicTestingModule, {
-      set: {
-        entryComponents: [
-          WizardOrganisationUnitInactivateUsersStepComponent,
-          WizardOrganisationUnitInactivateInnovationsStepComponent,
-          WizardSummaryWithConfirmStepComponent
-        ]
-      }
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

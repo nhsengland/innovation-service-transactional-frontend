@@ -1,6 +1,6 @@
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { CANCELLED } from 'dns';
 
 
 @Injectable()
-export class InnovationCollaborationRedirectionGuard implements CanActivate {
+export class InnovationCollaborationRedirectionGuard  {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,

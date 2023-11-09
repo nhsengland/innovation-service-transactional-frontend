@@ -1,12 +1,12 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
 @Injectable()
-export class AuthenticationRedirectionGuard implements CanActivate {
+export class AuthenticationRedirectionGuard  {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,

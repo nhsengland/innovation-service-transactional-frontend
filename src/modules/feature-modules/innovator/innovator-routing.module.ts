@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToCanActivate, mapToCanActivateChild, mapToResolve, RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -110,7 +110,7 @@ const header: RoutesDataType['header'] = {
 const routes: Routes = [
   {
     path: '', component: TransactionalLayoutComponent,
-    canActivateChild: [FirstTimeSigninGuard],
+    canActivateChild: mapToCanActivateChild([FirstTimeSigninGuard]),
     data: { header, module: 'innovator', breadcrumb: 'Home' },
     children: [
 
@@ -140,7 +140,7 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
           {
-            canActivate: [InnovationCollaborationRedirectionGuard],
+            canActivate: mapToCanActivate([InnovationCollaborationRedirectionGuard]),
             path: ':innovationId/collaborations/:collaboratorId',
             pathMatch: 'full',
             component: PageCollaborationInviteComponent,
@@ -150,7 +150,7 @@ const routes: Routes = [
           },
           {
             path: ':innovationId',
-            resolve: { innovationData: InnovationDataResolver },
+            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             data: {
               module: 'innovator',
               layout: { type: '1.third-2.thirds' },
@@ -207,7 +207,7 @@ const routes: Routes = [
 
                       {
                         path: ':sectionId',
-                        resolve: { innovationSectionData: InnovationSectionDataResolver },
+                        resolve: { innovationSectionData: mapToResolve(InnovationSectionDataResolver) },
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
@@ -246,7 +246,7 @@ const routes: Routes = [
                               },
                               {
                                 path: ':evidenceId',
-                                resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },
+                                resolve: { innovationSectionEvidenceData: mapToResolve(InnovationSectionEvidenceDataResolver) },
                                 data: {
                                   breadcrumb: (data: RoutesDataType) => {
                                     const name = data.innovationSectionEvidenceData?.name ?? '';
@@ -289,7 +289,7 @@ const routes: Routes = [
                   },
                   {
                     path: 'support',
-                    canActivate: [ShareInnovationRecordGuard],
+                    canActivate: mapToCanActivate([ShareInnovationRecordGuard]),
                     component: InnovationDataSharingEditComponent,
                     data: { breadcrumb: null, layout: { type: 'full' } },
                   }
@@ -329,7 +329,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: InnovationDocumentDataResolver },
+                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string, name: string } }) => `${data.document.name}`
@@ -360,7 +360,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationTaskDataResolver },
+                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -387,7 +387,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: InnovationDataResolver },
+                resolve: { innovationData: mapToResolve(InnovationDataResolver) },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -400,7 +400,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -463,7 +463,7 @@ const routes: Routes = [
               {
                 path: 'manage',
                 data: { breadcrumb: null },
-                canActivate: [ManageGuard],
+                canActivate: mapToCanActivate([ManageGuard]),
                 children: [
                   {
                     path: 'innovation',
