@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -9,7 +9,7 @@ import { AdminUsersService } from '../services/users.service';
 type ServiceUserData = Pick<UserInfo, 'id' | 'name'>;
 
 @Injectable()
-export class ServiceUserDataResolver implements Resolve<ServiceUserData> {
+export class ServiceUserDataResolver  {
 
   constructor(private usersService: AdminUsersService) { }
 

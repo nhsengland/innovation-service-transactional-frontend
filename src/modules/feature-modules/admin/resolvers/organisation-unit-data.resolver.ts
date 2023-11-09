@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  Resolve
-} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { Observable, map } from 'rxjs';
 
 @Injectable()
-export class OrganisationUnitDataResolver implements Resolve<{ id: null | string, name: string }> {
+export class OrganisationUnitDataResolver  {
 
   constructor(
     private organisationsService: OrganisationsService

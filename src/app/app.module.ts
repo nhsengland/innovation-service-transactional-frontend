@@ -1,5 +1,5 @@
 import { HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
-import { ErrorHandler, Injector, NgModule } from '@angular/core';
+import { APP_ID, ErrorHandler, Injector, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoreModule } from '@modules/core/core.module';
@@ -15,7 +15,7 @@ import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 
 @NgModule({
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     HttpClientXsrfModule,
@@ -27,6 +27,7 @@ import { GlobalErrorHandler } from './config/handlers/global-error.handler';
     AppRoutingModule
   ],
   providers: [
+    { provide: APP_ID, useValue: 'serverApp' },
     { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ],
   declarations: [AppComponent],

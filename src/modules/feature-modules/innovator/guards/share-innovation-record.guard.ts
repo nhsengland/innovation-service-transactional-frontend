@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
 @Injectable()
-export class ShareInnovationRecordGuard implements CanActivate {
+export class ShareInnovationRecordGuard  {
 
   constructor(
     private router: Router,

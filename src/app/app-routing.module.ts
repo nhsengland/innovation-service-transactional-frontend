@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToCanActivate, RouterModule, Routes } from '@angular/router';
 
 // Base layout.
 import { BaseLayoutComponent } from '@modules/theme/base/base-layout.component';
@@ -30,14 +30,14 @@ const routes: Routes = [
   },
 
   {
-    canActivate: [InnovationTransferRedirectionGuard],
+    canActivate: mapToCanActivate([InnovationTransferRedirectionGuard]),
     path: 'transfers/:id',
     pathMatch: 'full',
     children: []
   },
 
   {
-    canActivate: [InnovationCollaborationRedirectionGuard],
+    canActivate: mapToCanActivate([InnovationCollaborationRedirectionGuard]),
     path: 'innovations/:innovationId/collaborations/:collaboratorId',
     pathMatch: 'full',
     children: []
@@ -52,11 +52,11 @@ const routes: Routes = [
   },
 
   {
-    canActivate: [AuthenticationGuard],
+    canActivate: mapToCanActivate([AuthenticationGuard]),
     path: '',
     children: [
       {
-        canActivate: [AuthenticationRedirectionGuard],
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'dashboard',
         pathMatch: 'full',
         children: []
@@ -70,19 +70,19 @@ const routes: Routes = [
         path: 'announcements', loadChildren: () => import('@modules/feature-modules/announcements/announcements.module').then(m => m.AnnouncementsModule)
       },
       {
-        canActivate: [AuthenticationRedirectionGuard],
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'admin', loadChildren: () => import('@modules/feature-modules/admin/admin.module').then(m => m.AdminModule)
       },
       {
-        canActivate: [AuthenticationRedirectionGuard],
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'assessment', loadChildren: () => import('@modules/feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
       },
       {
-        canActivate: [AuthenticationRedirectionGuard],
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'innovator', loadChildren: () => import('@modules/feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
       },
       {
-        canActivate: [AuthenticationRedirectionGuard],
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
       }
     ]
