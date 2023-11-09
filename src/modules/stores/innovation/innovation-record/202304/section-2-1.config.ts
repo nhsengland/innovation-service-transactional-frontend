@@ -52,7 +52,7 @@ const stepsLabels = {
     label: 'Have you completed a health inequalities impact assessment?',
     description: `
       <p>By this, we mean a document or template which assesses the impact of your innovation on health inequalities and on those with protected characteristics. Health inequalities are the unfair and avoidable differences in health across the population, and between different groups within society.</p>
-      <p>An example of a completed health inequalities impact assessment can be found on <a href=${URLS.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA} target="_blank" rel="noopener noreferrer"> NHS England's web page (opens in a new window)</a>.</p>`
+      <p>An example of a completed health inequalities impact assessment can be found on <a href=${URLS.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA} target="_blank" rel="noopener noreferrer">NHS England's web page (opens in a new window)</a>.</p>`
   },
   q11: {
     label: 'Upload the health inequalities impact assessment, or any relevant documents',
