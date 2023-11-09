@@ -32,8 +32,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'blur' });
-  
-  showFiltersHideStatus: 'opened' | 'closed' = 'closed';
+
+  filterCount: number = 0;
 
   responseDocumentsLocations: ContextTypeType[] = [];
   selectedLocationFilters: ContextTypeType[] = [];
@@ -124,12 +124,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   }
 
-  onShowFiltersClick(){
-
-    this.showFiltersHideStatus === 'closed' ? 'open' : 'closed';
-
-  }
-
   private setFilters() {
 
     const startDate = this.getDateByControlName('startDate') ?? undefined;
@@ -141,6 +135,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters } : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
+
+    this.calculateFilterNum();
 
   }
 
@@ -155,6 +151,22 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     console.log(this.selectedLocationFilters)
   }
 
+  calculateFilterNum(){
+
+    let filterCount: number = 0;
+
+    this.selectedLocationFilters.length > 0 && (filterCount += this.selectedLocationFilters.length);
+
+    const startDate = this.getDateByControlName('startDate') ?? undefined;
+    const endDate = this.getDateByControlName('endDate') ?? undefined;
+
+    startDate ? filterCount +=1 : filterCount;
+    endDate ? filterCount +=1 : filterCount;
+
+    this.filterCount = filterCount
+    console.log('filters:' + this.filterCount)
+
+  }
 
 
 
