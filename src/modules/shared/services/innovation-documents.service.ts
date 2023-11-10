@@ -11,13 +11,15 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
-type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE' | 'INNOVATION_MESSAGE';
+export type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE' | 'INNOVATION_MESSAGE';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
   contextTypes?: ContextTypeType[],
-  contextId?: string;
-  fields?: ('description')[]
+  contextId?: string,
+  fields?: ('description')[],
+  dateFilter?: { field: 'createdAt', startDate?: string, endDate?: string}[],
+  uploadedBy?: UserRoleEnum[]
 }
 type InnovationDocumentsListInDTO = {
   count: number,
@@ -77,6 +79,8 @@ export class InnovationDocumentsService extends CoreService {
       ...(filters.contextId && { contextId: filters.contextId }),
       ...(filters.contextTypes && { contextTypes: filters.contextTypes }),
       ...(filters.fields && { fields: filters.fields }),
+      ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
+      ...(filters.uploadedBy && { uploadedBy: filters.uploadedBy})
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId }).setQueryParams(qp);

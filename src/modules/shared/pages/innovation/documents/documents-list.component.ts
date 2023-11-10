@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { isNgTemplate } from '@angular/compiler';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
+import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
+import { CustomValidators } from '@modules/shared/forms';
 
-import { InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-
+import { ChipsFilterComponent, chipFilterInputType } from '@modules/theme/components/chips/chips-filter-component';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -13,12 +18,28 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 })
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
 
+  @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsFilterComponent;
+
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
 
   // Flags
   isAdmin: boolean;
   isInnovatorType: boolean;
+
+  // Filter
+  form = new FormGroup({
+    name: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
+    startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
+    endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
+  }, { updateOn: 'blur' });
+
+  filterCount: number = 0;
+
+  locationChipsInput: chipFilterInputType = [];
+  selectedLocationFilters: string[] = [];
+
+  selectedUploadedByFilters: UserRoleEnum[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService
@@ -40,6 +61,10 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
 
   ngOnInit(): void {
+
+    const locations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE'];
+
+    this.locationChipsInput = locations.map(l => ({ id: l , value: this.translate('shared.catalog.documents.contextType.' + l) }));
 
     this.tableList.setVisibleColumns({
       name: { label: 'Name', orderable: true },
@@ -64,6 +89,19 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   }
 
+  onClearFilters(): void{
+
+    this.form.get('startDate')?.reset()
+    this.form.get('endDate')?.reset()
+
+    this.locationTagsComponent?.clearSelectedChips();
+
+    this.setFilters();
+
+    this.tableList.setPage(1);
+    this.getDocumentsList();
+
+  }
 
   onTableOrder(column: string): void {
     this.tableList.setOrderBy(column);
@@ -74,5 +112,60 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.tableList.setPage(event.pageNumber);
     this.getDocumentsList();
   }
+
+  onFormChange(): void {
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.setFilters();
+
+    this.tableList.setPage(1);
+    this.getDocumentsList();
+
+  }
+
+  private setFilters() {
+
+    const startDate = this.getDateByControlName('startDate') ?? undefined;
+    const endDate = this.getDateByControlName('endDate') ?? undefined;
+
+    this.tableList.setFilters({
+      name: this.form.get('name')?.value ?? undefined,
+      ...(this.selectedUploadedByFilters.length > 0 ? {uploadedBy: this.selectedUploadedByFilters } : {}),
+      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters as ContextTypeType[] } : {}),
+      ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
+    });
+
+    this.calculateFilterNum();
+
+  }
+
+  private getDateByControlName(formControlName: string) {
+    const value = this.form.get(formControlName)!.value;
+    return DatesHelper.parseIntoValidFormat(value);
+  }
+
+  setSelectedLocations(locations: string[]){
+    this.selectedLocationFilters = locations;
+  }
+
+  calculateFilterNum(){
+
+    let counter = this.selectedLocationFilters.length;
+
+    const startDate = this.getDateByControlName('startDate') ?? undefined;
+    const endDate = this.getDateByControlName('endDate') ?? undefined;
+
+    startDate && counter++;
+    endDate && counter++;
+
+    this.filterCount = counter;
+    
+  }
+
+
 
 }

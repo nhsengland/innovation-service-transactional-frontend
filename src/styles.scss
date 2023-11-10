@@ -609,3 +609,37 @@ td {
 }
 
 .vertical-align-middle { vertical-align: middle;}
+
+// Tag.
+.app-tag {
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  color: var(--primary-color);
+  display: inline-block;
+  padding: 5px 10px;
+
+  &.app-tag__selected {
+    background: var(--primary-color);
+    border: none;
+    color: var(--white) !important;
+  }
+
+}
+
+a.app-tag {
+
+  text-decoration: none;
+
+  &:link, &:visited {
+    color: var($nhsuk-link-color);
+  }
+
+  &:active, &:hover {
+    color: var(--white);
+    background: var(--primary-color);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 4px #ffcd60;
+  }
+}
