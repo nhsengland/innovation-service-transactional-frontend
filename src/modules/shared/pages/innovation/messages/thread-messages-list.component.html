@@ -1,14 +1,5 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container *ngIf="isAccessorType">
-    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
-      </div>
-    </div>
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4">
-  </ng-container>
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
@@ -34,7 +25,7 @@
                 <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
               </ng-template>
             </dt>
-            <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+            <dt *ngIf="showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
               <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>

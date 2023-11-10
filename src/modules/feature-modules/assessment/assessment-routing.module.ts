@@ -70,6 +70,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -335,6 +336,10 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
