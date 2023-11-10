@@ -147,8 +147,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   setSelectedLocations(locations: ContextTypeType[]){
     this.selectedLocationFilters = locations;
-    console.log("received selected locations:");
-    console.log(this.selectedLocationFilters)
   }
 
   calculateFilterNum(){
@@ -164,8 +162,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     endDate ? filterCount +=1 : filterCount;
 
     this.filterCount = filterCount
-    console.log('filters:' + this.filterCount)
-
+    
   }
 
 
