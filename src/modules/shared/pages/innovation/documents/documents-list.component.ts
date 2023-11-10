@@ -36,7 +36,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   filterCount: number = 0;
 
-  responseDocumentsLocations: ContextTypeType[] = [];
   locationChipsInput: chipFilterInputType = [];
   selectedLocationFilters: string[] = [];
 
@@ -63,11 +62,9 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    this.responseDocumentsLocations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE']
+    const locations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE'];
 
-    this.responseDocumentsLocations.map((item) => {
-      this.locationChipsInput.push({id: item, value: this.translate('shared.catalog.documents.contextType.' + item)})
-    })
+    this.locationChipsInput = locations.map(l => ({ id: l , value: this.translate('shared.catalog.documents.contextType.' + l) }));
 
     this.tableList.setVisibleColumns({
       name: { label: 'Name', orderable: true },
