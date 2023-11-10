@@ -75,6 +75,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -320,6 +321,10 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
