@@ -591,8 +591,7 @@ export const locale = {
             // DA08_ : { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.`},
             // // New - ADMIN
             AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS: { title: `The owner's account for innovation {{innovationName}} has been locked.`},
-            AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS: { title: `{{unitName}} are no longer supporting innovations through the NHS Innovation Service. This means they will no longer be supporting innovation {{innovationName}}. View your current support organisations.`},
-
+            AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS: { title: `{{unitName}} are no longer supporting innovations through the NHS Innovation Service. This means they will no longer be supporting innovation {{innovationName}}.`, link: `View your current support organisations.`},
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
