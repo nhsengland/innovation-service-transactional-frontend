@@ -32,7 +32,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TagComponent } from './components/tag/tag.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
-import { ChipsDocumentLocationComponent } from './components/chips/document-location/chips-document-location.component';
+import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 
 
 @NgModule({
@@ -72,7 +72,7 @@ import { ChipsDocumentLocationComponent } from './components/chips/document-loca
     TagComponent,
     StatisticsCardsComponent,
 
-    ChipsDocumentLocationComponent
+    ChipsFilterComponent
   ],
   providers: [],
   exports: [
@@ -105,7 +105,7 @@ import { ChipsDocumentLocationComponent } from './components/chips/document-loca
     TagComponent,
     StatisticsCardsComponent,
     
-    ChipsDocumentLocationComponent
+    ChipsFilterComponent
   ]
 })
 export class ThemeModule { }

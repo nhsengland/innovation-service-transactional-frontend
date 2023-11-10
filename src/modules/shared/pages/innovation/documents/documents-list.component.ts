@@ -1,3 +1,4 @@
+import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -9,7 +10,7 @@ import { CustomValidators } from '@modules/shared/forms';
 
 import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { ChipsDocumentLocationComponent } from '@modules/theme/components/chips/document-location/chips-document-location.component';
+import { ChipsFilterComponent, chipFilterInputType } from '@modules/theme/components/chips/chips-filter-component';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -17,7 +18,7 @@ import { ChipsDocumentLocationComponent } from '@modules/theme/components/chips/
 })
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
 
-  @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsDocumentLocationComponent;
+  @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsFilterComponent;
 
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
@@ -36,7 +37,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   filterCount: number = 0;
 
   responseDocumentsLocations: ContextTypeType[] = [];
-  selectedLocationFilters: ContextTypeType[] = [];
+  locationChipsInput: chipFilterInputType = [];
+  selectedLocationFilters: string[] = [];
 
   selectedUploadedByFilters: UserRoleEnum[] = [];
 
@@ -62,6 +64,10 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   ngOnInit(): void {
 
     this.responseDocumentsLocations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE']
+
+    this.responseDocumentsLocations.map((item) => {
+      this.locationChipsInput.push({id: item, value: this.translate('shared.catalog.documents.contextType.' + item)})
+    })
 
     this.tableList.setVisibleColumns({
       name: { label: 'Name', orderable: true },
@@ -132,7 +138,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
       ...(this.selectedUploadedByFilters.length > 0 ? {uploadedBy: this.selectedUploadedByFilters } : {}),
-      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters } : {}),
+      ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters as ContextTypeType[] } : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 
@@ -145,7 +151,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     return DatesHelper.parseIntoValidFormat(value);
   }
 
-  setSelectedLocations(locations: ContextTypeType[]){
+  setSelectedLocations(locations: string[]){
     this.selectedLocationFilters = locations;
   }
 
