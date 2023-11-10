@@ -154,17 +154,15 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   calculateFilterNum(){
 
-    let filterCount: number = 0;
-
-    this.selectedLocationFilters.length > 0 && (filterCount += this.selectedLocationFilters.length);
+    let counter = this.selectedLocationFilters.length;
 
     const startDate = this.getDateByControlName('startDate') ?? undefined;
     const endDate = this.getDateByControlName('endDate') ?? undefined;
 
-    startDate ? filterCount +=1 : filterCount;
-    endDate ? filterCount +=1 : filterCount;
+    startDate && counter++;
+    endDate && counter++;
 
-    this.filterCount = filterCount
+    this.filterCount = counter;
     
   }
 
