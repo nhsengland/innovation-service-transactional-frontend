@@ -51,7 +51,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   // Flags
-  isInnovatorType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
 
@@ -83,7 +82,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.engagingOrganisationUnits = [];
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
 
