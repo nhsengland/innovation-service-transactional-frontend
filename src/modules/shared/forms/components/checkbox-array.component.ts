@@ -9,6 +9,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
 
+
 @Component({
   selector: 'theme-form-checkbox-array',
   templateUrl: './checkbox-array.component.html',
@@ -23,6 +24,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
+  @Input() checkboxUniqueFields: string[] = []
 
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
@@ -70,6 +72,8 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
 
+    console.log('unique fields: ' + this.checkboxUniqueFields)
+
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
 
@@ -116,18 +120,36 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   }
 
   onChanged(e: Event): void {
-
+    
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
 
+    console.log('clicked: ' + event.value )
+    
     if (event.checked && valueIndex === -1) {
+      
+      this.isClickedExclusive(event.value) && this.fieldArrayControl.clear(); 
+      this.isExclusiveChecked() && this.fieldArrayControl.clear();
+    
       this.fieldArrayControl.push(new FormControl(event.value));
-    }
 
+    }
+    
     if (!event.checked && valueIndex > -1) {
       this.fieldArrayControl.removeAt(valueIndex);
     }
-
+    
   }
+
+  private isClickedExclusive(value: string): boolean {
+    return this.checkboxUniqueFields.includes(value)
+  }
+
+  private isExclusiveChecked(): boolean {
+    return (this.fieldArrayControl.value as string[]).filter(item => this.checkboxUniqueFields.includes(item)).length > 0;
+  }
+
+
+  
 
 }

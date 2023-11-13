@@ -34,6 +34,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   sectionSubmittedText: string = '';
 
+  checkboxUniqueFields: string[] = ['No', 'NONE', 'DO_NOT_NEED_SUPPORT']
+
 
   constructor(
     private activatedRoute: ActivatedRoute
