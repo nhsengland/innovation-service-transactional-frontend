@@ -9,6 +9,8 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
 
+export const INNOVATION_RECORD_NULL_ANSWERS = ['NO', 'NONE', 'DO_NOT_NEED_SUPPORT'];
+
 @Component({
   selector: 'theme-form-checkbox-array',
   templateUrl: './checkbox-array.component.html',
@@ -116,18 +118,36 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   }
 
   onChanged(e: Event): void {
-
+    
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
-
-    if (event.checked && valueIndex === -1) {
+    
+    console.log('checked box')
+    console.log(event.value)
+    
+    if (event.checked && INNOVATION_RECORD_NULL_ANSWERS.includes(event.value)) {
+      console.log('checked NONE')
+      this.fieldArrayControl.clear();
       this.fieldArrayControl.push(new FormControl(event.value));
     }
+    
+    if (event.checked && valueIndex === -1) {
+      this.fieldArrayControl.push(new FormControl(event.value));
 
+
+
+    }
+    
     if (!event.checked && valueIndex > -1) {
-      this.fieldArrayControl.removeAt(valueIndex);
+      this.removeFromFieldArray(valueIndex);
     }
 
+    console.log(this.fieldArrayControl.value)
+    
+  }
+
+  private removeFromFieldArray(valueIndex: number): void{
+    this.fieldArrayControl.removeAt(valueIndex);
   }
 
 }
