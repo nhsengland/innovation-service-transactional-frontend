@@ -211,6 +211,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
   }
 
+  checkIfUnfollowed(userId: string): boolean {
+    return this.threadFollowers?.some(follower => (follower.id === userId)) ?? false;
+  }
+
   onTableOrder(column: string): void {
     this.messagesList.setOrderBy(column);
     this.getThreadsList();
