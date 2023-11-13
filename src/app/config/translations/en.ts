@@ -527,7 +527,7 @@ export const locale = {
             ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message.` },
             ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.` },
             ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA : { title: `You are no longer the assigned accessor for {{innovationName}}.` },
-            // ST07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.` },
+            ST07_SUPPORT_STATUS_CHANGE_REQUEST : { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{proposedStatus}}. Update support status.` },
             // // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables //
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.` },
             SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. View this update in support summary.` },
@@ -560,6 +560,8 @@ export const locale = {
             // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.` },
             AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and assign a support status by the end of the next working day.` },
             AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and assign a support status as soon as possible.` },
+            AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER: { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.` },
+            AU09_TRANSFER_EXPIRED: { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.` },
             // AU07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.` },
             // // New - ACCOUNT MANAGEMENT - // TODO - Fix enum and check description variables //
             RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. View request.` },
@@ -568,6 +570,7 @@ export const locale = {
             WI01_INNOVATION_WITHDRAWN : { title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.` },
             SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: { title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.` },
             SH03_INNOVATION_STOPPED_SHARED_TO_SELF: { title : `You have stopped sharing innovation {{innovationName}} with all support organisations.` },
+            DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR: { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.` },
             // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.` },
             // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.` },
             // TO05_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.` },
