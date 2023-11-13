@@ -527,17 +527,10 @@ export const locale = {
             ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. `, link: `View message.` },
             ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA : { title: `You have been assigned as an accessor for {{innovationName}}. `, link: `Review the innovation and contact the innovator within 5 working days.` },
             ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA : { title: `You are no longer the assigned accessor for {{innovationName}}.` },
-            ST07_SUPPORT_STATUS_CHANGE_REQUEST : { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{proposedStatus}}. Update support status.` },
+            ST07_SUPPORT_STATUS_CHANGE_REQUEST : { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{proposedStatus}}. `, link: `Update support status.` },
             // // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables //
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
-            // // New - SUPPORT STATUS - // TODO - Fix enum and check description variables //
-            // ST01_ : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. View message from {{unitName}}.` },
-            // ST02_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.` },
-            // ST03_ : { title: `{{unitName}} has updated their support status to (new support status) for {{innovationName}}. View support summary.` },
-            // ST04_ : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. View message from {{unitName}}.` },
-            // ST05_ : { title: `You have been assigned as an accessor for {{innovationName}}. Review the innovation and contact the innovator within 5 working days.` },
-            // ST06_ : { title: `You are no longer the assigned accessor for {{innovationName}}.` },
             // // New - NEEDS ASSESSMENT - // TODO - Fix enum and check description variables //
             NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.` },
             NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}. `, link: `Review the innovation record and make contact with the innovator within 2 working days.` },
