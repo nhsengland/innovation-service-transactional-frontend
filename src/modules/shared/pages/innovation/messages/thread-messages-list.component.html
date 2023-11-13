@@ -10,12 +10,22 @@
           <a routerLink="/{{selfUser.urlBasePath}}/innovations/{{innovation.id}}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
         </p>
 
-        <span>
+        <ng-container *ngIf="isAssessmentType || isAccessorType">
+          <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
+            <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
+          </p>
+
+          <p *ngIf="!isFollower" class="nhsuk-u-font-size-16">
+            <a href="javascript:void(0)" (click)="onFollowMessageThreadClick()">Follow this message thread</a> if you do want to be notified about new replies.
+          </p>
+        </ng-container>
+
+        <p class="nhsuk-u-margin-0 nhsuk-u-font-size-16">
           {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
-        </span>
-        <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
-          {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
-        </a>
+          <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
+            {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
+          </a>
+        </p>
 
         <ng-container *ngIf="showFollowersHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">

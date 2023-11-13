@@ -23,7 +23,7 @@ import { omit } from 'lodash';
 })
 export class PageInnovationThreadMessagesListComponent extends CoreComponent implements OnInit {
 
-  selfUser: { id: string, urlBasePath: string, role: string };
+  selfUser: { id: string, urlBasePath: string, roleId: string, role: string };
   innovation: ContextInnovationType;
   threadId: string;
 
@@ -51,8 +51,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   // Flags
+  isAssessmentType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
+  isFollower: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -66,6 +68,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
       urlBasePath: this.stores.authentication.userUrlBasePath(),
+      roleId: this.stores.authentication.getUserContextInfo()?.roleId ?? '',
       role: this.stores.authentication.getUserContextInfo()?.type ?? ''
     };
 
@@ -82,6 +85,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.engagingOrganisationUnits = [];
 
     // Flags
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
 
@@ -119,6 +123,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.threadInfo = response.threadInfo;
         this.threadFollowers = response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
+        this.isFollower = this.threadFollowers.some(follower => follower.id === this.selfUser.id);
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
@@ -159,6 +164,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     });
   };
 
+
   onShowParticipantsClick() {
     if (this.showFollowersHideStatus !== 'opened') {
 
@@ -171,6 +177,39 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     }
   }
 
+  onUnfollowMessageThreadClick(): void {
+
+    this.innovationsService.deleteThreadFollower(this.innovation.id, this.threadId, this.selfUser.roleId).subscribe({
+      next: () => {
+        this.setAlertSuccess('You have unfollowed this message thread', { message: 'You will not be notified about new replies.' });
+        this.getThreadsList();
+      },
+      error: () => {
+        this.setPageStatus('READY');
+        this.setAlertUnknownError();
+      }
+    });
+
+  }
+
+  onFollowMessageThreadClick(): void {
+
+    const body = {
+      followerUserRoleIds: [this.selfUser.roleId]
+    };
+
+    this.innovationsService.addThreadFollowers(this.innovation.id, this.threadId, body).subscribe({
+      next: () => {
+        this.setAlertSuccess('You have followed this message thread', { message: 'You will be notified about new replies.' });
+        this.getThreadsList();
+      },
+      error: () => {
+        this.setPageStatus('READY');
+        this.setAlertUnknownError();
+      }
+    });
+
+  }
 
   onTableOrder(column: string): void {
     this.messagesList.setOrderBy(column);
@@ -181,7 +220,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.messagesList.setPage(event.pageNumber);
     this.getThreadsList();
   }
-
 
   onSubmit(): void {
 

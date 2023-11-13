@@ -488,6 +488,11 @@ export class InnovationsService extends CoreService {
     return this.http.patch<void>(url.buildUrl(), body).pipe(take(1));
   }
 
+  deleteThreadFollower(innovationId: string, threadId: string, roleId: string): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/threads/:threadId/followers/:roleId').setPathParams({ innovationId, threadId, roleId });
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1));
+  }
+
   getThreadMessagesList(innovationId: string, threadId: string, queryParams: APIQueryParamsType<{}>): Observable<GetThreadMessagesListOutDTO> {
 
     const { filters, ...qp } = queryParams;
