@@ -556,7 +556,7 @@ export const locale = {
             AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER: { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
             AU09_TRANSFER_EXPIRED: { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in `, link: `manage innovation.` },
             // AU07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.` },
-            // // New - ACCOUNT MANAGEMENT - // TODO - Fix enum and check description variables //
+            // // New - INNOVATION MANAGEMENT - // TODO - Fix enum and check description variables //
             RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. `, link: `View request.` },
             RE02_EXPORT_REQUEST_APPROVED: { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. `, link: `View and export the innovation record.` },
             RE03_EXPORT_REQUEST_REJECTED: { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. `, link: `View reason.` },
@@ -564,6 +564,12 @@ export const locale = {
             SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: { title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.` },
             SH03_INNOVATION_STOPPED_SHARED_TO_SELF: { title : `You have stopped sharing innovation {{innovationName}} with all support organisations.` },
             DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR: { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.` },
+            TO02_TRANSFER_OWNERSHIP_EXISTING_USER:  { title: `You have a request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
+            TO06_TRANSFER_OWNERSHIP_ACCEPTS_PREVIOUS_OWNER:  { title: `You have successfully transferred ownership of innovation {{innovationName}} to {{newInnovationOwner}}.` },
+            TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS: { title: `{{oldInnovationOwnerName}} has transferred ownership of innovation {{innovationName}} to {{newInnovationOwnerName}} `, link: `Send message to the new owner.` },
+            TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER:  { title: `Your request to transfer ownership of innovation {{innovationName}} has been declined. You can create a new transfer request in `, link: `manage innovation.` },
+            TO09_TRANSFER_OWNERSHIP_CANCELED_NEW_OWNER:  { title: `The request for you to take ownership of innovation {{innovationName}} has been cancelled by {{innovationOwner}}.` },
+            MC01_COLLABORATOR_INVITE_EXISTING_USER: { title: `{{requestUserName}} has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. `, link: `View invitation.` },
             // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.` },
             // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.` },
             // TO05_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.` },

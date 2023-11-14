@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
@@ -23,12 +23,12 @@ import { omit } from 'lodash';
 })
 export class PageInnovationThreadMessagesListComponent extends CoreComponent implements OnInit {
 
-  selfUser: { id: string, urlBasePath: string, role: string };
+  selfUser: { id: string, urlBasePath: string, roleId: string, role: string };
   innovation: ContextInnovationType;
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
-  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
+  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { displayUserName: string }>({ pageSize: 10 }) ;
   engagingOrganisationUnits: InnovationSupportsListDTO;
 
   showFollowersHideStatus: string | null = null;
@@ -51,8 +51,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   // Flags
+  isAssessmentType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
+  isFollower: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -66,6 +68,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.selfUser = {
       id: this.stores.authentication.getUserId(),
       urlBasePath: this.stores.authentication.userUrlBasePath(),
+      roleId: this.stores.authentication.getUserContextInfo()?.roleId ?? '',
       role: this.stores.authentication.getUserContextInfo()?.type ?? ''
     };
 
@@ -82,6 +85,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.engagingOrganisationUnits = [];
 
     // Flags
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
 
@@ -119,11 +123,19 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.threadInfo = response.threadInfo;
         this.threadFollowers = response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
+        this.isFollower = this.threadFollowers.some(follower => follower.id === this.selfUser.id);
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
+        const threadMessages = response.threadMessages.messages.map(message => {
+          return {
+            ...message,
+            displayUserName:`${ message.createdBy.name }, ${ message.createdBy.organisationUnit?.name ? message.createdBy.organisationUnit?.acronym : message.createdBy.role === "ASSESSMENT" ? "Needs assessment" : message.createdBy.isOwner ? "Innovator owner" : "Innovator" }`
+          }
+        });
 
-        this.messagesList.setData(response.threadMessages.messages, response.threadMessages.count);
+        this.messagesList.setData(threadMessages, response.threadMessages.count);
+
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
 
@@ -159,6 +171,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     });
   };
 
+
   onShowParticipantsClick() {
     if (this.showFollowersHideStatus !== 'opened') {
 
@@ -171,6 +184,43 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     }
   }
 
+  onUnfollowMessageThreadClick(): void {
+
+    this.innovationsService.deleteThreadFollower(this.innovation.id, this.threadId, this.selfUser.roleId).subscribe({
+      next: () => {
+        this.setAlertSuccess('You have unfollowed this message thread', { message: 'You will not be notified about new replies.' });
+        this.getThreadsList();
+      },
+      error: () => {
+        this.setPageStatus('READY');
+        this.setAlertUnknownError();
+      }
+    });
+
+  }
+
+  onFollowMessageThreadClick(): void {
+
+    const body = {
+      followerUserRoleIds: [this.selfUser.roleId]
+    };
+
+    this.innovationsService.addThreadFollowers(this.innovation.id, this.threadId, body).subscribe({
+      next: () => {
+        this.setAlertSuccess('You have followed this message thread', { message: 'You will be notified about new replies.' });
+        this.getThreadsList();
+      },
+      error: () => {
+        this.setPageStatus('READY');
+        this.setAlertUnknownError();
+      }
+    });
+
+  }
+
+  checkIfUnfollowed(userId: string): boolean {
+    return this.threadFollowers?.some(follower => (follower.id === userId)) ?? false;
+  }
 
   onTableOrder(column: string): void {
     this.messagesList.setOrderBy(column);
@@ -181,7 +231,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.messagesList.setPage(event.pageNumber);
     this.getThreadsList();
   }
-
 
   onSubmit(): void {
 
