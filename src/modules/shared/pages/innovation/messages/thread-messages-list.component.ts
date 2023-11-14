@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
@@ -28,7 +28,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
-  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0]>({ pageSize: 10 });
+  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { displayUserName: string }>({ pageSize: 10 }) ;
   engagingOrganisationUnits: InnovationSupportsListDTO;
 
   showFollowersHideStatus: string | null = null;
@@ -127,8 +127,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
+        const threadMessages = response.threadMessages.messages.map(message => {
+          return {
+            ...message,
+            displayUserName:`${ message.createdBy.name }, ${ message.createdBy.organisationUnit?.name ? message.createdBy.organisationUnit?.acronym : message.createdBy.role === "ASSESSMENT" ? "Needs assessment" : message.createdBy.isOwner ? "Innovator owner" : "Innovator" }`
+          }
+        });
 
-        this.messagesList.setData(response.threadMessages.messages, response.threadMessages.count);
+        this.messagesList.setData(threadMessages, response.threadMessages.count);
+
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
 

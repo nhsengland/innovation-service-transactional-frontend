@@ -69,8 +69,7 @@
               <div class="flex-direction-column">
                 <div class="d-flex align-items-center">
                   <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">
-                    {{ message.createdBy.name }},
-                    {{ message.createdBy.organisationUnit?.name ? message.createdBy.organisationUnit?.acronym : message.createdBy.role === "ASSESSMENT" ? "Needs assessment" : message.createdBy.isOwner ? "Innovator owner" : "Innovator" }}
+                    {{ message.displayUserName }}
                   </p>
                   <div class="nhsuk-u-padding-left-2">
                     <theme-notification-tag label="new" *ngIf="message.isNew"></theme-notification-tag>
