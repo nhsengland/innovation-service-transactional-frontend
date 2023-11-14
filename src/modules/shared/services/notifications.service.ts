@@ -78,6 +78,9 @@ export type NotificationsListInDTO = {
       exportRequestId?: string;
 
       supportId?: string;
+
+      collaboratorId?: string;
+
     }
   }[];
 };
@@ -268,6 +271,24 @@ export class NotificationsService extends CoreService {
                   break;
                 case NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+                case NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/`}
+                  break;
+                case NotificationContextDetailEnum.TO06_TRANSFER_OWNERSHIP_ACCEPTS_PREVIOUS_OWNER:
+                  link = null
+                  break;
+                case NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS:
+                  link = { label: 'Click to go to threads', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads` }
+                  break;
+                case NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER:
+                  link = { label: 'Click to go to manage innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation` }
+                  break;
+                case NotificationContextDetailEnum.TO09_TRANSFER_OWNERSHIP_CANCELED_NEW_OWNER:
+                  link = null
+                  break;
+                case NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER:
+                  link = { label: 'Click to go to collaboration', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.params?.collaboratorId}` }
                   break;
 
               }
