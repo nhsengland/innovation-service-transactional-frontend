@@ -24,7 +24,6 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
-  @Input() checkboxUniqueFields: string[] = []
 
   hasError = false;
   error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
@@ -33,6 +32,8 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
+
+  exclusiveItem: string | undefined = undefined;
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
@@ -72,7 +73,9 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
 
-    console.log('unique fields: ' + this.checkboxUniqueFields)
+    
+    this.lookForAndSetExclusive();
+    console.log('exclusive: ', this.exclusiveItem)
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
@@ -87,16 +90,16 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     });
 
   }
-
+  
   ngDoCheck(): void {
-
+    
     this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
-
+    
     this.items?.filter(item => item.conditional).forEach(item => {
-
+      
       if (item.conditional) {
-
+        
         if (item.conditional.isVisible && this.isConditionalFieldVisible(item.conditional.id)) {
           this.conditionalFormControl(item.conditional.id).setValidators(FormEngineHelper.getParameterValidators(item.conditional));
         }
@@ -107,32 +110,33 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
         this.conditionalFormControl(item.conditional.id).updateValueAndValidity();
 
       }
-
+      
     });
-
+    
     this.cdr.detectChanges();
-
+    
   }
-
-
+  
+  
   isChecked(value: string): boolean {
     return this.fieldArrayValues.includes(value);
   }
-
+  
   onChanged(e: Event): void {
     
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
-
-    console.log('clicked: ' + event.value )
+    
+    console.log('clicked: ' + event )
     
     if (event.checked && valueIndex === -1) {
       
-      this.isClickedExclusive(event.value) && this.fieldArrayControl.clear(); 
-      this.isExclusiveChecked() && this.fieldArrayControl.clear();
-    
+      
+      (this.isItemExclusive(event.value) || this.isExclusiveChecked()) && this.fieldArrayControl.clear(); 
+      // this.isExclusiveChecked() && this.fieldArrayControl.clear();
+      
       this.fieldArrayControl.push(new FormControl(event.value));
-
+      
     }
     
     if (!event.checked && valueIndex > -1) {
@@ -140,15 +144,20 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     }
     
   }
-
-  private isClickedExclusive(value: string): boolean {
-    return this.checkboxUniqueFields.includes(value)
+  
+  private isItemExclusive(value: string): boolean {
+    return this.exclusiveItem === value;
   }
-
+  
   private isExclusiveChecked(): boolean {
-    return (this.fieldArrayControl.value as string[]).filter(item => this.checkboxUniqueFields.includes(item)).length > 0;
+    return ( this.exclusiveItem !== undefined && (this.fieldArrayControl.value as string[]).includes(this.exclusiveItem) );
   }
-
+  
+  private lookForAndSetExclusive() {
+    for (let item of this.items!.entries()){
+      item[1].exclusive && (this.exclusiveItem = item[1].value);
+    }
+  }
 
   
 

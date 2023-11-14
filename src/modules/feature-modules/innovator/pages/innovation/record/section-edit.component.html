@@ -4,7 +4,7 @@
     <div class="nhsuk-grid-column-two-thirds">
 
       <ng-container *ngIf="wizard.isQuestionStep()">
-        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" [checkboxUniqueFields]="checkboxUniqueFields"></theme-form-engine>
+        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="sectionForm" [disabled]="!saveButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')"> {{ saveButton.label }}</button>
       </ng-container>
 

@@ -30,8 +30,6 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() formId = '';
   @Input() action = '';
 
-  @Input() checkboxUniqueFields: string[] = [];
-
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() values?: { [key: string]: any } = {};
   @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
