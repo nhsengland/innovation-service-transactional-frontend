@@ -73,9 +73,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
 
-    
     this.lookForAndSetExclusive();
-    console.log('exclusive: ', this.exclusiveItem)
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
@@ -127,13 +125,9 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
     
-    console.log('clicked: ' + event )
-    
     if (event.checked && valueIndex === -1) {
       
-      
       (this.isItemExclusive(event.value) || this.isExclusiveChecked()) && this.fieldArrayControl.clear(); 
-      // this.isExclusiveChecked() && this.fieldArrayControl.clear();
       
       this.fieldArrayControl.push(new FormControl(event.value));
       
@@ -154,11 +148,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   }
   
   private lookForAndSetExclusive() {
-    for (let item of this.items!.entries()){
-      item[1].exclusive && (this.exclusiveItem = item[1].value);
-    }
+    this.items?.map(item => item.exclusive && (this.exclusiveItem = item.value))
   }
-
-  
 
 }
