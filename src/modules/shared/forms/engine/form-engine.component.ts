@@ -34,7 +34,6 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() values?: { [key: string]: any } = {};
   @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
 
-
   private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
 

@@ -34,6 +34,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   sectionSubmittedText: string = '';
 
+
   constructor(
     private activatedRoute: ActivatedRoute
   ) {
