@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, UntypedFormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 
-import { EmailNotificationsPreferencesEnum, NotificationsService, EmailNotificationPreferencesDTO, EmailNotificationsTypeEnum } from '@modules/shared/services/notifications.service';
+import { EmailNotificationsPreferencesEnum, NotificationsService, EmailNotificationPreferencesDTO } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -60,13 +59,13 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
       Object.entries(response).filter((item) => item[1] === EmailNotificationsPreferencesEnum.YES).forEach((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
 
       this.preferencesResponse = response;
-      
-      this.formPreferencesList = Object.keys(response).map((category) => ({ 
-        value: category, 
-        label: this.getCategoryMessages(category).title, 
-        description: this.getCategoryMessages(category).description 
+
+      this.formPreferencesList = Object.keys(response).map((category) => ({
+        value: category,
+        label: this.getCategoryMessages(category).title,
+        description: this.getCategoryMessages(category).description
       })).sort((a, b) => a.label.localeCompare(b.label));
-      
+
       this.setPageStatus('READY');
 
     });

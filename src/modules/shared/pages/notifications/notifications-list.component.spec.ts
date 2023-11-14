@@ -10,9 +10,9 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryEnum } from '@modules/stores/context/context.enums';
 
-import { EmailNotificationCategoryEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageNotificationsListComponent } from './notifications-list.component';
 
@@ -48,7 +48,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
       data: [{
         id: 'Notification001',
         innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
-        contextType: EmailNotificationCategoryEnum.DOCUMENT,
+        contextType: NotificationCategoryEnum.DOCUMENT,
         contextDetail: NotificationContextDetailEnum.DC01_UPLOADED_DOCUMENT_TO_INNOVATOR,
         contextId: 'Innovation001',
         createdAt: '2020-01-01T00:00:00.000Z',
@@ -189,7 +189,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
-  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextTypeEnum.INNOVATION));
+  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryEnum.INNOVATION));
   //   tick(500); // Needed because of the debounce on the form.
 
   //   expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
@@ -253,7 +253,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
-  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationContextTypeEnum.INNOVATION));
+  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryEnum.INNOVATION));
 
   //   component.onRemoveFilter('contextTypes', 'INVALID VALUE');
   //   expect((component.form.get('contextTypes') as FormArray).length).toBe(1);
