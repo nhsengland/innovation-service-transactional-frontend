@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { NGXLogger } from 'ngx-logger';
@@ -8,7 +8,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 
 
 @Injectable()
-export class OrganisationDataResolver implements Resolve<any> {
+export class OrganisationDataResolver  {
 
   constructor(
     private logger: NGXLogger,

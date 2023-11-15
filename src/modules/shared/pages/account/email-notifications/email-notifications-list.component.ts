@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationCategoryEnum, EmailNotificationPreferencesDTO, EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationCategoryEnum, EmailNotificationPreferencesDTO, NotificationPreferenceEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -30,7 +30,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   ) {
 
     super();
-    
+
     this.setPageTitle('Email notifications preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
@@ -38,7 +38,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     this.currentUserContext = this.authenticationStore.getUserContextInfo();
 
     if (!this.currentUserContext) {
-      this.currentRole = null; 
+      this.currentRole = null;
     } else {
       this.currentRole = {
         id: this.currentUserContext.roleId,
@@ -53,7 +53,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   ngOnInit(): void {
 
     this.getEmailNotificationTypes();
-    this.checkMultipleRoles(); 
+    this.checkMultipleRoles();
 
   }
 
@@ -63,13 +63,13 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        this.isAnyOn = Object.values(response).some(item => item === EmailNotificationsPreferencesEnum.YES)
+        this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
 
         this.formPreferencesList = Object.keys(response).map((category) => ({
-          value: category, 
+          value: category,
           preference: this.getCategoryToggleInfo(response[category]).status,
           cssClass: this.getCategoryToggleInfo(response[category]).cssClass,
-          title: this.getCategoryMessages(category).title, 
+          title: this.getCategoryMessages(category).title,
           description: this.getCategoryMessages(category).description
         })).sort((a, b) => a.title.localeCompare(b.title));
 
@@ -79,16 +79,16 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
       });
 
   }
-  
+
   unsubscribeAllNotifications(): void {
-    
+
     this.setPageStatus('LOADING');
 
     const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
 
-    
+
     Object.keys(this.preferencesResponse).forEach(key => {
-            body.preferences[key] = this.isAnyOn ? EmailNotificationsPreferencesEnum.NO : EmailNotificationsPreferencesEnum.YES ;
+            body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES ;
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({

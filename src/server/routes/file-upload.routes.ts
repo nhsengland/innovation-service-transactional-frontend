@@ -122,7 +122,7 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
         }
       })
 
-      if(error instanceof axios.AxiosError && error.isAxiosError && error.response) {
+      if(axios.isAxiosError(error) && error.response) {
         res.status(error.response.status).send(error.response.data);
       } else {
         res.status(500).send();

@@ -1,14 +1,5 @@
 <theme-content-wrapper [status]="pageStatus">
 
-  <ng-container *ngIf="isAccessorType">
-    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-3 d-flex align-items-center">
-      <div class="nhsuk-grid-column-two-thirds">
-        <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0"> {{ innovation.name }} </p>
-      </div>
-    </div>
-    <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-bottom-4">
-  </ng-container>
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
 
@@ -19,12 +10,22 @@
           <a routerLink="/{{selfUser.urlBasePath}}/innovations/{{innovation.id}}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
         </p>
 
-        <span>
+        <ng-container *ngIf="isAssessmentType || isAccessorType">
+          <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
+            <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
+          </p>
+
+          <p *ngIf="!isFollower" class="nhsuk-u-font-size-16">
+            <a href="javascript:void(0)" (click)="onFollowMessageThreadClick()">Follow this message thread</a> if you do want to be notified about new replies.
+          </p>
+        </ng-container>
+
+        <p class="nhsuk-u-margin-0 nhsuk-u-font-size-16">
           {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
-        </span>
-        <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
-          {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
-        </a>
+          <a href="javascript:void(0)" (click)="onShowParticipantsClick()">
+            {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span>
+          </a>
+        </p>
 
         <ng-container *ngIf="showFollowersHideStatus === 'opened'">
           <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
@@ -34,7 +35,7 @@
                 <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
               </ng-template>
             </dt>
-            <dt *ngIf="isInnovatorType && showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
+            <dt *ngIf="showAddRecipientsLink" class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral">
               <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
             </dt>
           </dl>
@@ -65,13 +66,16 @@
           <div *ngFor="let message of messagesList.getRecords()" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-padding-3">
 
             <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-2">
-              <div>
+              <div class="flex-direction-column">
                 <div class="d-flex align-items-center">
-                  <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-right-2">
-                    {{ message.createdBy.name }}{{ message.createdBy.organisationUnit && message.createdBy.organisationUnit.name ? ', ' + message.createdBy.organisationUnit.name : '' }}
+                  <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">
+                    {{ message.displayUserName }}
                   </p>
-                  <theme-notification-tag label="new" *ngIf="message.isNew" class=""></theme-notification-tag>
+                  <div class="nhsuk-u-padding-left-2">
+                    <theme-notification-tag label="new" *ngIf="message.isNew"></theme-notification-tag>
+                  </div>
                 </div>
+                <p *ngIf="!checkIfUnfollowed(message.createdBy.id)" class="nhsuk-u-margin-0 font-color-secondary nhsuk-u-font-size-16">Unfollowed this message</p>
               </div>
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">
                 {{ message.createdAt | date: ('app.date_formats.long_date_time' | translate) }}

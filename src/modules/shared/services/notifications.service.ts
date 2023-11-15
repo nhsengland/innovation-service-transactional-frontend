@@ -16,7 +16,7 @@ export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnu
   SUPPORT = 'SUPPORT'
 }
 
-export enum EmailNotificationsPreferencesEnum {
+export enum NotificationPreferenceEnum {
   YES = 'YES',
   NO = 'NO'
 }
@@ -76,6 +76,11 @@ export type NotificationsListInDTO = {
       assessmentId?: string;
 
       exportRequestId?: string;
+
+      supportId?: string;
+
+      collaboratorId?: string;
+
     }
   }[];
 };
@@ -99,7 +104,7 @@ export type NotificationsListOutDTO = {
 };
 
 export type EmailNotificationPreferencesDTO = {
-  [category: string]: EmailNotificationsPreferencesEnum
+  [category: string]: NotificationPreferenceEnum
 };
 
 @Injectable()
@@ -165,9 +170,10 @@ export class NotificationsService extends CoreService {
 
                 case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
                 case NotificationContextDetailEnum.ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA:
+                case NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
-                
+
               }
               break;
 
@@ -203,10 +209,20 @@ export class NotificationsService extends CoreService {
 
             case EmailNotificationCategoryEnum.AUTOMATIC:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
+                case NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/` }
+                  break;
+                case NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation` }
+                  break;
+
               }
               break;
 
@@ -221,7 +237,7 @@ export class NotificationsService extends CoreService {
                   break;
               }
               break;
-                
+
             case EmailNotificationCategoryEnum.SUPPORT_SUMMARY:
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
@@ -248,6 +264,33 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
                   link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
                   break;
+                case NotificationContextDetailEnum.DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR:
+                case NotificationContextDetailEnum.WI01_INNOVATION_WITHDRAWN:
+                case NotificationContextDetailEnum.SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS:
+                  link = null
+                  break;
+                case NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+                case NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/`}
+                  break;
+                case NotificationContextDetailEnum.TO06_TRANSFER_OWNERSHIP_ACCEPTS_PREVIOUS_OWNER:
+                  link = null
+                  break;
+                case NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS:
+                  link = { label: 'Click to go to threads', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads` }
+                  break;
+                case NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER:
+                  link = { label: 'Click to go to manage innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation` }
+                  break;
+                case NotificationContextDetailEnum.TO09_TRANSFER_OWNERSHIP_CANCELED_NEW_OWNER:
+                  link = null
+                  break;
+                case NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER:
+                  link = { label: 'Click to go to collaboration', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.params?.collaboratorId}` }
+                  break;
+
               }
               break;
 

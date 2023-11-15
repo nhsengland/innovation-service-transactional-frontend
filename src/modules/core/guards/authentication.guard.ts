@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { EnvironmentVariablesStore } from '../stores/environment-variables.store
 
 
 @Injectable()
-export class AuthenticationGuard implements CanActivate {
+export class AuthenticationGuard  {
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,

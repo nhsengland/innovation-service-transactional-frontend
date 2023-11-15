@@ -33,6 +33,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TagComponent } from './components/tag/tag.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
+import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 
 
 @NgModule({
@@ -72,7 +73,9 @@ import { InnovationRecordExportComponent } from './components/innovation-record-
     TagComponent,
     StatisticsCardsComponent,
 
-    InnovationRecordExportComponent
+    InnovationRecordExportComponent,
+
+    ChipsFilterComponent
   ],
   providers: [],
   exports: [
@@ -104,6 +107,8 @@ import { InnovationRecordExportComponent } from './components/innovation-record-
     SpinnerComponent,
     TagComponent,
     StatisticsCardsComponent,
+    
+    ChipsFilterComponent,
 
     InnovationRecordExportComponent
   ]

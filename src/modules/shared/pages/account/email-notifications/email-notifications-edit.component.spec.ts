@@ -9,17 +9,17 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { EmailNotificationCategoryEnum, EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationCategoryEnum, NotificationPreferenceEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
 
 
 const EmailNotificationsListMock = {
-	[EmailNotificationCategoryEnum.DOCUMENT]: EmailNotificationsPreferencesEnum.NO,
-	[EmailNotificationCategoryEnum.MESSAGE]: EmailNotificationsPreferencesEnum.YES,
-	[EmailNotificationCategoryEnum.REMINDER]: EmailNotificationsPreferencesEnum.NO,
-	[EmailNotificationCategoryEnum.SUPPORT]: EmailNotificationsPreferencesEnum.YES,
-	[EmailNotificationCategoryEnum.TASK]: EmailNotificationsPreferencesEnum.NO,
+	[EmailNotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
+	[EmailNotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[EmailNotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[EmailNotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[EmailNotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
 };
 
 

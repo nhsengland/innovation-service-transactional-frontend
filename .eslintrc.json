@@ -31,7 +31,11 @@
           "error",
           {
             "type": "element",
-            "prefix": ["app", "shared", "theme"],
+            "prefix": [
+              "app",
+              "shared",
+              "theme"
+            ],
             "style": "kebab-case"
           }
         ]

@@ -171,6 +171,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'careSettings', dataType: 'checkbox-array', label: stepsLabels.q10.label,
+        validations: { isRequired: [true, 'Choose at least one category'] },
         items: [
           ...careSettingsItems,
           { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'], maxLength: 100 } }) }
@@ -201,7 +202,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'involvedAACProgrammes', dataType: 'checkbox-array', label: stepsLabels.q14.label, description: stepsLabels.q14.description,
-        items: involvedAACProgrammesItems
+        validations: { isRequired: [true, 'Choose at least one category'] },
+        items: [...involvedAACProgrammesItems]
       }]
     })
   );
