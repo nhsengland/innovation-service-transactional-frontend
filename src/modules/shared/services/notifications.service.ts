@@ -16,7 +16,7 @@ export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnu
   SUPPORT = 'SUPPORT'
 }
 
-export enum EmailNotificationsPreferencesEnum {
+export enum NotificationPreferenceEnum {
   YES = 'YES',
   NO = 'NO'
 }
@@ -104,7 +104,7 @@ export type NotificationsListOutDTO = {
 };
 
 export type EmailNotificationPreferencesDTO = {
-  [category: string]: EmailNotificationsPreferencesEnum
+  [category: string]: NotificationPreferenceEnum
 };
 
 @Injectable()
@@ -173,7 +173,7 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
-                
+
               }
               break;
 
@@ -211,7 +211,7 @@ export class NotificationsService extends CoreService {
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
                   link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
-                  break; 
+                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
@@ -237,7 +237,7 @@ export class NotificationsService extends CoreService {
                   break;
               }
               break;
-                
+
             case EmailNotificationCategoryEnum.SUPPORT_SUMMARY:
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
