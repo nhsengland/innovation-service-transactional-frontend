@@ -548,7 +548,7 @@ export const locale = {
             // AP02_ : { title: `Innovation "{{innovationName}}" owner has been locked.` },
             // AP04_ : { title: `Innovation "{{innovationName}}" Your account has been moved from {{previousUnit}} to {{newUnit}}.` },
             // // New - AUTOMATIC - // TODO - Fix enum and check description variables //
-            AU01_INNOVATOR_INCOMPLETE_RECORD : { title: `Your innovation record remains in draft.`, link: `Review and update your innovation record.` },
+            AU01_INNOVATOR_INCOMPLETE_RECORD : { title: `Your innovation record remains in draft. `, link: `Review and update your innovation record.` },
             AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation `, link: `add a progress update to their support summary.` },
             // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.` },
             AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and `, link: `assign a support status by the end of the next working day.` },
