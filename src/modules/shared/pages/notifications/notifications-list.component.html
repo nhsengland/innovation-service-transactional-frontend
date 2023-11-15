@@ -103,12 +103,13 @@
                   </a>
                 </ng-container>
 
-                {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }} 
-
-                <a *ngIf="item.link" href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url, item.link.queryParams)">
-                  {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.link' | translate: item.params }}
-                  <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
-                </a>
+                <ng-container *ngIf="item.link">
+                  {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }} 
+                  <a href="/transactional{{ item.link.url }}" (click)="onNotificationClick($event, item.id, item.link.url, item.link.queryParams)">
+                    {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.link' | translate: item.params }}
+                    <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
+                  </a>
+                </ng-container>
 
                 <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
               </td>
