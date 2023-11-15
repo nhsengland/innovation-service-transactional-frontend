@@ -209,9 +209,12 @@ export class NotificationsService extends CoreService {
 
             case EmailNotificationCategoryEnum.AUTOMATIC:
               switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break; 
                 case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
                   link = { label: 'Click to go to support status', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support/${item.params?.supportId}` }
-                  break;
+                  break;                
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
