@@ -48,7 +48,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
       data: [{
         id: 'Notification001',
         innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
-        contextType: NotificationCategoryTypeEnum.DOCUMENT,
+        contextType: NotificationCategoryTypeEnum.DOCUMENTS,
         contextDetail: NotificationContextDetailEnum.DC01_UPLOADED_DOCUMENT_TO_INNOVATOR,
         contextId: 'Innovation001',
         createdAt: '2020-01-01T00:00:00.000Z',
