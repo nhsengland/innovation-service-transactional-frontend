@@ -1,7 +1,7 @@
 import { DateISOType, LinkType } from '@app/base/types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
-import { NotificationCategoryEnum } from './context.enums';
+import { NotificationCategoryTypeEnum } from './context.enums';
 
 
 export type ContextPageAlertType = {
@@ -54,7 +54,7 @@ export type ContextInnovationType = {
   assessment?: { id: string, createdAt: DateISOType, finishedAt: null | DateISOType },
   assignedTo?: { id: string, userRoleId: string, name: string },
   support?: { id: string, status: InnovationSupportStatusEnum },
-  notifications?: { [key in NotificationCategoryEnum]?: number },
+  notifications?: { [key in NotificationCategoryTypeEnum]?: number },
   collaboratorId?: string,
   createdAt?: DateISOType,
   reassessmentCount: number

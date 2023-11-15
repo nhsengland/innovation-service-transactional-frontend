@@ -10,22 +10,22 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
-import { NotificationCategoryEnum, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationCategoryTypeEnum, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsListComponent } from './email-notifications-list.component';
 
 
 const EmailNotificationsListMock = {
-	[NotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
 }
 
 

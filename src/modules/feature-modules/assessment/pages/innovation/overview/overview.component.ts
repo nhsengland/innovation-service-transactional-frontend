@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryEnum } from '@app/base/enums';
+import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
 import { StatisticsCardType } from '@app/base/types';
 
@@ -77,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: this.innovation.owner?.mobilePhone || '' }
         ];
 
-        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryEnum.INNOVATION, NotificationCategoryEnum.SUPPORT] });
+        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT] });
 
         return forkJoin([
           this.innovation.assessment ? this.assessmentService.getInnovationExemption(this.innovationId, this.innovation.assessment.id) : of(null),

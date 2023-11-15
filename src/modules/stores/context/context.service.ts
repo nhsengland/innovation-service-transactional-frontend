@@ -6,12 +6,12 @@ import { map, take } from 'rxjs/operators';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { NotificationContextDetailEnum, NotificationCategoryEnum } from './context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
 
 
 type InnovationNotificationsDTO = {
   count: number;
-  data: { [key in NotificationCategoryEnum]: number };
+  data: { [key in NotificationCategoryTypeEnum]: number };
 };
 
 
@@ -38,7 +38,7 @@ export class ContextService {
 
   }
 
-  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<void> {
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<void> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/notifications/dismiss').setPathParams({ innovationId });
     return this.http.patch<void>(url.buildUrl(), conditions).pipe(take(1))
   }

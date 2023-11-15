@@ -9,22 +9,22 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { NotificationPreferenceEnum, NotificationCategoryEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationPreferenceEnum, NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
 
 
 const EmailNotificationsListMock = {
-	[NotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
 };
 
 
@@ -61,7 +61,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
     notificationsService = TestBed.inject(NotificationsService);
 
     authenticationStore.userUrlBasePath = () => 'innovator';
-    activatedRoute.snapshot.params = { notificationType: NotificationCategoryEnum.SUPPORT };
+    activatedRoute.snapshot.params = { notificationType: NotificationCategoryTypeEnum.SUPPORT };
 
   });
 

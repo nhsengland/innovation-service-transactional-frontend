@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { NotificationCategoryEnum } from '@modules/stores/context/context.enums';
+import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -25,7 +25,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   notificationsList = new TableModel<
     NotificationsListOutDTO['data'][0],
-    { contextTypes: NotificationCategoryEnum[], unreadOnly: boolean }
+    { contextTypes: NotificationCategoryTypeEnum[], unreadOnly: boolean }
   >();
 
   form = new FormGroup({
@@ -65,8 +65,8 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     }).setOrderBy('createdAt', 'descending');
 
     const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
-      [NotificationCategoryEnum.NEEDS_ASSESSMENT, NotificationCategoryEnum.INNOVATION, NotificationCategoryEnum.SUPPORT, NotificationCategoryEnum.TASK, NotificationCategoryEnum.THREAD] :
-      Object.values(NotificationCategoryEnum);
+      [NotificationCategoryTypeEnum.NEEDS_ASSESSMENT, NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT, NotificationCategoryTypeEnum.TASK, NotificationCategoryTypeEnum.THREAD] :
+      Object.values(NotificationCategoryTypeEnum);
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
       label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
