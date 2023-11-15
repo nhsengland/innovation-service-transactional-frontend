@@ -9,17 +9,22 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { EmailNotificationCategoryEnum, NotificationPreferenceEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationPreferenceEnum, NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
 
 
 const EmailNotificationsListMock = {
-	[EmailNotificationCategoryEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[EmailNotificationCategoryEnum.MESSAGE]: NotificationPreferenceEnum.YES,
-	[EmailNotificationCategoryEnum.REMINDER]: NotificationPreferenceEnum.NO,
-	[EmailNotificationCategoryEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[EmailNotificationCategoryEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
 };
 
 
@@ -56,7 +61,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
     notificationsService = TestBed.inject(NotificationsService);
 
     authenticationStore.userUrlBasePath = () => 'innovator';
-    activatedRoute.snapshot.params = { notificationType: EmailNotificationsTypeEnum.SUPPORT };
+    activatedRoute.snapshot.params = { notificationType: NotificationCategoryTypeEnum.SUPPORT };
 
   });
 

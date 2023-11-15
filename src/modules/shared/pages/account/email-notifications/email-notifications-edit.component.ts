@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, UntypedFormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormArray, FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 
-import { NotificationPreferenceEnum, NotificationsService, EmailNotificationPreferencesDTO, EmailNotificationsTypeEnum } from '@modules/shared/services/notifications.service';
+import { NotificationPreferenceEnum, NotificationsService, EmailNotificationPreferencesDTO } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 

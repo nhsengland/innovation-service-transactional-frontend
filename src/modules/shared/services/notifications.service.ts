@@ -6,53 +6,21 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
-
-export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
-  TASK = 'TASK',
-  MESSAGE = 'MESSAGE',
-  SUPPORT = 'SUPPORT'
-}
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',
   NO = 'NO'
 }
 
-export enum EmailNotificationCategoryEnum {
-  // GENERAL
-  // A are only composed by GENERAL ones (not all)
-  TASK = 'TASK',
-  MESSAGE = 'MESSAGE',
-  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
-  SUPPORT = 'SUPPORT',
-  EXPORT_REQUEST = 'EXPORT_REQUEST',
-  ACCOUNT = 'ACCOUNT',
-  REMINDER = 'REMINDER',
-  // NA
-  INNOVATOR_SUBMIT_IR = 'INNOVATOR_SUBMIT_IR',
-  ASSIGN_NA = 'ASSIGN_NA',
-  // QA
-  SUGGEST_SUPPORT = 'SUGGEST_SUPPORT',
-  // I
-  DOCUMENT = 'DOCUMENT',
-  // OTHER BUCKET (THIS NEEDS TO BE REVISED)
-  INNOVATION = 'INNOVATION',
-  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
-  SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
-  AUTOMATIC = 'AUTOMATIC',
-  ADMIN = 'ADMIN'
-}
-
-
 export type NotificationsListInDTO = {
   count: number;
   data: {
     id: string;
     innovation: { id: string, name: string, status: InnovationStatusEnum, ownerName: string };
-    contextType: EmailNotificationCategoryEnum;
+    contextType: NotificationCategoryTypeEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
     createdAt: DateISOType;
@@ -113,7 +81,7 @@ export class NotificationsService extends CoreService {
   constructor() { super(); }
 
 
-  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: EmailNotificationCategoryEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
+  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: NotificationCategoryTypeEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -134,10 +102,10 @@ export class NotificationsService extends CoreService {
 
           switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
             //// NEW NOTIFICATIONS:
-            case EmailNotificationCategoryEnum.DOCUMENT:
+            case NotificationCategoryTypeEnum.DOCUMENTS:
               link = { label: 'Click to view document.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents/${item.params?.fileId}`};
               break;
-            case EmailNotificationCategoryEnum.TASK:
+            case NotificationCategoryTypeEnum.TASK:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR:
                   link = { label: 'Click to view task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
@@ -147,11 +115,11 @@ export class NotificationsService extends CoreService {
                   break;
                 }
               break;
-            case EmailNotificationCategoryEnum.MESSAGE:
+            case NotificationCategoryTypeEnum.MESSAGES:
                 link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
                 break;
 
-            case EmailNotificationCategoryEnum.SUPPORT:
+            case NotificationCategoryTypeEnum.SUPPORT:
               switch (item.contextDetail) {
                 // This case will probably be changed (just work for now)
                 case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
@@ -177,7 +145,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.NEEDS_ASSESSMENT:
+            case NotificationCategoryTypeEnum.NEEDS_ASSESSMENT:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR:
                   link = null;
@@ -207,7 +175,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.AUTOMATIC:
+            case NotificationCategoryTypeEnum.AUTOMATIC:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
                   link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
@@ -226,7 +194,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.SUGGEST_SUPPORT:
+            case NotificationCategoryTypeEnum.SUGGEST_SUPPORT:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA:
                 case NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION:
@@ -238,11 +206,11 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.SUPPORT_SUMMARY:
+            case NotificationCategoryTypeEnum.SUPPORT_SUMMARY:
               link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
 
-            case EmailNotificationCategoryEnum.ADMIN:
+            case NotificationCategoryTypeEnum.ADMIN:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
                   link = null;
@@ -253,7 +221,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case EmailNotificationCategoryEnum.INNOVATION_MANAGEMENT:
+            case NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED:
                   link = { label: 'Click to go to request', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
@@ -294,7 +262,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case NotificationContextTypeEnum.INNOVATION:
+            case NotificationCategoryTypeEnum.INNOVATION:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.COLLABORATOR_INVITE:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
@@ -314,13 +282,13 @@ export class NotificationsService extends CoreService {
               };
               break;
 
-            case NotificationContextTypeEnum.TASK:
+            case NotificationCategoryTypeEnum.TASK:
               link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
-            case NotificationContextTypeEnum.THREAD:
+            case NotificationCategoryTypeEnum.THREAD:
               link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
               break;
-            case NotificationContextTypeEnum.DATA_SHARING:
+            case NotificationCategoryTypeEnum.DATA_SHARING:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
                   link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
@@ -330,7 +298,7 @@ export class NotificationsService extends CoreService {
                   break;
               };
               break;
-            // case NotificationContextTypeEnum.COMMENT:
+            // case NotificationCategoryTypeEnum.COMMENT:
             //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
             //   break;
 
@@ -398,3 +366,5 @@ export class NotificationsService extends CoreService {
   }
 
 }
+export { NotificationCategoryTypeEnum };
+

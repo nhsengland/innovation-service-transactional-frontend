@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextTypeEnum } from '@app/base/enums';
+import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
@@ -137,7 +137,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
         // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationContextTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
+        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
 
         if (response.supports) {
 

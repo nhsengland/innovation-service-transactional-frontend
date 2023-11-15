@@ -10,7 +10,7 @@ import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
 import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
 
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from './context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
 
 
 @Injectable()
@@ -45,7 +45,7 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
-  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): void {
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): void {
 
     this.contextService.dismissNotification(innovationId, conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),

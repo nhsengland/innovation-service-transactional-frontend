@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationCategoryEnum, EmailNotificationPreferencesDTO, NotificationPreferenceEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationPreferencesDTO, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
