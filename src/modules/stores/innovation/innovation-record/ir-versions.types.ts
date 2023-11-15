@@ -14,7 +14,8 @@ export type FormSelectableFieldType<T> = {
   label: 'SEPARATOR' | string,
   description?: string,
   group?: string,
-  conditional?: FormEngineParameterModel
+  conditional?: FormEngineParameterModel,
+  exclusive?: boolean
 }[];
 
 

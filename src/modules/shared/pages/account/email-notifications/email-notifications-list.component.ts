@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationPreferencesDTO, EmailNotificationsPreferencesEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationPreferencesDTO, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -63,7 +63,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        this.isAnyOn = Object.values(response).some(item => item === EmailNotificationsPreferencesEnum.YES)
+        this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
 
         this.formPreferencesList = Object.keys(response).map((category) => ({
           value: category,
@@ -88,7 +88,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
 
     Object.keys(this.preferencesResponse).forEach(key => {
-            body.preferences[key] = this.isAnyOn ? EmailNotificationsPreferencesEnum.NO : EmailNotificationsPreferencesEnum.YES ;
+            body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES ;
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({

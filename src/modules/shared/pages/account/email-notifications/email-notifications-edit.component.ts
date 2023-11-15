@@ -4,7 +4,7 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 
-import { EmailNotificationsPreferencesEnum, NotificationsService, EmailNotificationPreferencesDTO } from '@modules/shared/services/notifications.service';
+import { NotificationPreferenceEnum, NotificationsService, EmailNotificationPreferencesDTO } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -56,7 +56,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-      Object.entries(response).filter((item) => item[1] === EmailNotificationsPreferencesEnum.YES).forEach((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
+      Object.entries(response).filter((item) => item[1] === NotificationPreferenceEnum.YES).forEach((item) => (this.form.get('preferencesEnabled') as FormArray).push(new FormControl<string>(item[0])));
 
       this.preferencesResponse = response;
 
@@ -78,7 +78,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
     const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
 
     Object.keys(this.preferencesResponse).forEach(value => {
-            body.preferences[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? EmailNotificationsPreferencesEnum.YES : EmailNotificationsPreferencesEnum.NO
+            body.preferences[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? NotificationPreferenceEnum.YES : NotificationPreferenceEnum.NO
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(

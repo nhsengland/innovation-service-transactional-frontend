@@ -66,7 +66,8 @@ export class FormEngineParameterModel {
     label: 'SEPARATOR' | string;
     description?: string;
     group?: string;
-    conditional?: FormEngineParameterModel
+    conditional?: FormEngineParameterModel;
+    exclusive?: boolean;
   }[];
 
   fieldsGroupConfig?: {

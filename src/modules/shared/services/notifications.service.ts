@@ -10,7 +10,7 @@ import { NotificationContextDetailEnum, NotificationCategoryEnum } from '@module
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
-export enum EmailNotificationsPreferencesEnum {
+export enum NotificationPreferenceEnum {
   YES = 'YES',
   NO = 'NO'
 }
@@ -72,7 +72,7 @@ export type NotificationsListOutDTO = {
 };
 
 export type EmailNotificationPreferencesDTO = {
-  [category: string]: EmailNotificationsPreferencesEnum
+  [category: string]: NotificationPreferenceEnum
 };
 
 @Injectable()
@@ -177,8 +177,8 @@ export class NotificationsService extends CoreService {
 
             case NotificationCategoryEnum.AUTOMATIC:
               switch (item.contextDetail) {
-                case NotificationContextDetailEnum.AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS:
-                  link = { label: 'Click to go to support status', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support/${item.params?.supportId}` }
+                case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
                   break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
