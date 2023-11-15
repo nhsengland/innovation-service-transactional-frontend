@@ -15,13 +15,13 @@ import { PageAccountEmailNotificationsEditComponent } from './email-notification
 
 
 const EmailNotificationsListMock = {
-	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
 	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
 	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
 	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.DOCUMENT]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.MESSAGE]: NotificationPreferenceEnum.YES,
+	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
 	[NotificationCategoryTypeEnum.REMINDER]: NotificationPreferenceEnum.NO,
 	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
 	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
