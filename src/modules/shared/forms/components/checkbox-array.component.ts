@@ -126,8 +126,10 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
     
     if (event.checked && valueIndex === -1) {
-      
-      (this.isItemExclusive(event.value) || this.isExclusiveChecked()) && this.fieldArrayControl.clear(); 
+
+      if (this.isItemExclusive(event.value) || this.isExclusiveChecked()){
+        this.fieldArrayControl.clear();
+      }
       
       this.fieldArrayControl.push(new FormControl(event.value));
       
@@ -144,11 +146,11 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   }
   
   private isExclusiveChecked(): boolean {
-    return ( this.exclusiveItem !== undefined && (this.fieldArrayControl.value as string[]).includes(this.exclusiveItem) );
+    return this.exclusiveItem !== undefined && (this.fieldArrayControl.value as string[]).includes(this.exclusiveItem);
   }
   
   private lookForAndSetExclusive() {
-    this.items?.map(item => item.exclusive && (this.exclusiveItem = item.value))
+    this.items?.forEach(item => item.exclusive && (this.exclusiveItem = item.value));
   }
 
 }
