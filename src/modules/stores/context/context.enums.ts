@@ -12,7 +12,6 @@ export enum NotificationCategoryTypeEnum {
 
   //TO DO - DELETE OLD ONES
   INNOVATION = 'INNOVATION',
-  MESSAGE = 'MESSAGE',
   REMINDER = 'REMINDER',
   THREAD = 'THREAD',
   SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
