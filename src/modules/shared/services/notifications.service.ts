@@ -102,7 +102,7 @@ export class NotificationsService extends CoreService {
 
           switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
             //// NEW NOTIFICATIONS:
-            case NotificationCategoryTypeEnum.DOCUMENT:
+            case NotificationCategoryTypeEnum.DOCUMENTS:
               link = { label: 'Click to view document.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents/${item.params?.fileId}`};
               break;
             case NotificationCategoryTypeEnum.TASK:
