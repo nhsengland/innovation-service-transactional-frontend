@@ -1,6 +1,6 @@
 export enum NotificationCategoryTypeEnum {
   TASK = 'TASK',
-  DOCUMENT = 'DOCUMENT',
+  DOCUMENTS = 'DOCUMENTS',
   MESSAGES = 'MESSAGES',
   SUPPORT = 'SUPPORT',
   NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
