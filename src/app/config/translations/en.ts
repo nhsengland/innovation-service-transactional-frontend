@@ -473,7 +473,6 @@ export const locale = {
             INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
-            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
             MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
             DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, //TO DO: DELETE OLD ONE
             // NEW ONES

@@ -274,10 +274,6 @@ export class NotificationsService extends CoreService {
                   break;
               };
               break;
-            // case NotificationCategoryTypeEnum.COMMENT:
-            //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
-            //   break;
-
           }
 
           const section = item.params?.section ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section) : undefined;
