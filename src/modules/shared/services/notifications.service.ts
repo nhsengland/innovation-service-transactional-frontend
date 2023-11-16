@@ -121,11 +121,6 @@ export class NotificationsService extends CoreService {
 
             case NotificationCategoryTypeEnum.SUPPORT:
               switch (item.contextDetail) {
-                // This case will probably be changed (just work for now)
-                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
-                  break;
-
                 case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
                 case NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR:
                   link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
@@ -167,11 +162,6 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED:
                 case NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED:
                   link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
-                  break;
-
-                //// OLD - TO BE REMOVED
-                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
-                  link = null;
                   break;
                 default:
                   link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };

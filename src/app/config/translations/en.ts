@@ -474,7 +474,6 @@ export const locale = {
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
-            // NEW ONES
             DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
             ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
             ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
@@ -482,33 +481,6 @@ export const locale = {
             AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy
           },
           notification_context_details: {
-            LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
-            // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
-            // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
-            //
-            // OLD - TO BE DELETED
-            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}".` },
-            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}".` },
-            TASK_CREATION: { title: `New task for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
-            TASK_UPDATE: { title: `Task {{ taskCode }} status updated to "{{ taskStatusName }}" on innovation "{{ innovationName }}".` },
-            NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
-            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment.` },
-            NEEDS_ASSESSMENT_COMPLETED_TO_INNOVATOR: { title: `The needs assessment for innovation "{{ innovationName }}" has been completed.` },
-            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation.` },
-            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review.` },
-            INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
-            INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
-            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
-            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.` },
-            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
-            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
-            INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },
-            COLLABORATOR_INVITE: { title: `You have been invited to collaborate on "{{ innovationName }}" innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
-            COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
-            TRANSFER_PENDING: { title: `The owner of innovation {{ innovationName }} has deleted their account. Innovation awaiting new owner.` },
-            TRANSFER_EXPIRED: { title: `The invitation to transfer your innovation ownership has expired. Manage your innovation.` },
-            TRANSFER_REMINDER: { title: `The invitation to accept ownership of {{ innovationName }} is about to expire. Accept or decline now.` },
-            INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED: { title: 'An organisation has been suggested to support your innovation but will not able to view it until you update your data sharing preferences.' },
             // // NEW - TASKS
             TA01_TASK_CREATION_TO_INNOVATOR: { title: `You have been assigned a task for innovation {{innovationName}} by {{unitName}}. `, link: `View task.` },
             TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS: { title: `A task has been {{status}} by {{requestUserName}}. `, link: `View message about this task.` },
