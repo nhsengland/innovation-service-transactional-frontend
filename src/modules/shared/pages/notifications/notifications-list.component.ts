@@ -6,9 +6,10 @@ import { CoreComponent } from '@app/base';
 import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { ANotificationCategories, InnovatorNotificationCategories, NANotificationCategories, NotificationCategoryTypeEnum, QANotificationCategories } from '@modules/stores/context/context.enums';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 type FilterKeysType = 'contextTypes';
@@ -64,9 +65,24 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
-    const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
-      [NotificationCategoryTypeEnum.NEEDS_ASSESSMENT, NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT, NotificationCategoryTypeEnum.TASK, NotificationCategoryTypeEnum.THREAD] :
-      Object.values(NotificationCategoryTypeEnum);
+    let contextTypesSubset: NotificationCategoryTypeEnum[];
+    switch(this.stores.authentication.getUserType()) {
+      case UserRoleEnum.INNOVATOR:
+        contextTypesSubset = InnovatorNotificationCategories;
+        break;
+      case UserRoleEnum.ASSESSMENT:
+        contextTypesSubset = NANotificationCategories;
+        break;
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
+        contextTypesSubset = QANotificationCategories;
+        break;
+      case UserRoleEnum.ACCESSOR:
+        contextTypesSubset = ANotificationCategories;
+        break;
+      default:
+        contextTypesSubset = [];
+        break;
+    }
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
       label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),

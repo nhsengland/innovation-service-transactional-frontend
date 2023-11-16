@@ -470,13 +470,20 @@ export const locale = {
 
           notification_context_types: {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
-            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } },
+            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } }, //TO DO: DELETE OLD ONE
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
-            THREAD: { title: { singular: 'Message', plural: 'Messages' } },
-            COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
-            MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
-            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }
+            THREAD: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
+            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
+            MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
+            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, //TO DO: DELETE OLD ONE
+            // NEW ONES
+            DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
+            ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
+            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
+            ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
+            ACCOUNT: { title: { singular: 'Account creation', plural: 'Account creation' } }, // TO DO: check copy
+            AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
