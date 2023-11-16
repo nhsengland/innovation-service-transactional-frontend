@@ -195,6 +195,8 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       unreadOnly: this.form.get('unreadOnly')!.value
     });
 
+    this.notificationsList.setPage(1);
+
     this.getNotificationsList();
 
   }
