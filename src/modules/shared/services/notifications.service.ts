@@ -264,9 +264,6 @@ export class NotificationsService extends CoreService {
             case NotificationCategoryTypeEnum.TASK:
               link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
               break;
-            case NotificationCategoryTypeEnum.THREAD:
-              link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
-              break;
             case NotificationCategoryTypeEnum.DATA_SHARING:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:

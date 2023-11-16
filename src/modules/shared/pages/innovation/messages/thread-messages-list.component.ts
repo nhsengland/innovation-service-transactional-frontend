@@ -137,7 +137,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
         // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.THREAD], contextIds: [this.threadInfo.id] });
+        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
 
         if (response.supports) {
 
