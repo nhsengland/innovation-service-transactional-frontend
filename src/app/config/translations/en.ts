@@ -471,7 +471,7 @@ export const locale = {
           notification_context_types: {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
             INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
-            SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
+            SUPPORT: { title: { singular: 'Support status and summary updates', plural: 'Support status and summary updates' } }, // TO DO: check copy
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
             DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
