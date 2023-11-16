@@ -98,7 +98,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         organisationsStatusDescription: Object.entries(occurrences).map(([_, item]) => `${item.count} ${item.text}`).join(', ')
       }
 
-      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationCategoryTypeEnum.INNOVATION]}); // TODO: Verify notifications from admin
+      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT]}); // TODO: Verify notifications from admin
 
       this.setPageStatus('READY');
 

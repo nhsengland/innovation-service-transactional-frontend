@@ -12,7 +12,6 @@ export enum NotificationCategoryTypeEnum {
   AUTOMATIC = 'AUTOMATIC', // QA , A, Innovator
 
   //TO DO - DELETE OLD ONES
-  INNOVATION = 'INNOVATION',
   THREAD = 'THREAD',
   // COMMENT = 'COMMENT'
   DATA_SHARING = 'DATA_SHARING'

@@ -77,7 +77,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: this.innovation.owner?.mobilePhone || '' }
         ];
 
-        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT] });
+        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT, NotificationCategoryTypeEnum.SUPPORT] });
 
         return forkJoin([
           this.innovation.assessment ? this.assessmentService.getInnovationExemption(this.innovationId, this.innovation.assessment.id) : of(null),

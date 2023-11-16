@@ -470,7 +470,7 @@ export const locale = {
 
           notification_context_types: {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
-            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } }, //TO DO: DELETE OLD ONE
+            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             THREAD: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
@@ -480,7 +480,6 @@ export const locale = {
             // NEW ONES
             DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
             ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
-            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
             ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
             ACCOUNT: { title: { singular: 'Account creation', plural: 'Account creation' } }, // TO DO: check copy
             AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy

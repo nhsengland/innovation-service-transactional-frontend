@@ -258,28 +258,7 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER:
                   link = { label: 'Click to go to collaboration', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.params?.collaboratorId}` }
                   break;
-
               }
-              break;
-
-            case NotificationCategoryTypeEnum.INNOVATION:
-              switch (item.contextDetail) {
-                case NotificationContextDetailEnum.COLLABORATOR_INVITE:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
-                  break;
-                case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
-                  break;
-                case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
-                  link = null;
-                  break;
-                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
-                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
-                  break;
-                default:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
-                  break;
-              };
               break;
 
             case NotificationCategoryTypeEnum.TASK:

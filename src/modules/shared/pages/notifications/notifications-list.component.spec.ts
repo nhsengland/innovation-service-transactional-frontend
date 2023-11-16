@@ -189,7 +189,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
-  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryTypeEnum.INNOVATION));
+  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT));
   //   tick(500); // Needed because of the debounce on the form.
 
   //   expect(component.notificationsList.getTotalRowsNumber()).toBe(20);
@@ -197,7 +197,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //     key: 'contextTypes',
   //     title: 'Types',
   //     showHideStatus: 'opened',
-  //     selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION.title.plural', value: 'INNOVATION' }]
+  //     selected: [{ label: 'shared.catalog.innovation.notification_context_types.INNOVATION_MANAGEMENT.title.plural', value: 'INNOVATION' }]
   //   }]);
 
   // }));
@@ -253,7 +253,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
 
-  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryTypeEnum.INNOVATION));
+  //   (component.form.get('contextTypes') as FormArray).push(new FormControl(NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT));
 
   //   component.onRemoveFilter('contextTypes', 'INVALID VALUE');
   //   expect((component.form.get('contextTypes') as FormArray).length).toBe(1);
