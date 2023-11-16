@@ -137,9 +137,12 @@ export class NotificationsService extends CoreService {
                   break;
 
                 case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
-                case NotificationContextDetailEnum.ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA:
                 case NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+
+                case NotificationContextDetailEnum.ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA:
+                  link = null;
                   break;
 
                 case NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS:
