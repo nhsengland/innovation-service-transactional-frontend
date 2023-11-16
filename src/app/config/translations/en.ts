@@ -393,11 +393,11 @@ export const locale = {
               },
               QUALIFYING_ACCESSOR: {
                 title: 'Reminders',
-                description: 'Recieve reminders for you to interact with innovations you are supporting.'
+                description: 'Receive reminders for you to interact with innovations you are supporting.'
               },
               ACCESSOR: {
                 title: 'Reminders',
-                description: 'Recieve reminders for you to interact with innovations you are supporting.'
+                description: 'Receive reminders for you to interact with innovations you are supporting.'
               },
             },
 
