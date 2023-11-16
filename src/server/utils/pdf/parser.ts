@@ -37,7 +37,6 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
 
   try {
     content = getAllSectionsSummary(sections, version);
-    console.log(content)
   } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }

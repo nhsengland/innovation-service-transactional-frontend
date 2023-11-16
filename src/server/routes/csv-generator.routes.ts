@@ -1,9 +1,9 @@
 import * as express from 'express';
 import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
-import { CSVGeneratorSectionsNotFoundError, PDFGeneratorSectionsNotFoundError } from '../utils/errors';
-import { generatePDF } from '../utils/pdf/parser';
+import { CSVGeneratorSectionsNotFoundError } from '../utils/errors';;
 import { getAccessTokenBySessionId } from './authentication.routes';
+import { generateCSV } from '../utils/csv/parser';
 
 const csvRouter = express.Router();
 
@@ -22,7 +22,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
     };
     const version = req.query.version && typeof req.query.version === 'string' ? req.query.version : undefined;
 
-    generatePDF(req.params.innovationId, config, version)
+    generateCSV(req.params.innovationId, config, version)
       .then((response: any) => {
 
         const client = getAppInsightsClient();
@@ -62,8 +62,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
             stack: error.stack,
           }
         })
-        // console.log(error);
-        // console.log(`Error when attempting to generate the PDF from innovation ${innovationId}`);
+
         const status = error instanceof CSVGeneratorSectionsNotFoundError ? 404 : 500;
         res.status(status).send();
       });
