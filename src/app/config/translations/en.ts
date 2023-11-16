@@ -474,7 +474,6 @@ export const locale = {
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
             MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
-            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, //TO DO: DELETE OLD ONE
             // NEW ONES
             DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
             ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy

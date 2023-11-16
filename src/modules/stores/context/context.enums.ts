@@ -10,9 +10,6 @@ export enum NotificationCategoryTypeEnum {
   ADMIN = 'ADMIN', // QA, A, Innovator
   ACCOUNT = 'ACCOUNT', // Innovator
   AUTOMATIC = 'AUTOMATIC', // QA , A, Innovator
-
-  //TO DO - DELETE OLD ONES
-  DATA_SHARING = 'DATA_SHARING'
 }
 
 export const QANotificationCategories = [
