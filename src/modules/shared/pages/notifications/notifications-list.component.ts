@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { ANotificationCategories, InnovatorNotificationCategories, NANotificationCategories, NotificationCategoryTypeEnum, QANotificationCategories } from '@modules/stores/context/context.enums';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -64,9 +64,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
-    const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
-      [NotificationCategoryTypeEnum.NEEDS_ASSESSMENT, NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT, NotificationCategoryTypeEnum.TASK, NotificationCategoryTypeEnum.THREAD] :
-      Object.values(NotificationCategoryTypeEnum);
+    const contextTypesSubset = this.stores.authentication.isQualifyingAccessorRole() ? QANotificationCategories : this.stores.authentication.isAccessorRole() ? ANotificationCategories : this.stores.authentication.isAssessmentType() ? NANotificationCategories : InnovatorNotificationCategories;
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
       label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),

@@ -142,6 +142,10 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
 
+                case NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS:
+                case NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS :
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
+                  break;
               }
               break;
 
@@ -194,7 +198,7 @@ export class NotificationsService extends CoreService {
               }
               break;
 
-            case NotificationCategoryTypeEnum.SUGGEST_SUPPORT:
+            case NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS:
               switch (item.contextDetail) {
                 case NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA:
                 case NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION:
@@ -204,10 +208,6 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
                   break;
               }
-              break;
-
-            case NotificationCategoryTypeEnum.SUPPORT_SUMMARY:
-              link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
               break;
 
             case NotificationCategoryTypeEnum.ADMIN:

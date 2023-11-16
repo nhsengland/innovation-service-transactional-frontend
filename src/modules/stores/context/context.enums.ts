@@ -1,24 +1,62 @@
 export enum NotificationCategoryTypeEnum {
-  TASK = 'TASK',
-  DOCUMENTS = 'DOCUMENTS',
-  MESSAGES = 'MESSAGES',
-  SUPPORT = 'SUPPORT',
-  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT',
-  ORGANISATION_SUGGESTIONS = 'ORGANISATION_SUGGESTIONS',
-  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT',
-  ADMIN = 'ADMIN',
-  ACCOUNT = 'ACCOUNT',
-  AUTOMATIC = 'AUTOMATIC',
+  //TO DO: check the order for side menu
+  NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT', // QA, A, NA, Innovator
+  INNOVATION_MANAGEMENT = 'INNOVATION_MANAGEMENT', // QA, A, NA, Innovator
+  SUPPORT = 'SUPPORT', // QA, A, Innovator
+  TASK = 'TASK', // QA, A, NA, Innovator
+  MESSAGES = 'MESSAGES', // QA, A, NA, Innovator
+  DOCUMENTS = 'DOCUMENTS', // Innovator
+  ORGANISATION_SUGGESTIONS = 'ORGANISATION_SUGGESTIONS', // QA, Innovator
+  ADMIN = 'ADMIN', // QA, A, Innovator
+  ACCOUNT = 'ACCOUNT', // Innovator
+  AUTOMATIC = 'AUTOMATIC', // QA , A, Innovator
 
   //TO DO - DELETE OLD ONES
   INNOVATION = 'INNOVATION',
-  REMINDER = 'REMINDER',
   THREAD = 'THREAD',
-  SUPPORT_SUMMARY = 'SUPPORT_SUMMARY',
-  SUGGEST_SUPPORT = 'SUGGEST_SUPPORT',
   // COMMENT = 'COMMENT'
   DATA_SHARING = 'DATA_SHARING'
 }
+
+export const QANotificationCategories = [
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.SUPPORT,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.MESSAGES,
+  NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS,
+  NotificationCategoryTypeEnum.ADMIN,
+  NotificationCategoryTypeEnum.AUTOMATIC
+]
+
+export const ANotificationCategories = [
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.SUPPORT,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.MESSAGES,
+  NotificationCategoryTypeEnum.ADMIN
+]
+
+export const NANotificationCategories = [
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.MESSAGES
+]
+
+export const InnovatorNotificationCategories = [
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.SUPPORT,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.MESSAGES,
+  NotificationCategoryTypeEnum.DOCUMENTS,
+  NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS,
+  NotificationCategoryTypeEnum.ADMIN,
+  NotificationCategoryTypeEnum.ACCOUNT,
+  NotificationCategoryTypeEnum.AUTOMATIC
+]
 
 export enum NotificationContextDetailEnum {
   LOCK_USER = 'LOCK_USER',
