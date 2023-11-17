@@ -33,63 +33,13 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   try {
     content = getAllSectionsSummary(sections, version);
-    parsedCSV = parseCsvText(content);
+    // parsedCSV = parseCsvText(content);
   } catch (error: any) {
     throw new CSVGeneratorParserError(error);
   }
 
-  const response = await generateCSVHandler(innovationId, parsedCSV, config);
+  const response = await generateCSVHandler(innovationId, content, config);
 
   return response;
 
 };
-
-export const parseCsvText = (content: AllSectionsOutboundPayloadType ): string => {
-
-  let csvData: string = '';
-  let sectionIndex = 0;
-  let subsectionIndex = 0;
-  let questionIndex = 0;
-
-  // Add headers
-  csvData = 'Section,Question,Answer,\n';
-
-  content.map(section => {
-    sectionIndex = content.indexOf(section) + 1;
-    let sectionNumber = `${sectionIndex}.`;
-    // Add section line
-    csvData += (formatCsvLine(sectionNumber, section.title));
-
-    section.sections.map(subsection => {
-
-      subsectionIndex = section.sections.indexOf(subsection) + 1;
-      let subsectionNumber = `${sectionIndex}.${subsectionIndex}.`;
-      // Add subsection line
-      csvData += (formatCsvLine(subsectionNumber, subsection.section));
-
-      subsection.answers.map(question => {
-        questionIndex = subsection.answers.indexOf(question) + 1;
-        let questionNumber= `${sectionIndex}.${subsectionIndex}.${questionIndex}.`;
-        // Add question line
-        csvData +=(formatCsvLine(questionNumber, '', question.label, question.value));
-      })
-    })
-  })
-
-  console.log('CSV DATA: ');
-  console.log(csvData);
-
-  return csvData;
-
-}
-
-export const formatCsvLine = (section?: string, title?: string, question?: string, answer?: string): string => {
-  let sectionNum = section? `${section} ` : '';
-  let lineTitle = `${sectionNum}${title ?? ''}` ?? '';
-  let lineQuestion = question? `"${question}"` : '';
-  let lineAnswer = answer?  `"${answer}"` : '-';
-
-  let csvLine: string = lineTitle + ',' + lineQuestion + ',' + lineAnswer + ',' + '\n'; 
-  return csvLine 
-}
-
