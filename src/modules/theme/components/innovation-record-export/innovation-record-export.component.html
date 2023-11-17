@@ -1,7 +1,7 @@
 <ng-container *ngIf="!button">
-    <a [href]="exportDocumentUrl" >{{ label ? label : 'Export your current innovation record' }} ({{ fileType | uppercase }})</a>
+    <a [href]="exportDocumentUrl" >{{ customLabel ? customLabel : 'Export your current innovation record' }} ({{ fileType | uppercase }})</a>
 </ng-container>
 
 <ng-container *ngIf="button">
-    <a [href]="exportDocumentUrl" [ngClass]="btnStyle === 'primary'? 'nhsuk-button' : 'nhsuk-button nhsuk-button--secondary'" class="nhsuk-u-margin-bottom-0">{{ label ? label : 'Download record' }} ({{ fileType | uppercase }})</a>
+    <a [href]="exportDocumentUrl" [ngClass]="btnStyle === 'primary'? 'nhsuk-button' : 'nhsuk-button nhsuk-button--secondary'" class="nhsuk-u-margin-bottom-0">{{ customLabel ? customLabel : 'Download record' }} ({{ fileType | uppercase }})</a>
 </ng-container>

@@ -6,9 +6,8 @@ import { sectionType } from '@modules/stores/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 
-import { CSVGeneratorParserError, CSVGeneratorSectionsNotFoundError, PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
+import { CSVGeneratorParserError, CSVGeneratorSectionsNotFoundError } from '../errors';
 import { getSections } from '../pdf/parser';
-import { add } from 'lodash';
 
 export const generateCSVHandler = async (innovationId: string, body: any, config: any) => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/csv`;
@@ -23,7 +22,6 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType, data: MappedObjectType }[];
-  let parsedCSV: string;
 
   try {
     sections = await getSections(innovationId, config, version);
@@ -33,7 +31,6 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   try {
     content = getAllSectionsSummary(sections, version);
-    // parsedCSV = parseCsvText(content);
   } catch (error: any) {
     throw new CSVGeneratorParserError(error);
   }

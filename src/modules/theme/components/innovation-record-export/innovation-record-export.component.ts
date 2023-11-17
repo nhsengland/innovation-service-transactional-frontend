@@ -10,10 +10,8 @@ export class InnovationRecordExportComponent extends CoreComponent implements On
     @Input() innovationId: string = '';
     @Input() fileType: 'csv' | 'pdf' = 'pdf'; 
     @Input() button?: boolean = false;
-    @Input() label?: string | undefined = undefined;
+    @Input() customLabel?: string | undefined = undefined;
     @Input() btnStyle?: 'primary' | 'secondary' = 'primary';
-
-    // exportPayload: { fileType: string, data: AllSectionsOutboundPayloadType};
 
     exportDocumentUrl : string = '';
 
