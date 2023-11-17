@@ -23,6 +23,7 @@ import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
 import { AppServerModule } from './src/main.server';
+import csvRouter from 'src/server/routes/csv-generator.routes';
 
 dotenv.config();
 
@@ -79,6 +80,7 @@ export function app(): express.Express {
   // Routes
   server.use(authenticationRouter);
   server.use(pdfRouter);
+  server.use(csvRouter);
   server.use(fileUploadRouter);
   server.use(apiRouter);
 
