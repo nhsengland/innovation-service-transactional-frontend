@@ -332,7 +332,7 @@ export const locale = {
 
           email_notification_preferences: {
 
-            DOCUMENT: {
+            DOCUMENTS: {
               INNOVATOR: {
                 title: 'Documents',
                 description: 'Get notified when a support organisation uploads a document for you.'
@@ -354,7 +354,7 @@ export const locale = {
               }
             },
 
-            MESSAGE: {
+            MESSAGES: {
               SHARED:{
                 title: 'Messages',
                 description: 'Get notified about new messages and replies.',
