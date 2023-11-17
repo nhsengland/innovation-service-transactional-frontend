@@ -456,16 +456,62 @@ export const locale = {
           },
 
           notification_context_types: {
-            NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
-            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
-            SUPPORT: { title: { singular: 'Support status and summary updates', plural: 'Support status and summary updates' } }, // TO DO: check copy
-            TASK: { title: { singular: 'Task', plural: 'Tasks' } },
-            MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
-            DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
-            ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
-            ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
-            ACCOUNT: { title: { singular: 'Account creation', plural: 'Account creation' } }, // TO DO: check copy
-            AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy
+            NEEDS_ASSESSMENT: {
+              INNOVATOR: { title: 'Needs assessment' },
+              QUALIFYING_ACCESSOR: { title: 'Needs assessment' },
+              ACCESSOR: { title: 'Needs assessment' },
+              ASSESSMENT: { title: 'Needs assessment' }
+            },
+
+            INNOVATION_MANAGEMENT: {
+              INNOVATOR: { title: 'Manage innovation' },
+              QUALIFYING_ACCESSOR: { title: 'Withdrawals and export requests' },
+              ACCESSOR: { title: 'Withdrawals and export requests' },
+              ASSESSMENT: { title: 'Innovation withdrawals' }
+            },
+
+            SUPPORT: {
+              INNOVATOR: { title: 'Support status and summary updates' },
+              QUALIFYING_ACCESSOR: { title: 'Support status' },
+              ACCESSOR: { title: 'Support status and summary updates' }
+            },
+
+            TASK: {
+              INNOVATOR: { title: 'Tasks to do' },
+              QUALIFYING_ACCESSOR: { title: 'Tasks' },
+              ACCESSOR: { title: 'Tasks' },
+              ASSESSMENT: { title: 'Tasks' }
+            },
+
+            MESSAGES: {
+              INNOVATOR: { title: 'Messages' },
+              QUALIFYING_ACCESSOR: { title: 'Messages' },
+              ACCESSOR: { title: 'Messages' },
+              ASSESSMENT: { title: 'Messages' }
+            },
+
+            DOCUMENTS: {
+              INNOVATOR: { title: 'Documents' },
+              QUALIFYING_ACCESSOR: { title: '' }
+            },
+
+            ORGANISATION_SUGGESTIONS: {
+              INNOVATOR: { title: 'Suggested organisations' },
+              QUALIFYING_ACCESSOR: { title: 'Suggestions to support' }
+            },
+
+            ADMIN: {
+              INNOVATOR: { title: 'Your account' },
+              QUALIFYING_ACCESSOR: { title: 'Your account' },
+              ACCESSOR: { title: 'Your account' }
+            },
+
+            AUTOMATIC: {
+              INNOVATOR: { title: 'System reminders' },
+              QUALIFYING_ACCESSOR: { title: 'System reminders' },
+              ACCESSOR: { title: 'System reminders' },
+              ASSESSMENT: { title: 'System reminders' }
+            }
           },
           notification_context_details: {
             // TASKS

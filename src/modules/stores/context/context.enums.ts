@@ -13,43 +13,43 @@ export enum NotificationCategoryTypeEnum {
 }
 
 export const QANotificationCategories = [
-  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
-  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
-  NotificationCategoryTypeEnum.SUPPORT,
-  NotificationCategoryTypeEnum.TASK,
-  NotificationCategoryTypeEnum.MESSAGES,
   NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS,
+  NotificationCategoryTypeEnum.SUPPORT,
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
+  NotificationCategoryTypeEnum.MESSAGES,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.ADMIN,
   NotificationCategoryTypeEnum.AUTOMATIC
 ]
 
 export const ANotificationCategories = [
-  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
-  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.SUPPORT,
-  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.MESSAGES,
-  NotificationCategoryTypeEnum.ADMIN
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.ADMIN,
+  NotificationCategoryTypeEnum.AUTOMATIC
 ]
 
 export const NANotificationCategories = [
   NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
-  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.MESSAGES,
   NotificationCategoryTypeEnum.TASK,
-  NotificationCategoryTypeEnum.MESSAGES
+  NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT
 ]
 
 export const InnovatorNotificationCategories = [
-  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
+  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.SUPPORT,
-  NotificationCategoryTypeEnum.TASK,
-  NotificationCategoryTypeEnum.MESSAGES,
-  NotificationCategoryTypeEnum.DOCUMENTS,
   NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS,
-  NotificationCategoryTypeEnum.ADMIN,
-  NotificationCategoryTypeEnum.ACCOUNT,
-  NotificationCategoryTypeEnum.AUTOMATIC
+  NotificationCategoryTypeEnum.MESSAGES,
+  NotificationCategoryTypeEnum.TASK,
+  NotificationCategoryTypeEnum.DOCUMENTS,
+  NotificationCategoryTypeEnum.AUTOMATIC,
+  NotificationCategoryTypeEnum.ADMIN
 ]
 
 export enum NotificationContextDetailEnum {
