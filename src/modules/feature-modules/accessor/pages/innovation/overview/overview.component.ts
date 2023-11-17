@@ -88,7 +88,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(this.innovationSupport.status);
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT] });
 
       if (this.innovation.support?.id) {
         this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.SUPPORT], contextIds: [this.innovation.support.id] });

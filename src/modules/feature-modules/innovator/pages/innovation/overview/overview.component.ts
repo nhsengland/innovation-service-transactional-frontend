@@ -64,7 +64,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT, NotificationCategoryTypeEnum.SUPPORT] });
 
       const innovationContext = this.stores.context.getInnovation();
 

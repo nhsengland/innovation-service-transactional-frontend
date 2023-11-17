@@ -457,100 +457,52 @@ export const locale = {
 
           notification_context_types: {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
-            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } }, //TO DO: DELETE OLD ONE
-            SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
+            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
+            SUPPORT: { title: { singular: 'Support status and summary updates', plural: 'Support status and summary updates' } }, // TO DO: check copy
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
-            THREAD: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
-            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
             MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
-            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, //TO DO: DELETE OLD ONE
-            // NEW ONES
             DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
             ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
-            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
             ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
             ACCOUNT: { title: { singular: 'Account creation', plural: 'Account creation' } }, // TO DO: check copy
             AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy
           },
           notification_context_details: {
-            LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },
-            // COMMENT_CREATION: { title: `New comment for innovation "{{ innovationName }}"` },
-            // COMMENT_REPLY: { title: `New comment reply for innovation "{{ innovationName }}"` },
-            //
-            // OLD - TO BE DELETED
-            THREAD_CREATION: { title: `New conversation for innovation "{{ innovationName }}".` },
-            THREAD_MESSAGE_CREATION: { title: `New message for a conversation on innovation "{{ innovationName }}".` },
-            TASK_CREATION: { title: `New task for section {{ sectionNumber }} on innovation "{{ innovationName }}".` },
-            TASK_UPDATE: { title: `Task {{ taskCode }} status updated to "{{ taskStatusName }}" on innovation "{{ innovationName }}".` },
-            NEEDS_ASSESSMENT_STARTED: { title: `The needs assessment for innovation "{{ innovationName }}" has started.` },
-            NEEDS_ASSESSMENT_COMPLETED: { title: `Innovation "{{ innovationName }}" was suggested by needs assessment.` },
-            NEEDS_ASSESSMENT_COMPLETED_TO_INNOVATOR: { title: `The needs assessment for innovation "{{ innovationName }}" has been completed.` },
-            NEEDS_ASSESSMENT_ORGANISATION_SUGGESTION: { title: `Assessment team suggested one or more organisations for you to share your innovation.` },
-            INNOVATION_SUBMISSION: { title: `Innovation "{{ innovationName }}" is available for review.` },
-            INNOVATION_SUBMISSION_TO_INNOVATORS: { title: `Innovation "{{ innovationName }}" has been submitted for a needs assessment.` },
-            INNOVATION_SUBMISSION_REASSESSMENT: { title: `Innovation "{{ innovationName }}" has been submitted for a needs reassessment.` },
-            SUPPORT_STATUS_UPDATE: { title: `{{ organisationUnitName }} changed the support status of innovation "{{ innovationName }}" to "{{ supportStatusName }}".` },
-            SUPPORT_SUMMARY_UPDATE: { title: `{{ organisationUnitName }} has added a progress update to your support summary.` },
-            INNOVATION_REASSESSMENT_REQUEST: { title: `Innovation "{{ innovationName }}" is available for reassessment review.` },
-            INNOVATION_STOP_SHARING: { title: `Sharing of innovation "{{ innovationName }}" has been stopped for all supporting organisations.` },
-            INNOVATION_WITHDRAWN: { title: `The innovation "{{ innovationName }}" has been withdrawn by the owner. You can no longer access this innovation.` },
-            COLLABORATOR_INVITE: { title: `You have been invited to collaborate on "{{ innovationName }}" innovation by its owner {{ innovationOwnerName }}. You have 30 days to respond before the invitation expires. See invitation.` },
-            COLLABORATOR_UPDATE: { title: `Your invitation to collaborate on {{ innovationName }} innovation has been cancelled.` },
-            TRANSFER_PENDING: { title: `The owner of innovation {{ innovationName }} has deleted their account. Innovation awaiting new owner.` },
-            TRANSFER_EXPIRED: { title: `The invitation to transfer your innovation ownership has expired. Manage your innovation.` },
-            TRANSFER_REMINDER: { title: `The invitation to accept ownership of {{ innovationName }} is about to expire. Accept or decline now.` },
-            INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED: { title: 'An organisation has been suggested to support your innovation but will not able to view it until you update your data sharing preferences.' },
-            // // NEW - TASKS
+            // TASKS
             TA01_TASK_CREATION_TO_INNOVATOR: { title: `You have been assigned a task for innovation {{innovationName}} by {{unitName}}. `, link: `View task.` },
             TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS: { title: `A task has been {{status}} by {{requestUserName}}. `, link: `View message about this task.` },
             TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT: { title: `A task you assigned on innovation {{innovationName}} has been done by {{requestUserName}}. `, link: `View message about this task.` },
             TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT: { title: `A task you assigned on innovation {{innovationName}} has been declined by {{requestUserName}}. `, link: `View message about this task.` },
             TA05_TASK_CANCELLED_TO_INNOVATOR: { title: `A task for innovation {{innovationName}} has been cancelled by {{requestUserName}} at {{unitName}}. `, link: `View message about this task.` },
             TA06_TASK_REOPEN_TO_INNOVATOR: { title: `A task for innovation {{innovationName}} has been reopened by {{requestUserName}} at {{unitName}}. `, link: `View message about this task.` },
-            // // NEW - DOCUMENT
+            // DOCUMENTS
             DC01_UPLOADED_DOCUMENT_TO_INNOVATOR: { title: `{{unitName}} has uploaded a document for you to review. `, link: `View document.` },
-            // New - MESSAGES
+            // MESSAGES
             ME01_THREAD_CREATION : { title: `You have been added to a message thread about innovation {{innovationName}} by {{senderDisplayInformation}}. `, link: `View message thread.` },
             ME02_THREAD_ADD_FOLLOWERS : { title: `You have been added to a message thread about innovation {{innovationName}} by {{senderDisplayInformation}}. `, link: `View message thread.` },
             ME03_THREAD_MESSAGE_CREATION : { title: `You have a new message from {{senderDisplayInformation}} about innovation {{innovationName}}. `, link: `View message thread.` },
-            // NEW - SUPPORT
+            // SUPPORT
             ST01_SUPPORT_STATUS_TO_ENGAGING : { title: `{{unitName}} has updated their support status to engaging for {{innovationName}}. `, link: `View message.` },
             ST02_SUPPORT_STATUS_TO_OTHER : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. `, link: `View support summary.` },
             ST03_SUPPORT_STATUS_TO_WAITING : { title: `{{unitName}} has updated their support status to {{status}} for {{innovationName}}. `, link: `View support summary.` },
-            // // NEW - SUPPORT STATUS - // TODO - Fix enum and check description variables //
             ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR : { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. `, link: `View message.` },
             ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA : { title: `You have been assigned as an accessor for {{innovationName}}. `, link: `Review the innovation and contact the innovator within 5 working days.` },
             ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA : { title: `You are no longer the assigned accessor for {{innovationName}}.` },
             ST07_SUPPORT_STATUS_CHANGE_REQUEST : { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{proposedStatus}}. `, link: `Update support status.` },
-            // // New - SUPPORT SUMMARY - // TODO - Fix enum and check description variables //
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS : { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
-            // // New - NEEDS ASSESSMENT - // TODO - Fix enum and check description variables //
+            // // NEEDS ASSESSMENT
             NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.` },
             NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT : { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}. `, link: `Review the innovation record and make contact with the innovator within 2 working days.` },
             NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} has started. `, link: `View message from the needs assessment team.` },
             NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR : { title: `The needs assessment for innovation {{innovationName}} is complete. `, link: `View needs assessment.` },
-            NA05_NEEDS_ASSESSOR_REMOVED : { title: `Your organisation has been suggested to support {{innovationName}}. `, link: `Review the innovation and assign a support status within 5 working days.` },
             NA06_NEEDS_ASSESSOR_REMOVED : { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in `, link: `innovation overview.` },
             NA07_NEEDS_ASSESSOR_ASSIGNED : { title: `You have been assigned as the needs assessor for {{innovationName}}. `, link: `Review the innovation record and make contact with the innovator within 2 working days.` },
-            // // New - ORGANISATIONS SUGGESTIONS - // TODO - Fix enum and check description variables //
+            // ORGANISATIONS SUGGESTIONS
             OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA : { title: `Your organisation has been suggested to support {{innovationName}} by {{senderDisplayInformation}}. `, link: `Review the innovation and assign a support status within 5 working days.` },
             OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you `, link: `update your data sharing preferences.` },
             OS03_INNOVATION_DELAYED_SHARED_SUGGESTION : { title: `Your organisation has been suggested to support innovation {{innovationName}}. `, link: `Review the innovation and assign a support status within 5 working days.` },
-            // OS04_ : { title: `One or more organisations have been suggested to support your innovation. They will not be able to support you until you update your data sharing preferences.` },
-            // // New - ADMIN PORTAL - // TODO - Fix enum and check description variables //
-            // AP02_ : { title: `Innovation "{{innovationName}}" owner has been locked.` },
-            // AP04_ : { title: `Innovation "{{innovationName}}" Your account has been moved from {{previousUnit}} to {{newUnit}}.` },
-            // // New - AUTOMATIC - // TODO - Fix enum and check description variables //
-            AU01_INNOVATOR_INCOMPLETE_RECORD : { title: `Your innovation record remains in draft. `, link: `Review and update your innovation record.` },
-            AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation `, link: `add a progress update to their support summary.` },
-            // AU03_ : { title: `Innovation {{innovationName}} is not receiving an active support on the service. Find out more about your options and decide how you want to progress.` },
-            AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and `, link: `assign a support status by the end of the next working day.` },
-            AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and `, link: `assign a support status as soon as possible.` },
-            AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER: { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
-            AU09_TRANSFER_EXPIRED: { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in `, link: `manage innovation.` },
-            // AU07_ : { title: `{{innovationName}} has been waiting for 3 months. View innovation and review support status.` },
-            // // New - INNOVATION MANAGEMENT - // TODO - Fix enum and check description variables //
+            // INNOVATION MANAGEMENT
             RE01_EXPORT_REQUEST_SUBMITTED: { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. `, link: `View request.` },
             RE02_EXPORT_REQUEST_APPROVED: { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. `, link: `View and export the innovation record.` },
             RE03_EXPORT_REQUEST_REJECTED: { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. `, link: `View reason.` },
@@ -558,37 +510,30 @@ export const locale = {
             SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: { title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.` },
             SH03_INNOVATION_STOPPED_SHARED_TO_SELF: { title : `You have stopped sharing innovation {{innovationName}} with all support organisations.` },
             DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR: { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.` },
+            MC01_COLLABORATOR_INVITE_EXISTING_USER: { title: `{{requestUserName}} has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. `, link: `View invitation.` },
+            MC03_COLLABORATOR_UPDATE_CANCEL_INVITE : { title: `{{innovatorName}} has cancelled their invitation for you to collaborate on innovation {{innovationName}}.` },
+            MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE : { title: `{{requestUserName}} has accepted your invitation to collaborate on innovation {{innovationName}}.`, link: `Manage collaborators.`},
+            MC05_COLLABORATOR_UPDATE_DECLINES_INVITE : { title: `{{requestUserName}} has declined your invitation to collaborate on innovation {{innovationName}}.`, link: `Invite new collaborators.` },
+            MC06_COLLABORATOR_UPDATE_REMOVED_COLLABORATOR : { title: `{{requestUserName}} has removed you as a collaborator on innovation {{innovationName}}.` },
+            MC07_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_INNOVATORS : { title: `{{requestUserName}} has left innovation {{innovationName}}.`, link: `Manage collaborators.` },
+            MC08_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_SELF : { title: `You have successfully removed yourself as a collaborator on innovation {{innovationName}}.` },
             TO02_TRANSFER_OWNERSHIP_EXISTING_USER:  { title: `You have a request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
             TO06_TRANSFER_OWNERSHIP_ACCEPTS_PREVIOUS_OWNER:  { title: `You have successfully transferred ownership of innovation {{innovationName}} to {{newInnovationOwner}}.` },
             TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS: { title: `{{oldInnovationOwnerName}} has transferred ownership of innovation {{innovationName}} to {{newInnovationOwnerName}} `, link: `Send message to the new owner.` },
             TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER:  { title: `Your request to transfer ownership of innovation {{innovationName}} has been declined. You can create a new transfer request in `, link: `manage innovation.` },
             TO09_TRANSFER_OWNERSHIP_CANCELED_NEW_OWNER:  { title: `The request for you to take ownership of innovation {{innovationName}} has been cancelled by {{innovationOwner}}.` },
-            MC01_COLLABORATOR_INVITE_EXISTING_USER: { title: `{{requestUserName}} has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. `, link: `View invitation.` },
-            // TO02_ : { title: `You have a request to take ownership of innovation {{innovationName}}. View request.` },
-            // TO04_ : { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. View request.` },
-            // TO05_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in manage innovation.` },
-            // TO06_ : { title: `You have successfully transferred ownership of innovation {{innovationName}} to {{newInnovationOwner}}.` },
-            // TO08_ : { title: `Your request to transfer ownership of innovation {{innovationName}} has been declined. You can create a new transfer request in manage innovation.` },
-            // TO09_ : { title: `The request for you to take ownership of innovation {{innovationName}} has been cancelled by {{innovatorOwner}}.` },
-            // TA07_ : { title: `{{oldInnovationOwnerName}} has transferred ownership of innovation {{innovationName}} to {{newInnovationOwnerName}}. Send message to the new owner.` },
-            // SH01_ : { title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.` },
-            // SH02_ : { title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation during the needs assessment process.` },
-            // SH03_ : { title: `You have stopped sharing innovation {{innovationName}} with all support organisations and the needs assessment team.` },
-            // RE01_ : { title: `{{unitName}} has requested permission to use your innovation record data for {{innovationName}} for something outside of our terms of use. View request.` },
-            // RE02_ : { title: `Innovation {{innovationName}} has approved your request to use their innovation record data. View and export the innovation record.` },
-            // RE03_ : { title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. View reason.` },
-            // MC01_ : { title: `{{innovatorName) has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. View invitation.` },
-            // MC03_ : { title: `{{innovatorName}} has cancelled their invitation for you to collaborate on innovation {{innovationName}}.` },
-            // MC04_ : { title: `{{collaboratorName}} has accepted your invitation to collaborate on innovation {{innovation name}}. Manage collaborators.` },
-            // MC05_ : { title: `{{collaboratorName}} has declined your invitation to collaborate on innovation {{innovation name}}. Invite new collaborators.` },
-            // MC06_ : { title: `{{innovatorName}} has removed you as a collaborator on innovation {{innovation name}}.` },
-            // MC07_ : { title: `{{collaboratorName}} has left innovation {{innovationName}}. Manage collaborators.` },
-            // MC08_ : { title: `You have successfully removed yourself as a collaborator on innovation {{innovationName}}.` },
-            // DA08_ : { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.` },
-            // // New - ADMIN
+            // ADMIN PORTAL
             AP02_INNOVATOR_LOCKED_TO_ASSIGNED_USERS: { title: `The owner's account for innovation {{innovationName}} has been locked.` },
             AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS: { title: `{{unitName}} are no longer supporting innovations through the NHS Innovation Service. This means they will no longer be supporting innovation {{innovationName}}. `, link: `View your current support organisations.` },
-
+            // AUTOMATIC
+            AU01_INNOVATOR_INCOMPLETE_RECORD : { title: `Your innovation record remains in draft. `, link: `Review and update your innovation record.` },
+            AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT : { title: `You last interacted with innovation {{innovationName}} at least 3 months ago. If you are continuing to support this innovation `, link: `add a progress update to their support summary.` },
+            AU03_INNOVATOR_IDLE_SUPPORT : { title: `Your innovation {{innovationName}} is not receiving any active support on the service.`, link: `Find out more about your options and decide how you want to progress.` },
+            AU04_SUPPORT_KPI_REMINDER : { title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and `, link: `assign a support status by the end of the next working day.` },
+            AU05_SUPPORT_KPI_OVERDUE : { title: `Your organisation was suggested to support innovation {{innovationName}} over 5 working days ago. Review the innovation and `, link: `assign a support status as soon as possible.` },
+            AU06_ACCESSOR_IDLE_WAITING: { title: `{{innovationName}} has been waiting for 3 months.`, link: `View innovation and review support status.` },
+            AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER: { title: `You have 1 week left to accept the request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
+            AU09_TRANSFER_EXPIRED: { title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in `, link: `manage innovation.` }
           },
           section_status: {
             NOT_STARTED: { name: 'Not started', cssColorClass: 'nhsuk-tag--blue' },
