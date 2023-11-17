@@ -341,15 +341,15 @@ export const locale = {
 
             INNOVATION_MANAGEMENT: {
               QUALIFYING_ACCESSOR: {
-                title: 'Innovation management',
-                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
+                title: 'Withdrawals and export requests',
+                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting. Find out when your innovation record export requests are approved or rejected.',
               },
               ACCESSOR: {
-                title: 'Innovation management',
-                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
+                title: 'Withdrawals and export requests',
+                description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting. Find out when your innovation record export requests are approved or rejected.',
               },
               ASSESSMENT: {
-                title: 'Assigned needs assessor',
+                title: 'Innovation withdrawals',
                 description: 'Get notified when an innovator withdraws an innovation during the needs assessment process.'
               }
             },
