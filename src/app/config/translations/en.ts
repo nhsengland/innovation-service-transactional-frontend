@@ -332,43 +332,14 @@ export const locale = {
 
           email_notification_preferences: {
 
-            ACCOUNT: {
-              QUALIFYING_ACCESSOR: {
-                title: 'Your account',
-                description: 'Get notified when a user is removed or added to your organisation unit.'
-              },
-              ACCESSOR: {
-                title: 'Your account',
-                description: 'Get notified when a user is removed or added to your organisation unit.',
-              }
-            },
-
-            ASSIGN_NA: {
-              ASSESSMENT: {
-                title: 'Assigned needs assessor',
-                description: 'Get notified if you are assigned as a needs assessor to an innovation, or if a new assessor is assigned and you are no the longer assessor.'
-              }
-            },
-
-            DOCUMENT: {
+            DOCUMENTS: {
               INNOVATOR: {
                 title: 'Documents',
                 description: 'Get notified when a support organisation uploads a document for you.'
               },
             },
 
-            EXPORT_REQUEST: {
-              SHARED: {
-                title: 'Innovation record export requests',
-                description: 'Get notified when an innovator accepts or rejects your request to export their innovation record.',
-              }
-            },
-
             INNOVATION_MANAGEMENT: {
-              SHARED: {
-                title: 'Innovation management',
-                description: 'Get notified when an innovation is withdrawn or if an innovator stops sharing their innovation during the needs assessment process.',
-              },
               QUALIFYING_ACCESSOR: {
                 title: 'Innovation management',
                 description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
@@ -377,76 +348,92 @@ export const locale = {
                 title: 'Innovation management',
                 description: 'Get notified when an innovator withdraws or stops sharing an innovation you are supporting.',
               },
-
-            },
-
-            INNOVATOR_SUBMIT_IR: {
-              SHARED: {
-                title: 'Innovator submits innovation record',
-                description: 'Get notified when an innovation is submitted for needs assessment. '
+              ASSESSMENT: {
+                title: 'Assigned needs assessor',
+                description: 'Get notified when an innovator withdraws an innovation during the needs assessment process.'
               }
             },
 
-            MESSAGE: {
+            MESSAGES: {
               SHARED:{
                 title: 'Messages',
                 description: 'Get notified about new messages and replies.',
               }
             },
 
-            REMINDER: {
-              SHARED: {
-                title: 'Reminders',
-                description: 'Get notified with reminders for you to interact with innovations you are supporting.'
-              },
-              INNOVATOR: {
-                title: 'System reminders',
-                description: 'Get notified when your innovation record is incomplete or when your innovation is not receiving support.'
+            NEEDS_ASSESSMENT: {
+              ASSESSMENT: {
+                title: 'Needs assessment ',
+                description: 'Get notified when an innovation is submitted for a needs assessment.'
               }
             },
 
-            SUGGEST_SUPPORT: {
+            ORGANISATION_SUGGESTIONS: {
               QUALIFYING_ACCESSOR: {
                 title: 'Suggestions to support',
                 description: 'Get notified when your organisation is suggested to support an innovation.'
-              }
+              },
+            },
+
+            ADMIN: {
+              QUALIFYING_ACCESSOR: {
+                title: 'Your account',
+                description: 'Get notified when a user is removed or added to your organisation unit.'
+              },
+              ACCESSOR: {
+                title: 'Your account',
+                description: 'Get notified when a user is removed or added to your organisation unit.'
+              },
+            },
+
+            AUTOMATIC: {
+              INNOVATOR: {
+                title: 'Reminders',
+                description: 'Receive reminders when your innovation record is incomplete or when your innovation is not receiving support.'
+              },
+              QUALIFYING_ACCESSOR: {
+                title: 'Reminders',
+                description: 'Receive reminders for you to interact with innovations you are supporting.'
+              },
+              ACCESSOR: {
+                title: 'Reminders',
+                description: 'Receive reminders for you to interact with innovations you are supporting.'
+              },
             },
 
             SUPPORT: {
+              INNOVATOR: {
+                title: 'Support status and summary updates',
+                description: 'Get notified about updates to your support status and support summary.'
+              },
               QUALIFYING_ACCESSOR: {
-                title: 'Support status and updates',
+                title: 'Support status and summary updates',
                 description: 'Get notified about support status or support summary updates for innovations you are supporting.'
               },
               ACCESSOR: {
-                title: 'Support status and updates',
+                title: 'Support status and summary updates',
                 description: 'Get notified about support status or support summary updates for innovations you are supporting.'
               },
-              INNOVATOR: {
-                title: 'Support status and updates',
-                description: 'Get notified about updates to your support status and support summary.'
-              }
             },
 
             TASK: {
-              ASSESSMENT: {
-                title: 'Tasks',
-                description: 'Get notified when an innovator completes or declines tasks you have assigned to them.',
-              },
               INNOVATOR: {
                 title: 'Tasks to do',
                 description: 'Get notified when a task is assigned to you, reopened or cancelled.'
               },
               QUALIFYING_ACCESSOR: {
                 title: 'Tasks',
-                description: 'Get notified when an innovator completes or declines a task you have given them.'
+                description: 'Get notified when an innovator completes or declines a task you have assigned to them.'
               },
               ACCESSOR: {
                 title: 'Tasks',
-                description: 'Get notified when an innovator completes or declines a task you have given them.',
+                description: 'Get notified when an innovator completes or declines a task you have assigned to them.',
+              },
+              ASSESSMENT: {
+                title: 'Tasks',
+                description: 'Get notified when an innovator completes or declines a task you have assigned to them.',
               }
             },
-
-
 
           },
 
@@ -470,13 +457,20 @@ export const locale = {
 
           notification_context_types: {
             NEEDS_ASSESSMENT: { title: { singular: 'Needs Assessment', plural: 'Needs Assessment' } },
-            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } },
+            INNOVATION: { title: { singular: 'Innovation', plural: 'Innovations' } }, //TO DO: DELETE OLD ONE
             SUPPORT: { title: { singular: 'Support status change', plural: 'Support status changes' } },
             TASK: { title: { singular: 'Task', plural: 'Tasks' } },
-            THREAD: { title: { singular: 'Message', plural: 'Messages' } },
-            COMMENT: { title: { singular: 'Message', plural: 'Messages' } },
-            MESSAGE: { title: { singular: 'Message', plural: 'Messages' } },
-            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }
+            THREAD: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
+            COMMENT: { title: { singular: 'Message', plural: 'Messages' } }, //TO DO: DELETE OLD ONE
+            MESSAGES: { title: { singular: 'Message', plural: 'Messages' } },
+            DATA_SHARING: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, //TO DO: DELETE OLD ONE
+            // NEW ONES
+            DOCUMENTS: { title: { singular: 'Document', plural: 'Documents' } },
+            ORGANISATION_SUGGESTIONS: { title: { singular: 'Data sharing', plural: 'Data sharing' } }, // TO DO: check copy
+            INNOVATION_MANAGEMENT: { title: { singular: 'Innovation management', plural: 'Innovation management' } }, // TO DO: check copy
+            ADMIN: { title: { singular: 'Admin portal', plural: 'Admin portal' } }, // TO DO: check copy
+            ACCOUNT: { title: { singular: 'Account creation', plural: 'Account creation' } }, // TO DO: check copy
+            AUTOMATIC: { title: { singular: 'System notification', plural: 'System notifications' } } // TO DO: check copy
           },
           notification_context_details: {
             LOCK_USER: { title: `Innovation "{{ innovationName }}" owner has been locked.` },

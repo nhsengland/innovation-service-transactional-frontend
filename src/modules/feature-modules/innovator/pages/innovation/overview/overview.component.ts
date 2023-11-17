@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -64,7 +64,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT] });
+      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION, NotificationCategoryTypeEnum.SUPPORT] });
 
       const innovationContext = this.stores.context.getInnovation();
 
