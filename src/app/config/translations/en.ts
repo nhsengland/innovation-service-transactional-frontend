@@ -491,8 +491,7 @@ export const locale = {
             },
 
             DOCUMENTS: {
-              INNOVATOR: { title: 'Documents' },
-              QUALIFYING_ACCESSOR: { title: '' }
+              INNOVATOR: { title: 'Documents' }
             },
 
             ORGANISATION_SUGGESTIONS: {
