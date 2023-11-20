@@ -94,7 +94,8 @@
 
                 <ng-container *ngIf="!item.link">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
-                  <a *ngIf="item.readAt === null" href="javascript:void(0)" (click)="onNotificationClick($event, item.id, null)">Mark as read.
+                  <a *ngIf="item.readAt === null" href="javascript:void(0)" (click)="onNotificationClick($event, item.id, null)">
+                    Mark as read.
                     <span class="nhsuk-u-visually-hidden">Click to mark as read</span>
                   </a>
                 </ng-container>
