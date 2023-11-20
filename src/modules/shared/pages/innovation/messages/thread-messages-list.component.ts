@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
+import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
@@ -138,6 +138,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         // Throw notification read dismiss.
         this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
+
+        if (this.threadInfo.context?.type === 'TASK') {
+          this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context.id] });
+        }
 
         if (response.supports) {
 
