@@ -65,8 +65,10 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
+    const userType = this.stores.authentication.getUserType();
+
     let contextTypesSubset: NotificationCategoryTypeEnum[];
-    switch(this.stores.authentication.getUserType()) {
+    switch(userType) {
       case UserRoleEnum.INNOVATOR:
         contextTypesSubset = InnovatorNotificationCategories;
         break;
@@ -85,7 +87,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     }
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
+      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.${userType}.title`),
       value: item
     }));
 
