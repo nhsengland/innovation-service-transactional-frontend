@@ -145,7 +145,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           if (this.selfUser.role === UserRoleEnum.INNOVATOR) {
             this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
           }
-          else if (this.selfUser.role === UserRoleEnum.QUALIFYING_ACCESSOR || this.selfUser.role === UserRoleEnum.ACCESSOR || this.selfUser.role === UserRoleEnum.ASSESSMENT) {
+          else if (this.selfUser.id === this.threadInfo.createdBy.id && (this.selfUser.role === UserRoleEnum.QUALIFYING_ACCESSOR || this.selfUser.role === UserRoleEnum.ACCESSOR || this.selfUser.role === UserRoleEnum.ASSESSMENT)) {
             this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
           }
           break;
