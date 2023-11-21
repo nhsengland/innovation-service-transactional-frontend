@@ -131,7 +131,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.section.title}'`, { hint: `Task Id: ${this.task.displayId}` });
       }
 
-      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR], contextIds: [this.taskId] });
+      if (this.isInnovatorType) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR], contextIds: [this.taskId] });
+      }
 
       this.setPageStatus('READY');
 
