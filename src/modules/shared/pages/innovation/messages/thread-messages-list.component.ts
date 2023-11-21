@@ -52,6 +52,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   // Flags
+  isInnovatorType: boolean;
   isAssessmentType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
@@ -86,6 +87,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.engagingOrganisationUnits = [];
 
     // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
@@ -142,15 +144,17 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         switch (this.threadInfo.context?.type) {
           case 'TASK':
-          if (this.selfUser.role === UserRoleEnum.INNOVATOR) {
+          if (this.isInnovatorType) {
             this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
           }
-          else if (this.selfUser.id === this.threadInfo.createdBy.id && (this.selfUser.role === UserRoleEnum.QUALIFYING_ACCESSOR || this.selfUser.role === UserRoleEnum.ACCESSOR || this.selfUser.role === UserRoleEnum.ASSESSMENT)) {
+          else if (this.isAssessmentType || this.isAccessorType) {
             this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
           }
           break;
           case 'SUPPORT':
-            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            }
         }
 
         if (response.supports) {

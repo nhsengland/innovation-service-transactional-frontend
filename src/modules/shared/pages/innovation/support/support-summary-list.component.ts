@@ -155,7 +155,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           unitItem.isLoading = false;
           this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
           if (this.isInnovatorType) {
-            //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE], contextIds: [unitItem.id] })
+            //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER, NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING], contextIds: [support.id] })
           }
         },
         error: () => {
