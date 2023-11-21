@@ -139,24 +139,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
-
-        switch (this.threadInfo.context?.type) {
-          case 'TASK':
-          if (this.isInnovatorType) {
-            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
-          }
-          else if (this.isAssessmentType || this.isAccessorType) {
-            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
-          }
-          break;
-          case 'SUPPORT':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
-            }
-        }
-
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -177,6 +159,30 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           // Checks if there's any engaging accessor that's not a follower
           this.showAddRecipientsLink = this.engagingOrganisationUnits.reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], []).some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
 
+        }
+
+        // Throw notification read dismiss.
+        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
+
+        switch (this.threadInfo.context?.type) {
+          case 'TASK':
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            }
+            else if (this.isAssessmentType || this.isAccessorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
+            }
+            break;
+          case 'SUPPORT':
+              if (this.isInnovatorType) {
+                this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+              }
+              break;
+          case 'NEEDS_ASSESSMENT':
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            }
+            break;
         }
 
         this.setPageStatus('READY');

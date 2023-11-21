@@ -88,10 +88,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(this.innovationSupport.status);
 
-      if (this.innovation.support?.id) {
-        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA, NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST], contextIds: [this.innovation.support.id] });
-      }
-
       this.innovationCollaborators = collaborators.data;
 
       this.cardsList = [
@@ -116,6 +112,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: 'No tasks assigned by your organisation yet'
         }
       ];
+
+      // Throw notification read dismiss.
+
+      if (this.innovation.support?.id) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA], contextIds: [this.innovation.support.id] });
+        if (this.isQualifyingAccessorRole) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [ NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST], contextIds: [this.innovation.support.id] });
+        }
+      }
+
+      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER, NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING] });
 
       this.setPageStatus('READY');
 

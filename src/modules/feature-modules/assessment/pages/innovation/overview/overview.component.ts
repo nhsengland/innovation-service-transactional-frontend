@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
 import { StatisticsCardType } from '@app/base/types';
 
@@ -77,8 +77,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           { label: 'Phone number', value: this.innovation.owner?.mobilePhone || '' }
         ];
 
-        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT, NotificationCategoryTypeEnum.SUPPORT] });
-
         return forkJoin([
           this.innovation.assessment ? this.assessmentService.getInnovationExemption(this.innovationId, this.innovation.assessment.id) : of(null),
           this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp)
@@ -110,6 +108,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             emptyMessage: 'No replies to read'
           }
         ];
+
+        // Throw notification read dismiss.
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [  NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT, NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED, NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED] });
 
         this.setPageStatus('READY');
 

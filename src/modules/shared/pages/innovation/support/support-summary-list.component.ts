@@ -41,6 +41,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   isQualifyingAccessorRole: boolean;
   isAdmin: boolean;
   isInnovatorType: boolean;
+  isAccessorType: boolean;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
@@ -69,6 +70,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
 
     if (this.isAdmin) {
       this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
@@ -81,6 +83,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
     this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id).subscribe({
       next: response => {
+
+        console.log(response);
 
         this.sectionsList[0].unitsList = response.ENGAGING.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
@@ -124,6 +128,11 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
 
+        // Throw notification read dismiss.
+        if (this.isAccessorType) {
+          //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT], contextIds: [support.id] });
+        }
+
         this.setPageStatus('READY');
 
       },
@@ -154,8 +163,13 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           unitItem.historyList = response;
           unitItem.isLoading = false;
           this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
+
+          // Throw notification read dismiss.
           if (this.isInnovatorType) {
-            //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER, NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING], contextIds: [support.id] })
+            //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER, NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING, NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS], contextIds: [support.id] })
+          }
+          else if (this.isAccessorType) {
+            //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS], contextIds: [support.id] })
           }
         },
         error: () => {

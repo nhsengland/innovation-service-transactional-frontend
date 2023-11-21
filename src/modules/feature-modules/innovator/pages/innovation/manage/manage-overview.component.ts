@@ -8,6 +8,7 @@ import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
 
 import { GetInnovationTransfersDTO, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 
 @Component({
@@ -55,6 +56,11 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
       this.innovationTransfers = response.filter(innovationTransfer => innovationTransfer.innovation.id === this.innovation.id);
 
       this.isActiveInnovation = this.innovationTransfers.length === 0;
+
+      // Throw notification read dismiss.
+      this.innovationTransfers.forEach(transfer =>
+        this.stores.context.dismissNotification(transfer.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED] })
+      );
 
       this.setPageStatus('READY');
 

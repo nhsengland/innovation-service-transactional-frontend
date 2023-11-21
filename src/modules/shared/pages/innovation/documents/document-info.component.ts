@@ -51,6 +51,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
         this.canDelete = response.canDelete;
 
+        // Throw notification read dismiss.
         if (this.stores.authentication.isInnovatorType()) {
           this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS], contextIds: [this.documentInfo.id] });
         }
