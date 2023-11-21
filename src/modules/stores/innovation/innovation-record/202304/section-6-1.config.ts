@@ -22,7 +22,8 @@ const stepsLabels = {
   q5: { label: 'Have you secured funding for the next stage of development?' },
   q6: {
     label: 'Describe the funding you have secured for the next stage of development',
-    description: 'For example, venture capital, angel investor, seed funding, grant funding, government funding or similar.'
+    description: 'For example, venture capital, angel investor, seed funding, grant funding, government funding or similar.',
+    conditional: true
   }
 };
 
@@ -51,7 +52,8 @@ export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType, currentStep: number | 'summary'): void {

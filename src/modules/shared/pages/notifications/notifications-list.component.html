@@ -92,7 +92,7 @@
               <td class="nhsuk-table__cell nhsuk-body-s">
                 <span class="nhsuk-table-responsive__heading">{{ notificationsList.getColumnLabel('notification') }}</span>
 
-                <ng-container *ngIf="!item.link">
+                <!-- <ng-container *ngIf="!item.link">
                   <span *ngIf="item.readAt !== null" class="nhsuk-table-responsive__text">
                     {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                   </span>
@@ -101,7 +101,7 @@
                     {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }}
                     <span class="nhsuk-u-visually-hidden">Click to mark as read</span>
                   </a>
-                </ng-container>
+                </ng-container> -->
 
                 <ng-container *ngIf="item.link">
                   {{ 'shared.catalog.innovation.notification_context_details.' + item.contextDetail + '.title' | translate: item.params }} 
@@ -110,6 +110,14 @@
                     <span class="nhsuk-u-visually-hidden"> {{ item.link.label }} </span>
                   </a>
                 </ng-container>
+                <ng-container *ngIf="!item.link && item.readAt === null">
+                  <a href="javascript:void(0)" (click)="onNotificationClick($event, item.id, null)">
+                    {{ 'Mark as read' }} 
+                    <span class="nhsuk-u-visually-hidden">Click to mark as read</span>
+                  </a>
+                </ng-container>
+
+
 
                 <theme-notification-tag label="dot" *ngIf="item.readAt === null"></theme-notification-tag>
               </td>

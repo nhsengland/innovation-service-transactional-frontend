@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -10,16 +10,19 @@ import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig, innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { InnovationSectionStepLabels, InnovationSectionsVersions } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+
 
 
 @Component({
-  selector: 'shared-pages-innovation-section-info',
-  templateUrl: './section-info.component.html'
+    selector: 'shared-innovation-summary',
+    templateUrl: './section-summary.component.html'
 })
-export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
+export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit {
 
-  innovation: ContextInnovationType;
-  sectionId: string = '';
+  @Input() innovation: ContextInnovationType = this.stores.context.getInnovation();
+  @Input() sectionId: InnovationSectionEnum | InnovationSectionsVersions = InnovationSectionEnum.INNOVATION_DESCRIPTION;
+
   section: {
     id: InnovationSectionEnum,
     nextSectionId: null | string,
@@ -29,7 +32,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     submitButton: { show: boolean, label: string },
     hasEvidences: boolean,
     wizard: WizardEngineModel,
-    allStepsList: {label: string, conditional: boolean}[],
+    allStepsList: InnovationSectionStepLabels,
     date: string,
     submittedBy: null | { name: string, isOwner?: boolean },
     openTasksCount: number
@@ -42,10 +45,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   evidencesList: WizardSummaryType[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-  previousSection: null | { id: string, title: string } = null;
-  nextSection: null | { id: string, title: string } = null;
-
   baseUrl: string;
+  isSectionDetailsPage: string | undefined = this.activatedRoute.snapshot.params.sectionId;
+
 
   // Flags
   isInnovatorType: boolean;
@@ -60,10 +62,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.innovation ?? this.stores.context.getInnovation();
 
     this.section = {
-      id: this.activatedRoute.snapshot.params.sectionId,
+      id: this.sectionId as InnovationSectionEnum,
       nextSectionId: null,
       title: '',
       status: { id: 'UNKNOWN', label: '' },
@@ -71,7 +73,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       submitButton: { show: false, label: "Confirm section answers" },
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
-      allStepsList: [],
+      allStepsList: {},
       date: '',
       submittedBy: null,
       openTasksCount: 0
@@ -90,45 +92,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   ngOnInit(): void {
     
-    console.log('init')
+    console.log('route: ' + this.activatedRoute.snapshot.params.sectionId)
     this.initializePage();
 
-    // This router subscription is needed for the button to go to the next step.
-    // As is it the same component, we can't use the routerLink directive alone.
-    this.subscriptions.push(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
-    );
-
-  }
-
-
-  private getNextSectionId(): string | null {
-
-    const currentSectionIndex = this.sectionsIdsList.indexOf(this.section.id);
-
-    return this.sectionsIdsList[currentSectionIndex + 1] || null;
-
-  }
-
-  private getPreviousAndNextPagination(): void {
-
-    const currentSectionIndex = this.sectionsIdsList.indexOf(this.section.id);
-    const previousSectionId = this.sectionsIdsList[currentSectionIndex - 1] || null;
-    const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
-
-    if (previousSectionId) {
-      const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
-      this.previousSection = { id: previousSectionId, title: previousSection ? `${previousSection.group.number}.${previousSection.section.number} ${previousSection.section.title}` : '' };
-    } else {
-      this.previousSection = null;
-    }
-
-    if (nextSectionId) {
-      const nextSection = this.stores.innovation.getInnovationRecordSectionIdentification(nextSectionId);
-      this.nextSection = { id: nextSectionId, title: nextSection ? `${nextSection.group.number}.${nextSection.section.number} ${nextSection.section.title}` : '' };
-    } else {
-      this.nextSection = null;
-    }
 
   }
 
@@ -136,24 +102,21 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    // const sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
     this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
 
     const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
-    this.section.id = this.sectionId as any;
+    this.section.id = this.sectionId as InnovationSectionEnum;
     this.section.title = section.title;
     this.section.wizard = section.wizard;
-    
+    this.section.allStepsList = section.allStepsList ? section.allStepsList : {};
+
     this.shouldShowDocuments =
       this.innovation.status !== InnovationStatusEnum.CREATED ||
       (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section.id));
 
-    this.setPageTitle(this.section.title, { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
-    this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     forkJoin([
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id),
@@ -170,8 +133,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.section.date = sectionInfo.submittedAt;
       this.section.submittedBy = sectionInfo.submittedBy;
       this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
-
-      this.getPreviousAndNextPagination();
 
       if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
         // If accessor, only view information if section is submitted.
@@ -201,31 +162,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       // Documents.
       this.documentsList = documents?.data ?? [];
 
-      this.setPageStatus('READY');
+      // this.setPageStatus('READY');
 
     })
 
   }
-
-  onSubmitSection(): void {
-
-    this.stores.innovation.submitSections$(this.innovation.id, this.section.id).subscribe({
-      next: () => {
-
-        if (this.innovation.status === InnovationStatusEnum.CREATED || this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
-          this.section.status = { id: 'SUBMITTED', label: 'Submitted' };
-          this.section.submitButton.show = false;
-          this.section.nextSectionId = this.getNextSectionId();
-          this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.section.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
-        } else {
-          this.setRedirectAlertSuccess(this.sectionSubmittedText);
-          this.redirectTo(`/${this.baseUrl}/record/sections/${this.section.id}/submitted`);
-        }
-
-      },
-      error: () => this.setAlertUnknownError()
-    });
-
-  }
-
+  
 }

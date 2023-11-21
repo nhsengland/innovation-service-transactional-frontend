@@ -57,6 +57,8 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/sup
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from './pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/support-summary-progress-update.component';
+
+import { InnovationSectionSummaryComponent } from './pages/innovation/sections/section-summary.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -155,6 +157,8 @@ import { FileUploadService } from '@modules/shared/services/file-upload.service'
     PageInnovationSupportSummaryListComponent,
     PageInnovationSupportSummaryProgressUpdateDeleteComponent,
     PageInnovationSupportSummaryProgressUpdateComponent,
+
+    InnovationSectionSummaryComponent,
     // // Innovations.
     PageInnovationsAdvancedReviewComponent,
     // // Notifications.
