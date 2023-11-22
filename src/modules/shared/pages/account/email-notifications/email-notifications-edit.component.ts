@@ -64,7 +64,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
         value: category,
         label: this.getCategoryMessages(category).title,
         description: this.getCategoryMessages(category).description
-      })).sort((a, b) => a.label.localeCompare(b.label));
+      }));
 
       this.setPageStatus('READY');
 
