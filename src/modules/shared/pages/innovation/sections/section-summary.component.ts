@@ -20,7 +20,6 @@ import { InnovationSectionStepLabels, } from '@modules/stores/innovation/innovat
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit, OnChanges {
 
   @Input() sectionId: string | undefined;
-  @Input() test: string | undefined;
   
   sectionInfo: {
     id: string,
