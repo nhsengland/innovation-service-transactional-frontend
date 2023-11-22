@@ -620,7 +620,7 @@ td {
 
   &.app-tag__selected {
     background: var(--primary-color);
-    border: none;
+    border: 1px solid var(--primary-color);
     color: var(--white) !important;
   }
 
@@ -640,6 +640,6 @@ a.app-tag {
   }
 
   &:focus {
-    box-shadow: 0 0 0 4px #ffcd60;
+    box-shadow: none;
   }
 }
