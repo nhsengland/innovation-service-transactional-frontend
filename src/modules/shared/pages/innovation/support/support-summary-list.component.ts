@@ -100,8 +100,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           temporalDescription: item.support.start ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}` : ''
         }));
 
-        console.log("lists", this.sectionsList);
-
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
 
         // open the support summary entry specified in the query parameter
