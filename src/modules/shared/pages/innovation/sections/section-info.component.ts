@@ -32,8 +32,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   baseUrl: string;
 
-  paramSubscription: Subscription = new Subscription();
-
   sectionIdentification: {
     group: {
         number: number;
@@ -44,7 +42,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         title: string;
     }
   } | null = null;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -62,17 +59,19 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
-    
-    this.paramSubscription = this.activatedRoute.params.subscribe(() => {
-      this.initializePage();
-    });
 
     this.initializePage();
 
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
     this.subscriptions.push(
+
+      this.activatedRoute.params.subscribe(() => {
+        this.initializePage();
+      }),
+
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
+
     );
 
   }
