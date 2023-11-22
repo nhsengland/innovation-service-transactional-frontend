@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { UserRoleEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO, } from '@modules/shared/services/innovations.dtos';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
@@ -67,8 +67,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.userType = this.getUserType();
 
-
-
     this.allTasksList.setFilters({
       innovationId: this.innovationId,
       fields: ['notifications'],
@@ -84,6 +82,12 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
       this.processTaskList(allTasksResponse);
       this.tablesTitles = this.getTablesTitles();
+
+      // Throw notification read dismiss.
+      if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+        this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT] });
+      }
+
       this.setPageStatus('READY');
     });
 
@@ -128,7 +132,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     let tasksToDoTitle: string = '';
     switch (this.topList.count) {
-      case 0: 
+      case 0:
         tasksToDoTitle = 'You have no tasks to do';
         break;
       case 1:

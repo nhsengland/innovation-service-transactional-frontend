@@ -1,10 +1,11 @@
+import { UserRoleEnum } from './../../../../stores/authentication/authentication.enums';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
+import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
@@ -51,6 +52,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   // Flags
+  isInnovatorType: boolean;
   isAssessmentType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
@@ -85,6 +87,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.engagingOrganisationUnits = [];
 
     // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
@@ -136,9 +139,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
-
         if (response.supports) {
 
           // Engaging organisation units except the user unit, if accessor.
@@ -159,6 +159,30 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           // Checks if there's any engaging accessor that's not a follower
           this.showAddRecipientsLink = this.engagingOrganisationUnits.reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], []).some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
 
+        }
+
+        // Throw notification read dismiss.
+        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
+
+        switch (this.threadInfo.context?.type) {
+          case 'TASK':
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            }
+            else if (this.isAssessmentType || this.isAccessorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
+            }
+            break;
+          case 'SUPPORT':
+              if (this.isInnovatorType) {
+                this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+              }
+              break;
+          case 'NEEDS_ASSESSMENT':
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+            }
+            break;
         }
 
         this.setPageStatus('READY');

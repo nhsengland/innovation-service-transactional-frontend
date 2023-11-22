@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum } from '@app/base/enums';
 import { DatesHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -62,9 +62,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
 
   ngOnInit(): void {
-
-    // Throw notification read dismiss.
-    this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.NEEDS_ASSESSMENT], contextIds: [this.assessmentId] });
 
     this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(response => {
 
@@ -137,6 +134,12 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       ];
 
       this.setPageTitle(!this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment', { hint: `Innovation ${this.innovation.name}` });
+
+      // Throw notification read dismiss.
+      if (this.isInnovatorType) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR] });
+      }
+
       this.setPageStatus('READY');
 
     });

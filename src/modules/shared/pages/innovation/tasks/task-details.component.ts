@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 
@@ -131,7 +131,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         this.setPageTitle(`Update section ${section?.group.number}.${section?.section.number} '${section?.section.title}'`, { hint: `Task Id: ${this.task.displayId}` });
       }
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.TASK], contextIds: [this.taskId] });
+      if (this.isInnovatorType) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR], contextIds: [this.taskId] });
+      }
 
       this.setPageStatus('READY');
 

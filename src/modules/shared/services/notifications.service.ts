@@ -134,17 +134,14 @@ export class NotificationsService extends CoreService {
 
                 case NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER:
                 case NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING:
+                case NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS:
+                case NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS:
                   link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
                   break;
 
                 case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
                 case NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST:
                   link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
-                  break;
-
-                case NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS:
-                case NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS :
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' }  };
                   break;
               }
               break;
@@ -229,7 +226,7 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
                   break;
                 case NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT:
-                  link = { label: 'Click to go to support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary` }
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } }
                   break;
                 case NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT:
                   link = { label: 'Click to go to how to proceed', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/how-to-proceed` }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 
 enum FormFieldActionsEnum {
@@ -72,6 +73,9 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     this.form = new FormGroup({
       action: new FormControl<null | FormFieldActionsEnum>(null, { validators: CustomValidators.required('Please choose an option') }),
     }, { updateOn: 'blur' });
+
+    // Throw notification read dismiss.
+    this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT] });
 
     this.setPageStatus('READY');
 
