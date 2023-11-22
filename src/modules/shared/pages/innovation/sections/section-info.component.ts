@@ -17,7 +17,7 @@ import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
-  innovation: ContextInnovationType | undefined;
+  innovation: ContextInnovationType;
   sectionId: string = '';
 
   sectionSubmittedText: string = '';
