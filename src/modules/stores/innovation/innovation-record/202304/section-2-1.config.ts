@@ -131,85 +131,85 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
           items: diseasesConditionsImpactItems
         }]
       })
-      );
-    } else {
-      delete data.diseasesConditionsImpact;
-    }
+    );
+  } else {
+    delete data.diseasesConditionsImpact;
+  }
     
+  steps.push(
+    new FormEngineModel({
+      parameters: [{
+        id: 'estimatedCarbonReductionSavings', dataType: 'radio-group', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: estimatedCarbonReductionSavingsItems
+      }]
+    })
+  );
+      
+  if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'estimatedCarbonReductionSavings', dataType: 'radio-group', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: estimatedCarbonReductionSavingsItems
-        }]
-      })
-      );
-      
-      if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
-        steps.push(
-          new FormEngineModel({
-            parameters: [{
           id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
           validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'xl'
         }]
       })
-      );
-    } else {
-      delete data.estimatedCarbonReductionSavingsDescription;
-    }
+    );
+  } else {
+    delete data.estimatedCarbonReductionSavingsDescription;
+  }
     
-    steps.push(
-      new FormEngineModel({
-        parameters: [{
-          id: 'carbonReductionPlan', dataType: 'radio-group', label: stepsLabels.q8.label, description: stepsLabels.q8.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: carbonReductionPlanItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'keyHealthInequalities', dataType: 'checkbox-array', label: stepsLabels.q9.label, description: stepsLabels.q9.description,
-          validations: { isRequired: [true, 'Choose at least one item'] },
-          items: keyHealthInequalitiesItems
-        }]
-      }),
-      new FormEngineModel({
-        parameters: [{
-          id: 'completedHealthInequalitiesImpactAssessment', dataType: 'radio-group', label: stepsLabels.q10.label, description: stepsLabels.q10.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: yesNoItems
-        }]
-      })
-      );
-      
-    }
+  steps.push(
+    new FormEngineModel({
+      parameters: [{
+        id: 'carbonReductionPlan', dataType: 'radio-group', label: stepsLabels.q8.label, description: stepsLabels.q8.description,
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: carbonReductionPlanItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'keyHealthInequalities', dataType: 'checkbox-array', label: stepsLabels.q9.label, description: stepsLabels.q9.description,
+        validations: { isRequired: [true, 'Choose at least one item'] },
+        items: keyHealthInequalitiesItems
+      }]
+    }),
+    new FormEngineModel({
+      parameters: [{
+        id: 'completedHealthInequalitiesImpactAssessment', dataType: 'radio-group', label: stepsLabels.q10.label, description: stepsLabels.q10.description,
+        validations: { isRequired: [true, 'Choose one option'] },
+        items: yesNoItems
+      }]
+    })
+  );
     
-    function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-      
-      return {
-        ...(data.problemsTackled && { problemsTackled: data.problemsTackled }),
-        ...(data.howInnovationWork && { howInnovationWork: data.howInnovationWork }),
-        ...((data.benefitsOrImpact ?? []).length > 0 && { benefitsOrImpact: data.benefitsOrImpact }),
-        ...(data.impactDiseaseCondition && { impactDiseaseCondition: data.impactDiseaseCondition }),
-        ...((data.diseasesConditionsImpact ?? []).length > 0 && { diseasesConditionsImpact: data.diseasesConditionsImpact }),
-        ...(data.estimatedCarbonReductionSavings && { estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings }),
-        ...(data.estimatedCarbonReductionSavingsDescription && { estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription }),
-        ...(data.carbonReductionPlan && { carbonReductionPlan: data.carbonReductionPlan }),
-        ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
-        ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment })
-      };
-      
-    }
+}
     
-    function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-      
-      const toReturn: WizardSummaryType[] = [];
-      
-      let editStepNumber = 1;
-      
-      toReturn.push(
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+  
+  return {
+    ...(data.problemsTackled && { problemsTackled: data.problemsTackled }),
+    ...(data.howInnovationWork && { howInnovationWork: data.howInnovationWork }),
+    ...((data.benefitsOrImpact ?? []).length > 0 && { benefitsOrImpact: data.benefitsOrImpact }),
+    ...(data.impactDiseaseCondition && { impactDiseaseCondition: data.impactDiseaseCondition }),
+    ...((data.diseasesConditionsImpact ?? []).length > 0 && { diseasesConditionsImpact: data.diseasesConditionsImpact }),
+    ...(data.estimatedCarbonReductionSavings && { estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings }),
+    ...(data.estimatedCarbonReductionSavingsDescription && { estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription }),
+    ...(data.carbonReductionPlan && { carbonReductionPlan: data.carbonReductionPlan }),
+    ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
+    ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment })
+  };
+  
+}
+  
+function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
+  
+  const toReturn: WizardSummaryType[] = [];
+  
+  let editStepNumber = 1;
+  
+  toReturn.push(
     {
       label: stepsLabels.q1.label,
       value: data.problemsTackled,
@@ -230,47 +230,46 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       value: yesNoItems.find(item => item.value === data.impactDiseaseCondition)?.label,
       editStepNumber: editStepNumber++
     }
-    );
-    
-    if (data.impactDiseaseCondition === 'YES') {
-      toReturn.push({
-        label: stepsLabels.q5.label,
-        value: data.diseasesConditionsImpact?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
-        editStepNumber: editStepNumber++
-      });
-    }
-    
+  );
+
+  if (data.impactDiseaseCondition === 'YES') {
     toReturn.push({
-      label: stepsLabels.q6.label,
-      value: yesNotYetNoItems.find(item => item.value === data.estimatedCarbonReductionSavings)?.label,
+      label: stepsLabels.q5.label,
+      value: data.diseasesConditionsImpact?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
       editStepNumber: editStepNumber++
     });
-    
-    if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
-      toReturn.push({
-        label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
-        value: data.estimatedCarbonReductionSavingsDescription,
-        editStepNumber: editStepNumber++
-      });
+  }
+
+  toReturn.push({
+    label: stepsLabels.q6.label,
+    value: yesNotYetNoItems.find(item => item.value === data.estimatedCarbonReductionSavings)?.label,
+    editStepNumber: editStepNumber++
+  });
+  
+  if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
+    toReturn.push({
+      label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
+      value: data.estimatedCarbonReductionSavingsDescription,
+      editStepNumber: editStepNumber++
+    });
+  }
+
+  toReturn.push(
+    {
+      label: stepsLabels.q8.label,
+      value: carbonReductionPlanItems.find(item => item.value === data.carbonReductionPlan)?.label,
+      editStepNumber: editStepNumber++
+    },
+    {
+      label: stepsLabels.q9.label,
+      value: data.keyHealthInequalities?.map(impact => keyHealthInequalitiesItems.find(item => item.value === impact)?.label).join('\n'),
+      editStepNumber: editStepNumber++
+    },
+    {
+      label: stepsLabels.q10.label,
+      value: yesNoItems.find(item => item.value === data.completedHealthInequalitiesImpactAssessment)?.label,
+      editStepNumber: editStepNumber++
     }
-    
-    
-    toReturn.push(
-      {
-        label: stepsLabels.q8.label,
-        value: carbonReductionPlanItems.find(item => item.value === data.carbonReductionPlan)?.label,
-        editStepNumber: editStepNumber++
-      },
-      {
-        label: stepsLabels.q9.label,
-        value: data.keyHealthInequalities?.map(impact => keyHealthInequalitiesItems.find(item => item.value === impact)?.label).join('\n'),
-        editStepNumber: editStepNumber++
-      },
-      {
-        label: stepsLabels.q10.label,
-        value: yesNoItems.find(item => item.value === data.completedHealthInequalitiesImpactAssessment)?.label,
-        editStepNumber: editStepNumber++
-      }
   );
 
   return toReturn;

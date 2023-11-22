@@ -103,8 +103,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
-    this.sectionSubmittedText =  this.sectionIdentification ? `You have submitted section ${this.sectionIdentification?.group.number}.${this.sectionIdentification?.section.number} '${this.sectionIdentification?.section.title}'` : '';
-    
+        
     this.setPageTitle(this.translate(this.sectionIdentification!.section.title), { hint: this.sectionIdentification ? `${this.sectionIdentification.group.number}. ${this.sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
