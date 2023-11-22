@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, NavigationEnd } from '@angular/router';
-import { forkJoin, of } from 'rxjs';
+import { Subscription, forkJoin, of } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -18,18 +18,18 @@ import { InnovationSectionStepLabels, InnovationSectionsVersions } from '@module
     selector: 'shared-innovation-summary',
     templateUrl: './section-summary.component.html'
 })
-export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit {
+export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit, OnChanges {
 
-  @Input() innovation: ContextInnovationType = this.stores.context.getInnovation();
-  @Input() sectionId: InnovationSectionEnum | InnovationSectionsVersions = InnovationSectionEnum.INNOVATION_DESCRIPTION;
+  @Input() innovation!: ContextInnovationType;
+  @Input() sectionId: string | undefined;
 
-  section: {
-    id: InnovationSectionEnum,
+  sectionInfo: {
+    id: string,
     nextSectionId: null | string,
     title: string,
     status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
-    isNotStarted: boolean,
     submitButton: { show: boolean, label: string },
+    isNotStarted: boolean,
     hasEvidences: boolean,
     wizard: WizardEngineModel,
     allStepsList: InnovationSectionStepLabels,
@@ -46,7 +46,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   baseUrl: string;
-  isSectionDetailsPage: string | undefined = this.activatedRoute.snapshot.params.sectionId;
+  isSectionDetailsPage: string | undefined = undefined;
 
 
   // Flags
@@ -54,6 +54,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   isAccessorType: boolean;
   isAssessmentType: boolean;
   shouldShowDocuments = false;
+
+  paramSubscription: Subscription = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -64,13 +66,13 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.innovation = this.innovation ?? this.stores.context.getInnovation();
 
-    this.section = {
-      id: this.sectionId as InnovationSectionEnum,
+    this.sectionInfo = {
+      id: '',
       nextSectionId: null,
       title: '',
       status: { id: 'UNKNOWN', label: '' },
-      isNotStarted: false,
       submitButton: { show: false, label: "Confirm section answers" },
+      isNotStarted: false,
       hasEvidences: false,
       wizard: new WizardEngineModel({}),
       allStepsList: {},
@@ -88,19 +90,25 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
 
+    this.innovation = this.innovation ?? this.stores.context.getInnovation();
   }
 
   ngOnInit(): void {
-    
-    console.log('route: ' + this.activatedRoute.snapshot.params.sectionId)
+
+    this.setPageStatus('LOADING');
+
     this.initializePage();
 
+  }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.initializePage();
   }
 
   private initializePage(): void {
 
-    this.setPageStatus('LOADING');
+    this.sectionId = this.sectionId || '';
+    this.isSectionDetailsPage = this.activatedRoute.snapshot.params.sectionId;
 
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
@@ -108,52 +116,51 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
-    this.section.id = this.sectionId as InnovationSectionEnum;
-    this.section.title = section.title;
-    this.section.wizard = section.wizard;
-    this.section.allStepsList = section.allStepsList ? section.allStepsList : {};
+    this.sectionInfo.id = section.id;
+    this.sectionInfo.title = section.title;
+    this.sectionInfo.wizard = section.wizard;
+    this.sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
     this.shouldShowDocuments =
       this.innovation.status !== InnovationStatusEnum.CREATED ||
-      (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section.id));
-
+      (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(this.sectionInfo.id));
 
     forkJoin([
-      this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id),
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionInfo.id),
       !this.shouldShowDocuments ? of(null) : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 50,
         order: { createdAt: 'ASC' },
-        filters: { contextTypes: ['INNOVATION_SECTION'], contextId: this.section.id, fields: ['description'] }
+        filters: { contextTypes: ['INNOVATION_SECTION'], contextId: this.sectionInfo.id, fields: ['description'] }
       })
     ]).subscribe(([sectionInfo, documents]) => {
 
-      this.section.status = { id: sectionInfo.status, label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || '' };
-      this.section.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.section.status.id);
-      this.section.date = sectionInfo.submittedAt;
-      this.section.submittedBy = sectionInfo.submittedBy;
-      this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
+      this.sectionInfo.status = { id: sectionInfo.status, label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || '' };
+      this.sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(this.sectionInfo.status.id);
+      this.sectionInfo.date = sectionInfo.submittedAt;
+      this.sectionInfo.submittedBy = sectionInfo.submittedBy;
+      this.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
-      if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.section.status.id === 'DRAFT') {
+      if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && this.sectionInfo.status.id === 'DRAFT') {
         // If accessor, only view information if section is submitted.
         this.summaryList = [];
       } else {
 
         // Special business rule around section 2.2.
-        this.section.hasEvidences = !!(section.evidences && sectionInfo.data.hasEvidence && sectionInfo.data.hasEvidence === 'YES');
+        this.sectionInfo.hasEvidences = !!(section.evidences && sectionInfo.data.hasEvidence && sectionInfo.data.hasEvidence === 'YES');
 
-        this.section.wizard.setAnswers(this.section.wizard.runInboundParsing(sectionInfo.data)).runRules();
+        this.sectionInfo.wizard.setAnswers(this.sectionInfo.wizard.runInboundParsing(sectionInfo.data)).runRules();
 
-        const validInformation = this.section.wizard.validateData();
+        const validInformation = this.sectionInfo.wizard.validateData();
 
-        if (this.section.status.id === 'DRAFT' && validInformation.valid) {
-          this.section.submitButton.show = true;
+        if (this.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
+          this.sectionInfo.submitButton.show = true;
           if (this.innovation.status !== InnovationStatusEnum.CREATED && this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
-            this.section.submitButton.label = "Submit updates"
+            this.sectionInfo.submitButton.label = "Submit updates"
           }
         }
 
-        const data = this.section.wizard.runSummaryParsing();
+        const data = this.sectionInfo.wizard.runSummaryParsing();
         this.summaryList = data.filter(item => !item.evidenceId);
         this.evidencesList = data.filter(item => item.evidenceId);
 
@@ -162,9 +169,38 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       // Documents.
       this.documentsList = documents?.data ?? [];
 
-      // this.setPageStatus('READY');
+      this.setPageStatus('READY');
 
     })
+
+  }
+
+  private getNextSectionId(): string | null {
+
+    const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionInfo.id);
+
+    return this.sectionsIdsList[currentSectionIndex + 1] || null;
+
+  }
+
+  onSubmitSection(): void {
+
+    this.stores.innovation.submitSections$(this.innovation.id, this.sectionInfo.id).subscribe({
+      next: () => {
+
+        if (this.innovation.status === InnovationStatusEnum.CREATED || this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
+          this.sectionInfo.status = { id: 'SUBMITTED', label: 'Submitted' };
+          this.sectionInfo.submitButton.show = false;
+          this.sectionInfo.nextSectionId = this.getNextSectionId();
+          this.setAlertSuccess('Your answers have been confirmed for this section', { message: this.sectionInfo.nextSectionId ? 'Go to next section or return to the full innovation record' : undefined });
+        } else {
+          this.setRedirectAlertSuccess(this.sectionSubmittedText);
+          this.redirectTo(`/${this.baseUrl}/record/sections/${this.sectionInfo.id}/submitted`);
+        }
+
+      },
+      error: () => this.setAlertUnknownError()
+    });
 
   }
   

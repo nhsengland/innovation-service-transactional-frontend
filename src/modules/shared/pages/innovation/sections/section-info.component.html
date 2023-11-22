@@ -3,24 +3,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-    <shared-innovation-summary [sectionId]="section.id"></shared-innovation-summary>
-
-      <div *ngIf="isInnovatorType">
-        <button *ngIf="section.submitButton.show" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">{{ section.submitButton.label }}</button>
-      </div>
-
-      <ng-container *ngIf="
-        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType ||
-        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
-      ">
-        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: section.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for this section</button>
-      </ng-container>
-
-      <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">
-        <button *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button nhsuk-u-margin-top-5">Start needs assessment</button>
-        <button *ngSwitchCase="'NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit" class="nhsuk-button nhsuk-u-margin-top-5">Continue needs assessment</button>
-        <button *ngSwitchCase="'IN_PROGRESS'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}" class="nhsuk-button nhsuk-u-margin-top-5">View needs assessment</button>
-      </ng-container>
+    <shared-innovation-summary [sectionId]="this.sectionId" [innovation]="this.innovation!"></shared-innovation-summary>
 
     </div>
   </div>
