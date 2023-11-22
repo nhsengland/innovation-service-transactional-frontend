@@ -62,10 +62,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
-    this.setPageStatus('LOADING');
     
     this.paramSubscription = this.activatedRoute.params.subscribe(() => {
-      console.log('main subscription triggered')
       this.initializePage();
     });
 
@@ -102,6 +100,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   private initializePage(): void {
+    
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
     this.sectionSubmittedText =  this.sectionIdentification ? `You have submitted section ${this.sectionIdentification?.group.number}.${this.sectionIdentification?.section.number} '${this.sectionIdentification?.section.title}'` : '';
