@@ -1,36 +1,44 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { ContextTypeType } from "@modules/shared/services/innovation-documents.service";
 
 
-export type chipFilterInputType = {id: string, value: string}[];
+export type ChipFilterInputType = { id: string, value: string, exclusive?: boolean }[];
 
 @Component({
-    selector: 'theme-chips-filter-component',
-    templateUrl: './chips-filter-component.html'
+  selector: 'theme-chips-filter-component',
+  templateUrl: './chips-filter-component.html'
 })
-export class ChipsFilterComponent {
+export class ChipsFilterComponent implements OnInit {
 
-    @Input() chipsInput: chipFilterInputType = [];
-    @Output() chipsChange = new EventEmitter<string[]>();
+  @Input({ required: true }) chipsInput: ChipFilterInputType = [];
+  @Input() exclusive: boolean = false;
 
-    selectedChips: string[] = [];
+  @Output() chipsChange = new EventEmitter<string[]>();
 
-    constructor(){
+  selectedChips: string[] = [];
+
+  ngOnInit(): void {
+    if (this.exclusive) {
+      this.chipsInput.unshift({ id: 'ALL', value: 'All', exclusive: true });
     }
-    
-    onClickChip(chip: string) {
+  }
 
-        if (!this.selectedChips.includes(chip)) {
-            this.selectedChips.push(chip);
-        } else {
-            this.selectedChips = this.selectedChips.filter(item => chip !== item);
-        }
-        this.chipsChange.emit(this.selectedChips);
-
+  onClickChip(chip: ChipFilterInputType[number]) {
+    if (chip.exclusive) {
+      this.selectedChips = [];
+      this.chipsChange.emit(this.selectedChips);
+      return;
     }
 
-    clearSelectedChips(){
-        this.selectedChips = [];
-        this.chipsChange.emit(this.selectedChips);
+    if (!this.selectedChips.includes(chip.id)) {
+      this.selectedChips.push(chip.id);
+    } else {
+      this.selectedChips = this.selectedChips.filter(item => chip.id !== item);
     }
+    this.chipsChange.emit(this.selectedChips);
+  }
+
+  clearSelectedChips() {
+    this.selectedChips = [];
+    this.chipsChange.emit(this.selectedChips);
+  }
 }
