@@ -1,16 +1,15 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, NavigationEnd } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription, forkJoin, of } from 'rxjs';
-import { filter } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { getInnovationRecordConfig, innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSectionStepLabels, InnovationSectionsVersions } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+import { InnovationSectionStepLabels, } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 
 
 
@@ -20,9 +19,8 @@ import { InnovationSectionStepLabels, InnovationSectionsVersions } from '@module
 })
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit, OnChanges {
 
-  @Input() innovation!: ContextInnovationType;
   @Input() sectionId: string | undefined;
-
+  
   sectionInfo: {
     id: string,
     nextSectionId: null | string,
@@ -44,18 +42,17 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   summaryList: WizardSummaryType[] = [];
   evidencesList: WizardSummaryType[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
-
+  
   baseUrl: string;
-  isSectionDetailsPage: string | undefined = undefined;
-
+  isSectionDetailsPage: string | undefined;
+  
+  innovation: ContextInnovationType;
 
   // Flags
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
   shouldShowDocuments = false;
-
-  paramSubscription: Subscription = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -64,7 +61,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     super();
 
-    this.innovation = this.innovation ?? this.stores.context.getInnovation();
+    this.innovation = this.stores.context.getInnovation();
 
     this.sectionInfo = {
       id: '',
@@ -90,12 +87,9 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
 
-    this.innovation = this.innovation ?? this.stores.context.getInnovation();
   }
 
   ngOnInit(): void {
-
-    this.setPageStatus('LOADING');
 
     this.initializePage();
 
@@ -106,6 +100,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   }
 
   private initializePage(): void {
+
+    this.setPageStatus('LOADING');
 
     this.sectionId = this.sectionId || '';
     this.isSectionDetailsPage = this.activatedRoute.snapshot.params.sectionId;
