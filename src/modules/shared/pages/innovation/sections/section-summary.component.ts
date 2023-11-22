@@ -20,6 +20,7 @@ import { InnovationSectionStepLabels, } from '@modules/stores/innovation/innovat
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit, OnChanges {
 
   @Input() sectionId: string | undefined;
+  @Input() test: string | undefined;
   
   sectionInfo: {
     id: string,
@@ -96,7 +97,11 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.initializePage();
+    
+    if(!changes.sectionId.isFirstChange()){
+      this.initializePage();
+    }
+    
   }
 
   private initializePage(): void {

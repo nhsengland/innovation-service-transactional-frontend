@@ -32,16 +32,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   baseUrl: string;
 
-  sectionIdentification: {
-    group: {
-        number: number;
-        title: string;
-    };
-    section: {
-        number: number;
-        title: string;
-    }
-  } | null = null;
+  test: string = ''
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -68,6 +59,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       this.activatedRoute.params.subscribe(() => {
         this.initializePage();
+        this.test = 'updated'
       }),
 
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
@@ -101,9 +93,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   private initializePage(): void {
     
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
-    this.sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
         
-    this.setPageTitle(this.translate(this.sectionIdentification!.section.title), { hint: this.sectionIdentification ? `${this.sectionIdentification.group.number}. ${this.sectionIdentification.group.title}` : '' });
+    this.setPageTitle(this.translate(sectionIdentification!.section.title), { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     this.getPreviousAndNextPagination();
