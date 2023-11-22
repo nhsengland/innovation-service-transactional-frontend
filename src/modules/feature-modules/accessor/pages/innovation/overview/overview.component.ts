@@ -114,6 +114,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       // Throw notification read dismiss.
+      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER, NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING] });
+
+      if (this.isQualifyingAccessorRole) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA, NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION] });
+      }
 
       if (this.innovation.support?.id) {
         this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA], contextIds: [this.innovation.support.id] });
@@ -121,8 +126,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           this.stores.context.dismissNotification(this.innovationId, { contextDetails: [ NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST], contextIds: [this.innovation.support.id] });
         }
       }
-
-      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER, NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING] });
 
       this.setPageStatus('READY');
 
