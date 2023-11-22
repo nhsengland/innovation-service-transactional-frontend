@@ -226,7 +226,7 @@ export class NotificationsService extends CoreService {
                   link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
                   break;
                 case NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT:
-                  link = { label: 'Click to go to support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary` }
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } }
                   break;
                 case NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT:
                   link = { label: 'Click to go to how to proceed', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/how-to-proceed` }

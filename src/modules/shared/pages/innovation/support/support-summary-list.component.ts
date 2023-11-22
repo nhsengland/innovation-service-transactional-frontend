@@ -126,11 +126,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
 
-        // Throw notification read dismiss.
-        if (this.isAccessorType) {
-          //this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT], contextIds: [support.id] });
-        }
-
         this.setPageStatus('READY');
 
       },
@@ -167,7 +162,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER, NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING, NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS], contextIds: [unitItem.support.id] })
           }
           else if (this.isAccessorType && unitItem.support.id) {
-            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS], contextIds: [unitItem.support.id] })
+            this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS, NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT], contextIds: [unitItem.support.id] })
           }
         },
         error: () => {
