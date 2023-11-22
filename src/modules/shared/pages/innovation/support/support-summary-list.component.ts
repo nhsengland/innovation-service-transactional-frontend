@@ -84,8 +84,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id).subscribe({
       next: response => {
 
-        console.log(response);
-
         this.sectionsList[0].unitsList = response.ENGAGING.map(item => ({
           ...item, historyList: [], isLoading: false, isOpened: false,
           canDoProgressUpdates: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id,
