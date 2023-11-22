@@ -18,13 +18,14 @@ export class ChipsFilterComponent {
     constructor(){
     }
     
-    onClickChip(chip: string) {
+    onClickChip(chip: string, event: Event) {
 
         if (!this.selectedChips.includes(chip)) {
             this.selectedChips.push(chip);
         } else {
             this.selectedChips = this.selectedChips.filter(item => chip !== item);
         }
+        (event.target as HTMLElement).blur();
         this.chipsChange.emit(this.selectedChips);
 
     }

@@ -621,8 +621,8 @@ td {
   &.app-tag__selected {
     background: var(--primary-color);
     border: 1px solid var(--primary-color);
-
     color: var(--white) !important;
+
   }
 
 }
@@ -641,7 +641,6 @@ a.app-tag {
   }
 
   &:focus {
-    box-shadow: none !important;
-    background: none !important;
+    box-shadow: none;
   }
 }
