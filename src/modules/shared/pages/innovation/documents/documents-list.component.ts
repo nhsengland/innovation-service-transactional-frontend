@@ -35,6 +35,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'blur' });
 
+  hasUploadedDocuments: boolean = false;
+
   filterCount: number = 0;
 
   locationChipsInput: ChipFilterInputType = [];
@@ -66,6 +68,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
     this.statisticsService.getInnovationStatisticsInfo(this.innovation.id, { statistics: [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER] })
       .subscribe(({ DOCUMENTS_STATISTICS_COUNTER }) => {
+
+        if (DOCUMENTS_STATISTICS_COUNTER.locations.length === 0) {
+          this.setPageStatus('READY');
+          return;
+        }
+
+        this.hasUploadedDocuments = true;
 
         this.locationChipsInput = DOCUMENTS_STATISTICS_COUNTER.locations
           .map(l => ({ id: l.location, value: this.translate(`shared.catalog.documents.contextType.${l.location}`), count: l.count }))

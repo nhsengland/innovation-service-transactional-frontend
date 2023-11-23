@@ -15,102 +15,109 @@
 
       <button *ngIf="!isAdmin" class="nhsuk-button nhsuk-u-margin-bottom-9" routerLink="new">Upload a new document</button>
 
-      <form [formGroup]="form" class="d-flex flex-direction-column">
-        <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-          <div *ngIf="uploadedByChips.length > 0">
-            <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Show uploaded documents by' }" />
-            <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
+      <ng-container *ngIf="hasUploadedDocuments; else noDocsEmptyState">
+
+        <form [formGroup]="form" class="d-flex flex-direction-column">
+          <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+            <div *ngIf="uploadedByChips.length > 0">
+              <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Show uploaded documents by' }" />
+              <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
+            </div>
+            <div>
+              <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Search by document name' }" />
+              <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name" >
+                <ng-container append>
+                  <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
+                    <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
+                      <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
+                    </svg>
+                  </button>
+                </ng-container>
+              </theme-form-input>
+            </div>
           </div>
           <div>
-            <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Search by document name' }" />
-            <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name" >
-              <ng-container append>
-                <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
-                  <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
-                    <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
-                  </svg>
-                </button>
-              </ng-container>
-            </theme-form-input>
-          </div>
-        </div>
-        <div>
-          <details class="nhsuk-details">
-            <summary class="nhsuk-details__summary">
-              <span class="nhsuk-details__summary-text">Filter documents {{ filterCount > 0 ? '(' + filterCount + ')' : '' }}</span>
-            </summary>
-            <div class="nhsuk-details__text d-flex flex-direction-column">
-              <div *ngIf="locationChipsInput.length > 0">
-                <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
-                  <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by location' }" />
-                  <theme-chips-filter-component #locationTagsComponent [chipsInput]="locationChipsInput" (chipsChange)="setSelectedLocations($event)"></theme-chips-filter-component>
+            <details class="nhsuk-details">
+              <summary class="nhsuk-details__summary">
+                <span class="nhsuk-details__summary-text">Filter documents {{ filterCount > 0 ? '(' + filterCount + ')' : '' }}</span>
+              </summary>
+              <div class="nhsuk-details__text d-flex flex-direction-column">
+                <div *ngIf="locationChipsInput.length > 0">
+                  <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
+                    <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by location' }" />
+                    <theme-chips-filter-component #locationTagsComponent [chipsInput]="locationChipsInput" (chipsChange)="setSelectedLocations($event)"></theme-chips-filter-component>
+                  </div>
                 </div>
+                <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+                  <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by date range' }" />
+                  <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                  <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                </div>
+                <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
+                <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button></div>
               </div>
-              <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-                <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by date range' }" />
-                <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-                <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-              </div>
-              <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
-              <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button></div>
-            </div>
-          </details>
+            </details>
+          </div>
+        </form>
+
+        <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} documents of {{ tableList.getTotalRowsNumber() }}</p>
+
+        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
+
+        <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no documents.</p>
+
+        <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
+          <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
+            <caption class="nhsuk-u-visually-hidden">
+              Documents list
+              <span *ngIf="tableList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+            </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                  <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                  <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                    {{ item.label }}
+                    <span aria-hidden="true"></span>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+            <tbody class="nhsuk-table__body">
+              <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('name') }}</span>
+                  <div><span class="nhsuk-u-font-weight-bold word-break">{{ item.name }}</span> ({{ item.file.extension | uppercase }}{{ item.file.size ? ', ' + (item.file.size | bytesPrettyPrint)  : ''}})</div>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>
+                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ('app.date_formats.medium_date' | translate) }}</div>
+                  <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('contextType') }}</span>
+                  <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
+                  <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
+                </td>
+                <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
+                  <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('actions') }}</span>
+                  <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
+                  <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-      </form>
 
-      <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} documents of {{ tableList.getTotalRowsNumber() }}</p>
+        <div class="nhsuk-u-padding-bottom-4">
+          <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+        </div>
 
-      <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
+      </ng-container>
 
-      <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no documents.</p>
-
-      <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
-        <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
-          <caption class="nhsuk-u-visually-hidden">
-            Documents list
-            <span *ngIf="tableList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
-          </caption>
-          <thead class="nhsuk-table__head">
-            <tr>
-              <th *ngFor="let item of tableList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
-                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
-                <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
-                  {{ item.label }}
-                  <span aria-hidden="true"></span>
-                </button>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="nhsuk-table__body">
-            <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('name') }}</span>
-                <div><span class="nhsuk-u-font-weight-bold word-break">{{ item.name }}</span> ({{ item.file.extension | uppercase }}{{ item.file.size ? ', ' + (item.file.size | bytesPrettyPrint)  : ''}})</div>
-              </td>
-              <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('createdAt') }}</span>
-                <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.createdAt | date: ('app.date_formats.medium_date' | translate) }}</div>
-                <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">by {{ item.createdBy.description }}</div>
-              </td>
-              <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('contextType') }}</span>
-                <div class="nhsuk-body-s nhsuk-u-margin-0">{{ item.context.label }}</div>
-                <div *ngIf="item.context.description" class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">{{ item.context.description }}</div>
-              </td>
-              <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('actions') }}</span>
-                <div class="nhsuk-u-margin-0"><a href="{{ item.file.url }}" class="nhsuk-u-font-size-14" attr.aria-label="Download {{ item.name }} file">Download</a></div>
-                <div class="nhsuk-u-margin-0"><a routerLink="{{ item.id }}" class="nhsuk-u-font-size-14" attr.aria-label="View {{ item.name }} details">More details</a></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="nhsuk-u-padding-bottom-4">
-        <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
-      </div>
-
+      <ng-template #noDocsEmptyState>
+        <p>No documents were uploaded yet.</p>
+      </ng-template>
     </div>
   </div>
 
