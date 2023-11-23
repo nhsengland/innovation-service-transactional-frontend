@@ -1,47 +1,6 @@
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
   
-        <div class="nhsuk-u-margin-top-0">
-          <span class="nhsuk-u-visually-hidden">Information: </span>
-  
-          <p class="d-flex">
-  
-            <ng-container [ngSwitch]="sectionInfo.status.id">
-  
-              <ng-container *ngSwitchCase="'NOT_STARTED'">
-                <theme-svg-icon type="error"></theme-svg-icon>
-                <span class="nhsuk-u-margin-right-2"></span>
-                <span>This section has not been started yet.</span>
-              </ng-container>
-  
-              <ng-container *ngSwitchCase="'DRAFT'">
-                <theme-svg-icon type="edit"></theme-svg-icon>
-                <span class="nhsuk-u-margin-right-2"></span>
-                <span *ngIf="isInnovatorType; else notInnovator">This section is in draft and it is not visible to others. Confirm answers and complete section to become visible again.</span>
-                <ng-template #notInnovator><span>This section is in draft.</span></ng-template>
-              </ng-container>
-  
-              <ng-container *ngSwitchCase="'SUBMITTED'">
-                <ng-container *ngIf="sectionInfo.date !== '' && sectionInfo.submittedBy !== null">
-                  <theme-svg-icon type="success"></theme-svg-icon>
-                  <span class="nhsuk-u-margin-right-2"></span>
-                  <span>
-                    This section was submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
-                    <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
-                  </span>
-                </ng-container>
-              </ng-container>
-  
-            </ng-container>
-  
-          </p>
-  
-        </div>
-
-        <ng-container *ngIf="isSectionDetailsPage && isInnovatorType && sectionInfo.isNotStarted">
-          <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
-        </ng-container>
-  
         <ng-container *ngIf="sectionInfo.isNotStarted">
           <dl class="nhsuk-summary-list">
             <ng-container *ngFor="let item of sectionInfo.allStepsList | keyvalue; first as firstItem">
@@ -80,7 +39,6 @@
           <ng-container *ngIf="summaryList.length > 0">
             <h2>{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
             <dl class="nhsuk-summary-list">
-  
               <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
                 <ng-container [ngSwitch]="item.type">
                   <ng-container *ngSwitchCase="'button'">
@@ -105,59 +63,11 @@
                   </ng-container>
                 </ng-container>
               </ng-container>
-            </dl>
-          </ng-container>
-
-          <ng-container *ngIf="sectionInfo.hasEvidences">
-            <h2>Evidence</h2>
-            <button *ngIf="isInnovatorType" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary">Add evidence</button>
-            <p *ngIf="evidencesList.length === 0">There are no evidences on this section.</p>
-            <dl *ngIf="evidencesList.length > 0" class="nhsuk-summary-list">
-              <div *ngFor="let item of evidencesList" class="nhsuk-summary-list__row">
-                <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-                <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
-                <dd class="nhsuk-summary-list__actions">
-                  <a routerLink="evidences/{{ item.evidenceId }}" attr.aria-label="View {{ item.value }} details">More details</a>
-                </dd>
-              </div>
-            </dl>
-          </ng-container>
-  
-          <ng-container *ngIf="shouldShowDocuments">
-            <h2>Documents</h2>
-            <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ sectionId: sectionInfo.id }" class="nhsuk-button nhsuk-button--secondary">Upload a new document</button>
-            <p *ngIf="documentsList.length === 0">There are no documents uploaded to this section.</p>
-            <dl *ngIf="documentsList.length > 0" class="nhsuk-summary-list">
-              <div *ngFor="let document of documentsList; let i = index" class="nhsuk-summary-list__row">
-                <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
-                <dd class="nhsuk-summary-list__value text-pre-wrap">
-                  <a href="{{ document.file.url }}" attr.aria-label="Download {{ document.name }} file">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a>
-                  <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
-                </dd>
-                <dd class="nhsuk-summary-list__actions">
-                  <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
-                </dd>
-              </div>
+              
             </dl>
           </ng-container>
   
         </ng-container>
-
-        <div *ngIf="isSectionDetailsPage && isInnovatorType">
-            <button *ngIf="sectionInfo.submitButton.show" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">{{ sectionInfo.submitButton.label }}</button>
-        </div>
-
-        <ng-container *ngIf="
-        (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType ||
-        (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)
-      ">
-        <button routerLink="/{{ baseUrl }}/tasks/new" [queryParams]="{ section: sectionInfo.id }" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for this section</button>
-      </ng-container>
-
-      <ng-container *ngIf="isSectionDetailsPage && isAssessmentType" [ngSwitch]="innovation.status">
-        <button *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button nhsuk-u-margin-top-5">Start needs assessment</button>
-        <button *ngSwitchCase="'NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit" class="nhsuk-button nhsuk-u-margin-top-5">Continue needs assessment</button>
-        <button *ngSwitchCase="'IN_PROGRESS'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}" class="nhsuk-button nhsuk-u-margin-top-5">View needs assessment</button>
-      </ng-container>
+        
       </div>
     </div>
