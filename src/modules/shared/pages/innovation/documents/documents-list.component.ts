@@ -8,6 +8,8 @@ import { TableModel } from '@app/base/models';
 import { CustomValidators } from '@modules/shared/forms';
 
 import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
 
@@ -33,16 +35,18 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'blur' });
 
+  hasUploadedDocuments: boolean = false;
+
   filterCount: number = 0;
 
   locationChipsInput: ChipFilterInputType = [];
   selectedLocationFilters: string[] = [];
-
   uploadedByChips: ChipFilterInputType = [];
   selectedUploadedByChips: string[] = []
 
   constructor(
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private statisticsService: StatisticsService
   ) {
 
     super();
@@ -62,20 +66,34 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    const locations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE'];
-    this.locationChipsInput = locations.map(l => ({ id: l, value: this.translate(`shared.catalog.documents.contextType.${l}`) }));
+    this.statisticsService.getInnovationStatisticsInfo(this.innovation.id, { statistics: [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER] })
+      .subscribe(({ DOCUMENTS_STATISTICS_COUNTER }) => {
 
-    const uploadedByRole = [UserRoleEnum.INNOVATOR, UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT];
-    this.uploadedByChips = uploadedByRole.map(r => ({ id: r, value: this.translate(`shared.catalog.documents.uploadedByRole.${r}`) }))
+        if (DOCUMENTS_STATISTICS_COUNTER.locations.length === 0) {
+          this.setPageStatus('READY');
+          return;
+        }
 
-    this.tableList.setVisibleColumns({
-      name: { label: 'Name', orderable: true },
-      createdAt: { label: 'Uploaded', orderable: true },
-      contextType: { label: 'Location', orderable: true },
-      actions: { label: '', align: 'right' }
-    }).setOrderBy('createdAt', 'descending');
+        this.hasUploadedDocuments = true;
 
-    this.getDocumentsList();
+        this.locationChipsInput = DOCUMENTS_STATISTICS_COUNTER.locations
+          .map(l => ({ id: l.location, value: this.translate(`shared.catalog.documents.contextType.${l.location}`), count: l.count }))
+          .sort((a, b) => b.count - a.count);
+
+        this.uploadedByChips = DOCUMENTS_STATISTICS_COUNTER.uploadedByRoles
+          .map(r => ({ id: r.role, value: this.translate(`shared.catalog.documents.uploadedByRole.${r.role}`), count: r.count }))
+          .sort((a, b) => b.count - a.count);
+
+        this.tableList.setVisibleColumns({
+          name: { label: 'Name', orderable: true },
+          createdAt: { label: 'Uploaded', orderable: true },
+          contextType: { label: 'Location', orderable: true },
+          actions: { label: '', align: 'right' }
+        }).setOrderBy('createdAt', 'descending');
+
+        this.getDocumentsList();
+
+      });
 
   }
 
@@ -178,7 +196,5 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.filterCount = counter;
 
   }
-
-
 
 }
