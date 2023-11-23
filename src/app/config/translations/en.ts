@@ -62,6 +62,11 @@ export const locale = {
         singular: 'role',
         plural: 'roles'
       },
+      document: {
+        none: 'documents',
+        singular: 'document',
+        plural: 'documents'
+      },
       yes: 'yes'
     },
 

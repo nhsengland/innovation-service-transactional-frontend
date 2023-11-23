@@ -60,11 +60,21 @@
           </div>
         </form>
 
-        <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} documents of {{ tableList.getTotalRowsNumber() }}</p>
+        <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">Showing {{ tableList.getVisibleRowsNumber() }} {{ 'dictionary.document' | pluralTranslate: tableList.getVisibleRowsNumber() | translate }} of {{ tableList.getTotalRowsNumber() }}</p>
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
-        <p *ngIf="tableList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-4">There are no documents.</p>
+        <ng-container *ngIf="tableList.getTotalRowsNumber() === 0">
+          <p class="nhsuk-u-padding-top-4 nhsuk-u-font-weight-bold">There are no matching results.</p>
+          <p class="nhsuk-u-margin-bottom-2">Improve your search results by:</p>
+          <ul>
+            <li>removing filters</li>
+            <li>double-checking your spelling</li>
+            <li>using fewer words</li>
+            <li>searching for something less specific</li>
+            <li>checking or increasing the date rage</li>
+          </ul>
+        </ng-container>
 
         <div *ngIf="tableList.getTotalRowsNumber() > 0" class="bg-color-white">
           <table class="nhsuk-table-responsive app-sortable-table app-table-inside-card">
