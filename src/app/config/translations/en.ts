@@ -538,7 +538,7 @@ export const locale = {
             ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR: { title: `{{unitName}} has changed the accessors supporting {{innovationName}}. `, link: `View message.` },
             ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA: { title: `You have been assigned as an accessor for {{innovationName}}. `, link: `Review the innovation and contact the innovator within 5 working days.` },
             ST06_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_OLD_QA: { title: `You are no longer the assigned accessor for {{innovationName}}.` },
-            ST07_SUPPORT_STATUS_CHANGE_REQUEST: { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{proposedStatus}}. `, link: `Update support status.` },
+            ST07_SUPPORT_STATUS_CHANGE_REQUEST: { title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{status}}. `, link: `Update support status.` },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS: { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             // // NEEDS ASSESSMENT
@@ -561,7 +561,7 @@ export const locale = {
             SH03_INNOVATION_STOPPED_SHARED_TO_SELF: { title: `You have stopped sharing innovation {{innovationName}} with all support organisations.` },
             DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR: { title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.` },
             MC01_COLLABORATOR_INVITE_EXISTING_USER: { title: `{{requestUserName}} has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. `, link: `View invitation.` },
-            MC03_COLLABORATOR_UPDATE_CANCEL_INVITE: { title: `{{innovatorName}} has cancelled their invitation for you to collaborate on innovation {{innovationName}}.` },
+            MC03_COLLABORATOR_UPDATE_CANCEL_INVITE: { title: `{{requestUserName}} has cancelled their invitation for you to collaborate on innovation {{innovationName}}.` },
             MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE: { title: `{{requestUserName}} has accepted your invitation to collaborate on innovation {{innovationName}}. `, link: `Manage collaborators.` },
             MC05_COLLABORATOR_UPDATE_DECLINES_INVITE: { title: `{{requestUserName}} has declined your invitation to collaborate on innovation {{innovationName}}. `, link: `Invite new collaborators.` },
             MC06_COLLABORATOR_UPDATE_REMOVED_COLLABORATOR: { title: `{{requestUserName}} has removed you as a collaborator on innovation {{innovationName}}.` },

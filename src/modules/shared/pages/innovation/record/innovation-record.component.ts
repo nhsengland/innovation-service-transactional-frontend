@@ -98,7 +98,10 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
         // Throw notification read dismiss.
         if (this.isInnovatorType) {
-          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [  NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD] });
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD] });
+        }
+        else if (this.showSupportingTeamsShareRequestSection) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED] });
         }
 
         this.setPageStatus('READY');
