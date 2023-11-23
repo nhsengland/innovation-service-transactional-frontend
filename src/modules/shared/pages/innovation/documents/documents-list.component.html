@@ -17,7 +17,7 @@
 
       <form [formGroup]="form" class="d-flex flex-direction-column">
         <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-          <div>
+          <div *ngIf="uploadedByChips.length > 0">
             <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Show uploaded documents by' }" />
             <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
           </div>
@@ -40,7 +40,7 @@
               <span class="nhsuk-details__summary-text">Filter documents {{ filterCount > 0 ? '(' + filterCount + ')' : '' }}</span>
             </summary>
             <div class="nhsuk-details__text d-flex flex-direction-column">
-              <div>
+              <div *ngIf="locationChipsInput.length > 0">
                 <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
                   <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by location' }" />
                   <theme-chips-filter-component #locationTagsComponent [chipsInput]="locationChipsInput" (chipsChange)="setSelectedLocations($event)"></theme-chips-filter-component>

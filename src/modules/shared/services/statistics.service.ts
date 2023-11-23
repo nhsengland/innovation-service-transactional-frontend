@@ -3,9 +3,11 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
+import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { DateISOType } from '@app/base/types';
 
+import { ContextTypeType } from './innovation-documents.service';
 import { InnovationStatisticsEnum, OrganisationUnitStatisticsEnum, UserStatisticsTypeEnum } from './statistics.enum';
 
 
@@ -25,7 +27,12 @@ export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER]: { count: number, total: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_ASSESSMENT_START_COUNTER]: { count: number, total: number, lastSubmittedSection: null | string, lastSubmittedAt: null | DateISOType },
   [InnovationStatisticsEnum.UNREAD_MESSAGES_THREADS_INITIATED_BY_COUNTER]: { count: number, lastSubmittedAt: null | DateISOType },
-  [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER]: { count: number }
+  [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER]: { count: number },
+  [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER]: {
+    uploadedByRoles: { role: UserRoleEnum; count: number }[],
+    uploadedByUnits: { unit: string; count: number }[],
+    locations: { location: ContextTypeType; count: number }[]
+  }
 };
 
 export type OrganisationUnitStatisticsDTO = {

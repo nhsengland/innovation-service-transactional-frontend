@@ -6,7 +6,7 @@
       class="app-tag nhsuk-u-font-size-14"
       [ngClass]="{'app-tag__selected': !item.exclusive ? selectedChips.includes(item.id) : selectedChips.length === 0 }"
     >
-      {{ item.value }}
+      {{ item.value }} <ng-container *ngIf="item.count">({{ item.count }})</ng-container>
     </a>
   </li>
 </ul>
