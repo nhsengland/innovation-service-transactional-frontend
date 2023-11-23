@@ -95,6 +95,7 @@ import { StatisticsService } from './services/statistics.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/secion-info-all.component';
 
 @NgModule({
   imports: [
@@ -151,6 +152,7 @@ import { FileUploadService } from '@modules/shared/services/file-upload.service'
     PageInnovationRecordDownloadComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
+    PageInnovationAllSectionsInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationStatusListComponent,
     PageInnovationSupportStatusListComponent,

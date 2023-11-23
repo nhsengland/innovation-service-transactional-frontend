@@ -92,6 +92,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/secion-info-all.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -204,7 +205,11 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
+                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                        data: {
+                          breadcrumb: (data: RoutesDataType) => ''
+                        }, 
+                      },
                       {
                         path: ':sectionId',
                         resolve: { innovationSectionData: mapToResolve(InnovationSectionDataResolver) },

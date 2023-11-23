@@ -4,6 +4,7 @@ import { Subscription, filter } from 'rxjs';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ViewportScroller } from '@angular/common';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private contextStore: ContextStore,
-    private innovationStore: InnovationStore
+    private innovationStore: InnovationStore,
+    private scroller: ViewportScroller
   ) {
 
     this.subscriptions.add(
@@ -79,6 +81,10 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.sidebarItems = this._sidebarItems;
     }
 
+  }
+
+  onScrollToTop(): void {
+    this.scroller.scrollToPosition([0,0]);
   }
 
 }

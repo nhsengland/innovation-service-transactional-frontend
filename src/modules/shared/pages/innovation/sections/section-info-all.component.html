@@ -1,0 +1,40 @@
+<theme-content-wrapper [status]="pageStatus">
+
+    <div class="nhsuk-grid-column-full nhsuk-u-padding-left-0">
+  
+      <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
+        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
+      </ul>
+  
+      <p class="d-flex nhsuk-u-margin-0">
+        <theme-svg-icon type="success"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.submitted }} of {{ sections.progressBar.length }} {{ ('dictionary.section' | pluralTranslate: sections.progressBar.length | translate) }} completed
+      </p>
+      <p *ngIf="sections.draft > 0" class="d-flex nhsuk-u-margin-0">
+        <theme-svg-icon type="edit"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.draft }} {{ ('dictionary.section' | pluralTranslate: sections.draft | translate) }} in draft
+      </p>
+      <p *ngIf="sections.notStarted > 0" class="d-flex">
+        <theme-svg-icon type="error"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span>
+        {{ sections.notStarted }} {{ ('dictionary.section' | pluralTranslate: sections.notStarted | translate) }} not started
+      </p>
+      
+      <ng-container *ngFor="let item of innovationsSectionsList; let i = index">
+          <h1>{{ i + 1 }}. {{ item.title }}</h1>
+          <ng-container *ngFor="let section of item.sections; let j = index">
+            <h3 class="nhsuk-heading-m">
+              <a routerLink="{{ baseUrl }}/{{section.id}}/">
+                {{ i + 1}}.{{ j + 1 }}. {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
+              </a>
+            </h3>
+            <shared-innovation-summary [sectionId]="section.id"></shared-innovation-summary>
+          </ng-container>
+      </ng-container>
+    </div>
+
+    
+  
+  </theme-content-wrapper>
