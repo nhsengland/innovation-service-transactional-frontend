@@ -85,7 +85,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
       // Throw notification read dismiss.
       if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-        console.log("TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT");
         this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT] });
       }
 
