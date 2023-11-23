@@ -49,10 +49,10 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
 
         // Throw notification read dismiss.
         if (this.isInnovatorType) {
-          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED, ], contextIds: [this.requestId] });
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED], contextIds: [this.requestId] });
         }
         else if (this.isSupportTeamType) {
-          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED, ], contextIds: [this.requestId] });
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED], contextIds: [this.requestId] });
         }
 
         this.setPageStatus('READY');
