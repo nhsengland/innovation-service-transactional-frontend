@@ -22,7 +22,7 @@ export class ChipsFilterComponent implements OnInit {
     }
   }
 
-  onClickChip(chip: ChipFilterInputType[number]) {
+  onClickChip(chip: ChipFilterInputType[number], event: Event) {
     if (chip.exclusive) {
       this.selectedChips = [];
       this.chipsChange.emit(this.selectedChips);
@@ -35,6 +35,8 @@ export class ChipsFilterComponent implements OnInit {
       this.selectedChips = this.selectedChips.filter(item => chip.id !== item);
     }
     this.chipsChange.emit(this.selectedChips);
+    (event.target as HTMLElement).blur();
+
   }
 
   clearSelectedChips() {
