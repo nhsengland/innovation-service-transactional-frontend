@@ -393,15 +393,15 @@ export const locale = {
 
             AUTOMATIC: {
               INNOVATOR: {
-                title: 'Reminders',
+                title: 'System reminders',
                 description: 'Receive reminders when your innovation record is incomplete or when your innovation is not receiving support.'
               },
               QUALIFYING_ACCESSOR: {
-                title: 'Reminders',
+                title: 'System reminders',
                 description: 'Receive reminders for you to interact with innovations you are supporting.'
               },
               ACCESSOR: {
-                title: 'Reminders',
+                title: 'System reminders',
                 description: 'Receive reminders for you to interact with innovations you are supporting.'
               },
             },
