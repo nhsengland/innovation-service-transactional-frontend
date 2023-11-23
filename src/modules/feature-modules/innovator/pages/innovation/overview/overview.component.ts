@@ -121,6 +121,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT] });
       }
 
+      if (this.innovation.loggedUser.isOwner && this.innovation.status === 'PAUSED') {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF] });
+      }
+
       this.setPageStatus('READY');
 
     });
