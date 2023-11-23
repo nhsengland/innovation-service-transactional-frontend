@@ -63,20 +63,20 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
+      this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
 
-        this.formPreferencesList = Object.keys(response).map((category) => ({
-          value: category,
-          preference: this.getCategoryToggleInfo(response[category]).status,
-          cssClass: this.getCategoryToggleInfo(response[category]).cssClass,
-          title: this.getCategoryMessages(category).title,
-          description: this.getCategoryMessages(category).description
-        })).sort((a, b) => a.title.localeCompare(b.title));
+      this.formPreferencesList = Object.keys(response).map((category) => ({
+        value: category,
+        preference: this.getCategoryToggleInfo(response[category]).status,
+        cssClass: this.getCategoryToggleInfo(response[category]).cssClass,
+        title: this.getCategoryMessages(category).title,
+        description: this.getCategoryMessages(category).description
+      }));
 
-        this.preferencesResponse = response;
+      this.preferencesResponse = response;
 
-        this.setPageStatus('READY');
-      });
+      this.setPageStatus('READY');
+    });
 
   }
 
@@ -84,11 +84,11 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.setPageStatus('LOADING');
 
-    const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
+    const body: { preferences: EmailNotificationPreferencesDTO } = { preferences: {} };
 
 
     Object.keys(this.preferencesResponse).forEach(key => {
-            body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES ;
+      body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES;
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({
@@ -115,11 +115,11 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   }
 
-  private getCategoryMessages(category: string ): { title: string, description: string }{
+  private getCategoryMessages(category: string): { title: string, description: string } {
 
     const role = this.currentUserContext?.type;
 
-    if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)){
+    if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)) {
       return {
         title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.title'),
         description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.description')
@@ -133,12 +133,12 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   };
 
-  private getCategoryToggleInfo(status: string): {cssClass: string, status: string} {
+  private getCategoryToggleInfo(status: string): { cssClass: string, status: string } {
 
-    if (status === 'YES'){
-      return { cssClass: 'nhsuk-tag--green', status: 'On'};
+    if (status === 'YES') {
+      return { cssClass: 'nhsuk-tag--green', status: 'On' };
     } else {
-      return { cssClass: 'nhsuk-tag--grey', status: 'Off'};
+      return { cssClass: 'nhsuk-tag--grey', status: 'Off' };
     }
 
   }

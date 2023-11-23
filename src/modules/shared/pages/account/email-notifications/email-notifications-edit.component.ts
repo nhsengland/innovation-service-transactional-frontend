@@ -4,7 +4,7 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 
-import { NotificationPreferenceEnum, NotificationsService, EmailNotificationPreferencesDTO } from '@modules/shared/services/notifications.service';
+import { EmailNotificationPreferencesDTO, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -44,7 +44,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     this.currentUserContext = this.authenticationStore.getUserContextInfo();
 
-    this.setPageTitle('Select the email notifications you want to receive',  { width: '2.thirds', size: 'l' });
+    this.setPageTitle('Select the email notifications you want to receive', { width: '2.thirds', size: 'l' });
 
     this.setBackLink('Go back')
 
@@ -75,10 +75,10 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
   onSubmit(): void {
 
-    const body: {preferences: EmailNotificationPreferencesDTO} = {preferences: {}};
+    const body: { preferences: EmailNotificationPreferencesDTO } = { preferences: {} };
 
     Object.keys(this.preferencesResponse).forEach(value => {
-            body.preferences[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? NotificationPreferenceEnum.YES : NotificationPreferenceEnum.NO
+      body.preferences[value] = (this.form.get('preferencesEnabled')?.value)?.includes(value) ? NotificationPreferenceEnum.YES : NotificationPreferenceEnum.NO
     });
 
     this.notificationsService.updateEmailNotificationsPreferences(
@@ -96,11 +96,11 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
   }
 
-  private getCategoryMessages(category: string ): { title: string, description: string }{
+  private getCategoryMessages(category: string): { title: string, description: string } {
 
     const role = this.currentUserContext?.type;
 
-    if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)){
+    if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)) {
       return {
         title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.title'),
         description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.description')
