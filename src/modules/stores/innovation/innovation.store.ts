@@ -92,13 +92,14 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
 
-  getInnovationRecordSectionsTree(type: string, innovationId: string): { label: string, url: string, children: { label: string, url: string }[] }[] {
+  getInnovationRecordSectionsTree(type: string, innovationId: string): { label: string, url: string, children: { label: string, id: string, url: string }[] }[] {
 
     return getInnovationRecordConfig().map((parentSection, i) => ({
       label: `${i + 1}. ${parentSection.title}`,
       url: `/${type}/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`,
       children: parentSection.sections.map((section, k) => ({
         label: `${i + 1}.${k + 1} ${section.title}`,
+        id: `${section.id}`,
         url: `/${type}/innovations/${innovationId}/record/sections/${section.id}`
       }))
     }));

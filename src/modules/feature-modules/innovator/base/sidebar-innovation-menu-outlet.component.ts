@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
@@ -13,14 +13,23 @@ import { ViewportScroller } from '@angular/common';
 })
 export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
+  @HostListener('window:scroll', ['$event'])
+  onScrollChange($event: Event){
+    console.log(window.scrollY)
+    this.backToTopIsVisible = window.scrollY > 400 ? true : false;
+  }
+
+  backToTopIsVisible: boolean = false;
+
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string, id?: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
+  isAllSectionsDetailsPage: boolean = false;
 
-  private sectionsSidebar: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
-  private _sidebarItems: { label: string, url: string; }[] = [];
+  private sectionsSidebar: { label: string, url: string, children?: { label: string, id: string, url: string }[] }[] = [];
+  private _sidebarItems: { label: string, url: string, id?: string }[] = [];
 
   constructor(
     private router: Router,
@@ -38,6 +47,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.generateSidebar();
+
+    this.scroller.setOffset([0,20]);
   }
 
   ngOnDestroy(): void {
@@ -49,6 +60,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
 
       const innovation = this.contextStore.getInnovation();
+      const baseUrl = `innovator/innovations/${innovation.id}`;
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('innovator', innovation.id);
       this._sidebarItems = [
@@ -72,10 +84,15 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private onRouteChange(): void {
 
     this.generateSidebar();
+    
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
+      console.log(this.sidebarItems)
+      if (this.router.url.includes('/all')){
+        this.isAllSectionsDetailsPage = true;
+      }
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
@@ -86,5 +103,12 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   onScrollToTop(): void {
     this.scroller.scrollToPosition([0,0]);
   }
+
+  onScrollToSection(section: string): void {
+    console.log(`navigating to ${section}`)
+    this.scroller.scrollToAnchor(section);
+  }
+
+  
 
 }

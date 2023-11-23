@@ -57,6 +57,24 @@
         }
       }
 
+      .app-side-nav__item--expanded {
+        border-left: none;
+        margin-left: -12px;
+        padding-left: 8px;
+
+        .app-side-nav__link {
+          font-weight: 600;
+          pointer-events: none;
+          cursor: default;
+        }
+
+        .app-side-nav__list--nested {
+          display: block;
+        }
+      }
+
+      
+
       .app-side-nav__item--nested-current {
         .app-side-nav__link--nested {
           color: #212b32 !important;
@@ -261,7 +279,12 @@
   }
 }
 
-
+.backToTop {
+  position: fixed;
+  bottom: 0;
+  margin-bottom: 30px;
+  text-align: center;
+}
 
 // .app-index-navigation {
 //   padding-top: 16px
