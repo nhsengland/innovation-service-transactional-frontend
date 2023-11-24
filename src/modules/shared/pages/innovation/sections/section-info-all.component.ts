@@ -33,6 +33,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
     // Flags.
     isInnovatorType: boolean;
+    isAccessorType: boolean;
+    isAssessmentType: boolean;
+    
     isInnovationInCreatedStatus: boolean;
     showSupportingTeamsShareRequestSection: boolean;
     showInnovatorShareRequestSection: boolean;
@@ -48,11 +51,14 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
       this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-      this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections`;
+      this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
       this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
       this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${this.innovationId}/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
       
+      // Flags
       this.isInnovatorType = this.stores.authentication.isInnovatorType();
+      this.isAccessorType = this.stores.authentication.isAccessorType();
+      this.isAssessmentType = this.stores.authentication.isAssessmentType();
       this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
       this.showSupportingTeamsShareRequestSection = this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
       this.showInnovatorShareRequestSection = this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;

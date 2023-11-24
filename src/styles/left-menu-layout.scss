@@ -286,6 +286,12 @@
   text-align: center;
 }
 
+@media (max-width: 48.0525em) {
+  .backToTop {
+    display: none;
+  }
+}
+
 // .app-index-navigation {
 //   padding-top: 16px
 // }

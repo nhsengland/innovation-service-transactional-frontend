@@ -21,17 +21,13 @@
 <ng-container *ngIf="isAllSectionsDetailsPage">
 
   <ul class="nhsuk-list app-side-nav__list">
-
     <li *ngFor="let item of sidebarItems" class="app-side-nav__item app-side-nav__item--expanded">
-
       <a class="app-side-nav__link nhsuk-u-padding-right-1">{{ item.label }}</a>
-
       <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--nested">
         <li *ngFor="let nestedItem of item.children" class="app-side-nav__item app-side-nav__list--nested">
           <a href="javascript:void(0)" (click)="onScrollToSection(nestedItem.id!)" class="app-side-nav__link--nested nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
         </li>
       </ul>
-
     </li>
     <div *ngIf="backToTopIsVisible" class="backToTop">
       <svg role="presentation" focusable="false" class="back-to-top" xmlns="http://www.w3.org/2000/svg" width="13" height="17" viewBox="0 0 13 17">
@@ -40,4 +36,5 @@
       <a  href="javascript:void()" (click)="onScrollToTop()" class="nhsuk-u-font-size-14 nhsuk-u-margin-left-2">Back to top</a>
     </div>
   </ul>
+  
 </ng-container>

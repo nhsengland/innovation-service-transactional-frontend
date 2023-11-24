@@ -60,7 +60,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
 
       const innovation = this.contextStore.getInnovation();
-      const baseUrl = `innovator/innovations/${innovation.id}`;
 
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('innovator', innovation.id);
       this._sidebarItems = [
@@ -89,7 +88,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
-      console.log(this.sidebarItems)
       if (this.router.url.includes('/all')){
         this.isAllSectionsDetailsPage = true;
       }
@@ -108,7 +106,5 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     console.log(`navigating to ${section}`)
     this.scroller.scrollToAnchor(section);
   }
-
-  
 
 }
