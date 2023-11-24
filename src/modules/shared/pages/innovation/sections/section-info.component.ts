@@ -103,7 +103,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       this.activatedRoute.params.subscribe(() => {
         this.initializePage();
-        console.log('changed route param')
       }),
 
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
