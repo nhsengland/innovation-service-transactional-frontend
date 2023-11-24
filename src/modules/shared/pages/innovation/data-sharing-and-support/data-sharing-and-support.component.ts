@@ -150,7 +150,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
       if (this.userType === UserRoleEnum.INNOVATOR) {
 
-        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR] });
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR, NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR] });
 
         if (this.innovation.loggedUser.isOwner) {
           this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS] });
