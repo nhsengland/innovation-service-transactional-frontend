@@ -1,10 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ViewportScroller } from '@angular/common';
 
 
 @Component({
@@ -13,19 +14,30 @@ import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enum
 })
 export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
+  @HostListener('window:scroll', ['$event'])
+  onScrollChange($event: Event){
+    console.log(window.scrollY)
+    this.backToTopIsVisible = window.scrollY > 400 ? true : false;
+  }
+  
+  backToTopIsVisible: boolean = false;
+
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string, id?: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
+  isAllSectionsDetailsPage: boolean = false;
 
-  private sectionsSidebar: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
-  private _sidebarItems: { label: string, url: string; }[] = [];
+
+  private sectionsSidebar: { label: string, url: string, children?: { label: string, id: string, url: string }[] }[] = [];
+  private _sidebarItems: { label: string, url: string, id?: string }[] = [];
 
   constructor(
     private router: Router,
     private contextStore: ContextStore,
-    private innovationStore: InnovationStore
+    private innovationStore: InnovationStore,
+    private scroller: ViewportScroller
   ) {
 
     this.subscriptions.add(
@@ -73,10 +85,22 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
+      if (this.router.url.includes('/all')){
+        this.isAllSectionsDetailsPage = true;
+      }
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
     }
+  }
+
+  onScrollToTop(): void {
+    this.scroller.scrollToPosition([0,0]);
+  }
+
+  onScrollToSection(section: string): void {
+    console.log(`navigating to ${section}`)
+    this.scroller.scrollToAnchor(section);
   }
 
 }
