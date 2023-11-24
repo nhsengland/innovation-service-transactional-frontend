@@ -16,9 +16,10 @@ export type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
   contextTypes?: ContextTypeType[],
+  units?: string[],
   contextId?: string,
   fields?: ('description')[],
-  dateFilter?: { field: 'createdAt', startDate?: string, endDate?: string}[],
+  dateFilter?: { field: 'createdAt', startDate?: string, endDate?: string }[],
   uploadedBy?: UserRoleEnum[]
 }
 type InnovationDocumentsListInDTO = {
@@ -80,7 +81,8 @@ export class InnovationDocumentsService extends CoreService {
       ...(filters.contextTypes && { contextTypes: filters.contextTypes }),
       ...(filters.fields && { fields: filters.fields }),
       ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
-      ...(filters.uploadedBy && { uploadedBy: filters.uploadedBy})
+      ...(filters.uploadedBy && { uploadedBy: filters.uploadedBy }),
+      ...(filters.units && { units: filters.units }),
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId }).setQueryParams(qp);

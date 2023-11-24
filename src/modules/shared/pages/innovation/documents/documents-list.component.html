@@ -48,13 +48,19 @@
                     <theme-chips-filter-component #locationTagsComponent [chipsInput]="locationChipsInput" (chipsChange)="setSelectedLocations($event)"></theme-chips-filter-component>
                   </div>
                 </div>
+                <div *ngIf="uploadedByUnitChips.length > 0">
+                  <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
+                    <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by organisation' }" />
+                    <theme-chips-filter-component #uploadedByUnitComponent [chipsInput]="uploadedByUnitChips" (chipsChange)="setSelectedUploadedByUnits($event)"></theme-chips-filter-component>
+                  </div>
+                </div>
                 <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
                   <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by date range' }" />
                   <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                   <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                 </div>
-                <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
                 <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()"> Apply filters </button></div>
+                <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
               </div>
             </details>
           </div>
