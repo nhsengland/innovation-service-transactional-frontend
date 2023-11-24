@@ -20,6 +20,7 @@ import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/compon
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
 
   @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsFilterComponent;
+  @ViewChild('uploadedByUnitComponent') uploadedByUnitComponent?: ChipsFilterComponent;
 
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
@@ -39,10 +40,12 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   filterCount: number = 0;
 
+  uploadedByChips: ChipFilterInputType = [];
+  selectedUploadedByChips: string[] = [];
   locationChipsInput: ChipFilterInputType = [];
   selectedLocationFilters: string[] = [];
-  uploadedByChips: ChipFilterInputType = [];
-  selectedUploadedByChips: string[] = []
+  uploadedByUnitChips: ChipFilterInputType = [];
+  selectedUploadedByUnitChips: string[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService,
@@ -84,6 +87,10 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
           .map(r => ({ id: r.role, value: this.translate(`shared.catalog.documents.uploadedByRole.${r.role}`), count: r.count }))
           .sort((a, b) => b.count - a.count);
 
+        this.uploadedByUnitChips = DOCUMENTS_STATISTICS_COUNTER.uploadedByUnits
+          .map(u => ({ id: u.id, value: u.unit, count: u.count }))
+          .sort((a, b) => b.count - a.count);
+
         this.tableList.setVisibleColumns({
           name: { label: 'Name', orderable: true },
           createdAt: { label: 'Uploaded', orderable: true },
@@ -115,6 +122,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.form.get('endDate')?.reset()
 
     this.locationTagsComponent?.clearSelectedChips();
+    this.uploadedByUnitComponent?.clearSelectedChips();
 
     this.setFilters();
 
@@ -156,6 +164,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
       name: this.form.get('name')?.value ?? undefined,
       ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters as ContextTypeType[] } : {}),
       ...(this.selectedUploadedByChips.length > 0 ? { uploadedBy: this.selectedUploadedByChips as UserRoleEnum[] } : {}),
+      ...(this.selectedUploadedByUnitChips.length > 0 ? { units: this.selectedUploadedByUnitChips } : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 
@@ -172,6 +181,10 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.selectedLocationFilters = locations;
   }
 
+  setSelectedUploadedByUnits(units: string[]) {
+    this.selectedUploadedByUnitChips = units;
+  }
+
   setSelectedUploadedBy(roles: string[]) {
     this.selectedUploadedByChips = roles.flatMap(
       role =>
@@ -185,7 +198,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   calculateFilterNum() {
 
-    let counter = this.selectedLocationFilters.length;
+    let counter = this.selectedLocationFilters.length + this.selectedUploadedByUnitChips.length;
 
     const startDate = this.getDateByControlName('startDate') ?? undefined;
     const endDate = this.getDateByControlName('endDate') ?? undefined;

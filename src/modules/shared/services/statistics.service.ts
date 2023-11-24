@@ -30,7 +30,7 @@ export type InnovationStatisticsDTO = {
   [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER]: { count: number },
   [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER]: {
     uploadedByRoles: { role: UserRoleEnum; count: number }[],
-    uploadedByUnits: { unit: string; count: number }[],
+    uploadedByUnits: { id: string; unit: string; count: number }[],
     locations: { location: ContextTypeType; count: number }[]
   }
 };
