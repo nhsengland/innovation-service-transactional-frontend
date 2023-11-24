@@ -101,10 +101,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     
     this.subscriptions.push(
 
-      this.activatedRoute.params.subscribe(() => {
-        this.initializePage();
-      }),
-
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
 
     );
