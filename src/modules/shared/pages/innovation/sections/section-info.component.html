@@ -40,7 +40,9 @@
         <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
       </ng-container>
 
-      <shared-innovation-summary [sectionData]="getSectionSummaryData()" />
+      <ng-container *ngIf="pageStatus === 'READY'">
+        <shared-innovation-summary [sectionData]="getSectionSummaryData()" />
+      </ng-container>
       
       <div *ngIf="isInnovatorType">
         <button *ngIf="sectionInfo.submitButton.show" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">{{ sectionInfo.submitButton.label }}</button>

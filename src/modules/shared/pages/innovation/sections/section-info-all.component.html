@@ -72,7 +72,9 @@
             </div>
           </ng-container> -->
           
+        <ng-container *ngIf="pageStatus === 'READY'">
           <shared-innovation-summary [sectionData]="getSectionSummaryData(section.id)" />
+        </ng-container>
 
         </ng-container>
     </ng-container>

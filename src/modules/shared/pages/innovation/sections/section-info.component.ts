@@ -124,8 +124,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         
     this.setPageTitle(this.translate(sectionIdentification!.section.title), { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
-
-
     
     const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
@@ -185,6 +183,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       this.setPageStatus('READY');
     })
+
+
   }
 
   private getPreviousAndNextPagination(): void {
@@ -239,6 +239,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   getSectionSummaryData(): SectionSummaryInputData {
-    return { sectionInfo: this.sectionInfo, summaryList: this.summaryList, documentsList: this.documentsList }
+    return { 
+      sectionInfo: this.sectionInfo, 
+      summaryList: this.summaryList, 
+      evidencesList: this.evidencesList, 
+      documentsList: this.documentsList 
+    }
   }
 }

@@ -48,12 +48,11 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
     allSectionsSubmitted = false;
 
-    allSectionsData: { [k in InnovationSections as string]?: { sectionInfo?: SectionInfoType, summaryList?: WizardSummaryType[], documentsList?: InnovationDocumentsListOutDTO['data'] } } = {};
+    allSectionsData: { [k in InnovationSections as string]?: { sectionInfo?: SectionInfoType, summaryList?: WizardSummaryType[], evidencesList?: WizardSummaryType[], documentsList?: InnovationDocumentsListOutDTO['data'] } } = {};
 
 
     constructor(
       private activatedRoute: ActivatedRoute,
-      private statisticsService: StatisticsService,
       private innovationDocumentsService: InnovationDocumentsService
     ){
       super()
@@ -109,9 +108,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
           sectionsResponse.forEach((item, index) => { 
 
-            // console.log('item:')
-            // console.log(item)
-  
             const sectionInfo: SectionInfoType = {
               id: '',
               nextSectionId: null,
@@ -166,6 +162,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               documentsList = documentsResponse[index]?.data ?? [];
 
               this.allSectionsData[item.section] = {};
+              this.allSectionsData[item.section]!.evidencesList = evidencesList;
               this.allSectionsData[item.section]!.sectionInfo = sectionInfo;
               this.allSectionsData[item.section]!.summaryList = summaryList;
               this.allSectionsData[item.section]!.documentsList = documentsList;
@@ -193,6 +190,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       return { 
         sectionInfo: this.allSectionsData[section]!.sectionInfo!, 
         summaryList: this.allSectionsData[section]!.summaryList!, 
+        evidencesList: this.allSectionsData[section]!.evidencesList!,
         documentsList: this.allSectionsData[section]!.documentsList! }
     }
   }
