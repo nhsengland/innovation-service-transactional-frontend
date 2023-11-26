@@ -16,8 +16,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   @HostListener('window:scroll', ['$event'])
   onScrollChange($event: Event){
-    console.log(window.scrollY)
-    this.backToTopIsVisible = window.scrollY > 400 ? true : false;
+    this.backToTopIsVisible = window.scrollY > 750 ? true : false;
   }
 
   backToTopIsVisible: boolean = false;

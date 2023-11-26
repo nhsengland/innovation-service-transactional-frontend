@@ -22,18 +22,60 @@
         {{ sections.notStarted }} {{ ('dictionary.section' | pluralTranslate: sections.notStarted | translate) }} not started
       </p>
       
-      <ng-container *ngFor="let item of innovationsSectionsList; let i = index">
-          <h3 class="nhsuk-heading-l">{{ i + 1 }}. {{ item.title }}</h3>
-          <ng-container *ngFor="let section of item.sections; let j = index">
-            <h3 class="nhsuk-heading-m" [id]="section.id">
-              <a routerLink="{{ baseUrl }}/record/sections/{{section.id}}/">
-                {{ i + 1}}.{{ j + 1 }}. {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
-              </a>
-            </h3>
-            <shared-innovation-summary [sectionId]="section.id"></shared-innovation-summary>
-          </ng-container>
-      </ng-container>
     </div>
+
+
+
+    <ng-container *ngFor="let item of innovationsSectionsList ; let i = index">
+        <h3 class="nhsuk-heading-l">{{ i + 1 }}. {{ item.title }}</h3>
+
+        <ng-container *ngFor="let section of item.sections; let j = index">
+          <h3 class="nhsuk-heading-m" [id]="section.id">
+            <a routerLink="{{ baseUrl }}/record/sections/{{section.id}}/">
+              {{ i + 1}}.{{ j + 1 }}. {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
+            </a>
+          </h3>
+          
+          <!-- <ng-container>
+            <div class="nhsuk-u-margin-top-0">
+              <span class="nhsuk-u-visually-hidden">Information: </span>
+              <p class="d-flex">
+                <ng-container [ngSwitch]="sectionInfo.status.id">
+                  
+                  <ng-container *ngSwitchCase="'NOT_STARTED'">
+                    <theme-svg-icon type="error"></theme-svg-icon>
+                    <span class="nhsuk-u-margin-right-2"></span>
+                    <span>This section has not been started yet.</span>
+                    
+                  </ng-container>
+                
+                  <ng-container *ngSwitchCase="'DRAFT'">
+                    <theme-svg-icon type="edit"></theme-svg-icon>
+                    <span class="nhsuk-u-margin-right-2"></span>
+                    <span *ngIf="isInnovatorType; else notInnovator">This section is in draft and it is not visible to others. Confirm answers and complete section to become visible again.</span>
+                    <ng-template #notInnovator><span>This section is in draft.</span></ng-template>
+                  </ng-container>
+                  
+                  <ng-container *ngSwitchCase="'SUBMITTED'">
+                    <ng-container *ngIf="sectionInfo.date !== '' && sectionInfo.submittedBy !== null">
+                      <theme-svg-icon type="success"></theme-svg-icon>
+                      <span class="nhsuk-u-margin-right-2"></span>
+                      <span>
+                        This section was submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
+                        <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
+                      </span>
+                    </ng-container>
+                  </ng-container>
+          
+                </ng-container>
+              </p>
+            </div>
+          </ng-container> -->
+          
+          <shared-innovation-summary [sectionData]="getSectionSummaryData(section.id)" />
+
+        </ng-container>
+    </ng-container>
 
     <ng-container *ngIf="isAccessorType || isAssessmentType">
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for a section</button>
