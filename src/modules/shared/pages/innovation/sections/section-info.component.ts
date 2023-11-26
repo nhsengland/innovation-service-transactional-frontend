@@ -11,6 +11,22 @@ import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modu
 import { getInnovationRecordConfig, innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+import { SectionSummaryInputData } from './section-summary.component';
+
+export type SectionInfoType = {
+  id: string,
+  nextSectionId: null | string,
+  title: string,
+  status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
+  submitButton: { show: boolean, label: string },
+  isNotStarted: boolean,
+  hasEvidences: boolean,
+  wizard: WizardEngineModel,
+  allStepsList: InnovationSectionStepLabels,
+  date: string,
+  submittedBy: null | { name: string, isOwner?: boolean },
+  openTasksCount: number
+};
 
 
 @Component({
@@ -40,20 +56,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isAssessmentType: boolean;
   shouldShowDocuments = false;
 
-  sectionInfo: {
-    id: string,
-    nextSectionId: null | string,
-    title: string,
-    status: { id: keyof typeof INNOVATION_SECTION_STATUS, label: string },
-    submitButton: { show: boolean, label: string },
-    isNotStarted: boolean,
-    hasEvidences: boolean,
-    wizard: WizardEngineModel,
-    allStepsList: InnovationSectionStepLabels,
-    date: string,
-    submittedBy: null | { name: string, isOwner?: boolean },
-    openTasksCount: number
-  };
+  sectionInfo: SectionInfoType;
   
 
   constructor(
@@ -69,6 +72,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup => sectionsGroup.sections.map(section => section.id));
 
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
+
+    
     
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -104,7 +109,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.initializePage())
 
     );
-
+    
   }
   
 
@@ -231,5 +236,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     return this.sectionsIdsList[currentSectionIndex + 1] || null;
 
+  }
+
+  getSectionSummaryData(): SectionSummaryInputData {
+    return { sectionInfo: this.sectionInfo, summaryList: this.summaryList, documentsList: this.documentsList }
   }
 }
