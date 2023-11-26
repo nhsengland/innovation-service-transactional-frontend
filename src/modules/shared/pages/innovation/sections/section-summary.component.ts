@@ -15,7 +15,8 @@ import { SectionInfoType } from './section-info.component';
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType, 
   summaryList: WizardSummaryType[], 
-  documentsList: InnovationDocumentsListOutDTO['data'] 
+  evidencesList: WizardSummaryType[], 
+  documentsList: InnovationDocumentsListOutDTO['data']
 }
 
 @Component({
@@ -23,20 +24,21 @@ export type SectionSummaryInputData = {
     templateUrl: './section-summary.component.html'
 })
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit {
+  
+  @Input({required: true}) sectionData!: SectionSummaryInputData;
 
-  // @Input() sectionInfo: SectionInfoType;
-  // @Input() summaryList: WizardSummaryType[] = []
-  // @Input() documentsList: InnovationDocumentsListOutDTO['data'] = [];
-
-  sectionInfo: SectionInfoType;
+  sectionInfo: Partial<SectionInfoType> & {
+    id: string, 
+    openTasksCount: number,
+    status: {
+      id: keyof typeof INNOVATION_SECTION_STATUS;
+      label: string;
+    },
+  };
   summaryList: WizardSummaryType[] = []
+  evidencesList: WizardSummaryType[] = []
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-  @Input({required: true}) sectionData!: {
-     sectionInfo: SectionInfoType, 
-     summaryList: WizardSummaryType[], 
-     documentsList: InnovationDocumentsListOutDTO['data'] 
-  }
 
   sectionSubmittedText: string = '';
   
@@ -59,24 +61,11 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.innovation = this.stores.context.getInnovation();
 
-    this.sectionInfo = this.sectionData.sectionInfo;
-    this.summaryList = this.sectionData.summaryList;
-    this.documentsList = this.sectionData.documentsList;
-
-    // this.sectionInfo = {
-    //   id: '',
-    //   nextSectionId: null,
-    //   title: '',
-    //   status: { id: 'UNKNOWN', label: '' },
-    //   submitButton: { show: false, label: "Confirm section answers" },
-    //   isNotStarted: false,
-    //   hasEvidences: false,
-    //   wizard: new WizardEngineModel({}),
-    //   allStepsList: {},
-    //   date: '',
-    //   submittedBy: null,
-    //   openTasksCount: 0
-    // };
+    this.sectionInfo = {
+      id: '',
+      openTasksCount: 0,
+      status: { id: 'UNKNOWN', label: '' }
+    }
     
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
@@ -91,11 +80,16 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.isSectionDetailsPage = this.activatedRoute.snapshot.params.sectionId;
 
+    this.sectionInfo = this.sectionData.sectionInfo;
+    this.summaryList = this.sectionData.summaryList;
+    this.evidencesList = this.sectionData.evidencesList;
+    this.documentsList = this.sectionData.documentsList;
+
     this.shouldShowDocuments =
       this.innovation.status !== InnovationStatusEnum.CREATED ||
       (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(this.sectionData!.sectionInfo!.id));
 
-      this.setPageStatus('READY');
+    this.setPageStatus('READY');
 
   }
 
