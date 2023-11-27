@@ -78,7 +78,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     // Throw notification read dismiss.
     if (this.stores.authentication.isAccessorType()) {
-      this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING] });
+      this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING, NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS] });
     }
 
     this.tableList.setVisibleColumns({
