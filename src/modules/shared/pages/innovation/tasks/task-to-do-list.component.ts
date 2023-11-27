@@ -82,12 +82,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
       this.processTaskList(allTasksResponse);
       this.tablesTitles = this.getTablesTitles();
-
-      // Throw notification read dismiss.
-      if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-        this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT] });
-      }
-
       this.setPageStatus('READY');
     });
 
