@@ -570,7 +570,7 @@ export const locale = {
             MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE: { title: `{{requestUserName}} has accepted your invitation to collaborate on innovation {{innovationName}}. `, link: `Manage collaborators.` },
             MC05_COLLABORATOR_UPDATE_DECLINES_INVITE: { title: `{{requestUserName}} has declined your invitation to collaborate on innovation {{innovationName}}. `, link: `Invite new collaborators.` },
             MC06_COLLABORATOR_UPDATE_REMOVED_COLLABORATOR: { title: `{{requestUserName}} has removed you as a collaborator on innovation {{innovationName}}.` },
-            MC07_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_INNOVATORS: { title: `{{requestUserName}} has left innovation {{innovationName}}. `, link: `Manage collaborators.` },
+            MC07_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_INNOVATORS: { title: `{{requestUserName}} has left innovation {{innovationName}}.` },
             MC08_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_SELF: { title: `You have successfully removed yourself as a collaborator on innovation {{innovationName}}.` },
             TO02_TRANSFER_OWNERSHIP_EXISTING_USER: { title: `You have a request to take ownership of innovation {{innovationName}}. `, link: `View request.` },
             TO06_TRANSFER_OWNERSHIP_ACCEPTS_PREVIOUS_OWNER: { title: `You have successfully transferred ownership of innovation {{innovationName}} to {{newInnovationOwner}}.` },
