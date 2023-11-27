@@ -111,7 +111,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
       })));
 
       // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE, NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE, NotificationContextDetailEnum.MC07_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_INNOVATORS] });
+      this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE, NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE] });
 
       this.setPageStatus('READY');
 

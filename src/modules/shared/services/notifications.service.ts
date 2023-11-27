@@ -195,7 +195,6 @@ export class NotificationsService extends CoreService {
                   break;
                 case NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE:
                 case NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE:
-                case  NotificationContextDetailEnum.MC07_COLLABORATOR_UPDATE_COLLABORATOR_LEFT_TO_INNOVATORS:
                   link = { label: 'Click to go to manage collaborators', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation/collaborators` }
                   break;
                 case NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER:
