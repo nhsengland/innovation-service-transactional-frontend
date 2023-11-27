@@ -21,14 +21,6 @@
   
         <ng-container *ngIf="!sectionInfo.isNotStarted">
   
-          <div *ngIf="(isInnovatorType || isAccessorType) && innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT'" class="nhsuk-inset-text">
-            <span class="nhsuk-u-visually-hidden">Information:</span>
-            <p *ngIf="isInnovatorType">This section is not visible to others because you changed it to the 'in draft' status. You need to 'confirm section answers' for the section to become visible.</p>
-            <p *ngIf="isAccessorType">
-              You cannot see this section because it is in draft.<span *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'"> If you need to see this section, create an action or send a message to the innovator asking them to resubmit it.</span>
-            </p>
-          </div>
-  
           <div *ngIf="isInnovatorType && sectionInfo.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
             <p>
               <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
@@ -37,8 +29,7 @@
           </div>
   
           <ng-container *ngIf="summaryList.length > 0">
-            <h2>{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
-            <dl class="nhsuk-summary-list">
+            <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
               <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
                 <ng-container [ngSwitch]="item.type">
                   <ng-container *ngSwitchCase="'button'">
@@ -50,17 +41,29 @@
                   </ng-container>
                   <ng-container *ngSwitchDefault>
                     <div class="nhsuk-summary-list__row">
-                      <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                      <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
                       <dd class="nhsuk-summary-list__value text-pre-wrap">
                         <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
-                      <dd class="nhsuk-summary-list__actions">
-                        <a *ngIf="isInnovatorType && item.editStepNumber" routerLink="edit/{{ item.editStepNumber }}"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                      <dd  class="nhsuk-summary-list__actions">
+                        <a *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)" class="nhsuk-back-link__link cursor-pointer"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       </dd>
                     </div>
                   </ng-container>
                 </ng-container>
+              </ng-container>
+              <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">Documents</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <ng-container *ngFor="let document of documentsList; index as i">
+                     <p><span>Document {{ i +1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
+                    </ng-container>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                  </dd>
+                </div>
               </ng-container>
               
             </dl>

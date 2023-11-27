@@ -16,6 +16,10 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   @HostListener('window:scroll', ['$event'])
   onScrollChange($event: Event){
     this.backToTopIsVisible = window.scrollY > 750 ? true : false;
+    console.log('document.body.clientHeight')
+    console.log(window.innerHeight)
+    console.log('window.scrollY')
+    console.log(window.scrollY)
   }
 
   backToTopIsVisible: boolean = false;
@@ -87,12 +91,14 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
+      this.isAllSectionsDetailsPage = false;
       if (this.router.url.includes('/all')){
         this.isAllSectionsDetailsPage = true;
       }
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
+      this.isAllSectionsDetailsPage = false;
     }
 
   }
@@ -101,9 +107,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.scroller.scrollToPosition([0,0]);
   }
 
-  onScrollToSection(section: string): void {
-    console.log(`navigating to ${section}`)
+  onScrollToSection(section: string, event: Event): void {
+
     this.scroller.scrollToAnchor(section);
+    (event.target as HTMLElement).blur();
+
   }
 
 }

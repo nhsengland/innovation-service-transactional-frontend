@@ -4,49 +4,58 @@
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <p class="d-flex">
           <ng-container [ngSwitch]="sectionInfo.status.id">
-            
-            <ng-container *ngSwitchCase="'NOT_STARTED'">
-              <theme-svg-icon type="error"></theme-svg-icon>
-              <span class="nhsuk-u-margin-right-2"></span>
-              <span>This section has not been started yet.</span>
-              
-            </ng-container>
-          
-            <ng-container *ngSwitchCase="'DRAFT'">
-              <theme-svg-icon type="edit"></theme-svg-icon>
-              <span class="nhsuk-u-margin-right-2"></span>
-              <span *ngIf="isInnovatorType; else notInnovator">This section is in draft and it is not visible to others. Confirm answers and complete section to become visible again.</span>
-              <ng-template #notInnovator><span>This section is in draft.</span></ng-template>
-            </ng-container>
-            
-            <ng-container *ngSwitchCase="'SUBMITTED'">
-              <ng-container *ngIf="sectionInfo.date !== '' && sectionInfo.submittedBy !== null">
-                <theme-svg-icon type="success"></theme-svg-icon>
-                <span class="nhsuk-u-margin-right-2"></span>
-                <span>
-                  This section was submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
-                  <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
-                </span>
-              </ng-container>
-            </ng-container>
+            <p class="d-flex">
 
+              <ng-container *ngSwitchCase="'NOT_STARTED'">
+                <theme-svg-icon type="error"></theme-svg-icon>
+                <span class="nhsuk-u-margin-right-2"></span>
+                <span>This section has not been started yet.</span>
+              </ng-container>
+          
+              <ng-container *ngSwitchCase="'DRAFT'">
+                <theme-svg-icon type="edit"></theme-svg-icon>
+                <span class="nhsuk-u-margin-right-2"></span>
+                <ng-container *ngIf="isInnovatorType">  
+                  <ng-container *ngIf="innovation.status !== 'CREATED'">
+                    <span>This section is in draft and is not visible to others. Submit updates to make it visible again.</span>
+                  </ng-container>
+                  <ng-container *ngIf="innovation.status === 'CREATED'">
+                    <div>
+                      <p>This section is in draft. You need to complete the section before you can submit your record for needs assessment.</p>
+                      <p class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">If you are unable to answer a question yet, you can still mark the section as complete. This will help us match you with organisations that can support you in these areas.</p>
+                    </div>
+                  </ng-container>
+                </ng-container>
+                <ng-template !isInnovatorType><span>This section is in draft.</span></ng-template>
+              </ng-container>
+              
+              <ng-container *ngSwitchCase="'SUBMITTED'">
+                <ng-container *ngIf="sectionInfo.date !== '' && sectionInfo.submittedBy !== null">
+                  <theme-svg-icon type="success"></theme-svg-icon>
+                  <span class="nhsuk-u-margin-right-2"></span>
+                  <span>
+                    This section was submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
+                    <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
+                  </span>
+                  </ng-container>
+                </ng-container>
+                
+            </p>
           </ng-container>
-        </p>
       </div>
 
       <ng-container *ngIf="isInnovatorType && sectionInfo.isNotStarted">
         <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
       </ng-container>
 
+      <ng-container *ngIf="summaryList.length > 0">
+        <h2>{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
+      </ng-container>
+
       <ng-container *ngIf="pageStatus === 'READY'">
         <shared-innovation-summary [sectionData]="getSectionSummaryData()" />
       </ng-container>
-      
-      <div *ngIf="isInnovatorType">
-        <button *ngIf="sectionInfo.submitButton.show" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">{{ sectionInfo.submitButton.label }}</button>
-      </div>
 
       <ng-container *ngIf="sectionInfo.hasEvidences">
         <h2>Evidence</h2>
@@ -80,6 +89,10 @@
           </div>
         </dl>
       </ng-container>
+
+      <div *ngIf="isInnovatorType">
+        <button *ngIf="sectionInfo.submitButton.show" (click)="onSubmitSection()" class="nhsuk-button nhsuk-u-margin-top-5">{{ sectionInfo.submitButton.label }}</button>
+      </div>
         
       <ng-container *ngIf="
       (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType ||

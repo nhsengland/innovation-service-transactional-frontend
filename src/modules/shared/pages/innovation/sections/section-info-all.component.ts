@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CoreComponent } from "@app/base";
-import { StatisticsService } from "@modules/shared/services/statistics.service";
+import { InnovationStatisticsDTO, StatisticsService } from "@modules/shared/services/statistics.service";
 import { ContextInnovationType } from "@modules/stores";
 import { InnovationStatusEnum } from "@modules/stores/innovation";
 import { INNOVATION_SECTIONS } from "@modules/stores/innovation/innovation-record/202304/main.config";
@@ -14,6 +14,7 @@ import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from "@modu
 import { innovationSectionsWithFiles } from "@modules/stores/innovation/innovation-record/ir-versions.config";
 import { InnovationSections } from "@modules/stores/innovation/innovation-record/202209/catalog.types";
 import { SectionSummaryInputData } from "./section-summary.component";
+import { InnovationStatisticsEnum } from "@modules/shared/services/statistics.enum";
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -53,7 +54,8 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
     constructor(
       private activatedRoute: ActivatedRoute,
-      private innovationDocumentsService: InnovationDocumentsService
+      private innovationDocumentsService: InnovationDocumentsService,
+      private statisticsService: StatisticsService
     ){
       super()
       
@@ -76,7 +78,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       
     }
 
-    fetchSectionsData(){
+    getSectionsData(){
 
       let summaryList: WizardSummaryType[];
       let evidencesList: WizardSummaryType[];
@@ -85,6 +87,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
       const reqsSectionInfo: Observable<InnovationSectionInfoDTO>[] = [];
       const reqsDocuments: Observable<InnovationDocumentsListOutDTO>[] = [];
+      const statisticsObservable: Observable<InnovationStatisticsDTO> = this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] });
       
       // here I populate the arrays
       this.innovationsSubSectionsList.forEach((section) => {   
@@ -101,10 +104,21 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
           order: { createdAt: 'ASC' },
           filters: { contextTypes: ['INNOVATION_SECTION'], contextId: section, fields: ['description'] }
         }));
+
+
+
       })
 
-      combineLatest([forkJoin([...reqsSectionInfo]),forkJoin([...reqsDocuments])]).subscribe(
-        ([sectionsResponse, documentsResponse]) =>{
+      combineLatest([
+        forkJoin([...reqsSectionInfo]),
+        forkJoin([...reqsDocuments]),
+        forkJoin([
+          this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
+          this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] }),
+        ])
+        
+      ]).subscribe(
+        ([sectionsResponse, documentsResponse, [summary,statistics]]) =>{
 
           sectionsResponse.forEach((item, index) => { 
 
@@ -170,11 +184,43 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               
           } )
 
+          this.setSectionsStatistics(statistics, summary);
+
           this.setPageStatus('READY')
         }
       )
       
     }
+
+    setSectionsStatistics(statistics: InnovationStatisticsDTO, summary: SectionsSummaryModel){
+
+      this.innovationSections = summary;          
+      this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
+
+      this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
+        return [...acc, ...item.sections.map(s => {
+          switch (s.status) {
+            case 'SUBMITTED': return '1:active';
+            case 'DRAFT': return '2:warning';
+            case 'NOT_STARTED':
+            default:
+              return '3:inactive';
+          }
+        })];
+      }, []);
+
+      this.sections.notStarted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length, 0);
+      this.sections.draft = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length, 0);
+      this.sections.submitted = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length, 0);
+      this.sections.withOpenTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.filter(s => s.openTasksCount > 0).length, 0);
+      this.sections.openTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.reduce((acc: number, section) => acc + section.openTasksCount, 0), 0);
+
+      this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
+
+      this.setPageStatus('READY');
+  
+    }
+    
 
     ngOnInit(): void {
         
@@ -182,7 +228,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
       this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
       this.setPageTitle('All sections questions and answers', { hint: 'Innovation record'});
-      this.fetchSectionsData();
+      this.getSectionsData();
 
     }
 

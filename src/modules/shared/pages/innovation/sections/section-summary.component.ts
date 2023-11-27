@@ -39,7 +39,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   evidencesList: WizardSummaryType[] = []
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-
   sectionSubmittedText: string = '';
   
   baseUrl: string;
@@ -93,4 +92,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   }
 
+  onClickChange(editStepNumber: number): void {
+    this.router.navigateByUrl(`${ this.baseUrl }/record/sections/${this.sectionInfo.id }/edit/${ editStepNumber }`)
+  }
 }

@@ -98,7 +98,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   onScrollToSection(section: string): void {
-    console.log(`navigating to ${section}`)
     this.scroller.scrollToAnchor(section);
   }
 
