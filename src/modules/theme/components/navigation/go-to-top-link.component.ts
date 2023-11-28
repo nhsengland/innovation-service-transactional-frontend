@@ -5,7 +5,7 @@ import { AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Simpl
   selector: 'theme-go-to-top-link',
   templateUrl: './go-to-top-link.component.html'
 })
-export class GoToTopComponent implements OnInit, OnChanges {
+export class GoToTopComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   onScrollChange($event: Event){
@@ -18,12 +18,6 @@ export class GoToTopComponent implements OnInit, OnChanges {
 
     this.checkVisibility();
     this.checkForFooter();
-
-    console.log(
-      'header-navigation' + document.getElementById('header-navigation')?.offsetHeight
-    )
-
-
 
   }
 
@@ -41,21 +35,14 @@ export class GoToTopComponent implements OnInit, OnChanges {
   constructor(
     private scroller: ViewportScroller
   ) { }
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes')
-    console.log(changes)
-  }
 
   isAllSectionsDetailsPage: boolean = false;
 
   ngOnInit(): void {
 
     this.scroller.setOffset([0,20]);
-
     this.documentTotalHeight = document.documentElement.getBoundingClientRect().height;
     this.footerHeight = document.getElementById('nhsuk-footer')?.offsetHeight ? document.getElementById('nhsuk-footer')!.offsetHeight + 32 : 132;
-
-    
     
   }
 
@@ -69,10 +56,15 @@ export class GoToTopComponent implements OnInit, OnChanges {
 
   checkForFooter(): void {
     const backToTop = document.getElementById('backToTop')
+
     if ((this.viewportHeight + this.scrolledAmount ) >= ( this.documentTotalHeight - this.footerHeight )){
+
       backToTop?.classList.add("absolute");
+
     } else {
+
       backToTop?.classList.remove("absolute");
+      
     }
   }
 }

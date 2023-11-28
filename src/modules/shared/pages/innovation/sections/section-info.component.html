@@ -27,7 +27,7 @@
                     </div>
                   </ng-container>
                 </ng-container>
-                <ng-template !isInnovatorType><span>This section is in draft.</span></ng-template>
+                <ng-container !isInnovatorType><span>This section is in draft.</span></ng-container>
               </ng-container>
               
               <ng-container *ngSwitchCase="'SUBMITTED'">
@@ -54,7 +54,20 @@
       </ng-container>
 
       <ng-container *ngIf="pageStatus === 'READY'">
-        <shared-innovation-summary [sectionData]="getSectionSummaryData()" />
+
+        <ng-container *ngIf="!isInnovatorType && sectionInfo.status.id === 'DRAFT'; else summaryComponent">
+          <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
+            <span class="nhsuk-u-visually-hidden">Information:</span>
+            <p>
+              You cannot see this section because it is in draft. If you need to see this section, create a task or send a message to the innovator asking them to resubmit it.
+            </p>
+          </div>
+        </ng-container>
+        
+        <ng-template #summaryComponent>
+          <shared-innovation-summary [sectionData]="getSectionSummaryData()" />
+        </ng-template>
+        
       </ng-container>
 
       <ng-container *ngIf="sectionInfo.hasEvidences">

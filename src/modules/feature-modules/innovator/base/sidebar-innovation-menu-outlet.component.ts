@@ -76,18 +76,19 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.generateSidebar();
     
+    this.isAllSectionsDetailsPage = false;
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
-      this.isAllSectionsDetailsPage = false;
+
       if (this.router.url.includes('/all')){
         this.isAllSectionsDetailsPage = true;
       }
+
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
-      this.isAllSectionsDetailsPage = false;
     }
 
   }

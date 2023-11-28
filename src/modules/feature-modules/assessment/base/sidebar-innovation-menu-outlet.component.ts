@@ -81,9 +81,12 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.generateSidebar();
 
+    this.isAllSectionsDetailsPage = false;
+
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
+
       if (this.router.url.includes('/all')){
         this.isAllSectionsDetailsPage = true;
       }
@@ -93,13 +96,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     }
   }
 
-  onScrollToTop(): void {
-    this.scroller.scrollToPosition([0,0]);
-  }
+  onScrollToSection(section: string, event: Event): void {
 
-  onScrollToSection(section: string): void {
-    console.log(`navigating to ${section}`)
     this.scroller.scrollToAnchor(section);
+    (event.target as HTMLElement).blur();
+
   }
 
 }

@@ -25,6 +25,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit{
     
     innovationsSectionsList: InnovationSectionsListType = INNOVATION_SECTIONS;
+    
     innovationsSubSectionsList: string[] = INNOVATION_SECTIONS.flatMap(el => el.sections.flatMap(section => section.id ));
 
     innovationId: string;
@@ -87,25 +88,21 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
       const reqsSectionInfo: Observable<InnovationSectionInfoDTO>[] = [];
       const reqsDocuments: Observable<InnovationDocumentsListOutDTO>[] = [];
-      const statisticsObservable: Observable<InnovationStatisticsDTO> = this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] });
       
-      // here I populate the arrays
       this.innovationsSubSectionsList.forEach((section) => {   
 
         let shouldShowDocuments =
         this.innovation.status !== InnovationStatusEnum.CREATED ||
           (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section));
 
-
         reqsSectionInfo.push(this.stores.innovation.getSectionInfo$(this.innovation.id, section)) ;
+
         !shouldShowDocuments ? of(null) : reqsDocuments.push(this.innovationDocumentsService.getDocumentList(this.innovation.id, {
           skip: 0,
           take: 50,
           order: { createdAt: 'ASC' },
           filters: { contextTypes: ['INNOVATION_SECTION'], contextId: section, fields: ['description'] }
         }));
-
-
 
       })
 
@@ -138,7 +135,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             };
   
             const section = this.stores.innovation.getInnovationRecordSection(item.section);
-            
+
             sectionInfo.id = section.id;
             sectionInfo.title = section.title;
             sectionInfo.wizard = section.wizard;
@@ -150,10 +147,11 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             sectionInfo.submittedBy = item.submittedBy;
             sectionInfo.openTasksCount = item.tasksIds ? item.tasksIds.length : 0;
   
-  
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {
+
               // If accessor, only view information if section is submitted.
               summaryList = [];
+
             } else {
       
               // Special business rule around section 2.2.
@@ -174,14 +172,15 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               summaryList = data.filter(item => !item.evidenceId);
               evidencesList = data.filter(item => item.evidenceId);
               documentsList = documentsResponse[index]?.data ?? [];
-
-              this.allSectionsData[item.section] = {};
-              this.allSectionsData[item.section]!.evidencesList = evidencesList;
-              this.allSectionsData[item.section]!.sectionInfo = sectionInfo;
-              this.allSectionsData[item.section]!.summaryList = summaryList;
-              this.allSectionsData[item.section]!.documentsList = documentsList;
+  
             }
-              
+
+            this.allSectionsData[sectionInfo.id] = {};
+            this.allSectionsData[sectionInfo.id]!.evidencesList = evidencesList;
+            this.allSectionsData[sectionInfo.id]!.sectionInfo = sectionInfo;
+            this.allSectionsData[sectionInfo.id]!.summaryList = summaryList;
+            this.allSectionsData[sectionInfo.id]!.documentsList = documentsList;
+
           } )
 
           this.setSectionsStatistics(statistics, summary);
@@ -218,7 +217,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 
       this.setPageStatus('READY');
-  
     }
     
 
