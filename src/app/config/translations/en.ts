@@ -547,8 +547,8 @@ export const locale = {
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS: { title: `{{unitName}} added a progress update for innovation {{innovationName}}. `, link: `View this update in support summary.` },
             // // NEEDS ASSESSMENT
-            NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR: { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}.` },
-            NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT: { title: `Innovation {{innovationName}} has been submitted for a {{needsAssessment}}. `, link: `Review the innovation record and make contact with the innovator within 2 working days.` },
+            NA01_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_INNOVATOR: { title: `Innovation {{innovationName}} has been submitted for a needs {{assessmentType}}.` },
+            NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT: { title: `Innovation {{innovationName}} has been submitted for a needs {{assessmentType}}. `, link: `Review the innovation record and make contact with the innovator within 2 working days.` },
             NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR: { title: `The needs assessment for innovation {{innovationName}} has started. `, link: `View message from the needs assessment team.` },
             NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR: { title: `The needs assessment for innovation {{innovationName}} is complete. `, link: `View needs assessment.` },
             NA06_NEEDS_ASSESSOR_REMOVED: { title: `You are no longer the assigned needs assessor for {{innovationName}}. You can find the new needs assessor in `, link: `innovation overview.` },

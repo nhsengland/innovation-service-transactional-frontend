@@ -100,7 +100,7 @@ export class NotificationsService extends CoreService {
 
           let link: null | { label: string; url: string; queryParams?: Record<string, string> } = null;
 
-          switch (item.contextType as any) { // TO DO - REMOVE 'as any' AFTER MIGRATING ALL NOTIFICATIONS
+          switch (item.contextType) {
 
             // TASK
             case NotificationCategoryTypeEnum.TASK:

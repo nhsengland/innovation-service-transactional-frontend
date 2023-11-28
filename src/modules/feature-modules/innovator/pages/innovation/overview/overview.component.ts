@@ -125,6 +125,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF] });
       }
 
+      if (!this.innovation.loggedUser.isOwner) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR] });
+      }
+
       this.setPageStatus('READY');
 
     });
