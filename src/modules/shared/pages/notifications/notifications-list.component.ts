@@ -125,7 +125,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       return;
     }
 
-    this.stores.context.dismissUserNotification(notificationId);
+    this.stores.context.dismissUserNotification({notificationIds: [notificationId]});
 
     if (url) {
       // Stop event propagation to avoid triggering the href link

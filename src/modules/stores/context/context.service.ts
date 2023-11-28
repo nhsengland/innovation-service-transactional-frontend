@@ -43,9 +43,9 @@ export class ContextService {
     return this.http.patch<void>(url.buildUrl(), conditions).pipe(take(1))
   }
 
-  dismissUserNotification(notificationId: string): Observable<{ affected: number}> {
+  dismissUserNotification(conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<{ affected: number}> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { notificationIds: [notificationId] }).pipe(take(1), map(response => response));
+    return this.http.patch<{ affected: number }>(url.buildUrl(), conditions).pipe(take(1), map(response => response));
   }
 
   getInnovationNotifications(innovationId: string): Observable<InnovationNotificationsDTO> {
