@@ -510,9 +510,9 @@ export const locale = {
             },
 
             ADMIN: {
-              INNOVATOR: { title: 'Your account' },
-              QUALIFYING_ACCESSOR: { title: 'Your account' },
-              ACCESSOR: { title: 'Your account' }
+              INNOVATOR: { title: 'Administrator updates' },
+              QUALIFYING_ACCESSOR: { title: 'Administrator updates' },
+              ACCESSOR: { title: 'Administrator updates' }
             },
 
             AUTOMATIC: {
