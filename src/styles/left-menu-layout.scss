@@ -327,7 +327,10 @@
   position: fixed;
   bottom: 0;
   margin-bottom: 30px;
-  text-align: center;
+}
+.absolute {
+  position: absolute;
+  bottom: 0;
 }
 
 @media (max-width: 48.0525em) {
