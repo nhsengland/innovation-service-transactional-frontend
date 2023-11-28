@@ -13,44 +13,6 @@ import { ViewportScroller } from '@angular/common';
 })
 export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
-  @HostListener('window:scroll', ['$event'])
-  onScrollChange($event: Event){
-
-    // let totalHeight = document.documentElement.getBoundingClientRect().height;
-    // let scroll = window.scrollY;
-    // let footer = document.getElementById('nhsuk-footer')!.offsetHeight + 32;
-    // let sum = window.scrollY + window.innerHeight 
-    // console.log('---------------------------')
-    // console.log('window.innerHeight + scroll')
-    // console.log(window.innerHeight + scroll)
-    // console.log('second')
-    // console.log(totalHeight - footer)
-
-    // const backToTop = document.getElementById('backToTop')
-    // if(window.innerHeight + scroll >= totalHeight - footer ){
-    //   backToTop?.classList.add("absolute")
-    // } else {
-    //   backToTop?.classList.remove("absolute")
-    // }
-
-    // this.backToTopIsVisible = window.scrollY > 750 ? true : false;
-    // console.log('height body')
-    // console.log(document.body.getBoundingClientRect().height)
-    // console.log('height documentElement')
-    // console.log(document.documentElement.getBoundingClientRect().height)
-    // console.log('window.scrollY')
-    // console.log(window.scrollY)
-    // console.log('screen size')
-    // console.log(window.innerHeight)
-
-    
-
-
-  }
-
-  backToTopIsVisible: boolean = false;
-  hasReachedFooter: boolean = false;
-
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string, url: string, children?: { label: string, url: string, id?: string }[] }[] = [];
@@ -76,9 +38,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
     this.generateSidebar();
 
-    // this.scroller.setOffset([0,20]);
   }
 
   ngOnDestroy(): void {
@@ -128,10 +90,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.isAllSectionsDetailsPage = false;
     }
 
-  }
-
-  onScrollToTop(): void {
-    this.scroller.scrollToPosition([0,0]);
   }
 
   onScrollToSection(section: string, event: Event): void {
