@@ -374,7 +374,7 @@ export const locale = {
             NEEDS_ASSESSMENT: {
               ASSESSMENT: {
                 title: 'Needs assessment ',
-                description: 'Get notified when an innovation is submitted for a needs assessment.'
+                description: 'Get notified when an innovation is submitted for a needs assessment. Find out if you are the assigned needs assessor or a new assessor is assigned.'
               }
             },
 
