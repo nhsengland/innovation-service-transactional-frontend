@@ -14,15 +14,12 @@ export class GoToTopComponent implements OnInit {
     this.viewportHeight = window.innerHeight;
     this.scrolledAmount = window.scrollY;
 
-    this.backToTopIsVisible = window.scrollY > 750 ? true : false;
-
     this.checkVisibility();
     this.checkForFooter();
 
   }
 
   backToTopIsVisible: boolean = false;
-  hasReachedFooter: boolean = false;
 
   documentTotalHeight: number = document.documentElement.getBoundingClientRect().height;
   
@@ -59,11 +56,11 @@ export class GoToTopComponent implements OnInit {
 
     if ((this.viewportHeight + this.scrolledAmount ) >= ( this.documentTotalHeight - this.footerHeight )){
 
-      backToTop?.classList.add("absolute");
+      backToTop?.classList.add("backToTop__absolute");
 
     } else {
 
-      backToTop?.classList.remove("absolute");
+      backToTop?.classList.remove("backToTop__absolute");
       
     }
   }
