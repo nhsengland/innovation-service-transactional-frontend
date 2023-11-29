@@ -75,7 +75,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
         // Throw notification read dismiss.
         if (this.innovationTransfers.length) {
-          this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER] });
+          this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER, NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER] });
         }
 
       } else {
@@ -89,12 +89,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             invitedAt: DatesHelper.addDaysToDate(i.invitedAt ?? '', 30).toString()
           }
         });
-
-        // Throw notification read dismiss.
-        if (this.inviteCollaborations.length) {
-          this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER] });
-        }
-
       } else {
         this.setAlertUnknownError();
       }
