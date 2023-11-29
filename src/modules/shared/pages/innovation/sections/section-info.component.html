@@ -14,8 +14,10 @@
               </ng-container>
           
               <ng-container *ngSwitchCase="'DRAFT'">
+
                 <theme-svg-icon type="edit"></theme-svg-icon>
                 <span class="nhsuk-u-margin-right-2"></span>
+
                 <ng-container *ngIf="isInnovatorType">  
                   <ng-container *ngIf="innovation.status !== 'CREATED'">
                     <span>This section is in draft and is not visible to others. Submit updates to make it visible again.</span>
@@ -27,7 +29,11 @@
                     </div>
                   </ng-container>
                 </ng-container>
-                <ng-container !isInnovatorType><span>This section is in draft.</span></ng-container>
+
+                <ng-container *ngIf="!isInnovatorType">
+                  <span>This section is in draft.</span>
+                </ng-container>
+
               </ng-container>
               
               <ng-container *ngSwitchCase="'SUBMITTED'">

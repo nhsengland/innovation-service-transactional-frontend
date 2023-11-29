@@ -57,7 +57,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   shouldShowDocuments = false;
 
   sectionInfo: SectionInfoType;
-  
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -117,21 +116,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.setPageStatus('LOADING');
 
-    this.sectionInfo = {
-      id: '',
-      nextSectionId: null,
-      title: '',
-      status: { id: 'UNKNOWN', label: '' },
-      submitButton: { show: false, label: "Confirm section answers" },
-      isNotStarted: false,
-      hasEvidences: false,
-      wizard: new WizardEngineModel({}),
-      allStepsList: {},
-      date: '',
-      submittedBy: null,
-      openTasksCount: 0
-    };
-
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
@@ -189,8 +173,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         const data = this.sectionInfo.wizard.runSummaryParsing();
         this.summaryList = data.filter(item => !item.evidenceId);
         this.evidencesList = data.filter(item => item.evidenceId);
-
-        console.log(this.sectionInfo)
 
       }
       
