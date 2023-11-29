@@ -10,6 +10,7 @@ import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.mode
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -94,6 +95,14 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.sections.openTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.reduce((acc: number, section) => acc + section.openTasksCount, 0), 0);
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
+
+        // Throw notification read dismiss.
+        if (this.isInnovatorType) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD] });
+        }
+        else if (this.showSupportingTeamsShareRequestSection) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED] });
+        }
 
         this.setPageStatus('READY');
 

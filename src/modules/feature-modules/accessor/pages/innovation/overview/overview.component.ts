@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
-import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
@@ -88,12 +88,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(this.innovationSupport.status);
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT] });
-
-      if (this.innovation.support?.id) {
-        this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.SUPPORT], contextIds: [this.innovation.support.id] });
-      }
-
       this.innovationCollaborators = collaborators.data;
 
       this.cardsList = [
@@ -118,6 +112,20 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: 'No tasks assigned by your organisation yet'
         }
       ];
+
+      // Throw notification read dismiss.
+      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER, NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE, NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING] });
+
+      if (this.isQualifyingAccessorRole) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA, NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION] });
+      }
+
+      if (this.innovation.support?.id) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA], contextIds: [this.innovation.support.id] });
+        if (this.isQualifyingAccessorRole) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [ NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST], contextIds: [this.innovation.support.id] });
+        }
+      }
 
       this.setPageStatus('READY');
 

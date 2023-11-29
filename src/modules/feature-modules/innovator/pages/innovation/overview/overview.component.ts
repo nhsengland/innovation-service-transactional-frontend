@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -64,12 +64,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
 
-      this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT, NotificationCategoryTypeEnum.SUPPORT] });
-
       const innovationContext = this.stores.context.getInnovation();
 
       const engagingOrganisationsCount = (innovationInfo.supports ?? []).filter(supports => [InnovationSupportStatusEnum.ENGAGING].includes(supports.status)).length;
-
 
       this.innovation = {
         owner: { name: innovationInfo.owner?.name ?? '' },
@@ -117,6 +114,19 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
+      }
+
+      // Throw notification read dismiss.
+      if (this.innovation.status === 'IN_PROGRESS' && this.innovation.lastEndSupportAt) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT] });
+      }
+
+      if (this.innovation.loggedUser.isOwner && this.innovation.status === 'PAUSED') {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF] });
+      }
+
+      if (!this.innovation.loggedUser.isOwner) {
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR] });
       }
 
       this.setPageStatus('READY');

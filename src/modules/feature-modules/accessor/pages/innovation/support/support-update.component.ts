@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { UserRoleEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 import { CustomValidators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -64,7 +64,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     [InnovationSupportStatusEnum.UNSUITABLE]: 'Explain why your organisation has no suitable support offer for this innovation.',
     [InnovationSupportStatusEnum.CLOSED]: 'Explain why your organisation has closed its engagement with this innovation.'
   };
-  
+
   private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]: 'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.',
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
@@ -94,16 +94,16 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
 
     this.messageStatusUpdated = {
-      [InnovationSupportStatusEnum.ENGAGING]: 
+      [InnovationSupportStatusEnum.ENGAGING]:
         { message: 'The innovator and collaborators will be notified and your message has been sent.'},
-      [InnovationSupportStatusEnum.WAITING]:  
-        { message: "The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.", 
+      [InnovationSupportStatusEnum.WAITING]:
+        { message: "The innovator and collaborators will be notified. If you need information from the innovator you can assign them a task.",
           itemsList: [{ title: ' Go to tasks.', callback: `/accessor/innovations/${this.innovationId}/tasks` }]
         },
       [InnovationSupportStatusEnum.UNSUITABLE]: { message: 'The innovator and collaborators will be notified.' },
       [InnovationSupportStatusEnum.CLOSED]: { message: 'The innovator and collaborators will be notified.' },
     };
-  
+
   }
 
 
@@ -126,6 +126,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         response.engagingAccessors.forEach(accessor => {
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
         });
+
+        // Throw notification read dismiss.
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT], contextIds: [this.supportId] });
 
         this.setPageStatus('READY');
 
@@ -157,7 +160,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       case 1:
 
         this.chosenStatus = this.form.get('status')?.value ?? null;
-        
+
         const formStatusField = this.form.get('status');
         if (!formStatusField?.valid) {
           formStatusField?.markAsTouched();
@@ -269,7 +272,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     } else {
       this.stepNumber--;
     }
-    
+
     if (this.stepNumber === 0) {
       this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
     }

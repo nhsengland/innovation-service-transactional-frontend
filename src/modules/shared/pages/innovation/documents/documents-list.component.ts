@@ -1,4 +1,3 @@
-import { isNgTemplate } from '@angular/compiler';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -9,8 +8,10 @@ import { TableModel } from '@app/base/models';
 import { CustomValidators } from '@modules/shared/forms';
 
 import { ContextTypeType, InnovationDocumentsListFiltersType, InnovationDocumentsListOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
+import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { ChipsFilterComponent, chipFilterInputType } from '@modules/theme/components/chips/chips-filter-component';
+import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -19,6 +20,7 @@ import { ChipsFilterComponent, chipFilterInputType } from '@modules/theme/compon
 export class PageInnovationDocumentsListComponent extends CoreComponent implements OnInit {
 
   @ViewChild('locationTagsComponent') locationTagsComponent?: ChipsFilterComponent;
+  @ViewChild('uploadedByUnitComponent') uploadedByUnitComponent?: ChipsFilterComponent;
 
   innovation: ContextInnovationType;
   tableList = new TableModel<InnovationDocumentsListOutDTO['data'][number], InnovationDocumentsListFiltersType>({ pageSize: 10 });
@@ -34,15 +36,20 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     endDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
   }, { updateOn: 'blur' });
 
+  hasUploadedDocuments: boolean = false;
+
   filterCount: number = 0;
 
-  locationChipsInput: chipFilterInputType = [];
+  uploadedByChips: ChipFilterInputType = [];
+  selectedUploadedByChips: string[] = [];
+  locationChipsInput: ChipFilterInputType = [];
   selectedLocationFilters: string[] = [];
-
-  selectedUploadedByFilters: UserRoleEnum[] = [];
+  uploadedByUnitChips: ChipFilterInputType = [];
+  selectedUploadedByUnitChips: string[] = [];
 
   constructor(
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private statisticsService: StatisticsService
   ) {
 
     super();
@@ -62,18 +69,38 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   ngOnInit(): void {
 
-    const locations = ['INNOVATION', 'INNOVATION_SECTION', 'INNOVATION_EVIDENCE', 'INNOVATION_PROGRESS_UPDATE', 'INNOVATION_MESSAGE'];
+    this.statisticsService.getInnovationStatisticsInfo(this.innovation.id, { statistics: [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER] })
+      .subscribe(({ DOCUMENTS_STATISTICS_COUNTER }) => {
 
-    this.locationChipsInput = locations.map(l => ({ id: l , value: this.translate('shared.catalog.documents.contextType.' + l) }));
+        if (DOCUMENTS_STATISTICS_COUNTER.locations.length === 0) {
+          this.setPageStatus('READY');
+          return;
+        }
 
-    this.tableList.setVisibleColumns({
-      name: { label: 'Name', orderable: true },
-      createdAt: { label: 'Uploaded', orderable: true },
-      contextType: { label: 'Location', orderable: true },
-      actions: { label: '', align: 'right'}
-    }).setOrderBy('createdAt', 'descending');
+        this.hasUploadedDocuments = true;
 
-    this.getDocumentsList();
+        this.locationChipsInput = DOCUMENTS_STATISTICS_COUNTER.locations
+          .map(l => ({ id: l.location, value: this.translate(`shared.catalog.documents.contextType.${l.location}`), count: l.count }))
+          .sort((a, b) => b.count - a.count);
+
+        this.uploadedByChips = DOCUMENTS_STATISTICS_COUNTER.uploadedByRoles
+          .map(r => ({ id: r.role, value: this.translate(`shared.catalog.documents.uploadedByRole.${r.role}`), count: r.count }))
+          .sort((a, b) => b.count - a.count);
+
+        this.uploadedByUnitChips = DOCUMENTS_STATISTICS_COUNTER.uploadedByUnits
+          .map(u => ({ id: u.id, value: u.unit, count: u.count }))
+          .sort((a, b) => b.count - a.count);
+
+        this.tableList.setVisibleColumns({
+          name: { label: 'Name', orderable: true },
+          createdAt: { label: 'Uploaded', orderable: true },
+          contextType: { label: 'Location', orderable: true },
+          actions: { label: '', align: 'right' }
+        }).setOrderBy('createdAt', 'descending');
+
+        this.getDocumentsList();
+
+      });
 
   }
 
@@ -89,12 +116,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
   }
 
-  onClearFilters(): void{
+  onClearFilters(): void {
 
     this.form.get('startDate')?.reset()
     this.form.get('endDate')?.reset()
 
     this.locationTagsComponent?.clearSelectedChips();
+    this.uploadedByUnitComponent?.clearSelectedChips();
 
     this.setFilters();
 
@@ -134,8 +162,9 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
     this.tableList.setFilters({
       name: this.form.get('name')?.value ?? undefined,
-      ...(this.selectedUploadedByFilters.length > 0 ? {uploadedBy: this.selectedUploadedByFilters } : {}),
       ...(this.selectedLocationFilters.length > 0 ? { contextTypes: this.selectedLocationFilters as ContextTypeType[] } : {}),
+      ...(this.selectedUploadedByChips.length > 0 ? { uploadedBy: this.selectedUploadedByChips as UserRoleEnum[] } : {}),
+      ...(this.selectedUploadedByUnitChips.length > 0 ? { units: this.selectedUploadedByUnitChips } : {}),
       ...(startDate || endDate ? { dateFilter: [{ field: 'createdAt', startDate, endDate }] } : {})
     });
 
@@ -148,13 +177,28 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     return DatesHelper.parseIntoValidFormat(value);
   }
 
-  setSelectedLocations(locations: string[]){
+  setSelectedLocations(locations: string[]) {
     this.selectedLocationFilters = locations;
   }
 
-  calculateFilterNum(){
+  setSelectedUploadedByUnits(units: string[]) {
+    this.selectedUploadedByUnitChips = units;
+  }
 
-    let counter = this.selectedLocationFilters.length;
+  setSelectedUploadedBy(roles: string[]) {
+    this.selectedUploadedByChips = roles.flatMap(
+      role =>
+        role === UserRoleEnum.ACCESSOR
+          ? [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
+          : role
+    );
+
+    this.onFormChange();
+  }
+
+  calculateFilterNum() {
+
+    let counter = this.selectedLocationFilters.length + this.selectedUploadedByUnitChips.length;
 
     const startDate = this.getDateByControlName('startDate') ?? undefined;
     const endDate = this.getDateByControlName('endDate') ?? undefined;
@@ -163,9 +207,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     endDate && counter++;
 
     this.filterCount = counter;
-    
+
   }
-
-
 
 }

@@ -15,7 +15,6 @@ export enum NotificationCategoryTypeEnum {
 export const QANotificationCategories = [
   NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS,
   NotificationCategoryTypeEnum.SUPPORT,
-  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.MESSAGES,
   NotificationCategoryTypeEnum.TASK,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
@@ -25,7 +24,6 @@ export const QANotificationCategories = [
 
 export const ANotificationCategories = [
   NotificationCategoryTypeEnum.SUPPORT,
-  NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.MESSAGES,
   NotificationCategoryTypeEnum.TASK,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
@@ -113,7 +111,7 @@ export enum NotificationContextDetailEnum {
   // AUTOMATIC
   AU01_INNOVATOR_INCOMPLETE_RECORD = 'AU01_INNOVATOR_INCOMPLETE_RECORD',
   AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT = 'AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT',
-  AU03_INNOVATOR_IDLE_SUPPORT = 'INNOVATOR_IDLE_SUPPORT',
+  AU03_INNOVATOR_IDLE_SUPPORT = 'AU03_INNOVATOR_IDLE_SUPPORT',
   AU04_SUPPORT_KPI_REMINDER = 'AU04_SUPPORT_KPI_REMINDER',
   AU05_SUPPORT_KPI_OVERDUE = 'AU05_SUPPORT_KPI_OVERDUE',
   AU06_ACCESSOR_IDLE_WAITING = 'AU06_ACCESSOR_IDLE_WAITING',
