@@ -30,23 +30,48 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
   @Output() submitEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
 
   leadText: string = '';
-
-  validationMessage = this.stores.authentication.isInnovatorType() ? 'Select an organisation you want to be notified about your message' : this.stores.authentication.isAssessmentType() ? "Select organisations, or select 'No, I only want to notify the innovator about this message'" : "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
+  formValidationMessage: string = '';
 
   form = new FormGroup({
-    organisationUnits: new FormArray<FormControl<string>>([], { validators: CustomValidators.requiredCheckboxArray(this.validationMessage), updateOn: 'change' })
+    organisationUnits: new FormArray<FormControl<string>>([], { updateOn: 'change' })
   }, { updateOn: 'blur' });
 
   formOrganisationUnitsItems: Required<FormEngineParameterModel>['items'] = [];
 
-  constructor() { super(); }
+  // Flags
+  isInnovatorType: boolean;
+  isAssessmentType: boolean;
+  isAccessorType: boolean;
 
-  ngOnInit(): void {
+  constructor() {
+
+    super();
+
+    // Flags
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
 
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
-    this.leadText = this.stores.authentication.isInnovatorType() || this.stores.authentication.isAssessmentType() ? 'You can select organisations that are currently engaging or waiting to support this innovation.' : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
+  }
+
+  ngOnInit(): void {
+
+    this.leadText = this.isInnovatorType || this.isAssessmentType ? 'You can select organisations that are currently engaging or waiting to support this innovation.' : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
+
+    if (this.isInnovatorType || !(this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType))) {
+      this.formValidationMessage = 'Select the organisations you want to notify about this message';
+    }
+    else if (this.isAssessmentType) {
+      this.formValidationMessage = "Select organisations, or select 'No, I only want to notify the innovator about this message'";
+    }
+    else {
+      this.formValidationMessage = "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
+    }
+
+    this.form.controls['organisationUnits'].setValidators([CustomValidators.requiredCheckboxArray(this.formValidationMessage)]);
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
@@ -84,7 +109,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     }
 
 
-    if (this.data.activeInnovators && (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType())) {
+    if (this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType)) {
       this.formOrganisationUnitsItems.push(
         { value: 'SEPARATOR', label: 'SEPARATOR' },
         { value: 'NO_CHOICE', label: 'No, I only want to notify the innovator about this message' }
@@ -127,7 +152,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
 
     const onlyInnovatorsOptionChosen = !!this.form.value.organisationUnits?.find(item => item === 'NO_CHOICE');
     if (onlyInnovatorsOptionChosen && (this.form.value.organisationUnits ?? []).length > 1) {
-      this.form.get('organisationUnits')!.setErrors({ customError: true, message: this.validationMessage });
+      this.form.get('organisationUnits')!.setErrors({ customError: true, message: this.formValidationMessage });
       this.form.markAllAsTouched();
       return;
     }

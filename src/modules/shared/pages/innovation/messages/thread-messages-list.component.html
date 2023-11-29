@@ -75,7 +75,7 @@
                     <theme-notification-tag label="new" *ngIf="message.isNew"></theme-notification-tag>
                   </div>
                 </div>
-                <p *ngIf="!checkIfUnfollowed(message.createdBy.id)" class="nhsuk-u-margin-0 font-color-secondary nhsuk-u-font-size-16">Unfollowed this message</p>
+                <p *ngIf="!checkIfUnfollowed(message.createdBy.id)" class="nhsuk-u-margin-0 font-color-secondary nhsuk-u-font-size-16">Unfollowed this thread</p>
               </div>
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">
                 {{ message.createdAt | date: ('app.date_formats.long_date_time' | translate) }}
