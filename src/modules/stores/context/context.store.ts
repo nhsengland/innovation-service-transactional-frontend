@@ -54,9 +54,9 @@ export class ContextStore extends Store<ContextModel> {
 
   }
 
-  dismissUserNotification(notificationId: string): void {
+  dismissUserNotification(conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): void {
 
-    this.contextService.dismissUserNotification(notificationId).subscribe({
+    this.contextService.dismissUserNotification(conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),
       error: (error) => this.logger.error('Error dismissing user notification', error)
     });

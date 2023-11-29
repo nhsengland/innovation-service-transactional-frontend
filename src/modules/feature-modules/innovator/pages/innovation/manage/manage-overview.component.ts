@@ -58,9 +58,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
       this.isActiveInnovation = this.innovationTransfers.length === 0;
 
       // Throw notification read dismiss.
-      this.innovationTransfers.forEach(transfer =>
-        this.stores.context.dismissNotification(transfer.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED, NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER] })
-      );
+      this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED, NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER] });
 
       this.setPageStatus('READY');
 

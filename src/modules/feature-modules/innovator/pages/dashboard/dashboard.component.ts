@@ -74,9 +74,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.innovationTransfers = innovationsTransfers;
 
         // Throw notification read dismiss.
-        this.innovationTransfers.forEach(transfer =>
-          this.stores.context.dismissNotification(transfer.innovation.id, { contextDetails: [NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER, NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER] })
-        );
+        if (this.innovationTransfers.length) {
+          this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER, NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER] });
+        }
+
       } else {
         this.setAlertUnknownError();
       }

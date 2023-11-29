@@ -39,7 +39,7 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
       }
 
       // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER], contextIds: [this.collaboratorId] });
+      this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER], contextIds: [this.collaboratorId] });
 
       this.setPageStatus('READY');
     });
