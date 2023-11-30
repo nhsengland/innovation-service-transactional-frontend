@@ -35,7 +35,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
     pdfDocumentUrl: string;
 
     innovation: ContextInnovationType;
-    pendingExportRequests = 0;
+    // pendingExportRequests = 0;
     innovationSections: SectionsSummaryModel = [];
     sections: { progressBar: ProgressBarType[], submitted: number, draft: number, notStarted: number, withOpenTasksCount: number, openTasksCount: number } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0,  withOpenTasksCount: 0, openTasksCount: 0};
 
@@ -89,35 +89,30 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       const reqsSectionInfo: Observable<InnovationSectionInfoDTO>[] = [];
       const reqsDocuments: Observable<InnovationDocumentsListOutDTO>[] = [];
       
-      this.innovationsSubSectionsList.forEach((section) => {   
-
-        let shouldShowDocuments =
-        this.innovation.status !== InnovationStatusEnum.CREATED ||
-          (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section));
-
-        reqsSectionInfo.push(this.stores.innovation.getSectionInfo$(this.innovation.id, section)) ;
-
-        !shouldShowDocuments ? of(null) : reqsDocuments.push(this.innovationDocumentsService.getDocumentList(this.innovation.id, {
-          skip: 0,
-          take: 50,
-          order: { createdAt: 'ASC' },
-          filters: { contextTypes: ['INNOVATION_SECTION'], contextId: section, fields: ['description'] }
-        }));
+      this.innovationsSubSectionsList.forEach((section) => {  
 
       })
 
-      combineLatest([
-        forkJoin([...reqsSectionInfo]),
-        forkJoin([...reqsDocuments]),
-        forkJoin([
-          this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
-          this.statisticsService.getInnovationStatisticsInfo(this.innovationId, { statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER] }),
-        ])
-        
-      ]).subscribe(
-        ([sectionsResponse, documentsResponse, [summary,statistics]]) =>{
+      // let shouldShowDocuments =
+      //   this.innovation.status !== InnovationStatusEnum.CREATED ||
+      //     (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section));
 
-          sectionsResponse.forEach((item, index) => { 
+      forkJoin([
+        this.stores.innovation.getAllSectionsInfo$(this.innovation.id),
+        this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+          skip: 0,
+          take: 50,
+          order: { createdAt: 'ASC' },
+          filters: { contextTypes: ['INNOVATION_SECTION'], fields: ['description'] }
+        }),
+        this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
+      ])
+      .subscribe(
+        ([sectionsResponse, documentsResponse, summary]) =>{
+          console.log('sectionsResponse: ');
+          console.log(sectionsResponse);
+
+          sectionsResponse.forEach((responseItem) => { 
 
             const sectionInfo: SectionInfoType = {
               id: '',
@@ -134,18 +129,18 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               openTasksCount: 0
             };
   
-            const section = this.stores.innovation.getInnovationRecordSection(item.section);
+            const section = this.stores.innovation.getInnovationRecordSection(responseItem.section.section);
 
             sectionInfo.id = section.id;
             sectionInfo.title = section.title;
             sectionInfo.wizard = section.wizard;
             sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
   
-            sectionInfo.status = { id: item.status, label: INNOVATION_SECTION_STATUS[item.status]?.label || '' };
+            sectionInfo.status = { id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS, label: INNOVATION_SECTION_STATUS[responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS]?.label || '' };
             sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
-            sectionInfo.date = item.submittedAt;
-            sectionInfo.submittedBy = item.submittedBy;
-            sectionInfo.openTasksCount = item.tasksIds ? item.tasksIds.length : 0;
+            sectionInfo.date = responseItem.section.submittedAt;
+            sectionInfo.submittedBy = responseItem.section.submittedBy;
+            sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
   
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {
 
@@ -155,9 +150,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             } else {
       
               // Special business rule around section 2.2.
-              sectionInfo.hasEvidences = !!(section.evidences && item.data.hasEvidence && item.data.hasEvidence === 'YES');
+              sectionInfo.hasEvidences = !!(section.evidences && responseItem.data.hasEvidence && responseItem.data.hasEvidence === 'YES');
       
-              sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(item.data)).runRules();
+              sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
       
               const validInformation = sectionInfo.wizard.validateData();
       
@@ -171,7 +166,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               const data = sectionInfo.wizard.runSummaryParsing();
               summaryList = data.filter(item => !item.evidenceId);
               evidencesList = data.filter(item => item.evidenceId);
-              documentsList = documentsResponse[index]?.data ?? [];
+              documentsList = documentsResponse.data.filter((document) => document.context.id === responseItem.section.section);
   
             }
 
@@ -183,7 +178,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
           } )
 
-          this.setSectionsStatistics(statistics, summary);
+          this.setSectionsStatistics(summary);
 
           this.setPageStatus('READY')
         }
@@ -191,10 +186,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       
     }
 
-    setSectionsStatistics(statistics: InnovationStatisticsDTO, summary: SectionsSummaryModel){
+    setSectionsStatistics(summary: SectionsSummaryModel){
 
       this.innovationSections = summary;          
-      this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
       this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
         return [...acc, ...item.sections.map(s => {

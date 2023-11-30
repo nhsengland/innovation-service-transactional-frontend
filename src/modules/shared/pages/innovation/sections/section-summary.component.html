@@ -12,7 +12,7 @@
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a *ngIf="isInnovatorType && firstItem" routerLink="edit"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a *ngIf="isInnovatorType && firstItem" (click)="onStartSection(sectionInfo.id)" class="nhsuk-back-link__link cursor-pointer"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
                 </dd>
               </div>
             </ng-container>
@@ -20,13 +20,6 @@
         </ng-container>
   
         <ng-container *ngIf="!sectionInfo.isNotStarted">
-          
-          <div *ngIf="isInnovatorType && sectionInfo.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
-            <p>
-              <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
-              This section has {{ sectionInfo.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: sectionInfo.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{sectionInfo.id}}/tasks">View tasks.</a>
-            </p>
-          </div>
   
           <ng-container *ngIf="summaryList.length > 0">
             <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
@@ -62,6 +55,21 @@
                     </ng-container>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
+                  </dd>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">Evidences</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <ng-container *ngFor="let evidence of evidencesList; index as i">
+                     <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
+                    </ng-container>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                    <ng-container *ngFor="let evidence of evidencesList; index as i">
+                      <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link cursor-pointer">More details</a></p>
+                    </ng-container>
                   </dd>
                 </div>
               </ng-container>

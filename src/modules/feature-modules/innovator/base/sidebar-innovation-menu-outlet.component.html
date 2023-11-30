@@ -25,12 +25,12 @@
   <h2 *ngIf="showHeading" class="app-side-nav__heading">All sections</h2>
 
   <ul class="nhsuk-list app-side-nav__list">
-    <li *ngFor="let item of sidebarItems" class="app-side-nav__item app-side-nav__item--all-expanded">
+    <li *ngFor="let item of sidebarItems; first as firstItem" [ngClass]="firstItem? 'nhsuk-u-padding-top-1' : 'nhsuk-u-padding-top-4'">
 
-      <span class="app-side-nav__section nhsuk-u-padding-right-1">{{ item.label }}</span>
+      <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-bottom-1"><span class="app-side-nav__section nhsuk-u-padding-right-1">{{ item.label }}</span></p>
 
-      <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--expanded">
-        <li *ngFor="let nestedItem of item.children" class="app-side-nav__item">
+      <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--expanded nhsuk-u-margin-0">
+        <li *ngFor="let nestedItem of item.children" class="app-side-nav__item nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-0">
           <a href="javascript:void(0)" (click)="onScrollToSection(nestedItem.id!, $event)" class="app-side-nav__link--all nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
         </li>
       </ul>

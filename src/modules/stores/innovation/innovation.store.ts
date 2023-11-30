@@ -12,7 +12,7 @@ import { InnovationService } from './innovation.service';
 
 import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
 import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
-import { GetInnovationEvidenceDTO, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, INNOVATION_SECTION_STATUS, INNOVATION_STATUS, INNOVATION_SUPPORT_STATUS, InnovationAllSectionsInfoDTO, InnovationModel, InnovationSectionInfoDTO, SectionsSummaryModel } from './innovation.models';
 
 
 @Injectable()
@@ -69,6 +69,10 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
     return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['tasks'] });
+  }
+
+  getAllSectionsInfo$(innovationId: string): Observable<InnovationAllSectionsInfoDTO> {
+    return this.innovationsService.getAllSectionsInfo(innovationId);
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {

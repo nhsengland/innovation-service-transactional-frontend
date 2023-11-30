@@ -57,7 +57,7 @@
           </p>
         </div>
 
-        <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
+        <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-6">
           Submit record for needs assessment
         </button>
         <button *ngIf="innovation.status === 'PAUSED'" routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
@@ -158,7 +158,7 @@
         </div>
       </ng-container>
 
-      <ng-container>
+      <ng-container *ngIf="!isAdminType">
         <div class="nhsuk-action-link nhsuk-u-padding-top-5">
           <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
             <theme-svg-icon type="action"></theme-svg-icon>

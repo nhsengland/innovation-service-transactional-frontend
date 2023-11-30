@@ -168,6 +168,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           if (this.innovation.status !== InnovationStatusEnum.CREATED && this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT) {
             this.sectionInfo.submitButton.label = "Submit updates"
           }
+        } else {
+          this.sectionInfo.submitButton.show = false;
         }
 
         const data = this.sectionInfo.wizard.runSummaryParsing();

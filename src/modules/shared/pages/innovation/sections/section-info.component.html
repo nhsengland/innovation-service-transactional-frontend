@@ -50,6 +50,13 @@
             </p>
           </ng-container>
       </div>
+      
+      <div *ngIf="isInnovatorType && sectionInfo.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
+        <p>
+          <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
+          This section has {{ sectionInfo.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: sectionInfo.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{sectionInfo.id}}/tasks">View tasks.</a>
+        </p>
+      </div>
 
       <ng-container *ngIf="isInnovatorType && sectionInfo.isNotStarted">
         <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
@@ -77,7 +84,7 @@
       </ng-container>
 
       <ng-container *ngIf="sectionInfo.hasEvidences">
-        <h2>Evidence</h2>
+        <h2 class="nhsuk-u-margin-top-4">Evidence</h2>
         <button *ngIf="isInnovatorType" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary">Add evidence</button>
         <p *ngIf="evidencesList.length === 0">There are no evidences on this section.</p>
         <dl *ngIf="evidencesList.length > 0" class="nhsuk-summary-list">

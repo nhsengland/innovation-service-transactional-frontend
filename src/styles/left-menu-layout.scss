@@ -64,8 +64,9 @@
 
         .app-side-nav__section {
           font-weight: 700;
-          font-size: 14px;
+          font-size: 16px;
           color: $nhsuk-secondary-text-color;
+          line-height: 1;
         }
 
         .app-side-nav__link {
@@ -144,7 +145,6 @@
           font-weight: 400;
           font-size: 14px;
           font-size: .875rem;
-          line-height: 1.3;
           list-style: none;
 
           .app-side-nav__link--all {

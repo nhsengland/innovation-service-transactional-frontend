@@ -95,4 +95,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   onClickChange(editStepNumber: number): void {
     this.router.navigateByUrl(`${ this.baseUrl }/record/sections/${this.sectionInfo.id }/edit/${ editStepNumber }`)
   }
+
+  onStartSection(sectionId: string): void {
+    this.router.navigateByUrl(`${ this.baseUrl }/record/sections/${ sectionId }/edit`)
+  }
 }
