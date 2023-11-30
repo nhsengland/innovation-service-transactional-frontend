@@ -9,6 +9,7 @@ import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
 
 import { GetOwnedInnovations, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { CookieService } from 'ngx-cookie-service';
 import { catchError, forkJoin, map, of } from 'rxjs';
 
 
@@ -38,6 +39,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
 
 
   constructor(
+    private cookieService: CookieService,
     private innovatorService: InnovatorService,
     private innovationsService: InnovationsService
   ) {
@@ -158,8 +160,9 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit{
 
     this.innovatorService.deleteUserAccount(body).subscribe({
       next: () => {
+        this.cookieService.deleteAll();
         LocalStorageHelper.removeItem('userContext');
-        this.redirectTo('/delete-account-message', {});
+        window.location.replace(`${this.CONSTANTS.APP_URL}/signout?redirectUrl=${this.CONSTANTS.APP_URL}/delete-account-message`);
     },
       error: () => {
         this.submitButton = { isActive: true, label: 'Delete account' };
