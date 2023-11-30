@@ -1,20 +1,18 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { CoreComponent } from "@app/base";
-import { InnovationStatisticsDTO, StatisticsService } from "@modules/shared/services/statistics.service";
+import { StatisticsService } from "@modules/shared/services/statistics.service";
 import { ContextInnovationType } from "@modules/stores";
 import { InnovationStatusEnum } from "@modules/stores/innovation";
 import { INNOVATION_SECTIONS } from "@modules/stores/innovation/innovation-record/202304/main.config";
 import { InnovationSectionsListType } from "@modules/stores/innovation/innovation-record/ir-versions.types";
-import { INNOVATION_SECTION_STATUS, InnovationSectionInfoDTO, SectionsSummaryModel } from "@modules/stores/innovation/innovation.models";
-import { Observable, combineLatest, forkJoin, of } from "rxjs";
+import { INNOVATION_SECTION_STATUS, SectionsSummaryModel } from "@modules/stores/innovation/innovation.models";
+import { forkJoin } from "rxjs";
 import { SectionInfoType } from "./section-info.component";
 import { WizardEngineModel, WizardSummaryType } from "@modules/shared/forms";
 import { InnovationDocumentsListOutDTO, InnovationDocumentsService } from "@modules/shared/services/innovation-documents.service";
-import { innovationSectionsWithFiles } from "@modules/stores/innovation/innovation-record/ir-versions.config";
 import { InnovationSections } from "@modules/stores/innovation/innovation-record/202209/catalog.types";
 import { SectionSummaryInputData } from "./section-summary.component";
-import { InnovationStatisticsEnum } from "@modules/shared/services/statistics.enum";
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -35,7 +33,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
     pdfDocumentUrl: string;
 
     innovation: ContextInnovationType;
-    // pendingExportRequests = 0;
     innovationSections: SectionsSummaryModel = [];
     sections: { progressBar: ProgressBarType[], submitted: number, draft: number, notStarted: number, withOpenTasksCount: number, openTasksCount: number } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0,  withOpenTasksCount: 0, openTasksCount: 0};
 
@@ -60,7 +57,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
     ){
       super()
       
-
       this.innovation = this.stores.context.getInnovation();
 
       this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -79,23 +75,22 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       
     }
 
+    ngOnInit(): void {
+        
+      this.setPageStatus('LOADING');
+
+      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+      this.setPageTitle('All sections questions and answers', { hint: 'Innovation record'});
+      
+      this.getSectionsData();
+
+    }
+
     getSectionsData(){
 
       let summaryList: WizardSummaryType[];
       let evidencesList: WizardSummaryType[];
       let documentsList: InnovationDocumentsListOutDTO['data'];
-      
-
-      const reqsSectionInfo: Observable<InnovationSectionInfoDTO>[] = [];
-      const reqsDocuments: Observable<InnovationDocumentsListOutDTO>[] = [];
-      
-      this.innovationsSubSectionsList.forEach((section) => {  
-
-      })
-
-      // let shouldShowDocuments =
-      //   this.innovation.status !== InnovationStatusEnum.CREATED ||
-      //     (this.innovation.status === InnovationStatusEnum.CREATED && innovationSectionsWithFiles.includes(section));
 
       forkJoin([
         this.stores.innovation.getAllSectionsInfo$(this.innovation.id),
@@ -109,8 +104,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       ])
       .subscribe(
         ([sectionsResponse, documentsResponse, summary]) =>{
-          console.log('sectionsResponse: ');
-          console.log(sectionsResponse);
 
           sectionsResponse.forEach((responseItem) => { 
 
@@ -209,18 +202,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       this.sections.openTasksCount = this.innovationSections.reduce((acc: number, item) => acc + item.sections.reduce((acc: number, section) => acc + section.openTasksCount, 0), 0);
 
       this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
-
-      this.setPageStatus('READY');
-    }
-    
-
-    ngOnInit(): void {
-        
-      this.setPageStatus('LOADING');
-
-      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
-      this.setPageTitle('All sections questions and answers', { hint: 'Innovation record'});
-      this.getSectionsData();
 
     }
 

@@ -1,14 +1,13 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSectionStepLabels, } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import { SectionInfoType } from './section-info.component';
 
 
