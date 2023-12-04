@@ -122,7 +122,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
         
     this.setPageTitle(this.translate(sectionIdentification!.section.title), { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
-    this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+    this.setBackLink('Go back');
     
     const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
@@ -139,7 +139,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionInfo.id),
       !this.shouldShowDocuments ? of(null) : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
-        take: 50,
+        take: 100,
         order: { createdAt: 'ASC' },
         filters: { contextTypes: ['INNOVATION_SECTION'], contextId: this.sectionInfo.id, fields: ['description'] }
       })

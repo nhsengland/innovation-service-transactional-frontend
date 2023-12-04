@@ -46,32 +46,38 @@
                   </ng-container>
                 </ng-container>
               </ng-container>
+
               <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
-                <div class="nhsuk-summary-list__row">
-                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">Documents</dt>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap">
-                    <ng-container *ngFor="let document of documentsList; index as i">
-                     <p><span>Document {{ i +1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
-                    </ng-container>
-                  </dd>
-                  <dd class="nhsuk-summary-list__actions">
-                  </dd>
-                </div>
+                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem">
+                  <div class="nhsuk-summary-list__row">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
+                      <span *ngIf="firstItem">Documents</span>
+                    </dt>
+                    <dd class="nhsuk-summary-list__value text-pre-wrap">
+                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
+                    </dd>
+                    <dd class="nhsuk-summary-list__actions">
+                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+                    </dd>
+                  </div>
+                </ng-container>
               </ng-container>
+
               <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
-                <div class="nhsuk-summary-list__row">
-                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">Evidences</dt>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap">
-                    <ng-container *ngFor="let evidence of evidencesList; index as i">
-                     <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
-                    </ng-container>
-                  </dd>
-                  <dd class="nhsuk-summary-list__actions">
-                    <ng-container *ngFor="let evidence of evidencesList; index as i">
-                      <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link cursor-pointer">More details</a></p>
-                    </ng-container>
-                  </dd>
-                </div>
+                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem">
+
+                  <div class="nhsuk-summary-list__row">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
+                      <span *ngIf="firstItem">Evidences</span>
+                    </dt>
+                    <dd class="nhsuk-summary-list__value text-pre-wrap">
+                      <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
+                    </dd>
+                    <dd class="nhsuk-summary-list__actions">
+                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link cursor-pointer">More details</a></p>
+                    </dd>
+                  </div>
+                </ng-container>
               </ng-container>
               
             </dl>

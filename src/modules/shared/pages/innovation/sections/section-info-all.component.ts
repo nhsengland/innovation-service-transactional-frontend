@@ -96,7 +96,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
         this.stores.innovation.getAllSectionsInfo$(this.innovation.id),
         this.innovationDocumentsService.getDocumentList(this.innovation.id, {
           skip: 0,
-          take: 50,
+          take: 100,
           order: { createdAt: 'ASC' },
           filters: { contextTypes: ['INNOVATION_SECTION'], fields: ['description'] }
         }),

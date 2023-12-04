@@ -126,10 +126,17 @@
                 <span *ngIf="section.status === 'SUBMITTED'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
                   Last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate) }}
                 </span>
-                <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                  In draft - last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)
-                  }}
-                </span>
+                  <ng-container *ngIf="!isAccessorType">
+                    <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
+                      In draft - last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)
+                    }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="isAccessorType">
+                  <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
+                    This section is in draft and will not visible until it is resubmitted.
+                  </span>
+                </ng-container>
               </ng-container>
 
             </li>

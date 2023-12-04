@@ -41,7 +41,7 @@
                   <theme-svg-icon type="success"></theme-svg-icon>
                   <span class="nhsuk-u-margin-right-2"></span>
                   <span>
-                    This section was submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
+                    This section was last submitted by {{ sectionInfo.submittedBy.name }} on {{ sectionInfo.date | date: ('app.date_formats.long_date' | translate) }}.
                     <span class="d-inline-block" *ngIf="isInnovatorType">You can update this section at any time.</span>
                   </span>
                   </ng-container>
@@ -63,12 +63,12 @@
       </ng-container>
 
       <ng-container *ngIf="summaryList.length > 0">
-        <h2>{{ isInnovatorType ? 'Your' : 'Submitted' }} answers</h2>
+        <h2>Questions and answers</h2>
       </ng-container>
 
       <ng-container *ngIf="pageStatus === 'READY'">
 
-        <ng-container *ngIf="!isInnovatorType && sectionInfo.status.id === 'DRAFT'; else summaryComponent">
+        <ng-container *ngIf="isAccessorType && sectionInfo.status.id === 'DRAFT'; else summaryComponent">
           <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
             <span class="nhsuk-u-visually-hidden">Information:</span>
             <p>
