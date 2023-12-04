@@ -4,7 +4,7 @@ import { AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Simpl
 @Component({
   selector: 'theme-go-to-top-link',
   templateUrl: './go-to-top-link.component.html',
-  styleUrls: ['./go-to-top-link.scss']
+  styleUrls: ['./go-to-top-link.component.scss']
 })
 export class GoToTopComponent implements OnInit {
 
