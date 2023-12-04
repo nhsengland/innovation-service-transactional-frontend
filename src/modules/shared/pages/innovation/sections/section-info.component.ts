@@ -36,7 +36,7 @@ export type SectionInfoType = {
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
 
   innovation: ContextInnovationType;
-  sectionId: string = '';
+  sectionId: string;
 
   sectionSubmittedText: string = '';
 

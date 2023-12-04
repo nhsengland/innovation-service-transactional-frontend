@@ -210,7 +210,7 @@ const routes: Routes = [
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
                       { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
                         data: {
-                          breadcrumb: (data: RoutesDataType) => ''
+                          breadcrumb: (data: RoutesDataType) => 'All sections'
                         }, 
                       },
                       {

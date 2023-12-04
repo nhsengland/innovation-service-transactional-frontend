@@ -3,7 +3,8 @@ import { AfterViewInit, Component, HostListener, Input, OnChanges, OnInit, Simpl
 
 @Component({
   selector: 'theme-go-to-top-link',
-  templateUrl: './go-to-top-link.component.html'
+  templateUrl: './go-to-top-link.component.html',
+  styleUrls: ['./go-to-top-link.scss']
 })
 export class GoToTopComponent implements OnInit {
 
@@ -56,11 +57,11 @@ export class GoToTopComponent implements OnInit {
 
     if ((this.viewportHeight + this.scrolledAmount ) >= ( this.documentTotalHeight - this.footerHeight )){
 
-      backToTop?.classList.add("backToTop__absolute");
+      backToTop?.classList.add("go-to-top__absolute");
 
     } else {
 
-      backToTop?.classList.remove("backToTop__absolute");
+      backToTop?.classList.remove("go-to-top__absolute");
       
     }
   }

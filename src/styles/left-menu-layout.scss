@@ -323,21 +323,7 @@
   }
 }
 
-.backToTop {
-  position: fixed;
-  bottom: 0;
-  margin-bottom: 30px;
-  
-}
-.backToTop__absolute {
-  position: absolute;
-}
 
-@media (max-width: 48.0525em) {
-  .backToTop {
-    display: none;
-  }
-}
 
 // .app-index-navigation {
 //   padding-top: 16px

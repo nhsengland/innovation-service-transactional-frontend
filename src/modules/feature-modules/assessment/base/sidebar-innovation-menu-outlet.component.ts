@@ -14,20 +14,12 @@ import { ViewportScroller } from '@angular/common';
 })
 export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
-  @HostListener('window:scroll', ['$event'])
-  onScrollChange($event: Event){
-    this.backToTopIsVisible = window.scrollY > 750 ? true : false;
-  }
-  
-  backToTopIsVisible: boolean = false;
-
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string, url: string, children?: { label: string, url: string, id?: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
   isAllSectionsDetailsPage: boolean = false;
-
 
   private sectionsSidebar: { label: string, url: string, children?: { label: string, id: string, url: string }[] }[] = [];
   private _sidebarItems: { label: string, url: string, id?: string }[] = [];
@@ -81,15 +73,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.generateSidebar();
 
-    this.isAllSectionsDetailsPage = false;
+    this.isAllSectionsDetailsPage = this.router.url.includes('/all');
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
-
-      if (this.router.url.includes('/all')){
-        this.isAllSectionsDetailsPage = true;
-      }
     } else {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
