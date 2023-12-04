@@ -42,6 +42,20 @@ export type InnovationSectionInfoDTO = {
   tasksIds?: string[];
 }
 
+export type InnovationAllSectionsInfoDTO = {
+   section: {
+    section: string,
+    status: keyof typeof INNOVATION_SECTION_STATUS,
+    submittedAt: DateISOType,
+    submittedBy: {
+      name: string,
+      displayTag: string
+    },
+    openTasksCount: number
+   },
+   data: MappedObjectType;
+  }[];
+
 export type getInnovationInfoResponse = {
   id: string;
   name: string;

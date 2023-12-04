@@ -76,6 +76,7 @@ import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -184,7 +185,11 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
+                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                        data: {
+                          breadcrumb: (data: RoutesDataType) => 'All sections'
+                        }, 
+                      },
                       {
                         path: ':sectionId',
                         children: [

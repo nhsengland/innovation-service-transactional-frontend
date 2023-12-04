@@ -57,7 +57,7 @@
           </p>
         </div>
 
-        <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
+        <button *ngIf="isInnovationInCreatedStatus" routerLink="/innovator/innovations/{{ innovationId }}/record/support" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-6">
           Submit record for needs assessment
         </button>
         <button *ngIf="innovation.status === 'PAUSED'" routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-bottom-4">
@@ -126,10 +126,17 @@
                 <span *ngIf="section.status === 'SUBMITTED'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
                   Last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate) }}
                 </span>
-                <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                  In draft - last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)
-                  }}
-                </span>
+                  <ng-container *ngIf="!isAccessorType">
+                    <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
+                      In draft - last submitted by {{ section.submittedBy?.name }} <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ section.submittedAt | date: ('app.date_formats.long_date' | translate)
+                    }}
+                  </span>
+                </ng-container>
+                <ng-container *ngIf="isAccessorType">
+                  <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
+                    This section is in draft and will not visible until it is resubmitted.
+                  </span>
+                </ng-container>
               </ng-container>
 
             </li>
@@ -155,6 +162,15 @@
             <a href="{{ CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION }}" target="_blank" rel="noopener noreferrer" class="nhsuk-link nhsuk-link--no-visited-state">terms of use (opens in a new window)</a>, you need to request the innovator's permission.
           </p>
           <a routerLink="./export-requests/list" class="nhsuk-link nhsuk-link--no-visited-state">Request permission and view requests</a>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!isAdminType">
+        <div class="nhsuk-action-link nhsuk-u-padding-top-5">
+          <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
+            <theme-svg-icon type="action"></theme-svg-icon>
+            <span class="nhsuk-action-link__text"> View all the questions and answers </span>
+          </a>
         </div>
       </ng-container>
 

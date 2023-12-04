@@ -71,6 +71,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -207,7 +208,11 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
+                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                        data: {
+                          breadcrumb: (data: RoutesDataType) => 'All sections'
+                        }, 
+                      },
                       {
                         path: ':sectionId',
                         children: [

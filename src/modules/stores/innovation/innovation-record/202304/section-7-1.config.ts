@@ -17,14 +17,16 @@ const stepsLabels = {
     label: 'What is the cost of your innovation?',
     description: `
       <p>Include the relevant metric such as a flat capital cost or cost per patient, cost per unit or cost per procedure. Include any costs associated with implementation and resources.</p>
-      <p>For example, £10 based on 500 units per site. £345 per procedure and a typical patient requires two procedures.</p>`
+      <p>For example, £10 based on 500 units per site. £345 per procedure and a typical patient requires two procedures.</p>`,
+    conditional: true
   },
   q3: { label: 'Roughly how many patients would be eligible for your innovation in the UK?' },
   q4: {
     label: 'What is the eligibility criteria for your innovation?',
     description: `
     <p>For example, users need to be over a certain age, or have a certain medical history or current health status.</p>
-    <p>Answer "not relevant" if your innovation does not have any eligibility criteria.</p>`
+    <p>Answer "not relevant" if your innovation does not have any eligibility criteria.</p>`,
+    conditional: true
   },
   q5: { label: 'How many units of your innovation would you expect to sell in the UK per year?' },
   q6: {
@@ -59,7 +61,8 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {

@@ -8,7 +8,7 @@ import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { GetInnovationEvidenceDTO, INNOVATION_STATUS, InnovationSectionInfoDTO, InnovationSectionsListDTO, OrganisationSuggestionModel } from './innovation.models';
+import { GetInnovationEvidenceDTO, INNOVATION_STATUS, InnovationAllSectionsInfoDTO, InnovationSectionInfoDTO, InnovationSectionsListDTO, OrganisationSuggestionModel } from './innovation.models';
 
 
 @Injectable()
@@ -45,6 +45,12 @@ export class InnovationService {
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/sections/:sectionId').setPathParams({ innovationId, sectionId }).setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response));
+
+  }
+
+  getAllSectionsInfo(innovationId: string): Observable<InnovationAllSectionsInfoDTO>{
+    const url =  new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/all-sections').setPathParams({ innovationId });
+    return this.http.get<InnovationAllSectionsInfoDTO>(url.buildUrl()).pipe(take(1), map(response => response))
 
   }
 

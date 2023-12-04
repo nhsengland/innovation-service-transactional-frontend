@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ViewportScroller } from '@angular/common';
 
 
 @Component({
@@ -14,17 +15,19 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
+  sidebarItems: { label: string, url: string, children?: { label: string, url: string, id?: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
+  isAllSectionsDetailsPage: boolean = false;
 
-  private sectionsSidebar: { label: string, url: string, children?: { label: string, url: string }[] }[] = [];
-  private _sidebarItems: { label: string, url: string; }[] = [];
+  private sectionsSidebar: { label: string, url: string, children?: { label: string, id: string, url: string }[] }[] = [];
+  private _sidebarItems: { label: string, url: string, id?: string }[] = [];
 
   constructor(
     private router: Router,
     private contextStore: ContextStore,
-    private innovationStore: InnovationStore
+    private innovationStore: InnovationStore,
+    private scroller: ViewportScroller
   ) {
 
     this.subscriptions.add(
@@ -35,7 +38,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    
     this.generateSidebar();
+
   }
 
   ngOnDestroy(): void {
@@ -71,6 +76,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.generateSidebar();
 
+    this.isAllSectionsDetailsPage = this.router.url.includes('/all');
+
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
       this.sidebarItems = this.sectionsSidebar;
@@ -78,6 +85,13 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this.showHeading = false;
       this.sidebarItems = this._sidebarItems;
     }
+
+  }
+
+  onScrollToSection(section: string, event: Event): void {
+
+    this.scroller.scrollToAnchor(section);
+    (event.target as HTMLElement).blur();
 
   }
 

@@ -55,7 +55,8 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
