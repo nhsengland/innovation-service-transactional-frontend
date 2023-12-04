@@ -685,16 +685,22 @@ export const locale = {
         },
         user: {
           AssessmentUserIsNotTheOnlyOne: {
-            label: 'User is not the only assessment user on the service'
+            label: 'The user is not the only assessment user on the service'
           },
           LastQualifyingAccessorUserOnOrganisationUnit: {
-            label: 'User is not the only qualifying accessor within a organisation unit'
+            label: 'The user is not the only qualifying accessor within a organisation unit'
           },
           LastUserOnOrganisationUnit: {
-            label: 'User is not the only one within their unit(s)'
+            label: 'The user is not the only one within their unit(s)'
+          },
+          UserHasAnyAccessorRoleInOtherOrganisation: {
+            label: 'The user is not an qualifying accessor or accessor in other organisations'
+          },
+          OrganisationUnitIsActive: {
+            label: 'The unit is active'
           },
           NoInnovationsSupportedOnlyByThisUser: {
-            label: 'User is not the only one supporting a given innovation',
+            label: 'The user is not the only one supporting any innovation',
             description: {
               none: 'No innovation is being supported',
               singular: '{{ supports.innovations.length }} innovation being supported',

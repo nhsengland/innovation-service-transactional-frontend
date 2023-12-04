@@ -62,8 +62,8 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
           ...this.user,
           role: user.roles.filter(role => role.id === this.user.role.id).map((r) => ({
             id: r.id,
-            description: r.displayTeam ? `${this.stores.authentication.getRoleDescription(r.role)} (${r.displayTeam})` : `${this.stores.authentication.getRoleDescription(r.role)}`
-          }))[0] || { id: '', description: '' }
+            description: r.displayTeam ? `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})` : `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()}`
+          }))[0] ?? { id: '', description: '' }
         }
 
         if (!this.user.role.id) {
@@ -72,8 +72,7 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
 
         this.rulesList = validationRules.validations;
 
-        if (this.rulesList.length === 0) { this.pageStep = 'INACTIVATE_ROLE'; }
-        else { this.pageStep = 'RULES'; }
+        this.pageStep = this.rulesList.length === 0 ? 'INACTIVATE_ROLE' : 'RULES';
 
         this.setPageStatus('READY');
       },
