@@ -132,8 +132,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             sectionInfo.status = { id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS, label: INNOVATION_SECTION_STATUS[responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS]?.label || '' };
             sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
             sectionInfo.date = responseItem.section.submittedAt;
-            sectionInfo.submittedBy!.name = responseItem.section.submittedBy?.name ?? '';
-            sectionInfo.submittedBy!.isOwner = responseItem.section.submittedBy?.displayTag === 'Owner' ?? false;
+            sectionInfo.submittedBy = { 
+              name: responseItem.section.submittedBy?.name, 
+              isOwner: responseItem.section.submittedBy?.displayTag === 'Owner' }
             sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
   
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {
