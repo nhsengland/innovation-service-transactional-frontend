@@ -44,8 +44,9 @@ export class GoToTopComponent implements OnInit {
     
   }
 
-  onScrollToTop(): void {
+  onScrollToTop(event: Event): void {
     this.scroller.scrollToPosition([0,0]);
+    (event.target as HTMLElement).blur();
   }
 
   checkVisibility(): void {

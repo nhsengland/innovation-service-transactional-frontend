@@ -13,7 +13,7 @@
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a href="javascript:void(0);" *ngIf="isInnovatorType && firstItem" (click)="onStartSection(sectionInfo.id)"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a href="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
                 </dd>
               </div>
             </ng-container>
@@ -41,7 +41,8 @@
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
                       <dd  class="nhsuk-summary-list__actions">
-                        <a href="javascript:void(0);" *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <a href="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{item.editStepNumber}}" *ngIf="isInnovatorType && item.editStepNumber"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <!-- <a href="javascript:void(0);" *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a> -->
                       </dd>
                     </div>
                   </ng-container>
