@@ -24,7 +24,7 @@ export type SectionInfoType = {
   wizard: WizardEngineModel,
   allStepsList: InnovationSectionStepLabels,
   date: string,
-  submittedBy: null | { name: string, isOwner?: boolean },
+  submittedBy: null | { name: string, displayTag?: string },
   openTasksCount: number
 };
 

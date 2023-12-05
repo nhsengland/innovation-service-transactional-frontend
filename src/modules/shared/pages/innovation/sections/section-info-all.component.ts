@@ -118,7 +118,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               wizard: new WizardEngineModel({}),
               allStepsList: {},
               date: '',
-              submittedBy: { name: '', isOwner: false },
+              submittedBy: { name: '', displayTag: '' },
               openTasksCount: 0
             };
   
@@ -134,7 +134,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             sectionInfo.date = responseItem.section.submittedAt;
             sectionInfo.submittedBy = { 
               name: responseItem.section.submittedBy?.name, 
-              isOwner: responseItem.section.submittedBy?.displayTag === 'Owner' }
+              displayTag: responseItem.section.submittedBy?.displayTag }
             sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
   
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {
