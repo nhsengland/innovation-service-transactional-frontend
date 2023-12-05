@@ -34,7 +34,7 @@
         <ng-container *ngFor="let section of item.sections; let j = index; ">
           <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7 nhsuk-u-margin-bottom-2" [id]="section.id">
             <a routerLink="{{ baseUrl }}/record/sections/{{section.id}}/">
-              {{ i + 1}}.{{ j + 1 }}. {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
+              {{ i + 1}}.{{ j + 1 }} {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
             </a>
           </h3>
           <ng-container *ngIf="pageStatus === 'READY'">
@@ -106,7 +106,7 @@
       </div>
     </ng-container>
       
-    <ng-container *ngIf="!isInnovatorType && innovation.status === 'CREATED'">
+    <ng-container *ngIf="!isInnovatorType && ['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status)">
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for a section</button>
     </ng-container>
     

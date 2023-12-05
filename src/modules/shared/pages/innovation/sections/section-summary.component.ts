@@ -103,7 +103,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     // add conditional questions special cases regarding 4.1
     if( this.sectionInfo.id === 'TESTING_WITH_USERS'){
       const questionToAdd = {label: 'Describe the testing and feedback for each testing', conditional: true }
-      this.allSteps.splice(3, 0, questionToAdd);
+      this.allSteps.splice(4, 0, questionToAdd);
     }
     // add conditional questions special cases regarding 5.1
     if( this.sectionInfo.id === 'REGULATIONS_AND_STANDARDS'){
