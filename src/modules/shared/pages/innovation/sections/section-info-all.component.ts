@@ -49,7 +49,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
     allSectionsData: { [k in InnovationSections as string]?: { sectionInfo?: SectionInfoType, summaryList?: WizardSummaryType[], evidencesList?: WizardSummaryType[], documentsList?: InnovationDocumentsListOutDTO['data'] } } = {};
 
-
     constructor(
       private activatedRoute: ActivatedRoute,
       private innovationDocumentsService: InnovationDocumentsService,

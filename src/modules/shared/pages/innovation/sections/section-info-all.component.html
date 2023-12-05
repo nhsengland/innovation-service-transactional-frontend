@@ -106,7 +106,7 @@
       </div>
     </ng-container>
       
-    <ng-container *ngIf="!isInnovatorType && innovation.status === 'CREATED'">
+    <ng-container *ngIf="!isInnovatorType && ['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status)">
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for a section</button>
     </ng-container>
     

@@ -13,7 +13,7 @@
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a *ngIf="isInnovatorType && firstItem" (click)="onStartSection(sectionInfo.id)" class="nhsuk-back-link__link cursor-pointer"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a href="javascript:void(0);" *ngIf="isInnovatorType && firstItem" (click)="onStartSection(sectionInfo.id)"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
                 </dd>
               </div>
             </ng-container>
@@ -41,7 +41,7 @@
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
                       <dd  class="nhsuk-summary-list__actions">
-                        <a *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)" class="nhsuk-back-link__link"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <a href="javascript:void(0);" *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       </dd>
                     </div>
                   </ng-container>
@@ -55,10 +55,10 @@
                       <span *ngIf="firstItem">Documents</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
-                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}" class="nhsuk-back-link__link">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
+                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details" class="nhsuk-back-link__link">More details</a>
+                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
                     </dd>
                   </div>
                 </ng-container>
