@@ -58,7 +58,6 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
       super()
       
       this.innovation = this.stores.context.getInnovation();
-      console.log(this.innovation.status);
 
       this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
