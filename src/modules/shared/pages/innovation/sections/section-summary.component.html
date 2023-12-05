@@ -68,7 +68,7 @@
                 <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem; last as lastItem">
                   <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
                     <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
-                      <span *ngIf="firstItem">Evidences</span>
+                      <span *ngIf="firstItem">Evidence</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
                       <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
