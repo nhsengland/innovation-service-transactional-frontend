@@ -67,7 +67,7 @@
                         <theme-svg-icon type="success"></theme-svg-icon>
                         <span class="nhsuk-u-margin-right-2"></span>
                         <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
-                          This section was last submitted by {{ sectionData.sectionInfo?.submittedBy?.name }} on {{ sectionData.sectionInfo?.date | date: ('app.date_formats.long_date' | translate) }}.
+                          This section was last submitted by {{ sectionData.sectionInfo?.submittedBy?.name }} <ng-container *ngIf="sectionData.sectionInfo?.submittedBy?.isOwner !== undefined">({{ sectionData.sectionInfo?.submittedBy?.isOwner ? 'Owner' : 'Collaborator' }})</ng-container> on {{ sectionData.sectionInfo?.date | date: ('app.date_formats.long_date' | translate) }}.
                         </span>
                       </ng-container>
                     </ng-container>
@@ -82,7 +82,7 @@
                 </p>
               </div>
 
-              <ng-container *ngIf="!isInnovatorType && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
+              <ng-container *ngIf="isAccessorType && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
                 
                 <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
                   <span class="nhsuk-u-visually-hidden">Information:</span>
@@ -106,7 +106,7 @@
       </div>
     </ng-container>
       
-    <ng-container *ngIf="isAccessorType || isAssessmentType">
+    <ng-container *ngIf="!isInnovatorType && innovation.status === 'CREATED'">
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for a section</button>
     </ng-container>
     

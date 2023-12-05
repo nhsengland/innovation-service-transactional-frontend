@@ -122,7 +122,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionSubmittedText =  sectionIdentification ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
         
     this.setPageTitle(this.translate(sectionIdentification!.section.title), { hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : '' });
-    this.setBackLink('Go back');
+    this.setBackLink('Go back', this.handleGoBack.bind(this));
     
     const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
@@ -247,4 +247,25 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       documentsList: this.documentsList 
     }
   }
+
+  handleGoBack(){
+
+    const previousUrl = this.stores.context.getPreviousUrl();
+
+    if( previousUrl?.endsWith('/record') || previousUrl?.includes('/edit') ){
+        this.redirectTo(`/${this.baseUrl}/record`);
+    }
+
+    if( previousUrl?.includes('/sections/')) {
+
+      if( previousUrl?.endsWith('/all') ){
+        this.redirectTo(this.stores.context.getPreviousUrl()!);
+      } else {
+        this.redirectTo(`/${this.baseUrl}/record`)
+      }
+      
+    }
+
+  }
+
 }

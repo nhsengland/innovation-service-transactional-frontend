@@ -3,11 +3,12 @@
   
         <ng-container *ngIf="sectionInfo.isNotStarted">
           <dl class="nhsuk-summary-list">
-            <ng-container *ngFor="let item of sectionInfo.allStepsList | keyvalue; first as firstItem">
+            <ng-container *ngFor="let item of allSteps; first as firstItem">
+
               <div class="nhsuk-summary-list__row">
                 <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3">
-                  <p class="nhsuk-u-margin-0">{{ item.value.label }}</p>
-                  <p *ngIf="item.value.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
+                  <p class="nhsuk-u-margin-0">{{ item.label }}</p>
+                  <p *ngIf="item.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
                 </dt>
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
@@ -48,26 +49,25 @@
               </ng-container>
 
               <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
-                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem">
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
+                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem; last as lastItem">
+                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
                       <span *ngIf="firstItem">Documents</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
-                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
+                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}" class="nhsuk-back-link__link cursor-pointer">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details" class="nhsuk-back-link__link cursor-pointer">More details</a>
                     </dd>
                   </div>
                 </ng-container>
               </ng-container>
 
               <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
-                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem">
-
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
+                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem; last as lastItem">
+                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
                       <span *ngIf="firstItem">Evidences</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">

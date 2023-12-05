@@ -53,11 +53,12 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
     constructor(
       private activatedRoute: ActivatedRoute,
       private innovationDocumentsService: InnovationDocumentsService,
-      private statisticsService: StatisticsService
+
     ){
       super()
       
       this.innovation = this.stores.context.getInnovation();
+      console.log(this.innovation.status);
 
       this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -133,6 +134,8 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
             sectionInfo.date = responseItem.section.submittedAt;
             sectionInfo.submittedBy = responseItem.section.submittedBy;
+            sectionInfo.submittedBy.name = responseItem.section.submittedBy.name;
+            sectionInfo.submittedBy.isOwner = responseItem.section.submittedBy.displayTag === 'Owner';
             sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
   
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {

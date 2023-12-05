@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -9,6 +9,7 @@ import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovati
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { SectionInfoType } from './section-info.component';
+import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 
 
 export type SectionSummaryInputData = {
@@ -17,6 +18,12 @@ export type SectionSummaryInputData = {
   evidencesList: WizardSummaryType[], 
   documentsList: InnovationDocumentsListOutDTO['data']
 }
+
+export type SectionStepsList = {
+  label: string,
+  description?: string | undefined,
+  conditional?: boolean | undefined,
+}[]
 
 @Component({
     selector: 'shared-innovation-summary',
@@ -37,6 +44,12 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   summaryList: WizardSummaryType[] = []
   evidencesList: WizardSummaryType[] = []
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
+
+  allSteps: {
+      label: string,
+      description?: string | undefined,
+      conditional?: boolean | undefined,
+    }[] = [];
 
   sectionSubmittedText: string = '';
   
@@ -82,6 +95,27 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.summaryList = this.sectionData.summaryList;
     this.evidencesList = this.sectionData.evidencesList;
     this.documentsList = this.sectionData.documentsList;
+
+    this.allSteps = Object.values(this.sectionInfo.allStepsList!);
+
+    
+    // add conditional questions regarding evidences for 2.2
+    if( this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS'){
+      const evidencesToAdd: SectionStepsList = []
+      this.allSteps.splice(1, 0, ...Object.values(stepsLabels));
+    }
+    // add conditional questions special cases regarding 4.1
+    if( this.sectionInfo.id === 'TESTING_WITH_USERS'){
+      const questionToAdd = {label: 'Describe the testing and feedback for each testing', conditional: true }
+      this.allSteps.splice(3, 0, questionToAdd);
+    }
+    // add conditional questions special cases regarding 5.1
+    if( this.sectionInfo.id === 'REGULATIONS_AND_STANDARDS'){
+      const questionToAdd = {label: 'Do you have a certification for each standard?', conditional: true }
+      this.allSteps.splice(2, 0, questionToAdd);
+    }
+      
+    
 
     this.shouldShowDocuments =
       this.innovation.status !== InnovationStatusEnum.CREATED ||
