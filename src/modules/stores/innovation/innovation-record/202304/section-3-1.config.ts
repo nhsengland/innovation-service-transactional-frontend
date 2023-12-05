@@ -15,12 +15,17 @@ const stepsLabels = {
   },
   q2: {
     label: 'Describe the market research you have done, or are doing, within the UK market',
-    description: `This could include a mix of interviews, focus groups, patient record forms, surveys, ethnography, or other market research methods.`
+    description: `This could include a mix of interviews, focus groups, patient record forms, surveys, ethnography, or other market research methods.`,
+    conditional: true
   },
-  q3: { label: 'Which option best describes your innovation?' },
+  q3: { 
+    label: 'Which option best describes your innovation?',
+    conditional: true 
+  },
   q4: {
     label: 'What competitors or alternatives exist, or how is the problem addressed in current practice?',
-    description: 'Include how your innovation is different to the alternatives in the market.'
+    description: 'Include how your innovation is different to the alternatives in the market.',
+    conditional: true
   },
 };
 

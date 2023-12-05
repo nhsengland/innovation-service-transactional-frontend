@@ -5,21 +5,36 @@ import { evidenceSubmitTypeItems, evidenceTypeItems } from './forms.config';
 
 
 // Labels.
-const stepsLabels = {
+export const stepsLabels = {
   q1: {
     label: 'What type of evidence or research do you want to submit?',
     description: `
     <p>Evidence can include clinical and economic evidence, as well as service evaluation, environmental and social impact or other proven benefits such as staff and system benefits. You will be able to add several pieces of evidence one at a time.</p>
-    <p>We will ask about user testing and regulatory approval in later sections.</p>`
+    <p>We will ask about user testing and regulatory approval in later sections.</p>`,
+    conditional: true
   },
-  q2: { label: 'What type of evidence do you have?' },
-  q3: { label: 'What type of economic evidence do you have?' },
-  q4: { label: 'What other type of evidence do you have?' },
+  q2: { 
+    label: 'What type of evidence do you have?',
+    conditional: true
+  },
+  q3: { 
+    label: 'What type of economic evidence do you have?',
+    conditional: true
+  },
+  q4: {
+    label: 'What other type of evidence do you have?',
+    conditional: true
+    },
   q5: {
     label: 'Write a short summary of the evidence',
-    description: 'Give a brief overview that covers the scope of the study and its key findings. Organisations will read this summary to see if any evidence is relevant to what they can help you with.'
+    description: 'Give a brief overview that covers the scope of the study and its key findings. Organisations will read this summary to see if any evidence is relevant to what they can help you with.',
+    conditional: true
   },
-  q6: { label: 'Upload any documents that support this evidence', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' }
+  q6: {
+    label: 'Upload any documents that support this evidence', 
+    description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+    conditional: true 
+  }
 };
 
 

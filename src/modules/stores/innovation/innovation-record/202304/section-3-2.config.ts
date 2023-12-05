@@ -17,7 +17,8 @@ const stepsLabels = {
   },
   q2: {
     label: 'Describe the potential care pathway with your innovation in use',
-    description: 'Focus on any areas that will be impacted by introducing your innovation to the care pathway.'
+    description: 'Focus on any areas that will be impacted by introducing your innovation to the care pathway.',
+    conditional: true
   }
 };
 

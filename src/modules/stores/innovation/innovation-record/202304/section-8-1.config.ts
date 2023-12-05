@@ -20,15 +20,18 @@ const stepsLabels = {
   },
   q3: {
     label: 'Where have you deployed your innovation?',
-    description: 'Provide the name of the organisation and the department, if possible.'
+    description: 'Provide the name of the organisation and the department, if possible.',
+    conditional: true
   },
   q4: {
     label: 'What was the commercial basis for deployment?',
-    description: `For example, did you provide your innovation for free or was it purchased? Or was it part funded by yourself and the NHS area in which it's being deployed?`
+    description: `For example, did you provide your innovation for free or was it purchased? Or was it part funded by yourself and the NHS area in which it's being deployed?`,
+    conditional: true
   },
   q5: {
     label: 'How did the deployment of your innovation affect the organisation(s)?',
-    description: `For example, which job roles were affected and how was the care pathway redesigned?`
+    description: `For example, which job roles were affected and how was the care pathway redesigned?`,
+    conditional: true
   },
   q6: {
     label: 'Does your team have the resources for scaling up to national deployment?',

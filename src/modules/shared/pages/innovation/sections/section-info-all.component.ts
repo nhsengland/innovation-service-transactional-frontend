@@ -53,7 +53,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
     constructor(
       private activatedRoute: ActivatedRoute,
       private innovationDocumentsService: InnovationDocumentsService,
-      private statisticsService: StatisticsService
+
     ){
       super()
       
@@ -132,7 +132,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
             sectionInfo.status = { id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS, label: INNOVATION_SECTION_STATUS[responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS]?.label || '' };
             sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
             sectionInfo.date = responseItem.section.submittedAt;
-            sectionInfo.submittedBy = responseItem.section.submittedBy;
+            sectionInfo.submittedBy = { 
+              name: responseItem.section.submittedBy?.name, 
+              displayTag: responseItem.section.submittedBy?.displayTag }
             sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
   
             if (this.stores.authentication.isAccessorType() && this.innovation.status === 'IN_PROGRESS' && sectionInfo.status.id === 'DRAFT') {

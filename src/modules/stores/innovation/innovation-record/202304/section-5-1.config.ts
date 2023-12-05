@@ -17,10 +17,12 @@ const stepsLabels = {
   },
   q2: {
     label: 'Which regulations, standards and certifications apply to your innovation?',
-    description: `Find out more about <a href="${URLS.UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES}" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new window)</a>, <a href="${URLS.UNDERSTANDING_CQC_REGULATIONS}" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new window)</a>, or <a href=${URLS.NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA} target="_blank" rel="noopener noreferrer">DTAC (opens in a new window)</a>.`
+    description: `Find out more about <a href="${URLS.UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES}" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new window)</a>, <a href="${URLS.UNDERSTANDING_CQC_REGULATIONS}" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new window)</a>, or <a href=${URLS.NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA} target="_blank" rel="noopener noreferrer">DTAC (opens in a new window)</a>.`,
+    conditional: true
   },
   q3: {
-    label: 'Upload all certification documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.'
+    label: 'Upload all certification documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+    conditional: true
   }
 };
 
