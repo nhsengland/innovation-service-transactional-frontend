@@ -18,7 +18,7 @@
       <ng-container *ngIf="hasUploadedDocuments; else noDocsEmptyState">
 
         <form [formGroup]="form" class="d-flex flex-direction-column">
-          <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+          <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-0">
             <div *ngIf="uploadedByChips.length > 0">
               <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Show uploaded documents by' }" />
               <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
