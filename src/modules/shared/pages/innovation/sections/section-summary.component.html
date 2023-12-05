@@ -41,7 +41,7 @@
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
                       <dd  class="nhsuk-summary-list__actions">
-                        <a *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)" class="nhsuk-back-link__link cursor-pointer"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <a *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)" class="nhsuk-back-link__link"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       </dd>
                     </div>
                   </ng-container>
@@ -55,10 +55,10 @@
                       <span *ngIf="firstItem">Documents</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
-                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}" class="nhsuk-back-link__link cursor-pointer">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
+                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}" class="nhsuk-back-link__link">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details" class="nhsuk-back-link__link cursor-pointer">More details</a>
+                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details" class="nhsuk-back-link__link">More details</a>
                     </dd>
                   </div>
                 </ng-container>
@@ -74,7 +74,7 @@
                       <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link cursor-pointer">More details</a></p>
+                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link">More details</a></p>
                     </dd>
                   </div>
                 </ng-container>

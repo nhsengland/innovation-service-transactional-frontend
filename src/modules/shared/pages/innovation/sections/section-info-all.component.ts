@@ -118,7 +118,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
               wizard: new WizardEngineModel({}),
               allStepsList: {},
               date: '',
-              submittedBy: { name: '', displayTag: '' },
+              submittedBy: null,
               openTasksCount: 0
             };
   
