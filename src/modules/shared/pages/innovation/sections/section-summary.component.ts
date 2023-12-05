@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -45,11 +45,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   evidencesList: WizardSummaryType[] = []
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-  allSteps: {
-      label: string,
-      description?: string | undefined,
-      conditional?: boolean | undefined,
-    }[] = [];
+  allSteps: SectionStepsList = [];
 
   sectionSubmittedText: string = '';
   
@@ -98,7 +94,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.allSteps = Object.values(this.sectionInfo.allStepsList!);
 
-    
+
     // add conditional questions regarding evidences for 2.2
     if( this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS'){
       const evidencesToAdd: SectionStepsList = []
