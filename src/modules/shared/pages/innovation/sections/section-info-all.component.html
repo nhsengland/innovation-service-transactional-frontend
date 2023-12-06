@@ -31,83 +31,85 @@
 
         <h3 class="nhsuk-heading-l nhsuk-u-margin-0">{{ i + 1 }}. {{ item.title }}</h3>
         
-        <ng-container *ngFor="let section of item.sections; let j = index; ">
-          <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7 nhsuk-u-margin-bottom-2" [id]="section.id">
-            <a routerLink="{{ baseUrl }}/record/sections/{{section.id}}/">
-              {{ i + 1}}.{{ j + 1 }} {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
-            </a>
-          </h3>
-          <ng-container *ngIf="pageStatus === 'READY'">
-            <ng-container *ngIf="allSectionsData[section.id] as sectionData">
-              
-              <div class="nhsuk-u-margin-top-0 font-color-secondary ">
-                <span class="nhsuk-u-visually-hidden">Information: </span>
-                <p class="d-flex nhsuk-u-margin-0">
-                  <ng-container [ngSwitch]="sectionData.sectionInfo?.status?.id">
-                    
-                    <ng-container *ngSwitchCase="'NOT_STARTED'">
-                      <theme-svg-icon type="error"></theme-svg-icon>
-                      <span class="nhsuk-u-margin-right-2"></span>
-                      <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section has not been started yet.</span>
-                      
-                    </ng-container>
-                    
-                    <ng-container *ngSwitchCase="'DRAFT'">
-                      <theme-svg-icon type="edit"></theme-svg-icon>
-                      <span class="nhsuk-u-margin-right-2"></span>
-                      <ng-container *ngIf="isInnovatorType; else notInnovator" >
-                        <span *ngIf="innovation.status === 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft. You need to complete the section before you can submit your record for needs assessment.</span>
-                        <span *ngIf="innovation.status !== 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft and is not visible to others. Go to the section and submit updates to make it visible again.</span>
-                      </ng-container>
-                      <ng-template #notInnovator><span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft.</span></ng-template>
-                    </ng-container>
-                    
-                    <ng-container *ngSwitchCase="'SUBMITTED'">
-                      <ng-container *ngIf="sectionData.sectionInfo?.date !== '' && sectionData?.sectionInfo?.submittedBy !== null">
-                        <theme-svg-icon type="success"></theme-svg-icon>
-                        <span class="nhsuk-u-margin-right-2"></span>
-                        <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
-                          This section was last submitted by {{ sectionData.sectionInfo?.submittedBy?.name }} <ng-container *ngIf="sectionData.sectionInfo?.submittedBy?.displayTag !== undefined">({{ sectionData.sectionInfo?.submittedBy?.displayTag }})</ng-container> on {{ sectionData.sectionInfo?.date | date: ('app.date_formats.long_date' | translate) }}.
-                        </span>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                </p>
-              </div>
-
-              <div *ngIf="isInnovatorType && sectionData.sectionInfo!.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
-                <p>
-                  <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
-                  This section has {{ sectionData.sectionInfo?.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: sectionData.sectionInfo?.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{sectionData.sectionInfo?.id}}/tasks">View tasks.</a>
-                </p>
-              </div>
-
-              <ng-container *ngIf="isAccessorType && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
+        <ng-container *ngFor="let section of item.sections; let j = index; last as lastItem">
+          <div [ngClass]="lastItem ? 'nhsuk-u-margin-bottom-8' : 'nhsuk-u-margin-bottom-2'">
+            <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7"  [id]="section.id">
+              <a routerLink="{{ baseUrl }}/record/sections/{{section.id}}/">
+                {{ i + 1}}.{{ j + 1 }} {{'shared.catalog.innovation.innovation_sections.' + section.id | translate}}
+              </a>
+            </h3>
+            <ng-container *ngIf="pageStatus === 'READY'">
+              <ng-container *ngIf="allSectionsData[section.id] as sectionData">
                 
-                <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
-                  <span class="nhsuk-u-visually-hidden">Information:</span>
-                  <p>
-                    You cannot see this section because it is in draft. If you need to see this section, create a task or send a message to the innovator asking them to resubmit it.
+                <div class="nhsuk-u-margin-top-0 font-color-secondary ">
+                  <span class="nhsuk-u-visually-hidden">Information: </span>
+                  <p class="d-flex nhsuk-u-margin-0">
+                    <ng-container [ngSwitch]="sectionData.sectionInfo?.status?.id">
+                      
+                      <ng-container *ngSwitchCase="'NOT_STARTED'">
+                        <theme-svg-icon type="error"></theme-svg-icon>
+                        <span class="nhsuk-u-margin-right-2"></span>
+                        <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section has not been started yet.</span>
+                      </ng-container>
+                      
+                      <ng-container *ngSwitchCase="'DRAFT'">
+                        <theme-svg-icon type="edit"></theme-svg-icon>
+                        <span class="nhsuk-u-margin-right-2"></span>
+                        <ng-container *ngIf="isInnovatorType; else notInnovator" >
+                          <span *ngIf="innovation.status === 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft. You need to complete the section before you can submit your record for needs assessment.</span>
+                          <span *ngIf="innovation.status !== 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft and is not visible to others. Go to the section and submit updates to make it visible again.</span>
+                        </ng-container>
+                        <ng-template #notInnovator><span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft.</span></ng-template>
+                      </ng-container>
+                      
+                      <ng-container *ngSwitchCase="'SUBMITTED'">
+                        <ng-container *ngIf="sectionData.sectionInfo?.date !== '' && sectionData?.sectionInfo?.submittedBy !== null">
+                          <theme-svg-icon type="success"></theme-svg-icon>
+                          <span class="nhsuk-u-margin-right-2"></span>
+                          <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
+                            This section was last submitted by {{ sectionData.sectionInfo?.submittedBy?.name }} <ng-container *ngIf="sectionData.sectionInfo?.submittedBy?.displayTag !== undefined">({{ sectionData.sectionInfo?.submittedBy?.displayTag }})</ng-container> on {{ sectionData.sectionInfo?.date | date: ('app.date_formats.long_date' | translate) }}.
+                          </span>
+                        </ng-container>
+                      </ng-container>
+                    </ng-container>
                   </p>
                 </div>
-
-              </ng-container>
-
-              <ng-template #summaryComponent>
-                <shared-innovation-summary [sectionData]="getSectionSummaryData(section.id)" />
-              </ng-template>
+                
+                <div *ngIf="isInnovatorType && sectionData.sectionInfo!.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
+                  <p>
+                    <theme-tag type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"></theme-tag>
+                    This section has {{ sectionData.sectionInfo?.openTasksCount }} {{ ('dictionary.task' | pluralTranslate: sectionData.sectionInfo?.openTasksCount | translate)  }} to do. <a routerLink="/{{ baseUrl }}/record/sections/{{sectionData.sectionInfo?.id}}/tasks">View tasks.</a>
+                  </p>
+                </div>
               
+                <ng-container *ngIf="isAccessorType && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
+                  
+                  <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
+                    <span class="nhsuk-u-visually-hidden">Information:</span>
+                    <p>
+                      You cannot see this section because it is in draft. If you need to see this section, create a task or send a message to the innovator asking them to resubmit it.
+                    </p>
+                  </div>
+                  
+                </ng-container>
+              
+                <ng-template #summaryComponent>
+                  <shared-innovation-summary [sectionData]="getSectionSummaryData(section.id)" />
+                </ng-template>
+              
+              </ng-container>
             </ng-container>
-          </ng-container>
-          
-          
+          </div>
           
         </ng-container>
       </div>
     </ng-container>
-      
-    <ng-container *ngIf="!isInnovatorType && ['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status)">
-      <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Assign a task for a section</button>
+    
+    
+
+    <ng-container *ngIf="(innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType ||
+    (['NEEDS_ASSESSMENT','IN_PROGRESS','COMPLETE'].includes(innovation.status) && isAssessmentType)">
+      <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
     </ng-container>
     
   

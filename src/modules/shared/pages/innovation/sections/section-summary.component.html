@@ -13,7 +13,7 @@
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a href="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a href="javascript:void(0);" routerLink="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
                 </dd>
               </div>
             </ng-container>
@@ -41,7 +41,7 @@
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
                       <dd  class="nhsuk-summary-list__actions">
-                        <a href="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{item.editStepNumber}}" *ngIf="isInnovatorType && item.editStepNumber"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <a href="javascript:void(0);" routerLink="{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{item.editStepNumber}}" *ngIf="isInnovatorType && item.editStepNumber"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       </dd>
                     </div>
                   </ng-container>
@@ -74,7 +74,7 @@
                       <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link">More details</a></p>
+                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}">More details</a></p>
                     </dd>
                   </div>
                 </ng-container>
