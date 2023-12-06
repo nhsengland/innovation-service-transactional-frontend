@@ -37,7 +37,7 @@ const stepsLabels = {
     label: 'Does your team have the resources for scaling up to national deployment?',
     description: 'This includes having a team with the right combination of skills and knowledge.'
   },
-  q7: { label: 'Share any relevant implementation planning documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' },
+  // q7: { label: 'Share any relevant implementation planning documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' },
 
 };
 

@@ -30,11 +30,11 @@ export const stepsLabels = {
     description: 'Give a brief overview that covers the scope of the study and its key findings. Organisations will read this summary to see if any evidence is relevant to what they can help you with.',
     conditional: true
   },
-  q6: {
-    label: 'Upload any documents that support this evidence', 
-    description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
-    conditional: true 
-  }
+  // q6: {
+  //   label: 'Upload any documents that support this evidence', 
+  //   description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+  //   conditional: true 
+  // }
 };
 
 

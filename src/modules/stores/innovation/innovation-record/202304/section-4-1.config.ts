@@ -24,9 +24,9 @@ const stepsLabels = {
   q4: { label: 'What kind of testing with users have you done?', description: 'This can include any testing you have done with people who would use your innovation, for example patients, nurses or administrative staff.',
         conditional: true 
       },
-  q5: { label: 'Upload any documents that showcase your user testing', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
-        conditional: true
-      },
+  // q5: { label: 'Upload any documents that showcase your user testing', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+  //       conditional: true
+  //     },
 };
 
 // Types.
