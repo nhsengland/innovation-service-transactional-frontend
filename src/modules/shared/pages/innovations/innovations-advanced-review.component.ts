@@ -68,7 +68,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     super();
 
-    this.setPageTitle('Innovations advanced search');
+    this.setPageTitle('Advanced search');
 
     if(this.stores.authentication.isAdminRole()) {
       this.setPageTitle('Innovations');
