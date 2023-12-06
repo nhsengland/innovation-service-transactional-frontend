@@ -98,7 +98,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     // add conditional questions regarding evidences for 2.2
     if( this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS'){
       const evidencesToAdd: SectionStepsList = []
-      // this.allSteps.splice(1, 0, ...Object.values(stepsLabels));
       this.allSteps.push(...Object.values(stepsLabels));
     }
     // add conditional questions special cases regarding 4.1
