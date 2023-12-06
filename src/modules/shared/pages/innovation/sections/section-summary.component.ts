@@ -110,6 +110,11 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       const questionToAdd = {label: 'Do you have a certification for each standard?', conditional: true }
       this.allSteps.splice(2, 0, questionToAdd);
     }
+    // add conditional questions special cases regarding 5.2
+    if( this.sectionInfo.id === 'INTELLECTUAL_PROPERTY'){
+      const questionToAdd = {label: 'Patent number(s)', conditional: true }
+      this.allSteps.splice(1, 0, questionToAdd);
+    }
       
     
 
