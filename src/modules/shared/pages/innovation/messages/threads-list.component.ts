@@ -23,7 +23,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   // Filter
   form = new FormGroup({
-    subject: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
+    subject: new FormControl('', { validators: [Validators.maxLength(100)], updateOn: 'change' }),
     following: new FormControl(false, { updateOn: 'change' })
   });
 
