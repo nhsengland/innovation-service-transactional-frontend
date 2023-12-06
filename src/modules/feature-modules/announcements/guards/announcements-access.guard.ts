@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 
 @Injectable()
-export class AnnouncementsAccessGuard implements CanActivate {
+export class AnnouncementsAccessGuard  {
 
   constructor(
     private router: Router,

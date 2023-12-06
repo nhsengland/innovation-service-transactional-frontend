@@ -1,0 +1,16 @@
+.go-to-top {
+    font-size: 19px;
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 30px;
+  }
+  
+  .go-to-top__absolute {
+    position: absolute;
+  }
+  
+  @media (max-width: 48.0525em) {
+    .go-to-top {
+      display: none;
+    }
+  }

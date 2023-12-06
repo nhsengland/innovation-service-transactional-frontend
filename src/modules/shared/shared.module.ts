@@ -57,6 +57,8 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/sup
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from './pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/support-summary-progress-update.component';
+
+import { InnovationSectionSummaryComponent } from './pages/innovation/sections/section-summary.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -92,7 +94,8 @@ import { OrganisationsService } from './services/organisations.service';
 import { StatisticsService } from './services/statistics.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
-
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
 
 @NgModule({
   imports: [
@@ -149,12 +152,15 @@ import { UsersService } from './services/users.service';
     PageInnovationRecordDownloadComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
+    PageInnovationAllSectionsInfoComponent,
     PageInnovationSectionEvidenceInfoComponent,
     PageInnovationStatusListComponent,
     PageInnovationSupportStatusListComponent,
     PageInnovationSupportSummaryListComponent,
     PageInnovationSupportSummaryProgressUpdateDeleteComponent,
     PageInnovationSupportSummaryProgressUpdateComponent,
+
+    InnovationSectionSummaryComponent,
     // // Innovations.
     PageInnovationsAdvancedReviewComponent,
     // // Notifications.
@@ -190,7 +196,8 @@ import { UsersService } from './services/users.service';
     OrganisationsService,
     TermsOfUseService,
     StatisticsService,
-    UsersService
+    UsersService,
+    FileUploadService
   ],
   exports: [
     CommonModule,

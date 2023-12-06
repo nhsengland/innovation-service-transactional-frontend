@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToResolve, RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -76,6 +76,7 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -125,7 +126,7 @@ const routes: Routes = [
           {
             path: ':organisationId',
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
-            resolve: { organisation: OrganisationDataResolver },
+            resolve: { organisation: mapToResolve(OrganisationDataResolver) },
             data: { breadcrumb: (data: { organisation: { id: string, name: string, acronym: string } }) => `${data.organisation.name}` },
             children: [
               {
@@ -148,7 +149,8 @@ const routes: Routes = [
                   },
                   {
                     path: ':organisationUnitId',
-                    resolve: { organisationUnit: OrganisationUnitDataResolver },
+                    resolve: { organisationUnit: mapToResolve(OrganisationUnitDataResolver) },
+                    runGuardsAndResolvers: 'always',
                     data: { breadcrumb: (data: { organisationUnit: { id: string, name: string, acronym: string } }) => `${data.organisationUnit.name}` },
                     children: [
                       {
@@ -190,7 +192,7 @@ const routes: Routes = [
           { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
-            resolve: { user: ServiceUserDataResolver },
+            resolve: { user: mapToResolve(ServiceUserDataResolver) },
             data: { breadcrumb: (data: { user: { id: string, name: string } }) => `${data.user.name}` },
             children: [
               { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
@@ -228,7 +230,7 @@ const routes: Routes = [
           { path: 'new', pathMatch: 'full', component: PageAnnouncementNewditComponent },
           {
             path: ':announcementId',
-            resolve: { announcement: AnnouncementDataResolver },
+            resolve: { announcement: mapToResolve(AnnouncementDataResolver) },
             data: { breadcrumb: (data: { announcement: { id: string, title: string } }) => `${data.announcement.title}` },
             children: [
               {
@@ -305,7 +307,7 @@ const routes: Routes = [
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: InnovationDataResolver },
+            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             children: [
 
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
@@ -349,7 +351,11 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
+                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                        data: {
+                          breadcrumb: (data: RoutesDataType) => 'All sections'
+                        }, 
+                      },
                       {
                         path: ':sectionId',
                         children: [
@@ -403,7 +409,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationTaskDataResolver },
+                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -430,7 +436,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -440,7 +446,7 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { breadcrumb: null }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       }
                     ]
                   }

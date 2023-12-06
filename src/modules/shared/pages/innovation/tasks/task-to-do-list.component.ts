@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { UserRoleEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO, } from '@modules/shared/services/innovations.dtos';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
@@ -66,8 +66,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   ngOnInit(): void {
 
     this.userType = this.getUserType();
-
-
 
     this.allTasksList.setFilters({
       innovationId: this.innovationId,
@@ -128,7 +126,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     let tasksToDoTitle: string = '';
     switch (this.topList.count) {
-      case 0: 
+      case 0:
         tasksToDoTitle = 'You have no tasks to do';
         break;
       case 1:

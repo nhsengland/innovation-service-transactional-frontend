@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
@@ -97,8 +97,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         groupedStatus: innovation.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences).map(([_, item]) => `${item.count} ${item.text}`).join(', ')
       }
-
-      this.stores.context.dismissNotification(this.innovationId, {contextTypes: [NotificationContextTypeEnum.INNOVATION]}); // TODO: Verify notifications from admin
 
       this.setPageStatus('READY');
 

@@ -1,5 +1,5 @@
-<theme-header [showUserInformation]="true" [showSignOut]="true" [leftMenuBarItems]="header.menuBarItems.left" [rightMenuBarItems]="header.menuBarItems.right" [notifications]="header.notifications"></theme-header>
-<theme-header-breadcrumbs-bar></theme-header-breadcrumbs-bar>
+<theme-header id="theme-header" [showUserInformation]="true" [showSignOut]="true" [leftMenuBarItems]="header.menuBarItems.left" [rightMenuBarItems]="header.menuBarItems.right" [notifications]="header.notifications"></theme-header>
+<theme-header-breadcrumbs-bar id="theme-breadcrumbs-bar"></theme-header-breadcrumbs-bar>
 
 <div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden" [ngClass]="routeLayoutInfo.backgroundColor">
   <main id="maincontent" role="main" class="nhsuk-main-wrapper nhsuk-u-padding-0">
@@ -66,7 +66,7 @@
       <div class="app-pane">
 
         <div class="app-pane__side-bar">
-          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+          <nav id="left-aside-menu" class="app-side-nav" role="navigation" aria-label="Main Navigation">
 
             <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
               <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">

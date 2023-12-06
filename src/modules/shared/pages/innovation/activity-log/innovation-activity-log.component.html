@@ -147,7 +147,7 @@
               <ng-container [ngSwitch]="ACTIVITY_LOG_ITEMS[item.activity].details">
                 <ng-container *ngSwitchCase="'ORGANISATIONS_LIST'">
                   <dl class="nhsuk-summary-list nhsuk-u-margin-0 nhsuk-u-padding-top-2">
-                    <dt class="nhsuk-summary-list__key nhsuk-body-s">Organisation units</dt>
+                    <dt class="nhsuk-summary-list__key nhsuk-body-s">Organisations</dt>
                     <dd class="nhsuk-summary-list__value">
                       <ul class="nhsuk-list nhsuk-body-s">
                         <li *ngFor="let organisation of (item.params.organisations || [])" class="nhsuk-u-margin-0">{{ organisation }} </li>

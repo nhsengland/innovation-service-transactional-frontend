@@ -14,7 +14,8 @@ export type FormSelectableFieldType<T> = {
   label: 'SEPARATOR' | string,
   description?: string,
   group?: string,
-  conditional?: FormEngineParameterModel
+  conditional?: FormEngineParameterModel,
+  exclusive?: boolean
 }[];
 
 
@@ -22,7 +23,10 @@ export type InnovationSectionConfigType<T = InnovationSectionsVersions> = {
   id: T,
   title: string,
   wizard: WizardEngineModel,
-  evidences?: WizardEngineModel
+  evidences?: WizardEngineModel,
+  allStepsList?: InnovationSectionStepLabels
 };
 
 export type InnovationSectionsListType = { title: string, sections: InnovationSectionConfigType[] }[];
+
+export type InnovationSectionStepLabels = {[q:string]: {label: string, description?: string, conditional?: boolean}};

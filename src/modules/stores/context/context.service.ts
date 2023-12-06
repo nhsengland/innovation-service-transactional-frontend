@@ -6,12 +6,12 @@ import { map, take } from 'rxjs/operators';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from './context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
 
 
 type InnovationNotificationsDTO = {
   count: number;
-  data: { [key in NotificationContextTypeEnum]: number };
+  data: { [key in NotificationCategoryTypeEnum]: number };
 };
 
 
@@ -38,14 +38,14 @@ export class ContextService {
 
   }
 
-  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationContextTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<void> {
+  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<void> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/notifications/dismiss').setPathParams({ innovationId });
     return this.http.patch<void>(url.buildUrl(), conditions).pipe(take(1))
   }
 
-  dismissUserNotification(notificationId: string): Observable<{ affected: number}> {
+  dismissUserNotification(conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): Observable<{ affected: number}> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { notificationIds: [notificationId] }).pipe(take(1), map(response => response));
+    return this.http.patch<{ affected: number }>(url.buildUrl(), conditions).pipe(take(1), map(response => response));
   }
 
   getInnovationNotifications(innovationId: string): Observable<InnovationNotificationsDTO> {

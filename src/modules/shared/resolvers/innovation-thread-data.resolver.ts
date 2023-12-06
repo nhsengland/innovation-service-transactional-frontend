@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 
 import { InnovationsService } from '../services/innovations.service';
 
 
 @Injectable()
-export class InnovationThreadDataResolver implements Resolve<{ id: null | string, name: string }> {
+export class InnovationThreadDataResolver  {
 
   constructor(
     private innovationsService: InnovationsService

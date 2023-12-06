@@ -10,19 +10,28 @@ import { hasFundindItems, hasRevenueModelItems, revenuesItems } from './forms.co
 // Labels.
 const stepsLabels = {
   q1: { label: 'Do you have a model for generating revenue from your innovation?' },
-  q2: { label: 'What is the revenue model for your innovation?' },
+  q2: { 
+    label: 'What is the revenue model for your innovation?',
+    conditional: true      
+    },
   q3: {
     label: 'Which NHS or social care organisation and department do you think would pay for the innovation?',
-    description: 'Be as specific as you can.'
-  },
+    description: 'Be as specific as you can.',
+    conditional: true
+    },
   q4: {
     label: 'Which NHS or social care organisation and department would benefit from the innovation?',
-    description: 'Be as specific as you can.'
+    description: 'Be as specific as you can.',
+    conditional: true
   },
-  q5: { label: 'Have you secured funding for the next stage of development?' },
+  q5: { 
+    label: 'Have you secured funding for the next stage of development?',
+    conditional: true 
+  },
   q6: {
     label: 'Describe the funding you have secured for the next stage of development',
-    description: 'For example, venture capital, angel investor, seed funding, grant funding, government funding or similar.'
+    description: 'For example, venture capital, angel investor, seed funding, grant funding, government funding or similar.',
+    conditional: true
   }
 };
 
@@ -51,7 +60,8 @@ export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: InboundPayloadType, currentStep: number | 'summary'): void {

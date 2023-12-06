@@ -9,6 +9,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
 
+
 @Component({
   selector: 'theme-form-checkbox-array',
   templateUrl: './checkbox-array.component.html',
@@ -31,6 +32,8 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   isRunningOnBrowser: boolean;
   isRunningOnServer: boolean;
+
+  exclusiveItem: string | undefined = undefined;
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
@@ -70,6 +73,8 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
 
+    this.lookForAndSetExclusive();
+
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
 
@@ -83,16 +88,16 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
     });
 
   }
-
+  
   ngDoCheck(): void {
-
+    
     this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
     this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
-
+    
     this.items?.filter(item => item.conditional).forEach(item => {
-
+      
       if (item.conditional) {
-
+        
         if (item.conditional.isVisible && this.isConditionalFieldVisible(item.conditional.id)) {
           this.conditionalFormControl(item.conditional.id).setValidators(FormEngineHelper.getParameterValidators(item.conditional));
         }
@@ -103,31 +108,49 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
         this.conditionalFormControl(item.conditional.id).updateValueAndValidity();
 
       }
-
+      
     });
-
+    
     this.cdr.detectChanges();
-
+    
   }
-
-
+  
+  
   isChecked(value: string): boolean {
     return this.fieldArrayValues.includes(value);
   }
-
+  
   onChanged(e: Event): void {
-
+    
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
-
+    
     if (event.checked && valueIndex === -1) {
-      this.fieldArrayControl.push(new FormControl(event.value));
-    }
 
+      if (this.isItemExclusive(event.value) || this.isExclusiveChecked()){
+        this.fieldArrayControl.clear();
+      }
+      
+      this.fieldArrayControl.push(new FormControl(event.value));
+      
+    }
+    
     if (!event.checked && valueIndex > -1) {
       this.fieldArrayControl.removeAt(valueIndex);
     }
-
+    
+  }
+  
+  private isItemExclusive(value: string): boolean {
+    return this.exclusiveItem === value;
+  }
+  
+  private isExclusiveChecked(): boolean {
+    return this.exclusiveItem !== undefined && (this.fieldArrayControl.value as string[]).includes(this.exclusiveItem);
+  }
+  
+  private lookForAndSetExclusive() {
+    this.items?.forEach(item => item.exclusive && (this.exclusiveItem = item.value));
   }
 
 }

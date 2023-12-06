@@ -12,6 +12,7 @@ import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovati
 
 import { DatesHelper } from '@app/base/helpers';
 import { GetInnovationCollaboratorInvitesDTO, GetInnovationTransfersDTO, InnovatorService } from '../../services/innovator.service';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 
 @Component({
@@ -71,6 +72,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
+
+        // Throw notification read dismiss.
+        if (this.innovationTransfers.length) {
+          this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER, NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER] });
+        }
+
       } else {
         this.setAlertUnknownError();
       }

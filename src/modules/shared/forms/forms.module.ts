@@ -22,6 +22,7 @@ import { FormInputAutocompleteArrayComponent } from './components/input-autocomp
 // import { FormInputAutocompleteValueComponent } from './components/input-autocomplete-value.component';
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
+import { FormFileUploadDescriptiveComponent } from './components/file-upload-descriptive.component';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormInputAutocompleteArrayComponent,
     // FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormFileUploadDescriptiveComponent
   ],
   exports: [
     // CommonModule,
@@ -68,7 +70,8 @@ import { FormTextareaComponent } from './components/textarea.component';
     FormInputAutocompleteArrayComponent,
     // FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
-    FormTextareaComponent
+    FormTextareaComponent,
+    FormFileUploadDescriptiveComponent
   ]
 })
 export class FormsModule { }

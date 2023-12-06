@@ -6,28 +6,21 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { NotificationContextDetailEnum, NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 
-export enum EmailNotificationsTypeEnum { // Subset of NotificationContextTypeEnum.
-  TASK = 'TASK',
-  MESSAGE = 'MESSAGE',
-  SUPPORT = 'SUPPORT'
+export enum NotificationPreferenceEnum {
+  YES = 'YES',
+  NO = 'NO'
 }
-export enum EmailNotificationsPreferencesEnum {
-  NEVER = 'NEVER',
-  INSTANTLY = 'INSTANTLY',
-  DAILY = 'DAILY'
-}
-
 
 export type NotificationsListInDTO = {
   count: number;
   data: {
     id: string;
     innovation: { id: string, name: string, status: InnovationStatusEnum, ownerName: string };
-    contextType: NotificationContextTypeEnum;
+    contextType: NotificationCategoryTypeEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
     createdAt: DateISOType;
@@ -42,6 +35,20 @@ export type NotificationsListInDTO = {
       // Messages.
       subject?: string;
       messageId?: string;
+      // Documents.
+      fileId?: string;
+
+      threadId?: string;
+      unitId?: string;
+
+      assessmentId?: string;
+
+      exportRequestId?: string;
+
+      supportId?: string;
+
+      collaboratorId?: string;
+
     }
   }[];
 };
@@ -64,11 +71,9 @@ export type NotificationsListOutDTO = {
   )[]
 };
 
-type EmailNotificationPreferencesDTO = {
-  notificationType: EmailNotificationsTypeEnum,
-  preference: EmailNotificationsPreferencesEnum
+export type EmailNotificationPreferencesDTO = {
+  [category: string]: NotificationPreferenceEnum
 };
-
 
 @Injectable()
 export class NotificationsService extends CoreService {
@@ -76,7 +81,7 @@ export class NotificationsService extends CoreService {
   constructor() { super(); }
 
 
-  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
+  getNotificationsList(queryParams: APIQueryParamsType<{ contextTypes: NotificationCategoryTypeEnum[], unreadOnly: boolean }>): Observable<NotificationsListOutDTO> {
 
     const { filters, ...qParams } = queryParams;
 
@@ -96,64 +101,149 @@ export class NotificationsService extends CoreService {
           let link: null | { label: string; url: string; queryParams?: Record<string, string> } = null;
 
           switch (item.contextType) {
-            case NotificationContextTypeEnum.NEEDS_ASSESSMENT:
+
+            // TASK
+            case NotificationCategoryTypeEnum.TASK:
               switch (item.contextDetail) {
-                case NotificationContextDetailEnum.NEEDS_ASSESSMENT_STARTED:
-                  link = null;
+                case NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR:
+                  link = { label: 'Click to view task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
                   break;
                 default:
-                  link = { label: 'Click to go to innovation assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.contextId}` };
+                  link = { label: 'Click to view message about this task.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
+                  break;
+                }
+              break;
+
+            // DOCUMENTS
+            case NotificationCategoryTypeEnum.DOCUMENTS:
+              link = { label: 'Click to view document.', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents/${item.params?.fileId}`};
+              break;
+
+            // MESSAGES
+            case NotificationCategoryTypeEnum.MESSAGES:
+                link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` };
+                break;
+
+            // SUPPORT
+            case NotificationCategoryTypeEnum.SUPPORT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING:
+                case NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR:
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
+                  break;
+
+                case NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER:
+                case NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING:
+                case NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS:
+                case NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } };
+                  break;
+
+                case NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA:
+                case NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
               }
               break;
-            case NotificationContextTypeEnum.INNOVATION:
+
+            //NEEDS ASSESMENT
+            case NotificationCategoryTypeEnum.NEEDS_ASSESSMENT:
               switch (item.contextDetail) {
-                case NotificationContextDetailEnum.COLLABORATOR_INVITE:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                case NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
-                case NotificationContextDetailEnum.COLLABORATOR_UPDATE:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.contextId}` };
+                case NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR:
+                  link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.params?.threadId}` }
                   break;
-                case NotificationContextDetailEnum.INNOVATION_WITHDRAWN:
-                  link = null;
+                case NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR:
+                  link = { label: 'Click to go to needs assessment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.params?.assessmentId}` }
                   break;
-                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
-                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
-                  break;
-                default:
-                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
-                  break;
-              };
-              break;
-            case NotificationContextTypeEnum.SUPPORT:
-              switch (item.contextDetail) {
-                case NotificationContextDetailEnum.SUPPORT_SUMMARY_UPDATE:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.contextId } };
-                  break;
-                default:
-                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` };
+                case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED:
+                case NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED:
+                  link = { label: 'Click to go to innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
               }
               break;
-            case NotificationContextTypeEnum.TASK:
-              link = { label: 'Click to go to task', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/tasks/${item.contextId}` };
-              break;
-            case NotificationContextTypeEnum.THREAD:
-              link = { label: 'Click to go to message', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads/${item.contextId}` };
-              break;
-            case NotificationContextTypeEnum.DATA_SHARING:
+
+            // ORGANISATIONS SUGGESTIONS
+            case NotificationCategoryTypeEnum.ORGANISATION_SUGGESTIONS:
               switch (item.contextDetail) {
-                case NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED:
-                  link = { label: 'Click to go to data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                case NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA:
+                case NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
                   break;
-                default:
-                  link = { label: 'Click to go to innovation data sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` };
+                case NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR:
+                  link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
                   break;
-              };
+              }
               break;
-            // case NotificationContextTypeEnum.COMMENT:
-            //   link = { label: 'Click to go to comment', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/comments` };
-            //   break;
+
+            // INNOVATION MANAGEMENT
+            case NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED:
+                  link = { label: 'Click to go to request', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
+                case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
+                  link = { label: 'Click to go to reason', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item.params?.exportRequestId}` }
+                  break;
+                case NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER:
+                  link = { label: 'Click to go to collaboration', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.params?.collaboratorId}` }
+                  break;
+                case NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE:
+                case NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE:
+                  link = { label: 'Click to go to manage collaborators', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation/collaborators` }
+                  break;
+                case NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/`}
+                  break;
+                case NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS:
+                  link = { label: 'Click to go to threads', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/threads` }
+                  break;
+                case NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER:
+                  link = { label: 'Click to go to manage innovation', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation` }
+                  break;
+              }
+              break;
+
+            // ADMIN
+            case NotificationCategoryTypeEnum.ADMIN:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS:
+                  link = { label: 'Click to go to sharing preferences', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support` }
+                  break;
+              }
+              break;
+
+            // AUTOMATIC
+            case NotificationCategoryTypeEnum.AUTOMATIC:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD:
+                  link = { label: 'Click to go to innovation record', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record` }
+                  break;
+                case NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT:
+                  link = { label: 'Click to go to innovation support summary', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`, queryParams: { unitId: item.params?.unitId ?? '' } }
+                  break;
+                case NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT:
+                  link = { label: 'Click to go to how to proceed', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/how-to-proceed` }
+                  break;
+                case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
+                case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
+                case NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING:
+                  link = { label: 'Click to go to innovation overview', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview` }
+                  break;
+                case NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/` }
+                  break;
+                case NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED:
+                  link = { label: 'Click to go to dashboard', url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation` }
+                  break;
+
+              }
+              break;
           }
 
           const section = item.params?.section ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section) : undefined;
@@ -200,17 +290,17 @@ export class NotificationsService extends CoreService {
   }
 
 
-  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO[]> {
+  getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
-    return this.http.get<EmailNotificationPreferencesDTO[]>(url.buildUrl()).pipe(
+    return this.http.get<EmailNotificationPreferencesDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
 
   }
 
-  updateEmailNotificationsPreferences(body: EmailNotificationPreferencesDTO[]): Observable<boolean> {
+  updateEmailNotificationsPreferences(body: {preferences: EmailNotificationPreferencesDTO}): Observable<boolean> {
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.put(url.buildUrl(), body).pipe(take(1), map(() => true));
@@ -218,3 +308,5 @@ export class NotificationsService extends CoreService {
   }
 
 }
+export { NotificationCategoryTypeEnum };
+

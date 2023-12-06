@@ -20,12 +20,15 @@
       </dd>
     </div>
 
-    <div *ngIf="innovationSupport.engagingAccessors.length > 0" class="nhsuk-summary-list__row">
+    <div *ngIf="innovationSupport.engagingAccessors.length > 0 || innovationSupport.status === 'ENGAGING'" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
       <dd class="nhsuk-summary-list__value">
           <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
             <li *ngFor="let accessor of innovationSupport.engagingAccessors">
               {{accessor.name}}
+            </li>
+            <li *ngIf="innovationSupport.engagingAccessors.length === 0">
+              No accessors assigned
             </li>
           </ul>
       </dd>

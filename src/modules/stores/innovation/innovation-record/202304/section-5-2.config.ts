@@ -51,7 +51,8 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
     showSummary: true,
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {

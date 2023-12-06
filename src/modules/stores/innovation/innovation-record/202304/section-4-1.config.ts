@@ -18,9 +18,15 @@ const stepsLabels = {
     label: 'Have you tested your innovation with its intended users in a real life setting?',
     description: 'Do not include any testing you have done with users in a controlled setting.'
   },
-  q3: { label: 'Which groups of intended users have you engaged with?' },
-  q4: { label: 'What kind of testing with users have you done?', description: 'This can include any testing you have done with people who would use your innovation, for example patients, nurses or administrative staff.' },
-  q5: { label: 'Upload any documents that showcase your user testing', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' },
+  q3: { label: 'Which groups of intended users have you engaged with?',
+        conditional: true 
+      },
+  q4: { label: 'What kind of testing with users have you done?', description: 'This can include any testing you have done with people who would use your innovation, for example patients, nurses or administrative staff.',
+        conditional: true 
+      },
+  // q5: { label: 'Upload any documents that showcase your user testing', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+  //       conditional: true
+  //     },
 };
 
 // Types.
@@ -55,7 +61,8 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {

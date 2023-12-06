@@ -17,7 +17,8 @@ const stepsLabels = {
   },
   q2: {
     label: 'Describe the potential care pathway with your innovation in use',
-    description: 'Focus on any areas that will be impacted by introducing your innovation to the care pathway.'
+    description: 'Focus on any areas that will be impacted by introducing your innovation to the care pathway.',
+    conditional: true
   }
 };
 
@@ -46,7 +47,8 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {

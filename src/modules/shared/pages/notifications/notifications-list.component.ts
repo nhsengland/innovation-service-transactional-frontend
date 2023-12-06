@@ -6,9 +6,10 @@ import { CoreComponent } from '@app/base';
 import { FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { NotificationContextTypeEnum } from '@modules/stores/context/context.enums';
+import { ANotificationCategories, InnovatorNotificationCategories, NANotificationCategories, NotificationCategoryTypeEnum, QANotificationCategories } from '@modules/stores/context/context.enums';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
+import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 
 
 type FilterKeysType = 'contextTypes';
@@ -25,7 +26,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
 
   notificationsList = new TableModel<
     NotificationsListOutDTO['data'][0],
-    { contextTypes: NotificationContextTypeEnum[], unreadOnly: boolean }
+    { contextTypes: NotificationCategoryTypeEnum[], unreadOnly: boolean }
   >();
 
   form = new FormGroup({
@@ -64,12 +65,29 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       action: { label: 'Action', align: 'right', orderable: false }
     }).setOrderBy('createdAt', 'descending');
 
-    const contextTypesSubset = this.stores.authentication.isAssessmentType() ?
-      [NotificationContextTypeEnum.NEEDS_ASSESSMENT, NotificationContextTypeEnum.INNOVATION, NotificationContextTypeEnum.SUPPORT, NotificationContextTypeEnum.TASK, NotificationContextTypeEnum.THREAD] :
-      Object.values(NotificationContextTypeEnum);
+    const userType = this.stores.authentication.getUserType();
+
+    let contextTypesSubset: NotificationCategoryTypeEnum[];
+    switch(userType) {
+      case UserRoleEnum.INNOVATOR:
+        contextTypesSubset = InnovatorNotificationCategories;
+        break;
+      case UserRoleEnum.ASSESSMENT:
+        contextTypesSubset = NANotificationCategories;
+        break;
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
+        contextTypesSubset = QANotificationCategories;
+        break;
+      case UserRoleEnum.ACCESSOR:
+        contextTypesSubset = ANotificationCategories;
+        break;
+      default:
+        contextTypesSubset = [];
+        break;
+    }
 
     this.datasets.contextTypes = contextTypesSubset.map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.title.plural`),
+      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.${userType}.title`),
       value: item
     }));
 
@@ -107,7 +125,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       return;
     }
 
-    this.stores.context.dismissUserNotification(notificationId);
+    this.stores.context.dismissUserNotification({notificationIds: [notificationId]});
 
     if (url) {
       // Stop event propagation to avoid triggering the href link
@@ -178,6 +196,8 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       contextTypes: this.form.get('contextTypes')!.value,
       unreadOnly: this.form.get('unreadOnly')!.value
     });
+
+    this.notificationsList.setPage(1);
 
     this.getNotificationsList();
 

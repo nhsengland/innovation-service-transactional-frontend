@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormControl, FormGroup } from '@app/base/forms';
+import { CustomValidators, FileTypes, FormControl, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 
@@ -20,7 +20,9 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     innovation: { id: '' },
     teams: [],
     subject: '',
-    message: ''
+    message: '',
+    file: null,
+    fileName: ''
   };
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
@@ -31,10 +33,17 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   form = new FormGroup({
     subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
     message: new FormControl<string>('', CustomValidators.required('A message is required')),
+    file: new FormControl<File | null>(null, [CustomValidators.emptyFileValidator(), CustomValidators.maxFileSizeValidator(20)]),
+    fileName: new FormControl<string>(''),
     confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
   }, { updateOn: 'blur' });
 
   formConfirmationField = { label: '', description: '' };
+
+  configInputFile = {
+    acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
+    maxFileSize: 20 // In Mb.
+  }
 
   constructor() { super(); }
 
@@ -45,6 +54,8 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
     this.form.get('subject')?.setValue(this.data.subject);
     this.form.get('message')?.setValue(this.data.message);
+    this.form.get('file')?.setValue(this.data.file);
+    this.form.get('fileName')?.setValue(this.data.fileName);
     if (!this.stores.authentication.isInnovatorType()) {
       this.form.get('confirmation')?.setValue(true);
     }
@@ -58,11 +69,12 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
 
   }
 
-
   prepareOutputData(): SubjectMessageStepOutputType {
     return {
       subject: this.form.value.subject ?? '',
-      message: this.form.value.message ?? ''
+      message: this.form.value.message ?? '',
+      file: this.form.value.file ?? null,
+      fileName: this.form.value.fileName ?? ''
     }
   }
 

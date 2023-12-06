@@ -2,11 +2,11 @@
 
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
-      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} <span *ngIf="lengthLimit" class="nhsuk-u-visually-hidden"> {{ 'Limited to ' + lengthLimitCharacters + ' characters' }} </span> </label>
     </h1>
   </ng-container>
   <ng-container *ngIf="label && !pageUniqueField">
-    <label class="nhsuk-label" [for]="id"> {{ label }} </label>
+    <label class="nhsuk-label" [for]="id"> {{ label }} <span *ngIf="lengthLimit" class="nhsuk-u-visually-hidden"> {{ 'Limited to ' + lengthLimitCharacters + ' characters' }} </span> </label>
   </ng-container>
 
   <ng-container *ngIf="description">
@@ -19,10 +19,12 @@
     </span>
   </ng-container>
 
-  <input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [ngClass]="inputCssClass"
+  <input #input [formControl]="fieldControl" [id]="id" [name]="controlName" [type]="type" [placeholder]="placeholder" [value]="fieldControl.value" [maxlength]="lengthLimitCharacters ?? null" class="nhsuk-input" [ngClass]="inputCssClass"
     [attr.aria-invalid]="hasError ? 'true' : null"
     [attr.aria-describedby]="ariaDescribedBy" />
 
   <ng-content select="[append]"></ng-content>
+
+  <div *ngIf="lengthLimit" class="nhsuk-hint" aria-live="polite">You have {{ currentAvailableCharacters }} characters remaining</div>
 
 </div>

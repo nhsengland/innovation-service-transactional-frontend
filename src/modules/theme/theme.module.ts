@@ -32,6 +32,9 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { TagComponent } from './components/tag/tag.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
+import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
+import { ChipsFilterComponent } from './components/chips/chips-filter-component';
+import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
 
 
 @NgModule({
@@ -69,7 +72,13 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
-    StatisticsCardsComponent
+    StatisticsCardsComponent,
+
+    InnovationRecordExportComponent,
+
+    ChipsFilterComponent,
+    
+    GoToTopComponent
   ],
   providers: [],
   exports: [
@@ -100,7 +109,13 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
-    StatisticsCardsComponent
+    StatisticsCardsComponent,
+    
+    ChipsFilterComponent,
+
+    InnovationRecordExportComponent,
+
+    GoToTopComponent
   ]
 })
 export class ThemeModule { }

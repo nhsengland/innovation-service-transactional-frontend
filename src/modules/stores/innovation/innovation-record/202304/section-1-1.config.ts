@@ -19,8 +19,8 @@ const stepsLabels = {
       <p>If you are not part of a company or organisation, put where you are based.</p>
       <p>We ask this to identify the organisations and people who are in the best position to support you.</p>`
   },
-  q4: { label: 'What is your head office postcode?' },
-  q5: { label: 'Which country is your head office located in?' },
+  q4: { label: 'What is your head office postcode?', conditional: true },
+  q5: { label: 'Which country is your head office located in?', conditional: true  },
   q6: { label: 'Does your innovation have a website?' },
   q7: { label: 'Select all the categories that can be used to describe your innovation' },
   q8: { label: 'Select a primary category to describe your innovation'},
@@ -79,7 +79,8 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+  }),
+  allStepsList: stepsLabels
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
@@ -171,6 +172,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'careSettings', dataType: 'checkbox-array', label: stepsLabels.q10.label,
+        validations: { isRequired: [true, 'Choose at least one category'] },
         items: [
           ...careSettingsItems,
           { value: 'OTHER', label: 'Other', conditional: new FormEngineParameterModel({ id: 'otherCareSetting', dataType: 'text', label: 'Other care setting', validations: { isRequired: [true, 'Other care setting description is required'], maxLength: 100 } }) }
@@ -201,7 +203,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [{
         id: 'involvedAACProgrammes', dataType: 'checkbox-array', label: stepsLabels.q14.label, description: stepsLabels.q14.description,
-        items: involvedAACProgrammesItems
+        validations: { isRequired: [true, 'Choose at least one category'] },
+        items: [...involvedAACProgrammesItems]
       }]
     })
   );

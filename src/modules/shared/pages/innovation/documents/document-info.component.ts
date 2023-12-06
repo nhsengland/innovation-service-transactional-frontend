@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { NotificationCategoryTypeEnum } from '@app/base/enums';
 
 import { InnovationDocumentInfoOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
@@ -50,6 +51,11 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
         this.canDelete = response.canDelete;
 
+        // Throw notification read dismiss.
+        if (this.stores.authentication.isInnovatorType()) {
+          this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS], contextIds: [this.documentInfo.id] });
+        }
+
         this.setPageStatus('READY');
 
       },
@@ -87,7 +93,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`);
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');

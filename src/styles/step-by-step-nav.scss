@@ -25,12 +25,12 @@ $top-border: solid 1px $nhsuk-border-color;
 
 @mixin step-nav-line-position {
   left: 0;
-  margin-left: ($number-circle-size / 2) - ($stroke-width / 2);
+  margin-left: ($number-circle-size * 0.5) - ($stroke-width * 0.5);
 }
 
 @mixin step-nav-line-position-large {
   left: 0;
-  margin-left: ($number-circle-size-large / 2) - ($stroke-width-large / 2);
+  margin-left: ($number-circle-size-large * 0.5) - ($stroke-width-large * 0.5);
   border-width: $stroke-width-large;
 }
 
@@ -166,8 +166,8 @@ $top-border: solid 1px $nhsuk-border-color;
   .app-step-nav--large & {
     @include govuk-media-query($from: tablet) {
       &:before {
-        margin-left: $number-circle-size-large / 4;
-        width: $number-circle-size-large / 2;
+        margin-left: $number-circle-size-large * 0.25;
+        width: $number-circle-size-large * 0.5;
         border-width: $stroke-width-large;
       }
 

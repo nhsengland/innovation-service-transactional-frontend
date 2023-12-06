@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToResolve, RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -70,6 +70,8 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 
 
 const header: RoutesDataType['header'] = {
@@ -120,7 +122,7 @@ const routes: Routes = [
           {
             path: ':innovationId',
             runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
-            resolve: { innovationData: InnovationDataResolver },
+            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             data: {
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
@@ -206,7 +208,11 @@ const routes: Routes = [
                     children: [
 
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-
+                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                        data: {
+                          breadcrumb: (data: RoutesDataType) => 'All sections'
+                        }, 
+                      },
                       {
                         path: ':sectionId',
                         children: [
@@ -251,7 +257,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: InnovationDocumentDataResolver },
+                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string, name: string } }) => `${data.document.name}`
@@ -286,7 +292,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: InnovationTaskDataResolver },
+                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -325,7 +331,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: InnovationThreadDataResolver },
+                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -335,7 +341,11 @@ const routes: Routes = [
                     children: [
                       {
                         path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
-                        data: { breadcrumb: null }
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
                         path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,
@@ -349,7 +359,7 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Support status' },
-                resolve: { innovationData: InnovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
+                resolve: { innovationData: mapToResolve(InnovationDataResolver) }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
@@ -457,7 +467,7 @@ const routes: Routes = [
                 data: { breadcrumb: null }
               },
               {
-                path: 'edit/:notificationType', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
+                path: 'edit', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }

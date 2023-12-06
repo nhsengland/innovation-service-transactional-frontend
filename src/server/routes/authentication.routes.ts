@@ -143,6 +143,13 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
 
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, async (req, res) => {
+  const authenticated = req.session.id && await getAccessTokenBySessionId(req.session.id);
+  // Skip login if already authenticated
+  if(authenticated) {
+    res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
+    return;
+  }
+  
   // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
   await getAuthCode(authorities.signin, 'LOGIN', res, req.query.back?.toString() ?? undefined);
 });

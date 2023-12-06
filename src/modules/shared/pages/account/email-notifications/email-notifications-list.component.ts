@@ -2,23 +2,27 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationsPreferencesEnum, EmailNotificationsTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { EmailNotificationPreferencesDTO, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
-
+import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
 @Component({
-  selector: 'shared-pages-account-email-notifications-list',
+  selector: 'app-assessment-account-email-notifications-list',
   templateUrl: './email-notifications-list.component.html'
 })
 export class PageAccountEmailNotificationsListComponent extends CoreComponent implements OnInit {
 
-  notificationTypeList: { type: EmailNotificationsTypeEnum, preference: EmailNotificationsPreferencesEnum }[] = [];
-
-  isAnySubscribed = true;
-
-  hasMultipleRoles = false;
+  isAnyOn: boolean = false;
+  hasMultipleRoles: boolean = false;
   currentRole: null | { id: string, description: string };
   displayName: string;
+
+  currentUserContext: AuthenticationModel['userContext'];
+
+  formPreferencesList: { value: string, cssClass: string, preference: string, title: string, description: string }[] = [];
+
+  preferencesResponse: EmailNotificationPreferencesDTO;
+
 
   constructor(
     private notificationsService: NotificationsService,
@@ -26,19 +30,23 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   ) {
 
     super();
-    this.setPageTitle('Email notifications');
+
+    this.setPageTitle('Email notifications preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 
-    const currentUserContext = this.authenticationStore.getUserContextInfo();
+    this.currentUserContext = this.authenticationStore.getUserContextInfo();
 
-    if (!currentUserContext) { this.currentRole = null; }
-    else {
+    if (!this.currentUserContext) {
+      this.currentRole = null;
+    } else {
       this.currentRole = {
-        id: currentUserContext.roleId,
-        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
+        id: this.currentUserContext.roleId,
+        description: `${this.authenticationStore.getRoleDescription(this.currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${this.currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
       };
     }
+
+    this.preferencesResponse = {};
 
   }
 
@@ -53,20 +61,48 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
     this.setPageStatus('LOADING');
 
-    this.notificationsService.getEmailNotificationsPreferences().subscribe(
-      response => {
+    this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
 
-        this.notificationTypeList = response.map(item => ({
-          type: item.notificationType,
-          preference: item.preference
-        })).sort((a, b) => a.type.localeCompare(b.type)); // Sort by type.
+      this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
 
-        this.isAnySubscribed = this.notificationTypeList.some(item => item.preference !== EmailNotificationsPreferencesEnum.NEVER);
+      this.formPreferencesList = Object.keys(response).map((category) => ({
+        value: category,
+        preference: this.getCategoryToggleInfo(response[category]).status,
+        cssClass: this.getCategoryToggleInfo(response[category]).cssClass,
+        title: this.getCategoryMessages(category).title,
+        description: this.getCategoryMessages(category).description
+      }));
 
-        this.setPageStatus('READY');
+      this.preferencesResponse = response;
 
+      this.setPageStatus('READY');
+    });
+
+  }
+
+  unsubscribeAllNotifications(): void {
+
+    this.setPageStatus('LOADING');
+
+    const body: { preferences: EmailNotificationPreferencesDTO } = { preferences: {} };
+
+
+    Object.keys(this.preferencesResponse).forEach(key => {
+      body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES;
+    });
+
+    this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({
+      next: () => {
+        this.getEmailNotificationTypes();
+      },
+      complete: () => {
+        this.setAlertSuccess('Your email notification preferences have been updated');
+      },
+      error: () => {
+        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
       }
-    );
+    });
+
   }
 
   private checkMultipleRoles(): void {
@@ -79,26 +115,31 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   }
 
+  private getCategoryMessages(category: string): { title: string, description: string } {
 
-  unsubscribeAllNotifications(): void {
+    const role = this.currentUserContext?.type;
 
-    this.setPageStatus('LOADING');
+    if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)) {
+      return {
+        title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.title'),
+        description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.description')
+      };
+    } else {
+      return {
+        title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.SHARED.title'),
+        description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.SHARED.description')
+      };
+    };
 
-    const body = [
-      { notificationType: EmailNotificationsTypeEnum.TASK, preference: EmailNotificationsPreferencesEnum.NEVER },
-      { notificationType: EmailNotificationsTypeEnum.MESSAGE, preference: EmailNotificationsPreferencesEnum.NEVER },
-      { notificationType: EmailNotificationsTypeEnum.SUPPORT, preference: EmailNotificationsPreferencesEnum.NEVER }
-    ];
+  };
 
-    this.notificationsService.updateEmailNotificationsPreferences(body).subscribe(
-      () => {
-        this.getEmailNotificationTypes();
-        this.setAlertSuccess('Your notification preferences have been saved');
-      },
-      () => {
-        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
-      }
-    );
+  private getCategoryToggleInfo(status: string): { cssClass: string, status: string } {
+
+    if (status === 'YES') {
+      return { cssClass: 'nhsuk-tag--green', status: 'On' };
+    } else {
+      return { cssClass: 'nhsuk-tag--grey', status: 'Off' };
+    }
+
   }
-
 }

@@ -43,7 +43,6 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
 
   const response = await generatePDFHandler(innovationId, content, config);
 
-
   return response;
 
 };

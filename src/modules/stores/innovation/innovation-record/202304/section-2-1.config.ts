@@ -1,7 +1,7 @@
 import { URLS } from '@app/base/constants';
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
 
-import { InnovationSectionConfigType } from '../ir-versions.types';
+import { InnovationSectionConfigType, InnovationSectionStepLabels } from '../ir-versions.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
@@ -9,7 +9,7 @@ import { benefitsOrImpactItems, carbonReductionPlanItems, diseasesConditionsImpa
 
 
 // Labels.
-const stepsLabels = {
+const stepsLabels: InnovationSectionStepLabels = {
   q1: {
     label: 'What problem is your innovation trying to solve?',
     description: `
@@ -26,7 +26,8 @@ const stepsLabels = {
   q4: { label: 'Does your innovation impact a disease or condition?' },
   q5: {
     label: 'What diseases or conditions does your innovation impact?',
-    description: 'Start typing to view conditions. You can select as many conditions as you like.'
+    description: 'Start typing to view conditions. You can select as many conditions as you like.',
+    conditional: true
   },
   q6: {
     label: 'Have you estimated the carbon reduction or savings that your innovation will bring?',
@@ -34,9 +35,13 @@ const stepsLabels = {
     <p>All NHS suppliers will be expected to provide the carbon footprint associated with the use of their innovation, as outlined in the <a href=${URLS.DELIVERING_A_NET_ZERO_NHS} target="_blank" rel="noopener noreferrer">Delivering a Net Zero NHS report (opens in a new window)</a>.</p>
     <p>If this is something you are unsure of, the NHS Innovation Service can support you with this.</p>`
   },
-  q7: {
-    labelYES: 'Provide the estimates and how this was calculated',
-    labelNOTYET: 'Explain how you plan to calculate carbon reduction savings'
+  q7_a: {
+    label: 'Provide the estimates and how this was calculated',
+    conditional: true
+  },
+  q7_b: {
+    label: 'Explain how you plan to calculate carbon reduction savings',
+    conditional: true
   },
   q8: {
     label: 'Do you have or are you working on a carbon reduction plan (CRP)?',
@@ -51,13 +56,14 @@ const stepsLabels = {
   q10: {
     label: 'Have you completed a health inequalities impact assessment?',
     description: `
-      <p>By this, we mean a document or template which asks you about the impact of your innovation on health inequalities.</p>
-      <p>One example is the Equality Impact Assessment Standard produced by the <a href=${URLS.NHSRHO} target="_blank" rel="noopener noreferrer">NHS Race and Health Observatory (opens in a new window)</a>.</p>`
+      <p>By this, we mean a document or template which assesses the impact of your innovation on health inequalities and on those with protected characteristics. Health inequalities are the unfair and avoidable differences in health across the population, and between different groups within society.</p>
+      <p>An example of a completed health inequalities impact assessment can be found on <a href=${URLS.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA} target="_blank" rel="noopener noreferrer">NHS England's web page (opens in a new window)</a>.</p>`
   },
-  q11: {
-    label: 'Upload the health inequalities impact assessment, or any relevant documents',
-    description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB.'
-  }
+  // q11: {
+  //   label: 'Upload the health inequalities impact assessment, or any relevant documents',
+  //   description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB.',
+  //   conditional: true
+  // }
 };
 
 
@@ -106,15 +112,16 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
     showSummary: true,
     runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-  })
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+  }),
+  allStepsList: stepsLabels
 };
 
 
 function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentStep: number | 'summary'): void {
-
+  
   steps.splice(4);
-
+  
   if (data.impactDiseaseCondition === 'YES') {
     steps.push(
       new FormEngineModel({
@@ -128,7 +135,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
   } else {
     delete data.diseasesConditionsImpact;
   }
-
+    
   steps.push(
     new FormEngineModel({
       parameters: [{
@@ -138,12 +145,12 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       }]
     })
   );
-
+      
   if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
     steps.push(
       new FormEngineModel({
         parameters: [{
-          id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7.labelYES : stepsLabels.q7.labelNOTYET,
+          id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
           validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'xl'
         }]
@@ -152,7 +159,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
   } else {
     delete data.estimatedCarbonReductionSavingsDescription;
   }
-
+    
   steps.push(
     new FormEngineModel({
       parameters: [{
@@ -176,11 +183,11 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       }]
     })
   );
-
+    
 }
-
+    
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
+  
   return {
     ...(data.problemsTackled && { problemsTackled: data.problemsTackled }),
     ...(data.howInnovationWork && { howInnovationWork: data.howInnovationWork }),
@@ -193,15 +200,15 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
     ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment })
   };
-
+  
 }
-
+  
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
+  
   const toReturn: WizardSummaryType[] = [];
-
+  
   let editStepNumber = 1;
-
+  
   toReturn.push(
     {
       label: stepsLabels.q1.label,
@@ -238,15 +245,14 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     value: yesNotYetNoItems.find(item => item.value === data.estimatedCarbonReductionSavings)?.label,
     editStepNumber: editStepNumber++
   });
-
+  
   if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
     toReturn.push({
-      label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7.labelYES : stepsLabels.q7.labelNOTYET,
+      label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
       value: data.estimatedCarbonReductionSavingsDescription,
       editStepNumber: editStepNumber++
     });
   }
-
 
   toReturn.push(
     {
@@ -267,5 +273,5 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   );
 
   return toReturn;
-
+  
 }

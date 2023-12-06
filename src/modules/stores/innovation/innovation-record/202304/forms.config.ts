@@ -289,8 +289,9 @@ export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
 ];
 
 export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolvedAACProgrammes> = [
-  { value: 'No', label: 'No' },
-  { value: 'Academic Health Science Network', label: 'Academic Health Science Network' },
+  { value: 'No', label: 'No', exclusive: true },
+  { value: 'SEPARATOR', label: 'SEPARATOR' },
+  { value: 'Health Innovation Network', label: 'Health Innovation Network' },
   { value: 'Artificial Intelligence in Health and Care Award', label: 'Artificial Intelligence in Health and Care Award' },
   { value: 'Clinical Entrepreneur Programme', label: 'Clinical Entrepreneur Programme' },
   { value: 'Early Access to Medicines Scheme', label: 'Early Access to Medicines Scheme' },
@@ -526,7 +527,8 @@ export const keyHealthInequalitiesItems: FormSelectableFieldType<catalogKeyHealt
   { value: 'CHRONIC_RESPIRATORY_DISEASE', label: 'Chronic respiratory disease' },
   { value: 'EARLY_CANCER_DIAGNOSIS', label: 'Early cancer diagnosis' },
   { value: 'HYPERTENSION_CASE_FINDING', label: 'Hypertension case finding and optimal management and lipid optimal management' },
-  { value: 'NONE', label: 'None of those listed' }
+  { value: 'SEPARATOR', label: 'SEPARATOR' },
+  { value: 'NONE', label: 'None of those listed', exclusive: true }
 ];
 
 // // Section 2.2.
@@ -534,7 +536,8 @@ export const needsSupportAnyAreaItems: FormSelectableFieldType<catalogNeedsSuppo
   { value: 'RESEARCH_GOVERNANCE', label: 'Research governance, including research ethics approvals' },
   { value: 'DATA_SHARING', label: 'Data sharing' },
   { value: 'CONFIDENTIAL_PATIENT_DATA', label: 'Use of confidential patient data' },
-  { value: 'DO_NOT_NEED_SUPPORT', label: 'No, I do not need support' }
+  { value: 'SEPARATOR', label: 'SEPARATOR' },
+  { value: 'DO_NOT_NEED_SUPPORT', label: 'No, I do not need support', exclusive: true }
 ];
 
 // // Section 2.2. Evidences.

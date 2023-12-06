@@ -11,19 +11,22 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 
-type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE';
+export type ContextTypeType = 'INNOVATION' | 'INNOVATION_SECTION' | 'INNOVATION_EVIDENCE' | 'INNOVATION_PROGRESS_UPDATE' | 'INNOVATION_MESSAGE';
 
 export type InnovationDocumentsListFiltersType = {
   name?: null | string,
   contextTypes?: ContextTypeType[],
-  contextId?: string;
-  fields?: ('description')[]
+  units?: string[],
+  contextId?: string,
+  fields?: ('description')[],
+  dateFilter?: { field: 'createdAt', startDate?: string, endDate?: string }[],
+  uploadedBy?: UserRoleEnum[]
 }
 type InnovationDocumentsListInDTO = {
   count: number,
   data: {
     id: string,
-    context: { type: ContextTypeType, id: string, name?: string },
+    context: { type: ContextTypeType, id: string, name?: string, threadId?: string },
     name: string,
     description?: string;
     createdAt: DateISOType,
@@ -41,7 +44,7 @@ export type InnovationDocumentsListOutDTO = {
 
 type InnovationDocumentInfoInDTO = {
   id: string,
-  context: { type: ContextTypeType, id: string, name?: string },
+  context: { type: ContextTypeType, id: string, name?: string, threadId?: string },
   name: string,
   description?: string,
   createdAt: DateISOType,
@@ -77,6 +80,9 @@ export class InnovationDocumentsService extends CoreService {
       ...(filters.contextId && { contextId: filters.contextId }),
       ...(filters.contextTypes && { contextTypes: filters.contextTypes }),
       ...(filters.fields && { fields: filters.fields }),
+      ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
+      ...(filters.uploadedBy && { uploadedBy: filters.uploadedBy }),
+      ...(filters.units && { units: filters.units }),
     };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/files').setPathParams({ innovationId }).setQueryParams(qp);
@@ -93,17 +99,16 @@ export class InnovationDocumentsService extends CoreService {
             case 'INNOVATION_EVIDENCE':
               description = item.context.name ?? '';
               break;
+            case 'INNOVATION_MESSAGE':
+              description = item.context.name ?? '';
+              break;
             default:
               break;
           }
 
           let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
           if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-            switch (item.createdBy.isOwner) {
-              case undefined: userDescription += ''; break;
-              case true: userDescription += ' (Owner)'; break;
-              case false: userDescription += ' (Collaborator)'; break;
-            }
+            item.createdBy.name === '[deleted user]' ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
           } else {
             userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
           }
@@ -142,17 +147,17 @@ export class InnovationDocumentsService extends CoreService {
             description = item.context.name ?? '';
             descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${item.context.id}`;
             break;
+          case 'INNOVATION_MESSAGE':
+            description = item.context.name ?? '';
+            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/threads/${item.context.threadId}`;
+            break;
           default:
             break;
         }
 
         let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-          switch (item.createdBy.isOwner) {
-            case undefined: userDescription += ''; break;
-            case true: userDescription += ' (Owner)'; break;
-            case false: userDescription += ' (Collaborator)'; break;
-          }
+          item.createdBy.name === '[deleted user]' ? userDescription : userDescription += (item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
         } else {
           userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : ''
         }

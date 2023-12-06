@@ -95,7 +95,6 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     if (this.userType === UserRoleEnum.INNOVATOR) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(this.innovationId);
-      this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.INNOVATION_ORGANISATION_SUGGESTION_NOT_SHARED] })
     }
 
     if (this.userType === UserRoleEnum.ADMIN || this.userType === UserRoleEnum.ASSESSMENT || this.userType === UserRoleEnum.ACCESSOR || this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
@@ -148,6 +147,16 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
         }
 
       });
+
+      if (this.userType === UserRoleEnum.INNOVATOR) {
+
+        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR, NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR] });
+
+        if (this.innovation.loggedUser.isOwner) {
+          this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS] });
+        }
+
+      }
 
       this.setPageStatus('READY');
 

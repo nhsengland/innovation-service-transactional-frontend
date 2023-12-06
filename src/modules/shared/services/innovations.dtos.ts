@@ -162,7 +162,12 @@ export type SupportSummaryOrganisationsListDTO = {
     id: string,
     name: string,
     sameOrganisation: boolean,
-    support: { status: InnovationSupportStatusEnum, start?: DateISOType, end?: DateISOType }
+    support: {
+      id?: string,
+      status: InnovationSupportStatusEnum,
+      start?: DateISOType,
+      end?: DateISOType
+    }
   }[]
 };
 export type SupportSummaryOrganisationHistoryDTO = {
