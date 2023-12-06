@@ -50,8 +50,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
-    this.setBackLink('Go back');
-
   }
 
 
