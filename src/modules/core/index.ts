@@ -12,4 +12,3 @@ export { CookiesService } from './services/cookies.service';
 
 // Stores
 export { EnvironmentVariablesStore } from './stores/environment-variables.store';
-

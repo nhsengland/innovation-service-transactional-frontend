@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <div *ngIf="!assessmentHasBeenSubmitted" class="full-width-section">
         <div class="nhsuk-inset-text nhsuk-u-margin-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
@@ -11,28 +9,36 @@
       </div>
 
       <ng-container *ngFor="let section of form.sections; let i = index">
-
-        <div class="full-width-section nhsuk-u-padding-top-5" [ngClass]="{'bg-color-white': (i % 2)}">
+        <div class="full-width-section nhsuk-u-padding-top-5" [ngClass]="{ 'bg-color-white': i % 2 }">
           <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
           <theme-form-engine formId="assessmentForm" [parameters]="section.parameters" [values]="form.data" (formChanges)="onFormChange()"></theme-form-engine>
         </div>
-
       </ng-container>
 
       <div class="full-width-section bg-color-white">
-
         <div *ngIf="stepId === 2 && !assessmentHasBeenSubmitted" class="nhsuk-inset-text nhsuk-u-margin-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p> When you submit, the innovation, along with your needs assessment, will become visible to all organisations that the innovator has chosen to share their data with. </p>
+          <p>When you submit, the innovation, along with your needs assessment, will become visible to all organisations that the innovator has chosen to share their data with.</p>
         </div>
 
         <ng-container *ngIf="stepId === 1">
-          <button [disabled]="this.saveButton.disabled" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('saveAsDraft')">{{ saveButton.label }}</button>
+          <button [disabled]="this.saveButton.disabled" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('saveAsDraft')">
+            {{ saveButton.label }}
+          </button>
         </ng-container>
 
         <ng-container *ngIf="stepId > 1">
-          <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">{{assessmentHasBeenSubmitted ? 'Update' : 'Submit'}} needs assessment</button>
-          <button *ngIf="!assessmentHasBeenSubmitted" [disabled]="this.saveButton.disabled" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onSubmit('saveAsDraft')">{{ saveButton.label }}</button>
+          <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">
+            {{ assessmentHasBeenSubmitted ? "Update" : "Submit" }} needs assessment
+          </button>
+          <button
+            *ngIf="!assessmentHasBeenSubmitted"
+            [disabled]="this.saveButton.disabled"
+            class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5"
+            (click)="onSubmit('saveAsDraft')"
+          >
+            {{ saveButton.label }}
+          </button>
         </ng-container>
 
         <p *ngIf="!assessmentHasBeenSubmitted">This document is autosaved every minute.</p>
@@ -64,5 +70,4 @@
       </div>
     </div>
   </div>
-
 </theme-content-wrapper>

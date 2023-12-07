@@ -1,22 +1,33 @@
 <div class="nhsuk-checkboxes">
   <div class="nhsuk-checkboxes__item" [ngClass]="cssClass">
-
     <ng-container *ngIf="isRunningOnBrowser">
-      <input [formControl]="fieldControl" [id]="id" type="checkbox" [name]="controlName" class="nhsuk-checkboxes__input" [attr.aria-describedby]="description ? '{{ id }}-hint' : null" />
+      <input
+        [formControl]="fieldControl"
+        [id]="id"
+        type="checkbox"
+        [name]="controlName"
+        class="nhsuk-checkboxes__input"
+        [attr.aria-describedby]="description ? '{{ id }}-hint' : null"
+      />
     </ng-container>
 
     <ng-container *ngIf="isRunningOnServer">
-      <input [id]="id" type="checkbox" [name]="controlName" [value]="true" [checked]="fieldControl.value === true" class="nhsuk-checkboxes__input" [attr.aria-describedby]="description ? '{{ id }}-hint' : null" />
+      <input
+        [id]="id"
+        type="checkbox"
+        [name]="controlName"
+        [value]="true"
+        [checked]="fieldControl.value === true"
+        class="nhsuk-checkboxes__input"
+        [attr.aria-describedby]="description ? '{{ id }}-hint' : null"
+      />
     </ng-container>
 
     <label for="{{ id }}" class="nhsuk-label nhsuk-checkboxes__label">{{ label }}</label>
     <div *ngIf="description" id="{{ id }}-hint" class="nhsuk-hint nhsuk-checkboxes__hint" [innerHTML]="description"></div>
 
     <ng-container *ngIf="hasError">
-      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-        <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
-      </span>
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
     </ng-container>
-
   </div>
 </div>

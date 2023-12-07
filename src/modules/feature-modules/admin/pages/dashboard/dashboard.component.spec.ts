@@ -12,10 +12,7 @@ import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
 
 import { PageDashboardComponent } from './dashboard.component';
 
-
-
 describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
@@ -25,13 +22,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -41,9 +32,7 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
     authenticationStore = TestBed.inject(AuthenticationStore);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageDashboardComponent);
@@ -68,5 +57,4 @@ describe('FeatureModules/Admin/Pages/Dashboard/PageDashboardComponent', () => {
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

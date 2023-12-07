@@ -15,47 +15,26 @@ import { HeaderComponent } from '@modules/theme/components/header/header.compone
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
 import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
 
-
 describe('AppComponent running SERVER side', () => {
-
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        ActivityTimeoutComponent
-      ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'server' }
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
+      providers: [{ provide: PLATFORM_ID, useValue: 'server' }]
     });
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
-
   });
-
 });
 
-
-
 describe('AppComponent running CLIENT side', () => {
-
   let router: Router;
 
   let cookiesService: CookiesService;
@@ -65,21 +44,11 @@ describe('AppComponent running CLIENT side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        AppComponent,
-        HeaderComponent,
-        FooterComponent,
-        ActivityTimeoutComponent
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
@@ -88,18 +57,14 @@ describe('AppComponent running CLIENT side', () => {
     cookiesService = TestBed.inject(CookiesService);
 
     cookiesService.getConsentCookie = () => ({ consented: true, necessary: true, analytics: true });
-
   });
 
   it('should create the component and execute navigation code', () => {
-
     fixture = TestBed.createComponent(AppComponent);
     component = fixture.componentInstance;
 
     router.navigateByUrl('/'); // Simulate router navigation.
 
     expect(component).toBeTruthy();
-
   });
-
 });

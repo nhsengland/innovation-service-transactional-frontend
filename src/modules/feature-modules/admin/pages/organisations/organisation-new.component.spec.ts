@@ -25,13 +25,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -42,7 +36,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
     authenticationStore = TestBed.inject(AuthenticationStore);
     usersService = TestBed.inject(AdminUsersService);
     adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
-
   });
 
   beforeEach(() => {
@@ -128,5 +121,4 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationNewComponent'
   //   expect(routerSpy).toHaveBeenCalledWith(['organisations'], {});
 
   // });
-
 });

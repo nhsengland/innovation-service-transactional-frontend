@@ -3,14 +3,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SvgIconComponent } from './svg-icon.component';
 
 describe(`'SvgIconComponent suite'`, () => {
-
   let component: SvgIconComponent;
   let fixture: ComponentFixture<SvgIconComponent>;
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
       imports: [RouterTestingModule],
-      declarations: [SvgIconComponent],
+      declarations: [SvgIconComponent]
     });
   }));
 
@@ -23,5 +22,4 @@ describe(`'SvgIconComponent suite'`, () => {
   it('should create instance', () => {
     expect(component).toBeTruthy();
   });
-
 });

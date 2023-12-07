@@ -16,30 +16,34 @@ enum SubmitButton {
 }
 
 type CancelState = { type: 'CANCEL' };
-type SuccessState = { type: 'SUCCESS', redirectTo: string, queryParams?: MappedObjectType, alertMessage?: string };
+type SuccessState = { type: 'SUCCESS'; redirectTo: string; queryParams?: MappedObjectType; alertMessage?: string };
 type ErrorState = { type: 'ERROR' };
-type ChangeTitleState = { type: 'CHANGE_TITLE', title: string };
-type PageLoadingState = { type: 'PAGE_STATUS', isLoading: boolean };
-export type UserInformationComponentState = CancelState | SuccessState | ErrorState | ChangeTitleState | PageLoadingState;
+type ChangeTitleState = { type: 'CHANGE_TITLE'; title: string };
+type PageLoadingState = { type: 'PAGE_STATUS'; isLoading: boolean };
+export type UserInformationComponentState =
+  | CancelState
+  | SuccessState
+  | ErrorState
+  | ChangeTitleState
+  | PageLoadingState;
 
 @Component({
   selector: 'app-admin-pages-user-information',
-  templateUrl: './user-information.component.html',
+  templateUrl: './user-information.component.html'
 })
 export class UserInformationComponent implements OnInit {
-
   @Input() user: null | (UserInfo & { rolesDescription: string[] }) = null;
 
   @Input() parentData: null | {
     flags: {
-      isBaseCreate: boolean,
-      isTeamCreate: boolean,
-      isUnitCreate: boolean,
-    },
+      isBaseCreate: boolean;
+      isTeamCreate: boolean;
+      isUnitCreate: boolean;
+    };
     queryParams: {
-      organisationId?: string,
-      unitId?: string,
-      team: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN
+      organisationId?: string;
+      unitId?: string;
+      team: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN;
     };
   } = null;
 
@@ -47,29 +51,27 @@ export class UserInformationComponent implements OnInit {
 
   componentData: {
     validations: {
-      isNonCompatibleRole?: boolean,
-      isFromOtherOrg?: boolean,
-      isFromSameUnit?: boolean,
-    },
-    isAddRoleValid?: boolean,
-    existingRole?: UserRoleEnum,
-    unitName?: string,
+      isNonCompatibleRole?: boolean;
+      isFromOtherOrg?: boolean;
+      isFromSameUnit?: boolean;
+    };
+    isAddRoleValid?: boolean;
+    existingRole?: UserRoleEnum;
+    unitName?: string;
   } = { validations: {} };
 
-  submitButton: { isDisabled: boolean, label: SubmitButton } = { isDisabled: false, label: SubmitButton.USER_DETAILS };
+  submitButton: { isDisabled: boolean; label: SubmitButton } = { isDisabled: false, label: SubmitButton.USER_DETAILS };
 
   constructor(
     private usersValidationService: UsersValidationRulesService,
     private organisationsService: OrganisationsService,
     private usersService: AdminUsersService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
     let role: null | UserRoleEnum = null;
 
     if (this.parentData && this.user) {
-
       const isAdmin = this.user.roles.some(r => r.role === UserRoleEnum.ADMIN);
       const isInnovator = this.user.roles.some(r => r.role === UserRoleEnum.INNOVATOR);
       const isNonCompatible = isAdmin || isInnovator || this.parentData.queryParams.team === UserRoleEnum.ADMIN;
@@ -83,9 +85,10 @@ export class UserInformationComponent implements OnInit {
       }
 
       if (this.componentData.isAddRoleValid) {
-
         if (this.parentData.flags.isUnitCreate) {
-          const existingRole = this.user.roles.find(r => r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR);
+          const existingRole = this.user.roles.find(
+            r => r.role === UserRoleEnum.QUALIFYING_ACCESSOR || r.role === UserRoleEnum.ACCESSOR
+          );
           if (existingRole) {
             role = existingRole.role;
           }
@@ -102,17 +105,14 @@ export class UserInformationComponent implements OnInit {
         } else {
           this.submitButton.label = SubmitButton.CONTINUE;
         }
-
       }
 
       this.getUnitName();
       this.buildTitle();
     }
-
   }
 
   onSubmit(): void {
-
     if (!this.user) {
       return;
     }
@@ -129,33 +129,42 @@ export class UserInformationComponent implements OnInit {
           return;
         }
 
-        this.usersService.addRoles(this.user.id, { role, organisationId, unitIds: unitId ? [unitId] : undefined }).subscribe({
-          next: () => {
-            if (this.user && this.parentData) {
-              if (this.parentData.flags.isUnitCreate) {
-                this.changeComponentState({
-                  type: 'SUCCESS',
-                  redirectTo: `/admin/organisations/${this.parentData.queryParams.organisationId}/unit/${this.parentData.queryParams.unitId}`,
-                  alertMessage: 'A new user has been added to the unit'
-                });
-              } else if (this.parentData.flags.isTeamCreate) {
-                this.changeComponentState({ type: 'SUCCESS', redirectTo: `/admin/organisations/${this.parentData.queryParams.team}`, alertMessage: 'A new user has been added to this team' });
+        this.usersService
+          .addRoles(this.user.id, { role, organisationId, unitIds: unitId ? [unitId] : undefined })
+          .subscribe({
+            next: () => {
+              if (this.user && this.parentData) {
+                if (this.parentData.flags.isUnitCreate) {
+                  this.changeComponentState({
+                    type: 'SUCCESS',
+                    redirectTo: `/admin/organisations/${this.parentData.queryParams.organisationId}/unit/${this.parentData.queryParams.unitId}`,
+                    alertMessage: 'A new user has been added to the unit'
+                  });
+                } else if (this.parentData.flags.isTeamCreate) {
+                  this.changeComponentState({
+                    type: 'SUCCESS',
+                    redirectTo: `/admin/organisations/${this.parentData.queryParams.team}`,
+                    alertMessage: 'A new user has been added to this team'
+                  });
+                }
               }
+            },
+            error: () => {
+              this.changeComponentState({ type: 'ERROR' });
             }
-          },
-          error: () => { this.changeComponentState({ type: 'ERROR' }); },
-        });
+          });
         break;
       case SubmitButton.CONTINUE:
         this.changeComponentState({
           type: 'SUCCESS',
           redirectTo: `/admin/users/${this.user?.id}/role/new`,
-          queryParams: { organisationId: this.parentData?.queryParams.organisationId, unitId: this.parentData?.queryParams.unitId }
+          queryParams: {
+            organisationId: this.parentData?.queryParams.organisationId,
+            unitId: this.parentData?.queryParams.unitId
+          }
         });
         break;
     }
-
-
   }
 
   emitCancel(): void {
@@ -165,33 +174,42 @@ export class UserInformationComponent implements OnInit {
   private validateRules(userId: string, role: UserRoleEnum, organisationUnitId?: string): void {
     this.changeComponentState({ type: 'PAGE_STATUS', isLoading: true });
 
-    this.usersValidationService.canAddRole(
-      userId,
-      { role, ...((role === UserRoleEnum.ACCESSOR || role === UserRoleEnum.QUALIFYING_ACCESSOR) && { organisationUnitIds: organisationUnitId ? [organisationUnitId] : [] }) }
-    ).subscribe({
-      next: (rules) => {
-
-        const isValid = !rules.some(r => !r.valid);
-        if (!isValid) {
-          this.componentData.isAddRoleValid = isValid;
-        }
-
-        this.componentData.validations.isFromOtherOrg = rules.some(r => r.rule === ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation && !r.valid);
-        this.componentData.validations.isFromSameUnit = rules.some(r => r.rule === ValidationRuleEnum.UserAlreadyHasRoleInUnit && !r.valid);
-
-        if (!this.componentData.isAddRoleValid) {
-          this.submitButton.label = SubmitButton.USER_DETAILS;
-
-          if(!this.componentData.validations.isFromOtherOrg && !this.componentData.validations.isFromSameUnit) {
-            this.componentData.validations.isNonCompatibleRole = true;
+    this.usersValidationService
+      .canAddRole(userId, {
+        role,
+        ...((role === UserRoleEnum.ACCESSOR || role === UserRoleEnum.QUALIFYING_ACCESSOR) && {
+          organisationUnitIds: organisationUnitId ? [organisationUnitId] : []
+        })
+      })
+      .subscribe({
+        next: rules => {
+          const isValid = !rules.some(r => !r.valid);
+          if (!isValid) {
+            this.componentData.isAddRoleValid = isValid;
           }
-        }
 
-        this.buildTitle();
-        this.changeComponentState({ type: 'PAGE_STATUS', isLoading: false });
-      },
-      error: () => { this.changeComponentState({ type: 'ERROR' }); }
-    });
+          this.componentData.validations.isFromOtherOrg = rules.some(
+            r => r.rule === ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation && !r.valid
+          );
+          this.componentData.validations.isFromSameUnit = rules.some(
+            r => r.rule === ValidationRuleEnum.UserAlreadyHasRoleInUnit && !r.valid
+          );
+
+          if (!this.componentData.isAddRoleValid) {
+            this.submitButton.label = SubmitButton.USER_DETAILS;
+
+            if (!this.componentData.validations.isFromOtherOrg && !this.componentData.validations.isFromSameUnit) {
+              this.componentData.validations.isNonCompatibleRole = true;
+            }
+          }
+
+          this.buildTitle();
+          this.changeComponentState({ type: 'PAGE_STATUS', isLoading: false });
+        },
+        error: () => {
+          this.changeComponentState({ type: 'ERROR' });
+        }
+      });
   }
 
   private getUnitName(): void {
@@ -203,36 +221,36 @@ export class UserInformationComponent implements OnInit {
     }
 
     this.organisationsService.getOrganisationUnitInfo(organisationId, unitId).subscribe({
-      next: (unit) => {
+      next: unit => {
         this.componentData.unitName = unit.name;
         this.buildTitle();
       },
-      error: () => { this.changeComponentState({ type: 'ERROR' }); }
-    })
+      error: () => {
+        this.changeComponentState({ type: 'ERROR' });
+      }
+    });
   }
 
   private buildTitle(): void {
-
     let title = 'This user already exists on the service';
     let displayTeam = this.getDisplayTeam();
 
     if ((this.parentData?.flags.isUnitCreate && this.componentData.unitName) || this.parentData?.flags.isTeamCreate) {
-
       if (this.componentData.isAddRoleValid === false) {
-        title += `. You can not add them to the ${displayTeam}`
+        title += `. You can not add them to the ${displayTeam}`;
       } else {
-        title += `. Do you want to add them to the ${displayTeam}?`
+        title += `. Do you want to add them to the ${displayTeam}?`;
       }
-
     }
 
-    this.changeComponentState({ type: 'CHANGE_TITLE', title })
-
+    this.changeComponentState({ type: 'CHANGE_TITLE', title });
   }
 
   private getDisplayTeam(): string {
     if (this.parentData?.flags.isTeamCreate) {
-      return this.parentData.queryParams.team === UserRoleEnum.ASSESSMENT ? 'needs assessment team' : 'service administrators';
+      return this.parentData.queryParams.team === UserRoleEnum.ASSESSMENT
+        ? 'needs assessment team'
+        : 'service administrators';
     }
     return this.componentData.unitName ?? 'Unknown';
   }

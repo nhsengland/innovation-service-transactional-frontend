@@ -1,10 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
-
-  
   <div class="d-flex align-items-center justify-content-space-between">
     <h2 class="nhsuk-heading-m">Needs Assessment team</h2>
   </div>
-
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
@@ -15,22 +12,31 @@
       <h2 class="nhsuk-card__heading nhsuk-heading-m">Recent innovations you have worked on</h2>
       <ul class="nhsuk-list">
         <li *ngFor="let item of latestInnovations.getRecords()" class="bottom-border-separator nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-0">
-          <a  class="d-flex align-items-center justify-content-space-between" *ngIf="!item.assessment?.id" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation"> 
+          <a
+            class="d-flex align-items-center justify-content-space-between"
+            *ngIf="!item.assessment?.id"
+            routerLink="/assessment/innovations/{{ item.id }}"
+            attr.aria-label="View {{ item.name }} innovation"
+          >
             <span>{{ item.name }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="nhsuk-icon nhsuk-icon__chevron-right" viewBox="0 0 24 24" aria-hidden="true" height="34" width="34">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"  fill="#4c6272"/>
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z" fill="#4c6272" />
             </svg>
           </a>
-          <a class="d-flex align-items-center justify-content-space-between" *ngIf="item.assessment?.id" routerLink="/assessment/innovations/{{ item.id }}/assessments/{{item.assessment?.id}}" attr.aria-label="View {{ item.name }} innovation assessment details">
+          <a
+            class="d-flex align-items-center justify-content-space-between"
+            *ngIf="item.assessment?.id"
+            routerLink="/assessment/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
+            attr.aria-label="View {{ item.name }} innovation assessment details"
+          >
             <span>{{ item.name }}</span>
 
             <svg xmlns="http://www.w3.org/2000/svg" class="nhsuk-icon nhsuk-icon__chevron-right" viewBox="0 0 24 24" aria-hidden="true" height="34" width="34">
-              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"  fill="#4c6272"/>
+              <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z" fill="#4c6272" />
             </svg>
           </a>
         </li>
       </ul>
     </div>
   </div>
-
 </theme-content-wrapper>

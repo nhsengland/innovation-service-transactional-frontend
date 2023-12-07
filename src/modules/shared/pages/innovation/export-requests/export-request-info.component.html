@@ -1,16 +1,14 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <dl class="nhsuk-summary-list">
-
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Request status</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            {{ 'shared.catalog.innovation.export_request_status.' + innovationRequest?.status + '.name' | translate }}
+            {{ "shared.catalog.innovation.export_request_status." + innovationRequest?.status + ".name" | translate }}
             <span *ngIf="innovationRequest?.status !== 'PENDING'" class="font-color-secondary nhsuk-body-s">
-              by {{ innovationRequest?.updatedBy?.name }} on {{ innovationRequest?.updatedAt | date: ('app.date_formats.long_date' | translate) }}</span>
+              by {{ innovationRequest?.updatedBy?.name }} on {{ innovationRequest?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</span
+            >
           </dd>
         </div>
 
@@ -19,7 +17,7 @@
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             {{ innovationRequest?.createdBy?.displayTeam }}
             <span class="font-color-secondary nhsuk-body-s">
-              by {{ innovationRequest?.createdBy?.name }} on {{ innovationRequest?.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              by {{ innovationRequest?.createdBy?.name }} on {{ innovationRequest?.createdAt | date: ("app.date_formats.long_date" | translate) }}
             </span>
           </dd>
         </div>
@@ -33,24 +31,17 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Reason for rejection</dt>
           <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ innovationRequest?.rejectReason }}</dd>
         </div>
-
       </dl>
 
       <ng-container *ngIf="isSupportTeamType">
-        <button *ngIf="innovationRequest?.status === 'PENDING'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('CANCELLED')">
-          Cancel request
-        </button>
-        <button *ngIf="innovationRequest?.status === 'REJECTED'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">
-          Request again
-        </button>
+        <button *ngIf="innovationRequest?.status === 'PENDING'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('CANCELLED')">Cancel request</button>
+        <button *ngIf="innovationRequest?.status === 'REJECTED'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">Request again</button>
       </ng-container>
 
       <ng-container *ngIf="isInnovatorType && innovationRequest?.status === 'PENDING'">
         <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('APPROVED')">Approve request</button>
         <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="rejectRequestRedirect()">Reject request</button>
       </ng-container>
-
     </div>
   </div>
-
 </theme-content-wrapper>

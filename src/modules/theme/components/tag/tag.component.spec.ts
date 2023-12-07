@@ -6,31 +6,21 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { TagComponent } from './tag.component';
 
-
 describe('Theme/Components/Tag/TagComponent', () => {
-
   let component: TagComponent;
   let fixture: ComponentFixture<TagComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ThemeModule
-      ],
-      declarations: [
-
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, ThemeModule],
+      declarations: []
     });
 
     fixture = TestBed.createComponent(TagComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create instance', () => {
     expect(component).toBeTruthy();
   });
-
 });

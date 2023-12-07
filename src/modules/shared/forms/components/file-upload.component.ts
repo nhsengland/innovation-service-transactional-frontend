@@ -11,7 +11,6 @@ import { LoggerService, Severity } from '@modules/core/services/logger.service';
 import { FileTypes, FileUploadType } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
-
 @Component({
   selector: 'theme-form-file-upload',
   templateUrl: 'file-upload.component.html',
@@ -19,7 +18,6 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormFileUploadComponent implements OnInit, DoCheck {
-
   @Input() id?: string;
   @Input() groupName = '';
   @Input() label?: string;
@@ -27,13 +25,16 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
 
   @Input()
-  set config(c: undefined | {
-    httpUploadUrl: string,
-    httpUploadBody?: { [key: string]: any },
-    acceptedFiles?: FileTypes[],
-    maxFileSize?: number // In Mb.
-  }) {
-
+  set config(
+    c:
+      | undefined
+      | {
+          httpUploadUrl: string;
+          httpUploadBody?: { [key: string]: any };
+          acceptedFiles?: FileTypes[];
+          maxFileSize?: number; // In Mb.
+        }
+  ) {
     this.fileConfig = {
       httpUploadUrl: c?.httpUploadUrl ?? '',
       httpUploadBody: c?.httpUploadBody
@@ -41,23 +42,22 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
 
     this.dzConfig = {
       acceptedFiles: (c?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
-      maxFileSize: c?.maxFileSize ? (c.maxFileSize * 1000000) : 1000000, // 1Mb.
+      maxFileSize: c?.maxFileSize ? c.maxFileSize * 1000000 : 1000000, // 1Mb.
       multiple: false
     };
+  }
 
-  };
-
-  uploadedFile: null | { id: string, file: File } = null;
+  uploadedFile: null | { id: string; file: File } = null;
   previousUploadedFile: null | FileUploadType = null;
 
   hasError = false;
   hasUploadError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
   isLoadingFile = false;
 
   fileConfig: {
-    httpUploadUrl: string,
-    httpUploadBody?: { [key: string]: any }
+    httpUploadUrl: string;
+    httpUploadBody?: { [key: string]: any };
   } = { httpUploadUrl: '' };
 
   dzConfig: {
@@ -67,14 +67,22 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   } = { acceptedFiles: '*', multiple: false, maxFileSize: 1000000 };
 
   // Form controls.
-  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldGroupControl(): FormGroup { return this.parentFieldControl?.get(this.groupName) as FormGroup; }
+  get parentFieldControl(): AbstractControl | null {
+    return this.injector.get(ControlContainer).control;
+  }
+  get fieldGroupControl(): FormGroup {
+    return this.parentFieldControl?.get(this.groupName) as FormGroup;
+  }
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
     let s = '';
-    if (this.description) { s += `hint-${this.id}`; }
-    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    if (this.description) {
+      s += `hint-${this.id}`;
+    }
+    if (this.hasError) {
+      s += `${s ? ' ' : ''}error-${this.id}`;
+    }
     return s || null;
   }
 
@@ -83,38 +91,38 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     private cdr: ChangeDetectorRef,
     private http: HttpClient,
     private loggerService: LoggerService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     const currentValue = this.fieldGroupControl.value;
-    this.previousUploadedFile = currentValue.id ? {
-      id: currentValue.id,
-      name: currentValue.name,
-      size: currentValue.size,
-      extension: currentValue.extension,
-      url: currentValue.url
-    } : null;
-
+    this.previousUploadedFile = currentValue.id
+      ? {
+          id: currentValue.id,
+          name: currentValue.name,
+          size: currentValue.size,
+          extension: currentValue.extension,
+          url: currentValue.url
+        }
+      : null;
   }
 
   ngDoCheck(): void {
-
     if (this.hasUploadError) {
       this.hasError = this.hasUploadError;
       this.hasUploadError = false;
     } else if (!this.isLoadingFile) {
-      this.hasError = (this.fieldGroupControl.invalid && (this.fieldGroupControl.touched || this.fieldGroupControl.dirty));
-      this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors) : { message: '', params: {} };
+      this.hasError =
+        this.fieldGroupControl.invalid && (this.fieldGroupControl.touched || this.fieldGroupControl.dirty);
+      this.error = this.hasError
+        ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors)
+        : { message: '', params: {} };
       this.cdr.detectChanges();
     }
-
   }
 
   private uploadFile(file: File): Observable<FileUploadType> {
-
     const formdata = new FormData();
     formdata.append('file', file, file.name);
     Object.entries(this.fileConfig?.httpUploadBody || {}).forEach(([key, value]) => formdata.append(key, value));
@@ -126,7 +134,6 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   }
 
   onChange(event: NgxDropzoneChangeEvent): void {
-
     this.hasError = false;
     this.hasUploadError = false;
 
@@ -136,17 +143,16 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     }
 
     if (event.rejectedFiles.length > 0) {
-
-      const sizeExceeded = event.rejectedFiles.some((f) => f.reason === 'size');
+      const sizeExceeded = event.rejectedFiles.some(f => f.reason === 'size');
       if (sizeExceeded) {
         this.hasUploadError = true;
         this.error = FormEngineHelper.getValidationMessage({ maxFileSize: 'true' });
       }
 
       const wrongFormat = event.rejectedFiles.some(f => f.reason === 'type');
-      if(wrongFormat) {
+      if (wrongFormat) {
         this.hasUploadError = true;
-        this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' })
+        this.error = FormEngineHelper.getValidationMessage({ wrongFileFormat: 'true' });
       }
 
       event.rejectedFiles.forEach(file => {
@@ -154,11 +160,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       });
 
       return; // If any file gives error, abort everything!
-
     }
 
     if (event.addedFiles.length > 0) {
-
       const emptyFile = event.addedFiles.some(i => i.size === 0);
       if (emptyFile) {
         event.addedFiles = event.addedFiles.filter(i => i.size !== 0);
@@ -169,11 +173,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
       }
 
       event.addedFiles.forEach(file => {
-
         this.uploadFile(file).subscribe({
           next: response => {
-
-            if(this.uploadedFile) {
+            if (this.uploadedFile) {
               this.onRemoveUploadedFile();
             }
 
@@ -190,25 +192,21 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
             this.isLoadingFile = false;
 
             this.cdr.detectChanges();
-
           },
           error: error => {
-            if(this.uploadedFile) {
+            if (this.uploadedFile) {
               this.onRemoveUploadedFile();
             }
             this.hasError = true;
             this.hasUploadError = true;
-            this.error = FormEngineHelper.getValidationMessage({ uploadError: 'true' })
+            this.error = FormEngineHelper.getValidationMessage({ uploadError: 'true' });
             this.isLoadingFile = false;
             this.cdr.detectChanges();
             this.loggerService.trackTrace('upload error', Severity.ERROR, { error });
           }
         });
-
       });
-
     }
-
   }
 
   onRemoveUploadedFile(): void {
@@ -232,12 +230,12 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   }
 
   setAuxMessageAndFocus(text: string): void {
-
     const element = document.getElementById('aux-upload-message');
 
     if (element) {
       element.textContent = text;
-      setTimeout(() => { // Await for the html injection if needed.
+      setTimeout(() => {
+        // Await for the html injection if needed.
         element.setAttribute('tabIndex', '-1');
         element.focus();
         element.addEventListener('blur', (e: any) => {
@@ -246,11 +244,9 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
         });
       });
     }
-
   }
 
   evaluateDropZoneTabIndex(): void {
-
     const element: any = document.getElementsByTagName('ngx-dropzone')[0] as HTMLInputElement;
 
     if (this.uploadedFile) {
@@ -258,14 +254,10 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
     } else {
       element.firstElementChild.setAttribute('tabIndex', '-1');
     }
-
   }
 
   openAddFileDialog(): void {
-
     const element: any = document.getElementsByTagName('ngx-dropzone')[0];
     element.firstElementChild.click();
-
   }
-
 }

@@ -16,7 +16,6 @@ import { SectionStepInputType, SectionStepOutputType } from './steps/section-ste
   templateUrl: './task-new.component.html'
 })
 export class PageInnovationTaskNewComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   sectionId: string;
 
@@ -24,25 +23,23 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   taskUrl: string;
   sectionUrl: string;
 
-  sections: { value: string, label: string }[];
+  sections: { value: string; label: string }[];
 
   wizard = new WizardModel<{
-    sectionStep: { section: null | InnovationSectionEnum },
-    messageStep: { message: string }
+    sectionStep: { section: null | InnovationSectionEnum };
+    messageStep: { message: string };
   }>({});
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.section;
-    
+
     this.baseUrl = this.stores.authentication.userUrlBasePath();
 
     this.taskUrl = `/${this.baseUrl}/innovations/${this.innovationId}/tasks`;
@@ -55,26 +52,20 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
       sectionStep: { section: null },
       messageStep: { message: '' }
     };
-
   }
 
   ngOnInit() {
-
     if (this.sectionId) {
-
       // Check if is a valid sectionId
       const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
       if (section) {
         this.wizard.data.sectionStep.section = this.sectionId as InnovationSectionEnum;
-      }
-      else {
+      } else {
         this.redirectTo(`${this.taskUrl}/new`);
         return;
       }
-
     } else {
-
       this.wizard.addStep(
         new WizardStepModel<SectionStepInputType, SectionStepOutputType>({
           id: 'sectionStep',
@@ -82,7 +73,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
           component: WizardTaskNewSectionStepComponent,
           data: {
             sections: this.sections,
-            selectedSection: null,
+            selectedSection: null
           },
           outputs: {
             previousStepEvent: data => this.onPreviousStep(data),
@@ -91,7 +82,6 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
           }
         })
       );
-
     }
 
     this.wizard.addStep(
@@ -106,25 +96,21 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onMessageStepOut, this.onSectionStepIn),
           submitEvent: data => this.onSubmitStep(data, this.onMessageStepOut),
-          cancelEvent: () => this.sectionId ? this.redirectTo(this.sectionUrl) : this.redirectTo(this.taskUrl)
+          cancelEvent: () => (this.sectionId ? this.redirectTo(this.sectionUrl) : this.redirectTo(this.taskUrl))
         }
       })
     );
 
     this.setPageStatus('READY');
-
-
   }
 
   onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
       if (this.sectionId) {
         this.redirectTo(this.sectionUrl);
-      }
-      else {
+      } else {
         this.redirectTo(this.taskUrl);
       }
       return;
@@ -132,25 +118,20 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoPreviousStep();
-
   }
 
   onNextStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoNextStep();
-
   }
 
   onSubmitStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.onSubmit();
-
   }
 
   // Steps mappings.
@@ -181,21 +162,20 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   }
 
   onSubmit(): void {
-
     const body = {
       section: this.wizard.data.sectionStep.section!,
       description: this.wizard.data.messageStep.message
     };
 
-
     this.innovationsService.createAction(this.innovationId, body).subscribe({
       next: response => {
-        this.setRedirectAlertSuccess('You have assigned a task', {message: 'The innovator will be notified and it will be added to their to do list.'});
-        this.redirectTo(`${this.taskUrl}/${response.id}`, {sectionId: this.sectionId});
+        this.setRedirectAlertSuccess('You have assigned a task', {
+          message: 'The innovator will be notified and it will be added to their to do list.'
+        });
+        this.redirectTo(`${this.taskUrl}/${response.id}`, { sectionId: this.sectionId });
       },
-      error: () => this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
+      error: () =>
+        this.setAlertError('An error occurred when creating an action. Please try again or contact us for further help')
     });
-
   }
-
 }

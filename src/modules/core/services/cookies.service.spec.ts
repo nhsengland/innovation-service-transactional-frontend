@@ -10,18 +10,13 @@ import { CoreModule } from '@modules/core';
 
 import { CookiesService } from './cookies.service';
 
-
 describe('Core/Services/CookiesService running SERVER side', () => {
-
   let cookieService: CookieService;
   let service: CookiesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule
-      ],
+      imports: [HttpClientTestingModule, CoreModule],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
@@ -30,33 +25,22 @@ describe('Core/Services/CookiesService running SERVER side', () => {
 
     cookieService = TestBed.inject(CookieService);
     service = TestBed.inject(CookiesService);
-
   });
-
 
   it('should run removeAnalyticsScripts() and do nothing', () => {
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": true }';
     service.removeAnalyticsScripts();
     expect(document.getElementById('hj-analytics')).toBeFalsy();
   });
-
 });
 
-
-
-
-
 describe('Core/Services/CookiesService running CLIENT side', () => {
-
   let cookieService: CookieService;
   let service: CookiesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule
-      ],
+      imports: [HttpClientTestingModule, CoreModule],
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
@@ -65,15 +49,12 @@ describe('Core/Services/CookiesService running CLIENT side', () => {
 
     cookieService = TestBed.inject(CookieService);
     service = TestBed.inject(CookiesService);
-
   });
-
 
   it('should run shouldAskForCookies() and return true', () => {
     service.getConsentCookie = () => ({});
     expect(service.shouldAskForCookies()).toBeTruthy();
   });
-
 
   it('should run getConsentCookie() and return an empty object when no cookie exists', () => {
     cookieService.get = () => '';
@@ -90,14 +71,11 @@ describe('Core/Services/CookiesService running CLIENT side', () => {
   });
 
   it('should run setConsentCookie(false) and remove analytics scripts', () => {
-
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": false }';
     cookieService.getAll = () => ({ _hjCookie: '', _gaCookie: '', otherCookie: '' });
 
     service.setConsentCookie(false);
     expect(document.getElementById('hj-analytics')).toBeFalsy();
     expect(document.getElementById('ga-analytics')).toBeFalsy();
-
   });
-
 });

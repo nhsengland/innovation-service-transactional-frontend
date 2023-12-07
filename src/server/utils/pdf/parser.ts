@@ -1,17 +1,26 @@
 import axios from 'axios';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import {
+  AllSectionsOutboundPayloadType,
+  getAllSectionsSummary
+} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 
 import { PDFGeneratorParserError, PDFGeneratorSectionsNotFoundError } from '../errors';
 
-
-export const getSections = async (innovationId: string, config: any, version?: string): Promise<{ section: sectionType, data: MappedObjectType }[]> => {
+export const getSections = async (
+  innovationId: string,
+  config: any,
+  version?: string
+): Promise<{ section: sectionType; data: MappedObjectType }[]> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/all-sections`;
-  const response = await axios.get<{ section: sectionType, data: MappedObjectType }[]>(url, { ...config, ...version && { params: { version } } });
+  const response = await axios.get<{ section: sectionType; data: MappedObjectType }[]>(url, {
+    ...config,
+    ...(version && { params: { version } })
+  });
   return response.data;
 };
 
@@ -22,12 +31,11 @@ export const generatePDFHandler = async (innovationId: string, body: any, config
   config.headers['Content-Type'] = 'application/pdf';
   const response = await axios.post(url, body, config);
   return response.data;
-}
+};
 
 export const generatePDF = async (innovationId: string, config: any, version?: string) => {
-
   let content: AllSectionsOutboundPayloadType;
-  let sections: { section: sectionType, data: MappedObjectType }[];
+  let sections: { section: sectionType; data: MappedObjectType }[];
 
   try {
     sections = await getSections(innovationId, config, version);
@@ -44,5 +52,4 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
   const response = await generatePDFHandler(innovationId, content, config);
 
   return response;
-
 };

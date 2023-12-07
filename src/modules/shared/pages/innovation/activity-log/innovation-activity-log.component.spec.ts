@@ -13,26 +13,17 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 
 import { PageInnovationActivityLogComponent } from './innovation-activity-log.component';
 
-
 describe('Shared/Pages/Innovation/PageInnovationActivityLogComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let organisationsService: OrganisationsService;
-
 
   let component: PageInnovationActivityLogComponent;
   let fixture: ComponentFixture<PageInnovationActivityLogComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -46,9 +37,7 @@ describe('Shared/Pages/Innovation/PageInnovationActivityLogComponent', () => {
 
     // activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', assessment: {} } };
-//     activatedRoute.snapshot.queryParams = { alert: 'actionCreationSuccess' };
-
-
+    //     activatedRoute.snapshot.queryParams = { alert: 'actionCreationSuccess' };
   });
 
   it('should create the component', () => {
@@ -57,7 +46,6 @@ describe('Shared/Pages/Innovation/PageInnovationActivityLogComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
 
   // it('should have AccessorRole tabs', () => {
 
@@ -254,5 +242,4 @@ describe('Shared/Pages/Innovation/PageInnovationActivityLogComponent', () => {
   //   expect((component.form.get('mainCategories') as FormArray).length).toBe(0);
 
   // });
-
 });

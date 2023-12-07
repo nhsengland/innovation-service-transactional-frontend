@@ -10,16 +10,14 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-
 @Component({
   selector: 'app-innovator-pages-innovation-data-sharing-change',
   templateUrl: './data-sharing-change.component.html'
 })
 export class InnovationDataSharingChangeComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   organisationInfoUrl: string;
-  organisationsList: { value: string, label: string }[] = [];
+  organisationsList: { value: string; label: string }[] = [];
 
   initialState: { organisations: { id: string }[] } = { organisations: [] };
 
@@ -27,42 +25,42 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
   submitButton = { isActive: true, label: 'Save changes' };
 
-  form = new FormGroup({
-    organisations: new FormArray<FormControl<string>>([], CustomValidators.requiredCheckboxArray('Choose at least one organisation'))
-  }, { updateOn: 'change' });
-
+  form = new FormGroup(
+    {
+      organisations: new FormArray<FormControl<string>>(
+        [],
+        CustomValidators.requiredCheckboxArray('Choose at least one organisation')
+      )
+    },
+    { updateOn: 'change' }
+  );
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService,
-    private innovatorService: InnovatorService,
+    private innovatorService: InnovatorService
   ) {
-
     super();
     this.setPageTitle('Change data sharing preferences');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.organisationInfoUrl = this.CONSTANTS.URLS.WHO_WE_ARE;
-
   }
 
   ngOnInit(): void {
-
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: false }),
       this.innovationsService.getInnovationSharesList(this.innovationId)
     ]).subscribe(([organisationsList, innovationSharesList]) => {
-
       this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
       this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name }));
 
-      if(innovationSharesList.length > 0) {
+      if (innovationSharesList.length > 0) {
         innovationSharesList.forEach(item => {
           (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
         });
-      }
-      else {
+      } else {
         organisationsList.forEach(item => {
           (this.form.get('organisations') as FormArray).push(new FormControl(item.id));
         });
@@ -73,14 +71,11 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
       );
 
       this.setPageStatus('READY');
-
     });
-
   }
 
   onSubmit(): void {
-
-    if(!this.form.valid) {
+    if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
@@ -93,26 +88,24 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
       next: () => {
         this.setRedirectAlertSuccess('Your data sharing preferences were changed');
         this.redirectTo(redirectUrl);
-    },
+      },
       error: () => {
         this.submitButton = { isActive: true, label: 'Save changes' };
-        this.setAlertError('An error occurred while saving your data sharing preferences. Please, try again or contact us for further help');
+        this.setAlertError(
+          'An error occurred while saving your data sharing preferences. Please, try again or contact us for further help'
+        );
       }
     });
-
   }
 
   dataSharingValidation(): void {
-
     this.showDataSharingValidationWarning = false;
 
-    this.initialState.organisations.forEach((o) => {
+    this.initialState.organisations.forEach(o => {
       const index = (this.form.get('organisations')!.value as string[]).findIndex(item => item === o.id);
       if (index === -1) {
         this.showDataSharingValidationWarning = true;
       }
     });
-
   }
-
 }

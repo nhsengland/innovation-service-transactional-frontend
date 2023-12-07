@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="wizard.isQuestionStep()">
         <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l nhsuk-u-margin-bottom-3">{{ wizard.currentStep().label }}</h1>
         <p *ngIf="wizard.currentStep().description" class="nhsuk-hint">{{ wizard.currentStep().description }}</p>
@@ -11,44 +9,52 @@
       </ng-container>
 
       <ng-container *ngIf="wizard.isSummaryStep()">
-
         <p>Check all information and a preview of the announcement as it will appear to users.</p>
 
         <dl class="nhsuk-summary-list">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Start date</dt>
-            <dd class="nhsuk-summary-list__value">{{ wizardSummary?.startsAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
+            <dd class="nhsuk-summary-list__value">{{ wizardSummary?.startsAt | date: ("app.date_formats.medium_date" | translate) }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(5)">Change<span class="nhsuk-u-visually-hidden"> start date </span></a>
+              <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(5)"
+                >Change<span class="nhsuk-u-visually-hidden"> start date </span></a
+              >
             </dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">End date</dt>
-            <dd class="nhsuk-summary-list__value">{{ wizardSummary?.expiresAt | date: ('app.date_formats.medium_date' | translate) }}</dd>
+            <dd class="nhsuk-summary-list__value">{{ wizardSummary?.expiresAt | date: ("app.date_formats.medium_date" | translate) }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a *ngIf="announcementData.isCreation || announcementData.isScheduled || announcementData.isActive" href="javascript:void(0)" (click)="onGotoStep( announcementData.isActive ? 1 : 5 )">Change<span class="nhsuk-u-visually-hidden"> end date </span></a>
+              <a
+                *ngIf="announcementData.isCreation || announcementData.isScheduled || announcementData.isActive"
+                href="javascript:void(0)"
+                (click)="onGotoStep(announcementData.isActive ? 1 : 5)"
+                >Change<span class="nhsuk-u-visually-hidden"> end date </span></a
+              >
             </dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">User groups</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">{{ wizardSummaryUserGroupsLabels }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(6)">Change<span class="nhsuk-u-visually-hidden"> user groups </span></a>
+              <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(6)"
+                >Change<span class="nhsuk-u-visually-hidden"> user groups </span></a
+              >
             </dd>
           </div>
         </dl>
 
-        <p>This is a preview of the announcement. <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(1)">Change any information necessary.</a></p>
+        <p>
+          This is a preview of the announcement.
+          <a *ngIf="announcementData.isCreation || announcementData.isScheduled" href="javascript:void(0)" (click)="onGotoStep(1)">Change any information necessary.</a>
+        </p>
 
         <h2 class="nhsuk-heading-l">{{ wizardSummary?.title }}</h2>
         <theme-announcements-generic [params]="wizardSummary?.params"></theme-announcements-generic>
 
-        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible">
+        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
         <button type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm</button>
-
       </ng-container>
-
     </div>
   </div>
-
 </theme-content-wrapper>

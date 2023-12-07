@@ -1,4 +1,16 @@
-import { Component, Input, OnInit, DoCheck, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  DoCheck,
+  OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  forwardRef,
+  Injector,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, fromEvent, map, Subscription } from 'rxjs';
 
@@ -9,19 +21,19 @@ import { ControlValueAccessorComponent } from '../base/control-value-accessor.co
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { InputLengthLimitType, INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
 
-
 @Component({
   selector: 'theme-form-input',
   templateUrl: './input.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => FormInputComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FormInputComponent),
+      multi: true
+    }
+  ]
 })
 export class FormInputComponent extends ControlValueAccessorComponent implements OnInit, DoCheck, OnDestroy {
-
   @ViewChild('input', { static: true }) inputRef?: ElementRef<HTMLInputElement>;
 
   @Input() id?: string;
@@ -37,7 +49,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   private fieldChangeSubscription = new Subscription();
 
   hasError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
   lengthLimitCharacters?: number;
   currentAvailableCharacters?: number;
@@ -48,8 +60,12 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   // Accessibility.
   get ariaDescribedBy(): null | string {
     let s = '';
-    if (this.description) { s += `hint-${this.id}`; }
-    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    if (this.description) {
+      s += `hint-${this.id}`;
+    }
+    if (this.hasError) {
+      s += `${s ? ' ' : ''}error-${this.id}`;
+    }
     return s || null;
   }
 
@@ -57,13 +73,10 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
     injector: Injector,
     private cdr: ChangeDetectorRef
   ) {
-
     super(injector);
-
   }
 
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type || 'text';
     this.placeholder = this.placeholder || '';
@@ -99,38 +112,31 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
           this.currentAvailableCharacters = this.lengthLimitCharacters! - value.length;
         })
       );
-
     }
 
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
     this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
 
-    this.fieldChangeSubscription.add(
-      this.fieldControl.statusChanges.subscribe(i => this.onStatusChange())
-    );
-
+    this.fieldChangeSubscription.add(this.fieldControl.statusChanges.subscribe(i => this.onStatusChange()));
   }
 
   ngDoCheck(): void {
     this.onStatusChange();
   }
 
-
   onStatusChange(): void {
-
     if (this.lengthLimit && this.fieldControl.value?.length > 0) {
       this.currentAvailableCharacters = this.lengthLimitCharacters! - this.fieldControl.value.length;
     }
 
-    this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
+    this.hasError = this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty);
+    this.error = this.hasError
+      ? FormEngineHelper.getValidationMessage(this.fieldControl.errors)
+      : { message: '', params: {} };
     this.cdr.detectChanges();
-
   }
-
 
   ngOnDestroy(): void {
     this.fieldChangeSubscription.unsubscribe();
   }
-
 }

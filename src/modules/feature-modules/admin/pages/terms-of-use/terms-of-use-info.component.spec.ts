@@ -15,9 +15,7 @@ import { PageTermsOfUseInfoComponent } from './terms-of-use-info.component';
 import { TermsOfUseTypeEnum } from '@app/base/enums';
 import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
-
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', () => {
-
   let component: PageTermsOfUseInfoComponent;
   let fixture: ComponentFixture<PageTermsOfUseInfoComponent>;
   let activatedRoute: ActivatedRoute;
@@ -25,20 +23,13 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
     activatedRoute = TestBed.inject(ActivatedRoute);
     userService = TestBed.inject(AdminUsersService);
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageTermsOfUseInfoComponent);
@@ -48,7 +39,6 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
   });
 
   it('should NOT have default information loaded', () => {
-
     userService.getTermsById = () => throwError('error');
 
     fixture = TestBed.createComponent(PageTermsOfUseInfoComponent);
@@ -56,30 +46,23 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseInfoComponent', ()
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('ERROR');
-
   });
 
-
   it('should have default information loaded', () => {
-
-    userService.getTermsById = () => of(
-      {
+    userService.getTermsById = () =>
+      of({
         id: 'term 01',
         name: 'term',
         touType: TermsOfUseTypeEnum.INNOVATOR,
         summary: 'TEST',
         releasedAt: '01-02-2022',
         createdAt: '12-01-2022'
-      }
-    );
+      });
 
     fixture = TestBed.createComponent(PageTermsOfUseInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('READY');
-
   });
-
-
 });

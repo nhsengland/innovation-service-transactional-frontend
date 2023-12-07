@@ -16,9 +16,7 @@ import { AuthenticationGuard } from '@modules/core/guards/authentication.guard';
 import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/innovation-collaboration-redirection.guard';
 import { InnovationTransferRedirectionGuard } from '@modules/core/guards/innovation-transfer-redirection.guard';
 
-
 const routes: Routes = [
-
   {
     path: '',
     pathMatch: 'full',
@@ -26,7 +24,9 @@ const routes: Routes = [
   },
 
   {
-    path: 'auth', loadChildren: () => import('@modules/feature-modules/authentication/authentication.module').then(m => m.AuthenticationModule)
+    path: 'auth',
+    loadChildren: () =>
+      import('@modules/feature-modules/authentication/authentication.module').then(m => m.AuthenticationModule)
   },
 
   {
@@ -44,11 +44,13 @@ const routes: Routes = [
   },
 
   {
-    path: 'home', loadChildren: () => import('@modules/feature-modules/home/home.module').then(m => m.HomeModule)
+    path: 'home',
+    loadChildren: () => import('@modules/feature-modules/home/home.module').then(m => m.HomeModule)
   },
 
   {
-    path: 'policies', loadChildren: () => import('@modules/feature-modules/policies/policies.module').then(m => m.PoliciesModule)
+    path: 'policies',
+    loadChildren: () => import('@modules/feature-modules/policies/policies.module').then(m => m.PoliciesModule)
   },
 
   {
@@ -67,23 +69,30 @@ const routes: Routes = [
         children: [{ path: '', pathMatch: 'full', component: PageSwitchContextComponent }]
       },
       {
-        path: 'announcements', loadChildren: () => import('@modules/feature-modules/announcements/announcements.module').then(m => m.AnnouncementsModule)
+        path: 'announcements',
+        loadChildren: () =>
+          import('@modules/feature-modules/announcements/announcements.module').then(m => m.AnnouncementsModule)
       },
       {
         canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
-        path: 'admin', loadChildren: () => import('@modules/feature-modules/admin/admin.module').then(m => m.AdminModule)
+        path: 'admin',
+        loadChildren: () => import('@modules/feature-modules/admin/admin.module').then(m => m.AdminModule)
       },
       {
         canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
-        path: 'assessment', loadChildren: () => import('@modules/feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
+        path: 'assessment',
+        loadChildren: () =>
+          import('@modules/feature-modules/assessment/assessment.module').then(m => m.AssessmentModule)
       },
       {
         canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
-        path: 'innovator', loadChildren: () => import('@modules/feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
+        path: 'innovator',
+        loadChildren: () => import('@modules/feature-modules/innovator/innovator.module').then(m => m.InnovatorModule)
       },
       {
         canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
-        path: 'accessor', loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
+        path: 'accessor',
+        loadChildren: () => import('@modules/feature-modules/accessor/accessor.module').then(m => m.AccessorModule)
       }
     ]
   },
@@ -108,13 +117,12 @@ const routes: Routes = [
 
   {
     path: '**',
-    redirectTo: 'not-found',
+    redirectTo: 'not-found'
   }
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { initialNavigation: 'enabledBlocking' })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

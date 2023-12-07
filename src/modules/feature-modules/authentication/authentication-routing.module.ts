@@ -12,17 +12,14 @@ const routes: Routes = [
     path: '',
     component: BaseLayoutComponent,
     children: [
-
       { path: '', pathMatch: 'full', redirectTo: '/not-found' },
 
       {
         path: 'signup',
         children: [
-
           { path: '', pathMatch: 'full', redirectTo: '/not-found' },
 
           { path: 'confirmation', pathMatch: 'full', component: SignUpConfirmationComponent }
-
         ]
       }
     ]
@@ -33,4 +30,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AuthenticationRoutingModule { }
+export class AuthenticationRoutingModule {}

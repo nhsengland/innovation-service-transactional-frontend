@@ -1,11 +1,8 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <form [formGroup]="form">
-
     <ng-container *ngIf="currentStep === 1">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
-
           <p>Select the organisations you think would be most suitable to offer support to this innovation. These organisations will be notified.</p>
 
           <ul class="nhsuk-list">
@@ -15,11 +12,15 @@
               </a>
             </li>
           </ul>
-          <theme-form-grouped-checkbox-array arrayName="organisationUnits" label="Organisation" [groupedItems]="groupedItems" [pageUniqueField]="false"></theme-form-grouped-checkbox-array>
-          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()"> Continue </button>
+          <theme-form-grouped-checkbox-array
+            arrayName="organisationUnits"
+            label="Organisation"
+            [groupedItems]="groupedItems"
+            [pageUniqueField]="false"
+          ></theme-form-grouped-checkbox-array>
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
           <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
-
         </div>
       </div>
     </ng-container>
@@ -27,13 +28,12 @@
     <ng-container *ngIf="currentStep === 2">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
-
-          <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0"> You have selected: </p>
+          <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">You have selected:</p>
           <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-5">
             <li *ngFor="let organisation of chosenUnits.list">
               {{ organisation.organisation }}
               <ul *ngIf="organisation.units.length > 0" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
-                <li *ngFor="let unit of organisation.units" class="nhsuk-u-margin-0"> {{ unit }} </li>
+                <li *ngFor="let unit of organisation.units" class="nhsuk-u-margin-0">{{ unit }}</li>
               </ul>
             </li>
           </ul>
@@ -41,16 +41,13 @@
           <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
           <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
 
-          <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3"> {{ submitButton.label }} </button>
+          <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
 
           <div>
             <a routerLink="/accessor/innovations/{{ innovation.id }}/support">Cancel</a>
           </div>
-
         </div>
       </div>
     </ng-container>
-
   </form>
-
 </theme-content-wrapper>

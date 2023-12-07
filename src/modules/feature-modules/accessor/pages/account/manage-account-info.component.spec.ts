@@ -19,13 +19,7 @@ describe('FeatureModules/Accessor/Pages/Account?ManageAccount/PageAccessorAccoun
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule,
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -35,11 +29,8 @@ describe('FeatureModules/Accessor/Pages/Account?ManageAccount/PageAccessorAccoun
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(
-      PageAccessorAccountManageAccountInfoComponent
-    );
+    fixture = TestBed.createComponent(PageAccessorAccountManageAccountInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

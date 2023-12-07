@@ -1,7 +1,10 @@
 import axios from 'axios';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { AllSectionsOutboundPayloadType, getAllSectionsSummary } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import {
+  AllSectionsOutboundPayloadType,
+  getAllSectionsSummary
+} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
@@ -16,12 +19,11 @@ export const generateCSVHandler = async (innovationId: string, body: any, config
   config.headers['Content-Type'] = 'text/csv';
   const response = await axios.post(url, body, config);
   return response.data;
-}
+};
 
 export const generateCSV = async (innovationId: string, config: any, version?: string) => {
-
   let content: AllSectionsOutboundPayloadType;
-  let sections: { section: sectionType, data: MappedObjectType }[];
+  let sections: { section: sectionType; data: MappedObjectType }[];
 
   try {
     sections = await getSections(innovationId, config, version);
@@ -38,5 +40,4 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
   const response = await generateCSVHandler(innovationId, content, config);
 
   return response;
-
 };

@@ -30,10 +30,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     private statisticsService: StatisticsService,
     private innovationsService: InnovationsService
   ) {
-
     super();
     this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
-
 
     this.user = {
       displayName: this.stores.authentication.getUserInfo().displayName,
@@ -42,27 +40,29 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
     };
 
-
     this.latestInnovations = new TableModel({ pageSize: 5 });
   }
 
   ngOnInit(): void {
-
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
     }
 
-    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER, UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER] };
+    const qp: { statistics: UserStatisticsTypeEnum[] } = {
+      statistics: [
+        UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER,
+        UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER
+      ]
+    };
 
     this.latestInnovations.setFilters({
       latestWorkedByMe: true
-    })
+    });
 
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp),
       this.innovationsService.getInnovationsList({ queryParams: this.latestInnovations.getAPIQueryParams() })
     ]).subscribe(([statistics, innovationsList]) => {
-
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);
 
       this.cardsList = [
@@ -73,7 +73,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           queryParams: { status: 'WAITING_NEEDS_ASSESSMENT' },
           count: statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].count,
           overdue: this.getFooter(statistics[UserStatisticsTypeEnum.WAITING_ASSESSMENT_COUNTER].overdue)
-        }, {
+        },
+        {
           title: 'Your innovations',
           label: `Innovations in needs assessment being assessed by you`,
           link: `/assessment/innovations`,
@@ -85,12 +86,10 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       ];
 
       this.setPageStatus('READY');
-    })
+    });
   }
-
 
   getFooter(counter: number): string {
-    return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`
+    return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`;
   }
-
 }

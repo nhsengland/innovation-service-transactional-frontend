@@ -12,73 +12,89 @@ import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } f
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
 
-
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private logger: NGXLogger,
-    private contextService: ContextService,
-  ) { super('STORE::Context', new ContextModel()); }
+    private contextService: ContextService
+  ) {
+    super('STORE::Context', new ContextModel());
+  }
 
   // Individual Behaviour Subjects and Observables.
-  get pageLayoutState(): ContextPageLayoutType { return this.state.pageLayoutBS.getValue(); }
-  setPageLayoutState(): void { this.state.pageLayoutBS.next(this.pageLayoutState); }
+  get pageLayoutState(): ContextPageLayoutType {
+    return this.state.pageLayoutBS.getValue();
+  }
+  setPageLayoutState(): void {
+    this.state.pageLayoutBS.next(this.pageLayoutState);
+  }
 
-  pageLayout$(): Observable<ContextPageLayoutType> { return this.state.pageLayout$; }
-  pageLayoutStatus$(): Observable<ContextPageStatusType> { return this.state.pageLayout$.pipe(map(item => item.status), distinctUntilChanged()); }
-  innovation$(): Observable<null | ContextInnovationType> { return this.state$.pipe(map(item => item.innovation)); }
-  notifications$(): Observable<ContextModel['notifications']> { return this.state$.pipe(map(item => item.notifications)); }
-
+  pageLayout$(): Observable<ContextPageLayoutType> {
+    return this.state.pageLayout$;
+  }
+  pageLayoutStatus$(): Observable<ContextPageStatusType> {
+    return this.state.pageLayout$.pipe(
+      map(item => item.status),
+      distinctUntilChanged()
+    );
+  }
+  innovation$(): Observable<null | ContextInnovationType> {
+    return this.state$.pipe(map(item => item.innovation));
+  }
+  notifications$(): Observable<ContextModel['notifications']> {
+    return this.state$.pipe(map(item => item.notifications));
+  }
 
   // Notifications methods.
   updateUserUnreadNotifications(): void {
-
     this.contextService.getUserUnreadNotifications().subscribe({
       next: response => {
         this.state.notifications.UNREAD = response.total;
         this.setState();
       },
-      error: (error) => this.logger.error('Error obtaining user unread notifications', error)
+      error: error => this.logger.error('Error obtaining user unread notifications', error)
     });
-
   }
 
-  dismissNotification(innovationId: string, conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): void {
-
+  dismissNotification(
+    innovationId: string,
+    conditions: {
+      notificationIds?: string[];
+      contextTypes?: NotificationCategoryTypeEnum[];
+      contextDetails?: NotificationContextDetailEnum[];
+      contextIds?: string[];
+    }
+  ): void {
     this.contextService.dismissNotification(innovationId, conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),
-      error: (error) => this.logger.error('Error dismissing all user notifications', error)
+      error: error => this.logger.error('Error dismissing all user notifications', error)
     });
-
   }
 
-  dismissUserNotification(conditions: { notificationIds?: string[], contextTypes?: NotificationCategoryTypeEnum[], contextDetails?: NotificationContextDetailEnum[], contextIds?: string[] }): void {
-
+  dismissUserNotification(conditions: {
+    notificationIds?: string[];
+    contextTypes?: NotificationCategoryTypeEnum[];
+    contextDetails?: NotificationContextDetailEnum[];
+    contextIds?: string[];
+  }): void {
     this.contextService.dismissUserNotification(conditions).subscribe({
       next: () => this.updateUserUnreadNotifications(),
-      error: (error) => this.logger.error('Error dismissing user notification', error)
+      error: error => this.logger.error('Error dismissing user notification', error)
     });
-
   }
 
   updateInnovationNotifications(): void {
-
     if (this.state.innovation?.id) {
-
       this.contextService.getInnovationNotifications(this.state.innovation.id).subscribe({
         next: response => {
           this.state.innovation!.notifications = response.data;
           this.setState();
         },
-        error: (error) => this.logger.error('Error obtaining innovation notifications', error)
+        error: error => this.logger.error('Error obtaining innovation notifications', error)
       });
-
     }
-
   }
-
 
   // Page layout methods.
   resetPageAlert(): void {
@@ -86,15 +102,16 @@ export class ContextStore extends Store<ContextModel> {
     this.setPageLayoutState();
   }
   setPageAlert(data: ContextPageLayoutType['alert']): void {
-
     this.pageLayoutState.alert = data;
 
-    if (!data.persistOneRedirect) { this.setPageLayoutState(); }
-
+    if (!data.persistOneRedirect) {
+      this.setPageLayoutState();
+    }
   }
 
   setPageStatus(status: ContextPageLayoutType['status']): void {
-    if (isPlatformBrowser(this.platformId)) { // When running server side, the status always remains LOADING. The visual effects only are meant to be applied on the browser.
+    if (isPlatformBrowser(this.platformId)) {
+      // When running server side, the status always remains LOADING. The visual effects only are meant to be applied on the browser.
       this.pageLayoutState.status = status;
       this.setPageLayoutState();
     }
@@ -111,7 +128,6 @@ export class ContextStore extends Store<ContextModel> {
   }
 
   resetPage() {
-
     if (this.pageLayoutState.alert.persistOneRedirect) {
       this.pageLayoutState.alert.persistOneRedirect = false;
     } else {
@@ -124,12 +140,23 @@ export class ContextStore extends Store<ContextModel> {
     this.setPageLayoutState();
   }
 
-
   // Innovation methods.
   getInnovation(): ContextInnovationType {
     if (!this.state.innovation) {
       console.error('Context has NO innovation');
-      return { id: '', name: '', status: InnovationStatusEnum.CREATED, statusUpdatedAt: null, loggedUser: { isOwner: false }, reassessmentCount: 0, categories: [], otherCategoryDescription: '', countryName: '', description: '', postCode: '' };
+      return {
+        id: '',
+        name: '',
+        status: InnovationStatusEnum.CREATED,
+        statusUpdatedAt: null,
+        loggedUser: { isOwner: false },
+        reassessmentCount: 0,
+        categories: [],
+        otherCategoryDescription: '',
+        countryName: '',
+        description: '',
+        postCode: ''
+      };
     }
     return this.state.innovation;
   }
@@ -143,18 +170,22 @@ export class ContextStore extends Store<ContextModel> {
   }
 
   updateInnovation(data: Partial<ContextInnovationType>): void {
-
     if (!this.state.innovation) {
       console.error('Context has NO innovation');
       return;
     }
 
-    if (data.name) { this.state.innovation.name = data.name; }
-    if (data.status) { this.state.innovation.status = data.status; }
-    if (data.assessment) { this.state.innovation.assessment = data.assessment; }
+    if (data.name) {
+      this.state.innovation.name = data.name;
+    }
+    if (data.status) {
+      this.state.innovation.status = data.status;
+    }
+    if (data.assessment) {
+      this.state.innovation.assessment = data.assessment;
+    }
 
     this.setState();
-
   }
 
   /**
@@ -177,5 +208,4 @@ export class ContextStore extends Store<ContextModel> {
   getPreviousUrl(): string | null {
     return this.state.previousUrl;
   }
-
 }

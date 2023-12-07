@@ -1,6 +1,5 @@
 // Improve left bar colors on conditional fields errors.
 .nhsuk-radios__conditional {
-
   &.error {
     border-left-color: var(--error-color);
   }
@@ -9,5 +8,4 @@
     border-left: unset;
     padding-left: unset;
   }
-
 }

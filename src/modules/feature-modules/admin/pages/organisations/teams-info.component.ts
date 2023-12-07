@@ -14,13 +14,11 @@ import { ObservedValueOf, forkJoin } from 'rxjs';
 import { OrganisationDataResolver } from '../../resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
 
-
 @Component({
   selector: 'app-admin-pages-organisations-other-teams-info',
   templateUrl: './teams-info.component.html'
 })
 export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
-
   public unit: ObservedValueOf<ReturnType<OrganisationUnitDataResolver['resolve']>>;
   public organisation: ObservedValueOf<ReturnType<OrganisationDataResolver['resolve']>>;
 
@@ -30,13 +28,17 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
   pageRole: null | UserRoleEnum = null;
 
   usersListFilters: APIQueryParamsType<UserListFiltersType> = {
-    take: 500, skip: 0,
+    take: 500,
+    skip: 0,
     filters: { userTypes: [], onlyActive: false, email: true }
   };
-  addUserQueryParams: null | { team: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN } | { organisationId: string, unitId: string } = null;
+  addUserQueryParams:
+    | null
+    | { team: UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN }
+    | { organisationId: string; unitId: string } = null;
 
-  activeUsers: { id: string, name: string, email: string }[] = [];
-  inactiveUsers: { id: string, name: string, email: string }[] = [];
+  activeUsers: { id: string; name: string; email: string }[] = [];
+  inactiveUsers: { id: string; name: string; email: string }[] = [];
 
   innovationsLoading: boolean = false;
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
@@ -46,7 +48,6 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
     private usersService: UsersService,
     private route: ActivatedRoute
   ) {
-
     super();
 
     this.unit = this.route.snapshot.data.organisationUnit;
@@ -57,17 +58,13 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
     this.isUnitTeamPage = !!this.unit;
 
     if (this.isAssessmentTeamPage) {
-
       this.setPageTitle('Needs assessment team');
       this.addUserQueryParams = { team: UserRoleEnum.ASSESSMENT };
       this.usersListFilters.filters.userTypes = [UserRoleEnum.ASSESSMENT];
-
     } else if (this.isServiceAdministratorPage) {
-
       this.setPageTitle('Service administrators');
       this.addUserQueryParams = { team: UserRoleEnum.ADMIN };
       this.usersListFilters.filters.userTypes = [UserRoleEnum.ADMIN];
-
     } else if (this.isUnitTeamPage) {
       this.setPageTitle(`${this.unit.name} (${this.unit.acronym})`);
       this.pageRole = UserRoleEnum.ASSESSMENT; // change this it will be different params
@@ -76,29 +73,35 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
       this.addUserQueryParams = { organisationId: this.organisation.id, unitId: this.unit.id };
 
       // Innovations List
-      this.innovationsList.setVisibleColumns({
-        innovation: { label: 'Innovation', orderable: false },
-        status: { label: 'Status', orderable: false, align: 'right' }
-      }).setFilters({
-        engagingOrganisationUnits: [this.unit.id],
-        supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING]
-      });
+      this.innovationsList
+        .setVisibleColumns({
+          innovation: { label: 'Innovation', orderable: false },
+          status: { label: 'Status', orderable: false, align: 'right' }
+        })
+        .setFilters({
+          engagingOrganisationUnits: [this.unit.id],
+          supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING]
+        });
     } else {
       this.redirectTo('admin/organisations');
     }
-
   }
 
   ngOnInit(): void {
-
     forkJoin([
       this.usersService.getUsersList({ queryParams: this.usersListFilters }),
-      ...this.isUnitTeamPage ? [this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })] : []
+      ...(this.isUnitTeamPage
+        ? [this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })]
+        : [])
     ]).subscribe({
       next: ([users, innovations]) => {
-        this.activeUsers = users.data.filter(item => item.isActive).map(item => ({ id: item.id, name: item.name, email: item.email }));
-        this.inactiveUsers = users.data.filter(item => !item.isActive).map(item => ({ id: item.id, name: item.name, email: item.email }));
-        if(this.isUnitTeamPage) {
+        this.activeUsers = users.data
+          .filter(item => item.isActive)
+          .map(item => ({ id: item.id, name: item.name, email: item.email }));
+        this.inactiveUsers = users.data
+          .filter(item => !item.isActive)
+          .map(item => ({ id: item.id, name: item.name, email: item.email }));
+        if (this.isUnitTeamPage) {
           this.innovationsList.setData(innovations.data, innovations.count);
         }
 
@@ -116,7 +119,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
     this.innovationsList.setPage(event.pageNumber);
 
     this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe({
-      next: (innovations) => {
+      next: innovations => {
         this.innovationsList.setData(innovations.data, innovations.count);
       },
       complete: () => {
@@ -128,5 +131,4 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
       }
     });
   }
-
 }

@@ -5,7 +5,6 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 
-
 // Base.
 import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
@@ -65,15 +64,8 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 
-
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AdminRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AdminRoutingModule],
   declarations: [
     // Base
     ContextInnovationOutletComponent,
@@ -136,4 +128,4 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     OrganisationUnitDataResolver
   ]
 })
-export class AdminModule { }
+export class AdminModule {}

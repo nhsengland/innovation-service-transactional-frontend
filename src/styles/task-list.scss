@@ -9,7 +9,6 @@
   // @include govuk-media-query($from: tablet) {
   //   min-width: 550px;
   // }
-
 }
 
 .app-task-list__section {
@@ -38,7 +37,6 @@
   @include govuk-media-query($from: tablet) {
     padding-left: govuk-spacing(6);
   }
-
 }
 
 .app-task-list__item {
@@ -54,7 +52,6 @@
 }
 
 .app-task-list__task-icon {
-
   margin-left: -40px;
   display: block;
 

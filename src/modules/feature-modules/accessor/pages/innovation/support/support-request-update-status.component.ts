@@ -8,27 +8,34 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-request-update-status',
-  templateUrl: './support-request-update-status.component.html',
+  templateUrl: './support-request-update-status.component.html'
 })
 export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   supportId: string;
   stepNumber: number;
 
   supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  supportStatus = Object.entries(this.supportStatusObj).map(([key, item]) => ({
-    key,
-    checked: false,
-    ...item
-  })).filter(x => !x.hidden && x.key !== InnovationSupportStatusEnum.ENGAGING);
+  supportStatus = Object.entries(this.supportStatusObj)
+    .map(([key, item]) => ({
+      key,
+      checked: false,
+      ...item
+    }))
+    .filter(x => !x.hidden && x.key !== InnovationSupportStatusEnum.ENGAGING);
 
   chosenStatus: null | InnovationSupportStatusEnum = null;
 
-  form = new FormGroup({
-    status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.CLOSED, { validators: Validators.required, updateOn: 'change' }),
-    message: new FormControl<string>('', CustomValidators.required('A comment is required')),
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.CLOSED, {
+        validators: Validators.required,
+        updateOn: 'change'
+      }),
+      message: new FormControl<string>('', CustomValidators.required('A comment is required'))
+    },
+    { updateOn: 'blur' }
+  );
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -44,7 +51,11 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
 
   ngOnInit(): void {
     this.setPageTitle('Request support status update', { showPage: false });
-    this.setBackLink('Go Back', `/accessor/innovations/${this.innovationId}/support`, `to support status innovation page`);
+    this.setBackLink(
+      'Go Back',
+      `/accessor/innovations/${this.innovationId}/support`,
+      `to support status innovation page`
+    );
     this.setPageStatus('READY');
   }
 
@@ -70,10 +81,12 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
     const body = {
       status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
       message: this.form.get('message')?.value ?? ''
-    }
+    };
 
     this.accessorService.requestSupportStatusChange(this.innovationId, this.supportId, body).subscribe(() => {
-      this.setRedirectAlertSuccess('Support status updated requested', { message: 'The qualifying accessor has been notified of your request.' });
+      this.setRedirectAlertSuccess('Support status updated requested', {
+        message: 'The qualifying accessor has been notified of your request.'
+      });
       this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     });
   }

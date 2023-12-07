@@ -14,14 +14,12 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
-
 @Component({
   selector: 'theme-form-input-autocomplete-array',
   templateUrl: './input-autocomplete-array.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
-
   @Input() id?: string;
   @Input() arrayName = '';
   @Input() label?: string;
@@ -29,31 +27,34 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() pageUniqueField = true;
 
-  searchableItems: { value: string, label: string, isVisible: boolean }[] = [];
-  chosenItems: { value: string, label: string }[] = [];
-  filteredItems$: Observable<{ value: string, label: string }[]> = of([]);
+  searchableItems: { value: string; label: string; isVisible: boolean }[] = [];
+  chosenItems: { value: string; label: string }[] = [];
+  filteredItems$: Observable<{ value: string; label: string }[]> = of([]);
 
   hasError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
   // Form controls.
-  get parentFieldControl(): AbstractControl | null { return this.injector.get(ControlContainer).control; }
-  get fieldArrayControl(): FormArray { return this.parentFieldControl?.get(this.arrayName) as FormArray; }
+  get parentFieldControl(): AbstractControl | null {
+    return this.injector.get(ControlContainer).control;
+  }
+  get fieldArrayControl(): FormArray {
+    return this.parentFieldControl?.get(this.arrayName) as FormArray;
+  }
 
   searchFieldControl = new FormControl('');
-
 
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef
-  ) { }
+  ) {}
 
-
-  private _filter(value: null | string): { value: string, label: string }[] {
-
+  private _filter(value: null | string): { value: string; label: string }[] {
     value = value ?? '';
 
-    if (value.length < 2) { return []; }
+    if (value.length < 2) {
+      return [];
+    }
 
     const filteredValues = UtilsHelper.arrayFullTextSearch(
       this.searchableItems.filter(item => item.isVisible).map(i => i.label) || [],
@@ -61,12 +62,9 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
     );
 
     return (this.items || []).filter(i => filteredValues.includes(i.label));
-
   }
 
-
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.searchableItems = (this.items || []).map(item => ({
@@ -80,23 +78,18 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
       label: this.searchableItems.find(item => item.value === value)?.label || ''
     }));
 
-    this.filteredItems$ = this.searchFieldControl.valueChanges.pipe(
-      map(value => this._filter(value))
-    );
-
+    this.filteredItems$ = this.searchFieldControl.valueChanges.pipe(map(value => this._filter(value)));
   }
 
   ngDoCheck(): void {
-
-    this.hasError = (this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty));
-    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors) : { message: '', params: {} };
+    this.hasError = this.fieldArrayControl.invalid && (this.fieldArrayControl.touched || this.fieldArrayControl.dirty);
+    this.error = this.hasError
+      ? FormEngineHelper.getValidationMessage(this.fieldArrayControl.errors)
+      : { message: '', params: {} };
     this.cdr.detectChanges();
-
   }
 
-
   onAddItem(event: MatAutocompleteSelectedEvent): void {
-
     const eventValue = event.option.value;
     const searchableItemsItem = this.searchableItems.find(item => item.label === eventValue);
 
@@ -108,11 +101,9 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
     }
 
     this.cdr.detectChanges();
-
   }
 
   onRemoveItem(value: string): void {
-
     // Handle selected items array.
     const fieldControlIndex = this.fieldArrayControl.controls.findIndex(item => item.value === value);
     if (fieldControlIndex > -1) {
@@ -132,7 +123,5 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
     }
 
     this.searchFieldControl.setValue('');
-
   }
-
 }

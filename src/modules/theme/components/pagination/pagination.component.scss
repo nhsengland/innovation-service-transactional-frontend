@@ -2,7 +2,8 @@
   display: inline-block;
   padding: 25px 0 0 0;
 
-  a, span {
+  a,
+  span {
     background-color: #eff4f5;
     float: left;
     padding: 8px 16px;
@@ -19,5 +20,4 @@
     cursor: pointer;
     color: white;
   }
-
 }

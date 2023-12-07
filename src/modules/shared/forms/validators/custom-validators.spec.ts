@@ -2,16 +2,13 @@ import { FormArray, FormControl, FormGroup, UntypedFormArray, ValidationErrors, 
 import { CustomValidators } from './custom-validators';
 
 describe('CustomValidators', () => {
-
   let formGroup: FormGroup;
   let formControl: FormControl;
   let formArray: FormArray;
   let validatorFn: ValidatorFn;
   let validator: ValidationErrors | null;
 
-
   describe('CustomValidators.required()', () => {
-
     beforeAll(() => {
       formControl = new FormControl();
       validatorFn = CustomValidators.required();
@@ -25,7 +22,7 @@ describe('CustomValidators', () => {
 
     it('should return error when required field value is empty (with message)', () => {
       formControl.setValue(null);
-      validator = (CustomValidators.required('is required'))(formControl);
+      validator = CustomValidators.required('is required')(formControl);
       expect(validator).toEqual({ required: { message: 'is required' } });
     });
 
@@ -34,12 +31,9 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toBeNull();
     });
-
   });
 
-
   describe('CustomValidators.requiredCheckboxArray()', () => {
-
     beforeAll(() => {
       formArray = new UntypedFormArray([]);
       validatorFn = CustomValidators.requiredCheckboxArray();
@@ -51,7 +45,7 @@ describe('CustomValidators', () => {
     });
 
     it('should return error when field value is an empty array (with message)', () => {
-      validator = (CustomValidators.requiredCheckboxArray('is required'))(formArray);
+      validator = CustomValidators.requiredCheckboxArray('is required')(formArray);
       expect(validator).toEqual({ required: { message: 'is required' } });
     });
 
@@ -60,16 +54,13 @@ describe('CustomValidators', () => {
       validator = validatorFn(formArray);
       expect(validator).toBeNull();
     });
-
   });
 
-
   describe('CustomValidators.requiredCheckboxGroup()', () => {
-
     beforeAll(() => {
       formGroup = new FormGroup({
         item1: new FormControl(false),
-        item2: new FormControl(false),
+        item2: new FormControl(false)
       });
       validatorFn = CustomValidators.requiredCheckboxGroup();
     });
@@ -84,15 +75,12 @@ describe('CustomValidators', () => {
       validator = validatorFn(formArray);
       expect(validator).toBeNull();
     });
-
   });
 
-
   describe('CustomValidators.pattern()', () => {
-
     beforeAll(() => {
       formControl = new FormControl();
-      validatorFn = CustomValidators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+      validatorFn = CustomValidators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$');
     });
 
     it('should return null with a valid basic email address', () => {
@@ -118,12 +106,9 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toEqual({ pattern: true });
     });
-
   });
 
-
   describe('CustomValidators.hexadecimalFormatValidator()', () => {
-
     beforeAll(() => {
       formControl = new FormControl();
       validatorFn = CustomValidators.hexadecimalFormatValidator();
@@ -152,12 +137,9 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toEqual({ hexadecimalFormat: true });
     });
-
   });
 
-
   describe('CustomValidators.minHexadecimalValidator()', () => {
-
     beforeAll(() => {
       formControl = new FormControl();
       validatorFn = CustomValidators.minHexadecimalValidator(5);
@@ -180,12 +162,9 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toEqual({ minHexadecimal: { min: 5 } });
     });
-
   });
 
-
   describe('CustomValidators.maxHexadecimalValidator()', () => {
-
     beforeAll(() => {
       formControl = new FormControl();
       validatorFn = CustomValidators.maxHexadecimalValidator(5);
@@ -208,7 +187,6 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toEqual({ maxHexadecimal: { max: 5 } });
     });
-
   });
 
   describe('CustomValidators.parsedDateStringValidator()', () => {
@@ -234,8 +212,7 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toBeNull();
     });
-
-  })
+  });
 
   describe('postcodeFormatValidator', () => {
     beforeAll(() => {
@@ -272,8 +249,5 @@ describe('CustomValidators', () => {
       validator = validatorFn(formControl);
       expect(validator).toBeNull();
     });
-
-  })
-
-
+  });
 });

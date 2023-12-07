@@ -2,80 +2,105 @@ import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 export class CustomValidators {
-
   static required(message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => !UtilsHelper.isEmpty(control.value) ? null : { required: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      !UtilsHelper.isEmpty(control.value) ? null : { required: message ? { message } : true };
   }
 
   static requiredCheckboxArray(message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length > 0 ? null : { required: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      ((control.value as string[]) || []).length > 0 ? null : { required: message ? { message } : true };
   }
 
   static minCheckboxArray(min: number, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length >= min ? null : { min: (message ? { message, min } : { min }) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      ((control.value as string[]) || []).length >= min ? null : { min: message ? { message, min } : { min } };
   }
 
   static maxCheckboxArray(max: number, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => (control.value as string[] || []).length <= max ? null : { max: (message ? { message, max } : { max }) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      ((control.value as string[]) || []).length <= max ? null : { max: message ? { message, max } : { max } };
   }
 
   static requiredCheckboxGroup(message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => (Object.entries(control.value as { [key: string]: boolean })).filter(item => item[1]).length > 0 ? null : { required: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      Object.entries(control.value as { [key: string]: boolean }).filter(item => item[1]).length > 0
+        ? null
+        : { required: message ? { message } : true };
   }
 
   static pattern(pattern: string, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => new RegExp(pattern).test(control.value) ? null : { pattern: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      new RegExp(pattern).test(control.value) ? null : { pattern: message ? { message } : true };
   }
 
   static equalTo(value: string, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => control.value === value ? null : { equalTo: (message ? { message } : true) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      control.value === value ? null : { equalTo: message ? { message } : true };
   }
 
   static equalToLength(length: number, message?: string | null): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => (control.value ?? '').length === length ? null : { equalToLength: (message ? { message, length } : { length }) };
+    return (control: AbstractControl): ValidationErrors | null =>
+      (control.value ?? '').length === length ? null : { equalToLength: message ? { message, length } : { length } };
   }
 
   static hexadecimalFormatValidator(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      if (typeof control.value === 'number') { return null; } // If a number is received, it may be passed liked 0x01 format.
-      return (/^(0[xX])?[0-9a-fA-F]+$/i).test(control.value) ? null : { hexadecimalFormat: true };
+      if (!control.value) {
+        return null;
+      }
+      if (typeof control.value === 'number') {
+        return null;
+      } // If a number is received, it may be passed liked 0x01 format.
+      return /^(0[xX])?[0-9a-fA-F]+$/i.test(control.value) ? null : { hexadecimalFormat: true };
     };
   }
 
   static minHexadecimalValidator(minValue: string | number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      return parseInt(control.value, 16) >= parseInt(minValue as string, 16) ? null : { minHexadecimal: { min: minValue } };
+      if (!control.value) {
+        return null;
+      }
+      return parseInt(control.value, 16) >= parseInt(minValue as string, 16)
+        ? null
+        : { minHexadecimal: { min: minValue } };
     };
   }
 
   static maxHexadecimalValidator(maxValue: string | number): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      return parseInt(control.value, 16) <= parseInt(maxValue as string, 16) ? null : { maxHexadecimal: { max: maxValue } };
+      if (!control.value) {
+        return null;
+      }
+      return parseInt(control.value, 16) <= parseInt(maxValue as string, 16)
+        ? null
+        : { maxHexadecimal: { max: maxValue } };
     };
   }
 
   static existsInValidator(existsIn: string[], message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      return !existsIn.includes(control.value) ? null : { existsIn: (message ? { message } : true) };
+      if (!control.value) {
+        return null;
+      }
+      return !existsIn.includes(control.value) ? null : { existsIn: message ? { message } : true };
     };
   }
 
   static parsedDateStringValidator(message?: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      return DatesHelper.parseIntoValidFormat(control.value) !== null ? null : { parsedDateString: (message ? { message } : true) };
-    }
+      if (!control.value) {
+        return null;
+      }
+      return DatesHelper.parseIntoValidFormat(control.value) !== null
+        ? null
+        : { parsedDateString: message ? { message } : true };
+    };
   }
 
   static validEmailValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      return new RegExp(
-        '^(?=.{1,254}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$'
-      ).test(control.value)
+      return new RegExp('^(?=.{1,254}$)[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,4}$').test(control.value)
         ? null
         : { validEmail: message ? { message } : true };
     };
@@ -84,43 +109,53 @@ export class CustomValidators {
   static postcodeFormatValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       return new RegExp(
-        /^(([A-Z][A-HJ-Y]?\d[A-Z\d]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA)( \d[A-Z]{2}|BFPO \d{1,4}|(KY\d|MSR|VG|AI)[ -]?\d{4}|[A-Z]{2} \d{2}|GE CX|GIR 0A{2}|SAN TA1)?)$/gmi
+        /^(([A-Z][A-HJ-Y]?\d[A-Z\d]?|ASCN|STHL|TDCU|BBND|[BFS]IQQ|PCRN|TKCA)( \d[A-Z]{2}|BFPO \d{1,4}|(KY\d|MSR|VG|AI)[ -]?\d{4}|[A-Z]{2} \d{2}|GE CX|GIR 0A{2}|SAN TA1)?)$/gim
       ).test(control.value)
         ? null
         : { postcodeFormat: message ? { message } : true };
-    }
+    };
   }
 
   static urlFormatValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
+      if (!control.value) {
+        return null;
+      }
       const pattern = new RegExp(
         '^(https?:\\/\\/)' + // protocol (mandator)
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-        '(\\#[-a-z\\d_]*)?$', // fragment locator
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+          '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+          '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+          '(\\#[-a-z\\d_]*)?$', // fragment locator
         'i'
       );
-      if (pattern.test(control.value)) { return null; }
+      if (pattern.test(control.value)) {
+        return null;
+      }
 
       return { urlFormat: message ? { message } : true };
-    }
+    };
   }
 
   static emptyFileValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
+      if (!control.value) {
+        return null;
+      }
       return control.value.size > 0 ? null : { emptyFile: message ? { message } : true };
-    }
+    };
   }
 
   static maxFileSizeValidator(maxFileSize: number, message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) { return null; }
-      return control.value.size <= maxFileSize * 1000000 ? null : { maxFileSize: (message ? { message, maxFileSize } : { maxFileSize }) };
-    }
+      if (!control.value) {
+        return null;
+      }
+      return control.value.size <= maxFileSize * 1000000
+        ? null
+        : { maxFileSize: message ? { message, maxFileSize } : { maxFileSize } };
+    };
   }
 
   // May be used in the future.
@@ -151,5 +186,4 @@ export class CustomValidators {
   //   const regex = /^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/;
   //   return regex.test(control.value) ? { passwordFormat: true } : null;
   // }
-
 }

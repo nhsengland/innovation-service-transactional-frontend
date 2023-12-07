@@ -4,21 +4,15 @@ import { Observable, of } from 'rxjs';
 
 import { InnovationStore } from '@modules/stores';
 
-
 @Injectable()
-export class InnovationSectionDataResolver  {
+export class InnovationSectionDataResolver {
+  constructor(private innovationStore: InnovationStore) {}
 
-  constructor(
-    private innovationStore: InnovationStore
-  ) { }
-
-  resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string, name: string }> {
-
+  resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string; name: string }> {
     return of({
       id: route.params['sectionId'],
-      name: this.innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId'])?.section.title ?? ''
+      name:
+        this.innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId'])?.section.title ?? ''
     });
-
   }
-
 }

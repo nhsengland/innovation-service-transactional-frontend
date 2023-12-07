@@ -1,14 +1,14 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <p>Choose one needs assessor from the needs assessor team to support this innovation</p>
       <form [formGroup]="form">
-        <div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': form.get('assessor')?.invalid && form.get('assessor')?.touched}">
+        <div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': form.get('assessor')?.invalid && form.get('assessor')?.touched }">
           <fieldset class="nhsuk-fieldset">
             <ng-container *ngIf="form.get('assessor')?.invalid && form.get('assessor')?.touched">
               <span id="error-field-assessor" class="nhsuk-error-message" role="alert">
-              <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get('assessor')?.errors?.message }} </span>
+                <span class="nhsuk-u-visually-hidden">Error:</span> {{ form.get("assessor")?.errors?.message }}
+              </span>
             </ng-container>
 
             <div class="nhsuk-radios">
@@ -25,5 +25,4 @@
       </form>
     </div>
   </div>
-
 </theme-content-wrapper>

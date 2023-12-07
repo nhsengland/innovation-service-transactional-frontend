@@ -6,13 +6,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormInputComponent } from './input.component';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
+  template: ` <form [formGroup]="form">
     <theme-form-input [id]="id" [controlName]="controlName"></theme-form-input>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormInputComponent) childComponent?: FormInputComponent;
 
   form = new FormGroup({
@@ -21,37 +19,26 @@ class HostComponent {
 
   id = 'FormInputId';
   controlName = 'testField';
-
 }
 
-
 describe('InputComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormInputComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormInputComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
     hostFixture.detectChanges();
     expect(hostComponent).toBeTruthy();
   });
-
 
   it('should form control field be invalid and with error', () => {
     hostFixture.detectChanges();
@@ -69,5 +56,4 @@ describe('InputComponent', () => {
     expect(hostComponent.childComponent?.hasError).toBe(false);
     expect(hostComponent.childComponent?.error.message).toBe('');
   });
-
 });

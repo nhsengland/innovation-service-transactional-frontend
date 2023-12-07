@@ -39,4 +39,3 @@ export class CSVGeneratorInnovationNotFoundError extends Error {
     this.name = 'CSVGeneratorInnovationNotFoundError';
   }
 }
-

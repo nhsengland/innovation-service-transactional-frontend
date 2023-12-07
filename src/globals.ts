@@ -3,7 +3,6 @@ import * as appinsights from 'applicationinsights';
 let insights: appinsights.Configuration;
 
 export const initAppInsights = () => {
-
   if (!insights) {
     insights = appinsights
       .setup(process.env.APPINSIGHTS_INSTRUMENTATION_KEY)
@@ -11,9 +10,9 @@ export const initAppInsights = () => {
       .start();
 
     appinsights.defaultClient.addTelemetryProcessor((envelope, context) => {
-      if(envelope.data.baseData) {
+      if (envelope.data.baseData) {
         const oid = context?.['http.ServerRequest']?.session?.oid;
-        if(oid) {
+        if (oid) {
           envelope.data.baseData.properties['authenticatedUser'] = oid;
           envelope.data.baseData.properties['session'] = context?.['http.ServerRequest']?.sessionID;
         }
@@ -23,7 +22,6 @@ export const initAppInsights = () => {
   }
 
   return appinsights;
-
 };
 
 export const getAppInsightsClient = () => {

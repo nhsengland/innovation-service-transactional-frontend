@@ -1,11 +1,16 @@
 import { FormEngineParameterModel } from '@modules/shared/forms';
 
-
 export const locationItems = [
   {
     value: 'England',
     label: 'England',
-    conditional: new FormEngineParameterModel({ id: 'englandPostCode', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: [true, 'First part of your postcode is required'] } })
+    conditional: new FormEngineParameterModel({
+      id: 'englandPostCode',
+      dataType: 'text',
+      label: 'First part of your postcode',
+      description: 'For example SW1',
+      validations: { isRequired: [true, 'First part of your postcode is required'] }
+    })
   },
   { value: 'Scotland', label: 'Scotland' },
   { value: 'Wales', label: 'Wales' },
@@ -13,8 +18,13 @@ export const locationItems = [
   { value: '', label: 'SEPARATOR' },
   {
     value: 'Based outside UK',
-    label: 'I\'m based outside of the UK',
-    conditional: new FormEngineParameterModel({ id: 'locationCountryName', dataType: 'text', label: 'Country', validations: { isRequired: [true, 'Country is required'] } })
+    label: "I'm based outside of the UK",
+    conditional: new FormEngineParameterModel({
+      id: 'locationCountryName',
+      dataType: 'text',
+      label: 'Country',
+      validations: { isRequired: [true, 'Country is required'] }
+    })
   }
 ];
 
@@ -38,6 +48,5 @@ export const yesPartiallyNoItems = [
 export const yesNotYetNotSureItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'NOT_YET', label: 'Not yet' },
-  { value: 'NOT_SURE', label: 'I\'m not sure' }
+  { value: 'NOT_SURE', label: "I'm not sure" }
 ];
-

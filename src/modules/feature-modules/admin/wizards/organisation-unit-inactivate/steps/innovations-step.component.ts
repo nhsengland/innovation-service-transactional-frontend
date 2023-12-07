@@ -16,13 +16,14 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 import { InnovationsStepInputType, InnovationsStepOutputType } from './innovations-step.types';
 
-
 @Component({
   selector: 'app-admin-wizards-organisation-unit-inactivate-innovations-step',
   templateUrl: './innovations-step.component.html'
 })
-export class WizardOrganisationUnitInactivateInnovationsStepComponent extends CoreComponent implements WizardStepComponentType<InnovationsStepInputType, InnovationsStepOutputType>, OnInit {
-
+export class WizardOrganisationUnitInactivateInnovationsStepComponent
+  extends CoreComponent
+  implements WizardStepComponentType<InnovationsStepInputType, InnovationsStepOutputType>, OnInit
+{
   @Input() title = '';
   @Input() data: InnovationsStepInputType = {
     organisation: { id: '' },
@@ -37,46 +38,46 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
   innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({
     pageSize: 10
   });
-  innovationStatistics: {status: InnovationSupportStatusEnum, count: number}[] = [];
+  innovationStatistics: { status: InnovationSupportStatusEnum; count: number }[] = [];
 
-  form = new FormGroup({
-    agreeInnovations: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
-  }, { updateOn: 'blur' });
-
+  form = new FormGroup(
+    {
+      agreeInnovations: new UntypedFormControl(false, CustomValidators.required('You need to confirm to proceed'))
+    },
+    { updateOn: 'blur' }
+  );
 
   constructor(
     private innovationsService: InnovationsService,
     private statisticsService: StatisticsService
   ) {
-
     super();
     this.setPageTitle(this.title);
     this.innovationsList = new TableModel({});
   }
 
   ngOnInit(): void {
-    this.innovationsList.setVisibleColumns({
-      innovation: { label: 'Innovation', orderable: false },
-      status: { label: 'Status', orderable: false }
-    }).setFilters({
-      supportStatuses: [
-        InnovationSupportStatusEnum.ENGAGING,
-        InnovationSupportStatusEnum.WAITING
-      ],
-      engagingOrganisationUnits: [this.data.organisationUnit.id]
-    });
+    this.innovationsList
+      .setVisibleColumns({
+        innovation: { label: 'Innovation', orderable: false },
+        status: { label: 'Status', orderable: false }
+      })
+      .setFilters({
+        supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING],
+        engagingOrganisationUnits: [this.data.organisationUnit.id]
+      });
 
     this.form.get('agreeInnovations')!.setValue(this.data.agreeInnovations);
 
     this.getUsersList();
   }
 
-
   getUsersList(column?: string): void {
-
     forkJoin([
       this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
-      this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, { statistics: [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT] }),
+      this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, {
+        statistics: [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT]
+      })
     ]).subscribe({
       next: ([innovations, statistics]) => {
         this.innovationsList.setData(innovations.data, innovations.count);
@@ -111,22 +112,19 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
     this.getUsersList();
   }
 
-
   verifyOutputData(): boolean {
-
     if (!this.form.get('agreeInnovations')!.value) {
       this.form.markAllAsTouched();
       return false;
     }
 
     return true;
-
   }
-
 
   onPreviousStep(): void {
     this.previousStepEvent.emit({
-      isComplete: true, data: {
+      isComplete: true,
+      data: {
         agreeInnovations: this.form.get('agreeInnovations')!.value,
         innovationsCount: this.innovationsList.getTotalRowsNumber()
       }
@@ -134,31 +132,33 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent extends Co
   }
 
   onNextStep(): void {
-
-    if (!this.verifyOutputData()) { return; }
+    if (!this.verifyOutputData()) {
+      return;
+    }
 
     if (this.form.valid) {
       this.nextStepEvent.emit({
-        isComplete: true, data: {
+        isComplete: true,
+        data: {
           agreeInnovations: true,
           innovationsCount: this.innovationsList.getTotalRowsNumber()
         }
       });
     }
-
   }
 
-  getUnitStatusSupport(supports?: {
-    id: string,
-    status: InnovationSupportStatusEnum,
-    organisation: {
-      id: string,
-      unit: {
-        id: string,
-      }
-    }
-  }[]): InnovationSupportStatusEnum {
-    return supports && supports.length > 0 ? supports[0].status :  InnovationSupportStatusEnum.WAITING;
+  getUnitStatusSupport(
+    supports?: {
+      id: string;
+      status: InnovationSupportStatusEnum;
+      organisation: {
+        id: string;
+        unit: {
+          id: string;
+        };
+      };
+    }[]
+  ): InnovationSupportStatusEnum {
+    return supports && supports.length > 0 ? supports[0].status : InnovationSupportStatusEnum.WAITING;
   }
-
 }

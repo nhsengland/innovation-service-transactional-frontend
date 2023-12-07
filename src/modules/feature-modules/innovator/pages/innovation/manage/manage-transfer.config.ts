@@ -7,81 +7,94 @@ type InboundPayloadType = {
 };
 
 type StepPayloadType = {
-  email: string,
-  ownerToCollaborator: string,
-  collaboratorEmail?: string
-
+  email: string;
+  ownerToCollaborator: string;
+  collaboratorEmail?: string;
 };
 
 type OutboundPayloadType = {
-  email: string,
-  ownerToCollaborator: boolean,
+  email: string;
+  ownerToCollaborator: boolean;
 };
 
-
-export const NO_COLLABORATORS_TRANSFERS = (ownEmail: string) => new WizardEngineModel({
-  steps: [
-    new FormEngineModel({
-      label: 'Transfer ownership of this innovation',
-      parameters: [{
-        id: 'email',
-        dataType: 'text',
-        label: 'Who do you want to transfer ownership to?',
-        description: 'Enter new owner\'s email',
-        validations: {
-          isRequired: [true, 'Email is required'],
-          validEmail: true,
-          existsIn: [[ownEmail], 'Cannot transfer to own email']
-        }
-      }]
-    }),
-    new FormEngineModel({
-      label: 'Do you want to continue to collaborate on this innovation?',
-      parameters: [{
-        id: 'ownerToCollaborator',
-        dataType: 'radio-group',
-        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: [
-          { value: 'YES', label: 'Yes' },
-          { value: 'NO', label: 'No' }
+export const NO_COLLABORATORS_TRANSFERS = (ownEmail: string) =>
+  new WizardEngineModel({
+    steps: [
+      new FormEngineModel({
+        label: 'Transfer ownership of this innovation',
+        parameters: [
+          {
+            id: 'email',
+            dataType: 'text',
+            label: 'Who do you want to transfer ownership to?',
+            description: "Enter new owner's email",
+            validations: {
+              isRequired: [true, 'Email is required'],
+              validEmail: true,
+              existsIn: [[ownEmail], 'Cannot transfer to own email']
+            }
+          }
         ]
-      }]
-    })
-  ],
-  runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
-  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
-  outboundParsing: (data: StepPayloadType) => outboundParsing(data)
-});
+      }),
+      new FormEngineModel({
+        label: 'Do you want to continue to collaborate on this innovation?',
+        parameters: [
+          {
+            id: 'ownerToCollaborator',
+            dataType: 'radio-group',
+            label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: [
+              { value: 'YES', label: 'Yes' },
+              { value: 'NO', label: 'No' }
+            ]
+          }
+        ]
+      })
+    ],
+    runtimeRules: [
+      (steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') =>
+        runtimeRules(steps, data, currentStep)
+    ],
+    inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data)
+  });
 
 export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       label: 'Transfer ownership of this innovation',
-      parameters: [{
-        id: 'collaboratorEmail',
-        dataType: 'radio-group',
-        label: 'Who do you want to transfer ownership to?',
-        description: 'Choose a collaborator or enter another person\'s email',
-        validations: { isRequired: [true, 'Email is required'] },
-        items: []
-      }]
+      parameters: [
+        {
+          id: 'collaboratorEmail',
+          dataType: 'radio-group',
+          label: 'Who do you want to transfer ownership to?',
+          description: "Choose a collaborator or enter another person's email",
+          validations: { isRequired: [true, 'Email is required'] },
+          items: []
+        }
+      ]
     }),
     new FormEngineModel({
       label: 'Do you want to continue to collaborate on this innovation?',
-      parameters: [{
-        id: 'ownerToCollaborator',
-        dataType: 'radio-group',
-        label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: [
-          { value: 'YES', label: 'Yes' },
-          { value: 'NO', label: 'No' }
-        ]
-      }]
+      parameters: [
+        {
+          id: 'ownerToCollaborator',
+          dataType: 'radio-group',
+          label: 'This means you can work on the innovation but are not the owner and do not have owner privileges.',
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: [
+            { value: 'YES', label: 'Yes' },
+            { value: 'NO', label: 'No' }
+          ]
+        }
+      ]
     })
   ],
-  runtimeRules: [(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, data, currentStep)],
+  runtimeRules: [
+    (steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') =>
+      runtimeRules(steps, data, currentStep)
+  ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
 });
@@ -92,7 +105,7 @@ export const otherEmailItem = (ownEmail: string) => ({
   conditional: new FormEngineParameterModel({
     id: 'email',
     dataType: 'text',
-    label: 'Enter new owner\'s email',
+    label: "Enter new owner's email",
     validations: {
       isRequired: [true, 'Email is required'],
       validEmail: true,
@@ -106,7 +119,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     email: '',
-    ownerToCollaborator: '',
+    ownerToCollaborator: ''
   };
 }
 
@@ -115,7 +128,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
   return {
     email: email,
-    ownerToCollaborator: data.ownerToCollaborator === 'YES',
+    ownerToCollaborator: data.ownerToCollaborator === 'YES'
   };
 }
-

@@ -6,13 +6,11 @@ import { FormEngineComponent, FormEngineParameterModel } from '@modules/shared/f
 
 import { AssessmentService } from '../../../services/assessment.service';
 
-
 @Component({
   selector: 'app-assessment-pages-innovation-assessment-new',
   templateUrl: './assessment-new.component.html'
 })
 export class InnovationAssessmentNewComponent extends CoreComponent implements OnInit {
-
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
@@ -27,7 +25,6 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     private activatedRoute: ActivatedRoute,
     private assessmentService: AssessmentService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -43,22 +40,17 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
       })
     ];
     this.formAnswers = {};
-
   }
 
-
   ngOnInit(): void {
-
     this.innovationName = this.stores.context.getInnovation().name;
 
     this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size: 'l' });
     this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}`);
     this.setPageStatus('READY');
-
   }
 
   onSubmit(): void {
-
     const formData = this.formEngineComponent?.getFormValues();
 
     if (!formData?.valid) {
@@ -71,10 +63,9 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
     this.assessmentService.createInnovationNeedsAssessment(this.innovationId, this.formAnswers).subscribe({
       next: response => this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${response.id}/edit`),
       error: () => {
-        this.setAlertUnknownError()
+        this.setAlertUnknownError();
         this.disableCreateButton = false;
       }
     });
-
   }
 }

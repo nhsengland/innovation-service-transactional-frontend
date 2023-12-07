@@ -1,46 +1,47 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+    <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-
       <div class="nhsuk-u-margin-bottom-3">
         <p class="nhsuk-u-font-weight-bold d-inline-block nhsuk-u-margin-bottom-0">Innovation status</p>
-        <a routerLink="/admin/innovations/{{ innovationId }}/statuses" class="float-r nhsuk-body-s nhsuk-u-margin-bottom-0"
-          arial-label="View innovation status information">What does this status mean?</a>
+        <a routerLink="/admin/innovations/{{ innovationId }}/statuses" class="float-r nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View innovation status information"
+          >What does this status mean?</a
+        >
       </div>
-    
+
       <div>
         <div class="d-inline-block nhsuk-u-margin-bottom-4">
           <theme-tag
             type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
-            label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}">
+            label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"
+          >
           </theme-tag>
-          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-2 d-inline-block"
-            *ngIf="innovation.organisationsStatusDescription">
+          <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-2 d-inline-block" *ngIf="innovation.organisationsStatusDescription">
             Organisations: {{ innovation.organisationsStatusDescription }}
           </span>
         </div>
-        <a routerLink="/admin/innovations/{{ innovation.id }}/support" class="float-r nhsuk-body-s"
-          arial-label="View innovation support status" *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">View support
-          status</a>
+        <a
+          routerLink="/admin/innovations/{{ innovation.id }}/support"
+          class="float-r nhsuk-body-s"
+          arial-label="View innovation support status"
+          *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'"
+          >View support status</a
+        >
       </div>
-            
     </div>
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
   <div class="nhsuk-grid-row nhsuk-u-margin-top-5">
     <div class="nhsuk-grid-column-full">
-
       <h2 class="nhsuk-heading-m">Innovation summary</h2>
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
@@ -48,7 +49,6 @@
           <dd class="nhsuk-summary-list__value text-pre-wrap nhsuk-u-padding-3">{{ item.value }}</dd>
         </div>
       </dl>
-
     </div>
   </div>
 
@@ -57,43 +57,34 @@
     <div *ngFor="let item of innovatorDetails" class="nhsuk-summary-list__row">
       <ng-container *ngIf="item.value !== ''">
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>        
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
       </ng-container>
     </div>
   </dl>
 
   <details class="nhsuk-details" *ngIf="innovationCollaborators.length > 0">
     <summary class="nhsuk-details__summary">
-      <span class="nhsuk-details__summary-text">
-        Collaborators
-      </span>
+      <span class="nhsuk-details__summary-text"> Collaborators </span>
     </summary>
     <div class="nhsuk-details__text">
       <table class="nhsuk-table">
         <thead role="rowgroup" class="nhsuk-table__head">
           <tr role="row">
-            <th role="columnheader" class="" scope="col">
-              Name
-            </th>
-            <th role="columnheader" class="" scope="col">
-              Email 
-            </th>
-            <th role="columnheader" class="" scope="col">
-              Role
-            </th>
+            <th role="columnheader" class="" scope="col">Name</th>
+            <th role="columnheader" class="" scope="col">Email</th>
+            <th role="columnheader" class="" scope="col">Role</th>
           </tr>
         </thead>
         <tbody class="nhsuk-table__body">
           <ng-container *ngFor="let collaborator of innovationCollaborators">
             <tr role="row" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell">{{collaborator.name ?? ''}}</td>
-              <td class="nhsuk-table__cell">{{collaborator.email ?? ''}}</td>
-              <td class="nhsuk-table__cell ">{{collaborator.role ?? ''}}</td>
+              <td class="nhsuk-table__cell">{{ collaborator.name ?? "" }}</td>
+              <td class="nhsuk-table__cell">{{ collaborator.email ?? "" }}</td>
+              <td class="nhsuk-table__cell">{{ collaborator.role ?? "" }}</td>
             </tr>
           </ng-container>
         </tbody>
       </table>
     </div>
   </details>
-
 </theme-content-wrapper>

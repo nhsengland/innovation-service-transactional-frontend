@@ -12,7 +12,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 
-
 @NgModule({
   imports: [
     BrowserModule,

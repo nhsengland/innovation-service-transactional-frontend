@@ -16,9 +16,7 @@ import { NotificationsService } from '@modules/shared/services/notifications.ser
 
 import { PageNotificationsListComponent } from './notifications-list.component';
 
-
 describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let notificationsService: NotificationsService;
@@ -28,13 +26,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -43,26 +35,27 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
     notificationsService = TestBed.inject(NotificationsService);
 
-    notificationsService.getNotificationsList = () => of({
-      count: 20,
-      data: [{
-        id: 'Notification001',
-        innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
-        contextType: NotificationCategoryTypeEnum.DOCUMENTS,
-        contextDetail: NotificationContextDetailEnum.DC01_UPLOADED_DOCUMENT_TO_INNOVATOR,
-        contextId: 'Innovation001',
-        createdAt: '2020-01-01T00:00:00.000Z',
-        createdBy: 'User001',
-        readAt: null,
-        params: null,
-        link: null
-      }]
-    });
-
+    notificationsService.getNotificationsList = () =>
+      of({
+        count: 20,
+        data: [
+          {
+            id: 'Notification001',
+            innovation: { id: 'Innovation001', name: 'Innovation name', status: InnovationStatusEnum.IN_PROGRESS },
+            contextType: NotificationCategoryTypeEnum.DOCUMENTS,
+            contextDetail: NotificationContextDetailEnum.DC01_UPLOADED_DOCUMENT_TO_INNOVATOR,
+            contextId: 'Innovation001',
+            createdAt: '2020-01-01T00:00:00.000Z',
+            createdBy: 'User001',
+            readAt: null,
+            params: null,
+            link: null
+          }
+        ]
+      });
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(PageNotificationsListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -115,7 +108,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   expect(component.alert.type).toBe('ERROR');
 
   // });
-
 
   // it('should run onDeleteNotification() and return SUCCESS', () => {
 
@@ -182,7 +174,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
   // });
 
-
   // it('should return notifications when changing filters', fakeAsync(() => {
 
   //   fixture = TestBed.createComponent(PageNotificationsListComponent);
@@ -201,7 +192,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   }]);
 
   // }));
-
 
   // it('should run onOpenCloseFilter() and do nothing with an invalid key', () => {
 
@@ -223,7 +213,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   expect(component.filters[0].showHideStatus).toBe('invalid status');
 
   // });
-
 
   // it('should run onOpenCloseFilter() and close the filter', () => {
 
@@ -295,5 +284,4 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   //   expect(component.notificationsList.page).toBe(2);
 
   // });
-
 });

@@ -28,7 +28,6 @@ import { InnovationsListComponent } from './pages/innovations/innovations-list.c
 // Services.
 import { AssessmentService } from './services/assessment.service';
 
-
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
   declarations: [
@@ -57,4 +56,4 @@ import { AssessmentService } from './services/assessment.service';
     AssessmentService
   ]
 })
-export class AssessmentModule { }
+export class AssessmentModule {}

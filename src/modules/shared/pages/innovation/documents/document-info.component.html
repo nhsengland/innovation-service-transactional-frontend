@@ -1,18 +1,17 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="pageStep === 'INFO' && documentInfo">
-
         <dl class="nhsuk-summary-list">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Document name</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.name }} ({{ documentInfo.file.extension | uppercase }}{{ documentInfo.file.size ? ', ' + (documentInfo.file.size | bytesPrettyPrint)  : ''}})</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">
+              {{ documentInfo.name }} ({{ documentInfo.file.extension | uppercase }}{{ documentInfo.file.size ? ", " + (documentInfo.file.size | bytesPrettyPrint) : "" }})
+            </dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Uploaded on</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.createdAt | date: ('app.date_formats.medium_date_time' | translate) }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ documentInfo.createdAt | date: ("app.date_formats.medium_date_time" | translate) }}</dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Uploaded by</dt>
@@ -21,10 +20,12 @@
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Location</dt>
             <dd class="nhsuk-summary-list__value">
-              {{ 'shared.catalog.documents.contextType.' + documentInfo.context.type | translate }}
+              {{ "shared.catalog.documents.contextType." + documentInfo.context.type | translate }}
               <br />
               <span *ngIf="!documentInfo.context.descriptionUrl">{{ documentInfo.context.description }}</span>
-              <span *ngIf="documentInfo.context.descriptionUrl"><a routerLink="/{{ documentInfo.context.descriptionUrl }}">{{ documentInfo.context.description }}</a></span>
+              <span *ngIf="documentInfo.context.descriptionUrl"
+                ><a routerLink="/{{ documentInfo.context.descriptionUrl }}">{{ documentInfo.context.description }}</a></span
+              >
             </dd>
           </div>
           <div *ngIf="documentInfo.description" class="nhsuk-summary-list__row">
@@ -35,7 +36,6 @@
 
         <a [href]="documentInfo.file.url" role="button" class="nhsuk-button nhsuk-u-margin-right-3">Download document</a>
         <button *ngIf="canDelete" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">Delete document</button>
-
       </ng-container>
 
       <ng-container *ngIf="pageStep === 'DELETE' && documentInfo">
@@ -47,8 +47,6 @@
         </ng-template>
         <button type="button" class="nhsuk-button" (click)="onDelete()">Delete document</button>
       </ng-container>
-
     </div>
   </div>
-
 </theme-content-wrapper>

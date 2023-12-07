@@ -10,10 +10,9 @@ export type APIQueryParamsType<F = { [key: string]: string | number | boolean | 
 };
 
 export class TableModel<T = { [key: string]: string | number | boolean }, F = APIQueryParamsType['filters']> {
-
   dataSource: T[];
   visibleColumns: {
-    [key: string]: { label: string, align?: AlignType, orderable?: boolean }
+    [key: string]: { label: string; align?: AlignType; orderable?: boolean };
   };
 
   totalRows: number;
@@ -28,10 +27,19 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   filters: null | F;
 
   // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
-  private cachedHeaderColumns: { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[];
+  private cachedHeaderColumns: {
+    key: string;
+    label: string;
+    align: string;
+    orderable: boolean;
+    orderDir: OrderDirectionType;
+  }[];
 
-  constructor(data?: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & { visibleColumns?: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) } }) {
-
+  constructor(
+    data?: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & {
+      visibleColumns?: { [key: string]: string | { label: string; align?: AlignType; orderable?: boolean } };
+    }
+  ) {
     this.dataSource = data?.dataSource || [];
 
     this.visibleColumns = {};
@@ -50,7 +58,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
     this.cachedHeaderColumns = [];
     this.setHeaderColumns();
-
   }
 
   isSortable(): boolean {
@@ -62,39 +69,41 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   }
 
   setFocusOnSortedColumnHeader(column: string): void {
-
-    setTimeout(() => { // Await for the html injection if needed.
-      const button = document.querySelector('button#'+column) as HTMLButtonElement;
-      const caption = button.closest("table")?.firstChild as HTMLTableCaptionElement;
+    setTimeout(() => {
+      // Await for the html injection if needed.
+      const button = document.querySelector('button#' + column) as HTMLButtonElement;
+      const caption = button.closest('table')?.firstChild as HTMLTableCaptionElement;
       caption.setAttribute('aria-hidden', 'true');
       if (button && caption) {
         button.setAttribute('tabIndex', '-1');
         button.focus();
-        button.addEventListener('blur', (e) => {
+        button.addEventListener('blur', e => {
           e.preventDefault();
           button.removeAttribute('tabIndex');
         });
-        button.addEventListener('keyup', (e) => {
+        button.addEventListener('keyup', e => {
           caption.setAttribute('aria-hidden', 'false');
         });
       }
     });
-
   }
 
-  setVisibleColumns(visibleColumns: { [key: string]: (string | { label: string; align?: AlignType; orderable?: boolean; }) }): this {
-
+  setVisibleColumns(visibleColumns: {
+    [key: string]: string | { label: string; align?: AlignType; orderable?: boolean };
+  }): this {
     this.visibleColumns = {};
 
     for (const [key, item] of Object.entries(visibleColumns)) {
-      if (typeof item === 'string') { this.visibleColumns[key] = { label: item }; }
-      else { this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable }; }
+      if (typeof item === 'string') {
+        this.visibleColumns[key] = { label: item };
+      } else {
+        this.visibleColumns[key] = { label: item.label, align: item.align, orderable: item.orderable };
+      }
     }
 
     this.setHeaderColumns();
 
     return this;
-
   }
 
   setPage(page: number): this {
@@ -103,7 +112,6 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   }
 
   setOrderBy(column: string, orderDir?: 'ascending' | 'descending'): this {
-
     if (orderDir) {
       this.orderBy = column;
       this.orderDir = orderDir;
@@ -112,7 +120,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     }
 
     if (this.orderBy === column) {
-      this.orderDir = (['none', 'ascending'].includes(this.orderDir) ? 'descending' : 'ascending');
+      this.orderDir = ['none', 'ascending'].includes(this.orderDir) ? 'descending' : 'ascending';
     } else {
       this.orderBy = column;
       this.orderDir = 'ascending';
@@ -146,39 +154,47 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     return this.visibleColumns[key]?.label || '';
   }
 
-  getHeaderColumns(): { key: string, label: string, align: string, orderable: boolean, orderDir: OrderDirectionType }[] {
+  getHeaderColumns(): {
+    key: string;
+    label: string;
+    align: string;
+    orderable: boolean;
+    orderDir: OrderDirectionType;
+  }[] {
     return this.cachedHeaderColumns;
-
   }
 
   setHeaderColumns(): void {
-
     this.cachedHeaderColumns = Object.entries(this.visibleColumns).map(([key, item]) => ({
       key,
       label: item.label,
       align: `text-align-${item.align || 'left'}`, // Return the CSS class.
       orderable: item.orderable === true ? true : false,
-      orderDir: (this.orderBy === key ? this.orderDir : 'none')
+      orderDir: this.orderBy === key ? this.orderDir : 'none'
     }));
-
   }
 
-  getRecords(): T[] { return this.dataSource; }
+  getRecords(): T[] {
+    return this.dataSource;
+  }
 
-  getVisibleRowsNumber(): number { return this.dataSource.length; }
-  getTotalRowsNumber(): number { return this.totalRows; }
+  getVisibleRowsNumber(): number {
+    return this.dataSource.length;
+  }
+  getTotalRowsNumber(): number {
+    return this.totalRows;
+  }
 
   getAPIQueryParams(): APIQueryParamsType<F> {
-
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
-      order: this.orderBy ? { [this.orderBy]: (['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC') } : undefined,
+      order: this.orderBy
+        ? { [this.orderBy]: ['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' }
+        : undefined,
       // TODO - maybe use this in the future
       // ...(this.filters && { filters: this.filters})
       filters: this.filters || ({} as F)
     };
-
   }
-
 }

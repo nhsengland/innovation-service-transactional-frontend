@@ -8,7 +8,6 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 import { StoresModule } from '@modules/stores';
 
-
 import { InnovationChangeAssessorComponent } from './change-assessor.component';
 
 describe('InnovationChangeAssessorComponent', () => {
@@ -18,21 +17,14 @@ describe('InnovationChangeAssessorComponent', () => {
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
-  
+
   let assessmentService: AssessmentService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InnovationChangeAssessorComponent ],
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AssessmentModule
-      ]
-    })
-    .compileComponents();
+      declarations: [InnovationChangeAssessorComponent],
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
+    }).compileComponents();
 
     AppInjector.setInjector(TestBed.inject(Injector));
 

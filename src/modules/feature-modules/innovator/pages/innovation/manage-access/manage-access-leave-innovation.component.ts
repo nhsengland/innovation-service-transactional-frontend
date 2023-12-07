@@ -10,7 +10,6 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
   templateUrl: './manage-access-leave-innovation.component.html'
 })
 export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   innovation: ContextInnovationType;
 
@@ -20,7 +19,6 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -28,7 +26,6 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
 
     this.setPageTitle(`Leave '${this.innovation.name}' innovation`);
     this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/access`);
-
   }
 
   ngOnInit() {
@@ -36,26 +33,25 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
   }
 
   onSubmit(): void {
-
-    if(this.innovation.collaboratorId) {
-
+    if (this.innovation.collaboratorId) {
       this.submitButton = { isActive: false, label: 'Saving...' };
 
-      const body: { status?: InnovationCollaboratorStatusEnum, role?: string } = {status: InnovationCollaboratorStatusEnum.LEFT};
+      const body: { status?: InnovationCollaboratorStatusEnum; role?: string } = {
+        status: InnovationCollaboratorStatusEnum.LEFT
+      };
 
-      this.innovationsService.updateInnovationCollaborator(this.innovationId, this.innovation.collaboratorId, body).subscribe({
-        next: () => {
-          this.setRedirectAlertSuccess(`You have left the '${this.innovation.name}' innovation.`);
-          this.redirectTo(`/innovator/dashboard`);
-        },
-        error: () => {
-          this.submitButton = { isActive: true, label: 'Leave innovation' };
-          this.setAlertUnknownError();
-        }
-      });
-
+      this.innovationsService
+        .updateInnovationCollaborator(this.innovationId, this.innovation.collaboratorId, body)
+        .subscribe({
+          next: () => {
+            this.setRedirectAlertSuccess(`You have left the '${this.innovation.name}' innovation.`);
+            this.redirectTo(`/innovator/dashboard`);
+          },
+          error: () => {
+            this.submitButton = { isActive: true, label: 'Leave innovation' };
+            this.setAlertUnknownError();
+          }
+        });
     }
-
   }
-
 }

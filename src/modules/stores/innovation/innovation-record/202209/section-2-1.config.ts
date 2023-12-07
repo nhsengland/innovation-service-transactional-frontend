@@ -6,7 +6,6 @@ import { DocumentType202209 } from './document.types';
 
 import { diseasesConditionsImpactItems, innovationImpactItems } from './forms.config';
 
-
 // Labels.
 const stepsLabels = {
   l1: 'Who does your innovation impact?',
@@ -15,12 +14,12 @@ const stepsLabels = {
   l4: 'Please specify the groups of clinicians, carers or administrative staff that your innovation impacts'
 };
 
-
 // Types.
 type InboundPayloadType = DocumentType202209['UNDERSTANDING_OF_NEEDS'];
-type StepPayloadType = Omit<InboundPayloadType, 'impactPatients' | 'impactClinicians'> & { impacts: ('PATIENTS' | 'CLINICIANS')[] };
+type StepPayloadType = Omit<InboundPayloadType, 'impactPatients' | 'impactClinicians'> & {
+  impacts: ('PATIENTS' | 'CLINICIANS')[];
+};
 type OutboundPayloadType = InboundPayloadType;
-
 
 export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'UNDERSTANDING_OF_NEEDS',
@@ -28,71 +27,84 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'impacts',
-          dataType: 'checkbox-array',
-          label: stepsLabels.l1,
-          description: 'We\'re asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will determine which questions we ask in this and other sections.',
-          validations: { isRequired: [true, 'Choose at least one option'] },
-          items: innovationImpactItems
-        }]
+        parameters: [
+          {
+            id: 'impacts',
+            dataType: 'checkbox-array',
+            label: stepsLabels.l1,
+            description:
+              "We're asking this to understand if we should ask you specific questions about patients and/or healthcare professionals. Your answer will determine which questions we ask in this and other sections.",
+            validations: { isRequired: [true, 'Choose at least one option'] },
+            items: innovationImpactItems
+          }
+        ]
       })
     ],
     showSummary: true,
-    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [
+      (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+        runtimeRules(steps, currentValues, currentStep)
+    ],
     inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   })
 };
 
-
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
-
   steps.splice(1);
 
   // PATIENTS.
-  if (!currentValues.impacts?.includes('PATIENTS')) { // Removes all subgroups if no PATIENTS has been selected.
+  if (!currentValues.impacts?.includes('PATIENTS')) {
+    // Removes all subgroups if no PATIENTS has been selected.
     currentValues.subgroups = [];
     delete currentValues.diseasesConditionsImpact;
   } else {
-
     // currentValues.subgroups = currentValues.subgroups.filter(group => group.id || group.name); // This will prevent empty subgroups when user go back (where validations are not triggered).
 
     steps.push(
-
       new FormEngineModel({
-        parameters: [{
-          id: 'diseasesConditionsImpact',
-          dataType: 'autocomplete-array',
-          label: stepsLabels.l2,
-          description: 'Start typing to filter and choose from the available options up to 5 diseases or conditions',
-          validations: { isRequired: [true, 'You must choose at least one disease or condition'], max: [5, 'You can only choose up to 5 diseases or conditions'] },
-          items: diseasesConditionsImpactItems
-        }]
+        parameters: [
+          {
+            id: 'diseasesConditionsImpact',
+            dataType: 'autocomplete-array',
+            label: stepsLabels.l2,
+            description: 'Start typing to filter and choose from the available options up to 5 diseases or conditions',
+            validations: {
+              isRequired: [true, 'You must choose at least one disease or condition'],
+              max: [5, 'You can only choose up to 5 diseases or conditions']
+            },
+            items: diseasesConditionsImpactItems
+          }
+        ]
       }),
       {
         saveStrategy: 'updateAndWait',
         ...new FormEngineModel({
-          parameters: [{
-            id: 'subgroups',
-            dataType: 'fields-group',
-            label: stepsLabels.l3,
-            description: `For example, children aged 0-5, pregnant women, people with high blood pressure. Please write "not applicable" if this doesn't apply to your innovation.`,
-            validations: { isRequired: true },
-            fieldsGroupConfig: {
-              fields: [
-                // { id: 'id', dataType: 'text', isVisible: false },
-                { id: 'name', dataType: 'text', label: 'Population or subgroup', validations: { isRequired: true, maxLength: 50 } }
-              ],
-              addNewLabel: 'Add new population or subgroup'
+          parameters: [
+            {
+              id: 'subgroups',
+              dataType: 'fields-group',
+              label: stepsLabels.l3,
+              description: `For example, children aged 0-5, pregnant women, people with high blood pressure. Please write "not applicable" if this doesn't apply to your innovation.`,
+              validations: { isRequired: true },
+              fieldsGroupConfig: {
+                fields: [
+                  // { id: 'id', dataType: 'text', isVisible: false },
+                  {
+                    id: 'name',
+                    dataType: 'text',
+                    label: 'Population or subgroup',
+                    validations: { isRequired: true, maxLength: 50 }
+                  }
+                ],
+                addNewLabel: 'Add new population or subgroup'
+              }
             }
-          }]
+          ]
         })
       }
-
     );
-
   }
 
   // CLINICIANS.
@@ -101,37 +113,40 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'cliniciansImpactDetails',
-          dataType: 'textarea',
-          label: stepsLabels.l4,
-          description: 'For example, carers of people with functional disability following stroke, GP practice managers, liaison psychiatrists in emergency departments.',
-          validations: { isRequired: [true, 'Specification is required'] },
-          lengthLimit: 's'
-        }]
-
+        parameters: [
+          {
+            id: 'cliniciansImpactDetails',
+            dataType: 'textarea',
+            label: stepsLabels.l4,
+            description:
+              'For example, carers of people with functional disability following stroke, GP practice managers, liaison psychiatrists in emergency departments.',
+            validations: { isRequired: [true, 'Specification is required'] },
+            lengthLimit: 's'
+          }
+        ]
       })
     );
   }
-
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
   const impacts: ('PATIENTS' | 'CLINICIANS')[] = [];
 
-  if (data.impactPatients) { impacts.push('PATIENTS'); }
-  if (data.impactClinicians) { impacts.push('CLINICIANS'); }
+  if (data.impactPatients) {
+    impacts.push('PATIENTS');
+  }
+  if (data.impactClinicians) {
+    impacts.push('CLINICIANS');
+  }
 
   return {
-    ...data, impacts
+    ...data,
+    impacts
     // subgroups: data.subgroups.map(item => ({ id: null, name: item })),
   };
-
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     impactPatients: data.impacts?.includes('PATIENTS') || false,
     impactClinicians: data.impacts?.includes('CLINICIANS') || false,
@@ -139,11 +154,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     diseasesConditionsImpact: data.diseasesConditionsImpact,
     cliniciansImpactDetails: data.cliniciansImpactDetails
   };
-
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
@@ -153,10 +166,11 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   if (data.impacts?.includes('PATIENTS')) {
-
     toReturn.push({
       label: stepsLabels.l2,
-      value: data.diseasesConditionsImpact?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
+      value: data.diseasesConditionsImpact
+        ?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label)
+        .join('\n'),
       editStepNumber: toReturn.length + 1
     });
 
@@ -166,19 +180,15 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       value: data.subgroups?.join('\n'),
       editStepNumber: toReturn.length + 1
     });
-
   }
 
   if (data.impacts?.includes('CLINICIANS')) {
-
     toReturn.push({
       label: stepsLabels.l4,
       value: data.cliniciansImpactDetails,
       editStepNumber: toReturn.length + 1
     });
-
   }
 
   return toReturn;
-
 }

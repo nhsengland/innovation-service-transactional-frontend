@@ -8,20 +8,19 @@ import { clinicalEvidenceItems, hasEvidenceItems } from './forms.config';
 
 import { SECTION_2_EVIDENCES } from './section-2-3-evidences.config';
 
-
 // Labels.
 const stepsLabels = {
   l1: 'Do you have evidence to show the effectiveness of your innovation?'
 };
 
-
 // Types.
-type InboundPayloadType = Omit<DocumentType202209['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & { files: { id: string; name: string; url: string; }[] };
+type InboundPayloadType = Omit<DocumentType202209['EVIDENCE_OF_EFFECTIVENESS'], 'files'> & {
+  files: { id: string; name: string; url: string }[];
+};
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = {
-  hasEvidence: catalogYesInProgressNotYet
+  hasEvidence: catalogYesInProgressNotYet;
 };
-
 
 export const SECTION_2_3: InnovationSectionConfigType<InnovationSections> = {
   id: 'EVIDENCE_OF_EFFECTIVENESS',
@@ -30,14 +29,17 @@ export const SECTION_2_3: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'hasEvidence',
-          dataType: 'radio-group',
-          label: stepsLabels.l1,
-          description: 'Evidence of effectiveness can include clinical and economic effectiveness as well as other proven benefits such as staff and system benefits. You\'ll be able to add several pieces of evidence one at a time. We will ask about user testing and regulatory approval (approvals by government or health authorities) in later sections.',
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: hasEvidenceItems
-        }]
+        parameters: [
+          {
+            id: 'hasEvidence',
+            dataType: 'radio-group',
+            label: stepsLabels.l1,
+            description:
+              "Evidence of effectiveness can include clinical and economic effectiveness as well as other proven benefits such as staff and system benefits. You'll be able to add several pieces of evidence one at a time. We will ask about user testing and regulatory approval (approvals by government or health authorities) in later sections.",
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: hasEvidenceItems
+          }
+        ]
       })
     ],
     showSummary: true,
@@ -46,18 +48,13 @@ export const SECTION_2_3: InnovationSectionConfigType<InnovationSections> = {
   })
 };
 
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     hasEvidence: data.hasEvidence ?? 'NOT_YET'
   };
-
 }
 
-
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
@@ -75,5 +72,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   return toReturn;
-
 }

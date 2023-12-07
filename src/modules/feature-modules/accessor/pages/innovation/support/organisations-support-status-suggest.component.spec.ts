@@ -16,9 +16,7 @@ import { AccessorService } from '@modules/feature-modules/accessor/services/acce
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { FormArray, FormControl } from '@angular/forms';
 
-
 describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisationsSupportStatusSuggestComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -31,13 +29,7 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -50,17 +42,21 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
-
+    activatedRoute.snapshot.data = {
+      innovationData: {
+        id: 'Inno01',
+        name: 'Innovation 01',
+        support: { id: 'Inno01Support01', status: 'ENGAGING' },
+        assessment: {}
+      }
+    };
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(InnovationSupportOrganisationsSupportStatusSuggestComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 
   // it('should have initial information loaded with payload 01', () => {
 
@@ -272,5 +268,4 @@ describe('FeatureModules/Accessor/Innovation/Support/InnovationSupportOrganisati
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

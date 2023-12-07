@@ -1,11 +1,16 @@
-<theme-header id="theme-header" [showUserInformation]="true" [showSignOut]="true" [leftMenuBarItems]="header.menuBarItems.left" [rightMenuBarItems]="header.menuBarItems.right" [notifications]="header.notifications"></theme-header>
+<theme-header
+  id="theme-header"
+  [showUserInformation]="true"
+  [showSignOut]="true"
+  [leftMenuBarItems]="header.menuBarItems.left"
+  [rightMenuBarItems]="header.menuBarItems.right"
+  [notifications]="header.notifications"
+></theme-header>
 <theme-header-breadcrumbs-bar id="theme-breadcrumbs-bar"></theme-header-breadcrumbs-bar>
 
 <div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden" [ngClass]="routeLayoutInfo.backgroundColor">
   <main id="maincontent" role="main" class="nhsuk-main-wrapper nhsuk-u-padding-0">
-
     <div class="nhsuk-width-container app-width-container">
-
       <router-outlet *ngIf="routeLayoutInfo.type !== 'journey'" name="page-context-outlet"></router-outlet>
 
       <ng-container [ngSwitch]="routeLayoutInfo.type">
@@ -19,17 +24,13 @@
           <ng-container *ngTemplateOutlet="fullLayout"></ng-container>
         </ng-container>
       </ng-container>
-
     </div>
-
   </main>
 </div>
 
 <theme-footer></theme-footer>
 
-
 <ng-template #fullLayout>
-
   <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-0">
     <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
       <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="24" width="24">
@@ -39,35 +40,40 @@
     </a>
   </div>
 
-  <theme-alert *ngIf="pageLayout.alert.type" [type]="pageLayout.alert.type" [title]="pageLayout.alert.title" [itemsList]="pageLayout.alert.itemsList" [width]="pageLayout.alert.width" [setFocus]="pageLayout.alert.setFocus"
-    class="d-block nhsuk-u-padding-top-4">
-    <p> {{ pageLayout.alert.message }} </p>
+  <theme-alert
+    *ngIf="pageLayout.alert.type"
+    [type]="pageLayout.alert.type"
+    [title]="pageLayout.alert.title"
+    [itemsList]="pageLayout.alert.itemsList"
+    [width]="pageLayout.alert.width"
+    [setFocus]="pageLayout.alert.setFocus"
+    class="d-block nhsuk-u-padding-top-4"
+  >
+    <p>{{ pageLayout.alert.message }}</p>
   </theme-alert>
 
   <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
-
     <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-      <div [ngClass]="{'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds'}">
-        <theme-page-title [title]="pageLayout.title.main" [titleHint]="pageLayout.title.secondary" [size]="pageLayout.title.size" [actions]="pageLayout.title.actions"></theme-page-title>
+      <div [ngClass]="{ 'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds' }">
+        <theme-page-title
+          [title]="pageLayout.title.main"
+          [titleHint]="pageLayout.title.secondary"
+          [size]="pageLayout.title.size"
+          [actions]="pageLayout.title.actions"
+        ></theme-page-title>
       </div>
     </div>
 
     <router-outlet></router-outlet>
-
   </div>
-
 </ng-template>
 
-
 <ng-template #leftAsideMenu>
-
   <div class="nhsuk-grid-row nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-full">
       <div class="app-pane">
-
         <div class="app-pane__side-bar">
           <nav id="left-aside-menu" class="app-side-nav" role="navigation" aria-label="Main Navigation">
-
             <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
               <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
                 <svg class="nhsuk-icon nhsuk-icon__chevron-left" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="24" width="24">
@@ -78,21 +84,31 @@
             </div>
 
             <router-outlet name="page-sidebar-outlet"></router-outlet>
-
           </nav>
         </div>
 
         <div class="app-pane__main-content">
-
-          <theme-alert *ngIf="pageLayout.alert.type" [type]="pageLayout.alert.type" [title]="pageLayout.alert.title" [itemsList]="pageLayout.alert.itemsList" [width]="pageLayout.alert.width" [setFocus]="pageLayout.alert.setFocus">
-            <p> {{ pageLayout.alert.message }} </p>
+          <theme-alert
+            *ngIf="pageLayout.alert.type"
+            [type]="pageLayout.alert.type"
+            [title]="pageLayout.alert.title"
+            [itemsList]="pageLayout.alert.itemsList"
+            [width]="pageLayout.alert.width"
+            [setFocus]="pageLayout.alert.setFocus"
+          >
+            <p>{{ pageLayout.alert.message }}</p>
           </theme-alert>
 
           <!-- <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5"> -->
 
           <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-            <div [ngClass]="{'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds'}">
-              <theme-page-title [title]="pageLayout.title.main" [titleHint]="pageLayout.title.secondary" [size]="pageLayout.title.size" [actions]="pageLayout.title.actions"></theme-page-title>
+            <div [ngClass]="{ 'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds' }">
+              <theme-page-title
+                [title]="pageLayout.title.main"
+                [titleHint]="pageLayout.title.secondary"
+                [size]="pageLayout.title.size"
+                [actions]="pageLayout.title.actions"
+              ></theme-page-title>
             </div>
           </div>
 
@@ -102,16 +118,11 @@
 
           <div class="nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-5 app-u-hide-desktop">
             <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
-
               <router-outlet name="page-sidebar-mobile-outlet"></router-outlet>
-
             </nav>
           </div>
-
         </div>
-
       </div>
     </div>
   </div>
-
 </ng-template>

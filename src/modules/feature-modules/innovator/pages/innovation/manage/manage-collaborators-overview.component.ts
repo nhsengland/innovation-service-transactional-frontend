@@ -10,12 +10,11 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
-
 type TableListsType = {
-  id: string,
-  name?: string,
-  role: string,
-  action: null | { label: string, url: string }
+  id: string;
+  name?: string;
+  role: string;
+  action: null | { label: string; url: string };
 };
 
 @Component({
@@ -23,17 +22,13 @@ type TableListsType = {
   templateUrl: './manage-collaborators-overview.component.html'
 })
 export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComponent implements OnInit {
-
-  user: { id: string, name: string, email: string };
+  user: { id: string; name: string; email: string };
   innovation: ContextInnovationType;
 
   activeCollaborators: TableModel<TableListsType>;
   historyCollaborators: TableModel<TableListsType>;
 
-  constructor(
-    private innovationsService: InnovationsService
-  ) {
-
+  constructor(private innovationsService: InnovationsService) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -59,24 +54,19 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
         actions: { label: '', align: 'right' }
       }
     });
-
   }
 
   ngOnInit() {
-
     forkJoin([
       this.innovationsService.getInnovationCollaboratorsList(this.innovation.id, ['pending', 'active']),
       this.innovationsService.getInnovationCollaboratorsList(this.innovation.id, ['history'])
     ]).subscribe(([activeCollaborators, historyCollaborators]) => {
-
       let action: null | TableListsType['action'] = null;
 
       this.activeCollaborators.setData([
         ...[{ id: this.user.id, name: this.user.name, role: 'Owner', email: this.user.email, action: null }],
         ...activeCollaborators.data.map(item => {
-
           switch (item.status) {
-
             case InnovationCollaboratorStatusEnum.ACTIVE:
               action = { label: 'Manage', url: `${item.id}` };
               break;
@@ -88,7 +78,6 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
             default:
               action = null;
               break;
-
           }
 
           return {
@@ -98,25 +87,28 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
             email: item.email,
             action
           };
-
         })
       ]);
 
-      this.historyCollaborators.setData(historyCollaborators.data.map(item => ({
-        id: item.id,
-        name: item.name ? `${item.name} (${item.email})` : item.email,
-        role: item.role ?? '',
-        email: item.email,
-        action: { label: 'Invite again', url: `${item.id}/invite-again` }
-      })));
+      this.historyCollaborators.setData(
+        historyCollaborators.data.map(item => ({
+          id: item.id,
+          name: item.name ? `${item.name} (${item.email})` : item.email,
+          role: item.role ?? '',
+          email: item.email,
+          action: { label: 'Invite again', url: `${item.id}/invite-again` }
+        }))
+      );
 
       // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE, NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE] });
+      this.stores.context.dismissNotification(this.innovation.id, {
+        contextDetails: [
+          NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE,
+          NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE
+        ]
+      });
 
       this.setPageStatus('READY');
-
     });
-
   }
-
 }

@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <div *ngIf="sectionInDraft" class="nhsuk-warning-callout">
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
           <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Submit section updates </span>
@@ -10,18 +8,20 @@
         <p>You need to confirm section answers and submit updates so that the organisation that has assigned this task can view your changes.</p>
       </div>
 
-
       <form [formGroup]="form">
-        <theme-form-textarea controlName="message" [label]="pageInformation?.leadText" description="Enter a message" [pageUniqueField]="false" lengthLimit="s"></theme-form-textarea>
+        <theme-form-textarea
+          controlName="message"
+          [label]="pageInformation?.leadText"
+          description="Enter a message"
+          [pageUniqueField]="false"
+          lengthLimit="s"
+        ></theme-form-textarea>
         <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()" [disabled]="submitBtn.isDisabled">{{ submitBtn.label }}</button>
       </form>
 
       <div>
         <a routerLink="/{{ userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/{{ taskId }}">Cancel</a>
       </div>
-
-
     </div>
   </div>
-
 </theme-content-wrapper>

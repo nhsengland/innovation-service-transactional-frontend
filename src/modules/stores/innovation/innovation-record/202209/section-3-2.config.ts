@@ -7,13 +7,11 @@ import { InnovationSections } from './catalog.types';
 import { DocumentType202209 } from './document.types';
 import { hasOtherIntellectualItems, hasPatentsItems } from './forms.config';
 
-
 // Labels.
 const stepsLabels = {
   l1: 'Do you have any patents for your innovation?',
-  l2: 'Do you have any other intellectual property for your innovation?',
+  l2: 'Do you have any other intellectual property for your innovation?'
 };
-
 
 // Types.
 type BaseType = {
@@ -24,31 +22,34 @@ type BaseType = {
 type InboundPayloadType = DocumentType202209['INTELLECTUAL_PROPERTY'];
 type StepPayloadType = InboundPayloadType;
 
-
 export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'INTELLECTUAL_PROPERTY',
   title: 'Intellectual property',
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'hasPatents',
-          dataType: 'radio-group',
-          label: stepsLabels.l1,
-          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: hasPatentsItems
-        }]
+        parameters: [
+          {
+            id: 'hasPatents',
+            dataType: 'radio-group',
+            label: stepsLabels.l1,
+            description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: hasPatentsItems
+          }
+        ]
       }),
       new FormEngineModel({
-        parameters: [{
-          id: 'hasOtherIntellectual',
-          dataType: 'radio-group',
-          label: stepsLabels.l2,
-          description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: hasOtherIntellectualItems
-        }]
+        parameters: [
+          {
+            id: 'hasOtherIntellectual',
+            dataType: 'radio-group',
+            label: stepsLabels.l2,
+            description: `See <a href=${URLS.INNOVATION_GUIDES_ADVANCED_GUIDE} target="_blank" rel="noopener noreferrer">Innovation guides (opens in a new window)</a> for more information about intellectual property.`,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: hasOtherIntellectualItems
+          }
+        ]
       })
     ],
     showSummary: true,
@@ -56,10 +57,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   })
 };
 
-
-
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   return [
     {
       label: stepsLabels.l1,
@@ -68,9 +66,10 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.l2,
-      value: data.otherIntellectual || hasOtherIntellectualItems.find(item => item.value === data.hasOtherIntellectual)?.label,
+      value:
+        data.otherIntellectual ||
+        hasOtherIntellectualItems.find(item => item.value === data.hasOtherIntellectual)?.label,
       editStepNumber: 2
     }
   ];
-
 }

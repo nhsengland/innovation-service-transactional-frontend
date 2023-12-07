@@ -3,18 +3,16 @@ import { UntypedFormControl } from '@angular/forms';
 import { HttpXsrfTokenExtractor } from '@angular/common/http';
 
 import { CookiesService } from '@modules/core';
-import { CoreComponent, } from '@app/base';
+import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
 
 import { COOKIES_USED } from '../../config/constants.config';
 
-
 @Component({
   selector: 'app-policies-cookies-edit',
-  templateUrl: './cookies-edit.component.html',
+  templateUrl: './cookies-edit.component.html'
 })
 export class CookiesEditComponent extends CoreComponent {
-
   analyticsCookies = COOKIES_USED.analytics;
 
   form = new FormGroup({
@@ -31,16 +29,13 @@ export class CookiesEditComponent extends CoreComponent {
     private tokenExtractor: HttpXsrfTokenExtractor,
     private cookiesService: CookiesService
   ) {
-
     super();
     this.setPageTitle('Choose which cookies we use');
 
     this.form.get('analytics')?.setValue(this.cookiesService.getConsentCookie().analytics ? 'true' : 'false');
   }
 
-
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -58,7 +53,5 @@ export class CookiesEditComponent extends CoreComponent {
     }
 
     this.redirectTo('policies/cookies-policy/confirmation');
-
   }
-
 }

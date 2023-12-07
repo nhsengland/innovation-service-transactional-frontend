@@ -3,60 +3,57 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { AnnouncementStatusEnum, AnnouncementsService, GetAnnouncementInfoType } from '@modules/feature-modules/admin/services/announcements.service';
-
+import {
+  AnnouncementStatusEnum,
+  AnnouncementsService,
+  GetAnnouncementInfoType
+} from '@modules/feature-modules/admin/services/announcements.service';
 
 @Component({
   selector: 'app-admin-pages-announcement-info',
   templateUrl: './announcement-info.component.html'
 })
 export class PageAnnouncementInfoComponent extends CoreComponent implements OnInit {
-
   announcementId: string;
-  announcement: null | GetAnnouncementInfoType & {
-    userGroupsLabels: string,
-    isScheduled: boolean,
-    isActive: boolean
-  } = null;
+  announcement:
+    | null
+    | (GetAnnouncementInfoType & {
+        userGroupsLabels: string;
+        isScheduled: boolean;
+        isActive: boolean;
+      }) = null;
   pageStep: 'INFO' | 'REMOVE' = 'INFO';
-
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService
   ) {
-
     super();
 
     this.announcementId = this.activatedRoute.snapshot.params.announcementId;
-
   }
 
   ngOnInit(): void {
-
     this.gotoInfoPage();
 
     this.announcementsService.getAnnouncementInfo(this.announcementId).subscribe({
       next: response => {
-
         this.announcement = {
           ...response,
-          userGroupsLabels: response.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n'),
+          userGroupsLabels: response.userRoles
+            .map(item => this.stores.authentication.getRoleDescription(item))
+            .join('\n'),
           isScheduled: response.status === AnnouncementStatusEnum.SCHEDULED,
           isActive: response.status === AnnouncementStatusEnum.ACTIVE
         };
 
         this.setPageStatus('READY');
-
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
-
     });
-
   }
 
   gotoInfoPage() {
@@ -72,7 +69,6 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
   }
 
   onDelete() {
-
     this.announcementsService.deleteAnnouncement(this.announcementId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The announcement was deleted');
@@ -83,7 +79,5 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
         this.setAlertUnknownError();
       }
     });
-
   }
-
 }

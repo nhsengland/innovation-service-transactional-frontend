@@ -11,38 +11,40 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-
 type TabType = {
-  key: InnovationSupportStatusEnum,
-  title: string,
-  mainDescription: string,
-  secondaryDescription?: string,
-  showAssignedToMeFilter: boolean,
-  showSuggestedOnlyFilter: boolean,
-  link: string,
-  queryParams: { status: InnovationSupportStatusEnum, assignedToMe?: boolean },
-  notifications: NotificationValueType,
+  key: InnovationSupportStatusEnum;
+  title: string;
+  mainDescription: string;
+  secondaryDescription?: string;
+  showAssignedToMeFilter: boolean;
+  showSuggestedOnlyFilter: boolean;
+  link: string;
+  queryParams: { status: InnovationSupportStatusEnum; assignedToMe?: boolean };
+  notifications: NotificationValueType;
 };
-
 
 @Component({
   selector: 'app-accessor-pages-innovations-review',
   templateUrl: './innovations-review.component.html'
 })
 export class InnovationsReviewComponent extends CoreComponent implements OnInit {
-
   defaultStatus: '' | 'UNASSIGNED' | 'ENGAGING' = '';
 
   tabs: TabType[] = [];
   currentTab: TabType;
 
-  form = new FormGroup({
-    assignedToMe: new FormControl(false),
-    suggestedOnly: new FormControl(true)
-  }, { updateOn: 'change' });
+  form = new FormGroup(
+    {
+      assignedToMe: new FormControl(false),
+      suggestedOnly: new FormControl(true)
+    },
+    { updateOn: 'change' }
+  );
 
   innovationsList: TableModel<
-    InnovationsListDTO['data'][0] & { supportInfo: { accessorsNames: string[], supportingOrganisations: string[], updatedAt: null | DateISOType } },
+    InnovationsListDTO['data'][0] & {
+      supportInfo: { accessorsNames: string[]; supportingOrganisations: string[]; updatedAt: null | DateISOType };
+    },
     InnovationsListFiltersType
   >;
 
@@ -52,12 +54,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
     this.setPageTitle('Innovations');
 
     if (this.stores.authentication.isAccessorRole()) {
-
       this.defaultStatus = 'ENGAGING';
       this.tabs = [
         {
@@ -66,7 +66,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
@@ -75,23 +76,24 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
-
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
-
       this.defaultStatus = 'UNASSIGNED';
       this.tabs = [
         {
           key: InnovationSupportStatusEnum.UNASSIGNED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
-          secondaryDescription: 'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
+          secondaryDescription:
+            'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
           notifications: null
         },
         {
@@ -100,7 +102,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
@@ -109,7 +112,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Waiting for an internal decision to progress.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.WAITING },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.WAITING },
           notifications: null
         },
         {
@@ -118,7 +122,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has no suitable offer for these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.UNSUITABLE },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.UNSUITABLE },
           notifications: null
         },
         {
@@ -127,7 +132,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has closed its engagement with these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
-          link: '/accessor/innovations', queryParams: { status: InnovationSupportStatusEnum.CLOSED },
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
@@ -145,51 +151,45 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     };
 
     this.innovationsList = new TableModel({});
-
   }
 
   ngOnInit(): void {
-
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams)),
       this.form.valueChanges.subscribe(() => this.onFormChange())
     );
-
   }
 
   getInnovationsList(column?: string): void {
-
     this.setPageStatus('LOADING');
 
-    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe(response => {
-      this.innovationsList.setData(
-        response.data.map(item => {
+    this.innovationsService
+      .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
+      .subscribe(response => {
+        this.innovationsList.setData(
+          response.data.map(item => {
+            const supportingOrganisations = (item.supports ?? [])
+              .filter(s => s.status === InnovationSupportStatusEnum.ENGAGING)
+              .map(s => s.organisation.acronym || '');
 
-          const supportingOrganisations = (item.supports ?? [])
-            .filter(s => s.status === InnovationSupportStatusEnum.ENGAGING)
-            .map(s => s.organisation.acronym || '');
-
-          return {
-            ...item,
-            supportInfo: {
-              accessorsNames: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)),
-              supportingOrganisations: [...new Set(supportingOrganisations)], // Remove duplicates.
-              updatedAt: item.supports && item.supports.length > 0 ? item.supports[0].updatedAt : null
-            }
-          };
-
-        }),
-        response.count);
-      if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
-      this.setPageStatus('READY');
-    });
-
+            return {
+              ...item,
+              supportInfo: {
+                accessorsNames: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)),
+                supportingOrganisations: [...new Set(supportingOrganisations)], // Remove duplicates.
+                updatedAt: item.supports && item.supports.length > 0 ? item.supports[0].updatedAt : null
+              }
+            };
+          }),
+          response.count
+        );
+        if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
+        this.setPageStatus('READY');
+      });
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum): void {
-
     switch (status) {
-
       case InnovationSupportStatusEnum.UNASSIGNED:
         this.innovationsList
           .clearData()
@@ -245,13 +245,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setOrderBy('updatedAt', 'descending');
         break;
-
     }
-
   }
 
   onRouteChange(queryParams: Params): void {
-
     this.setPageTitle('Innovations');
 
     const currentStatus = queryParams.status;
@@ -270,28 +267,20 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
-
   }
 
   onFormChange(): void {
-
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
-
   }
 
   onTableOrder(column: string): void {
-
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList(column);
-
   }
 
   onPageChange(event: { pageNumber: number }): void {
-
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
-
   }
-
 }

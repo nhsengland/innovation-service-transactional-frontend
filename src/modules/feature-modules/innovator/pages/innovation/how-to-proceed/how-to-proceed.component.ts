@@ -6,7 +6,6 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
-
 enum FormFieldActionsEnum {
   WITHDRAW = 'WITHDRAW',
   DELETE_ACCOUNT = 'DELETE_ACCOUNT',
@@ -14,13 +13,11 @@ enum FormFieldActionsEnum {
   NO_ACTION = 'NO_ACTION'
 }
 
-
 @Component({
   selector: 'app-innovator-pages-innovation-how-to-proceed',
   templateUrl: './how-to-proceed.component.html'
 })
 export class PageInnovationHowToProceedComponent extends CoreComponent {
-
   innovationId: string;
   baseUrl: string;
 
@@ -43,26 +40,24 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     ]
   };
 
-
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {
-
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     const isOwner = this.stores.context.getInnovation().loggedUser.isOwner;
 
     if (isOwner) {
-      this.formfieldAction.items.push({
-        value: FormFieldActionsEnum.WITHDRAW,
-        label: `Withdraw your innovation`,
-        description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation Service account.`
-      },
-      {
-        value: FormFieldActionsEnum.DELETE_ACCOUNT,
-        label: `Delete your account`,
-        description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation Service.`
-      });
+      this.formfieldAction.items.push(
+        {
+          value: FormFieldActionsEnum.WITHDRAW,
+          label: `Withdraw your innovation`,
+          description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation Service account.`
+        },
+        {
+          value: FormFieldActionsEnum.DELETE_ACCOUNT,
+          label: `Delete your account`,
+          description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation Service.`
+        }
+      );
     }
 
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
@@ -70,20 +65,24 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     this.setPageTitle(this.formfieldAction.title, { showPage: false });
     this.setBackLink('Go back', this.baseUrl);
 
-    this.form = new FormGroup({
-      action: new FormControl<null | FormFieldActionsEnum>(null, { validators: CustomValidators.required('Please choose an option') }),
-    }, { updateOn: 'blur' });
+    this.form = new FormGroup(
+      {
+        action: new FormControl<null | FormFieldActionsEnum>(null, {
+          validators: CustomValidators.required('Please choose an option')
+        })
+      },
+      { updateOn: 'blur' }
+    );
 
     // Throw notification read dismiss.
-    this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT] });
+    this.stores.context.dismissNotification(this.innovationId, {
+      contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT]
+    });
 
     this.setPageStatus('READY');
-
   }
 
-
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -104,11 +103,11 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
       case FormFieldActionsEnum.NO_ACTION:
       default:
-        this.setRedirectAlertSuccess('Your innovation will remain with unassigned status for now', { message: 'You can come back here and choose how you want to continue later.' });
+        this.setRedirectAlertSuccess('Your innovation will remain with unassigned status for now', {
+          message: 'You can come back here and choose how you want to continue later.'
+        });
         this.redirectTo(this.baseUrl);
         break;
     }
-
   }
-
 }

@@ -3,17 +3,14 @@ import { Router } from '@angular/router';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-
 @Injectable()
-export class AnnouncementsAccessGuard  {
-
+export class AnnouncementsAccessGuard {
   constructor(
     private router: Router,
     private authentication: AuthenticationStore
-  ) { }
+  ) {}
 
   canActivate(): boolean {
-
     const userContext = this.authentication.getUserContextInfo();
 
     if (!userContext) {
@@ -33,7 +30,5 @@ export class AnnouncementsAccessGuard  {
     }
 
     return true;
-
   }
-
 }

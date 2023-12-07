@@ -6,33 +6,29 @@ import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
 @Injectable()
-export class ShareInnovationRecordGuard  {
-
+export class ShareInnovationRecordGuard {
   constructor(
     private router: Router,
     private innovationsService: InnovationsService,
     private innovationStore: InnovationStore
-  ) { }
+  ) {}
 
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> {
-
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     const innovationId = route.params.innovationId;
 
-    return  forkJoin([
+    return forkJoin([
       this.innovationsService.getInnovationInfo(innovationId),
       this.innovationStore.getSectionsSummary$(innovationId)
     ]).pipe(
       map(([innovation, sections]) => {
+        const allSectionsSubmitted = sections.reduce(
+          (acc: boolean, item) => acc && item.sections.every(section => section.status === 'SUBMITTED'),
+          true
+        );
 
-        const allSectionsSubmitted = sections.reduce((acc: boolean, item) => acc && item.sections.every(section => section.status === 'SUBMITTED'), true);
-
-        if(innovation.status === InnovationStatusEnum.CREATED && allSectionsSubmitted) {
+        if (innovation.status === InnovationStatusEnum.CREATED && allSectionsSubmitted) {
           return true;
-        }
-        else {
+        } else {
           this.router.navigateByUrl(`innovator/innovations/${innovationId}/record`);
           return false;
         }
@@ -42,7 +38,5 @@ export class ShareInnovationRecordGuard  {
         return of(false);
       })
     );
-
   }
-
 }

@@ -9,7 +9,6 @@ import { ContextInnovationType } from '@modules/stores';
   templateUrl: './manage-access-overview.component.html'
 })
 export class PageInnovationManageAccessOverviewComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   innovation: ContextInnovationType;
   innovationDescription: string | null = '';
@@ -18,24 +17,18 @@ export class PageInnovationManageAccessOverviewComponent extends CoreComponent i
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
 
     this.setPageTitle('You are collaborating on this innovation');
-
   }
 
   ngOnInit() {
-
-    this.innovationsService.getInnovationInfo(this.innovationId)
-    .subscribe((innovationInfo) => {
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(innovationInfo => {
       this.innovationDescription = innovationInfo.description;
       this.setPageStatus('READY');
     });
-
   }
-
 }

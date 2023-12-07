@@ -13,23 +13,29 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { GetThreadFollowersDTO, GetThreadInfoDTO, GetThreadMessagesListOutDTO, InnovationsService, UploadThreadMessageDocumentType } from '@modules/shared/services/innovations.service';
+import {
+  GetThreadFollowersDTO,
+  GetThreadInfoDTO,
+  GetThreadMessagesListOutDTO,
+  InnovationsService,
+  UploadThreadMessageDocumentType
+} from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { omit } from 'lodash';
-
 
 @Component({
   selector: 'shared-pages-innovation-messages-thread-messages-list',
   templateUrl: './thread-messages-list.component.html'
 })
 export class PageInnovationThreadMessagesListComponent extends CoreComponent implements OnInit {
-
-  selfUser: { id: string, urlBasePath: string, roleId: string, role: string };
+  selfUser: { id: string; urlBasePath: string; roleId: string; role: string };
   innovation: ContextInnovationType;
   threadId: string;
 
   threadInfo: null | GetThreadInfoDTO = null;
-  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { displayUserName: string }>({ pageSize: 10 }) ;
+  messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { displayUserName: string }>({
+    pageSize: 10
+  });
   engagingOrganisationUnits: InnovationSupportsListDTO;
 
   showFollowersHideStatus: string | null = null;
@@ -40,16 +46,22 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   threadsLink = '';
   showAddRecipientsLink = false;
 
-  form = new FormGroup({
-    message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    file: new FormControl<File | null>(null, [CustomValidators.emptyFileValidator(), CustomValidators.maxFileSizeValidator(20)]),
-    fileName: new FormControl<string>(''),
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      message: new FormControl<string>('', CustomValidators.required('A message is required')),
+      file: new FormControl<File | null>(null, [
+        CustomValidators.emptyFileValidator(),
+        CustomValidators.maxFileSizeValidator(20)
+      ]),
+      fileName: new FormControl<string>('')
+    },
+    { updateOn: 'blur' }
+  );
 
   configInputFile = {
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
     maxFileSize: 20 // In Mb.
-  }
+  };
 
   // Flags
   isInnovatorType: boolean;
@@ -63,7 +75,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     private innovationsService: InnovationsService,
     private fileUploadService: FileUploadService
   ) {
-
     super();
     this.setPageTitle('Messages', { showPage: false });
 
@@ -82,7 +93,16 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     const previousUrl = this.stores.context.getPreviousUrl();
 
-    this.setBackLink('Go back', previousUrl ? (previousUrl?.endsWith('recipients') ? this.threadsLink : (documentAction ? this.threadsLink : previousUrl!)) : this.threadsLink);
+    this.setBackLink(
+      'Go back',
+      previousUrl
+        ? previousUrl?.endsWith('recipients')
+          ? this.threadsLink
+          : documentAction
+            ? this.threadsLink
+            : previousUrl!
+        : this.threadsLink
+    );
 
     this.engagingOrganisationUnits = [];
 
@@ -91,30 +111,29 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
-
   }
 
-
   ngOnInit(): void {
-
     this.messagesList.setOrderBy('createdAt', 'descending');
     this.getThreadsList();
-
   }
 
   getThreadsList(): void {
-
     this.setPageStatus('LOADING');
 
     const subscriptions: {
-      threadInfo: Observable<GetThreadInfoDTO>,
-      threadFollowers: Observable<GetThreadFollowersDTO>,
-      threadMessages: Observable<GetThreadMessagesListOutDTO>,
-      supports?: Observable<InnovationSupportsListDTO>
+      threadInfo: Observable<GetThreadInfoDTO>;
+      threadFollowers: Observable<GetThreadFollowersDTO>;
+      threadMessages: Observable<GetThreadMessagesListOutDTO>;
+      supports?: Observable<InnovationSupportsListDTO>;
     } = {
       threadInfo: this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
       threadFollowers: this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId),
-      threadMessages: this.innovationsService.getThreadMessagesList(this.innovation.id, this.threadId, this.messagesList.getAPIQueryParams()),
+      threadMessages: this.innovationsService.getThreadMessagesList(
+        this.innovation.id,
+        this.threadId,
+        this.messagesList.getAPIQueryParams()
+      )
     };
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
@@ -122,8 +141,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     }
 
     forkJoin(subscriptions).subscribe({
-      next: (response) => {
-
+      next: response => {
         this.threadInfo = response.threadInfo;
         this.threadFollowers = response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
         this.isFollower = this.threadFollowers.some(follower => follower.id === this.selfUser.id);
@@ -133,19 +151,33 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         const threadMessages = response.threadMessages.messages.map(message => {
           return {
             ...message,
-            displayUserName:`${ message.createdBy.name }, ${ message.createdBy.organisationUnit?.name ? message.createdBy.organisationUnit?.acronym : message.createdBy.role === "ASSESSMENT" ? "Needs assessment" : message.createdBy.isOwner ? "Innovator owner" : "Innovator" }`
-          }
+            displayUserName: `${message.createdBy.name}, ${
+              message.createdBy.organisationUnit?.name
+                ? message.createdBy.organisationUnit?.acronym
+                : message.createdBy.role === 'ASSESSMENT'
+                  ? 'Needs assessment'
+                  : message.createdBy.isOwner
+                    ? 'Innovator owner'
+                    : 'Innovator'
+            }`
+          };
         });
 
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
         if (response.supports) {
-
           // Engaging organisation units except the user unit, if accessor.
-          this.engagingOrganisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING || item.status === InnovationSupportStatusEnum.WAITING);
+          this.engagingOrganisationUnits = response.supports.filter(
+            item =>
+              item.status === InnovationSupportStatusEnum.ENGAGING ||
+              item.status === InnovationSupportStatusEnum.WAITING
+          );
 
           if (this.stores.authentication.isAccessorType()) {
-            this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
+            this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(
+              item =>
+                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+            );
           }
 
           // Keep only active engaging accessors
@@ -153,55 +185,76 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
             return {
               ...item,
               engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
-            }
+            };
           });
 
           // Checks if there's any engaging accessor that's not a follower
-          this.showAddRecipientsLink = this.engagingOrganisationUnits.reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], []).some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
-
+          this.showAddRecipientsLink = this.engagingOrganisationUnits
+            .reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], [])
+            .some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
         }
 
         // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, { contextTypes: [NotificationCategoryTypeEnum.MESSAGES], contextIds: [this.threadInfo.id] });
+        this.stores.context.dismissNotification(this.innovation.id, {
+          contextTypes: [NotificationCategoryTypeEnum.MESSAGES],
+          contextIds: [this.threadInfo.id]
+        });
 
         switch (this.threadInfo.context?.type) {
           case 'TASK':
             if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS, NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR, NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
-            }
-            else if (this.isAssessmentType || this.isAccessorType) {
-              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT, NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT], contextIds: [this.threadInfo.context!.id] });
+              this.stores.context.dismissNotification(this.innovation.id, {
+                contextDetails: [
+                  NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS,
+                  NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR,
+                  NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR
+                ],
+                contextIds: [this.threadInfo.context!.id]
+              });
+            } else if (this.isAssessmentType || this.isAccessorType) {
+              this.stores.context.dismissNotification(this.innovation.id, {
+                contextDetails: [
+                  NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT,
+                  NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT
+                ],
+                contextIds: [this.threadInfo.context!.id]
+              });
             }
             break;
           case 'SUPPORT':
-              if (this.isInnovatorType) {
-                this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING, NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
-              }
-              break;
+            if (this.isInnovatorType) {
+              this.stores.context.dismissNotification(this.innovation.id, {
+                contextDetails: [
+                  NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING,
+                  NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR
+                ],
+                contextIds: [this.threadInfo.context!.id]
+              });
+            }
+            break;
           case 'NEEDS_ASSESSMENT':
             if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, { contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR], contextIds: [this.threadInfo.context!.id] });
+              this.stores.context.dismissNotification(this.innovation.id, {
+                contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR],
+                contextIds: [this.threadInfo.context!.id]
+              });
             }
             break;
         }
 
         this.setPageStatus('READY');
-
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
-  };
-
+  }
 
   onShowParticipantsClick() {
     if (this.showFollowersHideStatus !== 'opened') {
-
       this.showFollowersHideStatus = 'opened';
       this.showFollowersText = 'Hide list';
-
     } else {
       this.showFollowersHideStatus = 'closed';
       this.showFollowersText = 'Show list';
@@ -209,10 +262,11 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   onUnfollowMessageThreadClick(): void {
-
     this.innovationsService.deleteThreadFollower(this.innovation.id, this.threadId, this.selfUser.roleId).subscribe({
       next: () => {
-        this.setAlertSuccess('You have unfollowed this message thread', { message: 'You will not be notified about new replies.' });
+        this.setAlertSuccess('You have unfollowed this message thread', {
+          message: 'You will not be notified about new replies.'
+        });
         this.getThreadsList();
       },
       error: () => {
@@ -220,18 +274,18 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.setAlertUnknownError();
       }
     });
-
   }
 
   onFollowMessageThreadClick(): void {
-
     const body = {
       followerUserRoleIds: [this.selfUser.roleId]
     };
 
     this.innovationsService.addThreadFollowers(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
-        this.setAlertSuccess('You have followed this message thread', { message: 'You will be notified about new replies.' });
+        this.setAlertSuccess('You have followed this message thread', {
+          message: 'You will be notified about new replies.'
+        });
         this.getThreadsList();
       },
       error: () => {
@@ -239,11 +293,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.setAlertUnknownError();
       }
     });
-
   }
 
   checkIfUnfollowed(userId: string): boolean {
-    return this.threadFollowers?.some(follower => (follower.id === userId)) ?? false;
+    return this.threadFollowers?.some(follower => follower.id === userId) ?? false;
   }
 
   onTableOrder(column: string): void {
@@ -257,7 +310,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   }
 
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -270,30 +322,33 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     let body: UploadThreadMessageDocumentType = { message: this.form.value.message! };
 
     if (file) {
-
       const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
 
-      this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
-        switchMap(response => {
-          const fileData = omit(response, 'url');
-          body = {
-            ...body,
-            file: {
-              name: this.form.value.fileName!,
-              file: fileData
-            }
-          }
-          return this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body);
-        })).subscribe({
+      this.fileUploadService
+        .uploadFile(httpUploadBody, file)
+        .pipe(
+          switchMap(response => {
+            const fileData = omit(response, 'url');
+            body = {
+              ...body,
+              file: {
+                name: this.form.value.fileName!,
+                file: fileData
+              }
+            };
+            return this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body);
+          })
+        )
+        .subscribe({
           next: () => {
-
             this.form.reset();
             this.form.markAsPristine();
 
-            this.setAlertSuccess('You have successfully sent a message', { message: 'All participants in this conversation will be notified.' });
+            this.setAlertSuccess('You have successfully sent a message', {
+              message: 'All participants in this conversation will be notified.'
+            });
 
             this.getThreadsList();
-
           },
           error: () => {
             this.setPageStatus('READY');
@@ -303,20 +358,19 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     } else {
       this.createThreadMessage(body);
     }
-
   }
 
   createThreadMessage(body: UploadThreadMessageDocumentType) {
     this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
-
         this.form.reset();
         this.form.markAsPristine();
 
-        this.setAlertSuccess('You have successfully sent a message', { message: 'All participants in this conversation will be notified.' });
+        this.setAlertSuccess('You have successfully sent a message', {
+          message: 'All participants in this conversation will be notified.'
+        });
 
         this.getThreadsList();
-
       },
       error: () => {
         this.setPageStatus('READY');
@@ -324,5 +378,4 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       }
     });
   }
-
 }

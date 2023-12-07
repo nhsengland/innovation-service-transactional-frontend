@@ -2,22 +2,19 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 
-
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
 export type WizardSummaryType = {
-  type?: 'keyValueLink' | 'button',
-  label: string,
-  value?: null | string,
-  editStepNumber?: number,
-  evidenceId?: string,
-  allowHTML?: boolean,
-  isFile?: boolean
+  type?: 'keyValueLink' | 'button';
+  label: string;
+  value?: null | string;
+  editStepNumber?: number;
+  evidenceId?: string;
+  allowHTML?: boolean;
+  isFile?: boolean;
 };
 
-
 export class WizardEngineModel {
-
   steps: WizardStepType[];
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
@@ -56,31 +53,34 @@ export class WizardEngineModel {
   }
 
   runSummaryParsing(data?: MappedObjectType): WizardSummaryType[] {
-
-    if (!this.summaryParsing) { return []; }
+    if (!this.summaryParsing) {
+      return [];
+    }
 
     this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
 
     return this.summary;
-
   }
 
-  isFirstStep(): boolean { return Number(this.currentStepId) === 1; }
-  isLastStep(): boolean { return Number(this.currentStepId) === this.steps.length; }
+  isFirstStep(): boolean {
+    return Number(this.currentStepId) === 1;
+  }
+  isLastStep(): boolean {
+    return Number(this.currentStepId) === this.steps.length;
+  }
   isValidStep(step: number | 'summary'): boolean {
-    return ((1 <= Number(step) && Number(step) <= this.steps.length) || step === 'summary');
+    return (1 <= Number(step) && Number(step) <= this.steps.length) || step === 'summary';
   }
   isQuestionStep(): boolean {
+    if (typeof this.currentStepId !== 'number') {
+      return false;
+    }
 
-    if (typeof this.currentStepId !== 'number') { return false; }
-
-    return (1 <= Number(this.currentStepId) && Number(this.currentStepId) <= this.steps.length);
-
+    return 1 <= Number(this.currentStepId) && Number(this.currentStepId) <= this.steps.length;
   }
   isSummaryStep(): boolean {
-    return (this.showSummary && this.currentStepId === 'summary');
+    return this.showSummary && this.currentStepId === 'summary';
   }
-
 
   currentStep(): FormEngineModel & WizardStepType {
     if (typeof this.currentStepId === 'number') {
@@ -105,11 +105,9 @@ export class WizardEngineModel {
     }
 
     return this;
-
   }
 
   nextStep(): this {
-
     if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
       this.runSummaryParsing();
       this.currentStepId = 'summary';
@@ -118,12 +116,12 @@ export class WizardEngineModel {
     }
 
     return this;
-
   }
 
   gotoStep(step: number | 'summary'): this {
-
-    if (step === 'summary') { this.runSummaryParsing(); }
+    if (step === 'summary') {
+      this.runSummaryParsing();
+    }
 
     this.currentStepId = parseInt(step as string, 10);
 
@@ -146,12 +144,11 @@ export class WizardEngineModel {
     return this;
   }
 
+  getSummary(): WizardSummaryType[] {
+    return this.summary;
+  }
 
-  getSummary(): WizardSummaryType[] { return this.summary; }
-
-
-  validateData(): { valid: boolean, errors: { title: string, description: string }[] } {
-
+  validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
     const parameters = this.steps.flatMap(step => step.parameters);
     const form = FormEngineHelper.buildForm(parameters, this.currentAnswers);
 
@@ -162,7 +159,5 @@ export class WizardEngineModel {
         description: value || ''
       }))
     };
-
   }
-
 }

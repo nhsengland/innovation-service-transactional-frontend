@@ -21,10 +21,8 @@ import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/
 import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
 
-
 @Component({ template: '' })
 export class CoreComponent implements OnDestroy {
-
   private platformId: object;
   private serverRequest: Request | null;
   private serverResponse: Response | null;
@@ -60,7 +58,6 @@ export class CoreComponent implements OnDestroy {
   public pageStatus: ContextPageStatusType = 'LOADING';
 
   constructor() {
-
     const injector = AppInjector.getInjector();
 
     this.platformId = injector.get(PLATFORM_ID);
@@ -98,24 +95,33 @@ export class CoreComponent implements OnDestroy {
     this.stores.context.setCurrentUrl(this.location.path());
 
     this.subscriptions.push(
-      this.stores.context.pageLayoutStatus$().subscribe(item => { this.pageStatus = item; }),
+      this.stores.context.pageLayoutStatus$().subscribe(item => {
+        this.pageStatus = item;
+      }),
       this.router.events.subscribe((e: any) => {
-        if(e instanceof NavigationEnd) {
+        if (e instanceof NavigationEnd) {
           this.stores.context.setCurrentUrl(e.urlAfterRedirects);
         }
       })
     );
-
   }
 
   /* istanbul ignore next */
-  get sRequest(): null | Request { return this.serverRequest; }
+  get sRequest(): null | Request {
+    return this.serverRequest;
+  }
   /* istanbul ignore next */
-  get sResponse(): null | Response { return this.serverResponse; }
+  get sResponse(): null | Response {
+    return this.serverResponse;
+  }
   /* istanbul ignore next */
-  get requestBody(): MappedObjectType { return this.serverRequest?.body || {}; }
+  get requestBody(): MappedObjectType {
+    return this.serverRequest?.body || {};
+  }
   /* istanbul ignore next */
-  get pageTitle(): string { return this.stores.context.state.pageLayoutBS.getValue().title.main ?? ''; } // Deprecated!
+  get pageTitle(): string {
+    return this.stores.context.state.pageLayoutBS.getValue().title.main ?? '';
+  } // Deprecated!
 
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -129,30 +135,41 @@ export class CoreComponent implements OnDestroy {
     return this.serverRequest?.method?.toLowerCase() === 'post';
   }
 
-  setPageTitle(main: string, options?: { hint?: string, showTab?: boolean, showPage?: boolean, size?: 'xl' | 'l', width?: 'full' | '2.thirds', actions?: LinkType[] }): void {
-
+  setPageTitle(
+    main: string,
+    options?: {
+      hint?: string;
+      showTab?: boolean;
+      showPage?: boolean;
+      size?: 'xl' | 'l';
+      width?: 'full' | '2.thirds';
+      actions?: LinkType[];
+    }
+  ): void {
     main = main ? this.translateService.instant(main) : null;
 
     if (main && (options?.showPage ?? true)) {
-      this.stores.context.setPageTitle({ main, secondary: options?.hint, size: options?.size, width: options?.width, actions: options?.actions });
+      this.stores.context.setPageTitle({
+        main,
+        secondary: options?.hint,
+        size: options?.size,
+        width: options?.width,
+        actions: options?.actions
+      });
     } else {
       this.stores.context.setPageTitle({ main: null });
     }
 
-    const tabTitle = (main && (options?.showTab ?? true)) ? `${main} | ` : '';
+    const tabTitle = main && (options?.showTab ?? true) ? `${main} | ` : '';
     this.titleService.setTitle(`${tabTitle}${this.translateService.instant('app.title')}`);
-
   }
 
-
   setPageStatus(status: 'LOADING' | 'READY' | 'ERROR'): void {
-
     // When running server side, the status always remains LOADING.
     // The visual effects only are meant to be applied on the browser.
     if (this.isRunningOnBrowser()) {
       this.stores.context.setPageStatus(status);
     }
-
   }
 
   resetBackLink() {
@@ -167,12 +184,14 @@ export class CoreComponent implements OnDestroy {
    * @param hiddenLabel hidden label for the back button
    */
   setBackLink(label?: string, urlOrCallback?: string | ((...p: any) => void), hiddenLabel?: string): void {
-
-    if (!label) { label = 'Go back'; }
+    if (!label) {
+      label = 'Go back';
+    }
 
     // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
     if (!urlOrCallback) {
-      urlOrCallback = this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
+      urlOrCallback =
+        this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
     }
 
     if (typeof urlOrCallback === 'string') {
@@ -190,26 +209,112 @@ export class CoreComponent implements OnDestroy {
     this.alert = { type: data.type, title: data.title, message: data.message, setFocus: true };
     this.stores.context.setPageAlert(data);
   }
-  setRedirectAlertSuccess(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.stores.context.setPageAlert({ type: 'SUCCESS', title, message: options?.message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
+  setRedirectAlertSuccess(
+    title: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.stores.context.setPageAlert({
+      type: 'SUCCESS',
+      title,
+      message: options?.message,
+      itemsList: options?.itemsList,
+      width: options?.width,
+      persistOneRedirect: true
+    });
   }
-  setRedirectAlertInformation(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.stores.context.setPageAlert({ type: 'INFORMATION', title, message: options?.message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
+  setRedirectAlertInformation(
+    title: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.stores.context.setPageAlert({
+      type: 'INFORMATION',
+      title,
+      message: options?.message,
+      itemsList: options?.itemsList,
+      width: options?.width,
+      persistOneRedirect: true
+    });
   }
-  setRedirectAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.stores.context.setPageAlert({ type: 'ERROR', title: 'There is a problem', message, itemsList: options?.itemsList, width: options?.width, persistOneRedirect: true });
+  setRedirectAlertError(
+    message: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.stores.context.setPageAlert({
+      type: 'ERROR',
+      title: 'There is a problem',
+      message,
+      itemsList: options?.itemsList,
+      width: options?.width,
+      persistOneRedirect: true
+    });
   }
-  setAlertSuccess(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.setAlert({ type: 'SUCCESS', title, message: options?.message, itemsList: options?.itemsList, width: options?.width });
+  setAlertSuccess(
+    title: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.setAlert({
+      type: 'SUCCESS',
+      title,
+      message: options?.message,
+      itemsList: options?.itemsList,
+      width: options?.width
+    });
   }
-  setAlertWarning(title: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.setAlert({ type: 'WARNING', title, message: options?.message, itemsList: options?.itemsList, width: options?.width });
+  setAlertWarning(
+    title: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.setAlert({
+      type: 'WARNING',
+      title,
+      message: options?.message,
+      itemsList: options?.itemsList,
+      width: options?.width
+    });
   }
-  setAlertError(message: string, options?: { message?: string, itemsList?: ContextPageLayoutType['alert']['itemsList'], width?: ContextPageLayoutType['alert']['width'] }): void {
-    this.setAlert({ type: 'ERROR', title: 'There is a problem', message, itemsList: options?.itemsList, width: options?.width });
+  setAlertError(
+    message: string,
+    options?: {
+      message?: string;
+      itemsList?: ContextPageLayoutType['alert']['itemsList'];
+      width?: ContextPageLayoutType['alert']['width'];
+    }
+  ): void {
+    this.setAlert({
+      type: 'ERROR',
+      title: 'There is a problem',
+      message,
+      itemsList: options?.itemsList,
+      width: options?.width
+    });
   }
-  setAlertUnknownError(): void { this.setAlert({ type: 'ERROR', title: 'There is a problem', message: 'It appears that something went wrong! You can try again or contact us for further help' }); }
-
+  setAlertUnknownError(): void {
+    this.setAlert({
+      type: 'ERROR',
+      title: 'There is a problem',
+      message: 'It appears that something went wrong! You can try again or contact us for further help'
+    });
+  }
 
   // focusBody(): void {
   //   if (isPlatformBrowser(this.platformId)) {
@@ -221,13 +326,13 @@ export class CoreComponent implements OnDestroy {
   //   }
   // }
 
-
-  userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
+  userUrlBasePath(): string {
+    return this.stores.authentication.userUrlBasePath();
+  }
 
   redirectTo(url: string, queryParams?: MappedObjectType): void {
-
     if (this.isRunningOnBrowser()) {
-      this.router.navigate([url], (queryParams ? { queryParams } : {}));
+      this.router.navigate([url], queryParams ? { queryParams } : {});
       return;
     }
 
@@ -238,55 +343,55 @@ export class CoreComponent implements OnDestroy {
     this.serverResponse?.setHeader('Location', url);
   }
 
-
   encodeInfo(s: string): string {
     return this.isRunningOnBrowser() ? btoa(s) : Buffer.from(s, 'binary').toString('base64');
   }
 
   decodeInfo(s: string): string {
-    if (!s) { return ''; }
+    if (!s) {
+      return '';
+    }
     return this.isRunningOnBrowser() ? atob(s) : Buffer.from(s, 'base64').toString('binary');
   }
 
   encodeUrlQueryParams(url: string, queryParams?: MappedObjectType): string {
-
     url = `${url.split('?')[0]}`;
     url += Object.keys(queryParams || {}).length > 0 ? '?' : '';
 
     let qpValue = '';
 
     for (const [key, value] of Object.entries(queryParams || {})) {
-
       qpValue = value;
 
-      if (UtilsHelper.isEmpty(value)) { continue; }
+      if (UtilsHelper.isEmpty(value)) {
+        continue;
+      }
 
-      if (typeof value === 'object') { qpValue = JSON.stringify(value); }
+      if (typeof value === 'object') {
+        qpValue = JSON.stringify(value);
+      }
 
       url += (url.slice(-1) === '?' ? '' : '&') + `${key}=${encodeURIComponent(this.encodeInfo(qpValue))}`;
-
     }
 
     return url;
-
   }
 
   decodeQueryParams(queryParams: MappedObjectType): MappedObjectType {
-
     const o: MappedObjectType = {};
 
     for (let [key, value] of Object.entries(queryParams)) {
-
       value = decodeURIComponent(value);
       value = this.decodeInfo(value);
 
-      try { o[key] = JSON.parse(value); }
-      catch { o[key] = value; }
-
+      try {
+        o[key] = JSON.parse(value);
+      } catch {
+        o[key] = value;
+      }
     }
 
     return o;
-
   }
 
   translate(translation: string, params?: object): string {
@@ -300,5 +405,4 @@ export class CoreComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.forEach(s => s.unsubscribe());
   }
-
 }

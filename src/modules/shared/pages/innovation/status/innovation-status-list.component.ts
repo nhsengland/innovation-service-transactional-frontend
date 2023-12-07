@@ -3,13 +3,11 @@ import { Component } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-
 @Component({
   selector: 'shared-pages-innovation-status-list',
   templateUrl: './innovation-status-list.component.html'
 })
 export class PageInnovationStatusListComponent extends CoreComponent {
-
   visibleStatus: InnovationGroupedStatusEnum[] = [
     InnovationGroupedStatusEnum.RECORD_NOT_SHARED,
     InnovationGroupedStatusEnum.AWAITING_NEEDS_ASSESSMENT,
@@ -21,13 +19,10 @@ export class PageInnovationStatusListComponent extends CoreComponent {
   ];
 
   constructor() {
-
     super();
 
     this.setPageTitle('Innovation status key');
     this.setBackLink('Go back');
     this.setPageStatus('READY');
-
   }
-
 }

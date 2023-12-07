@@ -1,21 +1,20 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine formId="newUserForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="newUserForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
       </ng-container>
 
       <ng-container *ngIf="wizard.isSummaryStep()">
-
         <dl class="nhsuk-summary-list">
-          <div *ngFor="let item of wizard.getSummary(); let i = index;" class="nhsuk-summary-list__row">
+          <div *ngFor="let item of wizard.getSummary(); let i = index" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
             <dd class="nhsuk-summary-list__actions">
-              <a *ngIf="item.editStepNumber" href="javascript:;" (click)="onGotoStep(item.editStepNumber)">Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+              <a *ngIf="item.editStepNumber" href="javascript:;" (click)="onGotoStep(item.editStepNumber)"
+                >Change<span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a
+              >
             </dd>
           </div>
         </dl>
@@ -25,10 +24,7 @@
         <div>
           <a href="javascript:;" (click)="goBackOrCancel()">Cancel</a>
         </div>
-
       </ng-container>
-
     </div>
   </div>
-
 </theme-content-wrapper>

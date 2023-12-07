@@ -3,12 +3,10 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-
 interface Breadcrumb {
   label: string;
   url: string;
 }
-
 
 @Component({
   selector: 'theme-header-breadcrumbs-bar',
@@ -16,7 +14,6 @@ interface Breadcrumb {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
-
   private subscriptions = new Subscription();
 
   breadcrumbs: Breadcrumb[] = [];
@@ -26,29 +23,24 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef
-  ) { }
-
+  ) {}
 
   ngOnInit(): void {
-
     this.subscriptions.add(
       this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe(() => this.onRouteChange())
     );
 
     this.onRouteChange();
-
   }
-
 
   private onRouteChange(): void {
     this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
-    this.backToItem = this.breadcrumbs.length > 1 ? this.breadcrumbs[this.breadcrumbs.length - 2] : { label: '', url: '' };
+    this.backToItem =
+      this.breadcrumbs.length > 1 ? this.breadcrumbs[this.breadcrumbs.length - 2] : { label: '', url: '' };
     this.cdr.detectChanges();
   }
 
-
   private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
-
     // console.log('route.firstChild', url, breadcrumbs);
     const children: ActivatedRoute[] = route.children;
 
@@ -57,7 +49,6 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
     }
 
     if (route.firstChild) {
-
       const firstChildSnapshot = route.firstChild.snapshot;
 
       const routeURL = firstChildSnapshot.url.map(segment => segment.path).join('/');
@@ -73,16 +64,12 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
       }
 
       return this.createBreadcrumbs(route.firstChild, url, breadcrumbs);
-
     }
 
     return []; // Code never reaches here!
-
   }
-
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-
 }

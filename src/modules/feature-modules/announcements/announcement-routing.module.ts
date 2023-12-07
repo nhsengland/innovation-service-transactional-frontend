@@ -10,14 +10,16 @@ import { AnnouncementsListComponent } from './pages/announcements-list/announcem
 // Guards
 import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
 
-
 const routes: Routes = [
   {
-    path: '', component: TransactionalLayoutComponent,
+    path: '',
+    component: TransactionalLayoutComponent,
     canActivate: mapToCanActivate([AnnouncementsAccessGuard]),
     children: [
       {
-        path: '', pathMatch: 'full', component: AnnouncementsListComponent,
+        path: '',
+        pathMatch: 'full',
+        component: AnnouncementsListComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
           layout: { type: 'full' }
@@ -31,4 +33,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AnnouncementRoutingModule { }
+export class AnnouncementRoutingModule {}

@@ -9,48 +9,74 @@ import { AuthenticationModel } from './authentication.models';
 import { AuthenticationService } from './authentication.service';
 import { AuthenticationStore } from './authentication.store';
 
-
 describe('Stores/AuthenticationStore/AuthenticationStore', () => {
-
   let authenticationStore: AuthenticationStore;
   let authenticationService: AuthenticationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule
-      ],
-      providers: [
-        AuthenticationStore,
-        AuthenticationService
-      ]
+      imports: [HttpClientTestingModule, CoreModule],
+      providers: [AuthenticationStore, AuthenticationService]
     });
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     authenticationService = TestBed.inject(AuthenticationService);
-
   });
 
   it('should run initializeAuthentication$() and return success', () => {
-
     authenticationService.verifyUserSession = () => of(true);
-    authenticationService.getUserInfo = () => of({ id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, hasAnnouncements: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] });
+    authenticationService.getUserInfo = () =>
+      of({
+        id: 'id',
+        email: 'john.doe@mail.com',
+        displayName: 'John Doe',
+        roles: [],
+        contactByEmail: false,
+        contactByPhone: false,
+        contactByPhoneTimeframe: null,
+        contactDetails: null,
+        phone: null,
+        termsOfUseAccepted: false,
+        hasInnovationTransfers: false,
+        hasInnovationCollaborations: false,
+        hasAnnouncements: false,
+        passwordResetAt: null,
+        firstTimeSignInAt: null,
+        organisations: []
+      });
 
     const expectedResponse = true;
     const expectedState: AuthenticationModel = {
       isSignIn: true,
-      user: { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', roles: [], contactByEmail: false, contactByPhone: false, contactByPhoneTimeframe: null, contactDetails: null, phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, hasInnovationCollaborations: false, hasAnnouncements: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] },
+      user: {
+        id: 'id',
+        email: 'john.doe@mail.com',
+        displayName: 'John Doe',
+        roles: [],
+        contactByEmail: false,
+        contactByPhone: false,
+        contactByPhoneTimeframe: null,
+        contactDetails: null,
+        phone: null,
+        termsOfUseAccepted: false,
+        hasInnovationTransfers: false,
+        hasInnovationCollaborations: false,
+        hasAnnouncements: false,
+        passwordResetAt: null,
+        firstTimeSignInAt: null,
+        organisations: []
+      },
       userContext: undefined
     };
     let response: any = null;
 
-    authenticationStore.initializeAuthentication$().subscribe({ next: success => response = success, error: error => response = error });
+    authenticationStore
+      .initializeAuthentication$()
+      .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     expect(response).toBe(expectedResponse);
     expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
     expect(authenticationStore.state.user).toEqual(expectedState.user);
-
   });
 
   // it('should run initializeAuthentication$() and return success not being first time signin', () => {
@@ -90,7 +116,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   //   expect(authenticationStore.state.isSignIn).toEqual(expectedState.isSignIn);
 
   // });
-
 
   // it('should run isInnovatorType() and return true', () => {
   //   authenticationStore.state.user = { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserRoleEnum.INNOVATOR, roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
@@ -155,7 +180,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   //   expect(authenticationStore.getUserType()).toBe('');
   // });
 
-
   // it('should run getAccessorOrganisationUnitName() and return empty name', () => {
   //   const expected = '';
   //   expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual(expected);
@@ -170,7 +194,6 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   //   expect(authenticationStore.getAccessorOrganisationUnitName()).toEqual('Org. Unit 01');
   // });
 
-
   // it('should run getUserInfo() and return empty user', () => {
   //   const expected = { id: '', email: '', displayName: '', type: '', roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   //   expect(authenticationStore.getUserInfo()).toEqual(expected);
@@ -180,5 +203,4 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
   //   const expected = authenticationStore.state.user = { id: 'id', email: 'john.doe@mail.com', displayName: 'John Doe', type: UserRoleEnum.INNOVATOR, roles: [], phone: null, termsOfUseAccepted: false, hasInnovationTransfers: false, passwordResetAt: null, firstTimeSignInAt: null, organisations: [] };
   //   expect(authenticationStore.getUserInfo()).toEqual(expected);
   // });
-
 });

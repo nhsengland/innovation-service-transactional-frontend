@@ -1,40 +1,45 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
-
       <form [formGroup]="form" class="nhsuk-grid-column-three-quarters nhsuk-u-padding-left-0">
-
         <ng-container *ngIf="stepNumber === 1">
-
-          <theme-form-checkbox-array class="nhsuk-u-margin-bottom-4" arrayName="accessors" label="Select 1 or more accessors from {{ userOrganisationUnit?.name }} to support this innovation." [items]="formAccessorsList" [pageUniqueField]="false"></theme-form-checkbox-array>
+          <theme-form-checkbox-array
+            class="nhsuk-u-margin-bottom-4"
+            arrayName="accessors"
+            label="Select 1 or more accessors from {{ userOrganisationUnit?.name }} to support this innovation."
+            [items]="formAccessorsList"
+            [pageUniqueField]="false"
+          ></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
-
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 2">
           <div *ngIf="selectedAccessors.length > 0" class="nhsuk-inset-text nhsuk-u-margin-top-4 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
-            <p class="nhsuk-heading-m nhsuk-u-margin-bottom-2"> Assigned accessors: </p>
+            <p class="nhsuk-heading-m nhsuk-u-margin-bottom-2">Assigned accessors:</p>
             <ul class="nhsuk-list">
-              <li *ngFor="let item of selectedAccessors" >
+              <li *ngFor="let item of selectedAccessors">
                 <p class="nhsuk-u-margin-bottom-2">{{ item.name }}</p>
               </li>
             </ul>
           </div>
 
-          <theme-form-textarea controlName="message" [cssOverride]="" [label]="getMessageLabel()" [description]="getMessageDescription()" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
-          
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">{{ 'Confirm and send message' }}</button>
+          <theme-form-textarea
+            controlName="message"
+            [cssOverride]=""
+            [label]="getMessageLabel()"
+            [description]="getMessageDescription()"
+            [pageUniqueField]="false"
+            lengthLimit="xl"
+          ></theme-form-textarea>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">{{ "Confirm and send message" }}</button>
         </ng-container>
 
         <div>
           <a routerLink="/accessor/innovations/{{ innovationId }}">Cancel</a>
         </div>
-
       </form>
-
     </div>
   </div>
-
 </theme-content-wrapper>
