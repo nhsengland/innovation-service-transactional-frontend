@@ -450,12 +450,12 @@ export const locale = {
           innovation_sections: {
             INNOVATION_DESCRIPTION: 'Description of innovation',
             VALUE_PROPOSITION: 'Value proposition',
-            UNDERSTANDING_OF_NEEDS: 'Detailed understanding of needs',
+            UNDERSTANDING_OF_NEEDS: 'Detailed understanding of needs and benefits',
             UNDERSTANDING_OF_BENEFITS: 'Detailed understanding of benefits',
-            EVIDENCE_OF_EFFECTIVENESS: 'Evidence of effectiveness',
+            EVIDENCE_OF_EFFECTIVENESS: 'Evidence of impact and benefit',
             MARKET_RESEARCH: 'Market research',
             INTELLECTUAL_PROPERTY: 'Intellectual property',
-            REGULATIONS_AND_STANDARDS: 'Standards and certifications',
+            REGULATIONS_AND_STANDARDS: 'Regulatory approvals, standards and certifications',
             CURRENT_CARE_PATHWAY: 'Current care pathway',
             TESTING_WITH_USERS: 'Testing with users',
             COST_OF_INNOVATION: 'Cost of your innovation',
@@ -685,16 +685,22 @@ export const locale = {
         },
         user: {
           AssessmentUserIsNotTheOnlyOne: {
-            label: 'User is not the only assessment user on the service'
+            label: 'The user is not the only assessment user on the service'
           },
           LastQualifyingAccessorUserOnOrganisationUnit: {
-            label: 'User is not the only qualifying accessor within a organisation unit'
+            label: 'The user is not the only qualifying accessor within a organisation unit'
           },
           LastUserOnOrganisationUnit: {
-            label: 'User is not the only one within their unit(s)'
+            label: 'The user is not the only one within their unit(s)'
+          },
+          UserHasAnyAccessorRoleInOtherOrganisation: {
+            label: 'The user is not an qualifying accessor or accessor in other organisations'
+          },
+          OrganisationUnitIsActive: {
+            label: 'The unit is active'
           },
           NoInnovationsSupportedOnlyByThisUser: {
-            label: 'User is not the only one supporting a given innovation',
+            label: 'The user is not the only one supporting any innovation',
             description: {
               none: 'No innovation is being supported',
               singular: '{{ supports.innovations.length }} innovation being supported',

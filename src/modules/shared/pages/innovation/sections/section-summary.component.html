@@ -3,16 +3,17 @@
   
         <ng-container *ngIf="sectionInfo.isNotStarted">
           <dl class="nhsuk-summary-list">
-            <ng-container *ngFor="let item of sectionInfo.allStepsList | keyvalue; first as firstItem">
+            <ng-container *ngFor="let item of allSteps; first as firstItem">
+
               <div class="nhsuk-summary-list__row">
                 <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3">
-                  <p class="nhsuk-u-margin-0">{{ item.value.label }}</p>
-                  <p *ngIf="item.value.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
+                  <p class="nhsuk-u-margin-0">{{ item.label }}</p>
+                  <p *ngIf="item.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
                 </dt>
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a *ngIf="isInnovatorType && firstItem" (click)="onStartSection(sectionInfo.id)" class="nhsuk-back-link__link cursor-pointer"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
                 </dd>
               </div>
             </ng-container>
@@ -40,7 +41,7 @@
                         <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                       </dd>
                       <dd  class="nhsuk-summary-list__actions">
-                        <a *ngIf="isInnovatorType && item.editStepNumber" (click)="onClickChange(item.editStepNumber)" class="nhsuk-back-link__link cursor-pointer"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+                        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{item.editStepNumber}}" *ngIf="isInnovatorType && item.editStepNumber"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
                       </dd>
                     </div>
                   </ng-container>
@@ -48,9 +49,9 @@
               </ng-container>
 
               <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
-                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem">
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
+                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem; last as lastItem">
+                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
                       <span *ngIf="firstItem">Documents</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
@@ -64,17 +65,16 @@
               </ng-container>
 
               <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
-                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem">
-
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">
-                      <span *ngIf="firstItem">Evidences</span>
+                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem; last as lastItem">
+                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
+                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
+                      <span *ngIf="firstItem">Evidence</span>
                     </dt>
                     <dd class="nhsuk-summary-list__value text-pre-wrap">
                       <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
                     </dd>
                     <dd class="nhsuk-summary-list__actions">
-                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}" class="nhsuk-back-link__link cursor-pointer">More details</a></p>
+                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}">More details</a></p>
                     </dd>
                   </div>
                 </ng-container>
