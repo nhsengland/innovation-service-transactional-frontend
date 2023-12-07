@@ -1,7 +1,6 @@
 import { Injector } from '@angular/core';
 
 export class AppInjector {
-
   private static injector: Injector;
 
   static setInjector(injector: Injector): void {
@@ -11,5 +10,4 @@ export class AppInjector {
   static getInjector(): Injector {
     return AppInjector.injector;
   }
-
 }

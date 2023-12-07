@@ -12,9 +12,7 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageEveryoneWorkingOnInnovationComponent } from './everyone-working-on-innovation.component';
 
-
 describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationStore: InnovationStore;
@@ -24,13 +22,7 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListCompo
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -40,16 +32,12 @@ describe('Shared/Pages/Innovation/Messages/PageInnovationThreadMessagesListCompo
     innovationStore = TestBed.inject(InnovationStore);
 
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', assessment: {} } };
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(PageEveryoneWorkingOnInnovationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 });

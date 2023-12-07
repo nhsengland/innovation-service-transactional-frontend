@@ -1,8 +1,7 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
-      <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1"> {{ label }} {{ uploadedFile ? '(1 file uploaded)' : '' }} </div>
+      <div class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" aria-hidden="true" tabindex="-1">{{ label }} {{ uploadedFile ? "(1 file uploaded)" : "" }}</div>
     </h1>
   </ng-container>
   <ng-container *ngIf="label && !pageUniqueField">
@@ -14,18 +13,20 @@
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-      <span class="nhsuk-u-visually-hidden">Error: </span>{{ error.message | translate: error.params }}
-    </span>
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error: </span>{{ error.message | translate: error.params }} </span>
   </ng-container>
 
   <ng-container *ngIf="previousUploadedFile">
     <div class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0">Previously added file</div>
     <dl class="nhsuk-summary-list">
       <div class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__value"><a href="{{ previousUploadedFile.url }}"> {{ previousUploadedFile.name }} </a></dt>
+        <dt class="nhsuk-summary-list__value">
+          <a href="{{ previousUploadedFile.url }}"> {{ previousUploadedFile.name }} </a>
+        </dt>
         <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile()">Delete <span class="nhsuk-u-visually-hidden">{{ previousUploadedFile.name }}</span></a>
+          <a href="javascript:void(0)" (click)="onRemovePreviousUploadedFile()"
+            >Delete <span class="nhsuk-u-visually-hidden">{{ previousUploadedFile.name }}</span></a
+          >
         </dd>
       </div>
     </dl>
@@ -34,11 +35,28 @@
   <span class="nhsuk-u-visually-hidden" id="aux-upload-message"></span>
 
   <ng-container *ngIf="!previousUploadedFile">
-    <ngx-dropzone id="{{ id }}" [multiple]="dzConfig.multiple" [accept]="dzConfig.acceptedFiles" [maxFileSize]="dzConfig.maxFileSize" (change)="onChange($event)" [disabled]="isLoadingFile" [disableClick]="true">
+    <ngx-dropzone
+      id="{{ id }}"
+      [multiple]="dzConfig.multiple"
+      [accept]="dzConfig.acceptedFiles"
+      [maxFileSize]="dzConfig.maxFileSize"
+      (change)="onChange($event)"
+      [disabled]="isLoadingFile"
+      [disableClick]="true"
+    >
       <ngx-dropzone-label>
         <label for="{{ id }}" class="cursor-pointer">Click or drop your file here</label>
       </ngx-dropzone-label>
-      <theme-file-upload-preview *ngIf="uploadedFile" [removable]="true" (removed)="onRemoveUploadedFile()" (click)="onRemoveUploadedFile()" (keypress)="onRemoveUploadedFile()" attr.aria-label="Delete {{uploadedFile.file.name}}" class="cursor-pointer" role="button">
+      <theme-file-upload-preview
+        *ngIf="uploadedFile"
+        [removable]="true"
+        (removed)="onRemoveUploadedFile()"
+        (click)="onRemoveUploadedFile()"
+        (keypress)="onRemoveUploadedFile()"
+        attr.aria-label="Delete {{ uploadedFile.file.name }}"
+        class="cursor-pointer"
+        role="button"
+      >
         <ngx-dropzone-label class="font-color-text overflow-hidden">
           <div class="text-ellipsis text-vertical-ellipsis-2-lines">{{ uploadedFile.file.name }}</div>
           <div class="nhsuk-u-padding-top-1 nhsuk-u-font-size-14">Click to remove</div>
@@ -46,5 +64,4 @@
       </theme-file-upload-preview>
     </ngx-dropzone>
   </ng-container>
-
 </div>

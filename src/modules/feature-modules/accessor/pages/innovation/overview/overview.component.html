@@ -1,48 +1,63 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+    <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-8">
-
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Support status</dt>
       <dd class="nhsuk-summary-list__value">
-          <theme-tag type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"></theme-tag>
+        <theme-tag
+          type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
+        ></theme-tag>
       </dd>
       <dd class="nhsuk-summary-list__actions width-25">
-        <a *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}">Change support status</a>
+        <a
+          *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"
+          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
+          >Change support status</a
+        >
       </dd>
     </div>
 
     <div *ngIf="innovationSupport.engagingAccessors.length > 0 || innovationSupport.status === 'ENGAGING'" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
       <dd class="nhsuk-summary-list__value">
-          <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
-            <li *ngFor="let accessor of innovationSupport.engagingAccessors">
-              {{accessor.name}}
-            </li>
-            <li *ngIf="innovationSupport.engagingAccessors.length === 0">
-              No accessors assigned
-            </li>
-          </ul>
+        <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
+          <li *ngFor="let accessor of innovationSupport.engagingAccessors">
+            {{ accessor.name }}
+          </li>
+          <li *ngIf="innovationSupport.engagingAccessors.length === 0">No accessors assigned</li>
+        </ul>
       </dd>
       <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors">Change accessors</a>
+        <a
+          *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
+          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
+          >Change accessors</a
+        >
       </dd>
     </div>
   </dl>
 
-  <a *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"> Change support status </a>
+  <a
+    *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
+    routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
+    class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
+  >
+    Change support status
+  </a>
 
   <ng-container *ngIf="isAccessorRole">
-    <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">Request status update</a>
-  
+    <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3"
+      >Request status update</a
+    >
+
     <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-7">
       Request a status update to the qualifying accessor if you want to change the engaging support status to a more suitable one.
     </p>
@@ -51,7 +66,10 @@
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'" *ngIf="showCards"></app-statistics-cards>
 
   <h2 class="nhsuk-heading-l nhsuk-u-margin-top-9">Innovation summary</h2>
-  <p class="nhsuk-u-font-size-18" *ngIf="innovation.assessment?.id"><a routerLink="/accessor/innovations/{{innovation.id}}/assessments/{{innovation.assessment?.id}}">View needs assessment</a> to better understand what kind of support this innovation needs.</p>
+  <p class="nhsuk-u-font-size-18" *ngIf="innovation.assessment?.id">
+    <a routerLink="/accessor/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}">View needs assessment</a> to better understand what kind of support this
+    innovation needs.
+  </p>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -85,12 +103,11 @@
           <ng-container *ngFor="let collaborator of innovationCollaborators">
             <tr role="row" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">{{ collaborator.name }}</td>
-              <td class="nhsuk-table__cell ">{{ collaborator.role }}</td>
+              <td class="nhsuk-table__cell">{{ collaborator.role }}</td>
             </tr>
           </ng-container>
         </tbody>
       </table>
     </div>
   </details>
-
 </theme-content-wrapper>

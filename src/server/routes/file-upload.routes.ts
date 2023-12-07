@@ -10,11 +10,12 @@ import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
-
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
-  fileFilter: (req, file, cb) => { checkFileType(file, cb); }
+  fileFilter: (req, file, cb) => {
+    checkFileType(file, cb);
+  }
 });
 const fileUploadRouter: Router = express.Router();
 
@@ -27,12 +28,10 @@ const whitelist = [
   'application/msword',
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   'application/vnd.ms-excel',
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
 ];
 
-
-const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
-
+const checkFileType = (file: any, cb: (...args: any[]) => void) => {
   const allowedExtension = filetypes.test(extname(file.originalname).toLowerCase());
   const mimetype = whitelist.includes(file.mimetype);
 
@@ -43,23 +42,28 @@ const checkFileType = (file: any, cb: ((...args: any[]) => void)) => {
   }
 };
 
-
-async function getUploadUrl(accessToken: string, innovationId: string, body: { filename: string }): Promise<{ id: string; name: string; url: string }> {
-
-  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL).addPath('v1/:innovationId/files/upload-url').setPathParams({ innovationId }).buildUrl();
+async function getUploadUrl(
+  accessToken: string,
+  innovationId: string,
+  body: { filename: string }
+): Promise<{ id: string; name: string; url: string }> {
+  const url = new UrlModel(ENVIRONMENT.API_INNOVATIONS_URL)
+    .addPath('v1/:innovationId/files/upload-url')
+    .setPathParams({ innovationId })
+    .buildUrl();
 
   try {
-    const result = await axios.post<{ id: string; name: string; url: string }>(url, body, { headers: { Authorization: `Bearer ${accessToken}` } });
+    const result = await axios.post<{ id: string; name: string; url: string }>(url, body, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
     return result.data;
   } catch (error) {
     console.error(error);
     throw error;
   }
-
 }
 
 async function uploadFile(url: string, file: any): Promise<void> {
-
   try {
     const config = {
       method: 'PUT' as Method,
@@ -77,12 +81,10 @@ async function uploadFile(url: string, file: any): Promise<void> {
     console.error('uploadFile', error);
     throw error;
   }
-
 }
 
 fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('file'), (req, res) => {
   (async () => {
-
     const accessToken = await getAccessTokenBySessionId(req.session.id);
     const requestFile = req.file;
 
@@ -97,7 +99,6 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
     }
 
     try {
-
       const fileInfo = await getUploadUrl(accessToken, req.body.innovationId, { filename: requestFile.originalname });
       await uploadFile(fileInfo.url, requestFile);
 
@@ -105,10 +106,13 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
         id: fileInfo.id,
         name: fileInfo.name,
         size: req.file?.size,
-        extension: req.file ? extname(req.file?.originalname).toLowerCase().substring(1) : '',
+        extension: req.file
+          ? extname(req.file?.originalname)
+              .toLowerCase()
+              .substring(1)
+          : '',
         url: fileInfo.url
       });
-
     } catch (error: any) {
       getAppInsightsClient().trackException({
         exception: error,
@@ -118,17 +122,16 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
           query: req.query,
           path: req.path,
           route: req.route,
-          authenticatedUser: (req.session as any).oid,
+          authenticatedUser: (req.session as any).oid
         }
-      })
+      });
 
-      if(axios.isAxiosError(error) && error.response) {
+      if (axios.isAxiosError(error) && error.response) {
         res.status(error.response.status).send(error.response.data);
       } else {
         res.status(500).send();
       }
     }
-
   })();
 });
 

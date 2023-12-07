@@ -6,11 +6,11 @@ import { UrlModel } from '@app/base/models';
 
 @Injectable()
 export class FileUploadService extends CoreService {
-
-constructor() { super(); }
+  constructor() {
+    super();
+  }
 
   uploadFile(httpUploadBody: { [key: string]: string }, file: File): Observable<FileUploadType> {
-
     const httpUploadUrl = new UrlModel(this.APP_URL).addPath('upload-file').buildUrl();
 
     const formData = new FormData();
@@ -21,7 +21,5 @@ constructor() { super(); }
       take(1),
       map(response => response)
     );
-
   }
-
 }

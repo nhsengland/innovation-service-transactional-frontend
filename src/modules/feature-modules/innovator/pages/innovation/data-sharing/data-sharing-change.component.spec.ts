@@ -17,9 +17,7 @@ import { InnovationDataSharingChangeComponent } from './data-sharing-change.comp
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-
 describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -32,13 +30,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -51,7 +43,6 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-
   });
 
   it('should create the component', () => {
@@ -59,7 +50,6 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 
   // it('should load initial data', () => {
 
@@ -104,7 +94,6 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 
   // it('should run onSubmit and call api with success', () => {
 
@@ -151,5 +140,4 @@ describe('FeatureModules/Innovator/Pages/Innovation/DataSharingChangeComponent',
   //   expect(component.showDataSharingValidationWarning).toBe(true);
 
   // });
-
 });

@@ -13,9 +13,7 @@ import { InnovationOverviewComponent } from './overview.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-
 describe('FeatureModules/Innovator/DashboardComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationStore: InnovationStore;
@@ -26,13 +24,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -41,7 +33,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     innovationStore = TestBed.inject(InnovationStore);
     innovatorService = TestBed.inject(InnovatorService);
-
   });
 
   it('should create the component', () => {
@@ -72,7 +63,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   // });
 
-
   // it('should show "innovationCreationSuccess" success', () => {
 
   //   activatedRoute.snapshot.queryParams = { alert: 'innovationCreationSuccess', name: 'Innovation name' };
@@ -86,7 +76,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 
   // it('should have innovation information loaded with payload 01', () => {
 
@@ -136,7 +125,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   //   expect(component.innovationStatus).toEqual(expected);
 
   // });
-
 
   // it('should have innovation information loaded with payload 02', () => {
 
@@ -197,7 +185,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
   // });
 
-
   // it('should NOT have innovation information loaded', () => {
 
   //   innovationStore.getSectionsSummary$ = () => throwError('error');
@@ -211,5 +198,4 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

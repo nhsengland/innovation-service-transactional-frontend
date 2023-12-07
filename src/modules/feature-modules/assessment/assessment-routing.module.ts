@@ -73,32 +73,32 @@ import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 
-
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
       { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
-      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks', },
+      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks' },
       { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
-      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details' },
+      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details' }
     ],
     right: []
   },
   notifications: {}
 };
 
-
 const routes: Routes = [
   {
-    path: '', component: TransactionalLayoutComponent,
+    path: '',
+    component: TransactionalLayoutComponent,
     data: { header, module: 'assessment', breadcrumb: 'Home' },
     children: [
-
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', pathMatch: 'full', component: DashboardComponent },
 
       {
-        path: 'terms-of-use', pathMatch: 'full', component: PageTermsOfUseAcceptanceComponent,
+        path: 'terms-of-use',
+        pathMatch: 'full',
+        component: PageTermsOfUseAcceptanceComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
           layout: { type: 'full' }
@@ -110,7 +110,9 @@ const routes: Routes = [
         data: { breadcrumb: 'Innovations' },
         children: [
           {
-            path: '', pathMatch: 'full', component: InnovationsListComponent,
+            path: '',
+            pathMatch: 'full',
+            component: InnovationsListComponent,
             data: {
               breadcrumb: null,
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
@@ -128,7 +130,6 @@ const routes: Routes = [
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             children: [
-
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
 
               { path: '', outlet: 'page-sidebar-outlet', component: SidebarInnovationMenuOutletComponent },
@@ -137,7 +138,9 @@ const routes: Routes = [
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
 
               {
-                path: 'overview', pathMatch: 'full', component: InnovationOverviewComponent,
+                path: 'overview',
+                pathMatch: 'full',
+                component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
               },
 
@@ -150,7 +153,9 @@ const routes: Routes = [
                 children: [
                   { path: '', pathMatch: 'full', redirectTo: '../:innovationId/overview' },
                   {
-                    path: 'new', pathMatch: 'full', component: InnovationAssessmentNewComponent,
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: InnovationAssessmentNewComponent,
                     data: { breadcrumb: null }
                   },
                   {
@@ -158,24 +163,34 @@ const routes: Routes = [
                     data: { breadcrumb: null },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationAssessmentOverviewComponent,
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       },
                       { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                       {
-                        path: 'edit/:stepId', pathMatch: 'full', component: InnovationAssessmentEditComponent,
+                        path: 'edit/:stepId',
+                        pathMatch: 'full',
+                        component: InnovationAssessmentEditComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'change-assessor', pathMatch: 'full', component: InnovationChangeAssessorComponent,
+                        path: 'change-assessor',
+                        pathMatch: 'full',
+                        component: InnovationChangeAssessorComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'exemption-info', pathMatch: 'full', component: InnovationAssessmentExemptionInfoComponent,
+                        path: 'exemption-info',
+                        pathMatch: 'full',
+                        component: InnovationAssessmentExemptionInfoComponent,
                         data: { layout: { type: 'full' } }
                       },
                       {
-                        path: 'exemption-upsert', pathMatch: 'full', component: InnovationAssessmentExemptionUpsertComponent,
+                        path: 'exemption-upsert',
+                        pathMatch: 'full',
+                        component: InnovationAssessmentExemptionUpsertComponent,
                         data: { layout: { type: 'full' } }
                       }
                     ]
@@ -189,14 +204,24 @@ const routes: Routes = [
                 children: [
                   { path: '', pathMatch: 'full', component: PageInnovationRecordComponent, data: { breadcrumb: null } },
 
-                  { path: 'download', pathMatch: 'full', component: PageInnovationRecordDownloadComponent, data: { layout: { type: 'full' } } },
+                  {
+                    path: 'download',
+                    pathMatch: 'full',
+                    component: PageInnovationRecordDownloadComponent,
+                    data: { layout: { type: 'full' } }
+                  },
 
                   {
                     path: 'export-requests',
                     data: { breadcrumb: 'Permission requests', layout: { type: 'full' } },
                     children: [
                       { path: '', pathMatch: 'full', redirectTo: 'list' },
-                      { path: 'list', pathMatch: 'full', component: PageInnovationExportRequestsListComponent, data: { breadcrumb: null } },
+                      {
+                        path: 'list',
+                        pathMatch: 'full',
+                        component: PageInnovationExportRequestsListComponent,
+                        data: { breadcrumb: null }
+                      },
                       { path: 'new', pathMatch: 'full', component: PageInnovationExportRequestNewComponent },
                       { path: ':requestId', pathMatch: 'full', component: PageInnovationExportRequestInfoComponent }
                     ]
@@ -206,18 +231,22 @@ const routes: Routes = [
                     path: 'sections',
                     data: { breadcrumb: null },
                     children: [
-
                       { path: '', pathMatch: 'full', redirectTo: '../record' },
-                      { path: 'all', pathMatch: 'full', component: PageInnovationAllSectionsInfoComponent,
+                      {
+                        path: 'all',
+                        pathMatch: 'full',
+                        component: PageInnovationAllSectionsInfoComponent,
                         data: {
                           breadcrumb: (data: RoutesDataType) => 'All sections'
-                        }, 
+                        }
                       },
                       {
                         path: ':sectionId',
                         children: [
                           {
-                            path: '', pathMatch: 'full', component: PageInnovationSectionInfoComponent,
+                            path: '',
+                            pathMatch: 'full',
+                            component: PageInnovationSectionInfoComponent,
                             data: { breadcrumb: null }
                           },
                           {
@@ -226,21 +255,24 @@ const routes: Routes = [
                             children: [
                               { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
                               {
-                                path: ':evidenceId', pathMatch: 'full', component: PageInnovationSectionEvidenceInfoComponent,
-                                data: { breadcrumb: 'Evidence Info' },
+                                path: ':evidenceId',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionEvidenceInfoComponent,
+                                data: { breadcrumb: 'Evidence Info' }
                               }
                             ]
                           }
                         ]
                       }
-
                     ]
                   }
                 ]
               },
 
               {
-                path: 'everyone', pathMatch: 'full', component: PageEveryoneWorkingOnInnovationComponent
+                path: 'everyone',
+                pathMatch: 'full',
+                component: PageEveryoneWorkingOnInnovationComponent
               },
 
               {
@@ -248,11 +280,15 @@ const routes: Routes = [
                 data: { breadcrumb: 'Documents' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationDocumentsListComponent,
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationDocumentsListComponent,
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationDocumentsNewditComponent,
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: PageInnovationDocumentsNewditComponent,
                     data: { layout: { type: 'full' } }
                   },
                   {
@@ -260,11 +296,13 @@ const routes: Routes = [
                     resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
                     data: {
                       layout: { type: 'full' },
-                      breadcrumb: (data: { document: { id: string, name: string } }) => `${data.document.name}`
+                      breadcrumb: (data: { document: { id: string; name: string } }) => `${data.document.name}`
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationDocumentInfoComponent,
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageInnovationDocumentInfoComponent,
                         data: { breadcrumb: null }
                       },
                       { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
@@ -279,15 +317,21 @@ const routes: Routes = [
                 data: { breadcrumb: 'Tasks' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationTaskToDoListComponent,
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationTaskToDoListComponent,
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
+                    path: 'statuses',
+                    pathMatch: 'full',
+                    component: PageTaskStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: PageInnovationTaskNewComponent,
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: PageInnovationTaskNewComponent,
                     data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
@@ -301,17 +345,23 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationTaskDetailsComponent,
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageInnovationTaskDetailsComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'cancel', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        path: 'cancel',
+                        pathMatch: 'full',
+                        component: PageInnovationTaskActionComponent,
                         data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.CANCELLED }
                       },
                       {
-                        path: 'reopen', pathMatch: 'full', component: PageInnovationTaskActionComponent,
+                        path: 'reopen',
+                        pathMatch: 'full',
+                        component: PageInnovationTaskActionComponent,
                         data: { breadcrumb: null, layout: { type: 'full' }, status: InnovationTaskStatusEnum.OPEN }
-                      },
+                      }
                     ]
                   }
                 ]
@@ -322,11 +372,15 @@ const routes: Routes = [
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationThreadsListComponent,
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationThreadsListComponent,
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'new', pathMatch: 'full', component: WizardInnovationThreadNewComponent,
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: WizardInnovationThreadNewComponent,
                     data: { breadcrumb: 'New', layout: { type: 'full' } }
                   },
                   {
@@ -340,15 +394,21 @@ const routes: Routes = [
                     },
                     children: [
                       {
-                        path: '', pathMatch: 'full', component: PageInnovationThreadMessagesListComponent,
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageInnovationThreadMessagesListComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'recipients', pathMatch: 'full', component: PageInnovationThreadRecipientsComponent,
+                        path: 'recipients',
+                        pathMatch: 'full',
+                        component: PageInnovationThreadRecipientsComponent,
                         data: { breadcrumb: null, layout: { type: 'full' } }
                       },
                       {
-                        path: 'messages/:messageId', pathMatch: 'full', component: PageInnovationThreadMessageEditComponent,
+                        path: 'messages/:messageId',
+                        pathMatch: 'full',
+                        component: PageInnovationThreadMessageEditComponent,
                         data: { breadcrumb: 'Edit' }
                       }
                     ]
@@ -362,10 +422,15 @@ const routes: Routes = [
                 resolve: { innovationData: mapToResolve(InnovationDataResolver) }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationDataSharingAndSupportComponent,
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationDataSharingAndSupportComponent,
                     data: { breadcrumb: null }
                   },
-                  { path: 'statuses', pathMatch: 'full', component: PageInnovationSupportStatusListComponent,
+                  {
+                    path: 'statuses',
+                    pathMatch: 'full',
+                    component: PageInnovationSupportStatusListComponent,
                     data: { breadcrumb: 'Statuses' }
                   }
                 ]
@@ -376,20 +441,23 @@ const routes: Routes = [
                 data: { breadcrumb: 'Support summary' },
                 children: [
                   {
-                    path: '', pathMatch: 'full', component: PageInnovationSupportSummaryListComponent,
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationSupportSummaryListComponent,
                     data: { breadcrumb: null }
                   }
                 ]
               },
 
               {
-                path: 'activity-log', pathMatch: 'full', component: PageInnovationActivityLogComponent,
+                path: 'activity-log',
+                pathMatch: 'full',
+                component: PageInnovationActivityLogComponent,
                 data: {
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
               }
-
             ]
           }
         ]
@@ -403,15 +471,19 @@ const routes: Routes = [
         },
         children: [
           { path: '', pathMatch: 'full', component: PageTasksAdvancedSearchComponent, data: { breadcrumb: null } },
-          { path: 'statuses', pathMatch: 'full', component: PageTaskStatusListComponent,
+          {
+            path: 'statuses',
+            pathMatch: 'full',
+            component: PageTaskStatusListComponent,
             data: { breadcrumb: 'Statuses' }
-          },
+          }
         ]
       },
 
-
       {
-        path: 'notifications', pathMatch: 'full', component: PageNotificationsListComponent,
+        path: 'notifications',
+        pathMatch: 'full',
+        component: PageNotificationsListComponent,
         data: {
           breadcrumb: 'Notifications',
           layout: { type: 'full', backgroundColor: 'bg-color-white' }
@@ -425,7 +497,6 @@ const routes: Routes = [
           layout: { type: '1.third-2.thirds' }
         },
         children: [
-
           { path: '', outlet: 'page-sidebar-outlet', component: SidebarAccountMenuOutletComponent },
           { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarAccountMenuOutletComponent },
 
@@ -435,25 +506,31 @@ const routes: Routes = [
             data: { breadcrumb: null },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAccountManageDetailsInfoComponent,
+                path: '',
+                pathMatch: 'full',
+                component: PageAccountManageDetailsInfoComponent,
                 data: { breadcrumb: null }
               },
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
               {
-                path: 'edit/:stepId', pathMatch: 'full', component: PageAccountManageDetailsEditComponent,
+                path: 'edit/:stepId',
+                pathMatch: 'full',
+                component: PageAccountManageDetailsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
                   layout: { type: 'full' }
                 }
               }
-            ],
+            ]
           },
           {
             path: 'manage-account',
             data: { breadcrumb: 'Manage account' },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAssessmentAccountManageAccountInfoComponent,
+                path: '',
+                pathMatch: 'full',
+                component: PageAssessmentAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
               }
             ]
@@ -463,11 +540,15 @@ const routes: Routes = [
             data: { breadcrumb: 'Email notifications' },
             children: [
               {
-                path: '', pathMatch: 'full', component: PageAccountEmailNotificationsListComponent,
+                path: '',
+                pathMatch: 'full',
+                component: PageAccountEmailNotificationsListComponent,
                 data: { breadcrumb: null }
               },
               {
-                path: 'edit', pathMatch: 'full', component: PageAccountEmailNotificationsEditComponent,
+                path: 'edit',
+                pathMatch: 'full',
+                component: PageAccountEmailNotificationsEditComponent,
                 data: {
                   breadcrumb: 'Edit',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }
@@ -476,15 +557,13 @@ const routes: Routes = [
             ]
           }
         ]
-      },
-
+      }
     ]
   }
-
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AssessmentRoutingModule { }
+export class AssessmentRoutingModule {}

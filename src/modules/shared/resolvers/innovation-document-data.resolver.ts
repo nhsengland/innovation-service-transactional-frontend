@@ -4,18 +4,14 @@ import { Observable, catchError, map, of } from 'rxjs';
 
 import { InnovationDocumentsService } from '../services/innovation-documents.service';
 
-
 @Injectable()
-export class InnovationDocumentDataResolver  {
-
+export class InnovationDocumentDataResolver {
   constructor(
     private router: Router,
     private innovationDocumentsService: InnovationDocumentsService
-  ) { }
+  ) {}
 
-
-  resolve(route: ActivatedRouteSnapshot): Observable<null | { id: null | string, name: string }> {
-
+  resolve(route: ActivatedRouteSnapshot): Observable<null | { id: null | string; name: string }> {
     return this.innovationDocumentsService.getDocumentInfo(route.params.innovationId, route.params.documentId).pipe(
       map(response => ({
         id: response.id,
@@ -26,7 +22,5 @@ export class InnovationDocumentDataResolver  {
         return of(null);
       })
     );
-
   }
-
 }

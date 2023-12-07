@@ -4,12 +4,9 @@ import { Component, Input } from '@angular/core';
   selector: 'theme-print-link',
   templateUrl: './print-link.component.html',
   styleUrls: ['./print-link.component.scss']
-
 })
 export class PrintLinkComponent {
-
   @Input() href = '';
 
-  constructor() { }
-
+  constructor() {}
 }

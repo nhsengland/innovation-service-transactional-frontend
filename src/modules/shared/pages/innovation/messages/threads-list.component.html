@@ -1,14 +1,13 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div *ngIf="!isInnovatorType && innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
-    <p> Please note that the innovator {{ innovation.owner.name }} is currently locked. </p>
+    <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
   <ng-container *ngIf="!canCreateThread && !isAdmin">
-    <div *ngIf="innovation.owner else missingOwner" class="nhsuk-grid-row">
+    <div *ngIf="innovation.owner; else missingOwner" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
       </div>
@@ -18,23 +17,21 @@
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
           <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> You cannot start a new message thread </span>
         </div>
-        <p> Currently this innovation does not have an active owner and a transfer ownership is pending. As soon as the transfer is accepted, you will be able to start a thread.</p>
+        <p>Currently this innovation does not have an active owner and a transfer ownership is pending. As soon as the transfer is accepted, you will be able to start a thread.</p>
       </div>
     </ng-template>
   </ng-container>
 
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
-
     <div class="nhsuk-grid-column-full">
       <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'PAUSED'">
         <p *ngIf="isInnovatorType">Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="!isInnovatorType">Use messages to talk to the innovator and other organisations supporting this innovation.</p>
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>For transparency reasons, all messages can be seen and replied by everyone who has access to this innovation.
-            <a routerLink="../support" target="_blank" rel="noopener noreferrer">
-              View a list of this innovation's data sharing preferences (opens in a new window).
-            </a>
+          <p>
+            For transparency reasons, all messages can be seen and replied by everyone who has access to this innovation.
+            <a routerLink="../support" target="_blank" rel="noopener noreferrer"> View a list of this innovation's data sharing preferences (opens in a new window). </a>
           </p>
         </div>
         <button type="button" routerLink="new" class="nhsuk-button">Start a new thread</button>
@@ -42,7 +39,6 @@
     </div>
 
     <div *ngIf="canCreateThread || (!canCreateThread && tableList.getTotalRowsNumber() > 0)" class="nhsuk-grid-column-full">
-
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-one-half">
           <form [formGroup]="form">
@@ -59,7 +55,6 @@
             <div *ngIf="!(isAdmin || isInnovatorType)" class="nhsuk-u-margin-bottom-5">
               <theme-form-checkbox controlName="following" label="Only show threads I am following" size="small"></theme-form-checkbox>
             </div>
-
           </form>
         </div>
       </div>
@@ -90,7 +85,7 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of tableList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('subject') }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("subject") }}</span>
                 <div>
                   <a routerLink="{{ item.id }}" attr.aria-label="View {{ item.subject }} conversation"> {{ item.subject }} </a>
                   <theme-notification-tag label="dot" *ngIf="item.hasUnreadNotifications"></theme-notification-tag>
@@ -100,13 +95,13 @@
                 </div>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('messageCount') }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("messageCount") }}</span>
                 {{ item.messageCount }} messages
               </td>
               <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel('latestMessageCreatedAt') }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ tableList.getColumnLabel("latestMessageCreatedAt") }}</span>
 
-                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ('app.date_formats.short_date_time' | translate) }}</p>
+                <p class="nhsuk-body-s nhsuk-u-margin-0">{{ item.lastMessage.createdAt | date: ("app.date_formats.short_date_time" | translate) }}</p>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
                   by <ng-container *ngTemplateOutlet="userInfo; context: { user: item.lastMessage.createdBy }"></ng-container>
                 </p>
@@ -117,15 +112,18 @@
       </div>
 
       <div class="nhsuk-u-padding-bottom-4">
-        <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+        <theme-pagination
+          [currentPage]="tableList.page"
+          [pageSize]="tableList.pageSize"
+          [totalRows]="tableList.getTotalRowsNumber()"
+          (updatePageEvent)="onPageChange($event)"
+        ></theme-pagination>
       </div>
-
     </div>
   </div>
 
   <ng-template #userInfo let-user="user">
     <ng-container *ngIf="selfUser.id === user.id">me</ng-container>
-    <ng-container *ngIf="selfUser.id !== user.id">{{ user.displayTeam ?? 'Innovator' }}</ng-container>
+    <ng-container *ngIf="selfUser.id !== user.id">{{ user.displayTeam ?? "Innovator" }}</ng-container>
   </ng-template>
-
 </theme-content-wrapper>

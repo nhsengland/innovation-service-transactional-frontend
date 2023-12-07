@@ -15,9 +15,7 @@ import { InnovationNewComponent } from './innovation-new.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-
 describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -29,13 +27,7 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -47,7 +39,6 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
     innovatorService = TestBed.inject(InnovatorService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
 
   it('should create the component', () => {
@@ -205,5 +196,4 @@ describe('FeatureModules/Innovator/Pages/InnovationNew/InnovationNewComponent', 
   //   expect(component.wizard.currentStepId).toBe(1);
 
   // });
-
 });

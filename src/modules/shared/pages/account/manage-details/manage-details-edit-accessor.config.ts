@@ -2,28 +2,28 @@ import { AuthenticationModel } from '@modules/stores/authentication/authenticati
 
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
 
-
 // Types.
 type InboundPayloadType = Required<AuthenticationModel>['user'];
 
 type StepPayloadType = {
-  displayName: string
+  displayName: string;
 };
 
 type OutboundPayloadType = {
-  displayName: string
+  displayName: string;
 };
-
 
 export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      parameters: [{
-        id: 'displayName',
-        dataType: 'text',
-        label: 'What\'s your full name?',
-        validations: { isRequired: [true, 'Name is required'] }
-      }]
+      parameters: [
+        {
+          id: 'displayName',
+          dataType: 'text',
+          label: "What's your full name?",
+          validations: { isRequired: [true, 'Name is required'] }
+        }
+      ]
     })
   ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
@@ -31,28 +31,18 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
-
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
-
   return { displayName: data.displayName };
-
 }
 
-
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return { displayName: data.displayName };
-
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
-  toReturn.push(
-    { label: 'Name', value: data.displayName, editStepNumber: 1 }
-  );
+  toReturn.push({ label: 'Name', value: data.displayName, editStepNumber: 1 });
 
   return toReturn;
-
 }

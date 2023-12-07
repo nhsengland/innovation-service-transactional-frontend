@@ -8,17 +8,11 @@ import { AuthenticationRoutingModule } from './authentication-routing.module';
 // Pages.
 import { SignUpConfirmationComponent } from './pages/sign-up-confirmation.component';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AuthenticationRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AuthenticationRoutingModule],
   declarations: [
     // Pages.
-    SignUpConfirmationComponent,
+    SignUpConfirmationComponent
   ]
 })
-export class AuthenticationModule { }
+export class AuthenticationModule {}

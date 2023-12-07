@@ -5,9 +5,7 @@ import { Component, Input } from '@angular/core';
   templateUrl: './back-link.component.html'
 })
 export class BackLinkComponent {
-
   @Input() href = '';
 
-  constructor() { }
-
+  constructor() {}
 }

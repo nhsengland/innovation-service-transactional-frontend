@@ -8,17 +8,13 @@ import { ActivatedRoute } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-
 import { AlertType } from '@app/base/types';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UsersService } from '@modules/shared/services/users.service';
 import { PageUserInfoComponent } from './user-info.component';
 
-
-
 describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let usersService: UsersService;
@@ -29,28 +25,19 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-
     usersService = TestBed.inject(UsersService);
     organisationsService = TestBed.inject(OrganisationsService);
 
     activatedRoute.snapshot.params = { userId: 'User01' };
     activatedRoute.snapshot.data = { user: { userId: 'User01', displayName: 'User Name' } };
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageUserInfoComponent);
@@ -60,7 +47,6 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
   });
 
   it('should show "userCreationSuccess" alert', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'userCreationSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'A new user has been added to the service', setFocus: true };
@@ -68,11 +54,9 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
 
   it('should show "lockSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'lockSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User locked successfully', setFocus: true };
@@ -80,11 +64,9 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
 
   it('should show "unlockSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'unlockSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User unlocked successfully', setFocus: true };
@@ -92,11 +74,9 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
 
   it('should show "roleChangeSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'roleChangeSuccess' };
 
     const expected: AlertType = { type: 'SUCCESS', title: 'User role changed successfully', setFocus: true };
@@ -104,22 +84,23 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
 
   it('should show "unitChangeSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'unitChangeSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'Organisation unit has been successfully changed', setFocus: true };
+    const expected: AlertType = {
+      type: 'SUCCESS',
+      title: 'Organisation unit has been successfully changed',
+      setFocus: true
+    };
 
     fixture = TestBed.createComponent(PageUserInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
 
-/*   it('should have initial information loaded with payload 01', () => {
+  /*   it('should have initial information loaded with payload 01', () => {
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', actionId: 'Action01' };
 
@@ -265,5 +246,4 @@ describe('FeatureModules/Admin/Pages/Users/PageUserInfoComponent', () => {
     expect(component.alert.type).toBe('ERROR');
 
   }); */
-
 });

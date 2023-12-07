@@ -5,8 +5,15 @@ import { InnovationSectionConfigType, InnovationSectionStepLabels } from '../ir-
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
-import { benefitsOrImpactItems, carbonReductionPlanItems, diseasesConditionsImpactItems, estimatedCarbonReductionSavingsItems, keyHealthInequalitiesItems, yesNoItems, yesNotYetNoItems } from './forms.config';
-
+import {
+  benefitsOrImpactItems,
+  carbonReductionPlanItems,
+  diseasesConditionsImpactItems,
+  estimatedCarbonReductionSavingsItems,
+  keyHealthInequalitiesItems,
+  yesNoItems,
+  yesNotYetNoItems
+} from './forms.config';
 
 // Labels.
 const stepsLabels: InnovationSectionStepLabels = {
@@ -58,7 +65,7 @@ const stepsLabels: InnovationSectionStepLabels = {
     description: `
       <p>By this, we mean a document or template which assesses the impact of your innovation on health inequalities and on those with protected characteristics. Health inequalities are the unfair and avoidable differences in health across the population, and between different groups within society.</p>
       <p>An example of a completed health inequalities impact assessment can be found on <a href=${URLS.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA} target="_blank" rel="noopener noreferrer">NHS England's web page (opens in a new window)</a>.</p>`
-  },
+  }
   // q11: {
   //   label: 'Upload the health inequalities impact assessment, or any relevant documents',
   //   description: 'The files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB.',
@@ -66,12 +73,10 @@ const stepsLabels: InnovationSectionStepLabels = {
   // }
 };
 
-
 // Types.
 // type InboundPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
 type StepPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
 type OutboundPayloadType = DocumentType202304['UNDERSTANDING_OF_NEEDS'];
-
 
 // Logic.
 export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
@@ -80,135 +85,186 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'problemsTackled', dataType: 'textarea', label: stepsLabels.q1.label, description: stepsLabels.q1.description,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l'
-        }]
+        parameters: [
+          {
+            id: 'problemsTackled',
+            dataType: 'textarea',
+            label: stepsLabels.q1.label,
+            description: stepsLabels.q1.description,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 'l'
+          }
+        ]
       }),
       new FormEngineModel({
-        parameters: [{
-          id: 'howInnovationWork',
-          dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l'
-        }]
+        parameters: [
+          {
+            id: 'howInnovationWork',
+            dataType: 'textarea',
+            label: stepsLabels.q2.label,
+            description: stepsLabels.q2.description,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 'l'
+          }
+        ]
       }),
       new FormEngineModel({
-        parameters: [{
-          id: 'benefitsOrImpact', dataType: 'checkbox-array', label: stepsLabels.q3.label,
-          // validations: { isRequired: [true, 'You must choose at least one disease or condition'] },
-          items: benefitsOrImpactItems
-        }]
+        parameters: [
+          {
+            id: 'benefitsOrImpact',
+            dataType: 'checkbox-array',
+            label: stepsLabels.q3.label,
+            // validations: { isRequired: [true, 'You must choose at least one disease or condition'] },
+            items: benefitsOrImpactItems
+          }
+        ]
       }),
       new FormEngineModel({
-        parameters: [{
-          id: 'impactDiseaseCondition', dataType: 'radio-group', label: stepsLabels.q4.label,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: yesNoItems
-        }]
+        parameters: [
+          {
+            id: 'impactDiseaseCondition',
+            dataType: 'radio-group',
+            label: stepsLabels.q4.label,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: yesNoItems
+          }
+        ]
       })
     ],
     showSummary: true,
-    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [
+      (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+        runtimeRules(steps, currentValues, currentStep)
+    ],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-    summaryParsing: (data: StepPayloadType) => summaryParsing(data),
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   }),
   allStepsList: stepsLabels
 };
 
-
 function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentStep: number | 'summary'): void {
-  
   steps.splice(4);
-  
+
   if (data.impactDiseaseCondition === 'YES') {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'diseasesConditionsImpact', dataType: 'autocomplete-array', label: stepsLabels.q5.label, description: stepsLabels.q5.description,
-          validations: { isRequired: [true, 'You must choose at least one disease or condition'] },
-          items: diseasesConditionsImpactItems
-        }]
+        parameters: [
+          {
+            id: 'diseasesConditionsImpact',
+            dataType: 'autocomplete-array',
+            label: stepsLabels.q5.label,
+            description: stepsLabels.q5.description,
+            validations: { isRequired: [true, 'You must choose at least one disease or condition'] },
+            items: diseasesConditionsImpactItems
+          }
+        ]
       })
     );
   } else {
     delete data.diseasesConditionsImpact;
   }
-    
+
   steps.push(
     new FormEngineModel({
-      parameters: [{
-        id: 'estimatedCarbonReductionSavings', dataType: 'radio-group', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: estimatedCarbonReductionSavingsItems
-      }]
+      parameters: [
+        {
+          id: 'estimatedCarbonReductionSavings',
+          dataType: 'radio-group',
+          label: stepsLabels.q6.label,
+          description: stepsLabels.q6.description,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: estimatedCarbonReductionSavingsItems
+        }
+      ]
     })
   );
-      
+
   if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'estimatedCarbonReductionSavingsDescription', dataType: 'textarea', label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'xl'
-        }]
+        parameters: [
+          {
+            id: 'estimatedCarbonReductionSavingsDescription',
+            dataType: 'textarea',
+            label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 'xl'
+          }
+        ]
       })
     );
   } else {
     delete data.estimatedCarbonReductionSavingsDescription;
   }
-    
+
   steps.push(
     new FormEngineModel({
-      parameters: [{
-        id: 'carbonReductionPlan', dataType: 'radio-group', label: stepsLabels.q8.label, description: stepsLabels.q8.description,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: carbonReductionPlanItems
-      }]
+      parameters: [
+        {
+          id: 'carbonReductionPlan',
+          dataType: 'radio-group',
+          label: stepsLabels.q8.label,
+          description: stepsLabels.q8.description,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: carbonReductionPlanItems
+        }
+      ]
     }),
     new FormEngineModel({
-      parameters: [{
-        id: 'keyHealthInequalities', dataType: 'checkbox-array', label: stepsLabels.q9.label, description: stepsLabels.q9.description,
-        validations: { isRequired: [true, 'Choose at least one item'] },
-        items: keyHealthInequalitiesItems
-      }]
+      parameters: [
+        {
+          id: 'keyHealthInequalities',
+          dataType: 'checkbox-array',
+          label: stepsLabels.q9.label,
+          description: stepsLabels.q9.description,
+          validations: { isRequired: [true, 'Choose at least one item'] },
+          items: keyHealthInequalitiesItems
+        }
+      ]
     }),
     new FormEngineModel({
-      parameters: [{
-        id: 'completedHealthInequalitiesImpactAssessment', dataType: 'radio-group', label: stepsLabels.q10.label, description: stepsLabels.q10.description,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: yesNoItems
-      }]
+      parameters: [
+        {
+          id: 'completedHealthInequalitiesImpactAssessment',
+          dataType: 'radio-group',
+          label: stepsLabels.q10.label,
+          description: stepsLabels.q10.description,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: yesNoItems
+        }
+      ]
     })
   );
-    
 }
-    
+
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-  
   return {
     ...(data.problemsTackled && { problemsTackled: data.problemsTackled }),
     ...(data.howInnovationWork && { howInnovationWork: data.howInnovationWork }),
     ...((data.benefitsOrImpact ?? []).length > 0 && { benefitsOrImpact: data.benefitsOrImpact }),
     ...(data.impactDiseaseCondition && { impactDiseaseCondition: data.impactDiseaseCondition }),
-    ...((data.diseasesConditionsImpact ?? []).length > 0 && { diseasesConditionsImpact: data.diseasesConditionsImpact }),
-    ...(data.estimatedCarbonReductionSavings && { estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings }),
-    ...(data.estimatedCarbonReductionSavingsDescription && { estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription }),
+    ...((data.diseasesConditionsImpact ?? []).length > 0 && {
+      diseasesConditionsImpact: data.diseasesConditionsImpact
+    }),
+    ...(data.estimatedCarbonReductionSavings && {
+      estimatedCarbonReductionSavings: data.estimatedCarbonReductionSavings
+    }),
+    ...(data.estimatedCarbonReductionSavingsDescription && {
+      estimatedCarbonReductionSavingsDescription: data.estimatedCarbonReductionSavingsDescription
+    }),
     ...(data.carbonReductionPlan && { carbonReductionPlan: data.carbonReductionPlan }),
     ...((data.keyHealthInequalities ?? []).length > 0 && { keyHealthInequalities: data.keyHealthInequalities }),
-    ...(data.completedHealthInequalitiesImpactAssessment && { completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment })
+    ...(data.completedHealthInequalitiesImpactAssessment && {
+      completedHealthInequalitiesImpactAssessment: data.completedHealthInequalitiesImpactAssessment
+    })
   };
-  
 }
-  
+
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-  
   const toReturn: WizardSummaryType[] = [];
-  
+
   let editStepNumber = 1;
-  
+
   toReturn.push(
     {
       label: stepsLabels.q1.label,
@@ -222,7 +278,9 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q3.label,
-      value: data.benefitsOrImpact?.map(impact => benefitsOrImpactItems.find(item => item.value === impact)?.label).join('\n'),
+      value: data.benefitsOrImpact
+        ?.map(impact => benefitsOrImpactItems.find(item => item.value === impact)?.label)
+        .join('\n'),
       editStepNumber: editStepNumber++
     },
     {
@@ -235,7 +293,9 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   if (data.impactDiseaseCondition === 'YES') {
     toReturn.push({
       label: stepsLabels.q5.label,
-      value: data.diseasesConditionsImpact?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label).join('\n'),
+      value: data.diseasesConditionsImpact
+        ?.map(impact => diseasesConditionsImpactItems.find(item => item.value === impact)?.label)
+        .join('\n'),
       editStepNumber: editStepNumber++
     });
   }
@@ -245,7 +305,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     value: yesNotYetNoItems.find(item => item.value === data.estimatedCarbonReductionSavings)?.label,
     editStepNumber: editStepNumber++
   });
-  
+
   if (['YES', 'NOT_YET'].includes(data.estimatedCarbonReductionSavings ?? '')) {
     toReturn.push({
       label: data.estimatedCarbonReductionSavings === 'YES' ? stepsLabels.q7_a.label : stepsLabels.q7_b.label,
@@ -262,7 +322,9 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     },
     {
       label: stepsLabels.q9.label,
-      value: data.keyHealthInequalities?.map(impact => keyHealthInequalitiesItems.find(item => item.value === impact)?.label).join('\n'),
+      value: data.keyHealthInequalities
+        ?.map(impact => keyHealthInequalitiesItems.find(item => item.value === impact)?.label)
+        .join('\n'),
       editStepNumber: editStepNumber++
     },
     {
@@ -273,5 +335,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   );
 
   return toReturn;
-  
 }

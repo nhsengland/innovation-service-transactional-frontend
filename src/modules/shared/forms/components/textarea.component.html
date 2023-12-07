@@ -1,12 +1,15 @@
-<div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
+<div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
-      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} <span class="nhsuk-u-visually-hidden"> {{ 'Limited to ' + lengthLimitCharacters + ' characters' }} </span> </label>
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id">
+        {{ label }} <span class="nhsuk-u-visually-hidden"> {{ "Limited to " + lengthLimitCharacters + " characters" }} </span>
+      </label>
     </h1>
   </ng-container>
   <ng-container *ngIf="label && !pageUniqueField">
-    <label class="nhsuk-label" [for]="id"> {{ label }} <span class="nhsuk-u-visually-hidden"> {{ 'Limited to ' + lengthLimitCharacters + ' characters' }} </span> </label>
+    <label class="nhsuk-label" [for]="id">
+      {{ label }} <span class="nhsuk-u-visually-hidden"> {{ "Limited to " + lengthLimitCharacters + " characters" }} </span>
+    </label>
   </ng-container>
 
   <ng-container *ngIf="description">
@@ -14,17 +17,23 @@
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-      <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
-    </span>
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
   </ng-container>
 
-  <textarea #textArea [formControl]="fieldControl" [id]="id" [name]="controlName" [placeholder]="placeholder" rows="5" [maxlength]="lengthLimitCharacters" class="nhsuk-textarea"
-  [attr.aria-invalid]="hasError ? 'true' : null"
-  [attr.aria-describedby]="ariaDescribedBy">
+  <textarea
+    #textArea
+    [formControl]="fieldControl"
+    [id]="id"
+    [name]="controlName"
+    [placeholder]="placeholder"
+    rows="5"
+    [maxlength]="lengthLimitCharacters"
+    class="nhsuk-textarea"
+    [attr.aria-invalid]="hasError ? 'true' : null"
+    [attr.aria-describedby]="ariaDescribedBy"
+  >
     {{ fieldControl.value }}
   </textarea>
 
   <div class="nhsuk-hint" aria-live="polite">You have {{ currentAvailableCharacters }} characters remaining</div>
-
 </div>

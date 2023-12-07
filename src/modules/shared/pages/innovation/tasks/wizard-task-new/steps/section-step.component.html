@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
         <theme-form-radio-group controlName="section" [items]="data.sections" [pageUniqueField]="false"></theme-form-radio-group>
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
@@ -11,8 +9,6 @@
       <div>
         <a href="javascript:void(0)" (click)="onCancelStep()">Cancel</a>
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

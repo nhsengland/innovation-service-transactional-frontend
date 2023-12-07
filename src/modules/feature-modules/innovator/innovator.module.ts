@@ -50,14 +50,8 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 // Services.
 import { InnovatorService } from './services/innovator.service';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    InnovatorRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,
@@ -106,4 +100,4 @@ import { InnovatorService } from './services/innovator.service';
     InnovatorService
   ]
 })
-export class InnovatorModule { }
+export class InnovatorModule {}

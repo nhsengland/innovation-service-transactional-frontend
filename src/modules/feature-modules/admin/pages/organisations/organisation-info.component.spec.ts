@@ -16,9 +16,7 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { UsersService } from '@modules/shared/services/users.service';
 import { USER_INFO_ADMIN } from '@tests/data.mocks';
 
-
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent', () => {
-
   let component: PageOrganisationInfoComponent;
   let fixture: ComponentFixture<PageOrganisationInfoComponent>;
   let activatedRoute: ActivatedRoute;
@@ -28,13 +26,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -47,7 +39,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     authenticationStore.getUserInfo = () => USER_INFO_ADMIN;
   });
 
-
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
@@ -56,7 +47,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
   });
 
   it('should NOT have default information loaded', () => {
-
     organisationsService.getOrganisationInfo = () => throwError(() => new Error('error'));
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
@@ -64,43 +54,39 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     fixture.detectChanges();
     expect(component.pageStatus).toBe('ERROR');
-
   });
 
-
   it('should have default information loaded', () => {
-
-    organisationsService.getOrganisationInfo = () => of({
-      id: 'OrgId', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
-    });
+    organisationsService.getOrganisationInfo = () =>
+      of({
+        id: 'OrgId',
+        name: 'Org name',
+        acronym: 'ORG',
+        isActive: true,
+        organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
+      });
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('READY');
-
   });
 
   it('should show "updateOrganisationSuccess" warning', () => {
-
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
     activatedRoute.snapshot.queryParams = { alert: 'updateOrganisationSuccess' };
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert.type).toEqual('SUCCESS');
-
   });
   it('should show "updateUnitSuccess" warning', () => {
-
     activatedRoute.snapshot.params = { organisationId: 'Org01' };
     activatedRoute.snapshot.queryParams = { alert: 'updateUnitSuccess' };
 
     fixture = TestBed.createComponent(PageOrganisationInfoComponent);
     component = fixture.componentInstance;
     expect(component.alert.type).toEqual('SUCCESS');
-
   });
 });

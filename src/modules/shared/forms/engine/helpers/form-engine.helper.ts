@@ -1,13 +1,19 @@
-import { AbstractControlOptions, FormArray, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import {
+  AbstractControlOptions,
+  FormArray,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 
 import { FormEngineParameterModel } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
 
 export class FormEngineHelper {
-
   static buildForm(parameters: FormEngineParameterModel[], values: { [key: string]: any } = {}): FormGroup {
-
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
     const form = new FormGroup({}, { updateOn: 'blur' });
@@ -15,26 +21,29 @@ export class FormEngineHelper {
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
     parameters.forEach(parameter => {
-
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
-
         // Creates an FormArray and pushes defaultValues into it.
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'grouped-checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          (parameterValue as string[] || []).forEach(v => { (form.get(parameter.id) as FormArray).push(new FormControl(v)); });
+          ((parameterValue as string[]) || []).forEach(v => {
+            (form.get(parameter.id) as FormArray).push(new FormControl(v));
+          });
           break;
 
         case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
           form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
           parameter.items?.forEach(item => {
             const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.value] : false;
-            (form.get(parameter.id) as FormGroup).addControl(item.value, FormEngineHelper.createParameterFormControl(parameter, itemValue));
+            (form.get(parameter.id) as FormGroup).addControl(
+              item.value,
+              FormEngineHelper.createParameterFormControl(parameter, itemValue)
+            );
           });
           break;
 
@@ -42,8 +51,11 @@ export class FormEngineHelper {
           form.addControl(parameter.id, new FormArray([]));
 
           let arrayValue: { [key: string]: any }[];
-          if (Array.isArray(parameterValue)) { arrayValue = parameterValue as { [key: string]: any }[]; }
-          else { arrayValue = []; }
+          if (Array.isArray(parameterValue)) {
+            arrayValue = parameterValue as { [key: string]: any }[];
+          } else {
+            arrayValue = [];
+          }
 
           arrayValue.forEach((parameterValueRow, i) => {
             (form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, parameterValueRow));
@@ -53,7 +65,10 @@ export class FormEngineHelper {
 
         // case 'autocomplete-value':
         case 'radio-group':
-          form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' }));
+          form.addControl(
+            parameter.id,
+            FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' })
+          );
           break;
 
         case 'file-upload': // Creates a FormGroup and pushes defaultValues into it.
@@ -65,13 +80,18 @@ export class FormEngineHelper {
 
         case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          (parameterValue as { id: string, name: string, url: string }[] || []).forEach(v => {
-            (form.get(parameter.id) as FormArray).push(new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) }));
+          ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
+            (form.get(parameter.id) as FormArray).push(
+              new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
+            );
           });
           break;
 
         default: // Creates a standard FormControl.
-          form.addControl(parameter.id, FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'blur' }));
+          form.addControl(
+            parameter.id,
+            FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'blur' })
+          );
           break;
       }
 
@@ -79,7 +99,10 @@ export class FormEngineHelper {
       conditionalFields.forEach(item => {
         if (item.conditional) {
           const itemValue = values[item.conditional.id] || null;
-          form.addControl(item.conditional.id, FormEngineHelper.createParameterFormControl(item.conditional, itemValue));
+          form.addControl(
+            item.conditional.id,
+            FormEngineHelper.createParameterFormControl(item.conditional, itemValue)
+          );
         }
       });
 
@@ -92,19 +115,17 @@ export class FormEngineHelper {
       // Apply validators only if parameter is visible!
       if (parameter.isVisible) {
         form.get(parameter.id)?.setValidators(FormEngineHelper.getParameterValidators(parameter));
-        if (parameter.validations?.async) { form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async); }
+        if (parameter.validations?.async) {
+          form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async);
+        }
         form.get(parameter.id)?.updateValueAndValidity();
       }
-
     });
 
     return form;
-
   }
 
-
   static addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): FormGroup {
-
     const formGroup = new FormGroup({});
 
     parameter.fieldsGroupConfig?.fields.forEach(field => {
@@ -115,28 +136,27 @@ export class FormEngineHelper {
     });
 
     return formGroup;
-
   }
-
 
   static isAnyVisibleField(parameters: FormEngineParameterModel[]): boolean {
     return parameters.some(parameter => parameter.isVisible);
   }
 
-  static getFormValues(form: FormGroup, parameters: FormEngineParameterModel[]): { valid: boolean; data: { [key: string]: any } } {
-
+  static getFormValues(
+    form: FormGroup,
+    parameters: FormEngineParameterModel[]
+  ): { valid: boolean; data: { [key: string]: any } } {
     const returnForm: { valid: boolean; data: { [key: string]: any } } = { valid: form.valid, data: {} };
 
-    Object.keys(form.getRawValue()).forEach(key => { // getRawValues is needed to return also disabled fields!
+    Object.keys(form.getRawValue()).forEach(key => {
+      // getRawValues is needed to return also disabled fields!
       returnForm.data[key] = form.getRawValue()[key];
     });
 
     return returnForm;
   }
 
-
   static getErrors(form: FormGroup): { [key: string]: string | null } {
-
     let result: { [key: string]: string | null } = {};
 
     Object.keys(form.controls).forEach(key => {
@@ -147,7 +167,10 @@ export class FormEngineHelper {
       const controlErrors: ValidationErrors | null | undefined = formProperty?.errors;
       if (controlErrors) {
         Object.keys(controlErrors).forEach(keyError => {
-          result = { ...result, ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }).message } };
+          result = {
+            ...result,
+            ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }).message }
+          };
         });
       }
     });
@@ -155,56 +178,126 @@ export class FormEngineHelper {
     return result;
   }
 
-
-  static getValidationMessage(error: ValidationErrors | null): { message: string, params: { [key: string]: string } } {
-
-    if (!error || Object.keys(error).length === 0) { // if empty!
+  static getValidationMessage(error: ValidationErrors | null): { message: string; params: { [key: string]: string } } {
+    if (!error || Object.keys(error).length === 0) {
+      // if empty!
       return { message: '', params: {} };
     }
 
     // Available validations.
-    if (error.required) { return { message: error.required.message || 'shared.forms_module.validations.required', params: {} }; }
-    if (error.equalTo) { return { message: error.equalTo.message || 'shared.forms_module.validations.equal_to', params: {} }; }
-    if (error.email) { return { message: 'shared.forms_module.validations.invalid_email', params: {} }; }
-    if (error.min) { return { message: error.min.message || 'shared.forms_module.validations.min', params: { min: error.min.min } }; }
-    if (error.max) { return { message: error.max.message || 'shared.forms_module.validations.max', params: { max: error.max.max } }; }
-    if (error.minlength) { return { message: 'shared.forms_module.validations.min_length', params: { minLength: error.minlength.requiredLength } }; }
-    if (error.maxlength) { return { message: 'shared.forms_module.validations.max_length', params: { maxLength: error.maxlength.requiredLength } }; }
-    if (error.equalToLength) { return { message: error.equalToLength.message || 'shared.forms_module.validations.equal_to_length', params: { equalToLength: error.equalToLength.length } }; }
-    if (error.pattern) { return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} }; }
-    if (error.existsIn) { return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} }; }
-    if (error.validEmail) { return { message: error.validEmail.message || 'shared.forms_module.validations.validEmail', params: {} }; }
-    if (error.postcodeFormat) { return { message: error.postcodeFormat.message || 'shared.forms_module.validations.invalid_postcode_format', params: {} }; }
-    if (error.urlFormat) { return { message: error.urlFormat.message || 'shared.forms_module.validations.invalid_url_format', params: {} }; }
+    if (error.required) {
+      return { message: error.required.message || 'shared.forms_module.validations.required', params: {} };
+    }
+    if (error.equalTo) {
+      return { message: error.equalTo.message || 'shared.forms_module.validations.equal_to', params: {} };
+    }
+    if (error.email) {
+      return { message: 'shared.forms_module.validations.invalid_email', params: {} };
+    }
+    if (error.min) {
+      return { message: error.min.message || 'shared.forms_module.validations.min', params: { min: error.min.min } };
+    }
+    if (error.max) {
+      return { message: error.max.message || 'shared.forms_module.validations.max', params: { max: error.max.max } };
+    }
+    if (error.minlength) {
+      return {
+        message: 'shared.forms_module.validations.min_length',
+        params: { minLength: error.minlength.requiredLength }
+      };
+    }
+    if (error.maxlength) {
+      return {
+        message: 'shared.forms_module.validations.max_length',
+        params: { maxLength: error.maxlength.requiredLength }
+      };
+    }
+    if (error.equalToLength) {
+      return {
+        message: error.equalToLength.message || 'shared.forms_module.validations.equal_to_length',
+        params: { equalToLength: error.equalToLength.length }
+      };
+    }
+    if (error.pattern) {
+      return { message: error.pattern.message || 'shared.forms_module.validations.invalid_format', params: {} };
+    }
+    if (error.existsIn) {
+      return { message: error.existsIn.message || 'shared.forms_module.validations.existsIn', params: {} };
+    }
+    if (error.validEmail) {
+      return { message: error.validEmail.message || 'shared.forms_module.validations.validEmail', params: {} };
+    }
+    if (error.postcodeFormat) {
+      return {
+        message: error.postcodeFormat.message || 'shared.forms_module.validations.invalid_postcode_format',
+        params: {}
+      };
+    }
+    if (error.urlFormat) {
+      return { message: error.urlFormat.message || 'shared.forms_module.validations.invalid_url_format', params: {} };
+    }
 
-    if (error.hexadecimalFormat) { return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} }; }
-    if (error.minHexadecimal) { return { message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`, params: {} }; }
-    if (error.maxHexadecimal) { return { message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`, params: {} }; }
-    if (error.parsedDateString) { return { message: error.parsedDateString.message || "shared.forms_module.validations.invalid_parse_date", params: {} } }
-    if (error.maxFileSize) { return { message: 'shared.forms_module.validations.max_file_size', params: {} } }
-    if (error.emptyFile) { return { message: 'shared.forms_module.validations.empty_file', params: {} } }
-    if (error.wrongFileFormat) { return { message: 'shared.forms_module.validations.wrong_file_format', params: {} } }
-    if (error.uploadError) { return { message: 'shared.forms_module.validations.upload_error', params: {} }}
-    if (error.customError) { return { message: error.message, params: {} }; }
+    if (error.hexadecimalFormat) {
+      return { message: 'shared.forms_module.validations.invalid_hexadecimal_format', params: {} };
+    }
+    if (error.minHexadecimal) {
+      return {
+        message: 'shared.forms_module.validations.min_hexadecimal' + ` (${error.minHexadecimal.min})`,
+        params: {}
+      };
+    }
+    if (error.maxHexadecimal) {
+      return {
+        message: 'shared.forms_module.validations.max_hexadecimal' + ` (${error.maxHexadecimal.max})`,
+        params: {}
+      };
+    }
+    if (error.parsedDateString) {
+      return {
+        message: error.parsedDateString.message || 'shared.forms_module.validations.invalid_parse_date',
+        params: {}
+      };
+    }
+    if (error.maxFileSize) {
+      return { message: 'shared.forms_module.validations.max_file_size', params: {} };
+    }
+    if (error.emptyFile) {
+      return { message: 'shared.forms_module.validations.empty_file', params: {} };
+    }
+    if (error.wrongFileFormat) {
+      return { message: 'shared.forms_module.validations.wrong_file_format', params: {} };
+    }
+    if (error.uploadError) {
+      return { message: 'shared.forms_module.validations.upload_error', params: {} };
+    }
+    if (error.customError) {
+      return { message: error.message, params: {} };
+    }
     return { message: '', params: {} };
-
   }
 
-
-  static createParameterFormControl(parameter: FormEngineParameterModel, value?: any, options?: AbstractControlOptions): FormControl {
-    return new FormControl({ value: (typeof value !== 'boolean' && !value && value !== 0 ? null : value), disabled: !parameter.isEditable }, options);
+  static createParameterFormControl(
+    parameter: FormEngineParameterModel,
+    value?: any,
+    options?: AbstractControlOptions
+  ): FormControl {
+    return new FormControl(
+      { value: typeof value !== 'boolean' && !value && value !== 0 ? null : value, disabled: !parameter.isEditable },
+      options
+    );
   }
 
   static getParameterValidators(parameter: FormEngineParameterModel): ValidatorFn[] {
-
     const validators = [];
 
     let validation: [boolean | number | string | string[], string | null];
 
     if (parameter.validations?.isRequired) {
-      validation = typeof parameter.validations.isRequired === 'boolean' ? [parameter.validations.isRequired, null] : parameter.validations.isRequired;
+      validation =
+        typeof parameter.validations.isRequired === 'boolean'
+          ? [parameter.validations.isRequired, null]
+          : parameter.validations.isRequired;
       if (validation[0]) {
-
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
@@ -219,26 +312,37 @@ export class FormEngineHelper {
             validators.push(CustomValidators.required(validation[1]));
             break;
         }
-
       }
     }
 
     if (parameter.validations?.pattern) {
-      validation = typeof parameter.validations.pattern === 'string' ? [parameter.validations.pattern, null] : parameter.validations.pattern;
-      if (validation[0]) { validators.push(CustomValidators.pattern(validation[0] as string, validation[1])); }
+      validation =
+        typeof parameter.validations.pattern === 'string'
+          ? [parameter.validations.pattern, null]
+          : parameter.validations.pattern;
+      if (validation[0]) {
+        validators.push(CustomValidators.pattern(validation[0] as string, validation[1]));
+      }
     }
 
-    if (parameter.validations?.minLength) { validators.push(Validators.minLength(parameter.validations.minLength)); }
-    if (parameter.validations?.maxLength) { validators.push(Validators.maxLength(parameter.validations.maxLength)); }
+    if (parameter.validations?.minLength) {
+      validators.push(Validators.minLength(parameter.validations.minLength));
+    }
+    if (parameter.validations?.maxLength) {
+      validators.push(Validators.maxLength(parameter.validations.maxLength));
+    }
     if (parameter.validations?.equalToLength) {
-      validation = (typeof parameter.validations.equalToLength === 'number' ? [parameter.validations.equalToLength, null] : parameter.validations.equalToLength);
+      validation =
+        typeof parameter.validations.equalToLength === 'number'
+          ? [parameter.validations.equalToLength, null]
+          : parameter.validations.equalToLength;
       validators.push(CustomValidators.equalToLength(validation[0] as number, validation[1]));
     }
 
     if (parameter.validations?.min) {
-      validation = (typeof parameter.validations.min === 'number' ? [parameter.validations.min, null] : parameter.validations.min);
+      validation =
+        typeof parameter.validations.min === 'number' ? [parameter.validations.min, null] : parameter.validations.min;
       if (validation[0]) {
-
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
@@ -250,14 +354,13 @@ export class FormEngineHelper {
             validators.push(Validators.min(validation[0] as number));
             break;
         }
-
       }
     }
 
     if (parameter.validations?.max) {
-      validation = (typeof parameter.validations.max === 'number' ? [parameter.validations.max, null] : parameter.validations.max);
+      validation =
+        typeof parameter.validations.max === 'number' ? [parameter.validations.max, null] : parameter.validations.max;
       if (validation[0]) {
-
         switch (parameter.dataType) {
           case 'autocomplete-array':
           case 'checkbox-array':
@@ -269,30 +372,46 @@ export class FormEngineHelper {
             validators.push(Validators.max(validation[0] as number));
             break;
         }
-
       }
     }
 
     if (parameter.validations?.existsIn) {
-      validation = (!Array.isArray(parameter.validations.existsIn) ? [parameter.validations.existsIn, null] : parameter.validations.existsIn as [string[], string]);
+      validation = !Array.isArray(parameter.validations.existsIn)
+        ? [parameter.validations.existsIn, null]
+        : (parameter.validations.existsIn as [string[], string]);
       if (validation[0]) {
         validators.push(CustomValidators.existsInValidator(validation[0] as string[], validation[1] as string));
       }
     }
 
     if (parameter.validations?.validEmail) {
-      validation = typeof parameter.validations.validEmail === 'boolean' ? [parameter.validations.validEmail, null] : parameter.validations.validEmail;
-      if (validation[0]) { validators.push(CustomValidators.validEmailValidator(validation[1])); }
+      validation =
+        typeof parameter.validations.validEmail === 'boolean'
+          ? [parameter.validations.validEmail, null]
+          : parameter.validations.validEmail;
+      if (validation[0]) {
+        validators.push(CustomValidators.validEmailValidator(validation[1]));
+      }
     }
 
     if (parameter.validations?.postcodeFormat) {
-      validation = typeof parameter.validations.postcodeFormat === 'boolean' ? [parameter.validations.postcodeFormat, null] : parameter.validations.postcodeFormat;
-      if (validation[0]) { validators.push(CustomValidators.postcodeFormatValidator(validation[1])); }
+      validation =
+        typeof parameter.validations.postcodeFormat === 'boolean'
+          ? [parameter.validations.postcodeFormat, null]
+          : parameter.validations.postcodeFormat;
+      if (validation[0]) {
+        validators.push(CustomValidators.postcodeFormatValidator(validation[1]));
+      }
     }
 
     if (parameter.validations?.urlFormat) {
-      validation = typeof parameter.validations.urlFormat === 'boolean' ? [parameter.validations.urlFormat, null] : parameter.validations.urlFormat;
-      if (validation[0]) { validators.push(CustomValidators.urlFormatValidator(validation[1])); }
+      validation =
+        typeof parameter.validations.urlFormat === 'boolean'
+          ? [parameter.validations.urlFormat, null]
+          : parameter.validations.urlFormat;
+      if (validation[0]) {
+        validators.push(CustomValidators.urlFormatValidator(validation[1]));
+      }
     }
 
     // Specific types field validations.
@@ -301,7 +420,5 @@ export class FormEngineHelper {
     }
 
     return validators;
-
   }
-
 }

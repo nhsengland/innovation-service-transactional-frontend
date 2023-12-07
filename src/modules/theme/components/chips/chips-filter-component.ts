@@ -1,14 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
-
-export type ChipFilterInputType = { id: string, value: string, exclusive?: boolean, count?: number }[];
+export type ChipFilterInputType = { id: string; value: string; exclusive?: boolean; count?: number }[];
 
 @Component({
   selector: 'theme-chips-filter-component',
   templateUrl: './chips-filter-component.html'
 })
 export class ChipsFilterComponent implements OnInit {
-
   @Input({ required: true }) chipsInput: ChipFilterInputType = [];
   @Input() exclusive: boolean = false;
 
@@ -19,7 +17,12 @@ export class ChipsFilterComponent implements OnInit {
   ngOnInit(): void {
     if (this.exclusive) {
       const totalCounter = this.chipsInput.reduce((acc, cur) => acc + (cur.count ?? 0), 0);
-      this.chipsInput.unshift({ id: 'ALL', value: 'All', exclusive: true, count: totalCounter !== 0 ? totalCounter : undefined });
+      this.chipsInput.unshift({
+        id: 'ALL',
+        value: 'All',
+        exclusive: true,
+        count: totalCounter !== 0 ? totalCounter : undefined
+      });
     }
   }
 

@@ -10,33 +10,23 @@ import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageAccountDeleteMessageComponent } from './delete-message.component';
 
-
 describe('Shared/Pages/ManageDeleteAccount/PageAccountManageUserAccountNewComponent', () => {
-
   let component: PageAccountDeleteMessageComponent;
   let fixture: ComponentFixture<PageAccountDeleteMessageComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     fixture = TestBed.createComponent(PageAccountDeleteMessageComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create the component', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
 });

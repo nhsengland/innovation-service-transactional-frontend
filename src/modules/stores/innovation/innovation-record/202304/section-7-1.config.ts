@@ -6,12 +6,12 @@ import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
 import { costComparisonItems, hasCostKnowledgeItems, patientRangeItems } from './forms.config';
 
-
 // Labels.
 const stepsLabels = {
   q1: {
     label: 'Do you know the cost of your innovation?',
-    description: 'By cost, we mean the cost to the NHS or any care organisation that would implement your innovation. Support organisations will use this to calculate cost effectiveness.'
+    description:
+      'By cost, we mean the cost to the NHS or any care organisation that would implement your innovation. Support organisations will use this to calculate cost effectiveness.'
   },
   q2: {
     label: 'What is the cost of your innovation?',
@@ -33,15 +33,15 @@ const stepsLabels = {
     label: 'Approximately how long do you expect each unit of your innovation to be in use?',
     description: `By this we mean the shelf life of the product, or the product's lifespan. This can include the lifespan of any components such as batteries.`
   },
-  q7: { label: 'What are the costs associated with the use of your innovation, compared to current practice in the UK?' }
+  q7: {
+    label: 'What are the costs associated with the use of your innovation, compared to current practice in the UK?'
+  }
 };
-
 
 // Types.
 type InboundPayloadType = DocumentType202304['COST_OF_INNOVATION'];
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['COST_OF_INNOVATION'];
-
 
 // Logic.
 export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
@@ -50,15 +50,23 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'hasCostKnowledge', dataType: 'radio-group', label: stepsLabels.q1.label, description: stepsLabels.q1.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: hasCostKnowledgeItems
-        }]
+        parameters: [
+          {
+            id: 'hasCostKnowledge',
+            dataType: 'radio-group',
+            label: stepsLabels.q1.label,
+            description: stepsLabels.q1.description,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: hasCostKnowledgeItems
+          }
+        ]
       })
     ],
     showSummary: true,
-    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [
+      (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+        runtimeRules(steps, currentValues, currentStep)
+    ],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   }),
@@ -66,7 +74,6 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
-
   steps.splice(1);
 
   if (['NO'].includes(currentValues.hasCostKnowledge || 'NO')) {
@@ -74,23 +81,31 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'costDescription',
-          dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'm'
-        }]
+        parameters: [
+          {
+            id: 'costDescription',
+            dataType: 'textarea',
+            label: stepsLabels.q2.label,
+            description: stepsLabels.q2.description,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 'm'
+          }
+        ]
       })
     );
   }
 
   steps.push(
     new FormEngineModel({
-      parameters: [{
-        id: 'patientsRange', dataType: 'radio-group', label: stepsLabels.q3.label,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: patientRangeItems
-      }]
+      parameters: [
+        {
+          id: 'patientsRange',
+          dataType: 'radio-group',
+          label: stepsLabels.q3.label,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: patientRangeItems
+        }
+      ]
     })
   );
 
@@ -99,43 +114,59 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
   } else {
     steps.push(
       new FormEngineModel({
-        parameters: [{
-          id: 'eligibilityCriteria', dataType: 'textarea', label: stepsLabels.q4.label, description: stepsLabels.q4.description,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'm'
-        }]
+        parameters: [
+          {
+            id: 'eligibilityCriteria',
+            dataType: 'textarea',
+            label: stepsLabels.q4.label,
+            description: stepsLabels.q4.description,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 'm'
+          }
+        ]
       })
     );
   }
 
   steps.push(
     new FormEngineModel({
-      parameters: [{
-        id: 'sellExpectations', dataType: 'textarea', label: stepsLabels.q5.label,
-        validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 's'
-      }]
+      parameters: [
+        {
+          id: 'sellExpectations',
+          dataType: 'textarea',
+          label: stepsLabels.q5.label,
+          validations: { isRequired: [true, 'A description is required'] },
+          lengthLimit: 's'
+        }
+      ]
     }),
     new FormEngineModel({
-      parameters: [{
-        id: 'usageExpectations', dataType: 'textarea', label: stepsLabels.q6.label, description: stepsLabels.q6.description,
-        validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'm'
-      }]
+      parameters: [
+        {
+          id: 'usageExpectations',
+          dataType: 'textarea',
+          label: stepsLabels.q6.label,
+          description: stepsLabels.q6.description,
+          validations: { isRequired: [true, 'A description is required'] },
+          lengthLimit: 'm'
+        }
+      ]
     }),
     new FormEngineModel({
-      parameters: [{
-        id: 'costComparison', dataType: 'radio-group', label: stepsLabels.q7.label,
-        validations: { isRequired: [true, 'Choose one option'] },
-        items: costComparisonItems
-      }]
+      parameters: [
+        {
+          id: 'costComparison',
+          dataType: 'radio-group',
+          label: stepsLabels.q7.label,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: costComparisonItems
+        }
+      ]
     })
   );
-
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     ...(data.hasCostKnowledge && { hasCostKnowledge: data.hasCostKnowledge }),
     ...(data.costDescription && { costDescription: data.costDescription }),
@@ -145,11 +176,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     ...(data.usageExpectations && { usageExpectations: data.usageExpectations }),
     ...(data.costComparison && { costComparison: data.costComparison })
   };
-
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
   let editStepNumber = 1;
@@ -193,5 +222,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   );
 
   return toReturn;
-
 }

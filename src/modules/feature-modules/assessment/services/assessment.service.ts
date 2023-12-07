@@ -6,21 +6,25 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 
-
-const InnovationKPIExemption = ['NO_RESPONSE', 'TECHNICAL_DIFFICULTIES', 'INCORRECT_DETAILS', 'SERVICE_UNAVAILABLE', 'CAPACITY'] as const;
-export type InnovationKPIExemption = typeof InnovationKPIExemption[number];
+const InnovationKPIExemption = [
+  'NO_RESPONSE',
+  'TECHNICAL_DIFFICULTIES',
+  'INCORRECT_DETAILS',
+  'SERVICE_UNAVAILABLE',
+  'CAPACITY'
+] as const;
+export type InnovationKPIExemption = (typeof InnovationKPIExemption)[number];
 
 export type AssessmentExemptionTypeDTO = {
-  isExempted: boolean,
-  exemption?: { reason: InnovationKPIExemption, message?: string, exemptedAt: DateISOType }
+  isExempted: boolean;
+  exemption?: { reason: InnovationKPIExemption; message?: string; exemptedAt: DateISOType };
 };
-
 
 @Injectable()
 export class AssessmentService extends CoreService {
-
-  constructor() { super(); }
-
+  constructor() {
+    super();
+  }
 
   // getOverdueAssessments(status: InnovationStatusEnum[], assignedToMe?: boolean): Observable<{ overdue: number }> {
 
@@ -33,40 +37,71 @@ export class AssessmentService extends CoreService {
   // }
 
   createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments').setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(take(1), map(response => response));
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments')
+      .setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
-  updateInnovationNeedsAssessment(innovationId: string, assessmentId: string, isSubmission: boolean, data: MappedObjectType): Observable<{ id: string }> {
-
+  updateInnovationNeedsAssessment(
+    innovationId: string,
+    assessmentId: string,
+    isSubmission: boolean,
+    data: MappedObjectType
+  ): Observable<{ id: string }> {
     const body = Object.assign({}, data);
 
     if (isSubmission) {
       body.isSubmission = true;
     }
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
-    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
-
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/:assessmentId')
+      .setPathParams({ innovationId, assessmentId });
+    return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
-  updateInnovationNeedsAssessmentAssessor(innovationId: string, assessmentId: string, body: { assessorId: string }): Observable<{ assessmentId: string, assessorId: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId').setPathParams({ innovationId, assessmentId });
-    return this.http.patch<{ assessmentId: string, assessorId: string }>(url.buildUrl(), body).pipe(take(1), map(response => response));
+  updateInnovationNeedsAssessmentAssessor(
+    innovationId: string,
+    assessmentId: string,
+    body: { assessorId: string }
+  ): Observable<{ assessmentId: string; assessorId: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/:assessmentId')
+      .setPathParams({ innovationId, assessmentId });
+    return this.http.patch<{ assessmentId: string; assessorId: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
   }
-
 
   getInnovationExemption(innovationId: string, assessmentId: string): Observable<AssessmentExemptionTypeDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId/exemption').setPathParams({ innovationId, assessmentId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/:assessmentId/exemption')
+      .setPathParams({ innovationId, assessmentId });
     return this.http.get<AssessmentExemptionTypeDTO>(url.buildUrl()).pipe(
       take(1),
       catchError(() => of({ isExempted: false }))
     );
   }
 
-  updateInnovationExemption(innovationId: string, assessmentId: string, data: { reason: InnovationKPIExemption, message?: string }): Observable<null> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId/assessments/:assessmentId/exemption').setPathParams({ innovationId, assessmentId });
-    return this.http.patch<null>(url.buildUrl(), data).pipe(take(1), map(response => response));
+  updateInnovationExemption(
+    innovationId: string,
+    assessmentId: string,
+    data: { reason: InnovationKPIExemption; message?: string }
+  ): Observable<null> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/:assessmentId/exemption')
+      .setPathParams({ innovationId, assessmentId });
+    return this.http.patch<null>(url.buildUrl(), data).pipe(
+      take(1),
+      map(response => response)
+    );
   }
-
 }

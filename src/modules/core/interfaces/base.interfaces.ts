@@ -18,7 +18,6 @@ export type AlertType = {
 
 export type NotificationValueType = null | 'dot' | 'new' | number;
 
-
 // Date's custom types.
 /**
  * Represent a string like `2021-01-08`

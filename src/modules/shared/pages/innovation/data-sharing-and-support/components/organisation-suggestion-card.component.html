@@ -4,7 +4,8 @@
       <div class="nhsuk-grid-column-full">
         <h3 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">Consider updating your data sharing preferences</h3>
         <p>
-          Some organisations that have been suggested to support your innovation, but you are not currently sharing your data with them. Update your data sharing preferences to improve your chances of receiving support.
+          Some organisations that have been suggested to support your innovation, but you are not currently sharing your data with them. Update your data sharing preferences to
+          improve your chances of receiving support.
         </p>
 
         <ng-container *ngIf="showAssessments">
@@ -12,17 +13,19 @@
             <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">Suggested organisations by the need assessment team:</p>
           </div>
           <ul class="nhsuk-list">
-            <li *ngFor="let item of assessments.organisations"> {{ item }} </li>
+            <li *ngFor="let item of assessments.organisations">{{ item }}</li>
           </ul>
         </ng-container>
 
         <ng-container *ngIf="showAccessors">
           <ng-container *ngFor="let suggestion of accessors">
             <div class="d-flex">
-              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">Suggested organisations by {{suggestion.organisation.name}} ({{ suggestion.organisation.acronym}}):</p>
+              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">
+                Suggested organisations by {{ suggestion.organisation.name }} ({{ suggestion.organisation.acronym }}):
+              </p>
             </div>
             <ul class="nhsuk-list">
-              <li *ngFor="let suggestedOrg of suggestion.suggestedOrganisations"> {{ suggestedOrg.name }} ({{ suggestedOrg.acronym }}) </li>
+              <li *ngFor="let suggestedOrg of suggestion.suggestedOrganisations">{{ suggestedOrg.name }} ({{ suggestedOrg.acronym }})</li>
             </ul>
           </ng-container>
         </ng-container>

@@ -11,20 +11,15 @@ import { FormCheckboxArrayComponent } from './checkbox-array.component';
 import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
+  template: ` <form [formGroup]="form">
     <theme-form-checkbox-array [id]="id" [arrayName]="arrayName" [items]="items"></theme-form-checkbox-array>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormCheckboxArrayComponent) childComponent?: FormCheckboxArrayComponent;
 
   form = new FormGroup({
-    testField: new FormArray([
-      new FormControl('value 1'),
-      new FormControl('value 4')
-    ]),
+    testField: new FormArray([new FormControl('value 1'), new FormControl('value 4')]),
     testFieldConditional: new FormControl('')
   });
 
@@ -36,34 +31,29 @@ class HostComponent {
     {
       value: 'value 3',
       label: 'value 3',
-      conditional: new FormEngineParameterModel({ id: 'testFieldConditional', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: true } })
+      conditional: new FormEngineParameterModel({
+        id: 'testFieldConditional',
+        dataType: 'text',
+        label: 'First part of your postcode',
+        description: 'For example SW1',
+        validations: { isRequired: true }
+      })
     }
   ];
-
 }
 
-
 describe('FormCheckboxArrayComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormInputComponent,
-        FormCheckboxArrayComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormInputComponent, FormCheckboxArrayComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -114,7 +104,6 @@ describe('FormCheckboxArrayComponent', () => {
 
     const expected = ['value 2', 'value 3'];
     expect(hostComponent.childComponent?.fieldArrayControl.value).toEqual(expected);
-
   });
 
   it('should conditional field be visible', () => {
@@ -126,5 +115,4 @@ describe('FormCheckboxArrayComponent', () => {
 
     expect(hostComponent.childComponent?.isConditionalFieldVisible('testFieldConditional')).toBe(true);
   });
-
 });

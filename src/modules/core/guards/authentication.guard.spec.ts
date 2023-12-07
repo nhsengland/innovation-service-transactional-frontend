@@ -15,7 +15,6 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationGuard } from './authentication.guard';
 
 describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let guard: AuthenticationGuard;
@@ -24,12 +23,7 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
@@ -42,31 +36,24 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
     guard = TestBed.inject(AuthenticationGuard);
 
     routerStateSnapshopMock = { url: '' };
-
   });
 
   it('should deny access to the route', () => {
-
     let expected: boolean | null = null;
 
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
     authenticationStore.initializeAuthentication$ = () => throwError('error');
 
-    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
+    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
+      expected = response;
+    });
 
     expect(expected).toBe(null); // Response from canActivate does not get returned, as it is redirected.
-
   });
-
 });
 
-
-
-
-
 describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let guard: AuthenticationGuard;
@@ -75,15 +62,8 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
 
     authenticationStore = TestBed.inject(AuthenticationStore);
@@ -91,25 +71,22 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
     guard = TestBed.inject(AuthenticationGuard);
 
     routerStateSnapshopMock = { url: '' };
-
   });
 
   it('should allow access to the route', () => {
-
     let expected!: boolean;
 
-    
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
     authenticationStore.initializeAuthentication$ = () => of(true);
 
-    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
+    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
+      expected = response;
+    });
     expect(expected).toBe(true);
-
   });
 
   it('should deny access to the route', () => {
-
     delete (window as { location?: {} }).location;
     window.location = { href: '', hostname: '', pathname: '', protocol: '', assign: jest.fn() } as unknown as Location;
 
@@ -118,10 +95,10 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
     authenticationStore.initializeAuthentication$ = () => throwError('error');
-    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => { expected = response; });
+    guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
+      expected = response;
+    });
 
     expect(expected).toBe(false);
-
   });
-
 });

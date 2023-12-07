@@ -5,13 +5,14 @@ import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 import { WarningStepInputType, WarningStepOutputType } from './warning-step.types';
 
-
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new-warning-step',
   templateUrl: './warning-step.component.html'
 })
-export class WizardInnovationThreadNewWarningStepComponent extends CoreComponent implements WizardStepComponentType<WarningStepInputType, WarningStepOutputType>, OnInit {
-
+export class WizardInnovationThreadNewWarningStepComponent
+  extends CoreComponent
+  implements WizardStepComponentType<WarningStepInputType, WarningStepOutputType>, OnInit
+{
   @Input() title = '';
   @Input() data: WarningStepInputType = {};
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<WarningStepOutputType>>();
@@ -19,15 +20,15 @@ export class WizardInnovationThreadNewWarningStepComponent extends CoreComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<WarningStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<WarningStepOutputType>>();
 
-  constructor() { super(); }
+  constructor() {
+    super();
+  }
 
   ngOnInit(): void {
-
     this.setPageTitle(this.title, { showPage: false });
     this.setBackLink('Go back', this.onCancelStep.bind(this));
 
     this.setPageStatus('READY');
-
   }
 
   // onPreviousStep(): void {
@@ -41,5 +42,4 @@ export class WizardInnovationThreadNewWarningStepComponent extends CoreComponent
   onCancelStep(): void {
     this.cancelEvent.emit({ isComplete: true, data: {} });
   }
-
 }

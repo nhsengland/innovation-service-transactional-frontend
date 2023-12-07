@@ -10,25 +10,17 @@ import { FormEngineComponent } from './form-engine.component';
 
 import { ALL_PARAMETER_TYPES_EMPTY, PARAMETERS_WITH_VALIDATIONS } from '../tests/form-engine.mock';
 
-
 describe('FormEngineComponent', () => {
-
   let component: FormEngineComponent;
   let fixture: ComponentFixture<FormEngineComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        LoggerTestingModule,
-        TranslateModule.forRoot(),
-        FormsModule
-      ]
+      imports: [HttpClientTestingModule, LoggerTestingModule, TranslateModule.forRoot(), FormsModule]
     });
 
     fixture = TestBed.createComponent(FormEngineComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -55,9 +47,7 @@ describe('FormEngineComponent', () => {
 
     expect(component.form.valid).toBe(true);
     expect(component.form.value).toEqual(expected);
-
   });
-
 
   it('should form control field be invalid and with error', () => {
     fixture.detectChanges();
@@ -85,7 +75,6 @@ describe('FormEngineComponent', () => {
     };
 
     expect(component.getFormValues()).toEqual(expected);
-
   });
 
   it('should form control field be valid when parameters change', () => {
@@ -96,7 +85,10 @@ describe('FormEngineComponent', () => {
       parameters: new SimpleChange(null, ALL_PARAMETER_TYPES_EMPTY, false)
     });
     component.removeFieldGroupRow('fieldsGroupField', 0);
-    component.addFieldGroupRow(ALL_PARAMETER_TYPES_EMPTY.find(p => p.id === 'fieldsGroupField') as any, { field01: 'value 1', field02: 'value 2' });
+    component.addFieldGroupRow(ALL_PARAMETER_TYPES_EMPTY.find(p => p.id === 'fieldsGroupField') as any, {
+      field01: 'value 1',
+      field02: 'value 2'
+    });
     fixture.detectChanges();
 
     const expected = {
@@ -109,7 +101,5 @@ describe('FormEngineComponent', () => {
 
     expect(component.form.valid).toBe(true);
     expect(component.form.value).toEqual(expected);
-
   });
-
 });

@@ -14,9 +14,7 @@ import { InnovatorOrganisationRoleEnum } from '@modules/stores/authentication/au
 
 import { PageAccountManageDetailsInfoComponent } from './manage-details-info.component';
 
-
 describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
@@ -26,13 +24,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -42,9 +34,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
     authenticationStore = TestBed.inject(AuthenticationStore);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageAccountManageDetailsInfoComponent);
@@ -154,5 +144,4 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsInfoCompone
   //   ]);
 
   // });
-
 });

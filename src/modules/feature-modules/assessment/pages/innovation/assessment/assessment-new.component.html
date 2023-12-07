@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <div class="nhsuk-inset-text">
         <span class="nhsuk-u-visually-hidden">Information:</span>
         <p>
@@ -12,13 +10,13 @@
       </div>
 
       <theme-form-engine formId="sectionForm" [parameters]="formParameters" [values]="formAnswers"></theme-form-engine>
-      <button [disabled]="this.disableCreateButton" type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">Start needs assessment and post message</button>
+      <button [disabled]="this.disableCreateButton" type="submit" form="sectionForm" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onSubmit()">
+        Start needs assessment and post message
+      </button>
 
       <div>
         <a routerLink="/assessment/innovations/{{ innovationId }}">Cancel</a>
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

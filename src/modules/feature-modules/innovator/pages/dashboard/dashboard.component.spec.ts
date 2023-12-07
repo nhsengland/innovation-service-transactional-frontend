@@ -17,9 +17,7 @@ import { PageDashboardComponent } from './dashboard.component';
 
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 
-
 describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
-
   let authenticationStore: AuthenticationStore;
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
@@ -30,13 +28,7 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -48,7 +40,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     activatedRoute = TestBed.inject(ActivatedRoute);
-
   });
 
   it('should create the component', () => {
@@ -78,7 +69,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   //   expect(component.innovationTransfers).toEqual(expected);
 
   // });
-
 
   // it('should NOT have initial information loaded', () => {
 
@@ -139,7 +129,6 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
 
   // // });
 
-
   // // it('should run onSubmitTransferResponse() REJECTING transfer and call API with success', () => {
 
   // //   innovatorService.updateTransferInnovation = () => of({ id: 'TransferId01' });
@@ -188,5 +177,4 @@ describe('FeatureModules/Innovator/Pages/Dashboard/DashboardComponent', () => {
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

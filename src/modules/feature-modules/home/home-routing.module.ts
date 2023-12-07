@@ -5,14 +5,11 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeLayoutComponent } from './base/home-layout.component';
 import { HomeComponent } from './home.component';
 
-
 const routes: Routes = [
   {
     path: '',
     component: HomeLayoutComponent,
-    children: [
-      { path: '', pathMatch: 'full', component: HomeComponent }
-    ]
+    children: [{ path: '', pathMatch: 'full', component: HomeComponent }]
   }
 ];
 
@@ -20,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HomeRoutingModule { }
+export class HomeRoutingModule {}

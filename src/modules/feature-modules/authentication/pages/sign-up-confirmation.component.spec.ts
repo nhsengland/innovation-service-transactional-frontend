@@ -11,23 +11,15 @@ import { AuthenticationModule } from '@modules/feature-modules/authentication/au
 import { SignUpConfirmationComponent } from './sign-up-confirmation.component';
 
 describe('FeatureModules/Authentication/SignUpConfirmationComponent', () => {
-
   let component: SignUpConfirmationComponent;
   let fixture: ComponentFixture<SignUpConfirmationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AuthenticationModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AuthenticationModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
   });
 
   it('should create the component', () => {
@@ -35,5 +27,4 @@ describe('FeatureModules/Authentication/SignUpConfirmationComponent', () => {
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

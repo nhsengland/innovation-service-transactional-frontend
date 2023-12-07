@@ -1,20 +1,18 @@
 <div class="nhsuk-grid-row nhsuk-u-padding-top-3">
   <div class="nhsuk-grid-column-full">
-
     <theme-alert [type]="alert.type" [title]="alert.title" [setFocus]="alert.setFocus">
-      <p> {{ alert.message }} </p>
+      <p>{{ alert.message }}</p>
     </theme-alert>
 
-    <h1 class="nhsuk-heading-xl"> {{ pageTitle }} </h1>
-
+    <h1 class="nhsuk-heading-xl">{{ pageTitle }}</h1>
   </div>
 </div>
 
 <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
   <div class="nhsuk-grid-column-full">
-    <h2 class="nhsuk-heading-l"> Change your Password </h2>
-    <p> You will need to enter your current password to change to a new one. </p>
+    <h2 class="nhsuk-heading-l">Change your Password</h2>
+    <p>You will need to enter your current password to change to a new one.</p>
     <a [href]="changePassword"> Change your Password </a>
-    <h6> Last password update: {{ user.passwordResetAt  | date:'dd/MM/yyyy' }} </h6>
+    <h6>Last password update: {{ user.passwordResetAt | date: "dd/MM/yyyy" }}</h6>
   </div>
 </div>

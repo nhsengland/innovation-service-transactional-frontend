@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">User details</h2>
 
       <dl class="nhsuk-summary-list">
@@ -24,7 +22,6 @@
           </dd>
         </div>
       </dl>
-
     </div>
   </div>
 
@@ -33,7 +30,10 @@
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active roles</h2>
         <div *ngIf="hasActiveAccessorRole">
-          <a routerLink="/admin/users/{{ user.id }}/change-role">Change {{ isActiveQualifyingAccessor ? 'qualifying accessor' :'accessor' }} {{ 'dictionary.role' | pluralTranslate: accessorRolesCount | translate }} to {{ isActiveQualifyingAccessor ? 'accessor' : 'qualifying accessor' }} </a>
+          <a routerLink="/admin/users/{{ user.id }}/change-role"
+            >Change {{ isActiveQualifyingAccessor ? "qualifying accessor" : "accessor" }} {{ "dictionary.role" | pluralTranslate: accessorRolesCount | translate }} to
+            {{ isActiveQualifyingAccessor ? "accessor" : "qualifying accessor" }}
+          </a>
         </div>
         <table class="nhsuk-table">
           <tbody class="nhsuk-table__body">
@@ -79,8 +79,7 @@
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let innovation of user.innovations" role="row" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }}
-                </a>
+                <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }} </a>
               </td>
             </tr>
           </tbody>
@@ -95,5 +94,4 @@
       <span class="nhsuk-action-link__text">Add role</span>
     </a>
   </div>
-
 </theme-content-wrapper>

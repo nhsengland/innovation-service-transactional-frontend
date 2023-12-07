@@ -17,9 +17,7 @@ import { InnovationSupportUpdateComponent } from './support-update.component';
 
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
-
 describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -32,13 +30,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -53,7 +45,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
-
   });
 
   it('should create the component', () => {
@@ -175,7 +166,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
 
   // });
 
-
   // it('should run onSubmit() with INVALID form', () => {
 
   //   fixture = TestBed.createComponent(InnovationSupportUpdateComponent);
@@ -278,5 +268,4 @@ describe('FeatureModules/Accessor/Innovation/InnovationSupportUpdateComponent', 
   //   (component as any).setStepTitle();
   //   expect(component.pageTitle).toBe('Update support status');
   // });
-
 });

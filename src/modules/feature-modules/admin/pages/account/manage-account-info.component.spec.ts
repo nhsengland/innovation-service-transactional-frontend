@@ -12,9 +12,7 @@ import { USER_INFO_ADMIN } from '@tests/data.mocks';
 
 import { PageAccountManageAccountInfoComponent } from './manage-account-info.component';
 
-
 describe('FeatureModules/Admin/Pages/Account/PageAccountManageAccountInfoComponent', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let component: PageAccountManageAccountInfoComponent;
@@ -22,20 +20,13 @@ describe('FeatureModules/Admin/Pages/Account/PageAccountManageAccountInfoCompone
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     authenticationStore.getUserInfo = () => USER_INFO_ADMIN;
-
   });
 
   it('should create the component', () => {
@@ -43,5 +34,4 @@ describe('FeatureModules/Admin/Pages/Account/PageAccountManageAccountInfoCompone
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

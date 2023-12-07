@@ -1,18 +1,17 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
-
     <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
-
       <ng-container *ngIf="pageUniqueField">
-        <h1 class="nhsuk-fieldset__heading"> {{ label }} </h1>
+        <h1 class="nhsuk-fieldset__heading">{{ label }}</h1>
       </ng-container>
-      <ng-container *ngIf="!pageUniqueField"><span class="nhsuk-u-font-weight-bold">{{ label }}</span></ng-container>
+      <ng-container *ngIf="!pageUniqueField"
+        ><span class="nhsuk-u-font-weight-bold">{{ label }}</span></ng-container
+      >
 
-      <ng-container *ngIf="hasError"> <!-- Add error to legend for accessibility purposes -->
-        <div class="nhsuk-u-visually-hidden">Error: {{ error.message | translate: error.params }} </div>
+      <ng-container *ngIf="hasError">
+        <!-- Add error to legend for accessibility purposes -->
+        <div class="nhsuk-u-visually-hidden">Error: {{ error.message | translate: error.params }}</div>
       </ng-container>
-
     </legend>
 
     <ng-container *ngIf="description">
@@ -20,21 +19,28 @@
     </ng-container>
 
     <ng-container *ngIf="hasError">
-      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-        <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
-      </span>
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
     </ng-container>
 
     <ul class="nhsuk-checkboxes nhsuk-u-padding-top-3 nhsuk-u-padding-left-0">
-
-      <ng-container *ngFor="let fgi of filteredGI; let i = index;">
-
+      <ng-container *ngFor="let fgi of filteredGI; let i = index">
         <li class="nhsuk-checkboxes__item nhsuk-u-margin-bottom-4">
-          <input id="{{ id }}{{ fgi.gItem.value }}" type="checkbox" [value]="fgi.gItem.value" [checked]="isChecked(fgi.gItem.value) || fgi.selectedChildren > 0"
-            [disabled]="fgi.gItem.isEditable !== undefined && fgi.gItem.isEditable === false" (change)="onChanged($event)" class="nhsuk-checkboxes__input"
-            [attr.aria-describedby]="fgi.gItem.description ? '{{ id }}{{ fgi.gItem.value }}-hint' : null" />
-          <label for="{{ id }}{{ fgi.gItem.value }}" class="nhsuk-label nhsuk-checkboxes__label d-flex" [ngClass]="{'undertermined-checkbox': fgi.selectedChildren > 0 && fgi.selectedChildren < fgi.gItem.items.length }">
-            <div> {{ fgi.gItem.label }}</div>
+          <input
+            id="{{ id }}{{ fgi.gItem.value }}"
+            type="checkbox"
+            [value]="fgi.gItem.value"
+            [checked]="isChecked(fgi.gItem.value) || fgi.selectedChildren > 0"
+            [disabled]="fgi.gItem.isEditable !== undefined && fgi.gItem.isEditable === false"
+            (change)="onChanged($event)"
+            class="nhsuk-checkboxes__input"
+            [attr.aria-describedby]="fgi.gItem.description ? '{{ id }}{{ fgi.gItem.value }}-hint' : null"
+          />
+          <label
+            for="{{ id }}{{ fgi.gItem.value }}"
+            class="nhsuk-label nhsuk-checkboxes__label d-flex"
+            [ngClass]="{ 'undertermined-checkbox': fgi.selectedChildren > 0 && fgi.selectedChildren < fgi.gItem.items.length }"
+          >
+            <div>{{ fgi.gItem.label }}</div>
             <a *ngIf="fgi.showHideDescription" href="javascript:void(0)" (click)="onShowHideClicked(fgi.gItem.value)" class="ml-auto">
               {{ fgi.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ fgi.showHideDescription }} </span>
             </a>
@@ -42,21 +48,25 @@
           <div *ngIf="fgi.gItem.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ fgi.gItem.value }}-hint">{{ fgi.gItem.description }}</div>
         </li>
 
-        <ul class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened'}">
-          <ng-container *ngFor="let item of fgi.gItem.items; let j = index;">
+        <ul class="nhsuk-u-margin-left-3 nhsuk-u-padding-left-4 border-left-inset-neutral" [ngClass]="{ 'nhsuk-u-visually-hidden': fgi.showHideStatus !== 'opened' }">
+          <ng-container *ngFor="let item of fgi.gItem.items; let j = index">
             <li class="nhsuk-checkboxes__item">
-              <input id="{{ id }}{{ item.value }}" type="checkbox" [value]="item.value" [checked]="isChecked(item.value)" [disabled]="item.isEditable !== undefined && item.isEditable === false"
-                (change)="onChanged($event)" class="nhsuk-checkboxes__input" [attr.aria-describedby]="description ? '{{ id }}{{ item.value }}-hint' : null"/>
+              <input
+                id="{{ id }}{{ item.value }}"
+                type="checkbox"
+                [value]="item.value"
+                [checked]="isChecked(item.value)"
+                [disabled]="item.isEditable !== undefined && item.isEditable === false"
+                (change)="onChanged($event)"
+                class="nhsuk-checkboxes__input"
+                [attr.aria-describedby]="description ? '{{ id }}{{ item.value }}-hint' : null"
+              />
               <label for="{{ id }}{{ item.value }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
               <div *ngIf="item.description" class="nhsuk-hint nhsuk-checkboxes__hint" id="{{ id }}{{ item.value }}-hint">{{ item.description }}</div>
             </li>
           </ng-container>
         </ul>
-
       </ng-container>
-
     </ul>
-
   </fieldset>
-
 </div>

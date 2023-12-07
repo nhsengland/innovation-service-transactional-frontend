@@ -5,7 +5,15 @@
 // It is the same approach as the FormInputAutocompleteArrayComponent, but holds just 1 value.
 // It was NOT thouroughly tested!
 // Example of usage at the end of this file.
-import { Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, forwardRef, Injector } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  forwardRef,
+  Injector
+} from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -17,19 +25,19 @@ import { ControlValueAccessorComponent } from '../base/control-value-accessor.co
 
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
-
 @Component({
   selector: 'theme-form-input-autocomplete-value',
   templateUrl: './input-autocomplete-value.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => FormInputAutocompleteValueComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FormInputAutocompleteValueComponent),
+      multi: true
+    }
+  ]
 })
 export class FormInputAutocompleteValueComponent extends ControlValueAccessorComponent implements OnInit {
-
   @Input() id?: string;
   @Input() label?: string;
   @Input() description?: string;
@@ -37,80 +45,74 @@ export class FormInputAutocompleteValueComponent extends ControlValueAccessorCom
   @Input() pageUniqueField = true;
 
   placeholder = '';
-  optionsList: { value: string, label: string }[] = [];
-  filteredItems$: Observable<{ value: string, label: string }[]> = of([]);
+  optionsList: { value: string; label: string }[] = [];
+  filteredItems$: Observable<{ value: string; label: string }[]> = of([]);
 
   hasError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
     let s = '';
-    if (this.description) { s += `hint-${this.id}`; }
-    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    if (this.description) {
+      s += `hint-${this.id}`;
+    }
+    if (this.hasError) {
+      s += `${s ? ' ' : ''}error-${this.id}`;
+    }
     return s || null;
   }
 
   anyConditionalField?: FormEngineParameterModel;
 
-  conditionalFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
+  conditionalFormControl(f: string): FormControl {
+    return this.parentFieldControl?.get(f) as FormControl;
+  }
 
   isConditionalFieldVisible(conditionalFieldId: string): boolean {
-    return (this.items || []).filter(item => item.value === this.fieldControl.value && item.conditional?.id === conditionalFieldId).length > 0;
+    return (
+      (this.items || []).filter(
+        item => item.value === this.fieldControl.value && item.conditional?.id === conditionalFieldId
+      ).length > 0
+    );
   }
 
   isConditionalFieldError(f: string): boolean {
     const control = this.conditionalFormControl(f);
-    return (control.invalid && (control.touched || control.dirty));
+    return control.invalid && (control.touched || control.dirty);
   }
-
 
   constructor(
     injector: Injector,
     private cdr: ChangeDetectorRef
   ) {
-
     super(injector);
-
   }
 
-
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
-    this.filteredItems$ = this.fieldControl.valueChanges.pipe(
-      map(value => this._filter(value))
-    );
+    this.filteredItems$ = this.fieldControl.valueChanges.pipe(map(value => this._filter(value)));
 
     this.anyConditionalField = this.items?.find(i => i.conditional)?.conditional;
-
-
   }
 
   onInputBlur(): void {
-
     // this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
     this.hasError = !this.items?.map(i => i.label).includes(this.fieldControl.value);
     this.error = this.hasError ? { message: 'Invalid value chosen', params: {} } : { message: '', params: {} };
     this.cdr.detectChanges();
-
   }
 
+  private _filter(value: string): { value: string; label: string }[] {
+    if (value.length < 2) {
+      return [];
+    }
 
-  private _filter(value: string): { value: string, label: string }[] {
-
-    if (value.length < 2) { return []; }
-
-    const filteredValues = UtilsHelper.arrayFullTextSearch(
-      this.items?.map(i => i.label) || [],
-      value
-    );
+    const filteredValues = UtilsHelper.arrayFullTextSearch(this.items?.map(i => i.label) || [], value);
 
     return (this.items || []).filter(i => filteredValues.includes(i.label));
-
   }
-
 }
 
 // new FormEngineModel({

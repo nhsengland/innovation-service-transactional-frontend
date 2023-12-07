@@ -1,5 +1,4 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
       <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
@@ -14,24 +13,37 @@
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-      <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
-    </span>
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
   </ng-container>
 
   <ng-container *ngIf="chosenItems.length > 0">
-    <div class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0"> You have chosen {{ chosenItems.length  }} {{ chosenItems.length | i18nPlural: {'=1': 'item', 'other': 'items'}  }} </div>
+    <div class="nhsuk-heading-s nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-0">
+      You have chosen {{ chosenItems.length }} {{ chosenItems.length | i18nPlural: { "=1": "item", other: "items" } }}
+    </div>
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of chosenItems" class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__value"> {{ item.label }} </dt>
+        <dt class="nhsuk-summary-list__value">{{ item.label }}</dt>
         <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:void(0)" (click)="onRemoveItem(item.value)"> Delete <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span></a>
+          <a href="javascript:void(0)" (click)="onRemoveItem(item.value)">
+            Delete <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span></a
+          >
         </dd>
       </div>
     </dl>
   </ng-container>
 
-  <input type="text" matInput [formControl]="searchFieldControl" [id]="id" name="search" type="text" [value]="searchFieldControl.value" class="nhsuk-input" [matAutocomplete]="auto" (keydown.enter)="$event.preventDefault()">
+  <input
+    type="text"
+    matInput
+    [formControl]="searchFieldControl"
+    [id]="id"
+    name="search"
+    type="text"
+    [value]="searchFieldControl.value"
+    class="nhsuk-input"
+    [matAutocomplete]="auto"
+    (keydown.enter)="$event.preventDefault()"
+  />
 
   <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption (optionSelected)="onAddItem($event)">
     <ng-container *ngIf="filteredItems$ | async as filteredItems">
@@ -41,5 +53,4 @@
       <mat-option *ngFor="let item of filteredItems" [value]="item.label"> {{ item.label }} </mat-option>
     </ng-container>
   </mat-autocomplete>
-
 </div>

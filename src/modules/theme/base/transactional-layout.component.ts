@@ -10,32 +10,29 @@ import { ContextStore } from '@modules/stores';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
 
-
 export type RoutesDataType = {
-  module?: string, // TODO: To remove.
+  module?: string; // TODO: To remove.
   header: {
-    menuBarItems: { left: HeaderMenuBarItemType[], right: HeaderMenuBarItemType[] },
-    notifications: HeaderNotificationsType
-  },
-  breadcrumb?: string,
+    menuBarItems: { left: HeaderMenuBarItemType[]; right: HeaderMenuBarItemType[] };
+    notifications: HeaderNotificationsType;
+  };
+  breadcrumb?: string;
   layout?: {
-    type?: 'full' | 'journey' | '1.third-2.thirds',
-    backgroundColor?: null | string
-  },
-  innovationActionData?: { id: null | string, name: string },
-  innovationData?: { id: string, name: string },
-  innovationSectionData?: { id: null | string, name: string },
-  innovationSectionEvidenceData?: { id: null | string, name: string }
-  innovationThreadData?: { id: null | string, name: string }
+    type?: 'full' | 'journey' | '1.third-2.thirds';
+    backgroundColor?: null | string;
+  };
+  innovationActionData?: { id: null | string; name: string };
+  innovationData?: { id: string; name: string };
+  innovationSectionData?: { id: null | string; name: string };
+  innovationSectionEvidenceData?: { id: null | string; name: string };
+  innovationThreadData?: { id: null | string; name: string };
 };
-
 
 @Component({
   selector: 'theme-transactional-layout',
   templateUrl: './transactional-layout.component.html'
 })
 export class TransactionalLayoutComponent implements OnInit, OnDestroy {
-
   private subscriptions = new Subscription();
 
   header: RoutesDataType['header'] = {
@@ -46,17 +43,16 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
   pageLayout: {
-    alert: ContextPageLayoutType['alert'],
-    backLink: ContextPageLayoutType['backLink'],
-    title: ContextPageLayoutType['title'],
-    sidebarItems: { label: string, url: string }[]
+    alert: ContextPageLayoutType['alert'];
+    backLink: ContextPageLayoutType['backLink'];
+    title: ContextPageLayoutType['title'];
+    sidebarItems: { label: string; url: string }[];
   } = {
-      alert: { type: null },
-      backLink: { label: null },
-      title: { main: null },
-      sidebarItems: []
-    };
-
+    alert: { type: null },
+    backLink: { label: null },
+    title: { main: null },
+    sidebarItems: []
+  };
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -65,31 +61,35 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private cdr: ChangeDetectorRef
   ) {
-
-    this.subscriptions.add( // Reset page layout. contextStore.resetPage() don't emit and event, so nothing changes visually.
-      this.router.events.pipe(filter((e): e is NavigationStart => e instanceof NavigationStart)).subscribe(() => this.contextStore.resetPage())
+    this.subscriptions.add(
+      // Reset page layout. contextStore.resetPage() don't emit and event, so nothing changes visually.
+      this.router.events
+        .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart))
+        .subscribe(() => this.contextStore.resetPage())
     );
     this.subscriptions.add(
-      this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => this.onRouteChange(e))
+      this.router.events
+        .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+        .subscribe(e => this.onRouteChange(e))
     );
-
   }
 
-
   ngOnInit() {
-
     this.subscriptions.add(
       this.contextStore.pageLayout$().subscribe(item => {
         this.pageLayout.alert = item.alert;
         this.pageLayout.backLink = item.backLink;
-        this.pageLayout.title = { ...item.title, width: item.title.width ?? 'full'};
+        this.pageLayout.title = { ...item.title, width: item.title.width ?? 'full' };
         this.cdr.detectChanges();
         // console.log('ContextPageLayout', item.alert);
       })
     );
 
-    this.subscriptions.add( // We need to reassign the variable so that the component reacts to it.
-      this.contextStore.notifications$().subscribe(item => { this.header.notifications = { notifications: item.UNREAD }; })
+    this.subscriptions.add(
+      // We need to reassign the variable so that the component reacts to it.
+      this.contextStore.notifications$().subscribe(item => {
+        this.header.notifications = { notifications: item.UNREAD };
+      })
     );
 
     // this.subscriptions.add(
@@ -100,16 +100,13 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     //     });
     //   })
     // );
-
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-
   private onRouteChange(event: NavigationEnd): void {
-
     const routeData = RoutingHelper.getRouteData<RoutesDataType>(this.activatedRoute);
 
     // console.log('ThemeTransactionalLayout::onRouteChange', routeData);
@@ -127,7 +124,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     this.contextStore.updateUserUnreadNotifications();
     // }
 
-
     // Always reset focus to body.
     if (isPlatformBrowser(this.platformId) && !this.pageLayout.alert.type) {
       setTimeout(() => {
@@ -136,12 +132,9 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
         document.body.removeAttribute('tabindex');
       });
     }
-
   }
 
-
   onBackLinkClicked() {
-
     // console.log('onBackLinkClicked', this.pageLayout.backLink);
 
     if (this.pageLayout.backLink.url) {
@@ -149,7 +142,5 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     } else if (this.pageLayout.backLink.callback) {
       this.pageLayout.backLink.callback.call(this);
     }
-
   }
-
 }

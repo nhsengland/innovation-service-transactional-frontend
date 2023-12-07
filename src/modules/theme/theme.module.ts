@@ -36,7 +36,6 @@ import { InnovationRecordExportComponent } from './components/innovation-record-
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -77,7 +76,7 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
     InnovationRecordExportComponent,
 
     ChipsFilterComponent,
-    
+
     GoToTopComponent
   ],
   providers: [],
@@ -110,7 +109,7 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
     SpinnerComponent,
     TagComponent,
     StatisticsCardsComponent,
-    
+
     ChipsFilterComponent,
 
     InnovationRecordExportComponent,
@@ -118,4 +117,4 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
     GoToTopComponent
   ]
 })
-export class ThemeModule { }
+export class ThemeModule {}

@@ -12,10 +12,8 @@ import { ContextStore } from '@modules/stores/context/context.store';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
-
 @Injectable()
 export class CoreService {
-
   private envVariablesStore: EnvironmentVariablesStore;
 
   protected http: HttpClient;
@@ -23,9 +21,9 @@ export class CoreService {
   protected logger: NGXLogger;
 
   protected stores: {
-    authentication: AuthenticationStore,
-    context: ContextStore,
-    innovation: InnovationStore
+    authentication: AuthenticationStore;
+    context: ContextStore;
+    innovation: InnovationStore;
   };
 
   protected APP_URL: string;
@@ -34,9 +32,7 @@ export class CoreService {
   protected API_INNOVATIONS_URL: string;
   protected API_USERS_URL: string;
 
-
   constructor() {
-
     const injector = AppInjector.getInjector();
 
     this.envVariablesStore = injector.get(EnvironmentVariablesStore);
@@ -55,33 +51,33 @@ export class CoreService {
     this.API_ADMIN_URL = this.envVariablesStore.API_ADMIN_URL;
     this.API_INNOVATIONS_URL = this.envVariablesStore.API_INNOVATIONS_URL;
     this.API_USERS_URL = this.envVariablesStore.API_USERS_URL;
-
   }
-
 
   setAlert(type: ContextPageLayoutType['alert']['type'], title: string, message?: string, setFocus?: boolean): void {
     this.stores.context.setPageAlert({ type, title, message, setFocus: !!setFocus, persistOneRedirect: false });
   }
 
-
   apiUserBasePath(): string {
-
     switch (this.stores.authentication.getUserType()) {
-      case UserRoleEnum.ADMIN: return 'user-admin';
-      case UserRoleEnum.ASSESSMENT: return 'assessments';
-      case UserRoleEnum.ACCESSOR: 
-      case UserRoleEnum.QUALIFYING_ACCESSOR: 
+      case UserRoleEnum.ADMIN:
+        return 'user-admin';
+      case UserRoleEnum.ASSESSMENT:
+        return 'assessments';
+      case UserRoleEnum.ACCESSOR:
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
         return 'accessors';
-      case UserRoleEnum.INNOVATOR: return 'innovators';
-      default: return '';
+      case UserRoleEnum.INNOVATOR:
+        return 'innovators';
+      default:
+        return '';
     }
-
   }
 
-  userUrlBasePath(): string { return this.stores.authentication.userUrlBasePath(); }
+  userUrlBasePath(): string {
+    return this.stores.authentication.userUrlBasePath();
+  }
 
   translate(translation: string, params?: object): string {
     return this.translateService.instant(translation, params);
   }
-
 }

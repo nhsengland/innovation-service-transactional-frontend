@@ -6,7 +6,6 @@ import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
 import { innovationPathwayKnowledgeItems } from './forms.config';
 
-
 // Labels.
 const stepsLabels = {
   q1: {
@@ -22,12 +21,10 @@ const stepsLabels = {
   }
 };
 
-
 // Types.
 type InboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
-
 
 // Logic.
 export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
@@ -36,15 +33,23 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'innovationPathwayKnowledge', dataType: 'radio-group', label: stepsLabels.q1.label, description: stepsLabels.q1.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: innovationPathwayKnowledgeItems
-        }]
+        parameters: [
+          {
+            id: 'innovationPathwayKnowledge',
+            dataType: 'radio-group',
+            label: stepsLabels.q1.label,
+            description: stepsLabels.q1.description,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: innovationPathwayKnowledgeItems
+          }
+        ]
       })
     ],
     showSummary: true,
-    runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') => runtimeRules(steps, currentValues, currentStep)],
+    runtimeRules: [
+      (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+        runtimeRules(steps, currentValues, currentStep)
+    ],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
   }),
@@ -52,7 +57,6 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
-
   steps.splice(1);
 
   if (['DONT_KNOW', 'NOT_PART_PATHWAY'].includes(currentValues.innovationPathwayKnowledge || 'DONT_KNOW')) {
@@ -62,27 +66,28 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
   steps.push(
     new FormEngineModel({
-      parameters: [{
-        id: 'potentialPathway', dataType: 'textarea', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-        validations: { isRequired: [true, 'A description is required'] },
-        lengthLimit: 'm'
-      }]
+      parameters: [
+        {
+          id: 'potentialPathway',
+          dataType: 'textarea',
+          label: stepsLabels.q2.label,
+          description: stepsLabels.q2.description,
+          validations: { isRequired: [true, 'A description is required'] },
+          lengthLimit: 'm'
+        }
+      ]
     })
   );
-
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     innovationPathwayKnowledge: data.innovationPathwayKnowledge,
     ...(data.potentialPathway && { potentialPathway: data.potentialPathway })
   };
-
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
@@ -100,5 +105,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   }
 
   return toReturn;
-
 }

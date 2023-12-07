@@ -11,31 +11,22 @@ import { SharedModule } from '@modules/shared/shared.module';
 import { PageNotFoundComponent } from './not-found.component';
 
 describe('Shared/Pages/NotFound/PageNotFoundComponent', () => {
-
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     fixture = TestBed.createComponent(PageNotFoundComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create the component', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
 });

@@ -4,24 +4,16 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { PageTitleComponent } from './page-title.component';
 
-
 describe('Theme/Components/PageTitle/PageTitleComponent', () => {
-
   let component: PageTitleComponent;
   let fixture: ComponentFixture<PageTitleComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule
-      ],
-      declarations: [
-        PageTitleComponent
-      ]
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      declarations: [PageTitleComponent]
     });
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageTitleComponent);
@@ -29,5 +21,4 @@ describe('Theme/Components/PageTitle/PageTitleComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
 });

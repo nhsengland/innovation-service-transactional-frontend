@@ -5,24 +5,26 @@ import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
 import { forkJoin } from 'rxjs/internal/observable/forkJoin';
-import { GetInactivateRoleUserRules, UsersValidationRulesService, Validations } from './../../../services/users-validation-rules.service';
+import {
+  GetInactivateRoleUserRules,
+  UsersValidationRulesService,
+  Validations
+} from './../../../services/users-validation-rules.service';
 import { AdminUsersService } from './../../../services/users.service';
-
 
 @Component({
   selector: 'app-admin-pages-users-role-inactivate',
   templateUrl: './role-inactivate.component.html'
 })
 export class PageUsersRoleInactivateComponent extends CoreComponent implements OnInit {
-
   user: {
-    id: string,
-    name: string,
+    id: string;
+    name: string;
     role: {
       id: string;
       description: string;
-    }
-   };
+    };
+  };
 
   pageStep: 'RULES' | 'INACTIVATE_ROLE' = 'RULES';
 
@@ -30,13 +32,11 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
 
   submitButton = { isActive: true, label: 'Confirm inactivation' };
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: AdminUsersService,
     private usersValidationRulesService: UsersValidationRulesService
   ) {
-
     super();
 
     this.user = {
@@ -46,25 +46,25 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
     };
 
     this.setPageTitle('Inactivate role');
-
   }
 
-
   ngOnInit(): void {
-
     forkJoin([
       this.usersService.getUserInfo(this.user.id),
-      this.usersValidationRulesService.getInactivateRoleUserRules(this.user.id, this.user.role.id),
+      this.usersValidationRulesService.getInactivateRoleUserRules(this.user.id, this.user.role.id)
     ]).subscribe({
       next: ([user, validationRules]) => {
-
         this.user = {
           ...this.user,
-          role: user.roles.filter(role => role.id === this.user.role.id).map((r) => ({
-            id: r.id,
-            description: r.displayTeam ? `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})` : `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()}`
-          }))[0] ?? { id: '', description: '' }
-        }
+          role: user.roles
+            .filter(role => role.id === this.user.role.id)
+            .map(r => ({
+              id: r.id,
+              description: r.displayTeam
+                ? `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})`
+                : `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()}`
+            }))[0] ?? { id: '', description: '' }
+        };
 
         if (!this.user.role.id) {
           this.redirectTo(`/admin/users/${this.user.id}`);
@@ -81,7 +81,6 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
         this.setAlertUnknownError();
       }
     });
-
   }
 
   nextStep(): void {
@@ -89,7 +88,6 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
   }
 
   onSubmit(): void {
-
     this.submitButton = { isActive: false, label: 'Saving...' };
 
     this.usersService.updateUserRole(this.user.id, this.user.role.id, false).subscribe({
@@ -102,7 +100,5 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
         this.setAlertUnknownError();
       }
     });
-
   }
-
 }

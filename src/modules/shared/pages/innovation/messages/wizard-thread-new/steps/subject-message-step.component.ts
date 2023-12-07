@@ -5,16 +5,16 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FileTypes, FormControl, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
-
 import { SubjectMessageStepInputType, SubjectMessageStepOutputType } from './subject-message-step.types';
-
 
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new-subject-message-step',
   templateUrl: './subject-message-step.component.html'
 })
-export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreComponent implements WizardStepComponentType<SubjectMessageStepInputType, SubjectMessageStepOutputType>, OnInit {
-
+export class WizardInnovationThreadNewSubjectMessageStepComponent
+  extends CoreComponent
+  implements WizardStepComponentType<SubjectMessageStepInputType, SubjectMessageStepOutputType>, OnInit
+{
   @Input() title = '';
   @Input() data: SubjectMessageStepInputType = {
     innovation: { id: '' },
@@ -29,26 +29,38 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
 
-
-  form = new FormGroup({
-    subject: new FormControl<string>('', [CustomValidators.required('A subject is required'), Validators.maxLength(100)]),
-    message: new FormControl<string>('', CustomValidators.required('A message is required')),
-    file: new FormControl<File | null>(null, [CustomValidators.emptyFileValidator(), CustomValidators.maxFileSizeValidator(20)]),
-    fileName: new FormControl<string>(''),
-    confirmation: new FormControl<boolean>(false, CustomValidators.required("You must select 'I understand' to send your message"))
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      subject: new FormControl<string>('', [
+        CustomValidators.required('A subject is required'),
+        Validators.maxLength(100)
+      ]),
+      message: new FormControl<string>('', CustomValidators.required('A message is required')),
+      file: new FormControl<File | null>(null, [
+        CustomValidators.emptyFileValidator(),
+        CustomValidators.maxFileSizeValidator(20)
+      ]),
+      fileName: new FormControl<string>(''),
+      confirmation: new FormControl<boolean>(
+        false,
+        CustomValidators.required("You must select 'I understand' to send your message")
+      )
+    },
+    { updateOn: 'blur' }
+  );
 
   formConfirmationField = { label: '', description: '' };
 
   configInputFile = {
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
     maxFileSize: 20 // In Mb.
+  };
+
+  constructor() {
+    super();
   }
 
-  constructor() { super(); }
-
   ngOnInit(): void {
-
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
@@ -61,12 +73,14 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
     }
 
     this.formConfirmationField = {
-      label: 'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
-      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${this.data.innovation.id}/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window).</a>`
+      label:
+        'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
+      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${
+        this.data.innovation.id
+      }/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window).</a>`
     };
 
     this.setPageStatus('READY');
-
   }
 
   prepareOutputData(): SubjectMessageStepOutputType {
@@ -75,7 +89,7 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
       message: this.form.value.message ?? '',
       file: this.form.value.file ?? null,
       fileName: this.form.value.fileName ?? ''
-    }
+    };
   }
 
   onCancelStep(): void {
@@ -87,14 +101,11 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent extends CoreCo
   }
 
   onSubmitStep(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
-
   }
-
 }

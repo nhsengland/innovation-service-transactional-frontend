@@ -1,16 +1,13 @@
 .nhsuk-breadcrumb {
-
   padding: 0;
 
   .nhsuk-width-container {
     border-bottom: solid 1px var(--color_nhsuk-grey-4);
 
     .nhsuk-breadcrumb__list {
-
       display: unset;
 
       .nhsuk-breadcrumb__item {
-
         padding: 12px 15px 10px;
         background: unset;
 
@@ -23,15 +20,11 @@
         }
 
         &.right-menu-item {
-
           &:after {
             content: none;
           }
         }
       }
-
     }
-
   }
-
 }

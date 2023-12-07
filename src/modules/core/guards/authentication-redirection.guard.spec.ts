@@ -14,9 +14,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { PLATFORM_ID } from '@angular/core';
 import { AuthenticationRedirectionGuard } from './authentication-redirection.guard';
 
-
 describe('Core/Guards/AuthenticationRedirectionGuard', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let guard: AuthenticationRedirectionGuard;
@@ -36,12 +34,8 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
         CoreModule,
         StoresModule
       ],
-      declarations: [
-        EmptyMockComponent
-      ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      declarations: [EmptyMockComponent],
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
 
     authenticationStore = TestBed.inject(AuthenticationStore);
@@ -49,7 +43,6 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     guard = TestBed.inject(AuthenticationRedirectionGuard);
 
     routerStateSnapshopMock = { url: '' };
-
   });
 
   it('should deny access and redirect when user has terms of use to accept', () => {
@@ -58,7 +51,6 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     authenticationStore.isTermsOfUseAccepted = () => false;
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
-
 
   it('should deny access and redirect when user type is empty or path is empty', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
@@ -87,7 +79,6 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(false);
   });
 
-
   it('should deny access and redirect when user type is ASSESSMENT', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserRoleEnum.ASSESSMENT;
@@ -113,8 +104,9 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'innovator' } };
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.isTermsOfUseAccepted = () => true;
-    authenticationStore.getUserContextInfo = () => { return { id: 'userId', roleId: 'id', type: UserRoleEnum.INNOVATOR } }
+    authenticationStore.getUserContextInfo = () => {
+      return { id: 'userId', roleId: 'id', type: UserRoleEnum.INNOVATOR };
+    };
     expect(guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any)).toBe(true);
   });
-
 });

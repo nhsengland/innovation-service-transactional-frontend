@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
-
       <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
         <div class="nhsuk-heading-m nhsuk-warning-callout__label">
           <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> Are you sure? </span>
@@ -10,10 +8,7 @@
         <p>You will not be able to access or work on this innovation going forward.</p>
       </div>
 
-      <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button"> {{ submitButton.label }} </button>
-
+      <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button">{{ submitButton.label }}</button>
     </div>
   </div>
-
 </theme-content-wrapper>
-

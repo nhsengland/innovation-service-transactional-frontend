@@ -18,9 +18,7 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { SharedModule } from '@modules/shared/shared.module';
 
-
 describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAndSupportComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationService: InnovationService;
@@ -32,14 +30,7 @@ describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAnd
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -49,7 +40,6 @@ describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAnd
     innovationService = TestBed.inject(InnovationService);
     innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
-
   });
 
   it('should create the component', () => {
@@ -324,5 +314,4 @@ describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAnd
   //   expect(component.organisations[0].showHideStatus).toEqual('opened');
 
   // });
-
 });

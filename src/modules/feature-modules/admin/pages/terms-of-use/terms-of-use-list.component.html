@@ -1,5 +1,4 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <section>
     <h2>Versions of terms of use</h2>
     <ul class="nhsuk-list nhsuk-list--bullet">
@@ -16,31 +15,28 @@
   </section>
 
   <section class="overflow-x-scroll">
-
     <h2>All versions</h2>
 
     <div class="nhsuk-u-padding-bottom-5 min-width-767">
       <ng-container *ngIf="terms.getTotalRowsNumber(); else emptyRows">
         <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
-          <div class="width-60"> Name </div>
-          <div class="width-20"> Creation date </div>
-          <div class="width-20"> Release date </div>
+          <div class="width-60">Name</div>
+          <div class="width-20">Creation date</div>
+          <div class="width-20">Release date</div>
         </div>
 
         <dl class="nhsuk-u-margin-0" *ngFor="let item of terms.getRecords()">
-
           <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
             <dt class="nhsuk-u-font-weight-normal width-60">
-              <a [routerLink]="(item.releasedAt) ? 'show-version/'+item.id : 'edit-version/'+item.id">{{ item.name }}</a>
+              <a [routerLink]="item.releasedAt ? 'show-version/' + item.id : 'edit-version/' + item.id">{{ item.name }}</a>
             </dt>
             <dd class="width-20 ml-auto">
-              {{ item.createdAt | date: ('app.date_formats.long_date' | translate) }}
+              {{ item.createdAt | date: ("app.date_formats.long_date" | translate) }}
             </dd>
             <dd class="width-20 ml-auto">
-              {{ item.releasedAt | date: ('app.date_formats.long_date' | translate) }}
+              {{ item.releasedAt | date: ("app.date_formats.long_date" | translate) }}
             </dd>
           </div>
-
         </dl>
       </ng-container>
       <ng-template #emptyRows>
@@ -51,7 +47,5 @@
     <div class="nhsuk-u-padding-bottom-4">
       <theme-pagination [currentPage]="terms.page" [pageSize]="terms.pageSize" [totalRows]="terms.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
     </div>
-
   </section>
-
 </theme-content-wrapper>

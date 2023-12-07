@@ -9,9 +9,7 @@ import { CookiesInfoComponent } from './pages/cookies/cookies-info.component';
 import { CookiesEditComponent } from './pages/cookies/cookies-edit.component';
 import { CookiesEditConfirmationComponent } from './pages/cookies/cookies-edit-confirmation.component';
 
-
 const routes: Routes = [
-
   { path: '', pathMatch: 'full', redirectTo: 'cookies-policy' },
 
   {
@@ -29,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PoliciesRoutingModule { }
+export class PoliciesRoutingModule {}

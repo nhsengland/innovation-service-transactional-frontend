@@ -13,9 +13,7 @@ import { InnovationOverviewComponent } from './overview.component';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-
 describe('FeatureModules/Admin/Innovation/InnovationOverviewComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
@@ -25,13 +23,7 @@ describe('FeatureModules/Admin/Innovation/InnovationOverviewComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule,
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -39,8 +31,14 @@ describe('FeatureModules/Admin/Innovation/InnovationOverviewComponent', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     innovationsService = TestBed.inject(InnovationsService);
 
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
-
+    activatedRoute.snapshot.data = {
+      innovationData: {
+        id: 'Inno01',
+        name: 'Innovation 01',
+        support: { id: 'Inno01Support01', status: 'ENGAGING' },
+        assessment: {}
+      }
+    };
   });
 
   it('should create the component', () => {
@@ -48,5 +46,4 @@ describe('FeatureModules/Admin/Innovation/InnovationOverviewComponent', () => {
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

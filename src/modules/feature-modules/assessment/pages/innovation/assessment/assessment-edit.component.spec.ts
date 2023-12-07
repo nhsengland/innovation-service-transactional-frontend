@@ -15,9 +15,7 @@ import { InnovationAssessmentEditComponent } from './assessment-edit.component';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEditComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -30,13 +28,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AssessmentModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -47,7 +39,6 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
     assessmentService = TestBed.inject(AssessmentService);
     organisationsService = TestBed.inject(OrganisationsService);
-
   });
 
   it('should create the component', () => {
@@ -149,8 +140,6 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
 
   // });
 
-
-
   // it('should run onSubmit(update) and continue to step 2', () => {
 
   //   activatedRoute.snapshot.params = { innovationId: 'Inno01', assessmentId: 'Assessment01', stepId: 1 };
@@ -217,5 +206,4 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentEd
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

@@ -13,10 +13,7 @@ import { FirstTimeSigninComponent } from './first-time-signin.component';
 
 import { InnovatorService } from '../../services/innovator.service';
 
-
-
 describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponent', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -28,13 +25,7 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -44,7 +35,6 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
-
   });
 
   it('should create the component', () => {
@@ -206,5 +196,4 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
   //   });
 
   // });
-
 });

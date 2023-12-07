@@ -8,27 +8,16 @@ import { StoresModule } from '@modules/stores';
 import { FooterComponent } from './footer.component';
 import { ActivityTimeoutComponent } from '../activity-timeout/activity-timeout.component';
 
-
 describe('Theme/Components/Footer/FooterComponent', () => {
-
   let component: FooterComponent;
   let fixture: ComponentFixture<FooterComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        FooterComponent,
-        ActivityTimeoutComponent
-      ],
+      imports: [RouterTestingModule, HttpClientTestingModule, CoreModule, StoresModule],
+      declarations: [FooterComponent, ActivityTimeoutComponent]
     });
   });
-
 
   it('should create the footer component', () => {
     fixture = TestBed.createComponent(FooterComponent);
@@ -49,7 +38,9 @@ describe('Theme/Components/Footer/FooterComponent', () => {
     fixture.detectChanges();
     const element = fixture.nativeElement;
 
-    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[0].textContent).toEqual('Accessibility statement');
+    expect(element.querySelectorAll('a.nhsuk-footer__list-item-link')[0].textContent).toEqual(
+      'Accessibility statement'
+    );
   });
 
   it('should render contact us link', () => {
@@ -91,5 +82,4 @@ describe('Theme/Components/Footer/FooterComponent', () => {
 
     expect(element.querySelector('p.nhsuk-footer__copyright').textContent).toContain('Crown copyright');
   });
-
 });

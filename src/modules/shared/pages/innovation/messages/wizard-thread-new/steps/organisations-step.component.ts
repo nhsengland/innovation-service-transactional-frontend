@@ -9,13 +9,14 @@ import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organisations-step.types';
 
-
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new-organisations-step',
   templateUrl: './organisations-step.component.html'
 })
-export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreComponent implements WizardStepComponentType<OrganisationsStepInputType, OrganisationsStepOutputType>, OnInit {
-
+export class WizardInnovationThreadNewOrganisationsStepComponent
+  extends CoreComponent
+  implements WizardStepComponentType<OrganisationsStepInputType, OrganisationsStepOutputType>, OnInit
+{
   @Input() title = '';
   @Input() isSubmitStep = false;
   @Input() data: OrganisationsStepInputType = {
@@ -32,9 +33,12 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
   leadText: string = '';
   formValidationMessage: string = '';
 
-  form = new FormGroup({
-    organisationUnits: new FormArray<FormControl<string>>([], { updateOn: 'change' })
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      organisationUnits: new FormArray<FormControl<string>>([], { updateOn: 'change' })
+    },
+    { updateOn: 'blur' }
+  );
 
   formOrganisationUnitsItems: Required<FormEngineParameterModel>['items'] = [];
 
@@ -44,7 +48,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
   isAccessorType: boolean;
 
   constructor() {
-
     super();
 
     // Flags
@@ -54,24 +57,27 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
 
     this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
-
   }
 
   ngOnInit(): void {
-
-    this.leadText = this.isInnovatorType || this.isAssessmentType ? 'You can select organisations that are currently engaging or waiting to support this innovation.' : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
+    this.leadText =
+      this.isInnovatorType || this.isAssessmentType
+        ? 'You can select organisations that are currently engaging or waiting to support this innovation.'
+        : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
 
     if (this.isInnovatorType || !(this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType))) {
       this.formValidationMessage = 'Select the organisations you want to notify about this message';
-    }
-    else if (this.isAssessmentType) {
-      this.formValidationMessage = "Select organisations, or select 'No, I only want to notify the innovator about this message'";
-    }
-    else {
-      this.formValidationMessage = "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
+    } else if (this.isAssessmentType) {
+      this.formValidationMessage =
+        "Select organisations, or select 'No, I only want to notify the innovator about this message'";
+    } else {
+      this.formValidationMessage =
+        "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
     }
 
-    this.form.controls['organisationUnits'].setValidators([CustomValidators.requiredCheckboxArray(this.formValidationMessage)]);
+    this.form.controls['organisationUnits'].setValidators([
+      CustomValidators.requiredCheckboxArray(this.formValidationMessage)
+    ]);
 
     this.data.selectedOrganisationUnits.forEach(item => {
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
@@ -84,7 +90,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
       unit.status === InnovationSupportStatusEnum.WAITING && waitingSupports.push(unit);
     }
 
-
     if (engagingSupports.length > 0) {
       this.formOrganisationUnitsItems.push(
         { value: 'Engaging organisations', label: 'HEADING' },
@@ -96,7 +101,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
       );
     }
 
-
     if (waitingSupports.length > 0) {
       this.formOrganisationUnitsItems.push(
         { value: 'Waiting organisations', label: 'HEADING' },
@@ -105,9 +109,8 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
           label: `${s.organisation.unit.name} (${s.organisation.unit.acronym})`,
           description: s.engagingAccessors.map(item => item.name).join('<br />')
         }))
-      )
+      );
     }
-
 
     if (this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType)) {
       this.formOrganisationUnitsItems.push(
@@ -117,26 +120,21 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     }
 
     this.setPageStatus('READY');
-
   }
 
-
   prepareOutputData(): OrganisationsStepOutputType {
-
     return {
       organisationUnits: (this.form.value.organisationUnits ?? []).map(formValue => {
-
         const organisationUnit = this.data.organisationUnits.find(item => item.organisation.unit.id === formValue);
 
         return {
           id: formValue,
           name: organisationUnit?.organisation.unit.name ?? '', // TODO: Change this id to userRoleId
-          users: organisationUnit?.engagingAccessors.map(u => ({ id: u.id, userRoleId: u.userRoleId, name: u.name })) ?? []
+          users:
+            organisationUnit?.engagingAccessors.map(u => ({ id: u.id, userRoleId: u.userRoleId, name: u.name })) ?? []
         };
-
       })
     };
-
   }
 
   onPreviousStep(): void {
@@ -144,7 +142,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
   }
 
   onNextStep(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -158,18 +155,14 @@ export class WizardInnovationThreadNewOrganisationsStepComponent extends CoreCom
     }
 
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
-
   }
 
   onSubmitStep(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
-
   }
-
 }

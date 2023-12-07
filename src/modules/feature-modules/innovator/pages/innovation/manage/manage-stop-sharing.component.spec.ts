@@ -12,13 +12,10 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { PageInnovationManageStopSharingComponent } from './manage-stop-sharing.component';
 
-
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopSharingComponent', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -31,13 +28,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopShari
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -50,15 +41,11 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsStopShari
     innovatorService = TestBed.inject(InnovatorService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(PageInnovationManageStopSharingComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
-
   });
-
 });

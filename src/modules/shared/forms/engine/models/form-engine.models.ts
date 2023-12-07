@@ -2,9 +2,7 @@ import { AsyncValidatorFn } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 
-
 export class FormEngineModel {
-
   label?: string;
   description?: string;
   parameters: FormEngineParameterModel[];
@@ -16,21 +14,33 @@ export class FormEngineModel {
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
     this.defaultData = data.defaultData ?? {};
   }
-
 }
 
-
 export class FormEngineParameterModel {
-
   id: string;
-  dataType: 'text' | 'textarea' | 'number' | 'password' | 'hidden' | 'date' | 'autocomplete-array' | 'checkbox-group' | 'checkbox-array' | 'grouped-checkbox-array' | 'radio-group' | 'fields-group' | 'file-upload' | 'file-upload-array';
+  dataType:
+    | 'text'
+    | 'textarea'
+    | 'number'
+    | 'password'
+    | 'hidden'
+    | 'date'
+    | 'autocomplete-array'
+    | 'checkbox-group'
+    | 'checkbox-array'
+    | 'grouped-checkbox-array'
+    | 'radio-group'
+    | 'fields-group'
+    | 'file-upload'
+    | 'file-upload-array';
   label?: string;
   description?: string;
   placeholder?: string;
   isVisible?: boolean;
   isEditable?: boolean;
   rank?: number;
-  validations?: { // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
+  validations?: {
+    // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
     isRequired?: boolean | [boolean, string];
     pattern?: string | [string, string];
     min?: number | [number, string];
@@ -42,13 +52,14 @@ export class FormEngineParameterModel {
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
-    urlFormat?: boolean | [boolean, string]
+    urlFormat?: boolean | [boolean, string];
   };
   lengthLimit?: TextareaLengthLimitType;
 
   additional?: FormEngineParameterModel[];
 
-  groupedItems?: { // Used in "grouped-checkbox-array" dataType.
+  groupedItems?: {
+    // Used in "grouped-checkbox-array" dataType.
     value: string;
     label: string;
     description?: string;
@@ -71,18 +82,17 @@ export class FormEngineParameterModel {
   }[];
 
   fieldsGroupConfig?: {
-    fields: FormEngineParameterModel[];  // Used in "fields-group" dataType.
+    fields: FormEngineParameterModel[]; // Used in "fields-group" dataType.
     addNewLabel?: string;
   };
 
   fileUploadConfig?: {
-    httpUploadUrl: string,
-    httpUploadBody?: Record<string, {}>,
-    acceptedFiles?: FileTypes[],
-    maxFileSize?: number, // In Mb.
-    previousUploadedFiles?: { id: string, name: string }[]
+    httpUploadUrl: string;
+    httpUploadBody?: Record<string, {}>;
+    acceptedFiles?: FileTypes[];
+    maxFileSize?: number; // In Mb.
+    previousUploadedFiles?: { id: string; name: string }[];
   };
-
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
@@ -109,6 +119,5 @@ export class FormEngineParameterModel {
     }
 
     this.fileUploadConfig = data.fileUploadConfig;
-
   }
 }

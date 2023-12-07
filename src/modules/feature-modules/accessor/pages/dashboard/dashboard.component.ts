@@ -8,13 +8,11 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 
-
 @Component({
   selector: 'app-accessor-pages-dashboard',
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent extends CoreComponent implements OnInit {
-
   user: {
     displayName: string;
     organisation: string;
@@ -26,10 +24,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   isQualifyingAccessorRole = false;
 
-  constructor(
-    private statisticsService: StatisticsService
-  ) {
-
+  constructor(private statisticsService: StatisticsService) {
     super();
     this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
@@ -43,16 +38,20 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
     }
 
-    const qp: { statistics: UserStatisticsTypeEnum[] } = { statistics: [UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER, UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER, UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER] };
+    const qp: { statistics: UserStatisticsTypeEnum[] } = {
+      statistics: [
+        UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER,
+        UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER,
+        UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER
+      ]
+    };
 
     this.statisticsService.getUserStatisticsInfo(qp).subscribe({
       next: statistics => {
-
         this.cardsList = [
           {
             title: 'Your innovations',
@@ -92,10 +91,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         }
 
         this.setPageStatus('READY');
-
       }
     });
-
   }
-
 }

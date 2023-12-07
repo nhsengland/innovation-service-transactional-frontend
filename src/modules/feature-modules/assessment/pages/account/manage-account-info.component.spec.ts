@@ -14,7 +14,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssessmentService } from '../../services/assessment.service';
 
 describe('FeatureModules/Assessment/Pages/Account?ManageAccount/PageAssessmentAccountManageAccountInfoComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -24,13 +23,7 @@ describe('FeatureModules/Assessment/Pages/Account?ManageAccount/PageAssessmentAc
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AssessmentModule,
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
     });
     AppInjector.setInjector(TestBed.inject(Injector));
 
@@ -39,12 +32,9 @@ describe('FeatureModules/Assessment/Pages/Account?ManageAccount/PageAssessmentAc
     routerSpy = jest.spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
-
   });
   it('should create the component', () => {
-    fixture = TestBed.createComponent(
-      PageAssessmentAccountManageAccountInfoComponent
-    );
+    fixture = TestBed.createComponent(PageAssessmentAccountManageAccountInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

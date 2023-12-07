@@ -10,25 +10,16 @@ import { AssessmentModule } from '@modules/feature-modules/assessment/assessment
 
 import { DashboardComponent } from './dashboard.component';
 
-
 describe('FeatureModules/Assessment/Pages/Dashboard/DashboardComponent', () => {
-
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AssessmentModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
   });
 
   it('should create the component', () => {
@@ -36,5 +27,4 @@ describe('FeatureModules/Assessment/Pages/Dashboard/DashboardComponent', () => {
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

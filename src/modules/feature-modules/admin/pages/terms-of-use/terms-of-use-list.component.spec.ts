@@ -15,9 +15,7 @@ import { PageTermsOfUseListComponent } from './terms-of-use-list.component';
 import { AlertType } from '@app/base/types';
 import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
-
 describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', () => {
-
   let component: PageTermsOfUseListComponent;
   let fixture: ComponentFixture<PageTermsOfUseListComponent>;
   let activatedRoute: ActivatedRoute;
@@ -25,20 +23,13 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
     activatedRoute = TestBed.inject(ActivatedRoute);
     userService = TestBed.inject(AdminUsersService);
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
@@ -48,7 +39,6 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
   });
 
   it('should NOT have default information loaded', () => {
-
     userService.getListOfTerms = () => throwError('error');
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
@@ -56,68 +46,56 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseListComponent', ()
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('ERROR');
-
   });
 
-
   it('should have default information loaded', () => {
-
-    userService.getListOfTerms = () => of(
-      {
+    userService.getListOfTerms = () =>
+      of({
         count: 1,
-        data: [{
-          id: 'term 01',
-          name: 'term',
-          touType: 'TEST',
-          summary: 'TEST',
-          releasedAt: '01-02-2022',
-          createdAt: '12-01-2022'
-        }]
-     }
-    );
+        data: [
+          {
+            id: 'term 01',
+            name: 'term',
+            touType: 'TEST',
+            summary: 'TEST',
+            releasedAt: '01-02-2022',
+            createdAt: '12-01-2022'
+          }
+        ]
+      });
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('READY');
-
   });
 
   it('should run onPageChange()', () => {
-
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
 
     component.onPageChange({ pageNumber: 2 });
     expect(component.terms.page).toBe(2);
-
   });
-
 
   it('should show "versionCreationSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'versionCreationSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully created new version', setFocus: true };
+    const expected: AlertType = { type: 'SUCCESS', title: "You've successfully created new version", setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
   it('should show "versionUpdatedSuccess" warning', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'versionUpdatedSuccess' };
 
-    const expected: AlertType = { type: 'SUCCESS', title: 'You\'ve successfully updated version', setFocus: true };
+    const expected: AlertType = { type: 'SUCCESS', title: "You've successfully updated version", setFocus: true };
 
     fixture = TestBed.createComponent(PageTermsOfUseListComponent);
     component = fixture.componentInstance;
     expect(component.alert).toEqual(expected);
-
   });
-
-
 });

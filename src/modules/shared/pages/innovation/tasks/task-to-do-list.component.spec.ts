@@ -8,14 +8,11 @@ import { ActivatedRoute } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
 
-
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { SharedModule } from '@modules/shared/shared.module';
 import { PageInnovationTaskToDoListComponent } from './task-to-do-list.component';
 
-
 describe('Shared/Pages/Innovation/PageInnovationTaskToDoTrackerListComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
@@ -25,13 +22,7 @@ describe('Shared/Pages/Innovation/PageInnovationTaskToDoTrackerListComponent', (
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -41,15 +32,19 @@ describe('Shared/Pages/Innovation/PageInnovationTaskToDoTrackerListComponent', (
     innovationsService = TestBed.inject(InnovationsService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
-    activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', support: { id: 'Inno01Support01', status: 'ENGAGING' }, assessment: {} } };
-
+    activatedRoute.snapshot.data = {
+      innovationData: {
+        id: 'Inno01',
+        name: 'Innovation 01',
+        support: { id: 'Inno01Support01', status: 'ENGAGING' },
+        assessment: {}
+      }
+    };
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageInnovationTaskToDoListComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

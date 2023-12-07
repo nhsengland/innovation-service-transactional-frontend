@@ -14,14 +14,8 @@ import { AnnouncementsAccessGuard } from './guards/announcements-access.guard';
 // Services.
 import { AnnouncementsService } from './services/announcements.service';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AnnouncementRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AnnouncementRoutingModule],
   declarations: [
     // Pages
     AnnouncementsListComponent
@@ -34,4 +28,4 @@ import { AnnouncementsService } from './services/announcements.service';
     AnnouncementsService
   ]
 })
-export class AnnouncementsModule { }
+export class AnnouncementsModule {}

@@ -1,24 +1,17 @@
 <div *ngIf="totalRows > pageSize" class="pagination">
-
   <a *ngIf="currentPage !== 1" (click)="onPreviousPage()">« Prev</a>
 
   <ng-container *ngIf="getPages().includes(1) === false">
-
     <a (click)="onPageChange(1)">1</a>
     <span>...</span>
-  
   </ng-container>
 
   <a *ngFor="let page of getPages()" [ngClass]="{ active: currentPage === page }" (click)="onPageChange(page)">{{ page }}</a>
 
   <ng-container *ngIf="getPages().includes(totalPages) === false">
-
     <span>...</span>
     <a (click)="onPageChange(totalPages)">{{ totalPages }}</a>
-
   </ng-container>
 
-
   <a *ngIf="currentPage !== totalPages" (click)="onNextPage()">Next »</a>
-
 </div>

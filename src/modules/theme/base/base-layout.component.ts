@@ -5,7 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './base-layout.component.html'
 })
 export class BaseLayoutComponent {
-
-  constructor() { }
-
+  constructor() {}
 }

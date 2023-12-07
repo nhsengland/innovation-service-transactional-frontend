@@ -23,19 +23,16 @@ import { CookiesService } from './services/cookies.service';
 import { InnovationService } from './services/innovation.service';
 import { LoggerService } from './services/logger.service';
 
-
 @NgModule({
-  imports: [
-    LoggerModule.forRoot(null),
-    TranslateModule.forRoot()
-  ],
+  imports: [LoggerModule.forRoot(null), TranslateModule.forRoot()],
   providers: [
     CookieService,
 
     // App base HREF definition.
     {
       provide: APP_BASE_HREF,
-      useFactory: (environmentVariablesStore: EnvironmentVariablesStore): string => environmentVariablesStore.ENV.BASE_PATH || '/',
+      useFactory: (environmentVariablesStore: EnvironmentVariablesStore): string =>
+        environmentVariablesStore.ENV.BASE_PATH || '/',
       deps: [EnvironmentVariablesStore]
     },
 

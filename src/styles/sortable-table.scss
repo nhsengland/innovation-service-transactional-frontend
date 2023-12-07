@@ -1,7 +1,6 @@
 // Based on https://github.com/ministryofjustice/moj-frontend/blob/master/package/moj/components/sortable-table/_sortable-table.scss
 
 .app-sortable-table {
-
   [aria-sort] button,
   [aria-sort] button:hover {
     background-color: transparent;
@@ -24,7 +23,9 @@
   [aria-sort] button:focus {
     background-color: $govuk-focus-colour;
     color: $govuk-focus-text-colour;
-    box-shadow: 0 -2px $govuk-focus-colour, 0 4px $govuk-focus-text-colour;
+    box-shadow:
+      0 -2px $govuk-focus-colour,
+      0 4px $govuk-focus-text-colour;
     outline: none;
   }
 
@@ -55,7 +56,7 @@
 
   [aria-sort="ascending"] button span:after {
     content: " \25b2";
-    font-size: .8em;
+    font-size: 0.8em;
     position: absolute;
     right: -5px;
     top: 2px;
@@ -63,10 +64,9 @@
 
   [aria-sort="descending"] button span:after {
     content: " \25bc";
-    font-size: .8em;
+    font-size: 0.8em;
     position: absolute;
     right: -5px;
     top: 2px;
   }
-
 }

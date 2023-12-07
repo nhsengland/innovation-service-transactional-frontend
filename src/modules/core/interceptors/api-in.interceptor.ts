@@ -3,18 +3,14 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { EMPTY, Observable, catchError, throwError } from 'rxjs';
 
-
 @Injectable()
 export class ApiInInterceptor implements HttpInterceptor {
-
-  constructor(@Inject(PLATFORM_ID) private platformId: object) { }
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
     return next.handle(request).pipe(
       // retry(1),
       catchError((error: HttpErrorResponse) => {
-
         // console.log('APIin', error);
 
         if (error.status === 401) {
@@ -26,15 +22,10 @@ export class ApiInInterceptor implements HttpInterceptor {
             return next.handle(request.clone());
           }
         } else {
-
           // If error is handled on the subscription itself, this error will be ignored!
           return throwError(() => error);
-
         }
-
       })
     );
-
   }
-
 }

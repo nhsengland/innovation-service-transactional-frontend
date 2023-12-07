@@ -11,24 +11,15 @@ import { UserRoleEnum } from './enums';
 
 import { CoreService } from './core.service';
 
-
 describe('App/Base/CoreService', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let service: CoreService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        LoggerTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      providers: [
-        CoreService
-      ]
+      imports: [HttpClientTestingModule, LoggerTestingModule, CoreModule, StoresModule],
+      providers: [CoreService]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -36,14 +27,10 @@ describe('App/Base/CoreService', () => {
     authenticationStore = TestBed.inject(AuthenticationStore);
 
     service = TestBed.inject(CoreService);
-
   });
 
-
   it('should create the service', () => {
-
     expect(service).toBeTruthy();
-
   });
 
   it(`should run apiUserBasePath() as Admin`, () => {
@@ -67,19 +54,13 @@ describe('App/Base/CoreService', () => {
     expect(service.apiUserBasePath()).toBe('');
   });
 
-
   it(`should run userUrlBasePath()`, () => {
-
     authenticationStore.userUrlBasePath = () => 'innovator';
 
     expect(service.userUrlBasePath()).toBe('innovator');
-
   });
 
   it('should run translate()', () => {
-
     expect(service.translate('app.title')).toBe('app.title');
-
   });
-
 });

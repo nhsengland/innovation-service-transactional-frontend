@@ -7,16 +7,12 @@ import { ENV } from '@tests/app.mocks';
 
 import { EnvironmentVariablesStore } from './environment-variables.store';
 
-
 describe('Core/Stores/EnvironmentStore running SERVER side', () => {
-
   let store: EnvironmentVariablesStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        LoggerTestingModule
-      ],
+      imports: [LoggerTestingModule],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
@@ -25,7 +21,6 @@ describe('Core/Stores/EnvironmentStore running SERVER side', () => {
     });
 
     store = TestBed.inject(EnvironmentVariablesStore);
-
   });
 
   it('should set environment variables', () => {
@@ -54,31 +49,22 @@ describe('Core/Stores/EnvironmentStore running SERVER side', () => {
   it('should run parseBasePath() with some-path', () => {
     expect(store.parseBasePath('some-path')).toBe('/some-path');
   });
-
 });
 
-
 describe('Core/Stores/EnvironmentStore running CLIENT side', () => {
-
   let windowSpy: jest.SpyInstance;
   let store: EnvironmentVariablesStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        LoggerTestingModule
-      ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' },
-        EnvironmentVariablesStore
-      ]
+      imports: [LoggerTestingModule],
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }, EnvironmentVariablesStore]
     });
 
     windowSpy = jest.spyOn(window, 'window', 'get');
     windowSpy.mockImplementation(() => ({ __env: ENV }));
 
     store = TestBed.inject(EnvironmentVariablesStore);
-
   });
 
   it('should set environment variables', () => {
@@ -91,5 +77,4 @@ describe('Core/Stores/EnvironmentStore running CLIENT side', () => {
     expect(store.BASE_URL).toBe('http://demo.com');
     expect(store.BASE_PATH).toBe('');
   });
-
 });

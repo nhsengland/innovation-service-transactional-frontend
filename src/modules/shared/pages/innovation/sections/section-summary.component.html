@@ -1,89 +1,97 @@
-    <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-  
-        <ng-container *ngIf="sectionInfo.isNotStarted">
-          <dl class="nhsuk-summary-list">
-            <ng-container *ngFor="let item of allSteps; first as firstItem">
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <ng-container *ngIf="sectionInfo.isNotStarted">
+      <dl class="nhsuk-summary-list">
+        <ng-container *ngFor="let item of allSteps; first as firstItem">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3">
+              <p class="nhsuk-u-margin-0">{{ item.label }}</p>
+              <p *ngIf="item.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
+            </dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap"></dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem">
+                Start <span class="nhsuk-u-visually-hidden"> section</span></a
+              >
+            </dd>
+          </div>
+        </ng-container>
+      </dl>
+    </ng-container>
 
-              <div class="nhsuk-summary-list__row">
-                <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3">
-                  <p class="nhsuk-u-margin-0">{{ item.label }}</p>
-                  <p *ngIf="item.conditional === true" class="nhsuk-u-margin-0 nhsuk-u-font-weight-normal font-color-secondary">(depends on a previous answer)</p>
+    <ng-container *ngIf="!sectionInfo.isNotStarted">
+      <ng-container *ngIf="summaryList.length > 0">
+        <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
+          <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+            <ng-container [ngSwitch]="item.type">
+              <ng-container *ngSwitchCase="'button'">
+                <div *ngIf="isInnovatorType" class="width-max-content">
+                  <dt class="nhsuk-u-margin-top-5">
+                    <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
+                  </dt>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                    <a
+                      href="javascript:void(0);"
+                      routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
+                      *ngIf="isInnovatorType && item.editStepNumber"
+                    >
+                      Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
+                    >
+                  </dd>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
+            <ng-container *ngFor="let document of documentsList; index as i; first as firstItem; last as lastItem">
+              <div class="nhsuk-summary-list__row" [ngClass]="{ 'nhsuk-summary-list--no-border': !lastItem }">
+                <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
+                  <span *ngIf="firstItem">Documents</span>
                 </dt>
                 <dd class="nhsuk-summary-list__value text-pre-wrap">
+                  <p>
+                    <span>Document {{ i + 1 }}: </span
+                    ><a href="{{ document.file.url }}"
+                      >{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</a
+                    >
+                  </p>
                 </dd>
                 <dd class="nhsuk-summary-list__actions">
-                  <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem"> Start <span class="nhsuk-u-visually-hidden"> section</span></a>
+                  <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
                 </dd>
               </div>
             </ng-container>
-          </dl>
-        </ng-container>
-  
-        <ng-container *ngIf="!sectionInfo.isNotStarted">
-  
-          <ng-container *ngIf="summaryList.length > 0">
-            <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
-              <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-                <ng-container [ngSwitch]="item.type">
-                  <ng-container *ngSwitchCase="'button'">
-                    <div *ngIf="isInnovatorType" class="width-max-content">
-                      <dt class="nhsuk-u-margin-top-5">
-                        <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
-                      </dt>
-                    </div>
-                  </ng-container>
-                  <ng-container *ngSwitchDefault>
-                    <div class="nhsuk-summary-list__row">
-                      <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
-                      <dd class="nhsuk-summary-list__value text-pre-wrap">
-                        <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                        <span *ngIf="!item.allowHTML">{{ item.value }}</span>
-                      </dd>
-                      <dd  class="nhsuk-summary-list__actions">
-                        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{item.editStepNumber}}" *ngIf="isInnovatorType && item.editStepNumber"> Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
-                      </dd>
-                    </div>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">
-                <ng-container *ngFor="let document of documentsList; index as i ; first as firstItem; last as lastItem">
-                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
-                      <span *ngIf="firstItem">Documents</span>
-                    </dt>
-                    <dd class="nhsuk-summary-list__value text-pre-wrap">
-                        <p><span>Document {{ i + 1 }}: </span><a href="{{ document.file.url }}">{{ document.name }} ({{ document.file.extension | uppercase }}{{ document.file.size ? ', ' + (document.file.size | bytesPrettyPrint) : ''}})</a></p>
-                    </dd>
-                    <dd class="nhsuk-summary-list__actions">
-                        <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
-                    </dd>
-                  </div>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
-                <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem; last as lastItem">
-                  <div class="nhsuk-summary-list__row" [ngClass]="{'nhsuk-summary-list--no-border' : !lastItem }">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
-                      <span *ngIf="firstItem">Evidence</span>
-                    </dt>
-                    <dd class="nhsuk-summary-list__value text-pre-wrap">
-                      <p><span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}</p>
-                    </dd>
-                    <dd class="nhsuk-summary-list__actions">
-                        <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}">More details</a></p>
-                    </dd>
-                  </div>
-                </ng-container>
-              </ng-container>
-              
-            </dl>
           </ng-container>
-  
-        </ng-container>
-        
-      </div>
-    </div>
+
+          <ng-container *ngIf="!isSectionDetailsPage && evidencesList.length > 0">
+            <ng-container *ngFor="let evidence of evidencesList; index as i; first as firstItem; last as lastItem">
+              <div class="nhsuk-summary-list__row" [ngClass]="{ 'nhsuk-summary-list--no-border': !lastItem }">
+                <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4">
+                  <span *ngIf="firstItem">Evidence</span>
+                </dt>
+                <dd class="nhsuk-summary-list__value text-pre-wrap">
+                  <p>
+                    <span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}
+                  </p>
+                </dd>
+                <dd class="nhsuk-summary-list__actions">
+                  <p><a href="{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/evidences/{{ evidence.evidenceId }}">More details</a></p>
+                </dd>
+              </div>
+            </ng-container>
+          </ng-container>
+        </dl>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

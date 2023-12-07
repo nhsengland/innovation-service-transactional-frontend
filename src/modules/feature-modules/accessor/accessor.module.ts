@@ -30,14 +30,8 @@ import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AccessorRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AccessorRoutingModule],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,
@@ -60,11 +54,11 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
     // // Training.
-    TrainingAndResourcesComponent,
+    TrainingAndResourcesComponent
   ],
   providers: [
     // Services.
-    AccessorService,
+    AccessorService
   ]
 })
-export class AccessorModule { }
+export class AccessorModule {}

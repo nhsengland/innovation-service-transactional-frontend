@@ -9,13 +9,11 @@ import { CustomValidators } from '@app/base/forms';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ContextInnovationType } from '@modules/stores';
 
-
 @Component({
   selector: 'app-innovator-pages-innovation-manage-withdraw',
   templateUrl: './manage-withdraw.component.html'
 })
 export class PageInnovationManageWithdrawComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   stepNumber: 1 | 2 = 1;
   innovation: ContextInnovationType;
@@ -29,7 +27,6 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
     private activatedRoute: ActivatedRoute,
     private innovatorService: InnovatorService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -45,58 +42,63 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
       email: user.email
     };
 
-    this.form = new FormGroup({
-      reason: new FormControl<string>('', CustomValidators.required('A reason is required')),
-      email: new FormControl<string>('', [CustomValidators.required('An email is required'), CustomValidators.equalTo(user.email, 'The email is incorrect')]),
-      confirmation: new FormControl<string>('', [CustomValidators.required('A confirmation text is necessary'), CustomValidators.equalTo('withdraw my innovation')])
-    }, { updateOn: 'blur' }
+    this.form = new FormGroup(
+      {
+        reason: new FormControl<string>('', CustomValidators.required('A reason is required')),
+        email: new FormControl<string>('', [
+          CustomValidators.required('An email is required'),
+          CustomValidators.equalTo(user.email, 'The email is incorrect')
+        ]),
+        confirmation: new FormControl<string>('', [
+          CustomValidators.required('A confirmation text is necessary'),
+          CustomValidators.equalTo('withdraw my innovation')
+        ])
+      },
+      { updateOn: 'blur' }
     );
   }
 
-
   ngOnInit(): void {
-
     this.setPageStatus('READY');
-
   }
 
-
   onSubmitForm(): void {
+    if (!this.parseForm()) {
+      return;
+    }
 
-    if (!this.parseForm()) { return; }
+    if (!this.form.valid) {
+      return;
+    }
 
-    if (!this.form.valid) { return; }
-
-    this.innovatorService.withdrawInnovation(this.innovationId!, this.form.get('reason')!.value).pipe(
-      concatMap(() => {
-        return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
-      })
-    ).subscribe(() => {
-
-      this.setRedirectAlertInformation(`Your '${this.innovation.name}' innovation has been withdrawn`);
-      this.redirectTo('/innovator/dashboard');
-
-    });
-
+    this.innovatorService
+      .withdrawInnovation(this.innovationId!, this.form.get('reason')!.value)
+      .pipe(
+        concatMap(() => {
+          return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
+        })
+      )
+      .subscribe(() => {
+        this.setRedirectAlertInformation(`Your '${this.innovation.name}' innovation has been withdrawn`);
+        this.redirectTo('/innovator/dashboard');
+      });
   }
 
   private handleGoBack() {
-
     this.stepNumber--;
 
     if (this.stepNumber === 0) {
       this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
     }
-
   }
 
-
   private parseForm(): boolean {
-
     switch (this.stepNumber) {
       case 1:
         this.form.get('reason')!.markAsTouched();
-        if (!this.form.get('reason')!.valid) { return false; }
+        if (!this.form.get('reason')!.valid) {
+          return false;
+        }
         this.stepNumber++;
         break;
 
@@ -109,7 +111,5 @@ export class PageInnovationManageWithdrawComponent extends CoreComponent impleme
     }
 
     return this.form.valid;
-
   }
-
 }

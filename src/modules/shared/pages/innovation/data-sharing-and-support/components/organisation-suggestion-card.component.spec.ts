@@ -15,22 +15,20 @@ import { NotificationsService } from '@modules/shared/services/notifications.ser
 
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
-
 @Component({
-  template: `<app-organisation-suggestions-card [suggestions]="suggestions" [shares]="shares"></app-organisation-suggestions-card>`
+  template: `<app-organisation-suggestions-card
+    [suggestions]="suggestions"
+    [shares]="shares"
+  ></app-organisation-suggestions-card>`
 })
 class HostComponent {
-
   @ViewChild(OrganisationSuggestionsCardComponent) childComponent?: OrganisationSuggestionsCardComponent;
 
   suggestions?: OrganisationSuggestionModel;
-  shares?: { id: string, status: string }[];
-
+  shares?: { id: string; status: string }[];
 }
 
-
 describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
-
   let notificationsService: NotificationsService;
 
   let hostComponent: HostComponent;
@@ -38,18 +36,8 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        ThemeModule,
-        SharedModule
-      ],
-      declarations: [
-        HostComponent,
-        OrganisationSuggestionsCardComponent
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, ThemeModule, SharedModule],
+      declarations: [HostComponent, OrganisationSuggestionsCardComponent]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -58,7 +46,6 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -67,25 +54,26 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
   });
 
   it('should create the component with empty information', () => {
-
     hostComponent.suggestions = {
       assessment: {
         suggestedOrganisations: []
       },
-      accessors: [{
-        organisation: {
-          id: '', name: '', acronym: ''
-        },
-        suggestedOrganisations: []
-
-      }]
+      accessors: [
+        {
+          organisation: {
+            id: '',
+            name: '',
+            acronym: ''
+          },
+          suggestedOrganisations: []
+        }
+      ]
     };
 
     hostComponent.shares = undefined;
 
     hostFixture.detectChanges();
     expect(hostComponent).toBeTruthy();
-
   });
 
   // it('should create the component', () => {
@@ -120,5 +108,4 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
   //   expect(hostComponent.childComponent?.assessments).toEqual({ organisations: [' Org name 01 (ORG01)'] });
 
   // });
-
 });
