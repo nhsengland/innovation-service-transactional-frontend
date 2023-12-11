@@ -64,6 +64,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
 
   signOut() {
     LocalStorageHelper.removeItem('userContext');
+    sessionStorage.clear();
     window.location.replace(`${this.envVariablesStore.APP_URL}/signout`); // Full reload to hit SSR.
   }
 
