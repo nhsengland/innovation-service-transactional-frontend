@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormGroup } from '@app/base/forms';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
+import { debounceTime } from 'rxjs';
 import { AdminUsersService } from '../../services/users.service';
 
 @Component({
@@ -13,12 +14,7 @@ import { AdminUsersService } from '../../services/users.service';
 })
 export class PageUserFindComponent extends CoreComponent implements OnInit {
   formSubmitted = false;
-  form = new FormGroup(
-    {
-      email: new UntypedFormControl('')
-    },
-    { updateOn: 'change' }
-  ); // Needs to be 'change' to allow submtitting using the enter key.
+  form = new FormGroup({ email: new UntypedFormControl('', { updateOn: 'blur' }) });
 
   searchUser: null | (UserInfo & { rolesDescription: string[] }) = null;
 
@@ -40,6 +36,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
     this.setPageStatus('READY');
+    this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onSubmit()));
   }
 
   onSubmit(): void {
@@ -63,5 +60,9 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
         this.setPageStatus('READY');
       }
     });
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }

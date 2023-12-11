@@ -33,7 +33,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   form = new FormGroup(
     {
-      search: new FormControl(''),
+      search: new FormControl('', { updateOn: 'blur' }),
       locations: new FormArray([]),
       supportStatuses: new FormArray([]),
       groupedStatuses: new FormArray([]),
@@ -277,5 +277,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onPageChange(event: { pageNumber: number }): void {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }
