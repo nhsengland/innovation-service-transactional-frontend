@@ -266,10 +266,8 @@ export class InnovationsService extends CoreService {
 
           return {
             ...item,
-            mainCategory:
-              item.otherMainCategoryDescription ??
-              irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label ??
-              '',
+            mainCategory: [],
+            // mainCategory: [item.otherMainCategoryDescription] ?? irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label ?? '',
             daysFromSubmittedAtToToday,
             overdueStatus
           };

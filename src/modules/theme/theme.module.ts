@@ -35,6 +35,7 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
+import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,9 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
 
     ChipsFilterComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    InnovationAdvancedSearchCardComponent
   ],
   providers: [],
   exports: [
@@ -114,7 +117,9 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
 
     InnovationRecordExportComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    InnovationAdvancedSearchCardComponent
   ]
 })
 export class ThemeModule {}
