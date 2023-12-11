@@ -14,6 +14,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { SortByInputType } from '@modules/theme/components/search/sort-by.component';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -223,6 +224,12 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onTableOrder(column: string): void {
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList(column);
+  }
+
+  onSortByChange(sortBy: SortByInputType) {
+    this.innovationsList.orderBy = sortBy.id;
+    this.innovationsList.orderDir = sortBy.order;
+    this.getInnovationsList();
   }
 
   onOpenCloseFilter(filterKey: FilterKeysType): void {

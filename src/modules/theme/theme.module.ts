@@ -35,6 +35,8 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
+import { SortByComponent } from './components/search/sort-by.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -43,7 +45,9 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
     TranslateModule.forChild(),
 
     // Angular Material.
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+
+    FormsModule
   ],
   declarations: [
     // Base.
@@ -77,7 +81,9 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
 
     ChipsFilterComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    SortByComponent
   ],
   providers: [],
   exports: [
@@ -114,7 +120,9 @@ import { GoToTopComponent } from './components/navigation/go-to-top-link.compone
 
     InnovationRecordExportComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    SortByComponent
   ]
 })
 export class ThemeModule {}
