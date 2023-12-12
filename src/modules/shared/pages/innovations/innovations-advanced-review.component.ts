@@ -45,6 +45,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     { updateOn: 'change' }
   );
 
+  sortByList: SortByInputType[] = [];
+
   anyFilterSelected = false;
   filters: {
     key: FilterKeysType;
@@ -103,6 +105,24 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
       };
       orderBy.key = 'updatedAt';
+
+      this.sortByList = [
+        { id: 'recordUpdatedAt', label: 'Last updated record', order: 'descending' },
+        { id: 'submittedAt', label: 'Last submitted Innovation', order: 'descending' },
+        { id: 'name', label: 'Innovation Name', order: 'ascending' },
+        { id: 'companyName', label: 'Company Name', order: 'ascending' },
+        { id: 'location', label: 'Location', order: 'ascending' }
+      ];
+    }
+
+    if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAccessorRole()) {
+      this.sortByList = [
+        { id: 'statusUpdatedAt', label: 'Last status update', order: 'descending' },
+        { id: 'submittedAt', label: 'Last submitted Innovation', order: 'descending' },
+        { id: 'name', label: 'Innovation Name', order: 'ascending' },
+        { id: 'companyName', label: 'Company Name', order: 'ascending' },
+        { id: 'location', label: 'Location', order: 'ascending' }
+      ];
     }
 
     this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
