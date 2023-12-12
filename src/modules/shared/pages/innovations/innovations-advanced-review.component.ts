@@ -61,7 +61,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   );
 
   advancedReviewSortByData: AdvancedReviewSortByKeysType;
-  sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
+  sortByComponentInputList: { key: string; text: string }[] = [];
 
   anyFilterSelected = false;
   filters: {
