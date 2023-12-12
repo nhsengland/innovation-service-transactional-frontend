@@ -18,6 +18,21 @@ import { SelectComponentInputType } from '@modules/theme/components/search/selec
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
+type AdvancedReviewSortByKeys =
+  | 'statusUpdatedAt'
+  | 'recordUpdatedAt'
+  | 'submittedAt'
+  | 'name'
+  | 'companyName'
+  | 'location';
+
+type AdvancedReviewSortByKeysType = {
+  [key in AdvancedReviewSortByKeys]: {
+    selectData: { key: AdvancedReviewSortByKeys; text: string };
+    order: 'ascending' | 'descending';
+  };
+};
+
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
   templateUrl: './innovations-advanced-review.component.html'
@@ -45,7 +60,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     { updateOn: 'change' }
   );
 
-  sortByList: SelectComponentInputType[] = [];
+  advancedReviewSortByData: AdvancedReviewSortByKeysType;
+  sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
 
   anyFilterSelected = false;
   filters: {
@@ -87,6 +103,51 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.setPageTitle('Innovations advanced search');
 
+    this.advancedReviewSortByData = {
+      statusUpdatedAt: {
+        selectData: {
+          key: 'statusUpdatedAt',
+          text: 'Last status update'
+        },
+        order: 'descending'
+      },
+      recordUpdatedAt: {
+        selectData: {
+          key: 'recordUpdatedAt',
+          text: 'Last updated record'
+        },
+        order: 'descending'
+      },
+      submittedAt: {
+        selectData: {
+          key: 'submittedAt',
+          text: 'Last submitted innovation'
+        },
+        order: 'descending'
+      },
+      name: {
+        selectData: {
+          key: 'name',
+          text: 'Innovation name'
+        },
+        order: 'ascending'
+      },
+      companyName: {
+        selectData: {
+          key: 'companyName',
+          text: 'Company name'
+        },
+        order: 'ascending'
+      },
+      location: {
+        selectData: {
+          key: 'location',
+          text: 'Location'
+        },
+        order: 'ascending'
+      }
+    };
+
     if (this.stores.authentication.isAdminRole()) {
       this.setPageTitle('Innovations');
     }
@@ -111,22 +172,22 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       };
       orderBy.key = 'updatedAt';
 
-      this.sortByList = [
-        { key: 'recordUpdatedAt', text: 'Last updated record', order: 'descending' },
-        { key: 'submittedAt', text: 'Last submitted Innovation', order: 'descending' },
-        { key: 'name', text: 'Innovation Name', order: 'ascending' },
-        { key: 'companyName', text: 'Company Name', order: 'ascending' },
-        { key: 'location', text: 'Location', order: 'ascending' }
+      this.sortByComponentInputList = [
+        this.advancedReviewSortByData.recordUpdatedAt.selectData,
+        this.advancedReviewSortByData.submittedAt.selectData,
+        this.advancedReviewSortByData.name.selectData,
+        this.advancedReviewSortByData.companyName.selectData,
+        this.advancedReviewSortByData.location.selectData
       ];
     }
 
     if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAccessorRole()) {
-      this.sortByList = [
-        { key: 'statusUpdatedAt', text: 'Last status update', order: 'descending' },
-        { key: 'submittedAt', text: 'Last submitted Innovation', order: 'descending' },
-        { key: 'name', text: 'Innovation Name', order: 'ascending' },
-        { key: 'companyName', text: 'Company Name', order: 'ascending' },
-        { key: 'location', text: 'Location', order: 'ascending' }
+      this.sortByComponentInputList = [
+        this.advancedReviewSortByData.statusUpdatedAt.selectData,
+        this.advancedReviewSortByData.submittedAt.selectData,
+        this.advancedReviewSortByData.name.selectData,
+        this.advancedReviewSortByData.companyName.selectData,
+        this.advancedReviewSortByData.location.selectData
       ];
     }
 
@@ -271,9 +332,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList(column);
   }
 
-  onSortByChange(sortBy: SelectComponentInputType) {
-    this.innovationsList.orderBy = sortBy.key;
-    this.innovationsList.orderDir = sortBy.order;
+  onSortByChange(sortByKey: string) {
+    this.innovationsList.orderBy = sortByKey;
+    this.innovationsList.orderDir = this.advancedReviewSortByData[sortByKey as AdvancedReviewSortByKeys].order;
+
     this.getInnovationsList();
   }
 

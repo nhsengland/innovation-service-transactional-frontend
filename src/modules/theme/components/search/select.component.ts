@@ -1,23 +1,22 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-export type SelectComponentInputType = { key: string; text: string; order: 'ascending' | 'descending' };
+export type SelectComponentInputType = { key: string; text: string };
 
 @Component({
   selector: 'theme-select-component',
   templateUrl: './select.component.html'
 })
 export class SelectComponent implements OnInit {
-  @Input() id: string = '';
-  @Input() label: string = '';
-  @Input() selectList: SelectComponentInputType[] = [];
+  @Input({ required: true }) id: string = '';
+  @Input({ required: true }) label: string = '';
+  @Input({ required: true }) selectList: SelectComponentInputType[] = [];
 
-  @Output() selectChanged = new EventEmitter<SelectComponentInputType>();
+  @Output() selectChanged = new EventEmitter<string>();
 
-  selectedField: SelectComponentInputType = { key: '', text: '', order: 'ascending' };
+  selectedField: string = '';
 
   ngOnInit(): void {
-    this.selectedField = this.selectList[0];
-    console.log();
+    this.selectedField = this.selectList[0].key;
   }
 
   onChangeSelect() {
