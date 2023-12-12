@@ -34,7 +34,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   form = new FormGroup(
     {
-      search: new FormControl(''),
+      search: new FormControl('', { updateOn: 'blur' }),
       locations: new FormArray([]),
       supportStatuses: new FormArray([]),
       groupedStatuses: new FormArray([]),
@@ -79,6 +79,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     private organisationsService: OrganisationsService
   ) {
     super();
+
+    // Force reload if running on server because of SSR and session storage
+    if (this.isRunningOnServer()) {
+      this.router.navigate([]);
+    }
 
     this.setPageTitle('Innovations advanced search');
 
@@ -161,6 +166,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             .filter(i => i.id !== myOrganisation)
             .map(i => ({ label: i.name, value: i.id }));
         }
+
+        // If we have previous filters, set them
+        const previousFilters = sessionStorage.getItem('innovationListFilters');
+        if (previousFilters) {
+          const filters = JSON.parse(previousFilters);
+          Object.entries(filters).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((v: string) => {
+                const formFilter = this.form.get(key) as FormArray;
+                formFilter.push(new FormControl(v), { emitEvent: false });
+              });
+            } else {
+              this.form.get(key)?.setValue(value, { emitEvent: false });
+            }
+          });
+        }
+
+        // Formchange must be triggered only after organisations are loaded so that it is populated
+        this.onFormChange();
       },
       error: error => {
         this.logger.error(error);
@@ -168,8 +192,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     });
 
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
-
-    this.onFormChange();
   }
 
   getInnovationsList(column?: string): void {
@@ -238,6 +260,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.innovationsList.setPage(1);
 
+    // persist in session storage
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
+
     this.getInnovationsList();
   }
 
@@ -279,5 +304,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onPageChange(event: { pageNumber: number }): void {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }

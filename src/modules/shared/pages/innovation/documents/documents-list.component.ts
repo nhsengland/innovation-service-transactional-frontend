@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { debounceTime } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
@@ -38,7 +39,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   // Filter
   form = new FormGroup(
     {
-      name: new FormControl('', { validators: [Validators.maxLength(50)], updateOn: 'change' }),
+      name: new FormControl('', { validators: [Validators.maxLength(50)] }),
       startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
       endDate: new FormControl(null, CustomValidators.parsedDateStringValidator())
     },
@@ -117,6 +118,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
         this.getDocumentsList();
       });
+
+    this.subscriptions.push(
+      this.form
+        .get('name')!
+        .valueChanges.pipe(debounceTime(500))
+        .subscribe(() => this.onFormChange())
+    );
   }
 
   getDocumentsList(column?: string): void {
@@ -206,7 +214,11 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.onFormChange();
   }
 
-  calculateFilterNum() {
+  onSearchClick() {
+    this.form.get('name')?.updateValueAndValidity({ onlySelf: true });
+  }
+
+  private calculateFilterNum() {
     let counter = this.selectedLocationFilters.length + this.selectedUploadedByUnitChips.length;
 
     const startDate = this.getDateByControlName('startDate') ?? undefined;
