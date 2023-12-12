@@ -307,28 +307,29 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.setPageTitle('Innovations');
     }
 
-    let columns: {
-      [key: string]: string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean };
-    } = {
-      name: { label: 'Innovation', orderable: true },
-      submittedAt: { label: 'Submitted', orderable: true },
-      mainCategory: { label: 'Main category', orderable: true },
-      location: { label: 'Location', orderable: true },
-      supportStatus: { label: 'Support status', align: 'right', orderable: false }
-    };
+    // let columns: {
+    //   [key: string]: string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean };
+    // } = {
+    //   name: { label: 'Innovation', orderable: true },
+    //   submittedAt: { label: 'Submitted', orderable: true },
+    //   mainCategory: { label: 'Main category', orderable: true },
+    //   location: { label: 'Location', orderable: true },
+    //   supportStatus: { label: 'Support status', align: 'right', orderable: false }
+    // };
+
     const orderBy: { key: string; order?: 'descending' | 'ascending' } = { key: 'submittedAt', order: 'descending' };
 
     if (this.stores.authentication.isAdminRole()) {
-      columns = {
-        name: { label: 'Innovation', orderable: true },
-        updatedAt: { label: 'Updated', orderable: true },
-        groupedStatus: { label: 'Innovation status', orderable: false },
-        engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
-      };
+      // columns = {
+      //   name: { label: 'Innovation', orderable: true },
+      //   updatedAt: { label: 'Updated', orderable: true },
+      //   groupedStatus: { label: 'Innovation status', orderable: false },
+      //   engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
+      // };
       orderBy.key = 'updatedAt';
     }
 
-    this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
+    // this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
   }
 
   ngOnInit(): void {
@@ -413,7 +414,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }),
           response.count
         );
-        if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
+        // if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
       });
   }
@@ -450,10 +451,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList();
   }
 
-  onTableOrder(column: string): void {
-    this.innovationsList.setOrderBy(column);
-    this.getInnovationsList(column);
-  }
+  // onTableOrder(column: string): void {
+  //   this.innovationsList.setOrderBy(column);
+  //   this.getInnovationsList(column);
+  // }
 
   onOpenCloseFilter(filterKey: FilterKeysType): void {
     const filter = this.filters.find(i => i.key === filterKey);
