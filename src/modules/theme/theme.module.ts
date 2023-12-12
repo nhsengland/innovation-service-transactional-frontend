@@ -35,7 +35,7 @@ import { StatisticsCardsComponent } from './components/statistics-cards/statisti
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
-import { SortByComponent } from './components/search/sort-by.component';
+import { SelectComponent } from './components/search/select.component';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -83,7 +83,7 @@ import { FormsModule } from '@angular/forms';
 
     GoToTopComponent,
 
-    SortByComponent
+    SelectComponent
   ],
   providers: [],
   exports: [
@@ -122,7 +122,7 @@ import { FormsModule } from '@angular/forms';
 
     GoToTopComponent,
 
-    SortByComponent
+    SelectComponent
   ]
 })
 export class ThemeModule {}

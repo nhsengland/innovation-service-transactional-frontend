@@ -1,0 +1,11 @@
+<div class="nhsuk-form-group" [ngClass]="{ 'd-flex align-items-center nhsuk-u-margin-bottom-2': labelOrientation === 'row' }">
+  <label class="nhsuk-label" [ngClass]="{ 'nhsuk-u-margin-right-2': labelOrientation === 'row' }">
+    {{ label }}
+  </label>
+
+  <select class="nhsuk-select" id="{{ id }}" [(ngModel)]="selectedField" (change)="this.onChangeSelect()">
+    <option *ngFor="let item of sortByList" [ngValue]="item">
+      <span>{{ item.text }}</span>
+    </option>
+  </select>
+</div>

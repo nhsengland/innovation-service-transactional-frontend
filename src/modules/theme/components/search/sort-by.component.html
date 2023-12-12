@@ -1,8 +1,0 @@
-<div class="nhsuk-u-margin-bottom-2">
-  <span class="nhsuk-u-font-size-19 nhsuk-u-margin-right-2">Sort by</span>
-  <select name="orderByKey" [(ngModel)]="selectedField" (change)="this.onChangeSelect()" class="nhsuk-select nhsuk-u-font-size-19">
-    <option *ngFor="let item of sortByList" [ngValue]="item">
-      <span>{{ item.label }}</span>
-    </option>
-  </select>
-</div>

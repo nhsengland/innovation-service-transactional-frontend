@@ -14,7 +14,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { SortByInputType } from '@modules/theme/components/search/sort-by.component';
+import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -45,7 +45,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     { updateOn: 'change' }
   );
 
-  sortByList: SortByInputType[] = [];
+  sortByList: SelectComponentInputType[] = [];
 
   anyFilterSelected = false;
   filters: {
@@ -107,21 +107,21 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       orderBy.key = 'updatedAt';
 
       this.sortByList = [
-        { id: 'recordUpdatedAt', label: 'Last updated record', order: 'descending' },
-        { id: 'submittedAt', label: 'Last submitted Innovation', order: 'descending' },
-        { id: 'name', label: 'Innovation Name', order: 'ascending' },
-        { id: 'companyName', label: 'Company Name', order: 'ascending' },
-        { id: 'location', label: 'Location', order: 'ascending' }
+        { key: 'recordUpdatedAt', text: 'Last updated record', order: 'descending' },
+        { key: 'submittedAt', text: 'Last submitted Innovation', order: 'descending' },
+        { key: 'name', text: 'Innovation Name', order: 'ascending' },
+        { key: 'companyName', text: 'Company Name', order: 'ascending' },
+        { key: 'location', text: 'Location', order: 'ascending' }
       ];
     }
 
     if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAccessorRole()) {
       this.sortByList = [
-        { id: 'statusUpdatedAt', label: 'Last status update', order: 'descending' },
-        { id: 'submittedAt', label: 'Last submitted Innovation', order: 'descending' },
-        { id: 'name', label: 'Innovation Name', order: 'ascending' },
-        { id: 'companyName', label: 'Company Name', order: 'ascending' },
-        { id: 'location', label: 'Location', order: 'ascending' }
+        { key: 'statusUpdatedAt', text: 'Last status update', order: 'descending' },
+        { key: 'submittedAt', text: 'Last submitted Innovation', order: 'descending' },
+        { key: 'name', text: 'Innovation Name', order: 'ascending' },
+        { key: 'companyName', text: 'Company Name', order: 'ascending' },
+        { key: 'location', text: 'Location', order: 'ascending' }
       ];
     }
 
@@ -246,8 +246,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList(column);
   }
 
-  onSortByChange(sortBy: SortByInputType) {
-    this.innovationsList.orderBy = sortBy.id;
+  onSortByChange(sortBy: SelectComponentInputType) {
+    this.innovationsList.orderBy = sortBy.key;
     this.innovationsList.orderDir = sortBy.order;
     this.getInnovationsList();
   }
