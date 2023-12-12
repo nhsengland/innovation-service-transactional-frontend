@@ -48,7 +48,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
   form = new FormGroup(
     {
-      search: new FormControl('', { updateOn: 'change' }),
+      search: new FormControl(''),
       assignedToMe: new FormControl(false, { updateOn: 'change' }),
       groupedStatuses: new FormArray<FormControl<InnovationGroupedStatusEnum>>([]),
       locations: new FormArray([]),
@@ -317,6 +317,10 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   onPageChange(event: { pageNumber: number }): void {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 
   // Daterange helpers

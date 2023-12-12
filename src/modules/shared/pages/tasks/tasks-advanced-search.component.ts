@@ -22,7 +22,7 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
 
   form = new FormGroup(
     {
-      innovationName: new FormControl<string>(''),
+      innovationName: new FormControl<string>('', { updateOn: 'blur' }),
       status: new FormArray<FormControl<InnovationTaskStatusEnum>>([]),
       sections: new FormArray<FormControl<InnovationSectionEnum>>([]),
       innovationStatus: new FormArray<FormControl<InnovationStatusEnum>>([]),
@@ -169,5 +169,9 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
   onPageChange(event: { pageNumber: number }): void {
     this.tasksList.setPage(event.pageNumber);
     this.getTasksList();
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }

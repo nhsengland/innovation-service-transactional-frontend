@@ -10,9 +10,9 @@ import {
   InnovationsService,
   InnovationThreadListFiltersType
 } from '@modules/shared/services/innovations.service';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 @Component({
   selector: 'shared-pages-innovation-messages-threads-list',
@@ -25,7 +25,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   // Filter
   form = new FormGroup({
-    subject: new FormControl('', { validators: [Validators.maxLength(100)], updateOn: 'change' }),
+    subject: new FormControl('', { validators: [Validators.maxLength(100)], updateOn: 'blur' }),
     following: new FormControl(false, { updateOn: 'change' })
   });
 
@@ -134,5 +134,9 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
     this.tableList.setPage(1);
     this.getThreadsList();
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }
