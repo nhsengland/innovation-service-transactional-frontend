@@ -6,7 +6,7 @@ export type SelectComponentInputType = { key: string; text: string; order: 'asce
   selector: 'theme-select-component',
   templateUrl: './select.component.html'
 })
-export class SelectComponent {
+export class SelectComponent implements OnInit {
   @Input() id: string = '';
   @Input() label: string = '';
   @Input() selectList: SelectComponentInputType[] = [];
@@ -15,6 +15,11 @@ export class SelectComponent {
   @Output() selectChanged = new EventEmitter<SelectComponentInputType>();
 
   selectedField: SelectComponentInputType = { key: '', text: '', order: 'ascending' };
+
+  ngOnInit(): void {
+    this.selectedField = this.selectList[0];
+    console.log();
+  }
 
   onChangeSelect() {
     this.selectChanged.emit(this.selectedField);
