@@ -9,14 +9,14 @@ export type SelectComponentInputType = { key: string; text: string; order: 'asce
 export class SelectComponent {
   @Input() id: string = '';
   @Input() label: string = '';
-  @Input() sortByList: SelectComponentInputType[] = [];
+  @Input() selectList: SelectComponentInputType[] = [];
   @Input() labelOrientation: 'row' | 'column' = 'column';
 
-  @Output() sortByChange = new EventEmitter<SelectComponentInputType>();
+  @Output() selectChanged = new EventEmitter<SelectComponentInputType>();
 
   selectedField: SelectComponentInputType = { key: '', text: '', order: 'ascending' };
 
   onChangeSelect() {
-    this.sortByChange.emit(this.selectedField);
+    this.selectChanged.emit(this.selectedField);
   }
 }
