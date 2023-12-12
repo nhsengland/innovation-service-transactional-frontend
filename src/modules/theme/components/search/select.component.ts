@@ -10,7 +10,6 @@ export class SelectComponent implements OnInit {
   @Input() id: string = '';
   @Input() label: string = '';
   @Input() selectList: SelectComponentInputType[] = [];
-  @Input() labelOrientation: 'row' | 'column' = 'column';
 
   @Output() selectChanged = new EventEmitter<SelectComponentInputType>();
 
