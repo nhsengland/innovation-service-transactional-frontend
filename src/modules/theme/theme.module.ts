@@ -27,7 +27,7 @@ import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
-import { CollapsableFilterComponent } from './components/collapsable-filter/collapsable-filter.component';
+import { CollapsibleFilterComponent } from './components/collapsible-filter/collapsible-filter.component';
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
 import { NotificationTagComponent } from './components/notification-tag/notification-tag.component';
@@ -77,7 +77,7 @@ import { TagComponent } from './components/tag/tag.component';
     InnovationRecordExportComponent,
 
     ChipsFilterComponent,
-    CollapsableFilterComponent,
+    CollapsibleFilterComponent,
 
     GoToTopComponent
   ],
@@ -113,7 +113,7 @@ import { TagComponent } from './components/tag/tag.component';
     StatisticsCardsComponent,
 
     ChipsFilterComponent,
-    CollapsableFilterComponent,
+    CollapsibleFilterComponent,
 
     InnovationRecordExportComponent,
 

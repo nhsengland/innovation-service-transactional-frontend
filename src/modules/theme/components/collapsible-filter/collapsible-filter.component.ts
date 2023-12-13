@@ -1,11 +1,11 @@
 import { Component, Input, signal } from '@angular/core';
 
 @Component({
-  selector: 'theme-collapsable-filter',
-  templateUrl: './collapsable-filter.component.html',
-  styleUrls: ['./collapsable-filter.component.scss']
+  selector: 'theme-collapsible-filter',
+  templateUrl: './collapsible-filter.component.html',
+  styleUrls: ['./collapsible-filter.component.scss']
 })
-export class CollapsableFilterComponent {
+export class CollapsibleFilterComponent {
   @Input({ required: true }) title: string = '';
   @Input() description?: string;
   @Input() scrollable?: boolean = false;

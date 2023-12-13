@@ -16,14 +16,14 @@
 
         <ng-container *ngFor="let filter of filters">
           <ng-container *ngIf="filter.active === true">
-            <theme-collapsable-filter
+            <theme-collapsible-filter
               [title]="filter.title"
               description="{{ (form.get(filter.key)?.value || []).length }} selected"
               [preOpen]="filter.showHideStatus === 'opened'"
               [scrollable]="filter.scrollable"
             >
               <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false" />
-            </theme-collapsable-filter>
+            </theme-collapsible-filter>
 
             <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
           </ng-container>
