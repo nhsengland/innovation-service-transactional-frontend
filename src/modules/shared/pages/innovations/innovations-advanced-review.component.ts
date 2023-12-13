@@ -50,6 +50,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     title: string;
     showHideStatus: 'opened' | 'closed';
     selected: { label: string; value: string }[];
+    scrollable?: boolean;
     active: boolean;
   }[] = [
     { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
@@ -59,6 +60,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       title: 'Engaging organisations',
       showHideStatus: 'closed',
       selected: [],
+      scrollable: true,
       active: false
     },
     { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
