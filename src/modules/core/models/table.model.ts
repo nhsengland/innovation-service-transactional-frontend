@@ -6,7 +6,7 @@ export type APIQueryParamsType<F = { [key: string]: string | number | boolean | 
   take: number;
   skip: number;
   order?: { [key: string]: 'ASC' | 'DESC' };
-  filters: F;
+  filters: Partial<F>;
 };
 
 export class TableModel<T = { [key: string]: string | number | boolean }, F = APIQueryParamsType['filters']> {
@@ -24,7 +24,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   orderBy: string;
   orderDir: OrderDirectionType;
 
-  filters: null | F;
+  filters: Partial<F>;
 
   // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
   private cachedHeaderColumns: {
@@ -54,7 +54,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     this.orderBy = data?.orderBy || '';
     this.orderDir = data?.orderDir || 'none';
 
-    this.filters = data?.filters || null;
+    this.filters = data?.filters || {};
 
     this.cachedHeaderColumns = [];
     this.setHeaderColumns();
@@ -194,7 +194,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
         : undefined,
       // TODO - maybe use this in the future
       // ...(this.filters && { filters: this.filters})
-      filters: this.filters || ({} as F)
+      filters: this.filters
     };
   }
 }

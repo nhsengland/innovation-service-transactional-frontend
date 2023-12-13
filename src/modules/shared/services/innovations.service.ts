@@ -10,6 +10,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
+import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import {
   ActivityLogItemsEnum,
@@ -22,6 +23,7 @@ import {
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
   CreateSupportSummaryProgressUpdateType,
   InnovationActionsListInDTO,
@@ -31,6 +33,7 @@ import {
   InnovationExportRequestInfoDTO,
   InnovationExportRequestsListDTO,
   InnovationInfoDTO,
+  InnovationListNewFullDTO,
   InnovationNeedsAssessmentInfoDTO,
   InnovationSharesListDTO,
   InnovationSupportInfoDTO,
@@ -44,7 +47,6 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
-import { FileUploadType } from '../forms/engine/config/form-engine.config';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -170,6 +172,50 @@ export type UploadThreadMessageDocumentType = {
   };
 };
 
+// Todo move later
+type Paginated<R extends string[]> = {
+  take: number;
+  skip: number;
+  order?: { [key in R[number]]?: 'ASC' | 'DESC' };
+};
+export type KeysUnionWithUndefined<T, Cache extends string = ''> = T extends PropertyKey
+  ? Cache
+  : keyof T extends object
+    ? Cache
+    : {
+        [P in keyof T]: P extends string
+          ? Cache extends ''
+            ? KeysUnionWithUndefined<T[P], `${P}`>
+            : Cache | KeysUnionWithUndefined<T[P], `${Cache}.${P}`>
+          : never;
+      }[keyof T];
+export type KeysUnion<T> = Exclude<KeysUnionWithUndefined<T>, undefined> extends infer X
+  ? X extends string // only interested in string keys otherwise it could be numbers if there's an array for example
+    ? X
+    : never
+  : never;
+
+type APIListResponse<T extends object, S extends KeysUnion<T>> = {
+  count: number;
+  data: RemoveDottedKeys<FullDict<T, S>>[];
+};
+
+type FullDict<T extends object, S extends KeysUnion<T>> = {
+  [K in S as K extends `${infer U}.${infer _R}` ? U : S]: K extends `${infer K}.${infer R}`
+    ? K extends keyof T
+      ? {
+          [key in R]: R extends keyof T[K] ? T[K][R] : never;
+        }
+      : never
+    : S extends keyof T
+      ? T[S]
+      : never;
+};
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
+type RemoveDottedKeys<T extends object> = {
+  [K in keyof T as K extends `${infer _K}.${infer _R}` ? never : K]: UnionToIntersection<T[K]>;
+};
+
 @Injectable()
 export class InnovationsService extends CoreService {
   constructor() {
@@ -276,6 +322,30 @@ export class InnovationsService extends CoreService {
         })
       }))
     );
+  }
+
+  getInnovationsList2<
+    // filters
+    F extends Partial<{
+      assignedToMe: boolean;
+      engagingOrganisations?: string[];
+      locations: catalogOfficeLocation[];
+      supportStatus: InnovationSupportStatusEnum[];
+      suggestedOnly: boolean;
+    }>,
+    // selects
+    S extends KeysUnion<InnovationListNewFullDTO> // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)
+  >(
+    fields: S[] = ['id', 'name'] as S[],
+    filters: F = {} as F,
+    pagination: Paginated<S[]> = { take: 100, skip: 0 }
+  ): Observable<APIListResponse<InnovationListNewFullDTO, S>> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({
+      fields,
+      ...filters,
+      ...pagination
+    });
+    return this.http.get<APIListResponse<InnovationListNewFullDTO, S>>(url.buildUrl()).pipe(take(1));
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
