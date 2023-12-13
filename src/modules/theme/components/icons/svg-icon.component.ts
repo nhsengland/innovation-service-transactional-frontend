@@ -5,5 +5,5 @@ import { Component, Input } from '@angular/core';
   templateUrl: './svg-icon.component.html'
 })
 export class SvgIconComponent {
-  @Input() type: '' | 'action' | 'success' | 'error' | 'edit' | 'back' = '';
+  @Input() type: '' | 'action' | 'success' | 'error' | 'not-started' | 'edit' | 'back' = '';
 }

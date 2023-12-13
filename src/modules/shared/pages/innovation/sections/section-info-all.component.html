@@ -18,7 +18,7 @@
         {{ sections.draft }} {{ "dictionary.section" | pluralTranslate: sections.draft | translate }} in draft
       </p>
       <p *ngIf="sections.notStarted > 0" class="d-flex">
-        <theme-svg-icon type="error"></theme-svg-icon>
+        <theme-svg-icon type="not-started"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
         {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
       </p>
@@ -42,7 +42,7 @@
                   <p class="d-flex nhsuk-u-margin-0">
                     <ng-container [ngSwitch]="sectionData.sectionInfo?.status?.id">
                       <ng-container *ngSwitchCase="'NOT_STARTED'">
-                        <theme-svg-icon type="error"></theme-svg-icon>
+                        <theme-svg-icon type="not-started"></theme-svg-icon>
                         <span class="nhsuk-u-margin-right-2"></span>
                         <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section has not been started yet.</span>
                       </ng-container>
