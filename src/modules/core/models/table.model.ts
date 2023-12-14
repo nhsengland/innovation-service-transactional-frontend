@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash';
+
 type AlignType = 'left' | 'right' | 'center';
 
 type OrderDirectionType = 'none' | 'ascending' | 'descending';
@@ -202,7 +204,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
         ? this.filters
         : Object.entries(this.filters).reduce((acc, [key, value]) => {
             // Maybe it should only be undefined but think we never filter by null so we should strip it
-            if (value !== '' && value != null) {
+            if (value != null && !isEmpty(value)) {
               acc[key as keyof F] = value;
             }
             return acc;

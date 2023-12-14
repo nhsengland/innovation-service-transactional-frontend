@@ -7,7 +7,8 @@ import {
   catalogCareSettings,
   catalogCategory,
   catalogInvolvedAACProgrammes,
-  catalogKeyHealthInequalities
+  catalogKeyHealthInequalities,
+  catalogOfficeLocation
 } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 import {
@@ -25,7 +26,7 @@ import {
 export type InnovationsListFiltersType = {
   name?: null | string;
   mainCategories?: string[];
-  locations?: string[];
+  locations?: catalogOfficeLocation[];
   status?: InnovationStatusEnum[];
   assessmentSupportStatus?: 'UNASSIGNED' | 'ENGAGING' | 'NOT_ENGAGING';
   supportStatuses?: InnovationSupportStatusEnum[];

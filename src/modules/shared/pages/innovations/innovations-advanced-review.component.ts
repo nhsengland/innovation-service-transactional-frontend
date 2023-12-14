@@ -13,7 +13,6 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
@@ -179,21 +178,14 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     // Temporarily until we use the new API for all
     if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAdminRole()) {
-      const { locations, assignedToMe, suggestedOnly, engagingOrganisations, supportStatuses } =
-        this.innovationsList.filters;
-      const { order, skip, take } = this.innovationsList.getAPIQueryParams();
+      const { order, skip, take, filters } = this.innovationsList.getAPIQueryParams();
+      console.log('test');
       this.innovationsService
-        .getInnovationsList2(
-          ['id', 'name', 'careSettings', 'support.status'],
-          {
-            locations: locations as catalogOfficeLocation[],
-            assignedToMe,
-            suggestedOnly,
-            engagingOrganisations,
-            supportStatuses
-          },
-          { order, skip, take }
-        )
+        .getInnovationsList2(['id', 'name', 'careSettings', 'support.status', 'submittedAt'], filters, {
+          order,
+          skip,
+          take
+        })
         .subscribe(response => {
           console.log(response);
         });
