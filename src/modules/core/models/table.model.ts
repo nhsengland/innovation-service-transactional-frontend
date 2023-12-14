@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash';
+
 type AlignType = 'left' | 'right' | 'center';
 
 type OrderDirectionType = 'none' | 'ascending' | 'descending';
@@ -6,7 +8,7 @@ export type APIQueryParamsType<F = { [key: string]: string | number | boolean | 
   take: number;
   skip: number;
   order?: { [key: string]: 'ASC' | 'DESC' };
-  filters: F;
+  filters: Partial<F>;
 };
 
 export class TableModel<T = { [key: string]: string | number | boolean }, F = APIQueryParamsType['filters']> {
@@ -24,7 +26,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
   orderBy: string;
   orderDir: OrderDirectionType;
 
-  filters: null | F;
+  filters: Partial<F>;
 
   // This variable is needed so angular lifecycle only refresh when something changes, when using this.getHeaderColumns() on a *ngFor.
   private cachedHeaderColumns: {
@@ -54,7 +56,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     this.orderBy = data?.orderBy || '';
     this.orderDir = data?.orderDir || 'none';
 
-    this.filters = data?.filters || null;
+    this.filters = data?.filters || {};
 
     this.cachedHeaderColumns = [];
     this.setHeaderColumns();
@@ -185,7 +187,11 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     return this.totalRows;
   }
 
-  getAPIQueryParams(): APIQueryParamsType<F> {
+  /**
+   * returns the query parameters to be used in the API call
+   * @param param - optional param to keep empty filters otherwise they are stripped by default
+   */
+  getAPIQueryParams(param?: { keepEmptyFilters: boolean }): APIQueryParamsType<F> {
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
@@ -194,7 +200,15 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
         : undefined,
       // TODO - maybe use this in the future
       // ...(this.filters && { filters: this.filters})
-      filters: this.filters || ({} as F)
+      filters: param?.keepEmptyFilters
+        ? this.filters
+        : Object.entries(this.filters).reduce((acc, [key, value]) => {
+            // Maybe it should only be undefined but think we never filter by null so we should strip it
+            if (value != null && !isEmpty(value)) {
+              acc[key as keyof F] = value;
+            }
+            return acc;
+          }, {} as any) // this has any is required unless we change the type of filters to extend instead of default but we aren't following that restriction code wise having many string|null that don't match the type
     };
   }
 }

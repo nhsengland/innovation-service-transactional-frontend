@@ -6,11 +6,13 @@ import {
   catalogCarbonReductionPlan,
   catalogCareSettings,
   catalogCategory,
-  catalogEvidenceType,
   catalogCostComparison,
+  catalogEvidenceSubmitType,
+  catalogEvidenceType,
   catalogHasCostKnowledge,
   catalogHasPatents,
   catalogHasRegulationKnowledge,
+  catalogHasRevenueModel,
   catalogIntendedUserGroupsEngaged,
   catalogInvolvedAACProgrammes,
   catalogKeyHealthInequalities,
@@ -22,14 +24,12 @@ import {
   catalogPatientRange,
   catalogRevenues,
   catalogStandardsType,
-  catalogEvidenceSubmitType,
   catalogYesInProgressNotYet,
   catalogYesNo,
   catalogYesNoNotRelevant,
   catalogYesNoNotSure,
   catalogYesNotYet,
-  catalogYesNotYetNo,
-  catalogHasRevenueModel
+  catalogYesNotYetNo
 } from './catalog.types';
 
 // Shared.

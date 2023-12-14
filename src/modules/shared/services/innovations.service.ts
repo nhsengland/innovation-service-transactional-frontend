@@ -10,6 +10,9 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
+import { KeysUnion } from '@modules/core/helpers/types.helper';
+import { APIListResponse, Paginated } from '@modules/core/models/api.model';
+import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import {
   ActivityLogItemsEnum,
@@ -22,6 +25,7 @@ import {
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
 import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
   CreateSupportSummaryProgressUpdateType,
   InnovationActionsListInDTO,
@@ -31,6 +35,8 @@ import {
   InnovationExportRequestInfoDTO,
   InnovationExportRequestsListDTO,
   InnovationInfoDTO,
+  InnovationListNewFullDTO,
+  InnovationListSelectType,
   InnovationNeedsAssessmentInfoDTO,
   InnovationSharesListDTO,
   InnovationSupportInfoDTO,
@@ -44,7 +50,6 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
-import { FileUploadType } from '../forms/engine/config/form-engine.config';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -276,6 +281,35 @@ export class InnovationsService extends CoreService {
         })
       }))
     );
+  }
+
+  getInnovationsList2<
+    // filters
+    F extends Partial<{
+      assignedToMe: boolean;
+      engagingOrganisations?: string[];
+      locations: catalogOfficeLocation[];
+      supportStatus: InnovationSupportStatusEnum[];
+      suggestedOnly: boolean;
+    }>,
+    // selects
+    // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)
+    S extends KeysUnion<InnovationListNewFullDTO> extends infer U
+      ? U extends InnovationListSelectType
+        ? U
+        : never
+      : never
+  >(
+    fields: S[] = ['id', 'name'] as S[],
+    filters: F = {} as F,
+    pagination: Paginated<S[]> = { take: 100, skip: 0 }
+  ): Observable<APIListResponse<InnovationListNewFullDTO, S>> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({
+      fields,
+      ...filters,
+      ...pagination
+    });
+    return this.http.get<APIListResponse<InnovationListNewFullDTO, S>>(url.buildUrl()).pipe(take(1));
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {

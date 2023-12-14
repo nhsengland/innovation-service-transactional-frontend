@@ -4,6 +4,14 @@ import { DateISOType } from '@app/base/types';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 import {
+  catalogCareSettings,
+  catalogCategory,
+  catalogInvolvedAACProgrammes,
+  catalogKeyHealthInequalities,
+  catalogOfficeLocation
+} from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+
+import {
   ActivityLogItemsEnum,
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
@@ -18,7 +26,7 @@ import {
 export type InnovationsListFiltersType = {
   name?: null | string;
   mainCategories?: string[];
-  locations?: string[];
+  locations?: catalogOfficeLocation[];
   status?: InnovationStatusEnum[];
   assessmentSupportStatus?: 'UNASSIGNED' | 'ENGAGING' | 'NOT_ENGAGING';
   supportStatuses?: InnovationSupportStatusEnum[];
@@ -87,6 +95,56 @@ export type InnovationsListDTO = {
     overdueStatus: null | string;
     daysFromSubmittedAtToToday: null | number;
   })[];
+};
+
+export type InnovationListSelectType =
+  | 'id'
+  | 'name'
+  | 'status'
+  | 'groupedStatus'
+  | 'submittedAt'
+  | 'updatedAt'
+  // Document fields
+  | 'careSettings'
+  | 'categories'
+  | 'countryName'
+  | 'diseasesAndConditions'
+  | 'involvedAACProgrammes'
+  | 'keyHealthInequalities'
+  | 'mainCategory'
+  | 'otherCategoryDescription'
+  // Relation fields
+  | 'ownerId' // this will change
+  | 'engagingOrganisations'
+  | 'engagingUnits'
+  | 'suggestedOrganisations'
+  | 'support.status'
+  | 'support.updatedAt';
+
+export type InnovationListNewFullDTO = {
+  id: string;
+  name: string;
+  status: InnovationStatusEnum;
+  groupedStatus: InnovationGroupedStatusEnum;
+  submittedAt: DateISOType | null;
+  updatedAt: DateISOType;
+
+  // Document fields
+  careSettings: catalogCareSettings[] | null;
+  categories: catalogCategory[] | null;
+  countryName: string | null;
+  diseasesAndConditions: string[] | null; // not strongly typed atm
+  involvedAACProgrammes: catalogInvolvedAACProgrammes[] | null;
+  keyHealthInequalities: catalogKeyHealthInequalities[] | null;
+  mainCategory: catalogCategory | null;
+  otherCategoryDescription: string | null;
+
+  // Relation fields
+  engagingOrganisations: { organisationId: string; name: string; acronym: string }[];
+  engagingUnits: { unitId: string; name: string; acronym: string }[];
+  ownerId: string; // TODO this will change to id, name, likely
+  suggestedUnits: { unitId: string; name: string; acronym: string }[];
+  support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
 };
 
 export type InnovationInfoDTO = {

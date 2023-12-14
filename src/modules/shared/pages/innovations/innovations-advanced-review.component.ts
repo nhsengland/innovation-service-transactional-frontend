@@ -178,6 +178,22 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   getInnovationsList(column?: string): void {
     this.setPageStatus('LOADING');
 
+    // Temporarily until we use the new API for all
+    if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAdminRole()) {
+      const { order, skip, take, filters } = this.innovationsList.getAPIQueryParams();
+      console.log('test');
+      this.innovationsService
+        .getInnovationsList2(['id', 'name', 'careSettings', 'support.status', 'submittedAt'], filters, {
+          order,
+          skip,
+          take
+        })
+        .subscribe(response => {
+          console.log(response);
+        });
+      // TODO Handle it here, just logging for now but this should replace the requests for the cards
+    }
+
     this.innovationsService
       .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
       .subscribe(response => {
