@@ -17,18 +17,30 @@ export type KeysUnion<T> = Exclude<KeysUnionWithUndefined<T>, undefined> extends
     : never
   : never;
 
-export type FullDict<T extends object, S extends KeysUnion<T>> = {
-  [K in S as K extends `${infer U}.${infer _R}` ? U : S]: K extends `${infer K}.${infer R}`
+export type FullDictTemp<T extends object, S extends KeysUnion<T>> = {
+  [K in S as K extends `${infer U}.${infer _R}` ? U : K]: K extends `${infer K}.${infer R}`
     ? K extends keyof T
-      ? {
-          [key in R]: R extends keyof T[K] ? T[K][R] : never;
-        }
+      ? Extract<T[K], null> extends never
+        ? {
+            [key in R]: R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never;
+          }
+        :
+            | null
+            | {
+                [key in R]: R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never;
+              }
       : never
     : S extends keyof T
-      ? T[S]
+      ? T[K]
       : never;
 };
-type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;
-export type RemoveDottedKeys<T extends object> = {
-  [K in keyof T as K extends `${infer _K}.${infer _R}` ? never : K]: UnionToIntersection<T[K]>;
+
+export type FullDict<T extends object, S extends KeysUnion<T>> = {
+  [k in keyof FullDictTemp<T, S>]: FullDictTemp<T, S>[k] extends object
+    ? UnionToIntersection<NonNullable<FullDictTemp<T, S>[k]>>
+    : Extract<FullDictTemp<T, S>[k], null> extends never
+      ? FullDictTemp<T, S>[k]
+      : null | UnionToIntersection<NonNullable<FullDictTemp<T, S>[k]>>;
 };
+
+type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (k: infer I) => void ? I : never;

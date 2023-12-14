@@ -1,4 +1,4 @@
-import { FullDict, KeysUnion, RemoveDottedKeys } from '../helpers/types.helper';
+import { FullDict, KeysUnion } from '../helpers/types.helper';
 
 export type Paginated<R extends string[]> = {
   take: number;
@@ -8,5 +8,5 @@ export type Paginated<R extends string[]> = {
 
 export type APIListResponse<T extends object, S extends KeysUnion<T>> = {
   count: number;
-  data: RemoveDottedKeys<FullDict<T, S>>[];
+  data: FullDict<T, S>[];
 };
