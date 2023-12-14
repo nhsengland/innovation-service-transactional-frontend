@@ -184,7 +184,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       const { order, skip, take } = this.innovationsList.getAPIQueryParams();
       this.innovationsService
         .getInnovationsList2(
-          ['id', 'name', 'careSettings'],
+          ['id', 'name', 'careSettings', 'support.status'],
           {
             locations: locations as catalogOfficeLocation[],
             assignedToMe,
