@@ -1,14 +1,16 @@
-type KeysUnionWithUndefined<T, Cache extends string = ''> = T extends PropertyKey
-  ? Cache
-  : keyof T extends object
+type KeysUnionWithUndefined<T, Cache extends string = ''> = T extends unknown[]
+  ? KeysUnionWithUndefined<T[0], `${Cache}`>
+  : T extends PropertyKey
     ? Cache
-    : {
-        [P in keyof T]: P extends string
-          ? Cache extends ''
-            ? KeysUnionWithUndefined<T[P], `${P}`>
-            : Cache | KeysUnionWithUndefined<T[P], `${Cache}.${P}`>
-          : never;
-      }[keyof T];
+    : keyof T extends object
+      ? Cache
+      : {
+          [P in keyof T]: P extends string
+            ? Cache extends ''
+              ? KeysUnionWithUndefined<T[P], `${P}`>
+              : Cache | KeysUnionWithUndefined<T[P], `${Cache}.${P}`>
+            : never;
+        }[keyof T];
 export type KeysUnion<T> = Exclude<KeysUnionWithUndefined<T>, undefined> extends infer X
   ? X extends string // only interested in string keys otherwise it could be numbers if there's an array for example
     ? X
