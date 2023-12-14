@@ -9,6 +9,7 @@ import { locationItems } from '@modules/stores/innovation/config/innovation-cata
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import {
+  InnovationListNewFullDTO,
   InnovationListSelectType,
   InnovationsListDTO,
   InnovationsListFiltersType,
@@ -30,6 +31,8 @@ import {
   diseasesConditionsImpactItems,
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { KeysUnion } from '@modules/core/helpers/types.helper';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -45,7 +48,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   pageSize: number = 20;
   pageNumber: number = 1;
   filtersList: { [filter: string]: string } | {} = {};
-  orderBy: InnovationListSelectType | null = null;
+  orderBy: InnovationListSelectType = 'submittedAt';
   orderDir: 'ascending' | 'descending' = 'ascending';
 
   innovationCardInfoMockData: InnovationsListInDTO = {
@@ -396,7 +399,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.innovationCardsData.push(this.parseCardInfo(data))
     );
 
-    const apiQueryParams = {
+    const paginationParams = {
       order: this.orderBy
         ? { [this.orderBy]: ['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' }
         : undefined,
@@ -404,112 +407,36 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       skip: (this.pageNumber - 1) * this.pageSize
     };
 
-    // temporarily added all to test the response
-    const apiQueryFields = [
-      'id',
-      'name',
-      'status',
-      'groupedStatus',
-      'submittedAt',
-      'updatedAt',
-      // Document fields
-      'careSettings',
-      'categories',
-      'countryName',
-      'diseasesAndConditions',
-      'involvedAACProgrammes',
-      'keyHealthInequalities',
-      'mainCategory',
-      'otherCategoryDescription',
-      // Relation fields
-      'ownerId',
-      'engagingOrganisations',
-      'engagingUnits',
-      'suggestedOrganisations',
-      'support.status',
-      'support.updatedAt'
-    ];
-
-    const apiQueryFilters = {
-      ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value } : null),
-      ...(this.form.get('mainCategories')?.value ? { mainCategories: this.form.get('mainCategories')?.value } : null),
-      ...(this.form.get('locations')?.value ? { locations: this.form.get('locations')?.value } : null),
-      ...(this.form.get('engagingOrganisations')?.value
-        ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
-        : null),
-      ...(this.form.get('supportStatuses')?.value
-        ? { supportStatuses: this.form.get('supportStatuses')?.value }
-        : null),
-      ...(this.form.get('groupedStatuses')?.value
-        ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
-        : null),
-      ...(this.stores.authentication.isAccessorType() && {
-        assignedToMe: this.form.get('assignedToMe')?.value ?? null,
-        suggestedOnly: this.form.get('suggestedOnly')?.value ?? null
-      })
+    const apiQueryFilters: Partial<{
+      // name: string;
+      assignedToMe: boolean;
+      engagingOrganisations?: string[];
+      locations: catalogOfficeLocation[];
+      supportStatus: InnovationSupportStatusEnum[];
+      suggestedOnly: boolean;
+    }> = {
+      // ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value as string } : { name: '' }),
+      ...(this.form.get('locations')?.value
+        ? { locations: this.form.get('locations')?.value as catalogOfficeLocation[] }
+        : null)
+      // ...(this.form.get('engagingOrganisations')?.value
+      //   ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
+      //   : null),
+      // ...(this.form.get('supportStatuses')?.value ? { supportStatus: this.form.get('supportStatuses')?.value } : null),
+      // ...(this.stores.authentication.isAccessorType() && {
+      //   assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
+      //   suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
+      // })
     };
 
-    // this.innovationsService.getInnovationsList2(apiQueryFields, apiQueryFilters, apiQueryParams).subscribe(response => {
-    //   response.forEach(innovation => {
-    //     const data: InnovationCardData = {
-    //       innovationId: innovation.id,
-    //       innovationName: innovation.name,
-    //       ownerName: innovation.owner.name,
-    //       countryName: innovation.countryName,
-    //       postCode: innovation.postCode,
-    //       categories: innovation.categories,
-    //       careSettings: parsedCareSettings,
-    //       diseasesAndConditions: parsedDiseasesAndConditions,
-    //       healthInequalities: [],
-    //       aacInvolvement: ['None'],
-    //       submittedAt: supportData.submittedAt,
-    //       engagingUnits: engagingUnits,
-    //       supportStatus: {
-    //         status: currentStatus?.status ?? 'UNASSIGNED',
-    //         updatedAt: currentStatus?.updatedAt ?? supportData.submittedAt!
-    //       },
-    //       innovationStatus: {
-    //         status: supportData.groupedStatus ?? '',
-    //         updatedAt: supportData.statusUpdatedAt ?? supportData.submittedAt!
-    //       }
-    //     };
-
-    //     this.innovationCardsData.push(data);
-    //   });
-    // });
-
-    // this.innovationsService
-    //   .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
-    //   .subscribe(response => {
-    // this.innovationsList.setData(
-    //   response.data.map(innovation => {
-    //     let status = null;
-
-    //     if (this.stores.authentication.isAdminRole() === false) {
-    //       status =
-    //         (innovation.supports || []).find(
-    //           s => s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
-    //         )?.status ?? InnovationSupportStatusEnum.UNASSIGNED;
-    //     }
-
-    //     return {
-    //       ...innovation,
-    //       ...{
-    //         supportInfo: {
-    //           status
-    //         }
-    //       },
-    //       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
-    //       engagingOrgs: innovation.supports?.filter(
-    //         support => support.status === InnovationSupportStatusEnum.ENGAGING
-    //       )
-    //     };
-    //   }),
-    //   response.count
-    // );
-    // if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
-    //       this.setPageStatus('READY');
-    //     });
+    this.innovationsService
+      .getInnovationsList2(['id', 'name', 'status', 'careSettings'], apiQueryFilters, paginationParams)
+      .subscribe(response => {
+        // response.forEach(innovation => {
+        console.log('response');
+        console.log(response);
+        // });
+      });
   }
 
   onFormChange(): void {
@@ -526,18 +453,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       !!this.form.get('assignedToMe')?.value ||
       !!this.form.get('suggestedOnly')?.value;
 
-    this.filtersList = {
-      name: this.form.get('search')?.value,
-      mainCategories: this.form.get('mainCategories')?.value,
-      locations: this.form.get('locations')?.value,
-      engagingOrganisations: this.form.get('engagingOrganisations')?.value,
-      supportStatuses: this.form.get('supportStatuses')?.value,
-      groupedStatuses: this.form.get('groupedStatuses')?.value,
-      ...(this.stores.authentication.isAccessorType() && {
-        assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-        suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
-      })
-    };
+    // this.filtersList = {
+    //   name: this.form.get('search')?.value,
+    //   mainCategories: this.form.get('mainCategories')?.value,
+    //   locations: this.form.get('locations')?.value,
+    //   engagingOrganisations: this.form.get('engagingOrganisations')?.value,
+    //   supportStatuses: this.form.get('supportStatuses')?.value,
+    //   groupedStatuses: this.form.get('groupedStatuses')?.value,
+    //   ...(this.stores.authentication.isAccessorType() && {
+    //     assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+    //     suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+    //   })
+    // };
 
     this.pageNumber = 1;
 
