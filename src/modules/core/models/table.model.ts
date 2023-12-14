@@ -185,7 +185,11 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     return this.totalRows;
   }
 
-  getAPIQueryParams(): APIQueryParamsType<F> {
+  /**
+   * returns the query parameters to be used in the API call
+   * @param param - optional param to keep empty filters otherwise they are stripped by default
+   */
+  getAPIQueryParams(param?: { keepEmptyFilters: boolean }): APIQueryParamsType<F> {
     return {
       take: this.pageSize,
       skip: (this.page - 1) * this.pageSize,
@@ -194,7 +198,15 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
         : undefined,
       // TODO - maybe use this in the future
       // ...(this.filters && { filters: this.filters})
-      filters: this.filters
+      filters: param?.keepEmptyFilters
+        ? this.filters
+        : Object.entries(this.filters).reduce((acc, [key, value]) => {
+            // Maybe it should only be undefined but think we never filter by null so we should strip it
+            if (value !== '' && value != null) {
+              acc[key as keyof F] = value;
+            }
+            return acc;
+          }, {} as any) // this has any is required unless we change the type of filters to extend instead of default but we aren't following that restriction code wise having many string|null that don't match the type
     };
   }
 }
