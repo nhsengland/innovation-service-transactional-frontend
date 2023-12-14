@@ -41,14 +41,14 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   currentUserContext: AuthenticationModel['userContext'];
 
-  innovationsList = new TableModel<
-    InnovationsListDTO['data'][0] & {
-      supportInfo?: { status: null | InnovationSupportStatusEnum };
-      groupedStatus: InnovationGroupedStatusEnum;
-      engagingOrgs: InnovationsListDTO['data'][0]['supports'];
-    },
-    InnovationsListFiltersType
-  >({ pageSize: 20 });
+  // New stuff taken from tablelist
+
+  pageSize: number = 20;
+  pageNumber: number = 1;
+  queryOrder: 'ASC' | 'DESC' = 'ASC';
+  filtersList: { [filter: string]: string } | {} = {};
+
+  //
 
   innovationCardInfoMockData: InnovationsListInDTO = {
     count: 1738,
@@ -252,6 +252,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   };
   innovationCardData: InnovationCardData[] = [];
 
+  innovationsList = new TableModel<
+    InnovationsListDTO['data'][0] & {
+      supportInfo?: { status: null | InnovationSupportStatusEnum };
+      groupedStatus: InnovationGroupedStatusEnum;
+      engagingOrgs: InnovationsListDTO['data'][0]['supports'];
+    },
+    InnovationsListFiltersType
+  >({ pageSize: 20 });
+
   form = new FormGroup(
     {
       search: new FormControl(''),
@@ -298,6 +307,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     private authenticationStore: AuthenticationStore
   ) {
     super();
+
+    if (this.isRunningOnServer()) {
+      this.router.navigate([]);
+    }
 
     this.baseUrl = this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
 
@@ -367,6 +380,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             .filter(i => i.id !== myOrganisation)
             .map(i => ({ label: i.name, value: i.id }));
         }
+
+        // If we have previous filters, set them
+        const previousFilters = sessionStorage.getItem('innovationListFilters');
+        if (previousFilters) {
+          const filters = JSON.parse(previousFilters);
+          Object.entries(filters).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((v: string) => {
+                const formFilter = this.form.get(key) as FormArray;
+                formFilter.push(new FormControl(v), { emitEvent: false });
+              });
+            } else {
+              this.form.get(key)?.setValue(value, { emitEvent: false });
+            }
+          });
+        }
+
+        // Formchange must be triggered only after organisations are loaded so that it is populated
+        this.onFormChange();
       },
       error: error => {
         this.logger.error(error);
@@ -385,35 +417,44 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.innovationCardData.push(this.parseCardInfo(data))
     );
 
+    console.log('queryparams:');
+    console.log(this.innovationsList.getAPIQueryParams());
+
+    const apiQueryParams = {
+      order: this.queryOrder,
+      take: this.pageSize,
+      skip: (this.pageNumber - 1) * this.pageSize
+    };
+
     this.innovationsService
       .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
       .subscribe(response => {
-        this.innovationsList.setData(
-          response.data.map(innovation => {
-            let status = null;
+        // this.innovationsList.setData(
+        //   response.data.map(innovation => {
+        //     let status = null;
 
-            if (this.stores.authentication.isAdminRole() === false) {
-              status =
-                (innovation.supports || []).find(
-                  s => s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
-                )?.status ?? InnovationSupportStatusEnum.UNASSIGNED;
-            }
+        //     if (this.stores.authentication.isAdminRole() === false) {
+        //       status =
+        //         (innovation.supports || []).find(
+        //           s => s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+        //         )?.status ?? InnovationSupportStatusEnum.UNASSIGNED;
+        //     }
 
-            return {
-              ...innovation,
-              ...{
-                supportInfo: {
-                  status
-                }
-              },
-              groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
-              engagingOrgs: innovation.supports?.filter(
-                support => support.status === InnovationSupportStatusEnum.ENGAGING
-              )
-            };
-          }),
-          response.count
-        );
+        //     return {
+        //       ...innovation,
+        //       ...{
+        //         supportInfo: {
+        //           status
+        //         }
+        //       },
+        //       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
+        //       engagingOrgs: innovation.supports?.filter(
+        //         support => support.status === InnovationSupportStatusEnum.ENGAGING
+        //       )
+        //     };
+        //   }),
+        //   response.count
+        // );
         // if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
       });
@@ -433,7 +474,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       !!this.form.get('assignedToMe')?.value ||
       !!this.form.get('suggestedOnly')?.value;
 
-    this.innovationsList.setFilters({
+    this.filtersList = {
       name: this.form.get('search')?.value,
       mainCategories: this.form.get('mainCategories')?.value,
       locations: this.form.get('locations')?.value,
@@ -444,9 +485,27 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         assignedToMe: this.form.get('assignedToMe')?.value ?? false,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
       })
-    });
+    };
 
-    this.innovationsList.setPage(1);
+    // this.innovationsList.setFilters({
+    //   name: this.form.get('search')?.value,
+    //   mainCategories: this.form.get('mainCategories')?.value,
+    //   locations: this.form.get('locations')?.value,
+    //   engagingOrganisations: this.form.get('engagingOrganisations')?.value,
+    //   supportStatuses: this.form.get('supportStatuses')?.value,
+    //   groupedStatuses: this.form.get('groupedStatuses')?.value,
+    //   ...(this.stores.authentication.isAccessorType() && {
+    //     assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+    //     suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+    //   })
+    // });
+
+    // this.innovationsList.setPage(1);
+
+    // persist in session storage
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
+
+    this.pageNumber = 1;
 
     this.getInnovationsList();
   }
@@ -481,7 +540,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.innovationsList.setPage(event.pageNumber);
+    // this.innovationsList.setPage(event.pageNumber);
+    this.pageNumber = event.pageNumber;
     this.getInnovationsList();
   }
 
