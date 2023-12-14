@@ -36,6 +36,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { TagComponent } from './components/tag/tag.component';
+import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 
 @NgModule({
   imports: [

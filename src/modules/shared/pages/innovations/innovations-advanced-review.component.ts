@@ -9,6 +9,7 @@ import { locationItems } from '@modules/stores/innovation/config/innovation-cata
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import {
+  InnovationListSelectType,
   InnovationsListDTO,
   InnovationsListFiltersType,
   InnovationsListInDTO
@@ -41,14 +42,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   currentUserContext: AuthenticationModel['userContext'];
 
-  // New stuff taken from tablelist
-
   pageSize: number = 20;
   pageNumber: number = 1;
-  queryOrder: 'ASC' | 'DESC' = 'ASC';
   filtersList: { [filter: string]: string } | {} = {};
-
-  //
+  orderBy: InnovationListSelectType | null = null;
+  orderDir: 'ascending' | 'descending' = 'ascending';
 
   innovationCardInfoMockData: InnovationsListInDTO = {
     count: 1738,
@@ -250,16 +248,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       }
     ]
   };
-  innovationCardData: InnovationCardData[] = [];
-
-  innovationsList = new TableModel<
-    InnovationsListDTO['data'][0] & {
-      supportInfo?: { status: null | InnovationSupportStatusEnum };
-      groupedStatus: InnovationGroupedStatusEnum;
-      engagingOrgs: InnovationsListDTO['data'][0]['supports'];
-    },
-    InnovationsListFiltersType
-  >({ pageSize: 20 });
+  innovationCardsData: InnovationCardData[] = [];
 
   form = new FormGroup(
     {
@@ -275,6 +264,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   );
 
   anyFilterSelected = false;
+
   filters: {
     key: FilterKeysType;
     title: string;
@@ -327,26 +317,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.setPageTitle('Innovations');
     }
 
-    // let columns: {
-    //   [key: string]: string | { label: string; align?: 'left' | 'right' | 'center'; orderable?: boolean };
-    // } = {
-    //   name: { label: 'Innovation', orderable: true },
-    //   submittedAt: { label: 'Submitted', orderable: true },
-    //   mainCategory: { label: 'Main category', orderable: true },
-    //   location: { label: 'Location', orderable: true },
-    //   supportStatus: { label: 'Support status', align: 'right', orderable: false }
-    // };
-
     const orderBy: { key: string; order?: 'descending' | 'ascending' } = { key: 'submittedAt', order: 'descending' };
 
     if (this.stores.authentication.isAdminRole()) {
-      // columns = {
-      //   name: { label: 'Innovation', orderable: true },
-      //   updatedAt: { label: 'Updated', orderable: true },
-      //   groupedStatus: { label: 'Innovation status', orderable: false },
-      //   engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
-      // };
-      orderBy.key = 'updatedAt';
+      this.orderBy = 'updatedAt';
     }
 
     // this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
@@ -356,6 +330,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'supportStatuses'];
 
     this.currentUserContext = this.authenticationStore.getUserContextInfo();
+
+    // If we have previous filters, set them
+    const previousFilters = sessionStorage.getItem('innovationListFilters');
+    if (previousFilters) {
+      const filters = JSON.parse(previousFilters);
+      Object.entries(filters).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.forEach((v: string) => {
+            const formFilter = this.form.get(key) as FormArray;
+            formFilter.push(new FormControl(v), { emitEvent: false });
+          });
+        } else {
+          this.form.get(key)?.setValue(value, { emitEvent: false });
+        }
+      });
+    }
+
+    // Formchange must be triggered only after organisations are loaded so that it is populated
+    this.onFormChange();
 
     if (this.stores.authentication.isAdminRole()) {
       filters = ['engagingOrganisations', 'groupedStatuses'];
@@ -387,25 +380,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             .filter(i => i.id !== myOrganisation)
             .map(i => ({ label: i.name, value: i.id }));
         }
-
-        // If we have previous filters, set them
-        const previousFilters = sessionStorage.getItem('innovationListFilters');
-        if (previousFilters) {
-          const filters = JSON.parse(previousFilters);
-          Object.entries(filters).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-              value.forEach((v: string) => {
-                const formFilter = this.form.get(key) as FormArray;
-                formFilter.push(new FormControl(v), { emitEvent: false });
-              });
-            } else {
-              this.form.get(key)?.setValue(value, { emitEvent: false });
-            }
-          });
-        }
-
-        // Formchange must be triggered only after organisations are loaded so that it is populated
-        this.onFormChange();
       },
       error: error => {
         this.logger.error(error);
@@ -415,54 +389,127 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
   }
 
-  getInnovationsList(column?: string): void {
+  getInnovationsList(): void {
     this.setPageStatus('LOADING');
 
     Object.values(this.innovationCardInfoMockData.data).forEach(data =>
-      this.innovationCardData.push(this.parseCardInfo(data))
+      this.innovationCardsData.push(this.parseCardInfo(data))
     );
 
-    console.log('queryparams:');
-    console.log(this.innovationsList.getAPIQueryParams());
-
     const apiQueryParams = {
-      order: this.queryOrder,
+      order: this.orderBy
+        ? { [this.orderBy]: ['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' }
+        : undefined,
       take: this.pageSize,
       skip: (this.pageNumber - 1) * this.pageSize
     };
 
-    this.innovationsService
-      .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
-      .subscribe(response => {
-        // this.innovationsList.setData(
-        //   response.data.map(innovation => {
-        //     let status = null;
+    // temporarily added all to test the response
+    const apiQueryFields = [
+      'id',
+      'name',
+      'status',
+      'groupedStatus',
+      'submittedAt',
+      'updatedAt',
+      // Document fields
+      'careSettings',
+      'categories',
+      'countryName',
+      'diseasesAndConditions',
+      'involvedAACProgrammes',
+      'keyHealthInequalities',
+      'mainCategory',
+      'otherCategoryDescription',
+      // Relation fields
+      'ownerId',
+      'engagingOrganisations',
+      'engagingUnits',
+      'suggestedOrganisations',
+      'support.status',
+      'support.updatedAt'
+    ];
 
-        //     if (this.stores.authentication.isAdminRole() === false) {
-        //       status =
-        //         (innovation.supports || []).find(
-        //           s => s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
-        //         )?.status ?? InnovationSupportStatusEnum.UNASSIGNED;
-        //     }
+    const apiQueryFilters = {
+      ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value } : null),
+      ...(this.form.get('mainCategories')?.value ? { mainCategories: this.form.get('mainCategories')?.value } : null),
+      ...(this.form.get('locations')?.value ? { locations: this.form.get('locations')?.value } : null),
+      ...(this.form.get('engagingOrganisations')?.value
+        ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
+        : null),
+      ...(this.form.get('supportStatuses')?.value
+        ? { supportStatuses: this.form.get('supportStatuses')?.value }
+        : null),
+      ...(this.form.get('groupedStatuses')?.value
+        ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
+        : null),
+      ...(this.stores.authentication.isAccessorType() && {
+        assignedToMe: this.form.get('assignedToMe')?.value ?? null,
+        suggestedOnly: this.form.get('suggestedOnly')?.value ?? null
+      })
+    };
 
-        //     return {
-        //       ...innovation,
-        //       ...{
-        //         supportInfo: {
-        //           status
-        //         }
-        //       },
-        //       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
-        //       engagingOrgs: innovation.supports?.filter(
-        //         support => support.status === InnovationSupportStatusEnum.ENGAGING
-        //       )
-        //     };
-        //   }),
-        //   response.count
-        // );
-        // if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
-        this.setPageStatus('READY');
-      });
+    // this.innovationsService.getInnovationsList2(apiQueryFields, apiQueryFilters, apiQueryParams).subscribe(response => {
+    //   response.forEach(innovation => {
+    //     const data: InnovationCardData = {
+    //       innovationId: innovation.id,
+    //       innovationName: innovation.name,
+    //       ownerName: innovation.owner.name,
+    //       countryName: innovation.countryName,
+    //       postCode: innovation.postCode,
+    //       categories: innovation.categories,
+    //       careSettings: parsedCareSettings,
+    //       diseasesAndConditions: parsedDiseasesAndConditions,
+    //       healthInequalities: [],
+    //       aacInvolvement: ['None'],
+    //       submittedAt: supportData.submittedAt,
+    //       engagingUnits: engagingUnits,
+    //       supportStatus: {
+    //         status: currentStatus?.status ?? 'UNASSIGNED',
+    //         updatedAt: currentStatus?.updatedAt ?? supportData.submittedAt!
+    //       },
+    //       innovationStatus: {
+    //         status: supportData.groupedStatus ?? '',
+    //         updatedAt: supportData.statusUpdatedAt ?? supportData.submittedAt!
+    //       }
+    //     };
+
+    //     this.innovationCardsData.push(data);
+    //   });
+    // });
+
+    // this.innovationsService
+    //   .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
+    //   .subscribe(response => {
+    // this.innovationsList.setData(
+    //   response.data.map(innovation => {
+    //     let status = null;
+
+    //     if (this.stores.authentication.isAdminRole() === false) {
+    //       status =
+    //         (innovation.supports || []).find(
+    //           s => s.organisation.unit.id === this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+    //         )?.status ?? InnovationSupportStatusEnum.UNASSIGNED;
+    //     }
+
+    //     return {
+    //       ...innovation,
+    //       ...{
+    //         supportInfo: {
+    //           status
+    //         }
+    //       },
+    //       groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED, // default never happens
+    //       engagingOrgs: innovation.supports?.filter(
+    //         support => support.status === InnovationSupportStatusEnum.ENGAGING
+    //       )
+    //     };
+    //   }),
+    //   response.count
+    // );
+    // if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
+    //       this.setPageStatus('READY');
+    //     });
   }
 
   onFormChange(): void {
@@ -492,36 +539,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       })
     };
 
-    // this.innovationsList.setFilters({
-    //   name: this.form.get('search')?.value,
-    //   mainCategories: this.form.get('mainCategories')?.value,
-    //   locations: this.form.get('locations')?.value,
-    //   engagingOrganisations: this.form.get('engagingOrganisations')?.value,
-    //   supportStatuses: this.form.get('supportStatuses')?.value,
-    //   groupedStatuses: this.form.get('groupedStatuses')?.value,
-    //   ...(this.stores.authentication.isAccessorType() && {
-    //     assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-    //     suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
-    //   })
-    // });
-
-    // this.innovationsList.setPage(1);
-
-    // persist in session storage
-    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
-
-    this.innovationsList.setPage(1);
+    this.pageNumber = 1;
 
     // persist in session storage
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
     this.getInnovationsList();
   }
-
-  // onTableOrder(column: string): void {
-  //   this.innovationsList.setOrderBy(column);
-  //   this.getInnovationsList(column);
-  // }
 
   onOpenCloseFilter(filterKey: FilterKeysType): void {
     const filter = this.filters.find(i => i.key === filterKey);
@@ -548,7 +572,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    // this.innovationsList.setPage(event.pageNumber);
     this.pageNumber = event.pageNumber;
     this.getInnovationsList();
   }
@@ -607,7 +630,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       ownerName: supportData.ownerName,
       countryName: supportData.countryName ?? '',
       postCode: supportData.postCode ?? '',
-      mainCategory: parsedMainCategories,
+      categories: parsedMainCategories,
       careSettings: parsedCareSettings,
       diseasesAndConditions: parsedDiseasesAndConditions,
       healthInequalities: [],

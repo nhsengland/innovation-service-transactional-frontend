@@ -8,7 +8,7 @@ export type InnovationCardData = {
   ownerName: string;
   countryName: string;
   postCode: null | string;
-  mainCategory: string[];
+  categories: string[];
   careSettings: string[];
   diseasesAndConditions: string[];
   healthInequalities: string[];

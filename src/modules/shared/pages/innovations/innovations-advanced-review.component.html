@@ -46,7 +46,7 @@
     </div>
 
     <div class="nhsuk-grid-column-three-quarters">
-      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">{{ innovationCardsData.length }} innovations</p>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
         <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
@@ -78,7 +78,7 @@
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-      <ng-container *ngIf="innovationsList.getTotalRowsNumber() === 0">
+      <ng-container *ngIf="innovationCardsData.length === 0">
         <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
         <p class="nhsuk-u-margin-bottom-2">Improve your search results by:</p>
         <ul>
@@ -89,9 +89,9 @@
         </ul>
       </ng-container>
 
-      <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
+      <ng-container *ngIf="innovationCardsData.length > 0">
         <dl class="nhsuk-summary-list">
-          <ng-container *ngFor="let item of innovationCardData">
+          <ng-container *ngFor="let item of innovationCardsData">
             <!-- <ng-container *ngFor="let item of innovationsList.getRecords()"> -->
 
             <theme-advanced-search-innovation-card [innovationCardData]="item" />
@@ -99,12 +99,7 @@
         </dl>
 
         <div class="nhsuk-u-padding-bottom-4">
-          <theme-pagination
-            [currentPage]="innovationsList.page"
-            [pageSize]="innovationsList.pageSize"
-            [totalRows]="innovationsList.getTotalRowsNumber()"
-            (updatePageEvent)="onPageChange($event)"
-          ></theme-pagination>
+          <theme-pagination [currentPage]="pageNumber" [pageSize]="pageSize" [totalRows]="innovationCardsData.length" (updatePageEvent)="onPageChange($event)"></theme-pagination>
         </div>
       </ng-container>
     </div>
