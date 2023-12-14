@@ -33,6 +33,7 @@ import {
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { KeysUnion } from '@modules/core/helpers/types.helper';
+import { resourceLimits } from 'worker_threads';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -48,7 +49,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   pageSize: number = 20;
   pageNumber: number = 1;
   filtersList: { [filter: string]: string } | {} = {};
-  orderBy: InnovationListSelectType = 'submittedAt';
+  orderBy: InnovationListSelectType = 'updatedAt';
   orderDir: 'ascending' | 'descending' = 'ascending';
 
   innovationCardInfoMockData: InnovationsListInDTO = {
@@ -400,11 +401,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     );
 
     const paginationParams = {
+      take: this.pageSize,
+      skip: (this.pageNumber - 1) * this.pageSize,
       order: this.orderBy
         ? { [this.orderBy]: ['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' }
-        : undefined,
-      take: this.pageSize,
-      skip: (this.pageNumber - 1) * this.pageSize
+        : undefined
     };
 
     const apiQueryFilters: Partial<{
@@ -418,24 +419,78 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       // ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value as string } : { name: '' }),
       ...(this.form.get('locations')?.value
         ? { locations: this.form.get('locations')?.value as catalogOfficeLocation[] }
-        : null)
+        : null),
       // ...(this.form.get('engagingOrganisations')?.value
       //   ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
       //   : null),
       // ...(this.form.get('supportStatuses')?.value ? { supportStatus: this.form.get('supportStatuses')?.value } : null),
-      // ...(this.stores.authentication.isAccessorType() && {
-      //   assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
-      //   suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
-      // })
+      ...(this.stores.authentication.isAccessorType() && {
+        assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
+        suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
+      })
     };
 
     this.innovationsService
-      .getInnovationsList2(['id', 'name', 'status', 'careSettings'], apiQueryFilters, paginationParams)
+      .getInnovationsList2(
+        [
+          'id',
+          'name',
+          'status',
+          'groupedStatus',
+          'submittedAt',
+          'updatedAt',
+          // Document fields
+          'careSettings',
+          'categories',
+          'countryName',
+          'diseasesAndConditions',
+          'involvedAACProgrammes',
+          'keyHealthInequalities',
+          'mainCategory',
+          'otherCategoryDescription',
+          // 'postcode',
+          // Relation fields
+          // 'owner.id',
+          // 'owner.name',
+          // 'engagingOrganisations',
+          'engagingUnits',
+          // 'suggestedOrganisations',
+          'support.status',
+          'support.updatedAt'
+        ],
+        apiQueryFilters,
+        paginationParams
+      )
       .subscribe(response => {
-        // response.forEach(innovation => {
-        console.log('response');
-        console.log(response);
-        // });
+        response.data.forEach(result => {
+          result!.categories
+
+          const translatedCategories: string[] = (result.categories as []).map(item => {
+            return item !== 'NONE'
+              ? categoriesItems.find(entry => entry.value === item)?.label ?? item
+              : result.otherCategoryDescription ?? item;
+
+          const innovationData: InnovationCardData = {
+            innovationId: result.id,
+            innovationName: result.name,
+            ownerName: 'TODO',
+            countryName: result.countryName,
+            postCode: 'TODO-123',
+            categories: translatedCategories,
+            careSettings: result.careSettings,
+            diseasesAndConditions: result.diseasesAndConditions,
+            healthInequalities: result.keyHealthInequalities,
+            aacInvolvement: result.involvedAACProgrammes,
+            submittedAt: result.submittedAt,
+            engagingUnits: [(result.engagingUnits as { unitId: string; name: string; acronym: string }[])[0].acronym],
+            supportStatus: {
+              status: result.support.status,
+              updatedAt: result.support.updatedAt || ''
+            }
+
+          };
+
+        });
       });
   }
 

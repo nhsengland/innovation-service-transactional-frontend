@@ -3,23 +3,23 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 
 export type InnovationCardData = {
-  innovationId: string;
-  innovationName: string;
-  ownerName: string;
-  countryName: string;
-  postCode: null | string;
-  categories: string[];
-  careSettings: string[];
-  diseasesAndConditions: string[];
-  healthInequalities: string[];
-  aacInvolvement: string[];
-  submittedAt: null | DateISOType;
-  engagingUnits: string[];
-  supportStatus: {
+  innovationId?: string;
+  innovationName?: string;
+  ownerName?: string;
+  countryName?: string;
+  postCode?: null | string;
+  categories?: string[];
+  careSettings?: string[];
+  diseasesAndConditions?: string[];
+  healthInequalities?: string[];
+  aacInvolvement?: string[];
+  submittedAt?: null | DateISOType;
+  engagingUnits?: string[];
+  supportStatus?: {
     status: string;
     updatedAt: DateISOType;
   };
-  innovationStatus: {
+  innovationStatus?: {
     status: string;
     updatedAt: DateISOType;
   };
