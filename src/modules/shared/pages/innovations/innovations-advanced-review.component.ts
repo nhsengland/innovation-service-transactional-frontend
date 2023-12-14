@@ -263,7 +263,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   form = new FormGroup(
     {
-      search: new FormControl(''),
+      search: new FormControl('', { updateOn: 'blur' }),
       locations: new FormArray([]),
       supportStatuses: new FormArray([]),
       groupedStatuses: new FormArray([]),
@@ -280,6 +280,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     title: string;
     showHideStatus: 'opened' | 'closed';
     selected: { label: string; value: string }[];
+    scrollable?: boolean;
     active: boolean;
   }[] = [
     { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
@@ -289,6 +290,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       title: 'Engaging organisations',
       showHideStatus: 'closed',
       selected: [],
+      scrollable: true,
       active: false
     },
     { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
@@ -307,6 +309,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     private authenticationStore: AuthenticationStore
   ) {
     super();
+
+    // Force reload if running on server because of SSR and session storage
+    if (this.isRunningOnServer()) {
+      this.router.navigate([]);
+    }
 
     if (this.isRunningOnServer()) {
       this.router.navigate([]);
@@ -406,8 +413,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     });
 
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
-
-    this.onFormChange();
   }
 
   getInnovationsList(column?: string): void {
@@ -505,7 +510,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     // persist in session storage
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
-    this.pageNumber = 1;
+    this.innovationsList.setPage(1);
+
+    // persist in session storage
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
     this.getInnovationsList();
   }
@@ -615,5 +623,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         updatedAt: supportData.statusUpdatedAt ?? supportData.submittedAt!
       }
     };
+  }
+
+  onSearchClick() {
+    this.form.updateValueAndValidity({ onlySelf: true });
   }
 }

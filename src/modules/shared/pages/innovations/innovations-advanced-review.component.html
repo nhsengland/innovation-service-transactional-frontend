@@ -5,7 +5,7 @@
       <form [formGroup]="form">
         <theme-form-input controlName="search" [pageUniqueField]="false">
           <ng-container append>
-            <button type="button" (click)="onFormChange()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
               <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
                 <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
               </svg>
@@ -25,20 +25,14 @@
 
         <ng-container *ngFor="let filter of filters">
           <ng-container *ngIf="filter.active === true">
-            <a
-              href="javascript:void(0)"
-              (click)="onOpenCloseFilter(filter.key)"
-              class="d-flex align-items-center nhsuk-u-font-size-19 text-decoration-none nhsuk-u-margin-bottom-0"
-              [attr.aria-expanded]="filter.showHideStatus === 'opened' ? 'true' : 'false'"
+            <theme-collapsible-filter
+              [title]="filter.title"
+              description="{{ (form.get(filter.key)?.value || []).length }} selected"
+              [preOpen]="filter.showHideStatus === 'opened'"
+              [scrollable]="filter.scrollable"
             >
-              <ng-container *ngTemplateOutlet="filterIcon; context: { showHideStatus: filter.showHideStatus }"></ng-container>
-              <span class="nhsuk-u-padding-left-2"> {{ filter.title }} <span class="nhsuk-u-visually-hidden"> filter section </span></span>
-            </a>
-
-            <div class="nhsuk-u-padding-left-1" [ngClass]="{ 'nhsuk-u-visually-hidden': filter.showHideStatus !== 'opened' }">
-              <div class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-bottom-1 nhsuk-u-padding-left-6">{{ (form.get(filter.key)?.value || []).length }} selected</div>
-              <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false"> </theme-form-checkbox-array>
-            </div>
+              <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false" />
+            </theme-collapsible-filter>
 
             <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
           </ng-container>
@@ -116,14 +110,3 @@
     </div>
   </div>
 </theme-content-wrapper>
-
-<ng-template #filterIcon let-showHideStatus="showHideStatus">
-  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
-  </svg>
-  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
-  </svg>
-</ng-template>

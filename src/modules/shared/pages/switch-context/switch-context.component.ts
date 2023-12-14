@@ -76,6 +76,8 @@ export class PageSwitchContextComponent extends CoreComponent {
     }
 
     if (this.currentRole?.id !== role.id) {
+      sessionStorage.clear();
+      
       this.authenticationStore.setUserContext({
         id: this.user.id,
         roleId: role.id,

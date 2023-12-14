@@ -99,9 +99,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
           this.wizard.addStep(
             new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
               id: 'organisationsStep',
-              title: this.stores.authentication.isInnovatorType()
-                ? 'Who do you want to notify about this message?'
-                : 'Would you like to notify other support organisations about this message?',
+              title: 'Who do you want to notify about this message?',
               isSubmitStep: true,
               component: WizardInnovationThreadNewOrganisationsStepComponent,
               data: {
