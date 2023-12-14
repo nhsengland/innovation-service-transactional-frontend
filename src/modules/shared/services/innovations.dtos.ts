@@ -113,8 +113,10 @@ export type InnovationListSelectType =
   | 'keyHealthInequalities'
   | 'mainCategory'
   | 'otherCategoryDescription'
+  | 'postcode'
   // Relation fields
-  | 'ownerId' // this will change
+  | 'owner.id'
+  | 'owner.name'
   | 'engagingOrganisations'
   | 'engagingUnits'
   | 'suggestedOrganisations'
@@ -142,8 +144,8 @@ export type InnovationListNewFullDTO = {
   // Relation fields
   engagingOrganisations: { organisationId: string; name: string; acronym: string }[];
   engagingUnits: { unitId: string; name: string; acronym: string }[];
-  ownerId: string; // TODO this will change to id, name, likely
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
+  owner: { id: string; name: string } | null;
   support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
 };
 

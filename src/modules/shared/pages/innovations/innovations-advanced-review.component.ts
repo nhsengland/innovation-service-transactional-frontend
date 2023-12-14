@@ -181,13 +181,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     // Temporarily until we use the new API for all
     if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAdminRole()) {
       const { order, skip, take, filters } = this.innovationsList.getAPIQueryParams();
-      console.log('test');
       this.innovationsService
-        .getInnovationsList2(['id', 'name', 'careSettings', 'support.status', 'submittedAt'], filters, {
-          order,
-          skip,
-          take
-        })
+        .getInnovationsList2(
+          ['id', 'name', 'careSettings', 'support.status', 'submittedAt', 'engagingOrganisations', 'owner.name'],
+          filters,
+          {
+            order,
+            skip,
+            take
+          }
+        )
         .subscribe(response => {
           console.log(response);
         });
