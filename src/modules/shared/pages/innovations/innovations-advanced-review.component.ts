@@ -44,7 +44,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   isAdminType: boolean = false;
   isAccessorType: boolean = false;
 
-  pageSize: number = 10;
+  pageSize: number = 20;
   pageNumber: number = 1;
   filtersList: { [filter: string]: string } | {} = {};
   orderBy: InnovationListSelectType = 'updatedAt';
@@ -227,6 +227,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'submittedAt',
       'updatedAt',
       'careSettings',
+      // 'otherCareSetting',
       'categories',
       'countryName',
       'diseasesAndConditions',
@@ -260,7 +261,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         const translatedCareSettings: string[] = result.careSettings
           ? (result.careSettings as []).map(item => {
-              return careSettingsItems.find(entry => entry.value === item)?.label ?? item;
+              return item !== 'OTHER'
+                ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
+                : result.otherCareSetting;
             })
           : [];
 

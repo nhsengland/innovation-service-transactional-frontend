@@ -109,6 +109,7 @@ export type InnovationListSelectType =
   | 'updatedAt'
   // Document fields
   | 'careSettings'
+  | 'otherCareSetting'
   | 'categories'
   | 'countryName'
   | 'diseasesAndConditions'
@@ -136,6 +137,7 @@ export type InnovationListNewFullDTO = {
 
   // Document fields
   careSettings: catalogCareSettings[] | null;
+  otherCareSetting: string | null;
   categories: catalogCategory[] | null;
   countryName: string | null;
   postcode: string | null;

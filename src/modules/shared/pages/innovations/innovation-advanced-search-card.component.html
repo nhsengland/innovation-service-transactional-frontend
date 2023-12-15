@@ -17,14 +17,14 @@
 
       <li>
         <span class="nhsuk-u-font-weight-bold">Categories: </span>
-        <span *ngFor="let item of innovationCardData.categories">{{ item }}. </span>
+        <span *ngFor="let item of innovationCardData.categories">{{ item }}<span *ngIf="innovationCardData.categories.length > 1">. </span></span>
         <!-- <span *ngFor="let item of innovationCardData.mainCategory">{{ "shared.catalog.innovation.mainCategories." + item | translate }}. </span> -->
       </li>
 
       <li>
         <span class="nhsuk-u-font-weight-bold">Care settings: </span>
         <ng-container *ngIf="innovationCardData.careSettings.length > 0; else none">
-          <span *ngFor="let item of innovationCardData.careSettings">{{ item }}. </span>
+          <span *ngFor="let item of innovationCardData.careSettings">{{ item }}<span *ngIf="innovationCardData.careSettings.length > 1">. </span></span>
           <!-- <span *ngFor="let item of innovationCardData.careSettings">{{ "shared.catalog.innovation.careSettingsItems." + item | translate }}. </span> -->
         </ng-container>
       </li>
@@ -40,14 +40,14 @@
         <li>
           <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
           <ng-container *ngIf="innovationCardData.keyHealthInequalities.length > 0; else none">
-            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ item }}. </span>
+            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ item }}<span *ngIf="innovationCardData.keyHealthInequalities.length > 1">. </span></span>
           </ng-container>
         </li>
 
         <li>
           <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
           <ng-container *ngIf="innovationCardData.involvedAACProgrammes.length > 0; else none"></ng-container>
-          <span *ngFor="let item of innovationCardData.involvedAACProgrammes">{{ item }}. </span>
+          <span *ngFor="let item of innovationCardData.involvedAACProgrammes">{{ item }}<span *ngIf="innovationCardData.involvedAACProgrammes.length > 1">. </span></span>
         </li>
       </ng-container>
 
@@ -55,7 +55,7 @@
         <span class="nhsuk-u-font-weight-bold">Engaging units ({{ innovationCardData.engagingUnits.length }}): </span>
         <ng-container *ngIf="innovationCardData.engagingUnits.length > 0; else none">
           <ng-container *ngFor="let unit of innovationCardData.engagingUnits">
-            <theme-tag [type]="'NEUTRAL'" label="{{ unit }}" class="nhsuk-u-margin-left-1" />
+            <theme-tag [type]="'WHITE'" label="{{ unit }}" class="nhsuk-u-margin-left-1" />
           </ng-container>
         </ng-container>
       </li>
@@ -79,7 +79,7 @@
         <span class="font-color-secondary"> Record last updated on {{ innovationCardData.innovationStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
       </li>
       <ng-template #none>
-        <span>None. </span>
+        <span>None</span>
       </ng-template>
     </ul>
   </dt>
