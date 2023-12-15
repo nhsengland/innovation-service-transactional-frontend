@@ -55,7 +55,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
 
-    this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 
@@ -119,6 +118,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
       );
     }
 
+    this.setPageTitle(this.title);
     this.setPageStatus('READY');
   }
 

@@ -69,6 +69,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     title: string;
     showHideStatus: 'opened' | 'closed';
     selected: { label: string; value: string }[];
+    scrollable?: boolean;
     active: boolean;
   }[] = [
     { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
@@ -78,6 +79,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       title: 'Engaging organisations',
       showHideStatus: 'closed',
       selected: [],
+      scrollable: true,
       active: false
     },
     { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
@@ -257,6 +259,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   getInnovationsList(column?: string): void {
     this.setPageStatus('LOADING');
+
+    // Temporarily until we use the new API for all
+    if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAdminRole()) {
+      const { order, skip, take, filters } = this.innovationsList.getAPIQueryParams();
+      this.innovationsService
+        .getInnovationsList2(
+          ['id', 'name', 'careSettings', 'support.status', 'submittedAt', 'engagingOrganisations', 'owner.name'],
+          filters,
+          {
+            order,
+            skip,
+            take
+          }
+        )
+        .subscribe(response => {
+          console.log(response);
+        });
+      // TODO Handle it here, just logging for now but this should replace the requests for the cards
+    }
 
     this.innovationsService
       .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })

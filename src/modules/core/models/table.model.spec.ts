@@ -19,7 +19,7 @@ const emptyExpected = {
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
-  filters: null,
+  filters: {},
   cachedHeaderColumns: []
 };
 
@@ -36,7 +36,7 @@ const defaultExpected = {
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
-  filters: null,
+  filters: {},
   cachedHeaderColumns: [
     { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
     { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },

@@ -45,7 +45,7 @@
         {{ sections.draft }} {{ "dictionary.section" | pluralTranslate: sections.draft | translate }} in draft
       </p>
       <p *ngIf="sections.notStarted > 0" class="d-flex">
-        <theme-svg-icon type="error"></theme-svg-icon>
+        <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
         {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
       </p>
@@ -196,7 +196,7 @@
 </theme-content-wrapper>
 
 <ng-template #icon let-status="status">
-  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error"></theme-svg-icon>
+  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error" customColor="grey"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'DRAFT'" type="edit"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'SUBMITTED'" type="success"></theme-svg-icon>
 </ng-template>
