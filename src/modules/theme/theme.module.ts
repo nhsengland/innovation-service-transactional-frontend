@@ -36,6 +36,8 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { TagComponent } from './components/tag/tag.component';
+import { SelectComponent } from './components/search/select.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -44,7 +46,9 @@ import { TagComponent } from './components/tag/tag.component';
     TranslateModule.forChild(),
 
     // Angular Material.
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+
+    FormsModule
   ],
   declarations: [
     // Base.
@@ -79,7 +83,9 @@ import { TagComponent } from './components/tag/tag.component';
     ChipsFilterComponent,
     CollapsibleFilterComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    SelectComponent
   ],
   providers: [],
   exports: [
@@ -117,7 +123,9 @@ import { TagComponent } from './components/tag/tag.component';
 
     InnovationRecordExportComponent,
 
-    GoToTopComponent
+    GoToTopComponent,
+
+    SelectComponent
   ]
 })
 export class ThemeModule {}
