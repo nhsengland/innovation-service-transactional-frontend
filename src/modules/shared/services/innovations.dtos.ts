@@ -138,6 +138,7 @@ export type InnovationListNewFullDTO = {
   careSettings: catalogCareSettings[] | null;
   categories: catalogCategory[] | null;
   countryName: string | null;
+  postcode: string | null;
   diseasesAndConditions: string[] | null; // not strongly typed atm
   involvedAACProgrammes: catalogInvolvedAACProgrammes[] | null;
   keyHealthInequalities: catalogKeyHealthInequalities[] | null;

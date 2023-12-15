@@ -3,25 +3,17 @@ import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { TableModel } from '@app/base/models';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import {
-  InnovationListNewFullDTO,
-  InnovationListSelectType,
-  InnovationsListDTO,
-  InnovationsListFiltersType,
-  InnovationsListInDTO
-} from '@modules/shared/services/innovations.dtos';
+import { InnovationListSelectType, InnovationsListInDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { DateISOType } from '@app/base/types';
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
+
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
@@ -32,8 +24,6 @@ import {
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-import { KeysUnion } from '@modules/core/helpers/types.helper';
-import { resourceLimits } from 'worker_threads';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -46,213 +36,17 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   currentUserContext: AuthenticationModel['userContext'];
 
+  isAdminType: boolean = false;
+  isAccessorType: boolean = false;
+
   pageSize: number = 20;
   pageNumber: number = 1;
   filtersList: { [filter: string]: string } | {} = {};
   orderBy: InnovationListSelectType = 'updatedAt';
-  orderDir: 'ascending' | 'descending' = 'ascending';
+  orderDir: 'ascending' | 'descending' = 'descending';
 
-  innovationCardInfoMockData: InnovationsListInDTO = {
-    count: 1738,
-    data: [
-      {
-        id: '80C1E756-515C-EE11-9937-000D3A7F2739',
-        name: 'Amazing Innovation',
-        ownerName: 'Random Company 1',
-        mainCategory: ['MEDICAL_DEVICE', 'EDUCATION', 'MODELS_CARE'],
-        careSettings: ['ACUTE_TRUSTS_INPATIENT', 'AMBULANCE', 'WRONG_SETTING'],
-        diseasesAndConditions: [
-          'MUSCULOSKELETAL_CONDITIONS_OSTEOPOROSIS',
-          'RESPIRATORY_CONDITIONS_MESOTHELIOMA',
-          'SLEEP_AND_SLEEP_CONDITIONS'
-        ],
-        description: 'Just a great innovation...',
-        status: 'IN_PROGRESS' as InnovationStatusEnum,
-        groupedStatus: 'RECEIVING_SUPPORT' as InnovationGroupedStatusEnum,
-        statusUpdatedAt: '2023-09-26T14:38:32.392Z',
-        submittedAt: '2023-09-26T14:37:19.303Z',
-        updatedAt: '2023-12-06T10:46:22.862Z',
-        countryName: 'Portugal',
-        postCode: null,
-        otherMainCategoryDescription: null,
-        assessment: {
-          id: 'C783A442-7A5C-EE11-9937-000D3A7F2739',
-          createdAt: '2023-09-26T14:37:47.886Z',
-          assignedTo: {
-            name: '[Test] Rob Test'
-          },
-          finishedAt: '2023-09-26T14:38:32.392Z',
-          reassessmentCount: 0
-        },
-
-        supports: [
-          {
-            id: '253C10A4-1061-EE11-B004-000D3AD4EF6F',
-            status: InnovationSupportStatusEnum.WAITING,
-            updatedAt: '2023-10-10T11:28:28.623Z',
-            organisation: {
-              id: '7BD3B905-7CB6-EC11-997E-0050F25A43BD',
-              name: 'Health Innovation Network',
-              acronym: 'HIN',
-              unit: {
-                id: '982AB20B-7CB6-EC11-997E-0050F25A43BD',
-                name: 'Health Innovation East',
-                acronym: 'EAST'
-              }
-            }
-          },
-          {
-            id: '0BEEBA5E-C763-EE11-B006-6045BD0E72ED',
-            status: InnovationSupportStatusEnum.CLOSED,
-            updatedAt: '2023-11-28T14:26:09.060Z',
-            organisation: {
-              id: '50413668-5BBA-EC11-997E-0050F25A43BD',
-              name: 'Northern Sea fictional group',
-              acronym: 'NORTH',
-              unit: {
-                id: '739BF5B6-5BBA-EC11-997E-0050F25A43BD',
-                name: 'Buchan Deep fictional research',
-                acronym: 'NORTH02'
-              }
-            }
-          }
-        ],
-        notifications: 3
-      },
-      {
-        id: '88FBD652-195C-EE11-9937-000D3A7F2739',
-        name: 'Refined Fresh Cheese',
-        ownerName: 'Bla bla LDA',
-        mainCategory: ['DATA_MONITORING', 'TRAVEL_TRANSPORT'],
-        careSettings: ['LOCAL_AUTHORITY_EDUCATION', 'PRIMARY_CARE', 'SOCIAL_CARE'],
-        diseasesAndConditions: [],
-        description:
-          'New ABC 13 9370, 13.3, 5th Gen CoreA5-8250U, 8GB RAM, 256GB SSD, power UHD Graphics, OS 10 Home, OS Office A & J 2016',
-        status: 'IN_PROGRESS' as InnovationStatusEnum,
-        groupedStatus: 'RECEIVING_SUPPORT' as InnovationGroupedStatusEnum,
-        statusUpdatedAt: '2023-09-26T03:06:35.000Z',
-        submittedAt: '2023-09-26T03:05:47.146Z',
-        updatedAt: '2023-09-26T03:06:35.013Z',
-        countryName: 'England',
-        postCode: 'BH15 1EG',
-        otherMainCategoryDescription: null,
-        assessment: {
-          id: 'F53A5FA8-195C-EE11-9937-000D3A7F2739',
-          createdAt: '2023-09-26T03:06:17.376Z',
-          assignedTo: {
-            name: '[Test] Rob Test'
-          },
-          finishedAt: '2023-09-26T03:06:35.000Z',
-          reassessmentCount: 0
-        },
-        supports: [
-          {
-            id: 'AA423BF0-E25C-EE11-9937-000D3A7F2739',
-            status: InnovationSupportStatusEnum.ENGAGING,
-            updatedAt: '2023-09-27T03:07:06.796Z',
-            organisation: {
-              id: '7BD3B905-7CB6-EC11-997E-0050F25A43BD',
-              name: 'Health Innovation Network',
-              acronym: 'HIN',
-              unit: {
-                id: '982AB20B-7CB6-EC11-997E-0050F25A43BD',
-                name: 'Health Innovation East',
-                acronym: 'EAST'
-              }
-            }
-          },
-          {
-            id: '0BEEBA5E-C763-EE11-B006-6045BD0E72ED',
-            status: InnovationSupportStatusEnum.ENGAGING,
-            updatedAt: '2023-12-11T11:55:34.486Z',
-            organisation: {
-              id: '50413668-5BBA-EC11-997E-0050F25A43BD',
-              name: 'Northern Sea fictional group',
-              acronym: 'NORTH',
-              unit: {
-                id: '739BF5B6-5BBA-EC11-997E-0050F25A43BD',
-                name: 'Buchan Deep fictional research',
-                acronym: 'NORTH02'
-              }
-            }
-          }
-        ],
-        notifications: 0
-      },
-      {
-        id: 'A3B79BC5-4859-EE11-9937-000D3A7F2739',
-        name: 'DC Tasks innovation test',
-        ownerName: 'Acme INC.',
-        mainCategory: ['ESTATES_FACILITIES', 'FOOD_NUTRITION', 'PHARMACEUTICAL'],
-        careSettings: [],
-        diseasesAndConditions: ['SKIN_CONDITIONS'],
-        description: 'This is a innovation to display tasks.',
-        status: 'IN_PROGRESS' as InnovationStatusEnum,
-        groupedStatus: 'RECEIVING_SUPPORT' as InnovationGroupedStatusEnum,
-        statusUpdatedAt: '2023-09-22T13:11:20.832Z',
-        submittedAt: '2023-09-22T13:09:58.146Z',
-        updatedAt: '2023-11-17T14:42:46.932Z',
-        countryName: 'Portugal',
-        postCode: null,
-        otherMainCategoryDescription: null,
-        assessment: {
-          id: '31BBDE6D-4959-EE11-9937-000D3A7F2739',
-          createdAt: '2023-09-22T13:10:41.590Z',
-          assignedTo: {
-            name: '[Test] Rob Test'
-          },
-          finishedAt: '2023-09-22T13:11:20.832Z',
-          reassessmentCount: 0
-        },
-        supports: [
-          {
-            id: '8C70EE2C-5585-EE11-8925-7C1E520432D9',
-            status: 'CLOSED' as InnovationSupportStatusEnum,
-            updatedAt: '2023-11-17T14:25:45.010Z',
-            organisation: {
-              id: '7BD3B905-7CB6-EC11-997E-0050F25A43BD',
-              name: 'Health Innovation Network',
-              acronym: 'HIN',
-              unit: {
-                id: '982AB20B-7CB6-EC11-997E-0050F25A43BD',
-                name: 'Health Innovation East',
-                acronym: 'EAST'
-              }
-            }
-          }
-        ],
-        notifications: 0
-      },
-      {
-        id: '23CC6CB2-F82D-ED11-AE83-0050F25A312B',
-        name: '1.1 not exist in list',
-        ownerName: 'Some Company',
-        mainCategory: ['ESTATES_FACILITIES', 'FOOD_NUTRITION', 'PHARMACEUTICAL'],
-        careSettings: ['END_LIFE_CARE', 'INDUSTRY'],
-        diseasesAndConditions: ['SKIN_CONDITIONS'],
-        description: 't',
-        status: 'IN_PROGRESS' as InnovationStatusEnum,
-        groupedStatus: 'AWAITING_SUPPORT' as InnovationGroupedStatusEnum,
-        statusUpdatedAt: '2023-11-06T17:46:16.375Z',
-        submittedAt: '2023-11-06T17:41:31.753Z',
-        updatedAt: '2023-11-06T17:46:16.383Z',
-        countryName: 'Armenia',
-        postCode: null,
-        otherMainCategoryDescription: null,
-        assessment: {
-          id: '4D6969C8-CB7C-EE11-8925-6045BDFBB2B2',
-          createdAt: '2023-11-06T17:41:59.723Z',
-          assignedTo: {
-            name: '[Test] Rob Test'
-          },
-          finishedAt: '2023-11-06T17:46:16.375Z',
-          reassessmentCount: 0
-        },
-        notifications: 0
-      }
-    ]
-  };
   innovationCardsData: InnovationCardData[] = [];
+  innovationsCount: number = 0;
 
   form = new FormGroup(
     {
@@ -304,6 +98,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ) {
     super();
 
+    this.isAdminType = this.stores.authentication.isAdminRole();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+
     // Force reload if running on server because of SSR and session storage
     if (this.isRunningOnServer()) {
       this.router.navigate([]);
@@ -326,8 +123,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.stores.authentication.isAdminRole()) {
       this.orderBy = 'updatedAt';
     }
-
-    // this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
   }
 
   ngOnInit(): void {
@@ -396,10 +191,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   getInnovationsList(): void {
     this.setPageStatus('LOADING');
 
-    Object.values(this.innovationCardInfoMockData.data).forEach(data =>
-      this.innovationCardsData.push(this.parseCardInfo(data))
-    );
-
     const paginationParams = {
       take: this.pageSize,
       skip: (this.pageNumber - 1) * this.pageSize,
@@ -408,22 +199,17 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         : undefined
     };
 
-    const apiQueryFilters: Partial<{
-      // name: string;
-      assignedToMe: boolean;
-      engagingOrganisations?: string[];
-      locations: catalogOfficeLocation[];
-      supportStatus: InnovationSupportStatusEnum[];
-      suggestedOnly: boolean;
-    }> = {
-      // ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value as string } : { name: '' }),
+    const apiQueryFilters = {
+      // ...(this.form.get('search')?.value ? { name: this.form.get('search')?.value as string } : { search: '' }),
       ...(this.form.get('locations')?.value
         ? { locations: this.form.get('locations')?.value as catalogOfficeLocation[] }
         : null),
-      // ...(this.form.get('engagingOrganisations')?.value
-      //   ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
-      //   : null),
-      // ...(this.form.get('supportStatuses')?.value ? { supportStatus: this.form.get('supportStatuses')?.value } : null),
+      ...(this.form.get('engagingOrganisations')?.value
+        ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
+        : null),
+      ...(this.form.get('supportStatuses')?.value
+        ? { supportStatuses: this.form.get('supportStatuses')?.value }
+        : undefined),
       ...(this.stores.authentication.isAccessorType() && {
         assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
@@ -439,7 +225,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           'groupedStatus',
           'submittedAt',
           'updatedAt',
-          // Document fields
           'careSettings',
           'categories',
           'countryName',
@@ -448,13 +233,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           'keyHealthInequalities',
           'mainCategory',
           'otherCategoryDescription',
-          // 'postcode',
-          // Relation fields
-          // 'owner.id',
-          // 'owner.name',
-          // 'engagingOrganisations',
+          'postcode',
+          'owner.name',
           'engagingUnits',
-          // 'suggestedOrganisations',
           'support.status',
           'support.updatedAt'
         ],
@@ -462,35 +243,81 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         paginationParams
       )
       .subscribe(response => {
-        response.data.forEach(result => {
-          result!.categories
+        this.innovationsCount = response.count;
+        this.innovationCardsData = [];
 
-          const translatedCategories: string[] = (result.categories as []).map(item => {
-            return item !== 'NONE'
-              ? categoriesItems.find(entry => entry.value === item)?.label ?? item
-              : result.otherCategoryDescription ?? item;
+        response.data.forEach(result => {
+          const translatedCategories: string[] = result.categories
+            ? (result.categories as []).map(item => {
+                return item !== 'NONE'
+                  ? categoriesItems.find(entry => entry.value === item)?.label ?? item
+                  : result.otherCategoryDescription ?? item;
+              })
+            : [];
+
+          const translatedCareSettings: string[] = result.careSettings
+            ? (result.careSettings as []).map(item => {
+                return careSettingsItems.find(entry => entry.value === item)?.label ?? item;
+              })
+            : [];
+
+          const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
+            ? (result.diseasesAndConditions as []).map(item => {
+                return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
+              })
+            : [];
+
+          const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
+            ? (result.keyHealthInequalities as []).map(item => {
+                return item === 'NONE'
+                  ? 'None'
+                  : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
+              })
+            : [];
+
+          const translatedAacInvolvement: string[] = result.involvedAACProgrammes
+            ? (result.involvedAACProgrammes as []).map(item => {
+                return item === 'No' ? 'None' : item;
+              })
+            : [];
+
+          const engagingUnits = result.engagingUnits
+            ? (
+                result.engagingUnits as {
+                  unitId: string;
+                  name: string;
+                  acronym: string;
+                }[]
+              ).map(unit => unit.acronym)
+            : [];
 
           const innovationData: InnovationCardData = {
             innovationId: result.id,
             innovationName: result.name,
-            ownerName: 'TODO',
+            ownerName: result.owner.name && 'Deleted user',
             countryName: result.countryName,
-            postCode: 'TODO-123',
+            postCode: result.postcode,
             categories: translatedCategories,
-            careSettings: result.careSettings,
-            diseasesAndConditions: result.diseasesAndConditions,
-            healthInequalities: result.keyHealthInequalities,
-            aacInvolvement: result.involvedAACProgrammes,
+            careSettings: translatedCareSettings,
+            diseasesAndConditions: translatedDiseasesAndConditions,
+            keyHealthInequalities: translatedKeyHealthInequalities,
+            involvedAACProgrammes: translatedAacInvolvement,
             submittedAt: result.submittedAt,
-            engagingUnits: [(result.engagingUnits as { unitId: string; name: string; acronym: string }[])[0].acronym],
+            engagingUnits: engagingUnits,
             supportStatus: {
               status: result.support.status,
               updatedAt: result.support.updatedAt || ''
+            },
+            innovationStatus: {
+              status: result.groupedStatus,
+              updatedAt: result.updatedAt
             }
-
           };
 
+          this.innovationCardsData.push(innovationData);
         });
+
+        this.setPageStatus('READY');
       });
   }
 
@@ -507,19 +334,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.filters.filter(i => i.selected.length > 0).length > 0 ||
       !!this.form.get('assignedToMe')?.value ||
       !!this.form.get('suggestedOnly')?.value;
-
-    // this.filtersList = {
-    //   name: this.form.get('search')?.value,
-    //   mainCategories: this.form.get('mainCategories')?.value,
-    //   locations: this.form.get('locations')?.value,
-    //   engagingOrganisations: this.form.get('engagingOrganisations')?.value,
-    //   supportStatuses: this.form.get('supportStatuses')?.value,
-    //   groupedStatuses: this.form.get('groupedStatuses')?.value,
-    //   ...(this.stores.authentication.isAccessorType() && {
-    //     assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-    //     suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
-    //   })
-    // };
 
     this.pageNumber = 1;
 
@@ -556,78 +370,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onPageChange(event: { pageNumber: number }): void {
     this.pageNumber = event.pageNumber;
     this.getInnovationsList();
-  }
-
-  parseCardInfo(supportData: InnovationsListInDTO['data'][0]): InnovationCardData {
-    const engagingUnits: string[] =
-      supportData.supports?.filter(item => item.status === 'ENGAGING').map(item => item.organisation.unit.acronym) ??
-      [];
-
-    const parsedMainCategories: string[] = supportData.mainCategory!.map(item => {
-      return item !== 'NONE'
-        ? categoriesItems.find(entry => entry.value === item)?.label ?? item
-        : supportData.otherMainCategoryDescription ?? item;
-    });
-
-    const parsedCareSettings: string[] = supportData.careSettings.map(item => {
-      return careSettingsItems.find(entry => entry.value === item)?.label ?? item;
-    });
-
-    const parsedDiseasesAndConditions: string[] = supportData.diseasesAndConditions.map(item => {
-      return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
-    });
-
-    const parsedHealthInequalities: string[] = supportData.diseasesAndConditions.map(item => {
-      return item === 'NONE' ? 'None' : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
-    });
-
-    const parsedAacInvolvement: string[] = supportData.diseasesAndConditions.map(item => {
-      return item === 'No' ? 'None' : item;
-    });
-
-    const currentStatus:
-      | {
-          id: string;
-          status: InnovationSupportStatusEnum;
-          updatedAt: DateISOType;
-          organisation: {
-            id: string;
-            name: string;
-            acronym: null | string;
-            unit: {
-              id: string;
-              name: string;
-              acronym: string;
-              users?: { name: string; role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[];
-            };
-          };
-        }
-      | undefined = supportData.supports?.find(
-      element => element.organisation.id === this.currentUserContext?.organisation?.id
-    );
-
-    return {
-      innovationId: supportData.id,
-      innovationName: supportData.name,
-      ownerName: supportData.ownerName,
-      countryName: supportData.countryName ?? '',
-      postCode: supportData.postCode ?? '',
-      categories: parsedMainCategories,
-      careSettings: parsedCareSettings,
-      diseasesAndConditions: parsedDiseasesAndConditions,
-      healthInequalities: [],
-      aacInvolvement: ['None'],
-      submittedAt: supportData.submittedAt,
-      engagingUnits: engagingUnits,
-      supportStatus: {
-        status: currentStatus?.status ?? 'UNASSIGNED',
-        updatedAt: currentStatus?.updatedAt ?? supportData.submittedAt!
-      },
-      innovationStatus: {
-        status: supportData.groupedStatus ?? '',
-        updatedAt: supportData.statusUpdatedAt ?? supportData.submittedAt!
-      }
-    };
   }
 
   onSearchClick() {

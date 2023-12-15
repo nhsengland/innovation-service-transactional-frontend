@@ -40,14 +40,14 @@
       <ng-container *ngIf="isAdminType">
         <li>
           <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
-          <ng-container *ngIf="innovationCardData.healthInequalities.length > 0; else none">
-            <span *ngFor="let item of innovationCardData.healthInequalities">{{ "shared.catalog.innovation.healthInequalities." + item | translate }}. </span>
+          <ng-container *ngIf="innovationCardData.keyHealthInequalities.length > 0; else none">
+            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ "shared.catalog.innovation.keyHealthInequalities." + item | translate }}. </span>
           </ng-container>
         </li>
 
         <li>
           <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
-          <span *ngFor="let item of innovationCardData.aacInvolvement">{{ item }}. </span>
+          <span *ngFor="let item of innovationCardData.involvedAACProgrammes">{{ item }}. </span>
         </li>
       </ng-container>
 

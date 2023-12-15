@@ -1,11 +1,16 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
-      <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name, company or email</h2>
+      <ng-container *ngIf="isAdminType">
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name, company or email</h2>
+      </ng-container>
+      <ng-container *ngIf="isAccessorType">
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
+      </ng-container>
       <form [formGroup]="form">
         <theme-form-input controlName="search" [pageUniqueField]="false">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px" aria-label="Search">
               <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
                 <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
               </svg>
@@ -46,7 +51,7 @@
     </div>
 
     <div class="nhsuk-grid-column-three-quarters">
-      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">{{ innovationCardsData.length }} innovations</p>
+      <p class="nhsuk-u-margin-bottom-0 nhsuk-u-font-weight-bold">{{ innovationsCount }} innovations</p>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
         <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
@@ -92,16 +97,14 @@
       <ng-container *ngIf="innovationCardsData.length > 0">
         <dl class="nhsuk-summary-list">
           <ng-container *ngFor="let item of innovationCardsData">
-            <!-- <ng-container *ngFor="let item of innovationsList.getRecords()"> -->
-
             <theme-advanced-search-innovation-card [innovationCardData]="item" />
           </ng-container>
         </dl>
-
-        <div class="nhsuk-u-padding-bottom-4">
-          <theme-pagination [currentPage]="pageNumber" [pageSize]="pageSize" [totalRows]="innovationCardsData.length" (updatePageEvent)="onPageChange($event)"></theme-pagination>
-        </div>
       </ng-container>
+
+      <div class="nhsuk-u-padding-bottom-4">
+        <theme-pagination [currentPage]="pageNumber" [pageSize]="pageSize" [totalRows]="innovationsCount" (updatePageEvent)="onPageChange($event)"></theme-pagination>
+      </div>
     </div>
   </div>
 </theme-content-wrapper>
