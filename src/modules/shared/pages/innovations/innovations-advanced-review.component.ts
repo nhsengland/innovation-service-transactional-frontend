@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { catchError, debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
@@ -14,6 +14,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { of } from 'rxjs';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -190,6 +191,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             skip,
             take
           }
+        )
+        .pipe(
+          catchError(() => {
+            return of('LOG:: Giving error on Innovation List 2.0');
+          })
         )
         .subscribe(response => {
           console.log(response);
