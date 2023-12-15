@@ -14,24 +14,8 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
-
-type AdvancedReviewSortByKeys =
-  | 'statusUpdatedAt'
-  | 'recordUpdatedAt'
-  | 'submittedAt'
-  | 'name'
-  | 'companyName'
-  | 'location';
-
-type AdvancedReviewSortByKeysType = {
-  [key in AdvancedReviewSortByKeys]: {
-    selectData: { key: AdvancedReviewSortByKeys; text: string };
-    order: 'ascending' | 'descending';
-  };
-};
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -59,9 +43,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     },
     { updateOn: 'change' }
   );
-
-  advancedReviewSortByData: AdvancedReviewSortByKeysType;
-  sortByComponentInputList: { key: string; text: string }[] = [];
 
   anyFilterSelected = false;
   filters: {
@@ -105,51 +86,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.setPageTitle('Innovations advanced search');
 
-    this.advancedReviewSortByData = {
-      statusUpdatedAt: {
-        selectData: {
-          key: 'statusUpdatedAt',
-          text: 'Last status update'
-        },
-        order: 'descending'
-      },
-      recordUpdatedAt: {
-        selectData: {
-          key: 'recordUpdatedAt',
-          text: 'Last updated record'
-        },
-        order: 'descending'
-      },
-      submittedAt: {
-        selectData: {
-          key: 'submittedAt',
-          text: 'Last submitted innovation'
-        },
-        order: 'descending'
-      },
-      name: {
-        selectData: {
-          key: 'name',
-          text: 'Innovation name'
-        },
-        order: 'ascending'
-      },
-      companyName: {
-        selectData: {
-          key: 'companyName',
-          text: 'Company name'
-        },
-        order: 'ascending'
-      },
-      location: {
-        selectData: {
-          key: 'location',
-          text: 'Location'
-        },
-        order: 'ascending'
-      }
-    };
-
     if (this.stores.authentication.isAdminRole()) {
       this.setPageTitle('Innovations');
     }
@@ -173,24 +109,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         engagingOrgs: { label: 'Engaging orgs', align: 'right', orderable: false }
       };
       orderBy.key = 'updatedAt';
-
-      this.sortByComponentInputList = [
-        this.advancedReviewSortByData.recordUpdatedAt.selectData,
-        this.advancedReviewSortByData.submittedAt.selectData,
-        this.advancedReviewSortByData.name.selectData,
-        this.advancedReviewSortByData.companyName.selectData,
-        this.advancedReviewSortByData.location.selectData
-      ];
-    }
-
-    if (this.stores.authentication.isQualifyingAccessorRole() || this.stores.authentication.isAccessorRole()) {
-      this.sortByComponentInputList = [
-        this.advancedReviewSortByData.statusUpdatedAt.selectData,
-        this.advancedReviewSortByData.submittedAt.selectData,
-        this.advancedReviewSortByData.name.selectData,
-        this.advancedReviewSortByData.companyName.selectData,
-        this.advancedReviewSortByData.location.selectData
-      ];
     }
 
     this.innovationsList.setVisibleColumns(columns).setOrderBy(orderBy.key, orderBy.order);
@@ -351,13 +269,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onTableOrder(column: string): void {
     this.innovationsList.setOrderBy(column);
     this.getInnovationsList(column);
-  }
-
-  onSortByChange(sortByKey: string) {
-    this.innovationsList.orderBy = sortByKey;
-    this.innovationsList.orderDir = this.advancedReviewSortByData[sortByKey as AdvancedReviewSortByKeys].order;
-
-    this.getInnovationsList();
   }
 
   onOpenCloseFilter(filterKey: FilterKeysType): void {

@@ -37,10 +37,8 @@
     </div>
 
     <div class="nhsuk-grid-column-three-quarters">
-      <div class="d-flex justify-content-space-between align-items-center">
-        <p class="nhsuk-u-margin-bottom-0">{{ innovationsList.getTotalRowsNumber() }} records found</p>
-        <theme-select-component [id]="'sortBy'" [label]="'Sort by'" [selectList]="sortByComponentInputList" (selectChanged)="onSortByChange($event)" />
-      </div>
+      <p class="nhsuk-u-margin-bottom-0">{{ innovationsList.getTotalRowsNumber() }} records found</p>
+
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
         <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
 
