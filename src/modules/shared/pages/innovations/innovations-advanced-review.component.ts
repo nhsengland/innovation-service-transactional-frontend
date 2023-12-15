@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { catchError, debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 

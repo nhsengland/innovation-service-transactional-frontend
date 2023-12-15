@@ -37,6 +37,8 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { TagComponent } from './components/tag/tag.component';
 import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
+import { SelectComponent } from './components/search/select.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -45,7 +47,9 @@ import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/inn
     TranslateModule.forChild(),
 
     // Angular Material.
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+
+    FormsModule
   ],
   declarations: [
     // Base.
@@ -82,7 +86,9 @@ import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/inn
 
     GoToTopComponent,
 
-    InnovationAdvancedSearchCardComponent
+    InnovationAdvancedSearchCardComponent,
+
+    SelectComponent
   ],
   providers: [],
   exports: [
@@ -121,6 +127,8 @@ import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/inn
     InnovationRecordExportComponent,
 
     GoToTopComponent,
+
+    SelectComponent,
 
     InnovationAdvancedSearchCardComponent
   ]
