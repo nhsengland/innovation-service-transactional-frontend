@@ -33,7 +33,6 @@
         <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
         <ng-container *ngIf="innovationCardData.diseasesAndConditions.length > 0; else none">
           <span *ngFor="let item of innovationCardData.diseasesAndConditions">{{ item }}. </span>
-          <!-- <span *ngFor="let item of innovationCardData.diseasesAndConditions">{{ "shared.catalog.innovation.diseasesConditionsImpactItems." + item | translate }}. </span> -->
         </ng-container>
       </li>
 
@@ -41,12 +40,13 @@
         <li>
           <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
           <ng-container *ngIf="innovationCardData.keyHealthInequalities.length > 0; else none">
-            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ "shared.catalog.innovation.keyHealthInequalities." + item | translate }}. </span>
+            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ item }}. </span>
           </ng-container>
         </li>
 
         <li>
           <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
+          <ng-container *ngIf="innovationCardData.involvedAACProgrammes.length > 0; else none"></ng-container>
           <span *ngFor="let item of innovationCardData.involvedAACProgrammes">{{ item }}. </span>
         </li>
       </ng-container>
@@ -76,7 +76,7 @@
             type="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.cssColorClass' | translate }}"
             label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.name' | translate }}"
         /></span>
-        <span class="font-color-secondary"> Status updated on {{ innovationCardData.supportStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
+        <span class="font-color-secondary"> Record last updated on {{ innovationCardData.innovationStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
       </li>
       <ng-template #none>
         <span>None. </span>

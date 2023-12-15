@@ -2,10 +2,10 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
       <ng-container *ngIf="isAdminType">
-        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name, company or email</h2>
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or email</h2>
       </ng-container>
       <ng-container *ngIf="isAccessorType">
-        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
+        <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name</h2>
       </ng-container>
       <form [formGroup]="form">
         <theme-form-input controlName="search" [pageUniqueField]="false">
@@ -81,7 +81,7 @@
         </ng-container>
       </dl>
 
-      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+      <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
 
       <ng-container *ngIf="innovationCardsData.length === 0">
         <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
