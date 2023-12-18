@@ -57,7 +57,7 @@ export type InnovationsListInDTO = {
     updatedAt: null | DateISOType;
     countryName: null | string;
     postCode: null | string;
-    mainCategory: null | string[];
+    mainCategory: null | string;
     ownerName: string;
     careSettings: string[];
     diseasesAndConditions: string[];
