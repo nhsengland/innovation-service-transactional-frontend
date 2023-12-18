@@ -12,8 +12,6 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { AuthenticationStore } from '@modules/stores';
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import {
   careSettingsItems,
@@ -46,8 +44,6 @@ type AdvancedReviewSortByKeysType = {
 })
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
   baseUrl: string;
-
-  currentUserContext: AuthenticationModel['userContext'];
 
   isAdminType: boolean = false;
   isAccessorType: boolean = false;
@@ -120,8 +116,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   constructor(
     private innovationsService: InnovationsService,
-    private organisationsService: OrganisationsService,
-    private authenticationStore: AuthenticationStore
+    private organisationsService: OrganisationsService
   ) {
     super();
 
@@ -141,7 +136,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.setPageTitle('Advanced search');
 
-    if (this.stores.authentication.isAdminRole()) {
+    if (this.isAdminType) {
       this.setPageTitle('Innovations');
     }
 
@@ -196,9 +191,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ngOnInit(): void {
     let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'supportStatuses'];
 
-    this.currentUserContext = this.authenticationStore.getUserContextInfo();
-
-    if (this.stores.authentication.isAdminRole()) {
+    if (this.isAdminType) {
       filters = ['engagingOrganisations', 'groupedStatuses'];
       this.form.get('suggestedOnly')?.setValue(false);
       this.datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(groupedStatus => ({
@@ -220,7 +213,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
-        if (this.stores.authentication.isAdminRole() === true) {
+        if (this.isAdminType === true) {
           this.datasets.engagingOrganisations = response.map(i => ({ label: i.name, value: i.id }));
         } else {
           const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
@@ -231,7 +224,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         // If we have previous filters, set them
         const previousFilters = sessionStorage.getItem('innovationListFilters');
-        console.log(previousFilters);
+
         if (previousFilters) {
           const filters = JSON.parse(previousFilters);
           Object.entries(filters).forEach(([key, value]) => {
