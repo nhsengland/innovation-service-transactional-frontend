@@ -317,15 +317,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         response.data.forEach(result => {
           const translatedCategories: string[] = result.categories
-            ? (result.categories as []).map(item => {
-                return item !== 'NONE'
+            ? result.categories.map(item => {
+                return item !== 'OTHER'
                   ? categoriesItems.find(entry => entry.value === item)?.label ?? item
                   : result.otherCategoryDescription ?? item;
               })
             : [];
 
           const translatedCareSettings: string[] = result.careSettings
-            ? (result.careSettings as []).map(item => {
+            ? result.careSettings.map(item => {
                 return item !== 'OTHER'
                   ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
                   : result.otherCareSetting ?? item;
@@ -333,13 +333,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             : [];
 
           const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
-            ? (result.diseasesAndConditions as []).map(item => {
+            ? result.diseasesAndConditions.map(item => {
                 return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
               })
             : [];
 
           const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
-            ? (result.keyHealthInequalities as []).map(item => {
+            ? result.keyHealthInequalities.map(item => {
                 return item === 'NONE'
                   ? 'None'
                   : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
@@ -347,20 +347,12 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             : [];
 
           const translatedAacInvolvement: string[] = result.involvedAACProgrammes
-            ? (result.involvedAACProgrammes as []).map(item => {
+            ? result.involvedAACProgrammes.map(item => {
                 return item === 'No' ? 'None' : item;
               })
             : [];
 
-          const engagingUnits = result.engagingUnits
-            ? (
-                result.engagingUnits as {
-                  unitId: string;
-                  name: string;
-                  acronym: string;
-                }[]
-              ).map(unit => unit.acronym)
-            : [];
+          const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
           const innovationData: InnovationCardData = {
             id: result.id,
