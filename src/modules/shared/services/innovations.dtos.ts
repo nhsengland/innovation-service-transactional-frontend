@@ -121,6 +121,7 @@ export type InnovationListSelectType =
   // Relation fields
   | 'owner.id'
   | 'owner.name'
+  | 'owner.companyName'
   | 'engagingOrganisations'
   | 'engagingUnits'
   | 'suggestedOrganisations'
@@ -151,7 +152,7 @@ export type InnovationListNewFullDTO = {
   engagingOrganisations: { organisationId: string; name: string; acronym: string }[];
   engagingUnits: { unitId: string; name: string; acronym: string }[];
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
-  owner: { id: string; name: string } | null;
+  owner: { id: string; name: string | null; companyName: string | null } | null;
   support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
 };
 

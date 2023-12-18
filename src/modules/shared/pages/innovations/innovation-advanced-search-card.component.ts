@@ -3,10 +3,10 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 
 export type InnovationCardData = {
-  innovationId: string;
-  innovationName: string;
-  ownerName: string;
-  countryName: string;
+  id: string;
+  name: string;
+  owner: string;
+  countryName?: string | null;
   postCode: null | string;
   categories: string[];
   careSettings: string[];

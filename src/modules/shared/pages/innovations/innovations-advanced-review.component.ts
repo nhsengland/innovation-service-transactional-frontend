@@ -1,24 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { catchError, debounceTime } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-import {
-  InnovationListNewFullDTO,
-  InnovationListSelectType,
-  InnovationsListInDTO
-} from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { AuthenticationStore, InnovationService } from '@modules/stores';
+import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import {
@@ -28,9 +22,23 @@ import {
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-import { KeysUnion } from '@modules/core/helpers/types.helper';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
+
+type AdvancedReviewSortByKeys =
+  | 'support.updatedAt'
+  | 'updatedAt'
+  | 'submittedAt'
+  | 'name'
+  | 'owner.companyName'
+  | 'countryName';
+
+type AdvancedReviewSortByKeysType = {
+  [key in AdvancedReviewSortByKeys]: {
+    text: string;
+    order: 'ascending' | 'descending';
+  };
+};
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -46,12 +54,26 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   pageSize: number = 20;
   pageNumber: number = 1;
-  filtersList: { [filter: string]: string } | {} = {};
-  orderBy: InnovationListSelectType = 'updatedAt';
+  orderBy: AdvancedReviewSortByKeys = 'updatedAt';
   orderDir: 'ascending' | 'descending' = 'descending';
+
+  paginationParams: {
+    take: number;
+    skip: number;
+    order: { [Property in AdvancedReviewSortByKeys]?: 'ASC' | 'DESC' };
+  } = {
+    take: this.pageSize,
+    skip: (this.pageNumber - 1) * this.pageSize,
+    order: { [this.orderBy]: this.orderDir }
+  };
+
+  filtersList: { [filter: string]: string } | {} = {};
 
   innovationCardsData: InnovationCardData[] = [];
   innovationsCount: number = 0;
+
+  sortByData: AdvancedReviewSortByKeysType;
+  sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
 
   form = new FormGroup(
     {
@@ -123,10 +145,51 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.setPageTitle('Innovations');
     }
 
-    const orderBy: { key: string; order?: 'descending' | 'ascending' } = { key: 'submittedAt', order: 'descending' };
+    this.sortByData = {
+      'support.updatedAt': {
+        text: 'Last status update',
+        order: 'descending'
+      },
+      updatedAt: {
+        text: 'Last updated record',
+        order: 'descending'
+      },
+      submittedAt: {
+        text: 'Last submitted innovation',
+        order: 'descending'
+      },
+      name: {
+        text: 'Innovation name',
+        order: 'ascending'
+      },
+      'owner.companyName': {
+        text: 'Company name',
+        order: 'ascending'
+      },
+      countryName: {
+        text: 'Location',
+        order: 'ascending'
+      }
+    };
 
-    if (this.stores.authentication.isAdminRole()) {
+    this.sortByComponentInputList = [
+      { key: 'submittedAt', text: this.sortByData.submittedAt.text },
+      { key: 'name', text: this.sortByData.name.text },
+      { key: 'owner.companyName', text: this.sortByData['owner.companyName'].text },
+      { key: 'countryName', text: this.sortByData.countryName.text }
+    ];
+
+    if (this.isAdminType) {
       this.orderBy = 'updatedAt';
+      this.sortByComponentInputList.splice(0, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
+    }
+
+    if (this.isAccessorType) {
+      this.orderBy = 'support.updatedAt';
+      this.sortByComponentInputList.splice(0, 0, {
+        key: 'support.updatedAt',
+        text: this.sortByData['support.updatedAt'].text
+      });
     }
   }
 
@@ -196,13 +259,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   getInnovationsList(): void {
     this.setPageStatus('LOADING');
 
-    const paginationParams = {
-      take: this.pageSize,
-      skip: (this.pageNumber - 1) * this.pageSize,
-      order: this.orderBy
-        ? { [this.orderBy]: ['none', 'ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' }
-        : undefined
-    };
+    this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
+    this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
     const apiQueryFilters = {
       ...(this.form.get('search')?.value ? { search: this.form.get('search')?.value as string } : { search: '' }),
@@ -212,6 +270,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       ...(this.form.get('engagingOrganisations')?.value
         ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
         : null),
+      // ...(this.form.get('groupedStatuses')?.value
+      //   ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
+      //   : null),
       ...(this.stores.authentication.isAccessorType() && {
         supportStatuses: this.form.get('supportStatuses')?.value ?? undefined,
         assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
@@ -227,7 +288,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'submittedAt',
       'updatedAt',
       'careSettings',
-      // 'otherCareSetting',
+      'otherCareSetting',
       'categories',
       'countryName',
       'diseasesAndConditions',
@@ -237,94 +298,98 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'otherCategoryDescription',
       'postcode',
       'owner.name',
+      'owner.companyName',
       'engagingUnits',
       'support.status',
       'support.updatedAt'
     ];
 
     if (this.isAdminType) {
+      // filter out unavailable fields if Admin
       queryFields = queryFields.filter(item => !['support.status', 'support.updatedAt'].includes(item));
     }
 
-    this.innovationsService.getInnovationsList2(queryFields, apiQueryFilters, paginationParams).subscribe(response => {
-      this.innovationsCount = response.count;
-      this.innovationCardsData = [];
+    this.innovationsService
+      .getInnovationsList2(queryFields, apiQueryFilters, this.paginationParams)
+      .subscribe(response => {
+        this.innovationsCount = response.count;
+        this.innovationCardsData = [];
 
-      response.data.forEach(result => {
-        const translatedCategories: string[] = result.categories
-          ? (result.categories as []).map(item => {
-              return item !== 'NONE'
-                ? categoriesItems.find(entry => entry.value === item)?.label ?? item
-                : result.otherCategoryDescription ?? item;
-            })
-          : [];
+        response.data.forEach(result => {
+          const translatedCategories: string[] = result.categories
+            ? (result.categories as []).map(item => {
+                return item !== 'NONE'
+                  ? categoriesItems.find(entry => entry.value === item)?.label ?? item
+                  : result.otherCategoryDescription ?? item;
+              })
+            : [];
 
-        const translatedCareSettings: string[] = result.careSettings
-          ? (result.careSettings as []).map(item => {
-              return item !== 'OTHER'
-                ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
-                : result.otherCareSetting;
-            })
-          : [];
+          const translatedCareSettings: string[] = result.careSettings
+            ? (result.careSettings as []).map(item => {
+                return item !== 'OTHER'
+                  ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
+                  : result.otherCareSetting ?? item;
+              })
+            : [];
 
-        const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
-          ? (result.diseasesAndConditions as []).map(item => {
-              return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
-            })
-          : [];
+          const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
+            ? (result.diseasesAndConditions as []).map(item => {
+                return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
+              })
+            : [];
 
-        const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
-          ? (result.keyHealthInequalities as []).map(item => {
-              return item === 'NONE'
-                ? 'None'
-                : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
-            })
-          : [];
+          const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
+            ? (result.keyHealthInequalities as []).map(item => {
+                return item === 'NONE'
+                  ? 'None'
+                  : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
+              })
+            : [];
 
-        const translatedAacInvolvement: string[] = result.involvedAACProgrammes
-          ? (result.involvedAACProgrammes as []).map(item => {
-              return item === 'No' ? 'None' : item;
-            })
-          : [];
+          const translatedAacInvolvement: string[] = result.involvedAACProgrammes
+            ? (result.involvedAACProgrammes as []).map(item => {
+                return item === 'No' ? 'None' : item;
+              })
+            : [];
 
-        const engagingUnits = result.engagingUnits
-          ? (
-              result.engagingUnits as {
-                unitId: string;
-                name: string;
-                acronym: string;
-              }[]
-            ).map(unit => unit.acronym)
-          : [];
+          const engagingUnits = result.engagingUnits
+            ? (
+                result.engagingUnits as {
+                  unitId: string;
+                  name: string;
+                  acronym: string;
+                }[]
+              ).map(unit => unit.acronym)
+            : [];
 
-        const innovationData: InnovationCardData = {
-          innovationId: result.id,
-          innovationName: result.name,
-          ownerName: result.owner ? result.owner.name : 'Deleted user',
-          countryName: result.countryName,
-          postCode: result.postcode,
-          categories: translatedCategories,
-          careSettings: translatedCareSettings,
-          diseasesAndConditions: translatedDiseasesAndConditions,
-          keyHealthInequalities: translatedKeyHealthInequalities,
-          involvedAACProgrammes: translatedAacInvolvement,
-          submittedAt: result.submittedAt,
-          engagingUnits: engagingUnits,
-          supportStatus: {
-            status: result.support ? result.support.status : '',
-            updatedAt: result.support ? result.support.updatedAt! : ''
-          },
-          innovationStatus: {
-            status: result.groupedStatus,
-            updatedAt: result.updatedAt
-          }
-        };
+          const innovationData: InnovationCardData = {
+            id: result.id,
+            name: result.name,
+            owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
+            countryName: result.countryName ?? null,
+            postCode: result.postcode,
+            categories: translatedCategories,
+            careSettings: translatedCareSettings,
+            diseasesAndConditions: translatedDiseasesAndConditions,
+            keyHealthInequalities: translatedKeyHealthInequalities,
+            involvedAACProgrammes: translatedAacInvolvement,
+            submittedAt: result.submittedAt,
+            engagingUnits: engagingUnits,
+            supportStatus: {
+              status: result.support ? result.support.status : '',
+              updatedAt: result.support ? result.support.updatedAt! : ''
+            },
+            innovationStatus: {
+              status: result.groupedStatus,
+              updatedAt: result.updatedAt
+            }
+          };
 
-        this.innovationCardsData.push(innovationData);
+          this.innovationCardsData.push(innovationData);
+        });
+
+        this.setPageStatus('READY');
       });
-
-      this.setPageStatus('READY');
-    });
   }
 
   onFormChange(): void {
@@ -380,5 +445,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   onSearchClick() {
     this.form.updateValueAndValidity({ onlySelf: true });
+  }
+
+  onSortByChange(selectKey: string): void {
+    this.orderBy = selectKey as AdvancedReviewSortByKeys;
+    this.orderDir = this.sortByData[selectKey as AdvancedReviewSortByKeys].order;
+    this.getInnovationsList();
   }
 }
