@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { UtilsHelper } from '../helpers/utils.helper';
 
 type AlignType = 'left' | 'right' | 'center';
 
@@ -204,7 +204,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
         ? this.filters
         : Object.entries(this.filters).reduce((acc, [key, value]) => {
             // Maybe it should only be undefined but think we never filter by null so we should strip it
-            if (value != null && !isEmpty(value)) {
+            if (value != null && !UtilsHelper.isEmpty(value)) {
               acc[key as keyof F] = value;
             }
             return acc;
