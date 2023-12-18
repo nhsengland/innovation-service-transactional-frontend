@@ -121,7 +121,16 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
               { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
             ];
-            this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
+
+            const previousUrl = this.stores.context.getPreviousUrl();
+
+            this.setBackLink(
+              'Go back',
+              previousUrl?.endsWith('/new')
+                ? `/assessment/innovations/${this.innovationId}/overview`
+                : `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`
+            );
+
             break;
           case 2:
             this.form.sections = [
