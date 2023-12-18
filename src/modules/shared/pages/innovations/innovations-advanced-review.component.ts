@@ -198,25 +198,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.currentUserContext = this.authenticationStore.getUserContextInfo();
 
-    // If we have previous filters, set them
-    const previousFilters = sessionStorage.getItem('innovationListFilters');
-    if (previousFilters) {
-      const filters = JSON.parse(previousFilters);
-      Object.entries(filters).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((v: string) => {
-            const formFilter = this.form.get(key) as FormArray;
-            formFilter.push(new FormControl(v), { emitEvent: false });
-          });
-        } else {
-          this.form.get(key)?.setValue(value, { emitEvent: false });
-        }
-      });
-    }
-
-    // Formchange must be triggered only after organisations are loaded so that it is populated
-    this.onFormChange();
-
     if (this.stores.authentication.isAdminRole()) {
       filters = ['engagingOrganisations', 'groupedStatuses'];
       this.form.get('suggestedOnly')?.setValue(false);
@@ -247,6 +228,26 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             .filter(i => i.id !== myOrganisation)
             .map(i => ({ label: i.name, value: i.id }));
         }
+
+        // If we have previous filters, set them
+        const previousFilters = sessionStorage.getItem('innovationListFilters');
+        console.log(previousFilters);
+        if (previousFilters) {
+          const filters = JSON.parse(previousFilters);
+          Object.entries(filters).forEach(([key, value]) => {
+            if (Array.isArray(value)) {
+              value.forEach((v: string) => {
+                const formFilter = this.form.get(key) as FormArray;
+                formFilter.push(new FormControl(v), { emitEvent: false });
+              });
+            } else {
+              this.form.get(key)?.setValue(value, { emitEvent: false });
+            }
+          });
+        }
+
+        // Formchange must be triggered only after organisations are loaded so that it is populated
+        this.onFormChange();
       },
       error: error => {
         this.logger.error(error);
@@ -270,9 +271,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       ...(this.form.get('engagingOrganisations')?.value
         ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
         : null),
-      // ...(this.form.get('groupedStatuses')?.value
-      //   ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
-      //   : null),
+      ...(this.form.get('groupedStatuses')?.value
+        ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
+        : null),
       ...(this.stores.authentication.isAccessorType() && {
         supportStatuses: this.form.get('supportStatuses')?.value ?? undefined,
         assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
