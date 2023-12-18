@@ -6,9 +6,9 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormArray, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { ActivityLogTypesEnum, ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 import { InnovationActivityLogListDTO } from '@modules/shared/services/innovations.dtos';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ACTIVITY_LOG_ITEMS, ActivityLogTypesEnum } from '@modules/stores/innovation';
 
 import { DatesHelper } from '@app/base/helpers';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -124,11 +124,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     this.innovation = this.stores.context.getInnovation();
 
     this.setPageTitle('Activity log');
-    this.setBackLink(
-      'Go back',
-      `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`,
-      `to ${this.innovation.name} innovation`
-    );
+    this.setBackLink('Go back');
 
     this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';
