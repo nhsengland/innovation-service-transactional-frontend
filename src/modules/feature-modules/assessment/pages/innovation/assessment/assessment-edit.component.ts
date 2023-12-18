@@ -25,6 +25,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
+  entrypointUrl: string = '';
+
   form: {
     sections: {
       title: string;
@@ -68,6 +70,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
   ngOnInit(): void {
+    this.entrypointUrl = this.stores.context.getPreviousUrl() ?? '';
+
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
@@ -109,7 +113,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
         this.stepId = Number(params.stepId);
-
         if (!this.isValidStepId()) {
           this.redirectTo('/not-found');
           return;
@@ -121,14 +124,11 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
               { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
             ];
-
-            const previousUrl = this.stores.context.getPreviousUrl();
-
             this.setBackLink(
               'Go back',
-              previousUrl?.endsWith('/new')
+              this.entrypointUrl.endsWith('/new')
                 ? `/assessment/innovations/${this.innovationId}/overview`
-                : `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`
+                : this.entrypointUrl
             );
 
             break;
@@ -137,6 +137,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
+
             this.setBackLink(
               'Go back',
               `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`
@@ -156,6 +157,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
   }
+
+  handleGoBack() {}
 
   onSubmit(
     action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'
