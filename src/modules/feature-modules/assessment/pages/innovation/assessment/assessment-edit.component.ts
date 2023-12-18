@@ -113,6 +113,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
         this.stepId = Number(params.stepId);
+
         if (!this.isValidStepId()) {
           this.redirectTo('/not-found');
           return;
@@ -137,7 +138,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
-
             this.setBackLink(
               'Go back',
               `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`
@@ -157,8 +157,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       })
     );
   }
-
-  handleGoBack() {}
 
   onSubmit(
     action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'
