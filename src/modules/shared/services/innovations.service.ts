@@ -286,6 +286,7 @@ export class InnovationsService extends CoreService {
   getInnovationsList2<
     // filters
     F extends Partial<{
+      search: string;
       assignedToMe: boolean;
       engagingOrganisations?: string[];
       locations: catalogOfficeLocation[];

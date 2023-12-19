@@ -36,6 +36,7 @@ import { PaginationComponent } from './components/pagination/pagination.componen
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { TagComponent } from './components/tag/tag.component';
+import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 import { SelectComponent } from './components/search/select.component';
 import { FormsModule } from '@angular/forms';
 
@@ -85,6 +86,8 @@ import { FormsModule } from '@angular/forms';
 
     GoToTopComponent,
 
+    InnovationAdvancedSearchCardComponent,
+
     SelectComponent
   ],
   providers: [],
@@ -125,7 +128,9 @@ import { FormsModule } from '@angular/forms';
 
     GoToTopComponent,
 
-    SelectComponent
+    SelectComponent,
+
+    InnovationAdvancedSearchCardComponent
   ]
 })
 export class ThemeModule {}
