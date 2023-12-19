@@ -3,22 +3,33 @@ import { InnovationSectionEnum } from '../innovation.enums';
 import { INNOVATION_SECTION_STATUS } from '../innovation.models';
 import { InnovationSectionsListType } from './ir-versions.types';
 
+import {
+  categoriesItems as SECTIONS_202209_categoriesItems,
+  clinicalEvidenceItems as SECTIONS_202209_evidencetypeItems,
+} from './202209/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202209 } from './202209/main.config';
+import {
+  categoriesItems as SECTIONS_202304_categoriesItems,
+  evidenceTypeItems as SECTIONS_202304_evidenceTypeItems,
+} from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
-import { categoriesItems as SECTIONS_202209_categoriesItems, clinicalEvidenceItems as SECTIONS_202209_evidencetypeItems } from './202209/forms.config';
-import { categoriesItems as SECTIONS_202304_categoriesItems, evidenceTypeItems as SECTIONS_202304_evidenceTypeItems } from './202304/forms.config';
-
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
   sections: {
-    section: string,
-    answers: { label: string; value: string; }[];
+    section: string;
+    answers: { label: string; value: string }[];
   }[];
 }[];
 
-export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
-export const irVersionsClinicalMainCategoryItems = [...SECTIONS_202209_evidencetypeItems, ...SECTIONS_202304_evidenceTypeItems];
+export const irVersionsMainCategoryItems = [
+  ...SECTIONS_202209_categoriesItems,
+  ...SECTIONS_202304_categoriesItems,
+];
+export const irVersionsClinicalMainCategoryItems = [
+  ...SECTIONS_202209_evidencetypeItems,
+  ...SECTIONS_202304_evidenceTypeItems,
+];
 
 // These sections should accept documents/files even before the innovation is submitted for NA.
 export const innovationSectionsWithFiles = [
@@ -26,12 +37,12 @@ export const innovationSectionsWithFiles = [
   'EVIDENCE_OF_EFFECTIVENESS',
   'TESTING_WITH_USERS',
   'REGULATIONS_AND_STANDARDS',
-  'DEPLOYMENT'
+  'DEPLOYMENT',
 ];
 
-
-export function getInnovationRecordConfig(version?: string): InnovationSectionsListType {
-
+export function getInnovationRecordConfig(
+  version?: string,
+): InnovationSectionsListType {
   switch (version) {
     case '202209':
       return SECTIONS_202209;
@@ -39,37 +50,60 @@ export function getInnovationRecordConfig(version?: string): InnovationSectionsL
     default:
       return SECTIONS_202304;
   }
-
 }
 
 export function getAllSectionsSummary(
   data: {
-    section: { id: null | string, section: InnovationSectionEnum, status: keyof typeof INNOVATION_SECTION_STATUS, updatedAt: string },
-    data: MappedObjectType
+    section: {
+      id: null | string;
+      section: InnovationSectionEnum;
+      status: keyof typeof INNOVATION_SECTION_STATUS;
+      updatedAt: string;
+    };
+    data: MappedObjectType;
   }[],
-  version?: string
+  version?: string,
 ): AllSectionsOutboundPayloadType {
+  const sectionMap = new Map(data.map((d) => [d.section.section, d]));
 
-  return getInnovationRecordConfig(version).map(i => ({
+  return getInnovationRecordConfig(version).map((i) => ({
     title: i.title,
-    sections: i.sections.map(s => ({
+    sections: i.sections.map((s) => ({
       section: s.title,
+      status:
+        sectionMap.get(s.id as any)?.section.status ??
+        INNOVATION_SECTION_STATUS.UNKNOWN,
       answers: s.wizard
-        .runSummaryParsing(s.wizard.runInboundParsing(data.find(d => d.section.section === s.id)?.data ?? {}))
-        .filter(item => item.type !== 'button' && !item.isFile)
-        .map(a => ({ label: a.label, value: a.value || '' }))
-    }))
+        .runSummaryParsing(
+          s.wizard.runInboundParsing(sectionMap.get(s.id as any)?.data ?? {}),
+        )
+        .filter((item) => item.type !== 'button' && !item.isFile)
+        .map((a) => ({ label: a.label, value: a.value || '' })),
+    })),
   }));
-
 }
 
-export function getAllSectionsList(): { value: string, label: string }[] {
-  return getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string, label: string }[], sectionGroup, i) => {
-    return [
-      ...sectionGroupAcc,
-      ...sectionGroup.sections.reduce((sectionAcc: { value: string, label: string }[], section, j) => {
-        return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
-      }, [])
-    ];
-  }, [])
-};
+export function getAllSectionsList(): { value: string; label: string }[] {
+  return getInnovationRecordConfig().reduce(
+    (sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
+      return [
+        ...sectionGroupAcc,
+        ...sectionGroup.sections.reduce(
+          (sectionAcc: { value: string; label: string }[], section, j) => {
+            return [
+              ...sectionAcc,
+              ...[
+                {
+                  value: section.id,
+                  label: `${i + 1}.${j + 1} ${section.title}`,
+                },
+              ],
+            ];
+          },
+          [],
+        ),
+      ];
+    },
+    [],
+  );
+}
