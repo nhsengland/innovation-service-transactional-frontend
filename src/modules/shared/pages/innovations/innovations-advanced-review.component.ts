@@ -10,7 +10,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import {
@@ -45,8 +45,8 @@ type AdvancedReviewSortByKeysType = {
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
   baseUrl: string;
 
-  isAdminType: boolean = false;
-  isAccessorType: boolean = false;
+  isAdminType: boolean;
+  isAccessorType: boolean;
 
   pageSize: number = 20;
   pageNumber: number = 1;
@@ -213,7 +213,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
-        if (this.isAdminType === true) {
+        if (this.isAdminType) {
           this.datasets.engagingOrganisations = response.map(i => ({ label: i.name, value: i.id }));
         } else {
           const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;

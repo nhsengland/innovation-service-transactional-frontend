@@ -2,22 +2,23 @@
   <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
     <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-font-weight-normal nhsuk-u-font-size-16">
       <li>
-        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">{{
-          innovationCardData.name
-        }}</a>
+        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
+          {{ innovationCardData.name }}
+        </a>
       </li>
 
       <li>
         <div class="d-flex flex-direction-column">
-          <span
-            >{{ innovationCardData.owner }}.<span *ngIf="innovationCardData.countryName">
-              {{ innovationCardData.countryName }}<span *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</span
-              >.
-            </span></span
-          >
-          <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary"
-            >Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.medium_date" | translate) }}</span
-          >
+          <span>
+            {{ innovationCardData.owner }}.
+            <span *ngIf="innovationCardData.countryName">
+              {{ innovationCardData.countryName }}
+              <span *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }} </span>.
+            </span>
+          </span>
+          <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
+            Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.medium_date" | translate) }}
+          </span>
         </div>
       </li>
 
@@ -70,7 +71,8 @@
           <theme-tag
             type="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.cssColorClass' | translate }}"
             label="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.name' | translate }}"
-        /></span>
+          />
+        </span>
         <span class="font-color-secondary"> Status updated on {{ innovationCardData.supportStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
       </li>
 
@@ -80,7 +82,8 @@
           <theme-tag
             type="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.cssColorClass' | translate }}"
             label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.name' | translate }}"
-        /></span>
+          />
+        </span>
         <span class="font-color-secondary"> Record last updated on {{ innovationCardData.innovationStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
       </li>
 

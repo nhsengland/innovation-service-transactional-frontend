@@ -32,15 +32,15 @@ export type InnovationCardData = {
 export class InnovationAdvancedSearchCardComponent extends CoreComponent {
   baseUrl: string;
 
-  isAdminType: boolean = false;
-  isAccessorType: boolean = false;
+  isAdminType: boolean;
+  isAccessorType: boolean;
 
   @Input({ required: true }) innovationCardData!: InnovationCardData;
 
   constructor() {
     super();
 
-    this.baseUrl = this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
 
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();

@@ -58,9 +58,6 @@ export type InnovationsListInDTO = {
     countryName: null | string;
     postCode: null | string;
     mainCategory: null | string;
-    ownerName: string;
-    careSettings: string[];
-    diseasesAndConditions: string[];
     otherMainCategoryDescription: null | string;
     assessment?: null | {
       id: string;
