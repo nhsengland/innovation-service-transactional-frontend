@@ -289,7 +289,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     }
 
     if (this.stepNumber === 0) {
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
+      const previousUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
+      this.router.navigateByUrl(previousUrl);
     }
   }
 }
