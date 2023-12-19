@@ -53,6 +53,8 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
+    this.setBackLink('Go back');
+
     if (this.sectionId) {
       this.innovationsService
         .getSectionInfo(this.innovationId, this.sectionId, { fields: ['tasks'] })
@@ -67,20 +69,8 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
           this.getTaskInfo();
         });
-
-      this.setBackLink(
-        'Go back',
-        `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections/${
-          this.sectionId
-        }`
-      );
     } else if (this.taskId) {
       this.getTaskInfo();
-
-      this.setBackLink(
-        'Go back',
-        `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/tasks`
-      );
     }
   }
 
