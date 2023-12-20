@@ -48,7 +48,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     super();
     this.setPageTitle('Suggest support organisations');
 
-    this.setBackLink('Go back');
+    this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     this.innovation = this.stores.context.getInnovation();
 
@@ -146,5 +146,19 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         this.setAlertUnknownError();
       }
     });
+  }
+
+  handleGoBack() {
+    switch (this.currentStep) {
+      case 1:
+        this.router.navigateByUrl(
+          this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`
+        );
+        break;
+
+      case 2:
+        this.currentStep = 1;
+        break;
+    }
   }
 }
