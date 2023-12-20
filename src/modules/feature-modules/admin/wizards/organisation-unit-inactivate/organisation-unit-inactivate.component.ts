@@ -116,7 +116,9 @@ export class WizardOrganisationUnitInactivateComponent extends CoreComponent imp
     this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
-      this.redirectTo(`/admin/organisations/${this.wizard.data.organisation.id}`);
+      this.redirectTo(
+        `/admin/organisations/${this.wizard.data.organisation.id}/unit/${this.wizard.data.organisationUnit.id}`
+      );
       return;
     }
 
