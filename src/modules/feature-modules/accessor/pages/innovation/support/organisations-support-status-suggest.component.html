@@ -20,7 +20,7 @@
           ></theme-form-grouped-checkbox-array>
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
-          <a routerLink="/accessor/innovations/{{ innovation.id }}/support" class="d-block">Cancel</a>
+          <a href="javascript:;" (click)="handleCancelOrSubmit()" class="d-block">Cancel</a>
         </div>
       </div>
     </ng-container>
@@ -43,9 +43,7 @@
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
 
-          <div>
-            <a routerLink="/accessor/innovations/{{ innovation.id }}/support">Cancel</a>
-          </div>
+          <a href="javascript:;" (click)="handleCancelOrSubmit()" class="d-block">Cancel</a>
         </div>
       </div>
     </ng-container>

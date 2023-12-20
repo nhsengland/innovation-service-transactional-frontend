@@ -10,8 +10,8 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { AccessorService } from '../../../services/accessor.service';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
+import { AccessorService } from '../../../services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -28,8 +28,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   selectedAccessors: typeof this.accessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
 
-  supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  supportStatus = Object.entries(this.supportStatusObj)
+  supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
     .map(([key, item]) => ({
       key,
       checked: false,
@@ -120,8 +119,14 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   ngOnInit(): void {
-    this.setPageTitle('Update support status', { showPage: false, size: 'l' });
+    if (this.stores.context.getPreviousUrl()?.includes('support/suggest')) {
+      this.stepNumber = 4;
+      this.onSubmitStep();
+      this.setPageStatus('READY');
+      return;
+    }
 
+    this.setPageTitle('Update support status', { showPage: false, size: 'l' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     if (!this.supportId) {
@@ -158,8 +163,10 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         }
       })
       .subscribe(response => {
-        this.accessorsList = response.data.map(item => ({ id: item.id, userRoleId: item.roleId, name: item.name }));
-        this.formAccessorsList = response.data.map(r => ({ value: r.id, label: r.name }));
+        for (const item of response.data) {
+          this.accessorsList.push({ id: item.id, userRoleId: item.roleId, name: item.name });
+          this.formAccessorsList.push({ value: item.id, label: item.name });
+        }
       });
 
     this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(availableStatuses => {
@@ -210,6 +217,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
         break;
 
+      case 4:
+        this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
+        this.resetBackLink();
+        break;
+
       default:
         break;
     }
@@ -244,8 +256,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           message: this.getMessageStatusUpdated()?.message,
           itemsList: this.getMessageStatusUpdated()?.itemsList
         });
-        this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
         this.stepNumber = 4;
+        this.onSubmitStep();
       } else {
         this.setRedirectAlertSuccess('Support status updated', {
           message: this.getMessageStatusUpdated()?.message,
@@ -260,9 +272,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     const suggestOrganisations = this.form.get('suggestOrganisations')?.value;
 
     if (suggestOrganisations === 'YES') {
-      this.redirectTo(`/accessor/innovations/${this.innovationId}/support/suggest`);
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/support/suggest`, { entryPoint: 'supportUpdate' });
     } else {
-      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
+      this.redirectTo(`/accessor/innovations/${this.innovationId}/overview`);
     }
   }
 
