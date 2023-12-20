@@ -25,6 +25,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
+  entrypointUrl: string = '';
+
   form: {
     sections: {
       title: string;
@@ -68,6 +70,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
   ngOnInit(): void {
+    this.entrypointUrl = this.stores.context.getPreviousUrl() ?? '';
+
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
@@ -121,7 +125,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
               { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
             ];
-            this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
+            this.setBackLink(
+              'Go back',
+              this.entrypointUrl.endsWith('/new')
+                ? `/assessment/innovations/${this.innovationId}/overview`
+                : this.entrypointUrl
+            );
+
             break;
           case 2:
             this.form.sections = [
