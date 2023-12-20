@@ -3,16 +3,16 @@ import { InnovationSectionEnum } from '../innovation.enums';
 import { INNOVATION_SECTION_STATUS } from '../innovation.models';
 import { InnovationSectionsListType } from './ir-versions.types';
 
-import { INNOVATION_SECTIONS as SECTIONS_202209 } from './202209/main.config';
-import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
 import {
   categoriesItems as SECTIONS_202209_categoriesItems,
   clinicalEvidenceItems as SECTIONS_202209_evidencetypeItems
 } from './202209/forms.config';
+import { INNOVATION_SECTIONS as SECTIONS_202209 } from './202209/main.config';
 import {
   categoriesItems as SECTIONS_202304_categoriesItems,
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
+import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -59,12 +59,15 @@ export function getAllSectionsSummary(
   }[],
   version?: string
 ): AllSectionsOutboundPayloadType {
+  const sectionMap = new Map(data.map(d => [d.section.section, d]));
+
   return getInnovationRecordConfig(version).map(i => ({
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
+      status: sectionMap.get(s.id as any)?.section.status ?? INNOVATION_SECTION_STATUS.UNKNOWN,
       answers: s.wizard
-        .runSummaryParsing(s.wizard.runInboundParsing(data.find(d => d.section.section === s.id)?.data ?? {}))
+        .runSummaryParsing(s.wizard.runInboundParsing(sectionMap.get(s.id as any)?.data ?? {}))
         .filter(item => item.type !== 'button' && !item.isFile)
         .map(a => ({ label: a.label, value: a.value || '' }))
     }))
