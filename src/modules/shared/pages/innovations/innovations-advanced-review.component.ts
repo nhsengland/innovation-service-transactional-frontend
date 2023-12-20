@@ -23,13 +23,7 @@ import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-rec
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
-type AdvancedReviewSortByKeys =
-  | 'support.updatedAt'
-  | 'updatedAt'
-  | 'submittedAt'
-  | 'name'
-  | 'owner.companyName'
-  | 'countryName';
+type AdvancedReviewSortByKeys = 'support.updatedAt' | 'updatedAt' | 'submittedAt' | 'name' | 'countryName';
 
 type AdvancedReviewSortByKeysType = {
   [key in AdvancedReviewSortByKeys]: {
@@ -157,10 +151,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         text: 'Innovation name',
         order: 'ascending'
       },
-      'owner.companyName': {
-        text: 'Company name',
-        order: 'ascending'
-      },
       countryName: {
         text: 'Location',
         order: 'ascending'
@@ -170,7 +160,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.sortByComponentInputList = [
       { key: 'submittedAt', text: this.sortByData.submittedAt.text },
       { key: 'name', text: this.sortByData.name.text },
-      { key: 'owner.companyName', text: this.sortByData['owner.companyName'].text },
       { key: 'countryName', text: this.sortByData.countryName.text }
     ];
 
@@ -282,7 +271,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'submittedAt',
       'updatedAt',
       'careSettings',
-      'otherCareSetting',
+      // 'otherCareSetting',
       'categories',
       'countryName',
       'diseasesAndConditions',
@@ -290,9 +279,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'keyHealthInequalities',
       'mainCategory',
       'otherCategoryDescription',
-      'postcode',
+      // 'postcode',
       'owner.name',
-      'owner.companyName',
+      // 'owner.companyName',
       'engagingUnits',
       'support.status',
       'support.updatedAt'
