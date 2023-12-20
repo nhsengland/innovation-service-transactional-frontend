@@ -151,9 +151,9 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   handleGoBack() {
     switch (this.currentStep) {
       case 1:
-        const previousUrl =
-          this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
-        this.router.navigateByUrl(previousUrl);
+        this.router.navigateByUrl(
+          this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`
+        );
         break;
 
       case 2:
