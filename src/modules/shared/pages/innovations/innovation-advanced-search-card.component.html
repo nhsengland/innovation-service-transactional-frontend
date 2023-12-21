@@ -13,7 +13,7 @@
             {{ innovationCardData.owner }}.
             <span *ngIf="innovationCardData.countryName">
               {{ innovationCardData.countryName }}
-              <span *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }} </span>.
+              <span *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }} </span>
             </span>
           </span>
           <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
@@ -24,35 +24,28 @@
 
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Categories: </span>
-        <span *ngFor="let item of innovationCardData.categories">{{ item }}<span *ngIf="innovationCardData.categories.length > 1">. </span></span>
+        <span>{{ categoriesList }}</span>
       </li>
 
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Care settings: </span>
-        <ng-container *ngIf="innovationCardData.careSettings.length > 0; else none">
-          <span *ngFor="let item of innovationCardData.careSettings">{{ item }}<span *ngIf="innovationCardData.careSettings.length > 1">. </span></span>
-        </ng-container>
+        <span>{{ careSettingsList }}</span>
       </li>
 
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
-        <ng-container *ngIf="innovationCardData.diseasesAndConditions.length > 0; else none">
-          <span *ngFor="let item of innovationCardData.diseasesAndConditions">{{ item }}<span *ngIf="innovationCardData.diseasesAndConditions.length > 1">. </span></span>
-        </ng-container>
+        <span>{{ diseasesAndConditionsList }}</span>
       </li>
 
       <ng-container *ngIf="isAdminType">
         <li class="nhsuk-u-margin-bottom-1">
           <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
-          <ng-container *ngIf="innovationCardData.keyHealthInequalities.length > 0; else none">
-            <span *ngFor="let item of innovationCardData.keyHealthInequalities">{{ item }}<span *ngIf="innovationCardData.keyHealthInequalities.length > 1">. </span></span>
-          </ng-container>
+          <span>{{ keyHealthInequalitiesList }}</span>
         </li>
 
         <li class="nhsuk-u-margin-bottom-1">
           <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
-          <ng-container *ngIf="innovationCardData.involvedAACProgrammes.length > 0; else none"></ng-container>
-          <span *ngFor="let item of innovationCardData.involvedAACProgrammes">{{ item }}<span *ngIf="innovationCardData.involvedAACProgrammes.length > 1">. </span></span>
+          <span>{{ involvedAACProgrammesList }}</span>
         </li>
       </ng-container>
 

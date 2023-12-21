@@ -1,8 +1,8 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
-      <h2 *ngIf="isAdminType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or email</h2>
-      <h2 *ngIf="isAccessorType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name</h2>
+      <h2 *ngIf="isAdminType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name, company or email</h2>
+      <h2 *ngIf="isAccessorType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
 
       <form [formGroup]="form">
         <theme-form-input controlName="search" [pageUniqueField]="false">
