@@ -10,6 +10,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { AccessorService } from '../../../services/accessor.service';
 
+import { ActivatedRoute } from '@angular/router';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 @Component({
@@ -17,6 +18,8 @@ import { SupportLogType } from '@modules/shared/services/innovations.dtos';
   templateUrl: './organisations-support-status-suggest.component.html'
 })
 export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends CoreComponent implements OnInit {
+  private supportUpdateSideEffect = false;
+
   currentStep: 1 | 2 = 1;
   innovation: ContextInnovationType;
 
@@ -41,6 +44,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   isQualifyingAccessorRole = false;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
     private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService
@@ -56,6 +60,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   }
 
   ngOnInit(): void {
+    this.supportUpdateSideEffect = this.activatedRoute.snapshot.queryParams['entryPoint'] === 'supportUpdate';
+
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovation.id, this.innovation.assessment?.id || '')
@@ -85,7 +91,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   }
 
   onSubmitStep(): void {
-    let chosenUnitsValues: string[] = [];
+    const chosenUnitsValues: string[] = [];
     const chosenUnitsList = this.groupedItems
       .map(item => {
         const units = item.items.filter(
@@ -96,13 +102,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           return { organisation: '', units: [] };
         } // This is filtered after the map.
 
-        if (item.items.length === 1) {
-          chosenUnitsValues.push(item.items[0].value);
-          return { organisation: item.label, units: [] };
-        } else {
-          chosenUnitsValues = [...chosenUnitsValues, ...units.map(u => u.value)];
-          return { organisation: item.label, units: units.map(u => u.label) };
-        }
+        chosenUnitsValues.push(...units.map(u => u.value));
+        return { organisation: item.label, units: item.items.length !== 1 ? units.map(u => u.label) : [] };
       })
       .filter(o => o.organisation);
 
@@ -139,7 +140,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         this.setRedirectAlertSuccess('Organisation suggestions sent', {
           message: 'Your suggestions were saved and notifications sent.'
         });
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/overview`);
+        this.handleCancelOrSubmit();
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Confirm and notify organisations' };
@@ -149,16 +150,18 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   }
 
   handleGoBack() {
-    switch (this.currentStep) {
-      case 1:
-        this.router.navigateByUrl(
-          this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`
-        );
-        break;
-
-      case 2:
-        this.currentStep = 1;
-        break;
+    if (this.currentStep === 1) {
+      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`);
+    } else {
+      this.currentStep--;
     }
+  }
+
+  handleCancelOrSubmit() {
+    let cancelUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
+    if (this.supportUpdateSideEffect) {
+      cancelUrl = `/accessor/innovations/${this.innovation.id}/overview`;
+    }
+    this.redirectTo(cancelUrl);
   }
 }
