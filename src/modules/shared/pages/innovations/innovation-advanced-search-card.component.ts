@@ -59,7 +59,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.involvedAACProgrammesList = this.getFormattedList(this.innovationCardData.involvedAACProgrammes);
   }
 
-  getFormattedList(list: string[]): string {
+  private getFormattedList(list: string[]): string {
     return list.length > 0 ? list.join('. ') : 'None';
   }
 }
