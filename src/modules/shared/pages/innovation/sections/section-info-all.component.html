@@ -89,7 +89,7 @@
                   </p>
                 </div>
 
-                <ng-container *ngIf="isAccessorType && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
+                <ng-container *ngIf="(isAccessorType || isAssessmentType) && sectionData.sectionInfo?.status?.id === 'DRAFT'; else summaryComponent">
                   <div class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
                     <span class="nhsuk-u-visually-hidden">Information:</span>
                     <p>
