@@ -101,6 +101,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
   ];
 
+  selectedFilters: {
+    key: FilterKeysType;
+    title: string;
+    showHideStatus: 'opened' | 'closed';
+    selected: { label: string; value: string }[];
+    scrollable?: boolean;
+    active: boolean;
+  }[] = [];
+
   datasets: { [key in FilterKeysType]: { label: string; value: string }[] } = {
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
@@ -242,22 +251,26 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   getInnovationsList(): void {
     this.setPageStatus('LOADING');
 
+    this.selectedFilters = this.filters.filter(filter => filter.selected.length > 0);
+
     this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
     this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
     const apiQueryFilters = {
-      ...(this.form.get('search')?.value ? { search: this.form.get('search')?.value as string } : { search: '' }),
-      ...(this.form.get('locations')?.value
+      ...(this.form.get('search')?.value ? { search: this.form.get('search')?.value as string } : {}),
+      ...(this.form.get('locations')?.value.length! > 0
         ? { locations: this.form.get('locations')?.value as catalogOfficeLocation[] }
-        : null),
-      ...(this.form.get('engagingOrganisations')?.value
+        : {}),
+      ...(this.form.get('engagingOrganisations')?.value.length! > 0
         ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
-        : null),
-      ...(this.form.get('groupedStatuses')?.value
+        : {}),
+      ...(this.form.get('groupedStatuses')?.value.length! > 0
         ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
-        : null),
+        : {}),
       ...(this.stores.authentication.isAccessorType() && {
-        supportStatuses: this.form.get('supportStatuses')?.value ?? undefined,
+        ...(this.form.get('supportStatuses')?.value.length! > 0
+          ? { supportStatuses: this.form.get('supportStatuses')?.value }
+          : {}),
         assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
         suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
       })
@@ -290,6 +303,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.isAdminType) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(item => !['support.status', 'support.updatedAt'].includes(item));
+    }
+    if (this.isAccessorType) {
+      // filter out unavailable fields for QA/A
+      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
     }
 
     this.innovationsService
@@ -425,6 +442,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onSortByChange(selectKey: string): void {
     this.orderBy = selectKey as AdvancedReviewSortByKeys;
     this.orderDir = this.sortByData[selectKey as AdvancedReviewSortByKeys].order;
+    this.pageNumber = 1;
     this.getInnovationsList();
   }
 }
