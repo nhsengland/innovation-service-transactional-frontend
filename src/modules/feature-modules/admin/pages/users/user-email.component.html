@@ -1,0 +1,25 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
+        </div>
+        <p>Changing an user email should only be done after confirmation.</p>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form">
+        <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-input
+          controlName="confirmation"
+          label="Are you sure you want to change the email?"
+          description="To confirm, please type the following: change email"
+          [pageUniqueField]="false"
+        ></theme-form-input>
+        <button type="submit" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Change email</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>
