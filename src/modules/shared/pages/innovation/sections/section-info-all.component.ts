@@ -263,8 +263,4 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
     this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
   }
-
-  getSectionSummaryData(section: string): SectionSummaryInputData {
-    return this.allSectionsData[section as InnovationSections]!;
-  }
 }

@@ -64,8 +64,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isAssessmentType: boolean;
   shouldShowDocuments = false;
 
-  sectionInfo: SectionInfoType;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -85,21 +83,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
-
-    this.sectionInfo = {
-      id: '',
-      nextSectionId: null,
-      title: '',
-      status: { id: 'UNKNOWN', label: '' },
-      submitButton: { show: false, label: 'Confirm section answers' },
-      isNotStarted: false,
-      hasEvidences: false,
-      wizard: new WizardEngineModel({}),
-      allStepsList: {},
-      date: '',
-      submittedBy: null,
-      openTasksCount: 0
-    };
 
     this.sectionSummaryData = {
       sectionInfo: {
