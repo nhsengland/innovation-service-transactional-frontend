@@ -40,7 +40,7 @@
                 <div class="nhsuk-u-margin-top-0 font-color-secondary">
                   <span class="nhsuk-u-visually-hidden">Information: </span>
                   <p class="d-flex nhsuk-u-margin-0">
-                    <ng-container [ngSwitch]="sectionData.sectionInfo?.status?.id">
+                    <ng-container [ngSwitch]="sectionData.sectionInfo.status.id">
                       <ng-container *ngSwitchCase="'NOT_STARTED'">
                         <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
                         <span class="nhsuk-u-margin-right-2"></span>
@@ -66,11 +66,11 @@
                           <theme-svg-icon type="success"></theme-svg-icon>
                           <span class="nhsuk-u-margin-right-2"></span>
                           <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
-                            This section was last submitted by {{ sectionData.sectionInfo?.submittedBy?.name }}
+                            This section was last submitted by {{ sectionData.sectionInfo.submittedBy?.name }}
                             <ng-container *ngIf="sectionData.sectionInfo?.submittedBy?.displayTag !== undefined"
-                              >({{ sectionData.sectionInfo?.submittedBy?.displayTag }})</ng-container
+                              >({{ sectionData.sectionInfo.submittedBy?.displayTag }})</ng-container
                             >
-                            on {{ sectionData.sectionInfo?.date | date: ("app.date_formats.long_date" | translate) }}.
+                            on {{ sectionData.sectionInfo.date | date: ("app.date_formats.long_date" | translate) }}.
                           </span>
                         </ng-container>
                       </ng-container>
@@ -84,12 +84,12 @@
                       type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}"
                       label="{{ 'shared.catalog.innovation.task_status.OPEN.name' | translate }}"
                     ></theme-tag>
-                    This section has {{ sectionData.sectionInfo?.openTasksCount }} {{ "dictionary.task" | pluralTranslate: sectionData.sectionInfo?.openTasksCount | translate }} to
-                    do. <a routerLink="/{{ baseUrl }}/record/sections/{{ sectionData.sectionInfo?.id }}/tasks">View tasks.</a>
+                    This section has {{ sectionData.sectionInfo.openTasksCount }} {{ "dictionary.task" | pluralTranslate: sectionData.sectionInfo.openTasksCount | translate }} to
+                    do. <a routerLink="/{{ baseUrl }}/record/sections/{{ sectionData.sectionInfo.id }}/tasks">View tasks.</a>
                   </p>
                 </div>
 
-                <shared-innovation-summary [sectionData]="getSectionSummaryData(section.id)" />
+                <shared-innovation-summary [sectionData]="sectionData" />
               </ng-container>
             </ng-container>
           </div>
