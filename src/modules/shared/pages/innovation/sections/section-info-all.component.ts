@@ -206,7 +206,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           return document.context.id === responseItem.section.section;
         });
 
-        this.allSectionsData[sectionInfo.id as InnovationSections] = {
+        this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
           evidencesList: evidencesList,
           sectionInfo: sectionInfo,
           summaryList: summaryList,
