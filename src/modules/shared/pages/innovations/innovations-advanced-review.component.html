@@ -5,7 +5,7 @@
       <h2 *ngIf="isAccessorType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
 
       <form [formGroup]="form">
-        <theme-form-input controlName="search" [pageUniqueField]="false">
+        <theme-form-input [placeholder]="'Search innovation'" controlName="search" [pageUniqueField]="false">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px" id="search-btn">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
@@ -60,8 +60,8 @@
         <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
 
         <ng-container *ngIf="anyFilterSelected">
-          <ng-container *ngFor="let filter of filters">
-            <div *ngIf="filter.selected.length > 0" class="d-flex align-items-center border-bottom-neutral">
+          <ng-container *ngFor="let filter of selectedFilters; last as isLast">
+            <div *ngIf="filter.selected.length > 0" class="d-flex align-items-center" [ngClass]="isAdminType && isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
               <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
               <dd class="width-75">
                 <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
