@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, isEmpty } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
@@ -20,6 +20,7 @@ import {
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { UtilsHelper } from '@app/base/helpers';
 
 type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
 
@@ -256,25 +257,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
     this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
-    const apiQueryFilters = {
-      ...(this.form.get('search')?.value ? { search: this.form.get('search')?.value as string } : {}),
-      ...(this.form.get('locations')?.value.length! > 0
-        ? { locations: this.form.get('locations')?.value as catalogOfficeLocation[] }
-        : {}),
-      ...(this.form.get('engagingOrganisations')?.value.length! > 0
-        ? { engagingOrganisations: this.form.get('engagingOrganisations')?.value }
-        : {}),
-      ...(this.form.get('groupedStatuses')?.value.length! > 0
-        ? { groupedStatuses: this.form.get('groupedStatuses')?.value }
-        : {}),
-      ...(this.stores.authentication.isAccessorType() && {
-        ...(this.form.get('supportStatuses')?.value.length! > 0
-          ? { supportStatuses: this.form.get('supportStatuses')?.value }
-          : {}),
-        assignedToMe: this.form.get('assignedToMe')?.value ?? undefined,
-        suggestedOnly: this.form.get('suggestedOnly')?.value ?? undefined
-      })
-    };
+    const apiQueryFilters = Object.fromEntries(
+      Object.entries(this.form.value).filter(([_k, v]) => !UtilsHelper.isEmpty(v))
+    );
 
     let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
       'id',
