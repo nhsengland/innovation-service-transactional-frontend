@@ -161,21 +161,23 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="innovation.assessment">
-        <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
-        <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">{{
-          innovation.reassessmentCount > 0 ? "Needs reassessment complete" : "Needs assessment complete"
-        }}</a>
-        <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed at {{ innovation.assessment.finishedAt | date: "MMMM y" }}</div>
-      </ng-container>
+      <ng-container *ngIf="innovation.status !== 'AWAITING_NEEDS_REASSESSMENT'">
+        <ng-container *ngIf="innovation.assessment">
+          <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
+          <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">{{
+            innovation.reassessmentCount > 0 ? "Needs reassessment complete" : "Needs assessment complete"
+          }}</a>
+          <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed at {{ innovation.assessment.finishedAt | date: "MMMM y" }}</div>
+        </ng-container>
 
-      <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link">
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
-        <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
-          <theme-svg-icon type="action"></theme-svg-icon>
-          <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
-        </a>
-      </div>
+        <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link">
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
+          <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
+            <theme-svg-icon type="action"></theme-svg-icon>
+            <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
+          </a>
+        </div>
+      </ng-container>
     </div>
   </div>
 </theme-content-wrapper>
