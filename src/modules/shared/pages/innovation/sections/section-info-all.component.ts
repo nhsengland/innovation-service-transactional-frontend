@@ -7,7 +7,7 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202209/catalog.types';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
@@ -61,11 +61,11 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   allSectionsSubmitted = false;
 
   allSectionsData: {
-    [k in InnovationSections as string]?: {
-      sectionInfo?: SectionInfoType;
-      summaryList?: WizardSummaryType[];
-      evidencesList?: WizardSummaryType[];
-      documentsList?: InnovationDocumentsListOutDTO['data'];
+    [key in InnovationSectionEnum]?: {
+      sectionInfo: SectionInfoType;
+      summaryList: WizardSummaryType[];
+      evidencesList: WizardSummaryType[];
+      documentsList: InnovationDocumentsListOutDTO['data'];
     };
   } = {};
 
@@ -200,16 +200,18 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           const data = sectionInfo.wizard.runSummaryParsing();
           summaryList = data.filter(item => !item.evidenceId);
           evidencesList = data.filter(item => item.evidenceId);
-          documentsList = documentsResponse.data.filter(
-            document => document.context.id === responseItem.section.section
-          );
         }
 
-        this.allSectionsData[sectionInfo.id] = {};
-        this.allSectionsData[sectionInfo.id]!.evidencesList = evidencesList;
-        this.allSectionsData[sectionInfo.id]!.sectionInfo = sectionInfo;
-        this.allSectionsData[sectionInfo.id]!.summaryList = summaryList;
-        this.allSectionsData[sectionInfo.id]!.documentsList = documentsList;
+        documentsList = documentsResponse.data.filter(document => {
+          return document.context.id === responseItem.section.section;
+        });
+
+        this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
+          evidencesList: evidencesList,
+          sectionInfo: sectionInfo,
+          summaryList: summaryList,
+          documentsList: documentsList
+        };
       }
 
       this.setSectionsStatistics(summary);
@@ -260,14 +262,5 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     );
 
     this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
-  }
-
-  getSectionSummaryData(section: string): SectionSummaryInputData {
-    return {
-      sectionInfo: this.allSectionsData[section]!.sectionInfo!,
-      summaryList: this.allSectionsData[section]!.summaryList!,
-      evidencesList: this.allSectionsData[section]!.evidencesList!,
-      documentsList: this.allSectionsData[section]!.documentsList!
-    };
   }
 }
