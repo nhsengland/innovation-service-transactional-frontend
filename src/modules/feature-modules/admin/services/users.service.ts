@@ -71,6 +71,14 @@ export class AdminUsersService extends CoreService {
     );
   }
 
+  changeUserEmail(userId: string, email: string): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
+    return this.http.patch<{ id: string }>(url.buildUrl(), { email }).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
   lockUser(userId: string): Observable<{ id: string }> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { accountEnabled: false }).pipe(
