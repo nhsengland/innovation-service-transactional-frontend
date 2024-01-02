@@ -20,7 +20,9 @@
           ></theme-form-grouped-checkbox-array>
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
-          <a href="javascript:;" (click)="handleCancelOrSubmit()" class="d-block">Cancel</a>
+          <div>
+            <a href="javascript:;" (click)="handleCancelOrSubmit()">Cancel</a>
+          </div>
         </div>
       </div>
     </ng-container>
@@ -43,7 +45,9 @@
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
 
-          <a href="javascript:;" (click)="handleCancelOrSubmit()" class="d-block">Cancel</a>
+          <div>
+            <a href="javascript:;" (click)="handleCancelOrSubmit()">Cancel</a>
+          </div>
         </div>
       </div>
     </ng-container>
