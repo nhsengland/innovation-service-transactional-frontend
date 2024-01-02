@@ -161,7 +161,7 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="innovation.assessment">
+      <ng-container *ngIf="innovation.assessment && innovation.assessment.finishedAt !== null">
         <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
         <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">{{
           innovation.reassessmentCount > 0 ? "Needs reassessment complete" : "Needs assessment complete"
