@@ -332,7 +332,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
                   ? categoriesItems.find(entry => entry.value === item)?.label ?? item
                   : result.otherCategoryDescription ?? item;
               })
-            : [];
+            : ['Question not answered'];
 
           const translatedCareSettings: string[] = result.careSettings
             ? result.careSettings.map(item => {
@@ -340,13 +340,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
                   ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
                   : result.otherCareSetting ?? item;
               })
-            : [];
+            : ['Question not answered'];
 
           const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
             ? result.diseasesAndConditions.map(item => {
                 return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
               })
-            : [];
+            : ['Question not answered'];
 
           const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
             ? result.keyHealthInequalities.map(item => {
@@ -354,13 +354,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
                   ? 'None'
                   : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
               })
-            : [];
+            : ['Question not answered'];
 
           const translatedAacInvolvement: string[] = result.involvedAACProgrammes
             ? result.involvedAACProgrammes.map(item => {
                 return item === 'No' ? 'None' : item;
               })
-            : [];
+            : ['Question not answered'];
 
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
