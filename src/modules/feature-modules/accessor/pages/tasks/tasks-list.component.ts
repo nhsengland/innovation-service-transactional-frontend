@@ -103,8 +103,8 @@ export class TasksListComponent extends CoreComponent implements OnInit {
         this.currentTab.index
       ].title.toLowerCase()} assigned by you`;
       if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
-      this.setPageStatus('READY');
       this.setPageTitle('Tasks');
+      this.setPageStatus('READY');
     });
   }
 
