@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, isEmpty } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
@@ -19,10 +19,15 @@ import {
   diseasesConditionsImpactItems,
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
-import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { UtilsHelper } from '@app/base/helpers';
+import { cloneDeep } from 'lodash';
 
-type FilterKeysType = 'locations' | 'engagingOrganisations' | 'supportStatuses' | 'groupedStatuses';
+type FilterKeysType =
+  | 'locations'
+  | 'engagingOrganisations'
+  | 'supportStatuses'
+  | 'groupedStatuses'
+  | 'diseasesAndConditions';
 
 type AdvancedReviewSortByKeys = 'support.updatedAt' | 'updatedAt' | 'submittedAt' | 'name' | 'countryName';
 
@@ -73,6 +78,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       supportStatuses: new FormArray([]),
       groupedStatuses: new FormArray([]),
       engagingOrganisations: new FormArray([]),
+      diseasesAndConditions: new FormArray([]),
       assignedToMe: new FormControl(false),
       suggestedOnly: new FormControl(true)
     },
@@ -87,6 +93,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     showHideStatus: 'opened' | 'closed';
     selected: { label: string; value: string }[];
     scrollable?: boolean;
+    searchable?: boolean;
     active: boolean;
   }[] = [
     { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
@@ -97,6 +104,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       showHideStatus: 'closed',
       selected: [],
       scrollable: true,
+      searchable: true,
+      active: false
+    },
+    {
+      key: 'diseasesAndConditions',
+      title: 'Diseases and conditions',
+      showHideStatus: 'closed',
+      selected: [],
+      scrollable: true,
+      searchable: true,
       active: false
     },
     { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
@@ -108,15 +125,21 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     showHideStatus: 'opened' | 'closed';
     selected: { label: string; value: string }[];
     scrollable?: boolean;
+    searchable?: boolean;
     active: boolean;
   }[] = [];
 
-  datasets: { [key in FilterKeysType]: { label: string; value: string }[] } = {
+  datasets: {
+    [key in FilterKeysType]: { label: string; value: string }[];
+  } = {
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
     supportStatuses: [],
-    groupedStatuses: []
+    groupedStatuses: [],
+    diseasesAndConditions: diseasesConditionsImpactItems
   };
+
+  auxDatasets = cloneDeep(this.datasets);
 
   constructor(
     private innovationsService: InnovationsService,
@@ -188,10 +211,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   ngOnInit(): void {
-    let filters: FilterKeysType[] = ['engagingOrganisations', 'locations', 'supportStatuses'];
+    let filters: FilterKeysType[] = ['engagingOrganisations', 'diseasesAndConditions', 'locations', 'supportStatuses'];
 
     if (this.isAdminType) {
-      filters = ['engagingOrganisations', 'groupedStatuses'];
+      filters = ['engagingOrganisations', 'diseasesAndConditions', 'groupedStatuses'];
       this.form.get('suggestedOnly')?.setValue(false);
       this.datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(groupedStatus => ({
         label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`),
@@ -220,6 +243,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             .filter(i => i.id !== myOrganisation)
             .map(i => ({ label: i.name, value: i.id }));
         }
+
+        this.auxDatasets.engagingOrganisations = this.datasets.engagingOrganisations;
 
         // If we have previous filters, set them
         const previousFilters = sessionStorage.getItem('innovationListFilters');
@@ -386,7 +411,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.pageNumber = 1;
 
     // persist in session storage
-    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
+    //const { engagingOrganisationsInputFilter, diseasesAndConditionsInputFilter, ...innovationListFilters } =
+    const innovationListFilters = this.form.value;
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(innovationListFilters));
 
     this.getInnovationsList();
   }
@@ -429,5 +456,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.orderDir = this.sortByData[selectKey as AdvancedReviewSortByKeys].order;
     this.pageNumber = 1;
     this.getInnovationsList();
+  }
+
+  formatSearchText(text: string) {
+    return text.trim().replace(/ {2,}/g, ' ').toLowerCase();
+  }
+
+  onCheckboxInputFilter(key: FilterKeysType, e: Event): void {
+    let inputText = (e.target as HTMLInputElement).value;
+
+    if (!inputText) {
+      this.datasets[key] = this.auxDatasets[key];
+    } else {
+      inputText = this.formatSearchText(inputText);
+
+      this.datasets[key] = this.auxDatasets[key].filter(
+        item =>
+          (this.form.get(key) as FormArray).value.includes(item.value) ||
+          this.formatSearchText(item.label).toLowerCase().includes(inputText)
+      );
+    }
   }
 }
