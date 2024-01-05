@@ -52,7 +52,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     private statisticsService: StatisticsService
   ) {
     super();
-    this.setPageTitle('Innovation record');
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -75,6 +74,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
+    this.setPageTitle('Innovation record');
+
     forkJoin([
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
       ...(this.isInnovatorType
