@@ -53,10 +53,9 @@ export class TasksListComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setPageTitle('Tasks');
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
-        this.setPageTitle('Tasks');
-
         if (!queryParams.openTasks) {
           this.router.navigate(['/accessor/tasks'], { queryParams: { openTasks: 'true' } });
           return;
@@ -98,13 +97,13 @@ export class TasksListComponent extends CoreComponent implements OnInit {
 
   getTasksList(column?: string): void {
     this.setPageStatus('LOADING');
-
     this.innovationsService.getTasksList(this.tasksList.getAPIQueryParams()).subscribe(response => {
       this.tasksList.setData(response.data, response.count);
       this.currentTab.description = `${response.count} ${this.tabs[
         this.currentTab.index
       ].title.toLowerCase()} assigned by you`;
       if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
+      this.setPageTitle('Tasks');
       this.setPageStatus('READY');
     });
   }
