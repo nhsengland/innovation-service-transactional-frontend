@@ -30,6 +30,7 @@ junit.xml
 *.log
 npm-debug.log*
 yarn-error.log*
+/.nx
 
 # System Files
 .DS_Store
