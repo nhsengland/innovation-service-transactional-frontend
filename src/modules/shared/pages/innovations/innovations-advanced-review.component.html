@@ -41,6 +41,15 @@
               [preOpen]="filter.showHideStatus === 'opened'"
               [scrollable]="filter.scrollable"
             >
+              <input
+                *ngIf="filter.searchable"
+                fixedContentContainer
+                id="{{ filter.key }}CheckboxInputFilter"
+                type="text"
+                name="{{ filter.key }}CheckboxInputFilter"
+                class="nhsuk-input search-input-icon nhsuk-u-margin-bottom-3"
+                (input)="onCheckboxInputFilter(filter.key, $event)"
+              />
               <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false" />
             </theme-collapsible-filter>
 

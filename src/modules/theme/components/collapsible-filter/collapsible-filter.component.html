@@ -12,8 +12,11 @@
   </div>
 </a>
 
-<div class="nhsuk-u-padding-left-1" [ngClass]="{ 'nhsuk-u-visually-hidden': !isOpen(), 'scrollable-container': scrollable === true }">
-  <ng-content></ng-content>
+<div class="nhsuk-u-padding-left-1" [ngClass]="{ 'nhsuk-u-visually-hidden': !isOpen() }">
+  <ng-content select="[fixedContentContainer]"></ng-content>
+  <div [ngClass]="{ 'scrollable-container': scrollable === true }">
+    <ng-content></ng-content>
+  </div>
 </div>
 
 <ng-template #filterIcon>

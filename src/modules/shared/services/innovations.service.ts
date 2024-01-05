@@ -292,6 +292,7 @@ export class InnovationsService extends CoreService {
       locations: catalogOfficeLocation[];
       supportStatus: InnovationSupportStatusEnum[];
       suggestedOnly: boolean;
+      diseasesAndConditions: string[];
     }>,
     // selects
     // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)
