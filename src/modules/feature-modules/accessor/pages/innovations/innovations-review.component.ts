@@ -85,6 +85,16 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.defaultStatus = 'UNASSIGNED';
       this.tabs = [
         {
+          key: InnovationSupportStatusEnum.ENGAGING,
+          title: 'All',
+          mainDescription: 'All innovations shared with your organisation.',
+          showAssignedToMeFilter: false,
+          showSuggestedOnlyFilter: false,
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+          notifications: null
+        },
+        {
           key: InnovationSupportStatusEnum.UNASSIGNED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',

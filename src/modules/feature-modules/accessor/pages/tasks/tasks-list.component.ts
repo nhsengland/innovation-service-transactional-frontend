@@ -53,10 +53,10 @@ export class TasksListComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.setPageTitle('Tasks');
+
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
-        this.setPageTitle('Tasks');
-
         if (!queryParams.openTasks) {
           this.router.navigate(['/accessor/tasks'], { queryParams: { openTasks: 'true' } });
           return;
