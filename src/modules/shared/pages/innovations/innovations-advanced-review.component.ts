@@ -411,9 +411,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.pageNumber = 1;
 
     // persist in session storage
-    //const { engagingOrganisationsInputFilter, diseasesAndConditionsInputFilter, ...innovationListFilters } =
-    const innovationListFilters = this.form.value;
-    sessionStorage.setItem('innovationListFilters', JSON.stringify(innovationListFilters));
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
     this.getInnovationsList();
   }
