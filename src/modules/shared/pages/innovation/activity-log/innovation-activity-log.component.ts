@@ -123,15 +123,15 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
     super();
     this.innovation = this.stores.context.getInnovation();
 
-    this.setPageTitle('Activity log');
-    this.setBackLink('Go back');
-
     this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';
   }
 
   ngOnInit(): void {
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(1000)).subscribe(() => this.onFormChange()));
+
+    this.setPageTitle('Activity log');
+    this.setBackLink('Go back');
 
     this.onFormChange();
   }
