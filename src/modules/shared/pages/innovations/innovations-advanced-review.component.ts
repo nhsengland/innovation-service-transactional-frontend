@@ -456,7 +456,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList();
   }
 
-  formatSearchText(text: string) {
+  private formatSearchText(text: string) {
     return text.trim().replace(/ {2,}/g, ' ').toLowerCase();
   }
 
@@ -468,10 +468,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     } else {
       inputText = this.formatSearchText(inputText);
 
+      const selected = (this.form.get(key) as FormArray).value;
+
       this.datasets[key] = this.auxDatasets[key].filter(
-        item =>
-          (this.form.get(key) as FormArray).value.includes(item.value) ||
-          this.formatSearchText(item.label).toLowerCase().includes(inputText)
+        item => selected.includes(item.value) || this.formatSearchText(item.label).includes(inputText)
       );
     }
   }

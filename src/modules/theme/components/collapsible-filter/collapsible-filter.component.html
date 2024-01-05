@@ -13,7 +13,7 @@
 </a>
 
 <div class="nhsuk-u-padding-left-1" [ngClass]="{ 'nhsuk-u-visually-hidden': !isOpen() }">
-  <ng-content select="[checkboxInputFilter]"></ng-content>
+  <ng-content select="[fixedContentContainer]"></ng-content>
   <div [ngClass]="{ 'scrollable-container': scrollable === true }">
     <ng-content></ng-content>
   </div>
