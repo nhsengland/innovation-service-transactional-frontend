@@ -329,13 +329,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
                   ? 'None'
                   : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
               })
-            : [];
+            : ['Question not answered'];
 
           const translatedAacInvolvement: string[] = result.involvedAACProgrammes
             ? result.involvedAACProgrammes.map(item => {
                 return item === 'No' ? 'None' : item;
               })
-            : [];
+            : ['Question not answered'];
 
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
