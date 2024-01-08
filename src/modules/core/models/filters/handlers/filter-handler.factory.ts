@@ -1,7 +1,7 @@
 import { FormGroup } from '@angular/forms';
 import { Filter } from '../filters.model';
 import { FilterHandler } from './base-filter.handler';
-import { CheckboxGroupHandler } from './checkbox-group.hander';
+import { CheckboxGroupHandler } from './checkbox-group.handler';
 import { CheckboxesHandler } from './checkboxes.handler';
 import { DateRangeHandler } from './date-range.handler';
 

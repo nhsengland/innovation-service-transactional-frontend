@@ -1,5 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { FilterHandler } from './handlers/base-filter.handler';
+import { CheckboxGroupHandler } from './handlers/checkbox-group.handler';
 import { FilterHandlerFactory } from './handlers/filter-handler.factory';
 
 export type Filter = BaseFilter & (CheckboxGroupFilter | CheckboxesFilter | DateRangeFilter);
@@ -30,7 +31,6 @@ type Dataset = { value: string; label: string; description?: string }[];
  * TODOS:
  * Pre-load form with values (e.g., from localStorage)
  * Handle checkbox group search by dataset (i.e., searchable to collapsible)
- * Handle translations of selected values (e.g. INNOVATION_MANAGEMENT)
  */
 export class FiltersModel {
   form: FormGroup;
@@ -66,6 +66,11 @@ export class FiltersModel {
   addDatasets(datasets: Record<string, Dataset>) {
     for (const [key, dataset] of Object.entries(datasets)) {
       this.#datasets.set(key, dataset);
+
+      const handler = this.handlers.get(key);
+      if (handler instanceof CheckboxGroupHandler) {
+        handler.translation = dataset.map(c => ({ key: c.value, value: c.label }));
+      }
     }
   }
 
