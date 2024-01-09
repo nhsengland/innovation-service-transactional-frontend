@@ -8,7 +8,7 @@ type BaseFilter = { key: string } & FilterOptions;
 
 type CheckboxesFilter = {
   type: 'CHECKBOXES';
-  checkboxes: ({ key: string; title: string; defaultValue?: boolean } & FilterOptions)[];
+  checkboxes: ({ title: string; defaultValue?: boolean } & BaseFilter)[];
   selected?: { key: string; value: boolean }[];
 };
 
@@ -58,6 +58,7 @@ export class FiltersModel {
   addFilter(filter: Filter) {
     this.filters.push(filter);
 
+    // To truly decouple this factory, it should be injected from the constructor.
     const handler = FilterHandlerFactory.create(filter, this.form);
     handler.create(filter);
     this.handlers.set(filter.key, handler);
