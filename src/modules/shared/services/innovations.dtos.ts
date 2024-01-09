@@ -123,7 +123,11 @@ export type InnovationListSelectType =
   | 'engagingUnits'
   | 'suggestedOrganisations'
   | 'support.status'
-  | 'support.updatedAt';
+  | 'support.updatedAt'
+  | 'assessment.id'
+  | 'statistics.notifications'
+  | 'statistics.tasks'
+  | 'statistics.messages';
 
 export type InnovationListNewFullDTO = {
   id: string;
@@ -151,6 +155,8 @@ export type InnovationListNewFullDTO = {
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
   owner: { id: string; name: string | null; companyName: string | null } | null;
   support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
+  assessment: { id: string } | null;
+  statistics: { notifications: number; tasks: number; messages: number };
 };
 
 export type InnovationInfoDTO = {

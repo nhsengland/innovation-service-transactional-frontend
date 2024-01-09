@@ -8,7 +8,7 @@
           <a
             id="tab-{{ item.key }}"
             [routerLink]="item.link"
-            [queryParams]="item.queryParams"
+            [queryParams]="{ status: item.key }"
             role="tab"
             class="nhsuk-u-padding-right-1"
             attr.aria-controls="content-{{ item.key }}"
@@ -24,7 +24,7 @@
 
   <div class="nhsuk-grid-row">
     <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
-      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2" aria-live="polite">{{ innovationsList2.getTotalRowsNumber() }} innovations</p>
 
       <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
         <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
@@ -33,18 +33,18 @@
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-      <p *ngIf="innovationsList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-3">There are no innovations to display.</p>
+      <p *ngIf="innovationsList2.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-3">There are no innovations to display.</p>
 
-      <ng-container *ngIf="innovationsList.getTotalRowsNumber() > 0">
+      <ng-container *ngIf="innovationsList2.getTotalRowsNumber() > 0">
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
           <caption class="nhsuk-table__caption">
             <p class="nhsuk-u-margin-bottom-0">{{ currentTab.mainDescription }}</p>
             <p class="nhsuk-hint">{{ currentTab.secondaryDescription }}</p>
-            <span *ngIf="innovationsList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+            <span *ngIf="innovationsList2.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
           </caption>
           <thead class="nhsuk-table__head">
             <tr class="">
-              <th *ngFor="let item of innovationsList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+              <th *ngFor="let item of innovationsList2.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
                 <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
                 <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
                   {{ item.label }}
@@ -54,11 +54,11 @@
             </tr>
           </thead>
           <tbody class="nhsuk-table__body">
-            <tr *ngFor="let item of innovationsList.getRecords()" class="nhsuk-table__row">
+            <tr *ngFor="let item of innovationsList2.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
-                    <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
+                    <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("name") }} </span>
                     <a
                       *ngIf="currentTab.key !== 'ENGAGING' && item.assessment?.id"
                       routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
@@ -75,45 +75,27 @@
                 </div>
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('submittedAt')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("submittedAt") }} </span>
+              <td *ngIf="innovationsList2.getColumnLabel('submittedAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("submittedAt") }} </span>
                 {{ item.submittedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('updatedAt')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("updatedAt") }} </span>
-                {{ item.updatedAt | date: ("app.date_formats.long_date" | translate) }}
-              </td>
-
-              <td *ngIf="innovationsList.getColumnLabel('mainCategory')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("mainCategory") }}</span>
+              <td *ngIf="innovationsList2.getColumnLabel('mainCategory')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("mainCategory") }}</span>
                 {{ item.mainCategory }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("location") }}</span>
+              <td *ngIf="innovationsList2.getColumnLabel('countryName')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("countryName") }}</span>
                 {{ item.countryName }}{{ item.postCode ? ", " + item.postCode : "" }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('accessors')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("accessors") }}</span>
-                {{
-                  item.supportInfo.accessorsNames.length === 0
-                    ? ""
-                    : item.supportInfo.accessorsNames[0] + "" + (item.supportInfo.accessorsNames.length > 1 ? " +" + ((item.supportInfo.accessorsNames.length || 0) - 1) : "")
-                }}
-              </td>
-
-              <td class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("engagingOrganisations") }}</span>
-                <ng-container *ngFor="let org of item.supportInfo.supportingOrganisations; let i = index">
-                  <ng-container *ngIf="i < 2">
-                    <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ org }}</strong>
-                  </ng-container>
-                  <ng-container *ngIf="i === 2 && item.supportInfo.supportingOrganisations.length > 2">
-                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.supportInfo.supportingOrganisations.length - 2 }}</strong>
-                  </ng-container>
-                </ng-container>
+              <td *ngIf="innovationsList2.getColumnLabel('supportStatus')" class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("supportStatus") }}</span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.name' | translate }}"
+                ></theme-tag>
               </td>
             </tr>
           </tbody>
@@ -121,9 +103,9 @@
 
         <div class="nhsuk-u-padding-bottom-4">
           <theme-pagination
-            [currentPage]="innovationsList.page"
-            [pageSize]="innovationsList.pageSize"
-            [totalRows]="innovationsList.getTotalRowsNumber()"
+            [currentPage]="innovationsList2.page"
+            [pageSize]="innovationsList2.pageSize"
+            [totalRows]="innovationsList2.getTotalRowsNumber()"
             (updatePageEvent)="onPageChange($event)"
           ></theme-pagination>
         </div>
