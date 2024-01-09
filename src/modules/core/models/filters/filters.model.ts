@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { FilterHandler } from './handlers/base-filter.handler';
+import { FilterHandler, GetHandlerValue } from './handlers/base-filter.handler';
 import { CheckboxGroupHandler } from './handlers/checkbox-group.handler';
 import { FilterHandlerFactory } from './handlers/filter-handler.factory';
 
@@ -29,8 +29,10 @@ type Dataset = { value: string; label: string; description?: string }[];
 
 /**
  * TODOS:
+ * Make a documentation
  * Pre-load form with values (e.g., from localStorage)
  * Handle checkbox group search by dataset (i.e., searchable to collapsible)
+ * Try remove boilerplate from datasets
  */
 export class FiltersModel {
   form: FormGroup;
@@ -81,7 +83,12 @@ export class FiltersModel {
 
     for (let filter of this.filters) {
       const handler = this.handlers.get(filter.key)!;
-      filters[filter.key] = handler.value;
+      const value = handler.value;
+      if (filter.type === 'CHECKBOXES') {
+        Object.assign(filters, value);
+      } else {
+        filters[filter.key] = handler.value;
+      }
       filter.selected = handler.getSelected();
       selected += filter.selected.length ?? 0;
 
@@ -95,6 +102,11 @@ export class FiltersModel {
 
   getDataset(filter: Filter) {
     return this.#datasets.get(filter.key) ?? [];
+  }
+
+  getFilterValue<F extends Filter, T extends F['type']>(filter: F): GetHandlerValue<T> {
+    const handler = this.handlers.get(filter.key)!;
+    return handler.value as GetHandlerValue<T>; // Types have to be improved on FilterHandler
   }
 
   removeSelection(filterKey: string, key: string) {
