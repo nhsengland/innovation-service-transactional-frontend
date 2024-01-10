@@ -59,7 +59,6 @@ export class FiltersModel {
     }
 
     if (config?.data) {
-      console.log(config.data);
       this.loadData(config.data);
     }
 
