@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-
-import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -22,13 +20,6 @@ import {
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 
-type FilterKeysType =
-  | 'locations'
-  | 'engagingOrganisations'
-  | 'supportStatuses'
-  | 'groupedStatuses'
-  | 'diseasesAndConditions';
-
 type AdvancedReviewSortByKeys = 'support.updatedAt' | 'updatedAt' | 'submittedAt' | 'name' | 'countryName';
 
 type AdvancedReviewSortByKeysType = {
@@ -38,10 +29,6 @@ type AdvancedReviewSortByKeysType = {
   };
 };
 
-/**
- * TODO:
- * Add search handler
- */
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
   templateUrl: './innovations-advanced-review.component.html'
@@ -75,22 +62,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   sortByData: AdvancedReviewSortByKeysType;
   sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
 
-  form = new FormGroup({ search: new FormControl('', { updateOn: 'blur' }) }, { updateOn: 'change' });
-
   anyFilterSelected = false;
 
-  datasets: {
-    [key in FilterKeysType]: { label: string; value: string }[];
-  } = {
-    locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
-    engagingOrganisations: [],
-    supportStatuses: [],
-    groupedStatuses: [],
-    diseasesAndConditions: diseasesConditionsImpactItems
-  };
-
   filtersModel!: FiltersModel;
-  formTest!: FormGroup;
+  form!: FormGroup;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -165,21 +140,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         }
 
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
-        this.formTest = this.filtersModel.form;
+        this.form = this.filtersModel.form;
 
-        this.subscriptions.push(
-          this.formTest.valueChanges.pipe(debounceTime(1000)).subscribe(() => this.onFormChange())
-        );
+        this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
 
-        // Formchange must be triggered only after organisations are loaded so that it is populated
         this.onFormChange();
       },
       error: error => {
         this.logger.error(error);
       }
     });
-
-    this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
   }
 
   getInnovationsList(): void {
@@ -273,7 +243,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.pageNumber = 1;
 
     // persist in session storage
-    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.formTest.value));
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
     this.getInnovationsList();
   }

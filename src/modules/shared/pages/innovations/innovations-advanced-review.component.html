@@ -1,11 +1,11 @@
 <theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-row" *ngIf="filtersModel && filtersModel.search as search">
     <div class="nhsuk-grid-column-one-half">
       <h2 *ngIf="isAdminType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name, company or email</h2>
       <h2 *ngIf="isAccessorType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
 
       <form [formGroup]="form">
-        <theme-form-input [placeholder]="'Search innovation'" controlName="search" [pageUniqueField]="false">
+        <theme-form-input [placeholder]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px" id="search-btn">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
@@ -21,7 +21,7 @@
 
   <div class="nhsuk-grid-row" *ngIf="filtersModel">
     <div class="nhsuk-grid-column-one-quarter nhsuk-u-margin-top-5">
-      <form [formGroup]="formTest">
+      <form [formGroup]="form">
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">Filter your search</h2>
 
         <ng-container *ngFor="let filter of this.filtersModel.filters">

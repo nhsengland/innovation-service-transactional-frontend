@@ -1,7 +1,10 @@
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { FilterHandler, GetHandlerValue } from './handlers/base-filter.handler';
 import { CheckboxGroupHandler } from './handlers/checkbox-group.handler';
 import { FilterHandlerFactory } from './handlers/filter-handler.factory';
+
+export type FiltersConfig = { search?: SearchFilter; filters: Filter[] };
+export type Dataset = { value: string; label: string; description?: string }[];
 
 export type Filter = BaseFilter & (CheckboxGroupFilter | CheckboxesFilter | DateRangeFilter);
 type BaseFilter = { key: string } & FilterOptions;
@@ -26,11 +29,11 @@ type DateRangeFilter = {
   selected?: { key: string; value: string }[];
 } & CollapsibleFilter;
 
+type SearchFilter = BaseFilter & { placeholder?: string };
+
 type CollapsibleFilter = { title: string; description?: string; state: 'opened' | 'closed'; scrollable?: boolean };
 type DateFilter = { key: string; label: string; description?: string; defaultValue?: string };
 type FilterOptions = { options?: { updateOn?: 'blur' | 'change'; emitEvent?: boolean } };
-
-type Dataset = { value: string; label: string; description?: string }[];
 
 /**
  * TODOS:
@@ -42,18 +45,25 @@ export class FiltersModel {
   filters: Filter[];
   handlers: Map<string, FilterHandler>;
 
+  search: SearchFilter | null;
+
   #datasets: Map<string, Dataset>;
 
-  constructor(config?: { filters?: Filter[]; datasets?: Record<string, Dataset>; data?: any }) {
+  constructor(config?: { filters?: FiltersConfig; datasets?: Record<string, Dataset>; data?: any }) {
     this.form = new FormGroup({}, { updateOn: 'blur' });
 
     this.filters = [];
     this.handlers = new Map<string, FilterHandler>();
+    this.search = null;
 
     this.#datasets = new Map();
 
     if (config?.filters) {
-      for (const filter of config.filters) {
+      if (config.filters.search) {
+        this.addSearch(config.filters.search);
+      }
+
+      for (const filter of config.filters.filters) {
         this.addFilter(filter);
       }
     }
@@ -74,6 +84,12 @@ export class FiltersModel {
     const handler = FilterHandlerFactory.create(filter, this.form);
     handler.create(filter);
     this.handlers.set(filter.key, handler);
+  }
+
+  // Assumes only one search per page
+  addSearch(search: SearchFilter) {
+    this.search = search;
+    this.form.addControl(search.key, new FormControl('', { updateOn: search.options?.updateOn }), { emitEvent: false });
   }
 
   addDatasets(datasets: Record<string, Dataset>) {
@@ -124,6 +140,11 @@ export class FiltersModel {
       if (filter.type === 'CHECKBOX_GROUP' || filter.type === 'DATE_RANGE') {
         filter.description = `${filter.selected?.length ?? 0} selected`;
       }
+    }
+
+    if (this.search) {
+      const value = this.form.get(this.search.key)!.value;
+      filters[this.search.key] = value;
     }
 
     return { filters, selected };
