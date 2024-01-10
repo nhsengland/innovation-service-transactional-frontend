@@ -19,28 +19,22 @@
     </div>
   </div>
 
-  <div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-row" *ngIf="filtersModel">
     <div class="nhsuk-grid-column-one-quarter nhsuk-u-margin-top-5">
-      <form [formGroup]="form">
+      <form [formGroup]="formTest">
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">Filter your search</h2>
 
-        <ng-container *ngIf="stores.authentication.userUrlBasePath() === 'accessor'">
-          <div class="nhsuk-u-padding-bottom-2">
-            <theme-form-checkbox controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
-          </div>
-          <theme-form-checkbox controlName="suggestedOnly" label="Only show suggested innovations for my organisation" size="small"></theme-form-checkbox>
-        </ng-container>
+        <ng-container *ngFor="let filter of this.filtersModel.filters">
+          <ng-container *ngIf="filter.type === 'CHECKBOXES'">
+            <ng-container *ngFor="let checkbox of filter.checkboxes">
+              <div class="nhsuk-u-margin-bottom-2">
+                <theme-form-checkbox [controlName]="checkbox.key" [label]="checkbox.title" size="small"></theme-form-checkbox>
+              </div>
+            </ng-container>
+          </ng-container>
 
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
-
-        <ng-container *ngFor="let filter of filters">
-          <ng-container *ngIf="filter.active === true">
-            <theme-collapsible-filter
-              [title]="filter.title"
-              description="{{ (form.get(filter.key)?.value || []).length }} selected"
-              [preOpen]="filter.showHideStatus === 'opened'"
-              [scrollable]="filter.scrollable"
-            >
+          <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
+            <theme-collapsible-filter [title]="filter.title" [description]="filter.description" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
               <input
                 *ngIf="filter.searchable"
                 fixedContentContainer
@@ -48,13 +42,30 @@
                 type="text"
                 name="{{ filter.key }}CheckboxInputFilter"
                 class="nhsuk-input search-input-icon nhsuk-u-margin-bottom-3"
-                (input)="onCheckboxInputFilter(filter.key, $event)"
+                (input)="onCheckboxInputFilter(filter, $event)"
               />
-              <theme-form-checkbox-array [arrayName]="filter.key" [items]="datasets[filter.key]" size="small" [pageUniqueField]="false" />
+              <theme-form-checkbox-array [arrayName]="filter.key" [items]="filter.items" size="small" [pageUniqueField]="false" />
             </theme-collapsible-filter>
-
-            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
           </ng-container>
+
+          <ng-container *ngIf="filter.type === 'DATE_RANGE'">
+            <theme-collapsible-filter [title]="filter.title" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
+              <theme-form-input
+                controlName="{{ filter.key }}::{{ filter.startDate.key }}"
+                [label]="filter.startDate.label"
+                [description]="filter.startDate.description"
+                [pageUniqueField]="false"
+              ></theme-form-input>
+              <theme-form-input
+                controlName="{{ filter.key }}::{{ filter.endDate.key }}"
+                [label]="filter.endDate.label"
+                [description]="filter.endDate.description"
+                [pageUniqueField]="false"
+              ></theme-form-input>
+            </theme-collapsible-filter>
+          </ng-container>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
         </ng-container>
       </form>
     </div>
@@ -68,28 +79,51 @@
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
         <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
 
-        <ng-container *ngIf="anyFilterSelected">
-          <ng-container *ngFor="let filter of selectedFilters; last as isLast">
-            <div *ngIf="filter.selected.length > 0" class="d-flex align-items-center" [ngClass]="isAdminType && isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
-              <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
+        <ng-container *ngFor="let filter of this.filtersModel.filters; last as isLast">
+          <div
+            *ngIf="filter.selected?.length && filter.type !== 'CHECKBOXES'"
+            class="d-flex align-items-center"
+            [ngClass]="isAdminType && isLast ? 'border-bottom-0' : 'border-bottom-neutral'"
+          >
+            <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
+              <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
               <dd class="width-75">
                 <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
-                  <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)" attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
-                    <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
-                      <path
-                        d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
-                      ></path>
-                    </svg>
+                  <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                    <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
                   </a>
-                  <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
+                  <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
                 </span>
               </dd>
-            </div>
-          </ng-container>
+            </ng-container>
 
-          <dt *ngIf="form.get('assignedToMe')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing innovations assigned to me</dt>
+            <ng-container *ngIf="filter.type === 'DATE_RANGE'">
+              <dt class="width-20 nhsuk-u-font-size-16">Submitted {{ getDaterangeFilterTitle(filter) }}</dt>
+              <dd class="width-75">
+                <ng-container *ngFor="let selected of filter.selected; let i = index">
+                  <span class="d-inline-block bordered-item nhsuk-u-margin-1">
+                    <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                      <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
+                    </a>
 
-          <dt *ngIf="form.get('suggestedOnly')?.value" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing suggested innovations</dt>
+                    <span class="nhsuk-u-font-size-14">{{ selected.value | date: ("app.date_formats.long_date" | translate) }}</span>
+                  </span>
+
+                  <span class="nhsuk-u-font-size-16" *ngIf="i === 0 && filter.selected?.length === 2"> and </span>
+                </ng-container>
+              </dd>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <ng-container *ngFor="let filter of this.filtersModel.filters">
+          <div *ngIf="filter.type === 'CHECKBOXES'">
+            <ng-container *ngFor="let checkbox of filter.selected">
+              <!-- TODO: Think of a better way to make this dynamic -->
+              <dt *ngIf="checkbox.key === 'assignedToMe'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing innovations assigned to me</dt>
+              <dt *ngIf="checkbox.key === 'suggestedOnly'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing suggested innovations</dt>
+            </ng-container>
+          </div>
         </ng-container>
       </dl>
 
@@ -120,3 +154,11 @@
     </div>
   </div>
 </theme-content-wrapper>
+
+<ng-template #closeIcon>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
+    <path
+      d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
+    ></path>
+  </svg>
+</ng-template>

@@ -28,7 +28,7 @@ export abstract class FilterHandler {
   abstract create(filter: Filter): void;
 
   abstract getSelected(): { key: string; value: string }[] | { key: string; value: boolean }[];
-  abstract setSelected(value: { key?: string; value: string | string[] | boolean | null }): void;
+  abstract setSelected(value: { key?: string; value: unknown }): void;
 
   abstract delete(key: string): void;
 }

@@ -12,7 +12,12 @@ type CheckboxesFilter = {
   selected?: { key: string; value: boolean }[];
 };
 
-type CheckboxGroupFilter = { type: 'CHECKBOX_GROUP'; selected?: { key: string; value: string }[] } & CollapsibleFilter;
+type CheckboxGroupFilter = {
+  type: 'CHECKBOX_GROUP';
+  selected?: { key: string; value: string }[];
+  searchable?: boolean;
+  items: Dataset;
+} & CollapsibleFilter;
 
 type DateRangeFilter = {
   type: 'DATE_RANGE';
@@ -30,9 +35,6 @@ type Dataset = { value: string; label: string; description?: string }[];
 /**
  * TODOS:
  * Make a documentation
- * Pre-load form with values (e.g., from localStorage)
- * Handle checkbox group search by dataset (i.e., searchable to collapsible)
- * Try remove boilerplate from datasets
  */
 export class FiltersModel {
   form: FormGroup;
@@ -42,7 +44,7 @@ export class FiltersModel {
 
   #datasets: Map<string, Dataset>;
 
-  constructor(config?: Filter[]) {
+  constructor(config?: { filters?: Filter[]; datasets?: Record<string, Dataset>; data?: any }) {
     this.form = new FormGroup({}, { updateOn: 'blur' });
 
     this.filters = [];
@@ -50,10 +52,19 @@ export class FiltersModel {
 
     this.#datasets = new Map();
 
-    if (config) {
-      for (const filter of config) {
+    if (config?.filters) {
+      for (const filter of config.filters) {
         this.addFilter(filter);
       }
+    }
+
+    if (config?.data) {
+      console.log(config.data);
+      this.loadData(config.data);
+    }
+
+    if (config?.datasets) {
+      this.addDatasets(config.datasets);
     }
   }
 
@@ -73,6 +84,25 @@ export class FiltersModel {
       const handler = this.handlers.get(key);
       if (handler instanceof CheckboxGroupHandler) {
         handler.translation = dataset.map(c => ({ key: c.value, value: c.label }));
+      }
+
+      const filter = this.filters.find(f => f.key === key);
+      if (filter && filter.type === 'CHECKBOX_GROUP') {
+        filter.items = dataset;
+        if (filter.searchable) {
+          this.updateDataset(filter, '');
+        }
+      }
+    }
+  }
+
+  loadData(data: any) {
+    for (const [key, value] of Object.entries(data)) {
+      const handler = this.handlers.get(key);
+      if (handler) {
+        handler.setSelected({ key, value });
+      } else {
+        this.form.get(key)?.setValue(value, { emitEvent: false });
       }
     }
   }
@@ -100,8 +130,17 @@ export class FiltersModel {
     return { filters, selected };
   }
 
-  getDataset(filter: Filter) {
-    return this.#datasets.get(filter.key) ?? [];
+  updateDataset(filter: Filter, search: string): void {
+    if (filter.type !== 'CHECKBOX_GROUP' || !filter.searchable) {
+      return;
+    }
+
+    search = this.#sanitizeText(search);
+    const selected = this.getFilterValue(filter);
+
+    filter.items = (this.#datasets.get(filter.key) ?? []).filter(
+      item => selected.includes(item.value) || this.#sanitizeText(item.label).includes(search)
+    );
   }
 
   getFilterValue<F extends Filter, T extends F['type']>(filter: F): GetHandlerValue<T> {
@@ -112,5 +151,9 @@ export class FiltersModel {
   removeSelection(filterKey: string, key: string) {
     const handler = this.handlers.get(filterKey)!;
     handler.delete(key);
+  }
+
+  #sanitizeText(text: string) {
+    return text.trim().replace(/ {2,}/g, ' ').toLowerCase();
   }
 }

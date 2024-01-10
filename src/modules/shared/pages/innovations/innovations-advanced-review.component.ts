@@ -1,26 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { InnovationCardData } from './innovation-advanced-search-card.component';
+import { DatesHelper, UtilsHelper } from '@app/base/helpers';
+import { Filter, FiltersModel } from '@modules/core/models/filters/filters.model';
 import {
   careSettingsItems,
   categoriesItems,
   diseasesConditionsImpactItems,
   keyHealthInequalitiesItems
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
-import { UtilsHelper } from '@app/base/helpers';
-import { cloneDeep } from 'lodash';
+import { InnovationCardData } from './innovation-advanced-search-card.component';
+import { getConfig } from './innovations-advanced-review.config';
 
 type FilterKeysType =
   | 'locations'
@@ -38,6 +38,10 @@ type AdvancedReviewSortByKeysType = {
   };
 };
 
+/**
+ * TODO:
+ * Add search handler
+ */
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
   templateUrl: './innovations-advanced-review.component.html'
@@ -71,63 +75,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   sortByData: AdvancedReviewSortByKeysType;
   sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
 
-  form = new FormGroup(
-    {
-      search: new FormControl('', { updateOn: 'blur' }),
-      locations: new FormArray([]),
-      supportStatuses: new FormArray([]),
-      groupedStatuses: new FormArray([]),
-      engagingOrganisations: new FormArray([]),
-      diseasesAndConditions: new FormArray([]),
-      assignedToMe: new FormControl(false),
-      suggestedOnly: new FormControl(true)
-    },
-    { updateOn: 'change' }
-  );
+  form = new FormGroup({ search: new FormControl('', { updateOn: 'blur' }) }, { updateOn: 'change' });
 
   anyFilterSelected = false;
-
-  filters: {
-    key: FilterKeysType;
-    title: string;
-    showHideStatus: 'opened' | 'closed';
-    selected: { label: string; value: string }[];
-    scrollable?: boolean;
-    searchable?: boolean;
-    active: boolean;
-  }[] = [
-    { key: 'locations', title: 'Location', showHideStatus: 'closed', selected: [], active: false },
-    { key: 'groupedStatuses', title: 'Innovation status', showHideStatus: 'closed', selected: [], active: false },
-    {
-      key: 'engagingOrganisations',
-      title: 'Engaging organisations',
-      showHideStatus: 'closed',
-      selected: [],
-      scrollable: true,
-      searchable: true,
-      active: false
-    },
-    {
-      key: 'diseasesAndConditions',
-      title: 'Diseases and conditions',
-      showHideStatus: 'closed',
-      selected: [],
-      scrollable: true,
-      searchable: true,
-      active: false
-    },
-    { key: 'supportStatuses', title: 'Support status', showHideStatus: 'closed', selected: [], active: false }
-  ];
-
-  selectedFilters: {
-    key: FilterKeysType;
-    title: string;
-    showHideStatus: 'opened' | 'closed';
-    selected: { label: string; value: string }[];
-    scrollable?: boolean;
-    searchable?: boolean;
-    active: boolean;
-  }[] = [];
 
   datasets: {
     [key in FilterKeysType]: { label: string; value: string }[];
@@ -139,7 +89,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     diseasesAndConditions: diseasesConditionsImpactItems
   };
 
-  auxDatasets = cloneDeep(this.datasets);
+  filtersModel!: FiltersModel;
+  formTest!: FormGroup;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -155,39 +106,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.router.navigate([]);
     }
 
-    if (this.isRunningOnServer()) {
-      this.router.navigate([]);
-    }
-
     this.baseUrl = this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
 
     this.setPageTitle('Advanced search');
 
-    if (this.isAdminType) {
-      this.setPageTitle('Innovations');
-    }
-
     this.sortByData = {
-      'support.updatedAt': {
-        text: 'Last status update',
-        order: 'descending'
-      },
-      updatedAt: {
-        text: 'Last updated record',
-        order: 'descending'
-      },
-      submittedAt: {
-        text: 'Last submitted innovation',
-        order: 'descending'
-      },
-      name: {
-        text: 'Innovation name',
-        order: 'ascending'
-      },
-      countryName: {
-        text: 'Location',
-        order: 'ascending'
-      }
+      'support.updatedAt': { text: 'Last status update', order: 'descending' },
+      updatedAt: { text: 'Last updated record', order: 'descending' },
+      submittedAt: { text: 'Last submitted innovation', order: 'descending' },
+      name: { text: 'Innovation name', order: 'ascending' },
+      countryName: { text: 'Location', order: 'ascending' }
     };
 
     this.sortByComponentInputList = [
@@ -197,6 +125,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     ];
 
     if (this.isAdminType) {
+      this.setPageTitle('Innovations');
+
       this.orderBy = 'updatedAt';
       this.sortByComponentInputList.splice(0, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
     }
@@ -211,57 +141,35 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   ngOnInit(): void {
-    let filters: FilterKeysType[] = ['engagingOrganisations', 'diseasesAndConditions', 'locations', 'supportStatuses'];
-
-    if (this.isAdminType) {
-      filters = ['engagingOrganisations', 'diseasesAndConditions', 'groupedStatuses'];
-      this.form.get('suggestedOnly')?.setValue(false);
-      this.datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(groupedStatus => ({
-        label: this.translate(`shared.catalog.innovation.grouped_status.${groupedStatus}.name`),
-        value: groupedStatus
-      }));
-    } else if (this.stores.authentication.isAccessorRole()) {
-      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS)
-        .map(([key, item]) => ({ label: item.label, value: key }))
-        .filter(i => ['ENGAGING', 'CLOSED'].includes(i.value));
-    } else if (this.stores.authentication.isQualifyingAccessorRole()) {
-      this.datasets.supportStatuses = Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({
-        label: item.label,
-        value: key
-      }));
-    }
-
-    this.filters = this.filters.map(filter => ({ ...filter, active: filters.includes(filter.key) }));
-
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
+        const { filters, datasets } = getConfig(this.stores.authentication.state.userContext?.type);
+
         if (this.isAdminType) {
-          this.datasets.engagingOrganisations = response.map(i => ({ label: i.name, value: i.id }));
+          datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
+          datasets.supportStatuses = [];
+          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
+            label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
+            value: status
+          }));
         } else {
-          const myOrganisation = this.stores.authentication.getUserInfo().organisations[0].id;
-          this.datasets.engagingOrganisations = response
-            .filter(i => i.id !== myOrganisation)
-            .map(i => ({ label: i.name, value: i.id }));
+          const orgId = this.stores.authentication.getUserInfo().organisations[0].id;
+          datasets.engagingOrganisations = response
+            .filter(o => o.id !== orgId)
+            .map(o => ({ value: o.id, label: o.name }));
         }
 
-        this.auxDatasets.engagingOrganisations = this.datasets.engagingOrganisations;
-
-        // If we have previous filters, set them
-        const previousFilters = sessionStorage.getItem('innovationListFilters');
-
+        let previousFilters = sessionStorage.getItem('innovationListFilters');
         if (previousFilters) {
-          const filters = JSON.parse(previousFilters);
-          Object.entries(filters).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-              value.forEach((v: string) => {
-                const formFilter = this.form.get(key) as FormArray;
-                formFilter.push(new FormControl(v), { emitEvent: false });
-              });
-            } else {
-              this.form.get(key)?.setValue(value, { emitEvent: false });
-            }
-          });
+          previousFilters = JSON.parse(previousFilters);
         }
+
+        this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
+        this.formTest = this.filtersModel.form;
+
+        this.subscriptions.push(
+          this.formTest.valueChanges.pipe(debounceTime(1000)).subscribe(() => this.onFormChange())
+        );
 
         // Formchange must be triggered only after organisations are loaded so that it is populated
         this.onFormChange();
@@ -277,14 +185,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   getInnovationsList(): void {
     this.setPageStatus('LOADING');
 
-    this.selectedFilters = this.filters.filter(filter => filter.selected.length > 0);
-
     this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
     this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
-    const apiQueryFilters = Object.fromEntries(
-      Object.entries(this.form.value).filter(([_k, v]) => !UtilsHelper.isEmpty(v))
-    );
+    const { filters } = this.filtersModel.getCurrentStateFilters();
+    const apiQueryFilters = Object.fromEntries(Object.entries(filters).filter(([_k, v]) => !UtilsHelper.isEmpty(v)));
 
     let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
       'id',
@@ -326,42 +231,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         this.innovationCardsData = [];
 
         response.data.forEach(result => {
-          const translatedCategories: string[] = result.categories
-            ? result.categories.map(item => {
-                return item !== 'OTHER'
-                  ? categoriesItems.find(entry => entry.value === item)?.label ?? item
-                  : result.otherCategoryDescription ?? item;
-              })
-            : ['Question not answered'];
-
-          const translatedCareSettings: string[] = result.careSettings
-            ? result.careSettings.map(item => {
-                return item !== 'OTHER'
-                  ? careSettingsItems.find(entry => entry.value === item)?.label ?? item
-                  : result.otherCareSetting ?? item;
-              })
-            : ['Question not answered'];
-
-          const translatedDiseasesAndConditions: string[] = result.diseasesAndConditions
-            ? result.diseasesAndConditions.map(item => {
-                return diseasesConditionsImpactItems.find(entry => entry.value === item)?.label ?? item;
-              })
-            : ['Question not answered'];
-
-          const translatedKeyHealthInequalities: string[] = result.keyHealthInequalities
-            ? result.keyHealthInequalities.map(item => {
-                return item === 'NONE'
-                  ? 'None'
-                  : keyHealthInequalitiesItems.find(entry => entry.value === item)?.label ?? item;
-              })
-            : ['Question not answered'];
-
-          const translatedAacInvolvement: string[] = result.involvedAACProgrammes
-            ? result.involvedAACProgrammes.map(item => {
-                return item === 'No' ? 'None' : item;
-              })
-            : ['Question not answered'];
-
+          const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
           const innovationData: InnovationCardData = {
@@ -370,21 +240,22 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
             countryName: result.countryName ?? null,
             postCode: result.postcode,
-            categories: translatedCategories,
-            careSettings: translatedCareSettings,
-            diseasesAndConditions: translatedDiseasesAndConditions,
-            keyHealthInequalities: translatedKeyHealthInequalities,
-            involvedAACProgrammes: translatedAacInvolvement,
+            categories: this.translateLists(result.categories, categoriesItems, result.otherCategoryDescription),
+            careSettings: this.translateLists(result.careSettings, careSettingsItems, result.otherCareSetting),
+            diseasesAndConditions: this.translateLists(result.diseasesAndConditions, diseasesConditionsImpactItems),
+            keyHealthInequalities: this.translateLists(
+              result.keyHealthInequalities,
+              keyHealthInequalitiesItems,
+              'None'
+            ),
+            involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
             submittedAt: result.submittedAt,
             engagingUnits: engagingUnits,
             supportStatus: {
               status: result.support ? result.support.status : '',
               updatedAt: result.support ? result.support.updatedAt! : ''
             },
-            innovationStatus: {
-              status: result.groupedStatus,
-              updatedAt: result.updatedAt
-            }
+            innovationStatus: { status: result.groupedStatus, updatedAt: result.updatedAt }
           };
 
           this.innovationCardsData.push(innovationData);
@@ -397,47 +268,14 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onFormChange(): void {
     this.setPageStatus('LOADING');
 
-    this.filters.forEach(filter => {
-      const f = this.form.get(filter.key)!.value as string[];
-      filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
-    });
-
-    /* istanbul ignore next */
-    this.anyFilterSelected =
-      this.filters.filter(i => i.selected.length > 0).length > 0 ||
-      !!this.form.get('assignedToMe')?.value ||
-      !!this.form.get('suggestedOnly')?.value;
-
+    const state = this.filtersModel.getCurrentStateFilters();
+    this.anyFilterSelected = state.selected > 0;
     this.pageNumber = 1;
 
     // persist in session storage
-    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
+    sessionStorage.setItem('innovationListFilters', JSON.stringify(this.formTest.value));
 
     this.getInnovationsList();
-  }
-
-  onOpenCloseFilter(filterKey: FilterKeysType): void {
-    const filter = this.filters.find(i => i.key === filterKey);
-
-    switch (filter?.showHideStatus) {
-      case 'opened':
-        filter.showHideStatus = 'closed';
-        break;
-      case 'closed':
-        filter.showHideStatus = 'opened';
-        break;
-      default:
-        break;
-    }
-  }
-
-  onRemoveFilter(filterKey: FilterKeysType, value: string): void {
-    const formFilter = this.form.get(filterKey) as FormArray;
-    const formFilterIndex = formFilter.controls.findIndex(i => i.value === value);
-
-    if (formFilterIndex > -1) {
-      formFilter.removeAt(formFilterIndex);
-    }
   }
 
   onPageChange(event: { pageNumber: number }): void {
@@ -456,23 +294,30 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList();
   }
 
-  private formatSearchText(text: string) {
-    return text.trim().replace(/ {2,}/g, ' ').toLowerCase();
+  onRemoveFilter(filterKey: string, selection: string): void {
+    this.filtersModel.removeSelection(filterKey, selection);
   }
 
-  onCheckboxInputFilter(key: FilterKeysType, e: Event): void {
-    let inputText = (e.target as HTMLInputElement).value;
+  getDaterangeFilterTitle(filter: Filter): string {
+    if (filter.type !== 'DATE_RANGE') return '';
 
-    if (!inputText) {
-      this.datasets[key] = this.auxDatasets[key];
-    } else {
-      inputText = this.formatSearchText(inputText);
+    const date = this.filtersModel.getFilterValue(filter);
+    return DatesHelper.translateTwoDatesOrder(date.startDate, date.endDate);
+  }
 
-      const selected = (this.form.get(key) as FormArray).value;
+  onCheckboxInputFilter(filter: Filter, e: Event): void {
+    const search = (e.target as HTMLInputElement).value;
+    this.filtersModel.updateDataset(filter, search);
+  }
 
-      this.datasets[key] = this.auxDatasets[key].filter(
-        item => selected.includes(item.value) || this.formatSearchText(item.label).includes(inputText)
-      );
+  private translateLists(rawArr: null | string[], translations: any[], other?: null | string): string[] {
+    return rawArr?.map(i => this.findTranslation(translations, i, other)) ?? ['Question not answered'];
+  }
+
+  private findTranslation(array: any[], value: string, other?: null | string): string {
+    if (value === 'NONE' || value === 'OTHER') {
+      return other ?? value;
     }
+    return array.find(c => c.value === value)?.label ?? value;
   }
 }
