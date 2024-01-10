@@ -11,6 +11,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { forkJoin } from 'rxjs';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -20,7 +21,7 @@ type TabType = {
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
   link: string;
-  queryParams: { status: InnovationSupportStatusEnum[]; assignedToMe?: boolean; suggestedOnly?: boolean };
+  queryParams: { status: InnovationSupportStatusEnum[]; assignedToMe?: boolean };
   notifications: NotificationValueType;
 };
 
@@ -42,25 +43,29 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     { updateOn: 'change' }
   );
 
+  innovationsList: TableModel<
+    InnovationsListDTO['data'][0] & {
+      supportInfo: { accessorsNames: string[]; supportingOrganisations: string[]; updatedAt: null | DateISOType };
+    },
+    InnovationsListFiltersType
+  >;
+
   innovationsList2: TableModel<
     {
       id: string;
       name: string;
+      updatedAt: DateISOType | null;
       submittedAt: DateISOType | null;
       mainCategory: string | null;
       countryName: string | null;
       postCode: string | null;
       supportStatus: InnovationSupportStatusEnum;
+      accessors: string[];
       assessment: {
         id: string;
       } | null;
       notifications: number;
-    },
-    InnovationsListFiltersType
-  >;
-  innovationsList: TableModel<
-    InnovationsListDTO['data'][0] & {
-      supportInfo: { accessorsNames: string[]; supportingOrganisations: string[]; updatedAt: null | DateISOType };
+      engagingOrganisations: string[];
     },
     InnovationsListFiltersType
   >;
@@ -202,37 +207,94 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
       'id',
       'name',
+      'updatedAt',
       'submittedAt',
       'countryName',
       'mainCategory',
       'postcode',
       'support.status',
       'assessment.id',
-      'statistics.notifications'
+      'statistics.notifications',
+      'engagingOrganisations'
     ];
 
     const { take, skip, order, filters } = this.innovationsList2.getAPIQueryParams();
 
-    this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe(response => {
-      this.innovationsList2.setData(
-        response.data.map(item => {
-          return {
-            id: item.id,
-            name: item.name,
-            submittedAt: item.submittedAt,
-            mainCategory: categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? 'Other',
-            countryName: item.countryName,
-            postCode: item.postcode,
-            supportStatus: item.support.status,
-            assessment: item.assessment,
-            notifications: item.statistics.notifications
-          };
-        }),
-        response.count
-      );
-      if (this.isRunningOnBrowser() && column) this.innovationsList2.setFocusOnSortedColumnHeader(column);
-      this.setPageStatus('READY');
+    forkJoin([
+      this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }),
+      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList2.getAPIQueryParams() })
+    ]).subscribe({
+      next: ([response, responseOld]) => {
+        this.innovationsList2.setData(
+          response.data.map((item, index) => {
+            return {
+              id: item.id,
+              name: item.name,
+              updatedAt: item.updatedAt,
+              submittedAt: item.submittedAt,
+              mainCategory: item.mainCategory
+                ? item.mainCategory === 'OTHER'
+                  ? 'Other'
+                  : categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? item.mainCategory
+                : '',
+              countryName: item.countryName,
+              postCode: item.postcode,
+              supportStatus: item.support.status,
+              assessment: item.assessment,
+              notifications: item.statistics.notifications,
+              accessors: (responseOld.data[index].supports ?? []).flatMap(s =>
+                (s.organisation.unit.users ?? []).map(u => u.name)
+              ),
+              engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
+            };
+          }),
+          response.count
+        );
+        if (this.isRunningOnBrowser() && column) this.innovationsList2.setFocusOnSortedColumnHeader(column);
+        this.setPageStatus('READY');
+      }
     });
+
+    //   this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe(response => {
+    //     this.innovationsList2.setData(
+    //       response.data.map((item,index) => {
+    //         return {
+    //           id: item.id,
+    //           name: item.name,
+    //           updatedAt: item.updatedAt,
+    //           submittedAt: item.submittedAt,
+    //           mainCategory: categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? 'Other',
+    //           countryName: item.countryName,
+    //           postCode: item.postcode,
+    //           supportStatus: item.support.status,
+    //           assessment: item.assessment,
+    //           notifications: item.statistics.notifications,
+    //           accessors: ['A accessor', 'Another one', 'A third just in case'],
+    //           engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
+    //         };
+    //       }),
+    //       response.count
+    //     );
+    //     if (this.isRunningOnBrowser() && column) this.innovationsList2.setFocusOnSortedColumnHeader(column);
+    //     this.setPageStatus('READY');
+    //     console.log('{ ...this.innovationsList2.dataSource}');
+    //     console.log({ ...this.innovationsList2.dataSource });
+    //   });
+
+    //   this.innovationsService
+    //     .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
+    //     .subscribe(response => {
+    //       this.innovationsList2.setData(
+    //         { ...this.innovationsList2.dataSource }
+    //         // response.data.map(item => {
+    //         //     return {
+    //         //         accessors: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)) ?? []
+    //         //         }
+    //         //     }),
+    //       );
+    //       if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
+    //       this.setPageStatus('READY');
+    //     });
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
@@ -250,7 +312,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
-            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
         break;
@@ -265,12 +327,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            submittedAt: { label: 'Submitted', orderable: true },
+            updatedAt: { label: 'Updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
-            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+            accessors: { label: 'Accessor', orderable: false },
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('submittedAt', 'descending');
+          .setOrderBy('updatedAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.WAITING:
@@ -285,12 +347,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            submittedAt: { label: 'Submitted', orderable: true },
+            updatedAt: { label: 'Updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
-            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('submittedAt', 'descending');
+          .setOrderBy('updatedAt', 'descending');
         break;
 
       case 'ALL':
@@ -317,32 +379,34 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.setPageTitle('Innovations');
 
     const currentStatus = queryParams.status;
-    const currentTabIndex = this.tabs.findIndex(tab => tab.key === currentStatus) || 0;
+    const currentTabIndex = this.tabs.findIndex(tab => tab.key === currentStatus);
 
     if (!currentStatus || currentTabIndex === -1) {
       this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
       return;
     }
 
-    if (queryParams.status === 'ALL') {
-      this.form.get('assignedToMe')?.setValue(false);
-      this.form.get('suggestedOnly')?.setValue(false);
-    }
-
-    if (queryParams.status === 'UNASSIGNED') {
-      this.form.get('suggestedOnly')?.setValue(true);
-    }
-    if (queryParams.status === 'ENGAGING') {
-      this.form.get('assignedToMe')?.setValue(false);
-    }
-
     this.currentTab = this.tabs[currentTabIndex];
 
-    this.prepareInnovationsList(this.currentTab.key);
-    this.getInnovationsList();
+    switch (queryParams.status) {
+      case 'ALL':
+        this.form.reset();
+        break;
+      case 'UNASSIGNED':
+        this.form.get('suggestedOnly')?.setValue(true);
+        break;
+      case 'ENGAGING':
+        this.form.get('assignedToMe')?.setValue(false);
+        break;
+      default:
+        this.prepareInnovationsList(this.currentTab.key);
+        this.getInnovationsList();
+        break;
+    }
   }
 
   onFormChange(): void {
+    console.log('onFormChange!');
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
   }

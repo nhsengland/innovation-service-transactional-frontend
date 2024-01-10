@@ -80,6 +80,11 @@
                 {{ item.submittedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
 
+              <td *ngIf="innovationsList2.getColumnLabel('updatedAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("updatedAt") }} </span>
+                {{ item.updatedAt | date: ("app.date_formats.long_date" | translate) }}
+              </td>
+
               <td *ngIf="innovationsList2.getColumnLabel('mainCategory')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("mainCategory") }}</span>
                 {{ item.mainCategory }}
@@ -90,12 +95,29 @@
                 {{ item.countryName }}{{ item.postCode ? ", " + item.postCode : "" }}
               </td>
 
+              <td *ngIf="innovationsList2.getColumnLabel('accessors')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("accessors") }}</span>
+                {{ item.accessors.length === 0 ? "" : item.accessors[0] + "" + (item.accessors.length > 1 ? " +" + ((item.accessors.length || 0) - 1) : "") }}
+              </td>
+
               <td *ngIf="innovationsList2.getColumnLabel('supportStatus')" class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("supportStatus") }}</span>
                 <theme-tag
                   type="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.cssColorClass' | translate }}"
                   label="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.name' | translate }}"
                 ></theme-tag>
+              </td>
+
+              <td *ngIf="innovationsList2.getColumnLabel('engagingOrganisations')" class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList2.getColumnLabel("engagingOrganisations") }}</span>
+                <ng-container *ngFor="let org of item.engagingOrganisations; let i = index">
+                  <ng-container *ngIf="i < 2">
+                    <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ org }}</strong>
+                  </ng-container>
+                  <ng-container *ngIf="i === 2 && item.engagingOrganisations.length > 2">
+                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.engagingOrganisations.length - 2 }}</strong>
+                  </ng-container>
+                </ng-container>
               </td>
             </tr>
           </tbody>

@@ -150,7 +150,7 @@ export type InnovationListNewFullDTO = {
   otherCategoryDescription: string | null;
 
   // Relation fields
-  engagingOrganisations: { organisationId: string; name: string; acronym: string }[];
+  engagingOrganisations: { organisationId: string; name: string; acronym: string }[] | null;
   engagingUnits: { unitId: string; name: string; acronym: string }[];
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
   owner: { id: string; name: string | null; companyName: string | null } | null;
