@@ -45,7 +45,15 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       searchable: true,
       items: []
     },
-    { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] }
+    { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] },
+    {
+      type: 'DATE_RANGE',
+      key: 'submittedAt',
+      title: 'Filter by date',
+      state: 'closed',
+      startDate: { key: 'startDate', label: 'Submitted after', description: 'For example, 2005 or 21/11/2014' },
+      endDate: { key: 'endDate', label: 'Submitted before', description: 'For example, 2005 or 21/11/2014' }
+    }
   ]
 };
 
@@ -66,11 +74,12 @@ export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datase
     'locations',
     'supportStatuses',
     'assignedToMe',
-    'suggestedOnly'
+    'suggestedOnly',
+    'submittedAt'
   ];
 
   if (role === UserRoleEnum.ADMIN) {
-    filters = ['engagingOrganisations', 'diseasesAndConditions', 'groupedStatuses'];
+    filters = ['engagingOrganisations', 'diseasesAndConditions', 'groupedStatuses', 'submittedAt'];
   }
 
   const config: FiltersConfig = { search: InnovationsListFiltersConfig.search, filters: [] };

@@ -49,7 +49,7 @@
           </ng-container>
 
           <ng-container *ngIf="filter.type === 'DATE_RANGE'">
-            <theme-collapsible-filter [title]="filter.title" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
+            <theme-collapsible-filter [title]="filter.title" [description]="filter.description" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
               <theme-form-input
                 controlName="{{ filter.key }}::{{ filter.startDate.key }}"
                 [label]="filter.startDate.label"
