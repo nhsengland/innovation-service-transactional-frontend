@@ -154,7 +154,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
     this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
-    const { filters } = this.filtersModel.getCurrentStateFilters();
+    const { filters, selected } = this.filtersModel.getCurrentStateFilters();
+    this.anyFilterSelected = selected > 0;
     const apiQueryFilters = Object.fromEntries(Object.entries(filters).filter(([_k, v]) => !UtilsHelper.isEmpty(v)));
 
     let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
@@ -234,8 +235,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onFormChange(): void {
     this.setPageStatus('LOADING');
 
-    const state = this.filtersModel.getCurrentStateFilters();
-    this.anyFilterSelected = state.selected > 0;
     this.pageNumber = 1;
 
     // persist in session storage

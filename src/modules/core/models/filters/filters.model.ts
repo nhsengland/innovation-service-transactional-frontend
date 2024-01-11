@@ -1,4 +1,5 @@
 import { FormControl, FormGroup } from '@angular/forms';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { FilterHandler, GetHandlerValue } from './handlers/base-filter.handler';
 import { CheckboxGroupHandler } from './handlers/checkbox-group.handler';
 import { FilterHandlerFactory } from './handlers/filter-handler.factory';
@@ -49,6 +50,9 @@ export class FiltersModel {
 
   #datasets: Map<string, Dataset>;
 
+  #selected: BehaviorSubject<Filter[]>;
+  selected$: Observable<Filter[]>;
+
   constructor(config?: { filters?: FiltersConfig; datasets?: Record<string, Dataset>; data?: any }) {
     this.form = new FormGroup({}, { updateOn: 'blur' });
 
@@ -57,6 +61,9 @@ export class FiltersModel {
     this.search = null;
 
     this.#datasets = new Map();
+
+    this.#selected = new BehaviorSubject<Filter[]>([]);
+    this.selected$ = this.#selected.asObservable();
 
     if (config?.filters) {
       if (config.filters.search) {
@@ -157,6 +164,8 @@ export class FiltersModel {
       filters[this.search.key] = value;
     }
 
+    this.#updateSelected();
+
     return { filters, selected };
   }
 
@@ -181,6 +190,19 @@ export class FiltersModel {
   removeSelection(filterKey: string, key: string) {
     const handler = this.handlers.get(filterKey)!;
     handler.delete(key);
+  }
+
+  #updateSelected() {
+    const filters = this.filters
+      .filter(f => f.selected?.length)
+      // Checkboxes are always shown at the bottom
+      .sort((a, b) => {
+        if (a.type === 'CHECKBOXES' && b.type !== 'CHECKBOXES') return 1;
+        if (a.type !== 'CHECKBOXES' && b.type === 'CHECKBOXES') return -1;
+        return 0;
+      });
+
+    this.#selected.next(filters);
   }
 
   #sanitizeText(text: string) {
