@@ -120,18 +120,14 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       next: response => {
         const { filters, datasets } = getConfig(this.stores.authentication.state.userContext?.type);
 
+        datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
+
         if (this.isAdminType) {
-          datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
             label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
             value: status
           }));
-        } else {
-          const orgId = this.stores.authentication.getUserInfo().organisations[0].id;
-          datasets.engagingOrganisations = response
-            .filter(o => o.id !== orgId)
-            .map(o => ({ value: o.id, label: o.name }));
         }
 
         let previousFilters = sessionStorage.getItem('innovationListFilters');
