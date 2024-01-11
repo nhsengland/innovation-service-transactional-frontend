@@ -129,10 +129,20 @@ export class FiltersModel {
     for (let filter of this.filters) {
       const handler = this.handlers.get(filter.key)!;
       const value = handler.value;
-      if (filter.type === 'CHECKBOXES') {
-        Object.assign(filters, value);
-      } else {
-        filters[filter.key] = handler.value;
+      switch (filter.type) {
+        case 'CHECKBOXES':
+          Object.assign(filters, value);
+          break;
+        case 'DATE_RANGE':
+          if (!filters['dateFilters']) {
+            filters['dateFilters'] = [];
+          }
+          if (value) {
+            filters['dateFilters'].push(value);
+          }
+          break;
+        default:
+          filters[filter.key] = value;
       }
       filter.selected = handler.getSelected();
       selected += filter.selected.length ?? 0;
