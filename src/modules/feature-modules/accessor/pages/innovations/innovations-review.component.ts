@@ -21,7 +21,7 @@ type TabType = {
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
   link: string;
-  queryParams: { status: InnovationSupportStatusEnum[]; assignedToMe?: boolean };
+  queryParams: { status?: InnovationSupportStatusEnum; assignedToMe?: boolean };
   notifications: NotificationValueType;
 };
 
@@ -82,7 +82,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.ENGAGING] },
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
@@ -92,7 +92,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.CLOSED] },
+          queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
@@ -106,15 +106,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: true,
           link: '/accessor/innovations',
-          queryParams: {
-            status: [
-              InnovationSupportStatusEnum.UNASSIGNED,
-              InnovationSupportStatusEnum.ENGAGING,
-              InnovationSupportStatusEnum.WAITING,
-              InnovationSupportStatusEnum.UNSUITABLE,
-              InnovationSupportStatusEnum.CLOSED
-            ]
-          },
+          queryParams: {},
           notifications: null
         },
         {
@@ -126,7 +118,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.UNASSIGNED] },
+          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
           notifications: null
         },
         {
@@ -136,7 +128,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.ENGAGING] },
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
           notifications: null
         },
         {
@@ -146,7 +138,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.WAITING] },
+          queryParams: { status: InnovationSupportStatusEnum.WAITING },
           notifications: null
         },
         {
@@ -156,7 +148,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.UNSUITABLE] },
+          queryParams: { status: InnovationSupportStatusEnum.UNSUITABLE },
           notifications: null
         },
         {
@@ -166,7 +158,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: [InnovationSupportStatusEnum.CLOSED] },
+          queryParams: { status: InnovationSupportStatusEnum.CLOSED },
           notifications: null
         }
       ];
@@ -179,7 +171,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
       link: '',
-      queryParams: { status: [InnovationSupportStatusEnum.UNASSIGNED] },
+      queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
       notifications: null
     };
 
@@ -253,7 +245,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: this.currentTab.queryParams.status,
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: false,
             suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
           })
@@ -271,7 +263,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: this.currentTab.queryParams.status,
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
             suggestedOnly: false
           })
@@ -291,7 +283,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: this.currentTab.queryParams.status,
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: false,
             suggestedOnly: false
           })
@@ -309,7 +301,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: this.currentTab.queryParams.status,
+            supportStatuses: undefined,
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
             suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
           })
