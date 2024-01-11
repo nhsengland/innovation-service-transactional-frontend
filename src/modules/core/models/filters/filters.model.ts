@@ -192,6 +192,15 @@ export class FiltersModel {
     handler.delete(key);
   }
 
+  clearAll(): void {
+    if (this.search) {
+      this.form.get(this.search.key)?.patchValue('');
+    }
+    for (const handler of this.handlers.values()) {
+      handler.reset();
+    }
+  }
+
   #updateSelected() {
     const filters = this.filters
       .filter(f => f.selected?.length)

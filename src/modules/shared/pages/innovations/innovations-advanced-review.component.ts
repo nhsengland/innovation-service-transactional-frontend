@@ -275,6 +275,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.filtersModel.updateDataset(filter, search);
   }
 
+  clearFilters(): void {
+    this.filtersModel.clearAll();
+  }
+
   private translateLists(rawArr: null | string[], translations: any[], other?: null | string): string[] {
     return rawArr?.length ? rawArr.map(i => this.findTranslation(translations, i, other)) : ['Question not answered'];
   }

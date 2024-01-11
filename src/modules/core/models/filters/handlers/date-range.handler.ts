@@ -59,6 +59,13 @@ export class DateRangeHandler extends FilterHandler {
     this.setSelected({ key, value: null });
   }
 
+  reset(): void {
+    for (const key of this.#keys) {
+      const control = this.#getControl(key);
+      control.patchValue(null);
+    }
+  }
+
   #getDate(key: string): string | null {
     return DatesHelper.parseIntoValidFormat(this.#getControl(key).value);
   }
