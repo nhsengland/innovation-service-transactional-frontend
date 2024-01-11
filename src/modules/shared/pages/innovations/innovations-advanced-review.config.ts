@@ -2,7 +2,13 @@ import { UserRoleEnum } from '@app/base/enums';
 import { Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-import { diseasesConditionsImpactItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import {
+  careSettingsItems,
+  categoriesItems,
+  diseasesConditionsImpactItems,
+  involvedAACProgrammesItems,
+  keyHealthInequalitiesItems
+} from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
   search: { key: 'search', placeholder: 'Search innovation' },
@@ -26,15 +32,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       ]
     },
     { type: 'CHECKBOX_GROUP', key: 'locations', title: 'Location', state: 'closed', items: [] },
-    { type: 'CHECKBOX_GROUP', key: 'groupedStatuses', title: 'Innovation status', state: 'closed', items: [] },
+    { type: 'CHECKBOX_GROUP', key: 'categories', title: 'Categories', state: 'closed', items: [], scrollable: true },
     {
       type: 'CHECKBOX_GROUP',
-      key: 'engagingOrganisations',
-      title: 'Engaging organisations',
+      key: 'careSettings',
+      title: 'Care settings',
       state: 'closed',
-      scrollable: true,
-      searchable: true,
-      items: []
+      items: [],
+      scrollable: true
     },
     {
       type: 'CHECKBOX_GROUP',
@@ -45,7 +50,33 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       searchable: true,
       items: []
     },
+    {
+      type: 'CHECKBOX_GROUP',
+      key: 'keyHealthInequalities',
+      title: 'Healthy inequalities',
+      state: 'closed',
+      items: [],
+      scrollable: true
+    },
+    {
+      type: 'CHECKBOX_GROUP',
+      key: 'involvedAACProgrammes',
+      title: 'AAC involvement',
+      state: 'closed',
+      items: [],
+      scrollable: true
+    },
+    {
+      type: 'CHECKBOX_GROUP',
+      key: 'engagingOrganisations',
+      title: 'Engaging organisations',
+      state: 'closed',
+      scrollable: true,
+      searchable: true,
+      items: []
+    },
     { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] },
+    { type: 'CHECKBOX_GROUP', key: 'groupedStatuses', title: 'Innovation status', state: 'closed', items: [] },
     {
       type: 'DATE_RANGE',
       key: 'submittedAt',
@@ -62,7 +93,11 @@ const InnovationListDatasets: Record<string, Dataset> = {
   engagingOrganisations: [],
   supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ value: key, label: item.label })),
   groupedStatuses: [],
-  diseasesAndConditions: diseasesConditionsImpactItems
+  diseasesAndConditions: diseasesConditionsImpactItems,
+  categories: categoriesItems,
+  careSettings: careSettingsItems,
+  keyHealthInequalities: keyHealthInequalitiesItems.filter(i => i.label !== 'SEPARATOR'),
+  involvedAACProgrammes: involvedAACProgrammesItems.filter(i => i.label !== 'SEPARATOR')
 };
 
 export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
@@ -75,11 +110,23 @@ export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datase
     'supportStatuses',
     'assignedToMe',
     'suggestedOnly',
-    'submittedAt'
+    'submittedAt',
+    'categories',
+    'careSettings'
   ];
 
   if (role === UserRoleEnum.ADMIN) {
-    filters = ['engagingOrganisations', 'diseasesAndConditions', 'groupedStatuses', 'submittedAt'];
+    filters = [
+      'locations',
+      'engagingOrganisations',
+      'diseasesAndConditions',
+      'groupedStatuses',
+      'submittedAt',
+      'categories',
+      'careSettings',
+      'keyHealthInequalities',
+      'involvedAACProgrammes'
+    ];
   }
 
   const config: FiltersConfig = { search: InnovationsListFiltersConfig.search, filters: [] };
