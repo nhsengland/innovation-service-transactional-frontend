@@ -172,7 +172,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
       if (
-        this.stores.authentication.isAccessorType() &&
+        (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) &&
         this.innovation.status === 'IN_PROGRESS' &&
         this.sectionSummaryData.sectionInfo.status.id === 'DRAFT'
       ) {
