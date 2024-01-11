@@ -40,6 +40,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   // Flags.
   isInnovatorType: boolean;
   isAccessorType: boolean;
+  isAssessmentType: boolean;
   isInnovationInCreatedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
@@ -65,6 +66,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.showSupportingTeamsShareRequestSection =
