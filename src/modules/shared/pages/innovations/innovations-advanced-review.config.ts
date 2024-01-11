@@ -94,8 +94,8 @@ const InnovationListDatasets: Record<string, Dataset> = {
   supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ value: key, label: item.label })),
   groupedStatuses: [],
   diseasesAndConditions: diseasesConditionsImpactItems,
-  categories: categoriesItems,
-  careSettings: careSettingsItems,
+  categories: [...categoriesItems, { value: 'OTHER', label: 'Other' }],
+  careSettings: [...careSettingsItems, { value: 'OTHER', label: 'Other' }],
   keyHealthInequalities: keyHealthInequalitiesItems.filter(i => i.label !== 'SEPARATOR'),
   involvedAACProgrammes: involvedAACProgrammesItems.filter(i => i.label !== 'SEPARATOR')
 };
