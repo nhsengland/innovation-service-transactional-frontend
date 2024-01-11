@@ -44,13 +44,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   );
 
   innovationsList: TableModel<
-    InnovationsListDTO['data'][0] & {
-      supportInfo: { accessorsNames: string[]; supportingOrganisations: string[]; updatedAt: null | DateISOType };
-    },
-    InnovationsListFiltersType
-  >;
-
-  innovationsList2: TableModel<
     {
       id: string;
       name: string;
@@ -191,7 +184,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     };
 
     this.innovationsList = new TableModel({});
-    this.innovationsList2 = new TableModel({});
   }
 
   ngOnInit(): void {
@@ -215,17 +207,15 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       'support.status',
       'assessment.id',
       'statistics.notifications',
-      'engagingOrganisations'
+      'engagingOrganisations',
+      'engagingUnits'
     ];
 
-    const { take, skip, order, filters } = this.innovationsList2.getAPIQueryParams();
+    const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
 
-    forkJoin([
-      this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }),
-      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList2.getAPIQueryParams() })
-    ]).subscribe({
-      next: ([response, responseOld]) => {
-        this.innovationsList2.setData(
+    this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe({
+      next: response => {
+        this.innovationsList.setData(
           response.data.map((item, index) => {
             return {
               id: item.id,
@@ -242,65 +232,25 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               supportStatus: item.support.status,
               assessment: item.assessment,
               notifications: item.statistics.notifications,
-              accessors: (responseOld.data[index].supports ?? []).flatMap(s =>
-                (s.organisation.unit.users ?? []).map(u => u.name)
+              accessors: (response.data[index].engagingUnits ?? []).flatMap(s =>
+                (s.assignedAccessors ?? []).map(u => u.name)
               ),
+
               engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
             };
           }),
           response.count
         );
-        if (this.isRunningOnBrowser() && column) this.innovationsList2.setFocusOnSortedColumnHeader(column);
+        if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
       }
     });
-
-    //   this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe(response => {
-    //     this.innovationsList2.setData(
-    //       response.data.map((item,index) => {
-    //         return {
-    //           id: item.id,
-    //           name: item.name,
-    //           updatedAt: item.updatedAt,
-    //           submittedAt: item.submittedAt,
-    //           mainCategory: categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? 'Other',
-    //           countryName: item.countryName,
-    //           postCode: item.postcode,
-    //           supportStatus: item.support.status,
-    //           assessment: item.assessment,
-    //           notifications: item.statistics.notifications,
-    //           accessors: ['A accessor', 'Another one', 'A third just in case'],
-    //           engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
-    //         };
-    //       }),
-    //       response.count
-    //     );
-    //     if (this.isRunningOnBrowser() && column) this.innovationsList2.setFocusOnSortedColumnHeader(column);
-    //     this.setPageStatus('READY');
-    //     console.log('{ ...this.innovationsList2.dataSource}');
-    //     console.log({ ...this.innovationsList2.dataSource });
-    //   });
-
-    //   this.innovationsService
-    //     .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
-    //     .subscribe(response => {
-    //       this.innovationsList2.setData(
-    //         { ...this.innovationsList2.dataSource }
-    //         // response.data.map(item => {
-    //         //     return {
-    //         //         accessors: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)) ?? []
-    //         //         }
-    //         //     }),
-    //       );
-    //       if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
-    //       this.setPageStatus('READY');
-    //     });
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
     switch (status) {
       case InnovationSupportStatusEnum.UNASSIGNED:
-        this.innovationsList2
+        this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: this.currentTab.queryParams.status,
@@ -318,7 +268,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         break;
 
       case InnovationSupportStatusEnum.ENGAGING:
-        this.innovationsList2
+        this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: this.currentTab.queryParams.status,
@@ -338,7 +288,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       case InnovationSupportStatusEnum.WAITING:
       case InnovationSupportStatusEnum.UNSUITABLE:
       case InnovationSupportStatusEnum.CLOSED:
-        this.innovationsList2
+        this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: this.currentTab.queryParams.status,
@@ -356,7 +306,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         break;
 
       case 'ALL':
-        this.innovationsList2
+        this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: this.currentTab.queryParams.status,
@@ -406,18 +356,17 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   onFormChange(): void {
-    console.log('onFormChange!');
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
   }
 
   onTableOrder(column: string): void {
-    this.innovationsList2.setOrderBy(column);
+    this.innovationsList.setOrderBy(column);
     this.getInnovationsList(column);
   }
 
   onPageChange(event: { pageNumber: number }): void {
-    this.innovationsList2.setPage(event.pageNumber);
+    this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
   }
 }
