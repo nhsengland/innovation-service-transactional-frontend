@@ -31,4 +31,6 @@ export abstract class FilterHandler {
   abstract setSelected(value: { key?: string; value: unknown }): void;
 
   abstract delete(key: string): void;
+
+  abstract reset(): void;
 }

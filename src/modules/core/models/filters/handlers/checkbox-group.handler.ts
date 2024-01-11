@@ -47,4 +47,8 @@ export class CheckboxGroupHandler extends FilterHandler {
       control.removeAt(index);
     }
   }
+
+  reset(): void {
+    this.control.clear();
+  }
 }

@@ -50,6 +50,12 @@ export class CheckboxesHandler extends FilterHandler {
     this.setSelected({ key, value: false });
   }
 
+  reset(): void {
+    for (const key of this.#keys) {
+      this.delete(key);
+    }
+  }
+
   #getControl(key: string): FormControl {
     return this.form.get(key) as FormControl;
   }
