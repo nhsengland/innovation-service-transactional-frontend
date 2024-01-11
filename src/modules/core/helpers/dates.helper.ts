@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon';
+import { UtilsHelper } from './utils.helper';
 
 export class DatesHelper {
   // Returns the difference (in days) between 2 dates.
@@ -33,5 +34,11 @@ export class DatesHelper {
     }
 
     return null;
+  }
+
+  static translateTwoDatesOrder(after: string | null, before: string | null): 'after' | 'before' | 'between' {
+    if (after !== null && UtilsHelper.isEmpty(before)) return 'after';
+    if (before !== null && UtilsHelper.isEmpty(after)) return 'before';
+    return 'between';
   }
 }
