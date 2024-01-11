@@ -10,16 +10,18 @@ import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { forkJoin } from 'rxjs';
 
 type TabType = {
-  key: InnovationSupportStatusEnum;
+  key: InnovationSupportStatusEnum | 'ALL';
   title: string;
   mainDescription: string;
   secondaryDescription?: string;
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
   link: string;
-  queryParams: { status: InnovationSupportStatusEnum; assignedToMe?: boolean };
+  queryParams: { status?: InnovationSupportStatusEnum; assignedToMe?: boolean };
   notifications: NotificationValueType;
 };
 
@@ -42,8 +44,21 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   );
 
   innovationsList: TableModel<
-    InnovationsListDTO['data'][0] & {
-      supportInfo: { accessorsNames: string[]; supportingOrganisations: string[]; updatedAt: null | DateISOType };
+    {
+      id: string;
+      name: string;
+      updatedAt: DateISOType | null;
+      submittedAt: DateISOType | null;
+      mainCategory: string | null;
+      countryName: string | null;
+      postCode: string | null;
+      supportStatus: InnovationSupportStatusEnum;
+      accessors: string[];
+      assessment: {
+        id: string;
+      } | null;
+      notifications: number;
+      engagingOrganisations: string[];
     },
     InnovationsListFiltersType
   >;
@@ -84,6 +99,16 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
       this.defaultStatus = 'UNASSIGNED';
       this.tabs = [
+        {
+          key: 'ALL',
+          title: 'All',
+          mainDescription: 'All innovations shared with your organisation.',
+          showAssignedToMeFilter: true,
+          showSuggestedOnlyFilter: true,
+          link: '/accessor/innovations',
+          queryParams: {},
+          notifications: null
+        },
         {
           key: InnovationSupportStatusEnum.UNASSIGNED,
           title: 'Unassigned',
@@ -163,38 +188,64 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   getInnovationsList(column?: string): void {
     this.setPageStatus('LOADING');
 
-    this.innovationsService
-      .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })
-      .subscribe(response => {
-        this.innovationsList.setData(
-          response.data.map(item => {
-            const supportingOrganisations = (item.supports ?? [])
-              .filter(s => s.status === InnovationSupportStatusEnum.ENGAGING)
-              .map(s => s.organisation.acronym || '');
+    let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
+      'id',
+      'name',
+      'updatedAt',
+      'submittedAt',
+      'countryName',
+      'mainCategory',
+      'postcode',
+      'support.status',
+      'assessment.id',
+      'statistics.notifications',
+      'engagingOrganisations',
+      'engagingUnits'
+    ];
 
+    const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
+
+    this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe({
+      next: response => {
+        this.innovationsList.setData(
+          response.data.map((item, index) => {
             return {
-              ...item,
-              supportInfo: {
-                accessorsNames: (item.supports ?? []).flatMap(s => (s.organisation.unit.users ?? []).map(u => u.name)),
-                supportingOrganisations: [...new Set(supportingOrganisations)], // Remove duplicates.
-                updatedAt: item.supports && item.supports.length > 0 ? item.supports[0].updatedAt : null
-              }
+              id: item.id,
+              name: item.name,
+              updatedAt: item.updatedAt,
+              submittedAt: item.submittedAt,
+              mainCategory: item.mainCategory
+                ? item.mainCategory === 'OTHER'
+                  ? 'Other'
+                  : categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? item.mainCategory
+                : '',
+              countryName: item.countryName,
+              postCode: item.postcode,
+              supportStatus: item.support.status,
+              assessment: item.assessment,
+              notifications: item.statistics.notifications,
+              accessors: (response.data[index].engagingUnits ?? []).flatMap(s =>
+                (s.assignedAccessors ?? []).map(u => u.name)
+              ),
+
+              engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
             };
           }),
           response.count
         );
         if (this.isRunningOnBrowser() && column) this.innovationsList.setFocusOnSortedColumnHeader(column);
         this.setPageStatus('READY');
-      });
+      }
+    });
   }
 
-  prepareInnovationsList(status: InnovationSupportStatusEnum): void {
+  prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
     switch (status) {
       case InnovationSupportStatusEnum.UNASSIGNED:
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.key],
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: false,
             suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
           })
@@ -202,7 +253,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            location: { label: 'Location', orderable: true },
+            countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
@@ -212,7 +263,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.key],
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
             suggestedOnly: false
           })
@@ -232,7 +283,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.key],
+            supportStatuses: [this.currentTab.queryParams.status!],
             assignedToMe: false,
             suggestedOnly: false
           })
@@ -240,10 +291,28 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             updatedAt: { label: 'Updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
-            location: { label: 'Location', orderable: true },
+            countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('updatedAt', 'descending');
+        break;
+
+      case 'ALL':
+        this.innovationsList
+          .clearData()
+          .setFilters({
+            supportStatuses: undefined,
+            assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+          })
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            submittedAt: { label: 'Submitted', orderable: true },
+            mainCategory: { label: 'Main category', orderable: true },
+            countryName: { label: 'Location', orderable: true },
+            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+          })
+          .setOrderBy('submittedAt', 'descending');
         break;
     }
   }
@@ -252,21 +321,30 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.setPageTitle('Innovations');
 
     const currentStatus = queryParams.status;
-    const currentTabIndex = this.tabs.findIndex(tab => tab.queryParams.status === currentStatus) || 0;
+    const currentTabIndex = this.tabs.findIndex(tab => tab.key === currentStatus);
 
     if (!currentStatus || currentTabIndex === -1) {
       this.router.navigate(['/accessor/innovations'], { queryParams: { status: this.defaultStatus } });
       return;
     }
 
-    if (queryParams.assignedToMe) {
-      this.form.get('assignedToMe')?.setValue(true);
-    }
-
     this.currentTab = this.tabs[currentTabIndex];
 
-    this.prepareInnovationsList(this.currentTab.key);
-    this.getInnovationsList();
+    switch (queryParams.status) {
+      case 'ALL':
+        this.form.reset();
+        break;
+      case 'UNASSIGNED':
+        this.form.get('suggestedOnly')?.setValue(true);
+        break;
+      case 'ENGAGING':
+        this.form.get('assignedToMe')?.setValue(false);
+        break;
+      default:
+        this.prepareInnovationsList(this.currentTab.key);
+        this.getInnovationsList();
+        break;
+    }
   }
 
   onFormChange(): void {

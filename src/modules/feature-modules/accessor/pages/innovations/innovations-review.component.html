@@ -8,7 +8,7 @@
           <a
             id="tab-{{ item.key }}"
             [routerLink]="item.link"
-            [queryParams]="item.queryParams"
+            [queryParams]="{ status: item.key }"
             role="tab"
             class="nhsuk-u-padding-right-1"
             attr.aria-controls="content-{{ item.key }}"
@@ -90,28 +90,32 @@
                 {{ item.mainCategory }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('location')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("location") }}</span>
+              <td *ngIf="innovationsList.getColumnLabel('countryName')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("countryName") }}</span>
                 {{ item.countryName }}{{ item.postCode ? ", " + item.postCode : "" }}
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('accessors')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("accessors") }}</span>
-                {{
-                  item.supportInfo.accessorsNames.length === 0
-                    ? ""
-                    : item.supportInfo.accessorsNames[0] + "" + (item.supportInfo.accessorsNames.length > 1 ? " +" + ((item.supportInfo.accessorsNames.length || 0) - 1) : "")
-                }}
+                {{ item.accessors.length === 0 ? "" : item.accessors[0] + "" + (item.accessors.length > 1 ? " +" + ((item.accessors.length || 0) - 1) : "") }}
               </td>
 
-              <td class="nhsuk-table__cell text-align-right">
+              <td *ngIf="innovationsList.getColumnLabel('supportStatus')" class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + item.supportStatus + '.name' | translate }}"
+                ></theme-tag>
+              </td>
+
+              <td *ngIf="innovationsList.getColumnLabel('engagingOrganisations')" class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("engagingOrganisations") }}</span>
-                <ng-container *ngFor="let org of item.supportInfo.supportingOrganisations; let i = index">
+                <ng-container *ngFor="let org of item.engagingOrganisations; let i = index">
                   <ng-container *ngIf="i < 2">
                     <strong class="nhsuk-tag nhsuk-tag--white nhsuk-u-margin-left-1">{{ org }}</strong>
                   </ng-container>
-                  <ng-container *ngIf="i === 2 && item.supportInfo.supportingOrganisations.length > 2">
-                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.supportInfo.supportingOrganisations.length - 2 }}</strong>
+                  <ng-container *ngIf="i === 2 && item.engagingOrganisations.length > 2">
+                    <strong class="nhsuk-tag nhsuk-tag--grey nhsuk-u-margin-left-1">+ {{ item.engagingOrganisations.length - 2 }}</strong>
                   </ng-container>
                 </ng-container>
               </td>

@@ -123,7 +123,11 @@ export type InnovationListSelectType =
   | 'engagingUnits'
   | 'suggestedOrganisations'
   | 'support.status'
-  | 'support.updatedAt';
+  | 'support.updatedAt'
+  | 'assessment.id'
+  | 'statistics.notifications'
+  | 'statistics.tasks'
+  | 'statistics.messages';
 
 export type InnovationListNewFullDTO = {
   id: string;
@@ -146,11 +150,15 @@ export type InnovationListNewFullDTO = {
   otherCategoryDescription: string | null;
 
   // Relation fields
-  engagingOrganisations: { organisationId: string; name: string; acronym: string }[];
-  engagingUnits: { unitId: string; name: string; acronym: string }[];
+  engagingOrganisations: { organisationId: string; name: string; acronym: string }[] | null;
+  engagingUnits:
+    | { unitId: string; name: string; acronym: string; assignedAccessors: { id: string; name: string }[] | null }[]
+    | null;
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
   owner: { id: string; name: string | null; companyName: string | null } | null;
   support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
+  assessment: { id: string } | null;
+  statistics: { notifications: number; tasks: number; messages: number };
 };
 
 export type InnovationInfoDTO = {
