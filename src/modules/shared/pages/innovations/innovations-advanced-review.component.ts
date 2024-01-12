@@ -235,7 +235,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   onFormChange(): void {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
-      return;
     }
 
     this.pageNumber = 1;
