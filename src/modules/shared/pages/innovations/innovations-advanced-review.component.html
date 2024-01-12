@@ -36,6 +36,7 @@
           <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
             <theme-collapsible-filter [title]="filter.title" [description]="filter.description" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
               <input
+                #autocompleteSearchInput
                 *ngIf="filter.searchable"
                 fixedContentContainer
                 id="{{ filter.key }}CheckboxInputFilter"

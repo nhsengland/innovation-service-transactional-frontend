@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -34,6 +34,8 @@ type AdvancedReviewSortByKeysType = {
   templateUrl: './innovations-advanced-review.component.html'
 })
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
+  @ViewChildren('autocompleteSearchInput') autocompleteInputs?: QueryList<ElementRef<HTMLInputElement>>;
+
   baseUrl: string;
 
   isAdminType: boolean;
@@ -277,6 +279,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   clearFilters(): void {
+    this.autocompleteInputs?.forEach(i => (i.nativeElement.value = ''));
     this.filtersModel.clearAll();
   }
 

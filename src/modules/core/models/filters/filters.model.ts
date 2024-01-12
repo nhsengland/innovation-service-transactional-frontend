@@ -193,11 +193,21 @@ export class FiltersModel {
   }
 
   clearAll(): void {
+    // If search is available reset the value
     if (this.search) {
       this.form.get(this.search.key)?.patchValue('');
     }
+
+    // Reset all filters values
     for (const handler of this.handlers.values()) {
       handler.reset();
+    }
+
+    // Reset checkbox group items to their default
+    for (const filter of this.filters) {
+      if (filter.type === 'CHECKBOX_GROUP' && filter.searchable) {
+        this.updateDataset(filter, '');
+      }
     }
   }
 
