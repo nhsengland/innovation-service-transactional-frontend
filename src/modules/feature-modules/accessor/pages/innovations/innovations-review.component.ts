@@ -21,7 +21,7 @@ type TabType = {
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
   link: string;
-  queryParams: { status?: InnovationSupportStatusEnum; assignedToMe?: boolean };
+  queryParams: { status?: InnovationSupportStatusEnum | 'ALL'; assignedToMe?: boolean; suggestedOnly?: boolean };
   notifications: NotificationValueType;
 };
 
@@ -106,7 +106,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: true,
           link: '/accessor/innovations',
-          queryParams: {},
+          queryParams: { status: 'ALL', suggestedOnly: false, assignedToMe: false },
           notifications: null
         },
         {
@@ -240,12 +240,15 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
+    const filteredArr: InnovationSupportStatusEnum[] | undefined =
+      this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status!] : undefined;
+
     switch (status) {
       case InnovationSupportStatusEnum.UNASSIGNED:
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.queryParams.status!],
+            supportStatuses: filteredArr,
             assignedToMe: false,
             suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
           })
@@ -263,7 +266,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.queryParams.status!],
+            supportStatuses: filteredArr,
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
             suggestedOnly: false
           })
@@ -283,7 +286,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: [this.currentTab.queryParams.status!],
+            supportStatuses: filteredArr,
             assignedToMe: false,
             suggestedOnly: false
           })
@@ -330,21 +333,15 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.currentTab = this.tabs[currentTabIndex];
 
-    switch (queryParams.status) {
-      case 'ALL':
-        this.form.reset();
-        break;
-      case 'UNASSIGNED':
-        this.form.get('suggestedOnly')?.setValue(true);
-        break;
-      case 'ENGAGING':
-        this.form.get('assignedToMe')?.setValue(false);
-        break;
-      default:
-        this.prepareInnovationsList(this.currentTab.key);
-        this.getInnovationsList();
-        break;
+    if (queryParams.assignedToMe === 'false' && queryParams.suggestedOnly === 'false') {
+      console.log('reset form');
+      this.form.reset();
+    } else if (queryParams.assignedToMe) {
+      this.form.get('assignedToMe')?.setValue(true);
     }
+
+    this.prepareInnovationsList(this.currentTab.key);
+    this.getInnovationsList();
   }
 
   onFormChange(): void {

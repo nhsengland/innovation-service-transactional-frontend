@@ -8,7 +8,7 @@
           <a
             id="tab-{{ item.key }}"
             [routerLink]="item.link"
-            [queryParams]="{ status: item.key }"
+            [queryParams]="item.queryParams"
             role="tab"
             class="nhsuk-u-padding-right-1"
             attr.aria-controls="content-{{ item.key }}"
