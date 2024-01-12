@@ -233,11 +233,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   onFormChange(): void {
-    this.setPageStatus('LOADING');
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.pageNumber = 1;
 
-    // persist in session storage
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
     this.getInnovationsList();
