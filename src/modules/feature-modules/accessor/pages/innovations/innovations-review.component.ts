@@ -240,7 +240,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
-    // Filter out 'ALL' from array, so typescript doesn't complain
+    // Filter out 'ALL' from array, so only status InnovationSupportStatusEnum remain
     const filteredArr: InnovationSupportStatusEnum[] | undefined =
       this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status] : undefined;
 
