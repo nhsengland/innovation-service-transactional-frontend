@@ -21,7 +21,7 @@ type TabType = {
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
   link: string;
-  queryParams: { status?: InnovationSupportStatusEnum | 'ALL'; assignedToMe?: boolean; suggestedOnly?: boolean };
+  queryParams: { status: InnovationSupportStatusEnum | 'ALL'; assignedToMe?: boolean; suggestedOnly?: boolean };
   notifications: NotificationValueType;
 };
 
@@ -240,8 +240,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   prepareInnovationsList(status: InnovationSupportStatusEnum | 'ALL'): void {
+    // Filter out 'ALL' from array, so typescript doesn't complain
     const filteredArr: InnovationSupportStatusEnum[] | undefined =
-      this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status!] : undefined;
+      this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status] : undefined;
 
     switch (status) {
       case InnovationSupportStatusEnum.UNASSIGNED:
@@ -334,7 +335,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.currentTab = this.tabs[currentTabIndex];
 
     if (queryParams.assignedToMe === 'false' && queryParams.suggestedOnly === 'false') {
-      console.log('reset form');
       this.form.reset();
     } else if (queryParams.assignedToMe) {
       this.form.get('assignedToMe')?.setValue(true);
