@@ -80,7 +80,7 @@
       </div>
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
-        <dt *ngIf="!anyFilterSelected" class="nhsuk-u-font-size-16">No filter has been selected</dt>
+        <dt *ngIf="!this.filtersModel.hasSelectedFilters" class="nhsuk-u-font-size-16">No filter has been selected</dt>
 
         <ng-container *ngFor="let filter of this.filtersModel.selected$ | async; last as isLast">
           <div class="d-flex align-items-center" [ngClass]="isLast ? 'border-bottom-0' : 'border-bottom-neutral'">

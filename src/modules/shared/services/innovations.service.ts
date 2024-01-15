@@ -307,20 +307,9 @@ export class InnovationsService extends CoreService {
     filters: F = {} as F,
     pagination: Paginated<S[]> = { take: 100, skip: 0 }
   ): Observable<APIListResponse<InnovationListNewFullDTO, S>> {
-    const qp = {
-      ...filters,
-      dateFilters:
-        filters.dateFilters &&
-        filters.dateFilters.map(f => ({
-          field: f.key,
-          startDate: f.startDate ?? undefined,
-          endDate: f.endDate ?? undefined
-        }))
-    };
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({
       fields,
-      ...qp,
+      ...filters,
       ...pagination
     });
     return this.http.get<APIListResponse<InnovationListNewFullDTO, S>>(url.buildUrl()).pipe(take(1));
