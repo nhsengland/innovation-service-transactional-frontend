@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UtilsHelper } from '@app/base/helpers';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { FilterHandler, GetHandlerValue } from './handlers/base-filter.handler';
@@ -31,7 +31,7 @@ type DateRangeFilter = {
   selected?: { key: string; value: string }[];
 } & CollapsibleFilter;
 
-type SearchFilter = BaseFilter & { placeholder?: string };
+type SearchFilter = BaseFilter & { placeholder?: string; maxLength?: number };
 
 type CollapsibleFilter = { title: string; description?: string; state: 'opened' | 'closed'; scrollable?: boolean };
 type DateFilter = { key: string; label: string; description?: string; defaultValue?: string };
@@ -105,7 +105,14 @@ export class FiltersModel {
   // Assumes only one search per page
   addSearch(search: SearchFilter) {
     this.search = search;
-    this.form.addControl(search.key, new FormControl('', { updateOn: search.options?.updateOn }), { emitEvent: false });
+    this.form.addControl(
+      search.key,
+      new FormControl('', {
+        validators: [Validators.maxLength(search.maxLength ?? 100)],
+        updateOn: search.options?.updateOn
+      }),
+      { emitEvent: false }
+    );
   }
 
   addDatasets(datasets: Record<string, Dataset>) {
@@ -235,8 +242,10 @@ export class FiltersModel {
     }
 
     if (this.search) {
-      const value = this.form.get(this.search.key)!.value;
-      filters[this.search.key] = value;
+      const control = this.form.get(this.search.key);
+      if (control?.valid) {
+        filters[this.search.key] = control.value;
+      }
     }
 
     this.#state = { filters, selected };
