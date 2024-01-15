@@ -182,7 +182,7 @@ export type InnovationInfoDTO = {
     mobilePhone?: null | string;
     contactDetails?: null | string;
     isActive: boolean;
-    organisation?: { name: string; size: null | string };
+    organisation?: { name: string; size: null | string; registrationNumber: null | string };
     lastLoginAt?: DateISOType;
   };
   lastEndSupportAt: null | DateISOType;

@@ -71,6 +71,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         ...(innovation.owner?.organisation?.size
           ? [{ label: 'Company size', value: innovation.owner?.organisation?.size ?? '' }]
           : []),
+        ...(this.innovation.owner?.organisation?.registrationNumber
+          ? [
+              {
+                label: 'Company UK registration number',
+                value: this.innovation.owner?.organisation?.registrationNumber ?? ''
+              }
+            ]
+          : []),
         { label: 'Description', value: innovation.description },
         {
           label: 'Categories',
