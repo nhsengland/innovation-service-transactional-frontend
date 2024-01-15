@@ -9,7 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { DatesHelper, UtilsHelper } from '@app/base/helpers';
+import { DatesHelper } from '@app/base/helpers';
 import { Filter, FiltersModel } from '@modules/core/models/filters/filters.model';
 import {
   careSettingsItems,
@@ -63,8 +63,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   sortByData: AdvancedReviewSortByKeysType;
   sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
-
-  anyFilterSelected = false;
 
   filtersModel!: FiltersModel;
   form!: FormGroup;
@@ -156,9 +154,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.paginationParams.order = { [this.orderBy]: ['ascending'].includes(this.orderDir) ? 'ASC' : 'DESC' };
     this.paginationParams.skip = (this.pageNumber - 1) * this.pageSize;
 
-    const { filters, selected } = this.filtersModel.getCurrentStateFilters();
-    this.anyFilterSelected = selected > 0;
-    const apiQueryFilters = Object.fromEntries(Object.entries(filters).filter(([_k, v]) => !UtilsHelper.isEmpty(v)));
+    this.filtersModel.handleStateChanges();
 
     let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
       'id',
@@ -194,7 +190,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     this.innovationsService
-      .getInnovationsList2(queryFields, apiQueryFilters, this.paginationParams)
+      .getInnovationsList2(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
       .subscribe(response => {
         this.innovationsCount = response.count;
         this.innovationCardsData = [];

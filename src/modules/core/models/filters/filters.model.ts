@@ -1,4 +1,5 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UtilsHelper } from '@app/base/helpers';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { FilterHandler, GetHandlerValue } from './handlers/base-filter.handler';
 import { CheckboxGroupHandler } from './handlers/checkbox-group.handler';
@@ -30,7 +31,7 @@ type DateRangeFilter = {
   selected?: { key: string; value: string }[];
 } & CollapsibleFilter;
 
-type SearchFilter = BaseFilter & { placeholder?: string };
+type SearchFilter = BaseFilter & { placeholder?: string; maxLength?: number };
 
 type CollapsibleFilter = { title: string; description?: string; state: 'opened' | 'closed'; scrollable?: boolean };
 type DateFilter = { key: string; label: string; description?: string; defaultValue?: string };
@@ -53,6 +54,12 @@ export class FiltersModel {
   #selected: BehaviorSubject<Filter[]>;
   selected$: Observable<Filter[]>;
 
+  #state: { filters: Record<string, any>; selected: number } | null;
+
+  get hasSelectedFilters(): boolean {
+    return this.#state ? this.#state.selected > 0 : false;
+  }
+
   constructor(config?: { filters?: FiltersConfig; datasets?: Record<string, Dataset>; data?: any }) {
     this.form = new FormGroup({}, { updateOn: 'blur' });
 
@@ -64,6 +71,8 @@ export class FiltersModel {
 
     this.#selected = new BehaviorSubject<Filter[]>([]);
     this.selected$ = this.#selected.asObservable();
+
+    this.#state = null;
 
     if (config?.filters) {
       if (config.filters.search) {
@@ -96,7 +105,14 @@ export class FiltersModel {
   // Assumes only one search per page
   addSearch(search: SearchFilter) {
     this.search = search;
-    this.form.addControl(search.key, new FormControl('', { updateOn: search.options?.updateOn }), { emitEvent: false });
+    this.form.addControl(
+      search.key,
+      new FormControl('', {
+        validators: [Validators.maxLength(search.maxLength ?? 100)],
+        updateOn: search.options?.updateOn
+      }),
+      { emitEvent: false }
+    );
   }
 
   addDatasets(datasets: Record<string, Dataset>) {
@@ -129,44 +145,28 @@ export class FiltersModel {
     }
   }
 
-  getCurrentStateFilters() {
-    const filters: Record<string, any> = {};
-    let selected = 0;
-
-    for (let filter of this.filters) {
-      const handler = this.handlers.get(filter.key)!;
-      const value = handler.value;
-      switch (filter.type) {
-        case 'CHECKBOXES':
-          Object.assign(filters, value);
-          break;
-        case 'DATE_RANGE':
-          if (!filters['dateFilters']) {
-            filters['dateFilters'] = [];
-          }
-          if (value) {
-            filters['dateFilters'].push(value);
-          }
-          break;
-        default:
-          filters[filter.key] = value;
-      }
-      filter.selected = handler.getSelected();
-      selected += filter.selected.length ?? 0;
-
-      if (filter.type === 'CHECKBOX_GROUP' || filter.type === 'DATE_RANGE') {
-        filter.description = `${filter.selected?.length ?? 0} selected`;
-      }
-    }
-
-    if (this.search) {
-      const value = this.form.get(this.search.key)!.value;
-      filters[this.search.key] = value;
-    }
-
+  handleStateChanges(): void {
+    this.#updateFilters();
     this.#updateSelected();
+  }
 
-    return { filters, selected };
+  getAPIQueryParams(): Record<string, any> {
+    if (!this.#state) {
+      return {};
+    }
+
+    const qp = {
+      ...this.#state.filters,
+      dateFilters:
+        this.#state.filters.dateFilters &&
+        this.#state.filters.dateFilters.map((f: GetHandlerValue<'DATE_RANGE'>) => ({
+          field: f.key,
+          startDate: f.startDate ?? undefined,
+          endDate: f.endDate ?? undefined
+        }))
+    };
+
+    return Object.fromEntries(Object.entries(qp).filter(([_k, v]) => !UtilsHelper.isEmpty(v)));
   }
 
   updateDataset(filter: Filter, search: string): void {
@@ -209,6 +209,46 @@ export class FiltersModel {
         this.updateDataset(filter, '');
       }
     }
+  }
+
+  #updateFilters(): void {
+    const filters: Record<string, any> = {};
+    let selected = 0;
+
+    for (let filter of this.filters) {
+      const handler = this.handlers.get(filter.key)!;
+      const value = handler.value;
+      switch (filter.type) {
+        case 'CHECKBOXES':
+          Object.assign(filters, value);
+          break;
+        case 'DATE_RANGE':
+          if (!filters['dateFilters']) {
+            filters['dateFilters'] = [];
+          }
+          if (value) {
+            filters['dateFilters'].push(value);
+          }
+          break;
+        default:
+          filters[filter.key] = value;
+      }
+      filter.selected = handler.getSelected();
+      selected += filter.selected.length ?? 0;
+
+      if (filter.type === 'CHECKBOX_GROUP' || filter.type === 'DATE_RANGE') {
+        filter.description = `${filter.selected?.length ?? 0} selected`;
+      }
+    }
+
+    if (this.search) {
+      const control = this.form.get(this.search.key);
+      if (control?.valid) {
+        filters[this.search.key] = control.value;
+      }
+    }
+
+    this.#state = { filters, selected };
   }
 
   #updateSelected() {
