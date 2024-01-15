@@ -96,8 +96,8 @@ const InnovationListDatasets: Record<string, Dataset> = {
   diseasesAndConditions: diseasesConditionsImpactItems,
   categories: [...categoriesItems, { value: 'OTHER', label: 'Other' }],
   careSettings: [...careSettingsItems, { value: 'OTHER', label: 'Other' }],
-  keyHealthInequalities: keyHealthInequalitiesItems.filter(i => i.label !== 'SEPARATOR'),
-  involvedAACProgrammes: involvedAACProgrammesItems.filter(i => i.label !== 'SEPARATOR')
+  keyHealthInequalities: keyHealthInequalitiesItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ value: i.value, label: i.label }) ),
+  involvedAACProgrammes: involvedAACProgrammesItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ value: i.value, label: i.label }) )
 };
 
 export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
