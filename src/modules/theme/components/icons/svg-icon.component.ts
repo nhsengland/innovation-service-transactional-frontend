@@ -8,8 +8,19 @@ type SvgPaletteDataType = { [key in SvgPaletteColorsType]: { stroke: string; fil
   templateUrl: './svg-icon.component.html'
 })
 export class SvgIconComponent implements OnInit {
-  @Input() type: '' | 'action' | 'success' | 'error' | 'edit' | 'back' = '';
+  @Input() type:
+    | ''
+    | 'action'
+    | 'success'
+    | 'error'
+    | 'edit'
+    | 'chevron-left'
+    | 'chevron-right'
+    | 'arrow-left'
+    | 'arrow-right'
+    | 'plus' = '';
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
+  @Input() fill? = '';
 
   svgPaletteData: SvgPaletteDataType = {
     green: {

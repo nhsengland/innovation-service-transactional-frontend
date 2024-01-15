@@ -114,15 +114,11 @@
   <div class="d-flex align-items-center">
     <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
       >{{ item.label }}
-      <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-      </svg>
+      <theme-svg-icon type="chevron-right" />
     </a>
     <a *ngIf="item.fullReload" [href]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
       >{{ item.label }}
-      <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-      </svg>
+      <theme-svg-icon type="chevron-right" />
     </a>
     <theme-notification-tag *ngIf="notifications[item.id]" [label]="notifications[item.id]" class="nhsuk-u-padding-right-2 nhsuk-u-padding-bottom-3"></theme-notification-tag>
   </div>
@@ -143,9 +139,7 @@
       attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu"
     >
       {{ item.label }}
-      <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
-      </svg>
+      <theme-svg-icon type="chevron-right" />
     </button>
 
     <div *ngIf="item.isOpen" class="app-multilevel-navigation__dropdown-menu">
