@@ -7,21 +7,24 @@ import { UsersService } from '@modules/shared/services/users.service';
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessor',
-  templateUrl: './change-assessor.component.html',
+  templateUrl: './change-assessor.component.html'
 })
-export class InnovationChangeAssessorComponent extends CoreComponent  implements OnInit {
+export class InnovationChangeAssessorComponent extends CoreComponent implements OnInit {
   innovationId: string;
   assessmentId: string;
 
-  form = new FormGroup({
-    assessor: new FormControl<string>('', { validators: Validators.required, updateOn: 'change' }),
-  }, { updateOn: 'blur' });
-  
-  needsAssessorList: { id: string, name: string }[] = [];
+  form = new FormGroup(
+    {
+      assessor: new FormControl<string>('', { validators: Validators.required, updateOn: 'change' })
+    },
+    { updateOn: 'blur' }
+  );
+
+  needsAssessorList: { id: string; name: string }[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private assessmentService: AssessmentService, 
+    private assessmentService: AssessmentService,
     private usersService: UsersService
   ) {
     super();
@@ -33,7 +36,7 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
   ngOnInit(): void {
     this.setPageTitle('Assign a new needs assessor to support this innovation');
 
-    this.usersService.getUsersList().subscribe((userList) => {
+    this.usersService.getUsersList().subscribe(userList => {
       const innovation = this.stores.context.getInnovation();
       this.needsAssessorList = userList.data.filter(i => i.id !== innovation.assignedTo?.id);
 
@@ -42,21 +45,22 @@ export class InnovationChangeAssessorComponent extends CoreComponent  implements
     });
   }
 
-
   onSubmit(): void {
     if (!this.form.valid) {
-      this.form.get('assessor')?.setErrors({ customError: true, message: 'Choose one assessor'})
+      this.form.get('assessor')?.setErrors({ customError: true, message: 'Choose one assessor' });
       this.form.markAllAsTouched();
       return;
     }
 
     const body = {
       assessorId: this.form.get('assessor')?.value ?? ''
-    }
-    
-    this.assessmentService.updateInnovationNeedsAssessmentAssessor(this.innovationId, this.assessmentId, body).subscribe(() => {
-      this.setRedirectAlertSuccess('The assigned needs assessor has been successfully changed');
-      this.redirectTo(`/assessment/innovations/${this.innovationId}/overview`);
-    });
+    };
+
+    this.assessmentService
+      .updateInnovationNeedsAssessmentAssessor(this.innovationId, this.assessmentId, body)
+      .subscribe(() => {
+        this.setRedirectAlertSuccess('The assigned needs assessor has been successfully changed');
+        this.redirectTo(`/assessment/innovations/${this.innovationId}/overview`);
+      });
   }
 }

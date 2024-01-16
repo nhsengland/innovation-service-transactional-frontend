@@ -13,13 +13,11 @@ import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config'
 import { ACCOUNT_DETAILS_ADMIN } from './manage-details-edit-admin.config';
 import { UpdateUserInfoDTO } from '@modules/stores/authentication/authentication.service';
 
-
 @Component({
   selector: 'shared-pages-account-manage-details-edit',
   templateUrl: './manage-details-edit.component.html'
 })
 export class PageAccountManageDetailsEditComponent extends CoreComponent implements OnInit {
-
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   module: '' | 'innovator' | 'accessor' | 'assessment' | 'admin' = '';
@@ -28,23 +26,20 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
   summaryList: WizardSummaryType[] = [];
 
-  isQuestionStep(): boolean { return Number.isInteger(Number(this.activatedRoute.snapshot.params.stepId)); }
-  isSummaryStep(): boolean { return this.activatedRoute.snapshot.params.stepId === 'summary'; }
+  isQuestionStep(): boolean {
+    return Number.isInteger(Number(this.activatedRoute.snapshot.params.stepId));
+  }
+  isSummaryStep(): boolean {
+    return this.activatedRoute.snapshot.params.stepId === 'summary';
+  }
 
-
-  constructor(
-    private activatedRoute: ActivatedRoute
-  ) {
-
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     this.module = RoutingHelper.getRouteData<any>(this.activatedRoute.root).module;
-
   }
 
-
   ngOnInit(): void {
-
     if (this.stores.authentication.isInnovatorType()) {
       this.wizard = ACCOUNT_DETAILS_INNOVATOR;
     } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
@@ -58,7 +53,6 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
 
     this.subscriptions.push(
       this.activatedRoute.params.subscribe(params => {
-
         if (!this.wizard.isValidStep(params.stepId)) {
           this.redirectTo('/not-found');
           return;
@@ -77,40 +71,33 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
         this.wizard.gotoStep(Number(params.stepId));
 
         this.setPageStatus('READY');
-
       })
     );
-
-
   }
 
-
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
-
     event.preventDefault();
 
     const formData = this.formEngineComponent?.getFormValues();
 
-    if (action === 'next' && !formData?.valid) { // Apply validation only when moving forward.
+    if (action === 'next' && !formData?.valid) {
+      // Apply validation only when moving forward.
       return;
     }
 
     this.wizard.addAnswers(formData?.data || {}).runRules();
 
     this.redirectTo(this.getNavigationUrl(action));
-
   }
 
-
   onSubmitWizard(): void {
-
     const wizardData = this.wizard.runOutboundParsing();
 
     let body: UpdateUserInfoDTO = {
       displayName: wizardData.displayName
     };
 
-    if(this.stores.authentication.isInnovatorType()) {
+    if (this.stores.authentication.isInnovatorType()) {
       body = {
         displayName: wizardData.displayName,
         contactByPhone: wizardData.contactByPhone,
@@ -122,40 +109,50 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       };
     }
 
-    this.stores.authentication.updateUserInfo$(body).pipe(
-      concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
-    ).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess('Your information has been saved');
-        this.redirectTo(`${this.module}/account/manage-details`);
-      },
-      error: () => {
-        this.setAlertError('An error occurred while updating information. Please try again or contact us for further help');
-      }
-    });
-
+    this.stores.authentication
+      .updateUserInfo$(body)
+      .pipe(
+        concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
+      )
+      .subscribe({
+        next: () => {
+          this.setRedirectAlertSuccess('Your information has been saved');
+          this.redirectTo(`${this.module}/account/manage-details`);
+        },
+        error: () => {
+          this.setAlertError(
+            'An error occurred while updating information. Please try again or contact us for further help'
+          );
+        }
+      });
   }
-
 
   getStepUrl(stepNumber: number | undefined): string {
     return `/${this.module}/account/manage-details/edit/${stepNumber}`;
   }
 
   getNavigationUrl(action: 'previous' | 'next'): string {
-
     let url = `/${this.module}/account/manage-details`;
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { url += ``; }
-        else if (this.isSummaryStep()) { url += `/edit/${this.wizard.steps.length}`; }
-        else { url += `/edit/${Number(this.wizard.currentStepId) - 1}`; }
+        if (this.wizard.isFirstStep()) {
+          url += ``;
+        } else if (this.isSummaryStep()) {
+          url += `/edit/${this.wizard.steps.length}`;
+        } else {
+          url += `/edit/${Number(this.wizard.currentStepId) - 1}`;
+        }
         break;
 
       case 'next':
-        if (this.isSummaryStep()) { url += ``; }
-        else if (this.wizard.isLastStep()) { url += `/edit/summary`; }
-        else { url += `/edit/${Number(this.wizard.currentStepId) + 1}`; }
+        if (this.isSummaryStep()) {
+          url += ``;
+        } else if (this.wizard.isLastStep()) {
+          url += `/edit/summary`;
+        } else {
+          url += `/edit/${Number(this.wizard.currentStepId) + 1}`;
+        }
         break;
 
       default: // Should NOT happen!
@@ -164,7 +161,5 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
     }
 
     return url;
-
   }
-
 }

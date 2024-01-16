@@ -1,21 +1,46 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
+      <span *ngIf="rulesToShow.length === 0" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-5">
+        Activate {{ user.role.description }} role for {{ user.name }}.
+      </span>
 
-        <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-5">
-          Activate {{ user.role.description }} role for {{ user.name }}.
-        </span>
+      <table *ngIf="rulesToShow.length > 0" class="nhsuk-table">
+        <caption>
+          All conditions must be valid to activate the role of
+          {{
+            user.role.description
+          }}
+          for
+          {{
+            user.name
+          }}.
+        </caption>
+        <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="col">Condition</th>
+            <th class="nhsuk-table__header" scope="col">Is valid</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let item of rulesToShow" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              {{ "shared.catalog.user." + item.rule + ".label" | translate }}
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <strong class="nhsuk-tag" [ngClass]="{ 'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid }">{{ item.valid ? "Valid" : "Invalid" }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()">
-          {{ submitButton.label }}
-        </button>
+      <button type="button" [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmit()">
+        {{ submitButton.label }}
+      </button>
 
       <div>
         <a routerLink="/admin/users/{{ user.id }}">{{ activationFailed ? "Go back to user information" : "Cancel" }} </a>
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

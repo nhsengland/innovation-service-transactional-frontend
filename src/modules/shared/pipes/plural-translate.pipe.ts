@@ -2,9 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'pluralTranslate' })
 export class PluralTranslatePipe implements PipeTransform {
-
   transform(translation: string, count?: null | number): string {
-
     switch (count) {
       case undefined:
       case null:
@@ -15,7 +13,5 @@ export class PluralTranslatePipe implements PipeTransform {
       default:
         return `${translation}.plural`;
     }
-
   }
-
 }

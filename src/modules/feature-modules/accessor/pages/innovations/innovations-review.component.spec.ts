@@ -17,9 +17,7 @@ import { NotificationsService } from '@modules/shared/services/notifications.ser
 
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 
-
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let authenticationStore: AuthenticationStore;
@@ -31,13 +29,7 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -47,7 +39,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
     notificationsService = TestBed.inject(NotificationsService);
-
   });
 
   it('should create the component', () => {
@@ -55,7 +46,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 
   // it('should have AccessorRole tabs', () => {
 
@@ -146,7 +136,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   // });
 
-
   // it('should run getInnovationsList() with success', () => {
 
   //   activatedRoute.queryParams = of({ status: 'UNASSIGNED' });
@@ -213,7 +202,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
   // });
 
-
   // it('should run onTableOrder()', () => {
 
   //   const dataMock = { count: 0, data: [] };
@@ -239,5 +227,4 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
   //   expect(component.innovationsList.page).toBe(2);
 
   // });
-
 });

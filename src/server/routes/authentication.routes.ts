@@ -23,13 +23,13 @@ const OAUTH_CONFIG = {
   signinPolicy: process.env.OAUTH_SIGNIN_POLICY || '',
   signupPolicy: process.env.OAUTH_SIGNUP_POLICY || '',
   changePasswordPolicy: process.env.OAUTH_CHANGE_PW_POLICY || '',
-  signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || '',
+  signoutRedirectUrl: process.env.OAUTH_REDIRECT_URL_SIGNOUT || ''
 };
 
 const authorities = {
   signin: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signinPolicy}`,
   signup: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.signupPolicy}`,
-  changePassword: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.changePasswordPolicy}`,
+  changePassword: `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/${OAUTH_CONFIG.changePasswordPolicy}`
 };
 
 const confidentialClientConfig: Configuration = {
@@ -44,16 +44,16 @@ const confidentialClientConfig: Configuration = {
       loggerCallback(logLevel: LogLevel, message) {
         try {
           getAppInsightsClient().trackTrace({
-            severity: 4-logLevel as SeverityLevel ?? SeverityLevel.Information,  // logLevel is reverse of SeverityLevel
-            message: message,
+            severity: ((4 - logLevel) as SeverityLevel) ?? SeverityLevel.Information, // logLevel is reverse of SeverityLevel
+            message: message
           });
         } catch (error) {
           // Ignore error
         }
       },
       piiLoggingEnabled: false,
-      logLevel: LogLevel.Warning,
-    },
+      logLevel: LogLevel.Warning
+    }
   }
 };
 
@@ -62,16 +62,14 @@ const axiosInstance = axios.create({ timeout: 60000, httpsAgent: new Agent({ kee
 // Currently using these scopes to get the auth token which was not working with silent auth. Without the auth code the
 // token request from cache was returning no token and forcing a new token to be created
 // There seems to be an issue with b2c and auth token which forced this: see https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2315#issuecomment-706382855
-const scopes = ['openid', OAUTH_CONFIG.clientId]
+const scopes = ['openid', OAUTH_CONFIG.clientId];
 
 // Session
-type UserSession = { oid: string, account: AccountInfo };
+type UserSession = { oid: string; account: AccountInfo };
 const userSessions = new Map<string, UserSession>();
 
 // Initialize MSAL Node
-const confidentialClientApplication = new ConfidentialClientApplication(
-  confidentialClientConfig
-);
+const confidentialClientApplication = new ConfidentialClientApplication(confidentialClientConfig);
 
 const APP_STATES = ['LOGIN', 'SIGNUP', 'SIGNOUT', 'CHANGE_PASSWORD'] as const;
 type APP_STATES = (typeof APP_STATES)[number];
@@ -80,21 +78,23 @@ const redirects = {
   LOGIN: process.env.OAUTH_REDIRECT_URL_SIGNIN!,
   SIGNUP: process.env.OAUTH_REDIRECT_URL_SIGNUP!,
   SIGNOUT: process.env.OAUTH_REDIRECT_URL_SIGNOUT!,
-  CHANGE_PASSWORD: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!,
+  CHANGE_PASSWORD: process.env.OAUTH_REDIRECT_URL_CHANGE_PW!
 };
-
-
 
 const authenticationRouter: Router = Router();
 
 export async function getAccessTokenBySessionId(sessionId: string): Promise<string> {
   const sessionToken = userSessions.get(sessionId);
-  if(sessionToken) {
+  if (sessionToken) {
     try {
-      return (await confidentialClientApplication.acquireTokenSilent({
-        account: sessionToken.account,
-        scopes: scopes,
-      }))?.idToken ?? '';
+      return (
+        (
+          await confidentialClientApplication.acquireTokenSilent({
+            account: sessionToken.account,
+            scopes: scopes
+          })
+        )?.idToken ?? ''
+      );
     } catch (error: any) {
       // This will fail if we don't have the token cached but there will be a 401 and a redirect to b2c
       getAppInsightsClient().trackException({
@@ -106,10 +106,9 @@ export async function getAccessTokenBySessionId(sessionId: string): Promise<stri
   return '';
 }
 
-
 //#region Routes
 authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) => {
-  const authenticated = req.session.id && await getAccessTokenBySessionId(req.session.id);
+  const authenticated = req.session.id && (await getAccessTokenBySessionId(req.session.id));
   if (authenticated) {
     getAppInsightsClient().trackTrace({
       severity: SeverityLevel.Information,
@@ -134,41 +133,46 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
         query: req.query,
         path: req.path,
         route: req.route,
-        authenticatedUser: (req.session as any).oid,
+        authenticatedUser: (req.session as any).oid
       }
     });
     res.status(401).send();
   }
 });
 
-
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin`, async (req, res) => {
-  const authenticated = req.session.id && await getAccessTokenBySessionId(req.session.id);
+  const authenticated = req.session.id && (await getAccessTokenBySessionId(req.session.id));
   // Skip login if already authenticated
-  if(authenticated) {
+  if (authenticated) {
     res.redirect(`${ENVIRONMENT.BASE_PATH}/dashboard`);
     return;
   }
-  
+
   // Using state to pass the back URL as per https://learn.microsoft.com/en-us/azure/active-directory/develop/msal-js-pass-custom-state-authentication-request
   await getAuthCode(authorities.signin, 'LOGIN', res, req.query.back?.toString() ?? undefined);
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) => {
-  if(!req.query.code) {
+  if (!req.query.code) {
     // If the user canceled the request, the error_description will contain AADB2C90091
-    if(req.query.error && req.query.error_description && req.query.error_description.toString().includes('AADB2C90091')) {
+    if (
+      req.query.error &&
+      req.query.error_description &&
+      req.query.error_description.toString().includes('AADB2C90091')
+    ) {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
         severity: SeverityLevel.Error,
         properties: {
-          authenticatedUser: (req.session as any).oid,
+          authenticatedUser: (req.session as any).oid
         }
       });
       res.redirect(`${ENVIRONMENT.BASE_PATH}/signout`);
     } else {
       getAppInsightsClient().trackTrace({
-        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
+        message: `[${req.method}] ${req.url} requested by ${
+          (req.session as any).oid ?? 'anonymous'
+        } failed because no code was provided`,
         severity: SeverityLevel.Error,
         properties: {
           params: req.params,
@@ -176,7 +180,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
           path: req.path,
           route: req.route,
           authenticatedUser: (req.session as any).oid,
-          method: req.method,
+          method: req.method
         }
       });
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
@@ -188,26 +192,140 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
 
   switch (state) {
     case 'LOGIN':
-      confidentialClientApplication.acquireTokenByCode({
-        redirectUri: redirects.LOGIN,
-        scopes: scopes,
-        code: req.query.code as string,
-      }).then((response)=>{
-        setAccessTokenBySessionId(req.session.id, response);
-        (req.session as any).oid = response.uniqueId;
+      confidentialClientApplication
+        .acquireTokenByCode({
+          redirectUri: redirects.LOGIN,
+          scopes: scopes,
+          code: req.query.code as string
+        })
+        .then(response => {
+          setAccessTokenBySessionId(req.session.id, response);
+          (req.session as any).oid = response.uniqueId;
 
-        // SET XSRF TOKEN
-        // https://angular.io/guide/http-security-xsrf-protection
-        // https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token
-        const token = randomBytes(24).toString('hex');
-        res.cookie('XSRF-TOKEN', token, {
-          httpOnly: false, // required by angular to be false so that it can be used by the interceptor to send in the header
-          secure: process.env.BASE_URL?.startsWith('https'),
-          sameSite: process.env.BASE_URL?.startsWith('https') ? 'strict' : 'lax'
-        })  
+          // SET XSRF TOKEN
+          // https://angular.io/guide/http-security-xsrf-protection
+          // https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token
+          const token = randomBytes(24).toString('hex');
+          res.cookie('XSRF-TOKEN', token, {
+            httpOnly: false, // required by angular to be false so that it can be used by the interceptor to send in the header
+            secure: process.env.BASE_URL?.startsWith('https'),
+            sameSite: process.env.BASE_URL?.startsWith('https') ? 'strict' : 'lax'
+          });
 
-        res.redirect(backUrl ? `${ENVIRONMENT.BASE_PATH}${backUrl}` : `${ENVIRONMENT.BASE_PATH}/dashboard`);
-        }).catch((error)=>{
+          res.redirect(backUrl ? `${ENVIRONMENT.BASE_PATH}${backUrl}` : `${ENVIRONMENT.BASE_PATH}/dashboard`);
+        })
+        .catch(error => {
+          getAppInsightsClient().trackException({
+            exception: error,
+            severity: SeverityLevel.Error,
+            properties: {
+              params: req.params,
+              query: req.query,
+              path: req.path,
+              route: req.route,
+              authenticatedUser: (req.session as any).oid,
+              stack: error.stack
+            }
+          });
+          res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+        });
+      break;
+    default:
+      // We only have login callback for now
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${
+          (req.session as any).oid ?? 'anonymous'
+        } failed because the state ${state} was not recognized`,
+        severity: SeverityLevel.Warning,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          method: req.method
+        }
+      });
+      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
+  }
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
+  const redirectUrl = (req.query.redirectUrl as string) || OAUTH_CONFIG.signoutRedirectUrl;
+  const azLogoutUri =
+    `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout` +
+    `?p=${OAUTH_CONFIG.signinPolicy}` + // add policy information
+    `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
+
+  const oid = req.session.id;
+  req.session.destroy(() => {
+    deleteAccessTokenBySessionId(oid);
+    res.redirect(azLogoutUri);
+  });
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
+  getAuthCode(authorities.signup, 'SIGNUP', res);
+});
+
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
+  if (!req.query.code) {
+    // If the user canceled the request, the error_description will contain AADB2C90091
+    if (
+      req.query.error &&
+      req.query.error_description &&
+      req.query.error_description.toString().includes('AADB2C90091')
+    ) {
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
+        severity: SeverityLevel.Error,
+        properties: {
+          authenticatedUser: (req.session as any).oid
+        }
+      });
+      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
+    } else {
+      getAppInsightsClient().trackTrace({
+        message: `[${req.method}] ${req.url} requested by ${
+          (req.session as any).oid ?? 'anonymous'
+        } failed because no code was provided`,
+        severity: SeverityLevel.Error,
+        properties: {
+          params: req.params,
+          query: req.query,
+          path: req.path,
+          route: req.route,
+          authenticatedUser: (req.session as any).oid,
+          method: req.method
+        }
+      });
+      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
+    }
+    return;
+  }
+
+  confidentialClientApplication
+    .acquireTokenByCode({
+      authority: authorities.signup,
+      redirectUri: redirects.SIGNUP,
+      scopes: scopes,
+      code: req.query.code as string
+    })
+    .then(response => {
+      axiosInstance
+        .post(
+          `${ENVIRONMENT.API_USERS_URL}/v1/me`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${response.idToken}`
+            }
+          }
+        )
+        .then(() => {
+          res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`);
+        })
+        .catch((error: any) => {
           getAppInsightsClient().trackException({
             exception: error,
             severity: SeverityLevel.Error,
@@ -218,90 +336,13 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
               route: req.route,
               authenticatedUser: (req.session as any).oid,
               stack: error.stack,
+              message: `Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`
             }
           });
           res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
         });
-      break;
-    default:
-      // We only have login callback for now
-      getAppInsightsClient().trackTrace({
-        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because the state ${state} was not recognized`,
-        severity: SeverityLevel.Warning,
-        properties: {
-          params: req.params,
-          query: req.query,
-          path: req.path,
-          route: req.route,
-          authenticatedUser: (req.session as any).oid,
-          method: req.method,
-        }
-      });
-      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
-  }
-});
-
-
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
-  const redirectUrl = req.query.redirectUrl as string || OAUTH_CONFIG.signoutRedirectUrl;
-  const azLogoutUri = `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout`
-    + `?p=${OAUTH_CONFIG.signinPolicy}` // add policy information
-    + `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
-
-  const oid = req.session.id;
-  req.session.destroy(() => {
-    deleteAccessTokenBySessionId(oid);
-    res.redirect(azLogoutUri);
-  })
-});
-
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup`, (_req, res) => {
-  getAuthCode(authorities.signup, 'SIGNUP', res);
-});
-
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) => {
-  if(!req.query.code) {
-    // If the user canceled the request, the error_description will contain AADB2C90091
-    if(req.query.error && req.query.error_description && req.query.error_description.toString().includes('AADB2C90091')) {
-      getAppInsightsClient().trackTrace({
-        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
-        severity: SeverityLevel.Error,
-        properties: {
-          authenticatedUser: (req.session as any).oid,
-        }
-      });
-      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
-    } else {
-      getAppInsightsClient().trackTrace({
-        message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} failed because no code was provided`,
-        severity: SeverityLevel.Error,
-        properties: {
-          params: req.params,
-          query: req.query,
-          path: req.path,
-          route: req.route,
-          authenticatedUser: (req.session as any).oid,
-          method: req.method,
-        }
-      });
-      res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
-    }
-    return;
-  }
-
-  confidentialClientApplication.acquireTokenByCode({
-    authority: authorities.signup,
-    redirectUri: redirects.SIGNUP,
-    scopes: scopes,
-    code: req.query.code as string,
-  }).then((response)=>{
-    axiosInstance.post(`${ENVIRONMENT.API_USERS_URL}/v1/me`, {}, {
-      headers: {
-        'Authorization': `Bearer ${response.idToken}`,
-      }
     })
-    .then(() => { res.redirect(`${ENVIRONMENT.BASE_PATH}/auth/signup/confirmation`); })
-    .catch((error: any) => {
+    .catch(error => {
       getAppInsightsClient().trackException({
         exception: error,
         severity: SeverityLevel.Error,
@@ -311,29 +352,11 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
           path: req.path,
           route: req.route,
           authenticatedUser: (req.session as any).oid,
-          stack: error.stack,
-          message: `Error when attempting to save the user: ${ENVIRONMENT.API_USERS_URL}/v1/me. Error: ${error}`
+          stack: error.stack
         }
       });
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
-  }).catch((error)=>{
-    getAppInsightsClient().trackException({
-      exception: error,
-      severity: SeverityLevel.Error,
-      properties: {
-        params: req.params,
-        query: req.query,
-        path: req.path,
-        route: req.route,
-        authenticatedUser: (req.session as any).oid,
-        stack: error.stack,
-      }
-    });
-    res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
-  });
-
-  
 });
 
 authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (_req, res) => {
@@ -342,12 +365,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/change-password`, (_req, res)
 //#endregion
 
 //#region Auxiliary functions
-function getAuthCode(
-  authority: string,
-  state: APP_STATES,
-  res: Response,
-  backUrl?: string
-) {
+function getAuthCode(authority: string, state: APP_STATES, res: Response, backUrl?: string) {
   const authCodeRequest: AuthorizationUrlRequest = {
     authority: authority,
     scopes: scopes,
@@ -358,17 +376,17 @@ function getAuthCode(
   // request an authorization code to exchange for a token
   return confidentialClientApplication
     .getAuthCodeUrl(authCodeRequest)
-    .then((response) => {
+    .then(response => {
       //redirect to the auth code URL/send code to
       res.redirect(response);
     })
     .catch(() => {
       res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
     });
-};
+}
 
 function setAccessTokenBySessionId(sessionId: string, response: AuthenticationResult): void {
-  if(response.account) {
+  if (response.account) {
     userSessions.set(sessionId, { oid: response.uniqueId, account: response.account });
   }
 }

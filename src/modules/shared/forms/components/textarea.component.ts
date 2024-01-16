@@ -1,4 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, ElementRef, Injector, Input, OnDestroy, OnInit, ViewChild, forwardRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  ElementRef,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  forwardRef
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { Subscription, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs';
 
@@ -9,19 +21,19 @@ import { ControlValueAccessorComponent } from '../base/control-value-accessor.co
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { TEXTAREA_LENGTH_LIMIT, TextareaLengthLimitType } from '../engine/config/form-engine.config';
 
-
 @Component({
   selector: 'theme-form-textarea',
   templateUrl: './textarea.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(() => FormTextareaComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => FormTextareaComponent),
+      multi: true
+    }
+  ]
 })
 export class FormTextareaComponent extends ControlValueAccessorComponent implements OnInit, DoCheck, OnDestroy {
-
   @ViewChild('textArea', { static: true }) textAreaRef?: ElementRef<HTMLTextAreaElement>;
 
   @Input() id?: string;
@@ -34,7 +46,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() cssOverride?: string;
 
   hasError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
   lengthLimitCharacters = 200;
   currentAvailableCharacters = 0;
@@ -46,23 +58,23 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   // Accessibility.
   get ariaDescribedBy(): null | string {
     let s = '';
-    if (this.description) { s += `hint-${this.id}`; }
-    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    if (this.description) {
+      s += `hint-${this.id}`;
+    }
+    if (this.hasError) {
+      s += `${s ? ' ' : ''}error-${this.id}`;
+    }
     return s || null;
   }
-
 
   constructor(
     injector: Injector,
     private cdr: ChangeDetectorRef
   ) {
-
     super(injector);
-
   }
 
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.type = this.type ?? 'text';
     this.placeholder = this.placeholder ?? '';
@@ -101,23 +113,21 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
         this.currentAvailableCharacters = this.lengthLimitCharacters - value.length;
       })
     );
-
   }
 
   ngDoCheck(): void {
-
     if (this.fieldControl.value?.length > 0) {
       this.currentAvailableCharacters = this.lengthLimitCharacters - this.fieldControl.value.length;
     }
 
-    this.hasError = (this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty));
-    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl.errors) : { message: '', params: {} };
+    this.hasError = this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty);
+    this.error = this.hasError
+      ? FormEngineHelper.getValidationMessage(this.fieldControl.errors)
+      : { message: '', params: {} };
     this.cdr.detectChanges();
-
   }
 
   ngOnDestroy(): void {
     this.fieldChangeSubscription.unsubscribe();
   }
-
 }

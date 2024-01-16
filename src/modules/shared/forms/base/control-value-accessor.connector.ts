@@ -1,11 +1,16 @@
 import { Component, Injector, Input, ViewChild } from '@angular/core';
-import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, FormControlDirective } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlContainer,
+  ControlValueAccessor,
+  FormControl,
+  FormControlDirective
+} from '@angular/forms';
 
 @Component({ template: '' })
 // Next line exception disables rule: "ComponentClassName should end with the suffix Component"
 // tslint:disable-next-line
 export abstract class ControlValueAccessorComponent implements ControlValueAccessor {
-
   @ViewChild(FormControlDirective, { static: true }) formControlDirective?: FormControlDirective;
 
   @Input() formControl?: FormControl;
@@ -17,10 +22,10 @@ export abstract class ControlValueAccessorComponent implements ControlValueAcces
   }
   // Return FormControl instance no matter formControl or controlName is given.
   get fieldControl(): FormControl {
-    return this.formControl || this.parentFieldControl?.get(this.controlName) as FormControl;
+    return this.formControl || (this.parentFieldControl?.get(this.controlName) as FormControl);
   }
 
-  constructor(private injector: Injector) { }
+  constructor(private injector: Injector) {}
 
   // ControlValueAccessor interface methods.
   // // Register a callback that is called every time the native form control is updated.
@@ -41,5 +46,4 @@ export abstract class ControlValueAccessorComponent implements ControlValueAcces
       this.formControlDirective?.valueAccessor?.setDisabledState(isDisabled);
     }
   }
-
 }

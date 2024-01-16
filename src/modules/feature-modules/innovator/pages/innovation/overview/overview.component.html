@@ -1,5 +1,4 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <ng-container *ngIf="innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt">
     <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
       <div class="nhsuk-card--care__heading-container">
@@ -10,8 +9,11 @@
       </div>
 
       <div class="nhsuk-card__content">
-        <p> There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other organisations. </p>
-        <p> Don't worry, there are a few options available to you. </p>
+        <p>
+          There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other
+          organisations.
+        </p>
+        <p>Don't worry, there are a few options available to you.</p>
         <p>
           <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed"> Choose how you want to proceed with your innovation </a>
         </p>
@@ -19,32 +21,38 @@
     </div>
   </ng-container>
 
-  <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-3">
-    <div class="d-flex justify-content-space-between">
-      <div>
-        <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-0 text-nowrap-only-desktop">Innovation status</h2>
-      </div>
-      <div class="d-flex flex-direction-column nhsuk-u-padding-left-7">
-        <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"></theme-tag>
+  <dl class="nhsuk-summary-list nhsuk-summary-list--no-border nhsuk-u-margin-bottom-3">
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">Innovation status</dt>
+      <dd class="nhsuk-summary-list__value">
+        <theme-tag
+        type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}"
+        label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"
+        ></theme-tag>
         <ng-container *ngIf="innovation?.engagingOrganisationsCount">
           <div class="nhsuk-u-margin-top-2 nhsuk-u-font-size-14 font-color-secondary">
-            {{ innovation?.engagingOrganisationsCount }} engaging {{ ('dictionary.organisation' | pluralTranslate: innovation?.engagingOrganisationsCount | translate) }}.
+            {{ innovation?.engagingOrganisationsCount }} engaging {{ "dictionary.organisation" | pluralTranslate: innovation?.engagingOrganisationsCount | translate }}.
           </div>
           <div class="nhsuk-u-font-size-14">
-            <a *ngIf="innovation?.groupedStatus === 'RECEIVING_SUPPORT'" routerLink="/innovator/innovations/{{ innovationId }}/support-summary" arial-label="View innovation support summary information">View support summary</a>
+            <a
+              *ngIf="innovation?.groupedStatus === 'RECEIVING_SUPPORT'"
+              routerLink="/innovator/innovations/{{ innovationId }}/support-summary"
+              arial-label="View innovation support summary information"
+              >View support summary</a
+            >
           </div>
         </ng-container>
-      </div>
+      </dd>
+      <dd class="nhsuk-summary-list__actions width-30 nhsuk-u-font-size-16">
+        <a routerLink="/innovator/innovation-statuses" arial-label="View innovation status information">What does this status mean?</a>
+      </dd>
     </div>
-    <div>
-      <a routerLink="/innovator/innovation-statuses" class="float-r text-nowrap-only-desktop" arial-label="View innovation status information">What does this status mean?</a>
-    </div>
-  </div>
+  </dl>
 
   <div>
     <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="innovation?.status === 'PAUSED'">
-      You have stopped sharing this innovation on {{ innovation?.statusUpdatedAt | date: ('app.date_formats.long_date' | translate) }}.
-      If you want support with your innovation, <a routerLink="/innovator/innovations/{{ innovationId }}/record">go to the innovation record</a> and reshare it for a needs reassessment.
+      You have stopped sharing this innovation on {{ innovation?.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. If you want support with your innovation,
+      <a routerLink="/innovator/innovations/{{ innovationId }}/record">go to the innovation record</a> and reshare it for a needs reassessment.
     </span>
   </div>
 
@@ -54,7 +62,7 @@
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Owner</dt>
       <dd class="nhsuk-summary-list__value">{{ innovation?.owner?.name }}</dd>
-      <dd class="nhsuk-summary-list__actions"></dd>
+      <dd class="nhsuk-summary-list__actions width-30"></dd>
     </div>
     <div *ngIf="(innovation?.collaborators ?? []).length > 0" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Collaborators</dt>
@@ -63,7 +71,7 @@
           <li *ngFor="let item of innovation?.collaborators">{{ item.nameOrEmail }}</li>
         </ul>
       </dd>
-      <dd class="nhsuk-summary-list__actions nhsuk-u-font-size-16">
+      <dd class="nhsuk-summary-list__actions width-30 nhsuk-u-font-size-16">
         <a *ngIf="innovation?.loggedUser?.isOwner" routerLink="../manage/innovation/collaborators">Manage collaborators</a>
       </dd>
     </div>
@@ -74,25 +82,20 @@
   <ng-container *ngIf="showBanner">
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
-        <h2 class="nhsuk-heading-m"> Your next steps </h2>
+        <h2 class="nhsuk-heading-m">Your next steps</h2>
         <ol class="nhsuk-list nhsuk-u-padding-0">
           <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections}"></ng-container>
-            <div class="nhsuk-u-margin-left-2">
-              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
-            </div>
+            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections }"></ng-container>
+            <div class="nhsuk-u-margin-left-2">Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a></div>
           </li>
           <li class="d-flex">
             <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
-            <div class="nhsuk-u-margin-left-2">
-              Share the record for the needs assessment
-            </div>
+            <div class="nhsuk-u-margin-left-2">Share the record for the needs assessment</div>
           </li>
         </ol>
       </div>
     </div>
   </ng-container>
-
 </theme-content-wrapper>
 
 <ng-template #icon let-completed="completed">

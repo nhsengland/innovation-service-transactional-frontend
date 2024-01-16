@@ -1,10 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
-
       <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
-        <caption class="nhsuk-u-visually-hidden">Tasks status definitions</caption>
+        <caption class="nhsuk-u-visually-hidden">
+          Tasks status definitions
+        </caption>
         <thead class="nhsuk-table__head">
           <tr>
             <th scope="col">Status</th>
@@ -19,17 +19,15 @@
                 type="{{ 'shared.catalog.innovation.task_status.' + status + '.cssColorClass' | translate }}"
                 label="{{ 'shared.catalog.innovation.task_status.' + status + '.name' | translate }}"
                 class="tag-no-wrap"
-                ></theme-tag>
+              ></theme-tag>
             </td>
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Definition</span>
-              {{ 'shared.catalog.innovation.task_status.' + status + '.description' | translate }}
+              {{ "shared.catalog.innovation.task_status." + status + ".description" | translate }}
             </td>
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
-
 </theme-content-wrapper>

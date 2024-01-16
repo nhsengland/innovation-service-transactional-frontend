@@ -12,18 +12,15 @@ import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
   templateUrl: './tasks-list.component.html'
 })
 export class TasksListComponent extends CoreComponent implements OnInit {
-
-  tabs: { key: string, title: string, link: string, queryParams: { openTasks: 'true' | 'false' } }[] = [];
-  currentTab: { index: number, key: string, contentTitle: string, description: string };
+  tabs: { key: string; title: string; link: string; queryParams: { openTasks: 'true' | 'false' } }[] = [];
+  currentTab: { index: number; key: string; contentTitle: string; description: string };
 
   tasksList: TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>;
-
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.tabs = [
@@ -53,16 +50,12 @@ export class TasksListComponent extends CoreComponent implements OnInit {
       orderBy: 'createdAt',
       orderDir: 'descending'
     });
-
   }
 
   ngOnInit(): void {
-
+    this.setPageTitle('Tasks');
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
-
-        this.setPageTitle('Tasks');
-
         if (!queryParams.openTasks) {
           this.router.navigate(['/accessor/tasks'], { queryParams: { openTasks: 'true' } });
           return;
@@ -83,7 +76,11 @@ export class TasksListComponent extends CoreComponent implements OnInit {
 
           case 'false':
             this.tasksList.clearData().setFilters({
-              status: [InnovationTaskStatusEnum.DONE, InnovationTaskStatusEnum.DECLINED, InnovationTaskStatusEnum.CANCELLED],
+              status: [
+                InnovationTaskStatusEnum.DONE,
+                InnovationTaskStatusEnum.DECLINED,
+                InnovationTaskStatusEnum.CANCELLED
+              ],
               createdByMe: true,
               fields: ['notifications']
             });
@@ -98,32 +95,26 @@ export class TasksListComponent extends CoreComponent implements OnInit {
     );
   }
 
-
   getTasksList(column?: string): void {
     this.setPageStatus('LOADING');
-
     this.innovationsService.getTasksList(this.tasksList.getAPIQueryParams()).subscribe(response => {
       this.tasksList.setData(response.data, response.count);
-      this.currentTab.description = `${response.count} ${this.tabs[this.currentTab.index].title.toLowerCase()} assigned by you`;
+      this.currentTab.description = `${response.count} ${this.tabs[
+        this.currentTab.index
+      ].title.toLowerCase()} assigned by you`;
       if (this.isRunningOnBrowser() && column) this.tasksList.setFocusOnSortedColumnHeader(column);
+      this.setPageTitle('Tasks');
       this.setPageStatus('READY');
-    }
-
-    );
+    });
   }
 
   onTableOrder(column: string): void {
-
     this.tasksList.setOrderBy(column);
     this.getTasksList(column);
-
   }
 
   onPageChange(event: { pageNumber: number }): void {
-
     this.tasksList.setPage(event.pageNumber);
     this.getTasksList();
-
   }
-
 }

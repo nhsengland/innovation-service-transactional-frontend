@@ -9,25 +9,26 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import { NotificationPreferenceEnum, NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import {
+  NotificationPreferenceEnum,
+  NotificationCategoryTypeEnum,
+  NotificationsService
+} from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
 
-
 const EmailNotificationsListMock = {
-	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-	[NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-	[NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
+  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
+  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
+  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
+  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
+  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
+  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO
 };
 
-
 describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsEditComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -40,13 +41,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -60,7 +55,6 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
 
     authenticationStore.userUrlBasePath = () => 'innovator';
     activatedRoute.snapshot.params = { notificationType: NotificationCategoryTypeEnum.SUPPORT };
-
   });
 
   it('should create the component', () => {
@@ -146,5 +140,4 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
   //   expect(routerSpy).toHaveBeenCalledWith(['/innovator/account/email-notifications'], { queryParams: { alert: 'editError' } });
 
   // });
-
 });

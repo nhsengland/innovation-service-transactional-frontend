@@ -11,7 +11,6 @@ import { InnovationService } from './innovation.service';
 import { UserRoleEnum } from '../authentication/authentication.enums';
 
 describe('Stores/Innovation/InnovationService', () => {
-
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
@@ -20,10 +19,7 @@ describe('Stores/Innovation/InnovationService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule
-      ],
+      imports: [HttpClientTestingModule, CoreModule],
       providers: [
         AuthenticationStore,
         AuthenticationService,
@@ -40,28 +36,25 @@ describe('Stores/Innovation/InnovationService', () => {
 
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.getUserId = () => 'user001';
-
   });
 
   afterEach(() => {
     httpMock.verify();
   });
 
-
   it('should run submitInnovation() and return success', () => {
-
     const responseMock = { id: 'Inno01', status: 'WAITING_NEEDS_ASSESSMENT' };
     const expected = responseMock;
     let response: any = null;
 
-    service.submitInnovation('Inno01').subscribe({ next: success => response = success, error: error => response = error });
+    service
+      .submitInnovation('Inno01')
+      .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/submit`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('PATCH');
     expect(response).toEqual(expected);
-
   });
-
 });

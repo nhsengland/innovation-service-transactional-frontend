@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Injector, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DoCheck,
+  Injector,
+  Input,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, Validators } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
 import { Subscription } from 'rxjs';
@@ -12,7 +21,6 @@ import { CustomValidators } from '../validators/custom-validators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDestroy {
-
   @Input() id?: string;
   @Input() inputsNames = ['file', 'fileName'];
   @Input() value?: File | null;
@@ -20,17 +28,19 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
   @Input() description?: string;
   @Input() pageUniqueField = true;
   @Input()
-  set config(c: undefined | {
-    acceptedFiles?: FileTypes[],
-    maxFileSize?: number // In Mb.
-  }) {
-
+  set config(
+    c:
+      | undefined
+      | {
+          acceptedFiles?: FileTypes[];
+          maxFileSize?: number; // In Mb.
+        }
+  ) {
     this.inputFileConfig = {
       acceptedFiles: (c?.acceptedFiles || [FileTypes.ALL]).map(ext => ext).join(','),
-      maxFileSize: c?.maxFileSize ? (c.maxFileSize * 1000000) : 1000000, // 1Mb.
+      maxFileSize: c?.maxFileSize ? c.maxFileSize * 1000000 : 1000000 // 1Mb.
     };
-
-  };
+  }
 
   inputFileConfig: {
     acceptedFiles: string;
@@ -39,7 +49,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
 
   hasError = false;
   hasUploadError = false;
-  error: { message: string, params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
   private fieldChangeSubscription = new Subscription();
 
@@ -48,56 +58,62 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
     return this.injector.get(ControlContainer).control;
   }
   get fieldControl(): FormControl[] {
-    return [this.parentFieldControl?.get(this.inputsNames[0]) as FormControl, this.parentFieldControl?.get(this.inputsNames[1]) as FormControl];
+    return [
+      this.parentFieldControl?.get(this.inputsNames[0]) as FormControl,
+      this.parentFieldControl?.get(this.inputsNames[1]) as FormControl
+    ];
   }
 
   // Get hold of the control being used.
-  createFormControl(f: string): FormControl { return this.parentFieldControl?.get(f) as FormControl; }
+  createFormControl(f: string): FormControl {
+    return this.parentFieldControl?.get(f) as FormControl;
+  }
 
   // Accessibility.
   get ariaDescribedBy(): null | string {
     let s = '';
-    if (this.description) { s += `hint-${this.id}`; }
-    if (this.hasError) { s += `${s ? ' ' : ''}error-${this.id}`; }
+    if (this.description) {
+      s += `hint-${this.id}`;
+    }
+    if (this.hasError) {
+      s += `${s ? ' ' : ''}error-${this.id}`;
+    }
     return s || null;
   }
 
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
-
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.fieldChangeSubscription.add(
-      this.fieldControl[0].valueChanges.subscribe(
-        value => {
-          if (value && this.fieldControl[0].valid) {
-            this.fieldControl[1].setValidators([CustomValidators.required('A name is required'), Validators.maxLength(100)]);
-            this.fieldControl[1].updateValueAndValidity();
-          } else {
-            this.fieldControl[1].clearValidators();
-            this.fieldControl[1].reset();
-          }
+      this.fieldControl[0].valueChanges.subscribe(value => {
+        if (value && this.fieldControl[0].valid) {
+          this.fieldControl[1].setValidators([
+            CustomValidators.required('A name is required'),
+            Validators.maxLength(100)
+          ]);
+          this.fieldControl[1].updateValueAndValidity();
+        } else {
+          this.fieldControl[1].clearValidators();
+          this.fieldControl[1].reset();
         }
-      )
+      })
     );
-
   }
 
   ngDoCheck(): void {
-
-    this.hasError = (this.fieldControl[0].invalid && (this.fieldControl[0].touched || this.fieldControl[0].dirty));
-    this.error = this.hasError ? FormEngineHelper.getValidationMessage(this.fieldControl[0].errors) : { message: '', params: {} };
+    this.hasError = this.fieldControl[0].invalid && (this.fieldControl[0].touched || this.fieldControl[0].dirty);
+    this.error = this.hasError
+      ? FormEngineHelper.getValidationMessage(this.fieldControl[0].errors)
+      : { message: '', params: {} };
     this.cdr.detectChanges();
-
   }
 
   onChange(event: any): void {
-
     this.hasUploadError = false;
 
     this.fieldControl[0].markAsTouched();
@@ -108,7 +124,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
       this.hasUploadError = true;
     }
 
-    if(file.size > this.inputFileConfig.maxFileSize) {
+    if (file.size > this.inputFileConfig.maxFileSize) {
       this.hasUploadError = true;
     }
 
@@ -117,7 +133,6 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
     if (!this.hasUploadError) {
       this.setFocus();
     }
-
   }
 
   downloadFile(file: File): void {
@@ -135,21 +150,19 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
   }
 
   setFocus(): void {
-
-    setTimeout(() => { // Await for the html injection if needed.
+    setTimeout(() => {
+      // Await for the html injection if needed.
       const h = document.getElementById('file-uploaded');
       if (h) {
         h.focus();
-        h.addEventListener('blur', (e) => {
+        h.addEventListener('blur', e => {
           e.preventDefault();
         });
       }
     });
-
   }
 
   ngOnDestroy(): void {
     this.fieldChangeSubscription.unsubscribe();
   }
-
 }

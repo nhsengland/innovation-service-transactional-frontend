@@ -8,22 +8,20 @@ import { InnovationsService, InnovationsTasksListFilterType } from '@modules/sha
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
-import { InnovationTaskData, InnovationTasksListDTO, } from '@modules/shared/services/innovations.dtos';
+import { InnovationTaskData, InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-
 
 @Component({
   selector: 'shared-pages-innovation-task-to-do-list',
   templateUrl: './task-to-do-list.component.html'
 })
 export class PageInnovationTaskToDoListComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   innovation: ContextInnovationType;
   userType: UserRoleEnum | undefined;
   tablesTitles: { topTableTitle: string; bottomTableTitle: string };
 
-  allTasksList: TableModel<InnovationTasksListDTO['data'][0],InnovationsTasksListFilterType>;
+  allTasksList: TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>;
 
   topList: InnovationTasksListDTO;
   bottomList: InnovationTasksListDTO;
@@ -36,14 +34,13 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
     this.setPageTitle(this.isInnovatorType ? 'Tasks to do' : 'Tasks');
 
-    this.tablesTitles = {topTableTitle: '', bottomTableTitle: ''};
+    this.tablesTitles = { topTableTitle: '', bottomTableTitle: '' };
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
@@ -53,18 +50,16 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       visibleColumns: {
         id: { label: 'ID' },
         name: { label: 'Task' },
-        status: { label: 'Status', align: 'right' },
+        status: { label: 'Status', align: 'right' }
       },
-      pageSize: 100,
+      pageSize: 100
     });
 
-    this.topList = {count: 0, data: [] };
-    this.bottomList = {count: 0, data: [] };
-
+    this.topList = { count: 0, data: [] };
+    this.bottomList = { count: 0, data: [] };
   }
 
   ngOnInit(): void {
-
     this.userType = this.getUserType();
 
     this.allTasksList.setFilters({
@@ -74,24 +69,23 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         InnovationTaskStatusEnum.OPEN,
         InnovationTaskStatusEnum.DONE,
         InnovationTaskStatusEnum.DECLINED,
-        InnovationTaskStatusEnum.CANCELLED,
+        InnovationTaskStatusEnum.CANCELLED
       ],
-      allTasks: true,
+      allTasks: true
     });
 
-    this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe((allTasksResponse) => {
+    this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe(allTasksResponse => {
       this.processTaskList(allTasksResponse);
       this.tablesTitles = this.getTablesTitles();
       this.setPageStatus('READY');
     });
-
   }
 
   processTaskList(taskList: InnovationTasksListDTO) {
     for (let task of taskList.data) {
       if (this.shouldBeOnTopTable(task)) {
         this.topList.data.push(task);
-      } else{
+      } else {
         this.bottomList.data.push(task);
       }
     }
@@ -99,9 +93,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     this.bottomList.count = this.bottomList.data.length;
   }
 
-  shouldBeOnTopTable(item: InnovationTaskData ): boolean {
+  shouldBeOnTopTable(item: InnovationTaskData): boolean {
     switch (this.getUserType()) {
-
       case 'INNOVATOR':
         return item.status == InnovationTaskStatusEnum.OPEN;
 
@@ -119,11 +112,12 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   getUserType() {
-    return this.stores.authentication.isAccessorType() ? UserRoleEnum.ACCESSOR : this.stores.authentication.getUserType();
+    return this.stores.authentication.isAccessorType()
+      ? UserRoleEnum.ACCESSOR
+      : this.stores.authentication.getUserType();
   }
 
   getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
-
     let tasksToDoTitle: string = '';
     switch (this.topList.count) {
       case 0:
@@ -133,41 +127,40 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         tasksToDoTitle = `You have 1 task to do`;
         break;
       default:
-        tasksToDoTitle = `You have ${this.topList.count} tasks to do`
+        tasksToDoTitle = `You have ${this.topList.count} tasks to do`;
     }
 
     switch (this.userType) {
       case 'INNOVATOR':
         return {
           topTableTitle: tasksToDoTitle,
-          bottomTableTitle: 'Previous tasks',
+          bottomTableTitle: 'Previous tasks'
         };
       case 'ACCESSOR':
         return {
           topTableTitle: 'Tasks assigned by my organisation unit',
-          bottomTableTitle: 'Tasks assigned by others',
+          bottomTableTitle: 'Tasks assigned by others'
         };
       case 'QUALIFYING_ACCESSOR':
         return {
           topTableTitle: 'Tasks assigned by my organisation unit',
-          bottomTableTitle: 'Tasks assigned by others',
+          bottomTableTitle: 'Tasks assigned by others'
         };
       case 'ASSESSMENT':
         return {
           topTableTitle: 'Tasks assigned by needs assessment team',
-          bottomTableTitle: 'Tasks assigned by others',
+          bottomTableTitle: 'Tasks assigned by others'
         };
       case 'ADMIN':
         return {
           topTableTitle: '',
-          bottomTableTitle: '',
+          bottomTableTitle: ''
         };
       default:
         return {
           topTableTitle: 'Top table title',
-          bottomTableTitle: 'Bottom table title',
+          bottomTableTitle: 'Bottom table title'
         };
     }
   }
-
 }

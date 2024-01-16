@@ -74,4 +74,4 @@ import { FormFileUploadDescriptiveComponent } from './components/file-upload-des
     FormFileUploadDescriptiveComponent
   ]
 })
-export class FormsModule { }
+export class FormsModule {}

@@ -13,9 +13,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 
 import { DashboardComponent } from './dashboard.component';
 
-
 describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let component: DashboardComponent;
@@ -23,27 +21,18 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
-
   });
 
   // it('should create the component', () => {
@@ -65,6 +54,4 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
   //   expect(component.cardsList[0].title).toBe('Review innovations');
 
   // });
-
 });
-

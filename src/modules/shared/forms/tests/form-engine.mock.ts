@@ -1,6 +1,5 @@
 import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 
-
 export const ALL_PARAMETER_TYPES_EMPTY = [
   new FormEngineParameterModel({ id: 'textField', dataType: 'text' }),
   new FormEngineParameterModel({ id: 'radioGroupField', dataType: 'radio-group' }),
@@ -11,12 +10,12 @@ export const ALL_PARAMETER_TYPES_EMPTY = [
     dataType: 'fields-group',
     fieldsGroupConfig: {
       fields: [
-        new FormEngineParameterModel({ id: 'field01', dataType: 'text'}),
-        new FormEngineParameterModel({ id: 'field02', dataType: 'text'})
-      ]}
+        new FormEngineParameterModel({ id: 'field01', dataType: 'text' }),
+        new FormEngineParameterModel({ id: 'field02', dataType: 'text' })
+      ]
+    }
   })
 ];
-
 
 export const CHOOSABLE_PARAMETER_TYPES = [
   new FormEngineParameterModel({
@@ -55,11 +54,14 @@ export const CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS = [
     items: [
       { value: 'value 1', label: 'label 1' },
       { value: 'value 2', label: 'label 2' },
-      { value: 'value 3', label: 'label 3', conditional: new FormEngineParameterModel({ id: 'textField', dataType: 'text' }) }
+      {
+        value: 'value 3',
+        label: 'label 3',
+        conditional: new FormEngineParameterModel({ id: 'textField', dataType: 'text' })
+      }
     ]
   })
 ];
-
 
 export const ALL_PARAMETERS_HIDDEN = [
   new FormEngineParameterModel({
@@ -84,14 +86,13 @@ export const ALL_PARAMETERS_HIDDEN = [
   })
 ];
 
-
 export const PARAMETERS_WITH_VALIDATIONS = [
   new FormEngineParameterModel({
     id: 'textField1',
     dataType: 'text',
     validations: {
       isRequired: false,
-      pattern: '',
+      pattern: ''
     }
   }),
   new FormEngineParameterModel({
@@ -109,7 +110,7 @@ export const PARAMETERS_WITH_VALIDATIONS = [
     dataType: 'text',
     validations: {
       isRequired: [true, 'is required'],
-      pattern: ['[a-z]', 'wrong pattern'],
+      pattern: ['[a-z]', 'wrong pattern']
     }
   }),
   new FormEngineParameterModel({
@@ -138,7 +139,7 @@ export const PARAMETERS_WITH_VALIDATIONS = [
       { value: 'value 3', label: 'label 3' }
     ],
     validations: {
-      isRequired: [true, 'is required'],
+      isRequired: [true, 'is required']
     }
   }),
   new FormEngineParameterModel({
@@ -150,7 +151,7 @@ export const PARAMETERS_WITH_VALIDATIONS = [
       { value: 'value 3', label: 'label 3' }
     ],
     validations: {
-      isRequired: [true, 'is required'],
+      isRequired: [true, 'is required']
     }
   }),
   new FormEngineParameterModel({
@@ -162,11 +163,10 @@ export const PARAMETERS_WITH_VALIDATIONS = [
       { value: 'value 3', label: 'label 3' }
     ],
     validations: {
-      isRequired: [true, 'is required'],
+      isRequired: [true, 'is required']
     }
   })
 ];
-
 
 export const PARAMETERS_VALUES = {
   textField2: 'abcdefg',

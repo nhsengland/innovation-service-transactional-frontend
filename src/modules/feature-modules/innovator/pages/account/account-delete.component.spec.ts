@@ -11,7 +11,6 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 import { PageAccountDeleteComponent } from './account-delete.component';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let component: PageAccountDeleteComponent;
@@ -19,31 +18,20 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', ()
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-
   });
 
-
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(PageAccountDeleteComponent);
     component = fixture.componentInstance;
     component.form.get('email')?.setValue('some@email.com');
     component.form.get('confirmation')?.setValue('delete my account');
     fixture.detectChanges();
     expect(component).toBeTruthy();
-
   });
-
 });

@@ -7,7 +7,6 @@ const testVariables = {
 };
 
 describe('Core/Models/UrlModel', () => {
-
   let component: UrlModel;
 
   it('should create UrlModel empty instance', () => {
@@ -108,9 +107,11 @@ describe('Core/Models/UrlModel', () => {
   });
 
   it('should return a valid url with a complex url as input', () => {
-    const expected = 'https://testurl.com:8080/path1/abc/path2?a=1&b=someText&c=%7B%22a%22:1,%22b%22:%22s%22%7D&d=one,two';
-    component = new UrlModel(testVariables.validComplexUrl).setPathParams({ id: 'abc' }).setQueryParams({ a: '1', b: 'someText', c: { a: 1, b: 's' }, d: ['one', 'two'] });
+    const expected =
+      'https://testurl.com:8080/path1/abc/path2?a=1&b=someText&c=%7B%22a%22:1,%22b%22:%22s%22%7D&d=one,two';
+    component = new UrlModel(testVariables.validComplexUrl)
+      .setPathParams({ id: 'abc' })
+      .setQueryParams({ a: '1', b: 'someText', c: { a: 1, b: 's' }, d: ['one', 'two'] });
     expect(component.buildUrl()).toBe(expected);
   });
-
 });

@@ -1,34 +1,29 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <p>
-        Below you will find information on the referral criteria for each organisation that uses the NHS Innovation
-        Service, which may help with the information you can provide to the Needs Assessment team, so that they can
-        provide the best support for your innovation.
+        Below you will find information on the referral criteria for each organisation that uses the NHS Innovation Service, which may help with the information you can provide to
+        the Needs Assessment team, so that they can provide the best support for your innovation.
       </p>
     </div>
   </div>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-
       <dl class="nhsuk-summary-list">
-
         <div *ngFor="let organisation of organisationsInformation" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">
             <a [href]="organisation.link" target="_blank" rel="noopener noreferrer" attr.aria-label="{{ organisation.name }} (Opens in a new window)">{{ organisation.name }}</a>
           </dt>
           <dd class="nhsuk-summary-list__value">
             <ng-container *ngFor="let info of organisation.information">
-
               <ng-container [ngSwitch]="info.type">
                 <ng-container *ngSwitchCase="'BULLET_LIST'">
                   <ul class="nhsuk-list nhsuk-list--bullet">
                     <ng-container *ngFor="let value of info.values">
                       <li>{{ value.description }}</li>
                       <ul *ngIf="value.subBullets" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
-                        <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0"> {{ subBullet }} </li>
+                        <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0">{{ subBullet }}</li>
                       </ul>
                     </ng-container>
                   </ul>
@@ -37,16 +32,11 @@
                 <ng-container *ngSwitchCase="'PARAGRAPH'">
                   <p *ngFor="let value of info.values">{{ value.description }}</p>
                 </ng-container>
-
               </ng-container>
-
             </ng-container>
           </dd>
         </div>
-
       </dl>
-
     </div>
   </div>
-
 </theme-content-wrapper>

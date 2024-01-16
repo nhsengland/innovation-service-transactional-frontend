@@ -16,9 +16,7 @@ import { InnovationAssessmentNewComponent } from './assessment-new.component';
 
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 
-
 describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNewComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -30,13 +28,7 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AssessmentModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -46,7 +38,6 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     routerSpy = jest.spyOn(router, 'navigate');
 
     assessmentService = TestBed.inject(AssessmentService);
-
   });
 
   it('should create the component', () => {
@@ -54,7 +45,6 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 
   // it('should run getInnovationInfo() with success', () => {
 
@@ -166,5 +156,4 @@ describe('FeatureModules/Assessment/Innovation/Assessment/InnovationAssessmentNe
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

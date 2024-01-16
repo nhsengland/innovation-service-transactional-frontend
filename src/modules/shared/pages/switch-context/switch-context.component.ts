@@ -7,38 +7,37 @@ import { UserRoleEnum } from '@app/base/enums';
 
 import { AuthenticationStore } from '@modules/stores';
 
-
 @Component({
   selector: 'shared-pages-switch-context',
   templateUrl: './switch-context.component.html'
 })
 export class PageSwitchContextComponent extends CoreComponent {
-
-  currentRole: null | { id: string, description: string };
+  currentRole: null | { id: string; description: string };
 
   user: {
-    id: string,
+    id: string;
     roles: {
-      id: string,
-      label: string,
-      type: UserRoleEnum,
-      organisation?: { id: string, name: string, acronym: null | string },
-      organisationUnit?: { id: string, name: string, acronym: string }
-    }[]
+      id: string;
+      label: string;
+      type: UserRoleEnum;
+      organisation?: { id: string; name: string; acronym: null | string };
+      organisationUnit?: { id: string; name: string; acronym: string };
+    }[];
   };
 
-
   constructor(private authenticationStore: AuthenticationStore) {
-
     super();
 
     const currentUserContext = this.authenticationStore.getUserContextInfo();
 
-    if (!currentUserContext) { this.currentRole = null; }
-    else {
+    if (!currentUserContext) {
+      this.currentRole = null;
+    } else {
       this.currentRole = {
         id: currentUserContext.roleId,
-        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
+        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${
+          this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''
+        }`
       };
     }
 
@@ -47,8 +46,9 @@ export class PageSwitchContextComponent extends CoreComponent {
     this.user = {
       id: user.id,
       roles: sortBy(user.roles, ['organisation', 'organisationUnit']).map(role => {
-
-        let label = `${this.authenticationStore.getRoleDescription(role.role)}${role.organisationUnit ? ` (${role.organisationUnit.name.trimEnd()})` : ''}`;
+        let label = `${this.authenticationStore.getRoleDescription(role.role)}${
+          role.organisationUnit ? ` (${role.organisationUnit.name.trimEnd()})` : ''
+        }`;
 
         if (currentUserContext) {
           label = currentUserContext.roleId === role.id ? `Continue as ${label}` : `Switch to ${label} profile`;
@@ -58,21 +58,16 @@ export class PageSwitchContextComponent extends CoreComponent {
           id: role.id,
           label,
           type: role.role,
-          ...role.organisation && { organisation: role.organisation },
-          ...role.organisationUnit && { organisationUnit: role.organisationUnit }
+          ...(role.organisation && { organisation: role.organisation }),
+          ...(role.organisationUnit && { organisationUnit: role.organisationUnit })
         };
-
       })
-
     };
 
     this.setPageTitle(!currentUserContext ? 'Choose your profile' : 'Switch profile');
-
   }
 
-
   onSubmit(chosenRoleId: string): void {
-
     const role = this.user.roles.find(item => item.id === chosenRoleId);
 
     if (!role) {
@@ -81,7 +76,8 @@ export class PageSwitchContextComponent extends CoreComponent {
     }
 
     if (this.currentRole?.id !== role.id) {
-
+      sessionStorage.clear();
+      
       this.authenticationStore.setUserContext({
         id: this.user.id,
         roleId: role.id,
@@ -90,21 +86,21 @@ export class PageSwitchContextComponent extends CoreComponent {
         organisationUnit: role.organisationUnit
       });
 
-      const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${role.organisationUnit ? ` (${role.organisationUnit.name})` : ''}`;
+      const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${
+        role.organisationUnit ? ` (${role.organisationUnit.name})` : ''
+      }`;
       this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}`);
 
       this.stores.authentication.initializeAuthentication$().subscribe(() => {
         if (this.stores.authentication.hasAnnouncements()) {
           this.redirectTo('announcements');
         }
-        this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`)
+        this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
       });
 
       return;
     }
 
     this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
-
   }
-
 }

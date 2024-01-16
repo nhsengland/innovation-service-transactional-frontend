@@ -9,20 +9,16 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
   templateUrl: './section-submitted.component.html'
 })
 export class InnovationSectionSubmittedComponent extends CoreComponent implements OnInit {
-
   innovation: ContextInnovationType;
 
   section: {
-    id: InnovationSectionEnum,
-    openTasksCount: number
+    id: InnovationSectionEnum;
+    openTasksCount: number;
   };
 
   sectionLink: string;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-  ) {
-
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -30,18 +26,17 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
       openTasksCount: 0
-    }
+    };
 
-    this.sectionLink = `/innovator/innovations/${this.innovation.id}/record/sections/${this.section.id}`
+    this.sectionLink = `/innovator/innovations/${this.innovation.id}/record/sections/${this.section.id}`;
 
-    this.setPageTitle('What you can do next', { size: "l"});
+    this.setPageTitle('What you can do next', { size: 'l' });
     this.setBackLink('Go back', this.sectionLink);
-
   }
 
   ngOnInit() {
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
-      next: (sectionInfo) => {
+      next: sectionInfo => {
         this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
         this.setPageStatus('READY');
       },
@@ -50,7 +45,5 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
         this.setAlertUnknownError();
       }
     });
-
   }
-
 }

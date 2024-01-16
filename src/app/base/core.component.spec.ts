@@ -14,24 +14,14 @@ import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { CoreComponent } from './core.component';
 
-
 describe('App/Base/CoreComponent running SERVER side', () => {
-
   let component: CoreComponent;
   let fixture: ComponentFixture<CoreComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        LoggerTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        CoreComponent
-      ],
+      imports: [HttpClientTestingModule, RouterTestingModule, LoggerTestingModule, CoreModule, StoresModule],
+      declarations: [CoreComponent],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
@@ -40,7 +30,6 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
   });
 
   it('should create the component', () => {
@@ -114,12 +103,9 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     component = fixture.componentInstance;
     expect(component.decodeInfo('dGVzdA==')).toBe('test');
   });
-
 });
 
-
 describe('App/Base/CoreComponent running CLIENT side', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -132,20 +118,13 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          { path: 'test', component: EmptyMockComponent }
-        ]),
+        RouterTestingModule.withRoutes([{ path: 'test', component: EmptyMockComponent }]),
         LoggerTestingModule,
         CoreModule,
         StoresModule
       ],
-      declarations: [
-        CoreComponent,
-        EmptyMockComponent
-      ],
-      providers: [
-        { provide: PLATFORM_ID, useValue: 'browser' }
-      ]
+      declarations: [CoreComponent, EmptyMockComponent],
+      providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -154,7 +133,6 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     routerSpy = jest.spyOn(router, 'navigate');
 
     authenticationStore = TestBed.inject(AuthenticationStore);
-
   });
 
   it('should create the component', () => {
@@ -245,7 +223,6 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     expect(component.alert.type).toBe('ERROR');
   });
 
-
   // it(`should run focusBody()`, fakeAsync(() => {
   //   fixture = TestBed.createComponent(CoreComponent);
   //   component = fixture.componentInstance;
@@ -255,13 +232,11 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
   // }));
 
   it(`should run userUrlBasePath()`, () => {
-
     authenticationStore.userUrlBasePath = () => 'innovator';
 
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     expect(component.userUrlBasePath()).toBe('innovator');
-
   });
 
   it(`should run redirectTo() WITHOUT QueryParams`, () => {
@@ -306,7 +281,11 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
   it('should run encodeUrlQueryParams() WITH QueryParams', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
-    const result = component.encodeUrlQueryParams('/test', { query_1: { teste_1: 6 }, query_2: '', query_3: 'One value' });
+    const result = component.encodeUrlQueryParams('/test', {
+      query_1: { teste_1: 6 },
+      query_2: '',
+      query_3: 'One value'
+    });
     expect(result).toBe('/test?query_1=eyJ0ZXN0ZV8xIjo2fQ%3D%3D&query_3=T25lIHZhbHVl');
   });
 
@@ -328,5 +307,4 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     component = fixture.componentInstance;
     expect(component.translationExists('app.title')).toBe(false);
   });
-
 });

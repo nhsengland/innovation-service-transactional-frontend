@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <div class="nhsuk-u-padding-bottom-5">
         <div class="nhsuk-action-link">
           <a routerLink="/admin/organisations/new" class="nhsuk-action-link__link">
@@ -18,12 +16,13 @@
       </div>
 
       <div class="nhsuk-u-padding-bottom-5">
-
         <h2>All support organisations</h2>
         <p class="nhsuk-body-m">View or update an organisation's information and its attached units.</p>
 
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-5">
-          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Organisations list</caption>
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+            Organisations list
+          </caption>
           <thead role="rowgroup" class="nhsuk-table__head">
             <tr role="row">
               <th role="columnheader" scope="col">Organisation</th>
@@ -37,7 +36,7 @@
                 <div>
                   <a [routerLink]="item.id">{{ item.name }} ({{ item.acronym }})</a>
                   <div *ngIf="item.organisationUnits.length > 1" class="nhsuk-body-s nhsuk-u-margin-0">
-                    {{ item.organisationUnits.length }} {{ ('dictionary.unit' | pluralTranslate: item.organisationUnits.length | translate) }} attached
+                    {{ item.organisationUnits.length }} {{ "dictionary.unit" | pluralTranslate: item.organisationUnits.length | translate }} attached
                   </div>
                 </div>
               </td>
@@ -48,16 +47,16 @@
             </tr>
           </tbody>
         </table>
-
       </div>
 
       <div class="nhsuk-u-padding-bottom-5">
-
         <h2>Other teams</h2>
         <p class="nhsuk-body-m">View or update a team's information.</p>
 
         <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-5">
-          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">Other teams list</caption>
+          <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">
+            Other teams list
+          </caption>
           <thead role="rowgroup" class="nhsuk-table__head">
             <tr role="row">
               <th role="columnheader" scope="col">Team</th>
@@ -77,10 +76,7 @@
             </tr>
           </tbody>
         </table>
-
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

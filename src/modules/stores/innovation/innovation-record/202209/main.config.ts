@@ -22,7 +22,6 @@ import { SECTION_7_1 } from './section-7-1.config';
 
 import { SECTION_8_1 } from './section-8-1.config';
 
-
 export const INNOVATION_SECTIONS: InnovationSectionsListType = [
   { title: 'About your product or service', sections: [SECTION_1_1, SECTION_1_2] },
   { title: 'Needs, benefits and effectiveness', sections: [SECTION_2_1, SECTION_2_2, SECTION_2_3] },

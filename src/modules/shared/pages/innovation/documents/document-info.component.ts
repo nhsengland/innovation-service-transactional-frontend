@@ -4,16 +4,17 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { NotificationCategoryTypeEnum } from '@app/base/enums';
 
-import { InnovationDocumentInfoOutDTO, InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import {
+  InnovationDocumentInfoOutDTO,
+  InnovationDocumentsService
+} from '@modules/shared/services/innovation-documents.service';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-info',
   templateUrl: './document-info.component.html'
 })
 export class PageInnovationDocumentInfoComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   documentId: string;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
@@ -28,48 +29,46 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
-
   }
 
   ngOnInit(): void {
-
     this.gotoInfoPage();
 
     this.innovationDocumentsService.getDocumentInfo(this.innovationId, this.documentId).subscribe({
       next: response => {
-
         this.documentInfo = {
           ...response,
-          locationLink: response.context.type === 'INNOVATION_SECTION' ? getAllSectionsList().find(item => item.value === response.context.id)?.label ?? '[Archived section]' : null,
+          locationLink:
+            response.context.type === 'INNOVATION_SECTION'
+              ? getAllSectionsList().find(item => item.value === response.context.id)?.label ?? '[Archived section]'
+              : null
         };
 
         this.canDelete = response.canDelete;
 
         // Throw notification read dismiss.
         if (this.stores.authentication.isInnovatorType()) {
-          this.stores.context.dismissNotification(this.innovationId, { contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS], contextIds: [this.documentInfo.id] });
+          this.stores.context.dismissNotification(this.innovationId, {
+            contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS],
+            contextIds: [this.documentInfo.id]
+          });
         }
 
         this.setPageStatus('READY');
-
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
-
     });
-
   }
 
   gotoInfoPage() {
-
     if (['/sections', '/support-summary'].some(i => this.stores.context.getPreviousUrl()?.includes(i))) {
       this.setBackLink('Go back');
     } else {
@@ -78,7 +77,6 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
     this.setPageTitle('Document details');
     this.pageStep = 'INFO';
-
   }
 
   gotoDeletePage() {
@@ -89,7 +87,6 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   onDelete() {
-
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
@@ -100,7 +97,5 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
         this.setAlertUnknownError();
       }
     });
-
   }
-
 }

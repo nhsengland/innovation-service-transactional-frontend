@@ -3,8 +3,8 @@
     <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
       <p class="nhsuk-body-s nhsuk-u-margin-0">It looks like JavaScript is disabled in your browser. You'll need to enable it if you want to create an account.</p>
       <p class="nhsuk-body-s nhsuk-u-margin-0">
-        Find out <a href="{{ URLS.ENABLE_JAVASCRIPT_SUPPORT }}" class="font-color-text">how to enable JavaScript for Windows</a>,
-        or <a href="{{ URLS.SAFARI_SUPPORT }}" class="font-color-text">how to enable JavaScript for Mac</a>.
+        Find out <a href="{{ URLS.ENABLE_JAVASCRIPT_SUPPORT }}" class="font-color-text">how to enable JavaScript for Windows</a>, or
+        <a href="{{ URLS.SAFARI_SUPPORT }}" class="font-color-text">how to enable JavaScript for Mac</a>.
       </p>
     </div>
   </div>
@@ -15,8 +15,13 @@
     <div class="nhsuk-width-container app-width-container">
       <p class="nhsuk-heading-l">Cookies on the NHS website</p>
       <p>We've put some small files called cookies on your device to make our site work.</p>
-      <p>We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this information to improve our site.</p>
-      <p>Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy"> read more about our cookies </a> before you choose.</p>
+      <p>
+        We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this
+        information to improve our site.
+      </p>
+      <p>
+        Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy"> read more about our cookies </a> before you choose.
+      </p>
       <div>
         <button class="nhsuk-button nhsuk-u-margin-right-4" (click)="onSaveCookies(true)">I'm OK with analytics cookies</button>
         <button class="nhsuk-button" (click)="onSaveCookies(false)">Do not use analytics cookies</button>
@@ -36,16 +41,15 @@
 <a class="nhsuk-skip-link" href="javascript:void()" (click)="handleSkipLinkClick($event)"> Skip to main content </a>
 
 <header class="nhsuk-header" role="banner">
-
   <div class="nhsuk-width-container nhsuk-header__container app-width-container">
-
     <div class="nhsuk-header__logo">
       <a class="nhsuk-header__link nhsuk-header__link--service" href="/" aria-label="NHS Innovation Service homepage">
         <svg class="nhsuk-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 16">
           <path class="nhsuk-logo__background" d="M0 0h40v16H0z"></path>
-          <path class="nhsuk-logo__text"
-            d="M3.9 1.5h4.4l2.6 9h.1l1.8-9h3.3l-2.8 13H9l-2.7-9h-.1l-1.8 9H1.1M17.3 1.5h3.6l-1 4.9h4L25 1.5h3.5l-2.7 13h-3.5l1.1-5.6h-4.1l-1.2 5.6h-3.4M37.7 4.4c-.7-.3-1.6-.6-2.9-.6-1.4 0-2.5.2-2.5 1.3 0 1.8 5.1 1.2 5.1 5.1 0 3.6-3.3 4.5-6.4 4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7 3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6">
-          </path>
+          <path
+            class="nhsuk-logo__text"
+            d="M3.9 1.5h4.4l2.6 9h.1l1.8-9h3.3l-2.8 13H9l-2.7-9h-.1l-1.8 9H1.1M17.3 1.5h3.6l-1 4.9h4L25 1.5h3.5l-2.7 13h-3.5l1.1-5.6h-4.1l-1.2 5.6h-3.4M37.7 4.4c-.7-.3-1.6-.6-2.9-.6-1.4 0-2.5.2-2.5 1.3 0 1.8 5.1 1.2 5.1 5.1 0 3.6-3.3 4.5-6.4 4.5-1.3 0-2.9-.3-4-.7l.8-2.7c.7.4 2.1.7 3.2.7s2.8-.2 2.8-1.5c0-2.1-5.1-1.3-5.1-5 0-3.4 2.9-4.4 5.8-4.4 1.6 0 3.1.2 4 .6"
+          ></path>
         </svg>
         <span class="nhsuk-header__service-name"> Innovation Service </span>
       </a>
@@ -63,19 +67,25 @@
       <p>{{ user.displayName }}</p>
       <p>{{ user.description }} <a routerLink="/switch-user-context" *ngIf="user.showSwitchProfile">Switch profile</a></p>
     </div>
-
   </div>
 
-
   <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0 || showSignOut">
-
-    <nav id="header-navigation" role="navigation" class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation" [ngClass]="{'children-items-height': menuBarItems.isChildrenOpened}" aria-label="Primary navigation" aria-labelledby="label-navigation">
+    <nav
+      id="header-navigation"
+      role="navigation"
+      class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation"
+      [ngClass]="{ 'children-items-height': menuBarItems.isChildrenOpened }"
+      aria-label="Primary navigation"
+      aria-labelledby="label-navigation"
+    >
       <div class="nhsuk-width-container app-width-container">
-
-        <p class="nhsuk-header__navigation-title"><span id="label-navigation">Menu</span>
+        <p class="nhsuk-header__navigation-title">
+          <span id="label-navigation">Menu</span>
           <button class="nhsuk-header__navigation-close" id="close-menu">
             <svg class="nhsuk-icon nhsuk-icon__close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"></path>
+              <path
+                d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
+              ></path>
             </svg>
             <span class="nhsuk-u-visually-hidden">Close menu</span>
           </button>
@@ -85,34 +95,31 @@
           <li *ngFor="let item of leftMenuBarItems" class="nhsuk-header__navigation-item app-multilevel-navigation__navigation-item">
             <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
           </li>
-          <li *ngFor="let item of rightMenuBarItems; let first = first;" class="nhsuk-header__navigation-item" [ngClass]="{'ml-auto': first}">
+          <li *ngFor="let item of rightMenuBarItems; let first = first" class="nhsuk-header__navigation-item" [ngClass]="{ 'ml-auto': first }">
             <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
           </li>
 
           <ng-container *ngIf="showSignOut">
-            <li class="nhsuk-header__navigation-item" [ngClass]="{'ml-auto': rightMenuBarItems.length === 0}">
+            <li class="nhsuk-header__navigation-item" [ngClass]="{ 'ml-auto': rightMenuBarItems.length === 0 }">
               <a href="javascript:void(0)" class="nhsuk-header__navigation-link" (click)="signOut()">Sign out</a>
             </li>
           </ng-container>
-
         </ul>
-
       </div>
     </nav>
-
   </ng-container>
-
 </header>
-
 
 <ng-template #menuItemTemplateLink let-item="item" let-css="css" let-showIcon="showIcon">
   <div class="d-flex align-items-center">
-    <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id]}">{{ item.label }}
+    <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+      >{{ item.label }}
       <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
       </svg>
     </a>
-    <a *ngIf="item.fullReload" [href]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id]}">{{ item.label }}
+    <a *ngIf="item.fullReload" [href]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+      >{{ item.label }}
       <svg *ngIf="showIcon" class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
       </svg>
@@ -121,17 +128,20 @@
   </div>
 </ng-template>
 
-
 <ng-template #menuItemTemplate let-item="item">
-
   <ng-container *ngIf="(item.children || []).length === 0">
     <ng-container *ngTemplateOutlet="menuItemTemplateLink; context: { item: item, css: 'nhsuk-header__navigation-link', showIcon: true }"></ng-container>
   </ng-container>
 
   <ng-container *ngIf="(item.children || []).length > 0">
-
-    <button type="button" class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button" [ngClass]="{'button-closed': !item.isOpen, 'button-open': item.isOpen}" (click)="onHeaderMenuClick(item)" [attr.aria-expanded]="item.isOpen"
-      attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu">
+    <button
+      type="button"
+      class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button"
+      [ngClass]="{ 'button-closed': !item.isOpen, 'button-open': item.isOpen }"
+      (click)="onHeaderMenuClick(item)"
+      [attr.aria-expanded]="item.isOpen"
+      attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu"
+    >
       {{ item.label }}
       <svg class="nhsuk-icon nhsuk-icon__chevron-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M15.5 12a1 1 0 0 1-.29.71l-5 5a1 1 0 0 1-1.42-1.42l4.3-4.29-4.3-4.29a1 1 0 0 1 1.42-1.42l5 5a1 1 0 0 1 .29.71z"></path>
@@ -147,7 +157,9 @@
           <div class="nhsuk-grid-column-two-thirds">
             <ul class="app-multilevel-navigation__dropdown-menu-list">
               <li *ngFor="let childItem of item.children">
-                <ng-container *ngTemplateOutlet="menuItemTemplateLink; context: { item: childItem, css: 'nhsuk-u-font-size-16 nhsuk-u-font-weight-bold', showIcon: false }"></ng-container>
+                <ng-container
+                  *ngTemplateOutlet="menuItemTemplateLink; context: { item: childItem, css: 'nhsuk-u-font-size-16 nhsuk-u-font-weight-bold', showIcon: false }"
+                ></ng-container>
                 <p *ngIf="childItem.description" class="nhsuk-body-s nhsuk-u-margin-0">{{ childItem.description }}</p>
               </li>
             </ul>
@@ -155,7 +167,5 @@
         </div>
       </div>
     </div>
-
   </ng-container>
-
 </ng-template>

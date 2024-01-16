@@ -4,26 +4,31 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { AnnouncementStatusEnum, AnnouncementsService } from '@modules/feature-modules/admin/services/announcements.service';
+import {
+  AnnouncementStatusEnum,
+  AnnouncementsService
+} from '@modules/feature-modules/admin/services/announcements.service';
 
-import { ANNOUNCEMENT_EDIT_QUESTIONS, ANNOUNCEMENT_NEW_QUESTIONS, OutboundPayloadType } from './announcement-newdit.config';
-
+import {
+  ANNOUNCEMENT_EDIT_QUESTIONS,
+  ANNOUNCEMENT_NEW_QUESTIONS,
+  OutboundPayloadType
+} from './announcement-newdit.config';
 
 @Component({
   selector: 'app-admin-pages-announcement-newdit',
   templateUrl: './announcement-newdit.component.html'
 })
 export class PageAnnouncementNewditComponent extends CoreComponent implements OnInit {
-
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   announcementId: string;
   announcementData: {
-    isCreation: boolean,
-    isEdition: boolean,
-    status: null | AnnouncementStatusEnum,
-    isScheduled: boolean,
-    isActive: boolean
+    isCreation: boolean;
+    isEdition: boolean;
+    status: null | AnnouncementStatusEnum;
+    isScheduled: boolean;
+    isActive: boolean;
   };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
@@ -34,7 +39,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService
   ) {
-
     super();
 
     this.announcementId = this.activatedRoute.snapshot.params.announcementId;
@@ -44,29 +48,25 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       status: null,
       isScheduled: false,
       isActive: false
-    }
+    };
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
-
   }
 
   ngOnInit(): void {
-
     if (this.announcementData.isCreation) {
-
       this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
       this.wizard.runRules();
 
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
       this.setPageStatus('READY');
-
     } else {
-
       this.announcementsService.getAnnouncementInfo(this.announcementId).subscribe(response => {
-
         this.announcementData.status = response.status;
-        this.announcementData.isScheduled = this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.SCHEDULED;
-        this.announcementData.isActive = this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE;
+        this.announcementData.isScheduled =
+          this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.SCHEDULED;
+        this.announcementData.isActive =
+          this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE;
 
         if (this.announcementData.isScheduled) {
           this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
@@ -81,18 +81,15 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
-
       });
-
     }
-
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
-    if (action === 'next' && !formData.valid) { // Don't move forward if step is NOT valid.
+    if (action === 'next' && !formData.valid) {
+      // Don't move forward if step is NOT valid.
       return;
     }
 
@@ -100,8 +97,11 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { this.redirectTo(`admin/announcements${this.announcementData.isEdition ? '/' + this.announcementId : ''}`); }
-        else { this.wizard.previousStep(); }
+        if (this.wizard.isFirstStep()) {
+          this.redirectTo(`admin/announcements${this.announcementData.isEdition ? '/' + this.announcementId : ''}`);
+        } else {
+          this.wizard.previousStep();
+        }
         break;
       case 'next':
         this.wizard.nextStep();
@@ -115,25 +115,22 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     } else {
       this.setPageTitle('Check your answers', { size: 'l' });
       this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
-      this.wizardSummaryUserGroupsLabels = this.wizardSummary.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n')
+      this.wizardSummaryUserGroupsLabels = this.wizardSummary.userRoles
+        .map(item => this.stores.authentication.getRoleDescription(item))
+        .join('\n');
     }
-
   }
 
   onGotoStep(stepNumber: number): void {
-
     this.wizard.gotoStep(stepNumber);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-
   }
 
   onSubmitWizard(): void {
-
     this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
     if (this.announcementData.isCreation) {
-
       this.announcementsService.createAnnouncement(this.wizardSummary).subscribe({
         next: response => {
           this.setRedirectAlertSuccess('A new announcement was created');
@@ -144,22 +141,19 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
           this.setAlertUnknownError();
         }
       });
-
     } else {
-
-      this.announcementsService.updateAnnouncement(this.announcementId, this.announcementData.status!, this.wizardSummary).subscribe({
-        next: () => {
-          this.setRedirectAlertSuccess('The announcement was updated');
-          this.redirectTo(`admin/announcements/${this.announcementId}`);
-        },
-        error: () => {
-          this.setPageStatus('ERROR');
-          this.setAlertUnknownError();
-        }
-      });
-
+      this.announcementsService
+        .updateAnnouncement(this.announcementId, this.announcementData.status!, this.wizardSummary)
+        .subscribe({
+          next: () => {
+            this.setRedirectAlertSuccess('The announcement was updated');
+            this.redirectTo(`admin/announcements/${this.announcementId}`);
+          },
+          error: () => {
+            this.setPageStatus('ERROR');
+            this.setAlertUnknownError();
+          }
+        });
     }
-
   }
-
 }

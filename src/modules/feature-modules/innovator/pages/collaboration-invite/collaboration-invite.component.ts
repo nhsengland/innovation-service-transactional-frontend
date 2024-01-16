@@ -9,7 +9,6 @@ import { catchError, EMPTY } from 'rxjs';
 
 import { GetInnovationCollaboratorInvitesDTO, InnovatorService } from '../../services/innovator.service';
 
-
 @Component({
   selector: 'app-innovator-pages-collaboration-invite',
   templateUrl: './collaboration-invite.component.html'
@@ -35,27 +34,36 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
     this.innovatorService.getInviteCollaborationInfo(this.innovationId, this.collaboratorId).subscribe(response => {
       this.collaborationInfo = {
         ...response,
-        invitedAt: DatesHelper.addDaysToDate(response.invitedAt?? '', 30).toString()
-      }
+        invitedAt: DatesHelper.addDaysToDate(response.invitedAt ?? '', 30).toString()
+      };
 
       // Throw notification read dismiss.
-      this.stores.context.dismissUserNotification({ contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER], contextIds: [this.collaboratorId] });
+      this.stores.context.dismissUserNotification({
+        contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER],
+        contextIds: [this.collaboratorId]
+      });
 
       this.setPageStatus('READY');
     });
   }
 
   onSubmit(status: InnovationCollaboratorStatusEnum.ACTIVE | InnovationCollaboratorStatusEnum.DECLINED): void {
-    this.innovatorService.updateCollaborationStatus(this.innovationId, this.collaboratorId, status)
-    .pipe(catchError(() => { this.redirectTo('/error/forbidden-collaborator'); return EMPTY }))
-    .subscribe(() => {
-      const successMessage = status === InnovationCollaboratorStatusEnum.ACTIVE ?
-        `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`
-        : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`;
+    this.innovatorService
+      .updateCollaborationStatus(this.innovationId, this.collaboratorId, status)
+      .pipe(
+        catchError(() => {
+          this.redirectTo('/error/forbidden-collaborator');
+          return EMPTY;
+        })
+      )
+      .subscribe(() => {
+        const successMessage =
+          status === InnovationCollaboratorStatusEnum.ACTIVE
+            ? `You have joined '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`
+            : `You have declined the invitation to join '${this.collaborationInfo?.innovation.name}' innovation as a collaborator`;
 
-      this.setRedirectAlertSuccess(successMessage);
-      this.redirectTo(`/innovator/dashboard`);
-    })
-
+        this.setRedirectAlertSuccess(successMessage);
+        this.redirectTo(`/innovator/dashboard`);
+      });
   }
 }

@@ -15,9 +15,7 @@ import { StoresModule } from '@modules/stores';
 import { AdminUsersService } from '../../services/users.service';
 import { PageUserFindComponent } from './user-find.component';
 
-
 describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let usersService: AdminUsersService;
@@ -27,13 +25,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -41,9 +33,7 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
 
     usersService = TestBed.inject(AdminUsersService);
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageUserFindComponent);
@@ -53,27 +43,26 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
   });
 
   it('should show "adminDeletedSuccess" alert', () => {
-
     activatedRoute.snapshot.queryParams = { alert: 'adminDeletedSuccess' };
 
     fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;
     expect(component.alert.type).toBe('SUCCESS');
-
   });
 
   it('should call onSubmit() and return success', () => {
-
     const responseMock: UserInfo = {
       id: ':id',
       name: ':displayName',
       email: 'test@example.com',
       isActive: true,
-      roles: [{
-        id: ':id',
-        role: UserRoleEnum.INNOVATOR,
-        isActive: true
-      }]
+      roles: [
+        {
+          id: ':id',
+          role: UserRoleEnum.INNOVATOR,
+          isActive: true
+        }
+      ]
     };
 
     usersService.getUserInfo = () => of(responseMock);
@@ -86,11 +75,9 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     fixture.detectChanges();
 
     expect(component.searchUser).toBeDefined();
-
   });
 
   it('should call onSubmit() and return error', () => {
-
     usersService.getUserInfo = () => throwError('error');
 
     fixture = TestBed.createComponent(PageUserFindComponent);
@@ -101,9 +88,5 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('READY');
-
   });
-
-
-
 });

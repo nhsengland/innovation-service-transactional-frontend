@@ -9,18 +9,13 @@ import { AdminUsersService } from '../services/users.service';
 type ServiceUserData = Pick<UserInfo, 'id' | 'name'>;
 
 @Injectable()
-export class ServiceUserDataResolver  {
-
-  constructor(private usersService: AdminUsersService) { }
-
+export class ServiceUserDataResolver {
+  constructor(private usersService: AdminUsersService) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<ServiceUserData> {
-
     return this.usersService.getUserInfo(route.params.userId).pipe(
       take(1),
       map(r => ({ id: r.id, name: r.name }))
     );
-
   }
-
 }

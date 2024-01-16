@@ -1,10 +1,8 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
-
     <ng-container *ngIf="wizard.isQuestionStep()">
-
-      <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l"> {{ wizard.currentStep().label }} </h1>
-      <p *ngIf="wizard.currentStep().description"> {{ wizard.currentStep().description }} </p>
+      <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l">{{ wizard.currentStep().label }}</h1>
+      <p *ngIf="wizard.currentStep().description">{{ wizard.currentStep().description }}</p>
 
       <!-- TODO: This copy as to change with collaborators -->
       <div *ngIf="wizard.isFirstStep()" class="nhsuk-inset-text">
@@ -14,26 +12,24 @@
 
       <theme-form-engine formId="addInnovationForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
       <button type="submit" form="addInnovationForm" class="nhsuk-button" (click)="onSubmitStep('next')">
-        {{ wizard.isFirstStep() ? 'Start now': 'Continue' }}
+        {{ wizard.isFirstStep() ? "Start now" : "Continue" }}
       </button>
-
     </ng-container>
 
     <ng-container *ngIf="wizard.isSummaryStep()">
-
       <h1 class="nhsuk-heading-l">Check your answers</h1>
 
       <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
         <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
         <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:;" (click)="wizard.gotoStep(item.editStepNumber || 1)"> Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a>
+          <a href="javascript:;" (click)="wizard.gotoStep(item.editStepNumber || 1)">
+            Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a
+          >
         </dd>
       </div>
 
       <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="submitWizard()" [disabled]="isCreatingInnovation">Complete registration</button>
-
     </ng-container>
-
   </div>
 </div>

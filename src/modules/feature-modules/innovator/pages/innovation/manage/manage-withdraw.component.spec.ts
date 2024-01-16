@@ -13,13 +13,10 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { PageInnovationManageWithdrawComponent } from './manage-withdraw.component';
 
-
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawComponent', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -32,13 +29,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawC
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -51,15 +42,12 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawC
     innovatorService = TestBed.inject(InnovatorService);
 
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(PageInnovationManageWithdrawComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
-
   });
 
   // it('should have initial information loaded', () => {
@@ -244,5 +232,4 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInnovationsWithdrawC
   //   expect(component.pageTitle).toBe('');
 
   // });
-
 });

@@ -10,27 +10,27 @@ import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/in
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationExportRequestInfoDTO } from '@modules/shared/services/innovations.dtos';
 
-
 @Component({
   selector: 'app-innovator-pages-innovation-export-request-reject',
   templateUrl: './export-request-reject.component.html'
 })
 export class PageInnovationExportRequestRejectComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   requestId: string;
 
   innovationRequest?: InnovationExportRequestInfoDTO;
 
-  form = new FormGroup({
-    rejectReason: new FormControl<string>('', CustomValidators.required('A reason is required'))
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      rejectReason: new FormControl<string>('', CustomValidators.required('A reason is required'))
+    },
+    { updateOn: 'blur' }
+  );
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -38,13 +38,10 @@ export class PageInnovationExportRequestRejectComponent extends CoreComponent im
 
     this.setPageTitle('Reject request', { showPage: false });
     this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/record/export-requests/${this.requestId}`);
-
   }
 
   ngOnInit(): void {
-
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe(response => {
-
       // This should not happen, but if it does, silently redirect to export requests list.
       if (response.status !== InnovationExportRequestStatusEnum.PENDING) {
         this.redirectTo(`/innovator/innovations/${this.innovationId}/record/export-requests/list`);
@@ -54,13 +51,10 @@ export class PageInnovationExportRequestRejectComponent extends CoreComponent im
       this.innovationRequest = response;
 
       this.setPageStatus('READY');
-
     });
-
   }
 
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -68,16 +62,16 @@ export class PageInnovationExportRequestRejectComponent extends CoreComponent im
 
     const body = {
       status: InnovationExportRequestStatusEnum.REJECTED,
-      rejectReason: this.form.get('rejectReason')?.value ?? '',
-    }
+      rejectReason: this.form.get('rejectReason')?.value ?? ''
+    };
 
     this.innovationsService.updateExportRequestStatus(this.innovationId, this.requestId, body).subscribe(() => {
-
-      this.setRedirectAlertSuccess('You have rejected this request', { message: 'You have not given your permission for this organisation to use the data in your innovation record, for the reason they outlined in the request. The organisation will be notified.', width: '2.thirds' });
+      this.setRedirectAlertSuccess('You have rejected this request', {
+        message:
+          'You have not given your permission for this organisation to use the data in your innovation record, for the reason they outlined in the request. The organisation will be notified.',
+        width: '2.thirds'
+      });
       this.redirectTo(`/innovator/innovations/${this.innovationId}/record/export-requests/list`);
-
     });
-
   }
-
 }

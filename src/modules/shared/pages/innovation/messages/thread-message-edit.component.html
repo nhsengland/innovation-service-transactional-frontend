@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <theme-form-textarea controlName="message" label="Edit your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Update message</button>
@@ -11,8 +9,6 @@
       <div>
         <a routerLink="../..">Cancel</a>
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

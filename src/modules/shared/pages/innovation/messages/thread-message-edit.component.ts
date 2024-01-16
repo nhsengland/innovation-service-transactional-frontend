@@ -8,14 +8,12 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UntypedFormControl } from '@angular/forms';
 
-
 @Component({
   selector: 'shared-pages-innovation-messages-thread-message-edit',
   templateUrl: './thread-message-edit.component.html'
 })
 export class PageInnovationThreadMessageEditComponent extends CoreComponent implements OnInit {
-
-  selfUser: { id: string, urlBasePath: string };
+  selfUser: { id: string; urlBasePath: string };
   innovation: ContextInnovationType;
   threadId: string;
   messageId: string;
@@ -24,12 +22,10 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
     message: new UntypedFormControl('', CustomValidators.required('A message is required'))
   });
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
     this.setPageTitle('Edit message');
 
@@ -41,23 +37,18 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     this.messageId = this.activatedRoute.snapshot.params.messageId;
-
   }
 
   ngOnInit(): void {
-
-    this.innovationsService.getThreadMessageInfo(this.innovation.id, this.threadId, this.messageId).subscribe(response => {
-
-      this.form.get('message')!.setValue(response.message);
-      this.setPageStatus('READY');
-
-    });
-
+    this.innovationsService
+      .getThreadMessageInfo(this.innovation.id, this.threadId, this.messageId)
+      .subscribe(response => {
+        this.form.get('message')!.setValue(response.message);
+        this.setPageStatus('READY');
+      });
   }
 
-
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -70,11 +61,9 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
     this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('You have successfully updated a message');
-        this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`)
+        this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`);
       },
       error: () => this.setAlertUnknownError()
     });
-
   }
-
 }

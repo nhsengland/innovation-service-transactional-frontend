@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="wizard.isQuestionStep()">
         <h1 *ngIf="wizard.currentStep().label" class="nhsuk-u-margin-bottom-3">{{ wizard.currentStep().label }}</h1>
         <p *ngIf="wizard.currentStep().description" class="nhsuk-hint nhsuk-u-margin-bottom-5">{{ wizard.currentStep().description }}</p>
@@ -11,7 +9,6 @@
       </ng-container>
 
       <ng-container *ngIf="wizard.isSummaryStep()">
-
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of wizard.getSummary()" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -20,16 +17,15 @@
               <span *ngIf="!item.allowHTML">{{ item.value }}</span>
             </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a>
+              <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)"
+                >Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
+              >
             </dd>
           </div>
         </dl>
 
         <button type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add update</button>
-
       </ng-container>
-
     </div>
   </div>
-
 </theme-content-wrapper>

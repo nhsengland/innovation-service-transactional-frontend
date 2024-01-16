@@ -13,9 +13,7 @@ import { TermsOfUseService } from '@modules/shared/services/terms-of-use.service
 
 import { PageTermsOfUseAcceptanceComponent } from './terms-of-use-acceptance.component';
 
-
 describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
-
   let component: PageTermsOfUseAcceptanceComponent;
   let fixture: ComponentFixture<PageTermsOfUseAcceptanceComponent>;
 
@@ -23,21 +21,13 @@ describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     termsOfUseService = TestBed.inject(TermsOfUseService);
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageTermsOfUseAcceptanceComponent);
@@ -75,5 +65,4 @@ describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

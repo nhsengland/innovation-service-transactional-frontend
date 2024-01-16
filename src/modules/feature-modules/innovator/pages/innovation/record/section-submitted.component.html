@@ -1,12 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="section.openTasksCount > 0">
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information: </span>
-          <p class="nhsuk-u-font-weight-bold">You have {{ section.openTasksCount }} outstanding {{ section.openTasksCount === 1 ? 'task' : 'tasks'  }} to do for this section.</p>
+          <p class="nhsuk-u-font-weight-bold">You have {{ section.openTasksCount }} outstanding {{ section.openTasksCount === 1 ? "task" : "tasks" }} to do for this section.</p>
         </div>
         <p>
           If you have completed your outstanding tasks, mark them as done in tasks.
@@ -22,8 +20,6 @@
       <div>
         <a [routerLink]="sectionLink">Return to section</a>
       </div>
-
     </div>
   </div>
-
 </theme-content-wrapper>

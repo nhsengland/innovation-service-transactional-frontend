@@ -11,32 +11,21 @@ import { PoliciesModule } from '@modules/feature-modules/policies/policies.modul
 import { CookiesEditConfirmationComponent } from './cookies-edit-confirmation.component';
 
 describe('CookiesInfoComponent', () => {
-
   let component: CookiesEditConfirmationComponent;
   let fixture: ComponentFixture<CookiesEditConfirmationComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        PoliciesModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, PoliciesModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
   });
 
   it('should create the component', () => {
-
     fixture = TestBed.createComponent(CookiesEditConfirmationComponent);
     component = fixture.componentInstance;
 
     expect(component).toBeTruthy();
-
   });
-
 });

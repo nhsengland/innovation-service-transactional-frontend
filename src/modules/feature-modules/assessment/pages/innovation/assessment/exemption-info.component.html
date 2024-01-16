@@ -1,12 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">The reason this innovation should be exempt from KPI reports</dt>
-          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ 'shared.catalog.assessment_exemptions.reasons.' + assessmentExemption?.reason | translate }}</dd>
+          <dd class="nhsuk-summary-list__value text-pre-wrap">{{ "shared.catalog.assessment_exemptions.reasons." + assessmentExemption?.reason | translate }}</dd>
           <dd class="nhsuk-summary-list__actions">
             <a routerLink="../exemption-upsert">Change<span class="nhsuk-u-visually-hidden"> exemption details</span></a>
           </dd>
@@ -19,8 +17,6 @@
           </dd>
         </div>
       </dl>
-
     </div>
   </div>
-
 </theme-content-wrapper>

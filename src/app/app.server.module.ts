@@ -16,13 +16,8 @@ export class ServerXhr implements XhrFactory {
 }
 
 @NgModule({
-  imports: [
-    AppModule,
-    ServerModule
-  ],
-  providers: [
-    { provide: XhrFactory, useClass: ServerXhr }
-  ],
-  bootstrap: [AppComponent],
+  imports: [AppModule, ServerModule],
+  providers: [{ provide: XhrFactory, useClass: ServerXhr }],
+  bootstrap: [AppComponent]
 })
-export class AppServerModule { }
+export class AppServerModule {}

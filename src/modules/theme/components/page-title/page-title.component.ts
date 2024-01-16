@@ -6,12 +6,10 @@ import { LinkType } from '@app/base/types';
   templateUrl: './page-title.component.html'
 })
 export class PageTitleComponent {
-
   @Input() title = '';
   @Input() titleHint?: string;
   @Input() size?: 'xl' | 'l' = 'xl';
   @Input() actions?: LinkType[] = [];
 
-  constructor() { }
-
+  constructor() {}
 }

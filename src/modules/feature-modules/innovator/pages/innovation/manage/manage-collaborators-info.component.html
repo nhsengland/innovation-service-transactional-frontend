@@ -1,10 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <dl *ngIf="!removeCollaboratorWarningVisible" class="nhsuk-summary-list">
-
         <div *ngIf="innovationCollaboration?.name" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Name</dt>
           <dd class="nhsuk-summary-list__value">{{ innovationCollaboration?.name }}</dd>
@@ -24,7 +21,6 @@
             <a routerLink="edit"> Change<span class="nhsuk-u-visually-hidden"> role</span></a>
           </dd>
         </div>
-
       </dl>
 
       <div *ngIf="removeCollaboratorWarningVisible" class="nhsuk-warning-callout">
@@ -35,8 +31,6 @@
       </div>
 
       <button *ngIf="actionButton" class="nhsuk-button" (click)="onActionButtonClicked(actionButton.action, $event)">{{ actionButton.label }}</button>
-
     </div>
   </div>
-
 </theme-content-wrapper>

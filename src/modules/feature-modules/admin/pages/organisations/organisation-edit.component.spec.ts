@@ -17,9 +17,7 @@ import { AdminOrganisationsService } from '@modules/feature-modules/admin/servic
 import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent', () => {
-
   let component: PageOrganisationEditComponent;
   let fixture: ComponentFixture<PageOrganisationEditComponent>;
   let router: Router;
@@ -32,13 +30,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -69,15 +61,18 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture.detectChanges();
 
     expect(component.pageStatus).toBe('ERROR');
-
   });
 
   it('should run getOrganisation()', () => {
     activatedRoute.snapshot.params = { organisationId: 'orgId' };
-    organisationsService.getOrganisationInfo = () => of({
-      id: 'orgId', name: 'Org name', acronym: 'ORG', isActive: true,
-      organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
-    });
+    organisationsService.getOrganisationInfo = () =>
+      of({
+        id: 'orgId',
+        name: 'Org name',
+        acronym: 'ORG',
+        isActive: true,
+        organisationUnits: [{ id: 'orgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
+      });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
@@ -85,9 +80,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     expect(component.pageStatus).toEqual('READY');
   });
 
-
   it('should run onSubmitStep() with UNDEFINED formEngineComponent field', () => {
-
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -99,7 +92,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   });
 
   it('should run onSubmitStep() and DO NOTHING with form NOT valid', () => {
-
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -112,9 +104,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     expect(component.wizard.currentStepId).toBe(1);
   });
 
-
   it('should run onSubmitStep() and go to previous step', () => {
-
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     component.formEngineComponent = TestBed.createComponent(FormEngineComponent).componentInstance;
@@ -125,11 +115,9 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
     component.onSubmitStep('previous');
     expect(component.wizard.currentStepId).toBe(2);
-
   });
 
   it('should run onSubmitStep() and go to next step', () => {
-
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -140,11 +128,9 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
     component.onSubmitStep('next');
     expect(component.wizard.currentStepId).toBe(2);
-
   });
 
   it('should run onSubmitStep() and do NOTHING with invalid action', () => {
-
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -155,7 +141,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
     component.onSubmitStep('invalid' as any);
     expect(component.wizard.currentStepId).toBe(1);
-
   });
 
   it('should run onSubmitWizard() with API success when updating organisation', () => {
@@ -168,8 +153,9 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01'], { queryParams: { alert: 'updateOrganisationSuccess' } });
-
+    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01'], {
+      queryParams: { alert: 'updateOrganisationSuccess' }
+    });
   });
   it('should run onSubmitWizard() with API success when updating unit', () => {
     activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
@@ -182,8 +168,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(["admin/organisations/Org01/unit/Unit01"], {});
-
+    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01/unit/Unit01'], {});
   });
 
   it('should run onSubmitStep() and redirect because is the first step', () => {
@@ -199,7 +184,5 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
     component.onSubmitStep('previous');
     expect(routerSpy).toHaveBeenCalledWith([`organisations/${component.organisationId}`], {});
-
   });
-
 });

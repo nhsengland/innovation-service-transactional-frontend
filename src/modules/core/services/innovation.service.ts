@@ -10,7 +10,6 @@ import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/inn
 
 @Injectable()
 export class InnovationService {
-
   private APP_URL: string;
 
   constructor(
@@ -20,22 +19,23 @@ export class InnovationService {
     this.APP_URL = this.environmentStore.APP_URL;
   }
 
-
   getInnovationTransfer(id: string): Observable<{ userExists: boolean }> {
-
     const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-transfers/:id/check').setPathParams({ id });
     return this.http.get<{ userExists: boolean }>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
-
   }
 
-  
-  getInnovationCollaboration(id: string): Observable<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }> {
-    const url = new UrlModel(this.APP_URL).addPath('innovators/innovation-collaborations/:id/check').setPathParams({ id });
+  getInnovationCollaboration(
+    id: string
+  ): Observable<{ userExists: boolean; collaboratorStatus: InnovationCollaboratorStatusEnum }> {
+    const url = new UrlModel(this.APP_URL)
+      .addPath('innovators/innovation-collaborations/:id/check')
+      .setPathParams({ id });
 
-    return this.http.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(url.buildUrl()).pipe(take(1));
+    return this.http
+      .get<{ userExists: boolean; collaboratorStatus: InnovationCollaboratorStatusEnum }>(url.buildUrl())
+      .pipe(take(1));
   }
-
 }

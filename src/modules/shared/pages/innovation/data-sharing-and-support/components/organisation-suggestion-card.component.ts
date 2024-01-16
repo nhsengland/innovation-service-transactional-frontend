@@ -5,15 +5,14 @@ import { AccessorSuggestionModel, OrganisationSuggestionModel } from '@modules/s
 @Component({
   selector: 'app-organisation-suggestions-card',
   templateUrl: './organisation-suggestion-card.component.html',
-  styleUrls: ['./organisation-suggestion-card.component.scss'],
+  styleUrls: ['./organisation-suggestion-card.component.scss']
 })
 export class OrganisationSuggestionsCardComponent implements OnChanges {
-
   @Input() suggestions: OrganisationSuggestionModel | undefined;
   @Input() shares: { organisationId: string }[] | undefined;
 
   assessments: {
-    organisations: string[]
+    organisations: string[];
   };
 
   accessors: AccessorSuggestionModel[] | undefined;
@@ -21,17 +20,15 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
   showAssessments: boolean;
   showAccessors: boolean;
 
-  constructor(
-  ) {
+  constructor() {
     this.showAccessors = false;
     this.showAssessments = false;
 
     this.assessments = {
-      organisations: [],
+      organisations: []
     };
 
     this.accessors = [];
-    ;
   }
 
   ngOnChanges(): void {
@@ -39,18 +36,22 @@ export class OrganisationSuggestionsCardComponent implements OnChanges {
     this.showAssessments = false;
     const sharesSet = new Set(this.shares?.map(item => item.organisationId));
     if (this.suggestions) {
-      this.assessments.organisations = this.suggestions.assessment.suggestedOrganisations.filter(i => !sharesSet.has(i.id)).map(i => i.name);
+      this.assessments.organisations = this.suggestions.assessment.suggestedOrganisations
+        .filter(i => !sharesSet.has(i.id))
+        .map(i => i.name);
       if (this.assessments && this.assessments.organisations.length > 0) {
         this.showAssessments = true;
-      };
+      }
 
-      this.accessors = this.suggestions.accessors.map(a => ({
-        organisation: a.organisation,
-        suggestedOrganisations: a.suggestedOrganisations.filter(i => !sharesSet.has(i.id))
-      })).filter(a => a.suggestedOrganisations.length > 0);
-      if(this.accessors && this.accessors.length > 0){
-        this.showAccessors = true
-      };
+      this.accessors = this.suggestions.accessors
+        .map(a => ({
+          organisation: a.organisation,
+          suggestedOrganisations: a.suggestedOrganisations.filter(i => !sharesSet.has(i.id))
+        }))
+        .filter(a => a.suggestedOrganisations.length > 0);
+      if (this.accessors && this.accessors.length > 0) {
+        this.showAccessors = true;
+      }
     }
   }
 }

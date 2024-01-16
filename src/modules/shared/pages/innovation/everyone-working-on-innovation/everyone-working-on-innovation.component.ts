@@ -7,34 +7,32 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { forkJoin } from 'rxjs';
 
-
 @Component({
   selector: 'shared-pages-innovation-participants',
   templateUrl: './everyone-working-on-innovation.component.html'
 })
 export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent implements OnInit {
-
   innovation: ContextInnovationType;
 
   innovationParticipants: {
     innovators: {
-      name: string,
-      role?: string
+      name: string;
+      role?: string;
     }[];
     accessors: {
-      name: string,
+      name: string;
       organisation: {
-        name: string,
-        acronym: string,
+        name: string;
+        acronym: string;
         unit: {
-          name: string,
-          acronym: string
-        }
-      }
+          name: string;
+          acronym: string;
+        };
+      };
     }[];
     assessmentUsers: {
-      name: string
-    }[]
+      name: string;
+    }[];
   } = { innovators: [], accessors: [], assessmentUsers: [] };
 
   innovationSupportIds: string[] = [];
@@ -43,29 +41,24 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     private innovationsService: InnovationsService,
     private usersService: UsersService
   ) {
-
     super();
     this.setPageTitle('Everyone who is working with this innovation', { showPage: false });
 
     this.innovation = this.stores.context.getInnovation();
-
   }
 
-
   ngOnInit(): void {
-
-    this.setPageStatus('LOADING')
+    this.setPageStatus('LOADING');
 
     forkJoin([
       this.innovationsService.getInnovationInfo(this.innovation.id),
       this.innovationsService.getInnovationSupportsList(this.innovation.id, true),
       this.usersService.getUsersList()
     ]).subscribe(([innovationInfo, innovationSupports, assessmentUsers]) => {
-
       if (innovationInfo.owner) {
-        this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner'});
+        this.innovationParticipants.innovators.push({ name: innovationInfo.owner.name, role: 'Owner' });
       }
-      
+
       for (const support of innovationSupports) {
         const accessors = support.engagingAccessors.map(a => ({
           name: a.name,
@@ -76,14 +69,12 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
           }
         }));
 
-        this.innovationParticipants.accessors.push(...accessors)
+        this.innovationParticipants.accessors.push(...accessors);
       }
 
-      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({ name: u.name }))
+      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({ name: u.name }));
 
-      this.setPageStatus('READY')
+      this.setPageStatus('READY');
     });
-
   }
-
 }

@@ -9,24 +9,28 @@ import { APIQueryParamsType } from '@app/base/types';
 
 import { GetUsersRequestDTO, UsersListDTO } from '../dtos/users.dto';
 
-
 export type UserListFiltersType = {
-  onlyActive: boolean,
-  userTypes: UserRoleEnum[]
-  email?: boolean,
-  organisationUnitId?: string,
+  onlyActive: boolean;
+  userTypes: UserRoleEnum[];
+  email?: boolean;
+  organisationUnitId?: string;
 };
-
 
 @Injectable()
 export class UsersService extends CoreService {
+  constructor() {
+    super();
+  }
 
-  constructor() { super(); }
-
-  getUsersList({ queryParams }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<UsersListDTO> {
-
+  getUsersList({
+    queryParams
+  }: { queryParams?: APIQueryParamsType<UserListFiltersType> } = {}): Observable<UsersListDTO> {
     if (!queryParams) {
-      queryParams = { take: 500, skip: 0, filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT] } };
+      queryParams = {
+        take: 500,
+        skip: 0,
+        filters: { email: false, onlyActive: true, userTypes: [UserRoleEnum.ASSESSMENT] }
+      };
     }
     const { filters, ...qParams } = queryParams;
 
@@ -36,10 +40,11 @@ export class UsersService extends CoreService {
       fields: filters.email ? ['email'] : [],
       onlyActive: filters.onlyActive ?? false,
       ...(filters.organisationUnitId ? { organisationUnitId: filters.organisationUnitId } : {})
-    }
+    };
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1').setQueryParams(qp);
-    return this.http.get<GetUsersRequestDTO>(url.buildUrl()).pipe(take(1),
+    return this.http.get<GetUsersRequestDTO>(url.buildUrl()).pipe(
+      take(1),
       map(response => ({
         count: response.count,
         data: response.data.map(item => ({
@@ -51,11 +56,9 @@ export class UsersService extends CoreService {
           roleId: item.roles[0].id,
           roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
           email: item.email ?? '',
-          organisationUnitUserId: item.organisationUnitUserId ?? '',
+          organisationUnitUserId: item.organisationUnitUserId ?? ''
         }))
       }))
     );
-
   }
-
 }

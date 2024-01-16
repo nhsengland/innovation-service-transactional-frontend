@@ -1,6 +1,6 @@
 import { TableModel } from './table.model';
 
-type defaultDataSourceType = { c1: string, c2: string, c3: string };
+type defaultDataSourceType = { c1: string; c2: string; c3: string };
 
 const defaultInit: any = {
   visibleColumns: {
@@ -19,20 +19,24 @@ const emptyExpected = {
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
-  filters: null,
+  filters: {},
   cachedHeaderColumns: []
 };
 
 const defaultExpected = {
   dataSource: [],
-  visibleColumns: { c1: { label: 'C1 label' }, c2: { label: 'C2 label' }, c3: { label: 'C3 label', align: 'left', orderable: true } },
+  visibleColumns: {
+    c1: { label: 'C1 label' },
+    c2: { label: 'C2 label' },
+    c3: { label: 'C3 label', align: 'left', orderable: true }
+  },
   totalRows: 0,
   page: 1,
   pageSize: 20,
   pageSizeOptions: [5, 10, 25],
   orderBy: '',
   orderDir: 'none',
-  filters: null,
+  filters: {},
   cachedHeaderColumns: [
     { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
     { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
@@ -40,9 +44,7 @@ const defaultExpected = {
   ]
 };
 
-
 describe('Core/Models/TableModel', () => {
-
   let component: TableModel;
 
   it('should create TableModel with EMPTY information', () => {
@@ -84,7 +86,9 @@ describe('Core/Models/TableModel', () => {
 
   it('should set orderBy and orderDir to a specific column', () => {
     const expected = {
-      ...defaultExpected, orderBy: 'c1', orderDir: 'descending',
+      ...defaultExpected,
+      orderBy: 'c1',
+      orderDir: 'descending',
       cachedHeaderColumns: [
         { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'descending' },
         { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
@@ -98,7 +102,9 @@ describe('Core/Models/TableModel', () => {
 
   it('should toggle orderBy of currently ordered column when it is ascending', () => {
     const expected = {
-      ...defaultExpected, orderBy: 'c1', orderDir: 'descending',
+      ...defaultExpected,
+      orderBy: 'c1',
+      orderDir: 'descending',
       cachedHeaderColumns: [
         { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'descending' },
         { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
@@ -112,7 +118,9 @@ describe('Core/Models/TableModel', () => {
 
   it('should toggle orderBy of currently ordered column when it is descending', () => {
     const expected = {
-      ...defaultExpected, orderBy: 'c1', orderDir: 'ascending',
+      ...defaultExpected,
+      orderBy: 'c1',
+      orderDir: 'ascending',
       cachedHeaderColumns: [
         { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'ascending' },
         { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
@@ -126,7 +134,9 @@ describe('Core/Models/TableModel', () => {
 
   it('should set orderBy to DESC when ordering by the same column', () => {
     const expected = {
-      ...defaultExpected, orderBy: 'c1', orderDir: 'descending',
+      ...defaultExpected,
+      orderBy: 'c1',
+      orderDir: 'descending',
       cachedHeaderColumns: [
         { key: 'c1', label: 'C1 label', align: 'text-align-left', orderable: false, orderDir: 'descending' },
         { key: 'c2', label: 'C2 label', align: 'text-align-left', orderable: false, orderDir: 'none' },
@@ -138,7 +148,6 @@ describe('Core/Models/TableModel', () => {
     expect(component).toEqual(expected);
   });
 
-
   it('should set filters', () => {
     const expected = { ...defaultExpected, ...{ filters: { status: 'enabled' } } };
     component = new TableModel<defaultDataSourceType>(defaultInit);
@@ -147,7 +156,10 @@ describe('Core/Models/TableModel', () => {
   });
 
   it('should set data without totalRows', () => {
-    const expected = { ...defaultExpected, ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 1 } };
+    const expected = {
+      ...defaultExpected,
+      ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 1 }
+    };
     component = new TableModel<defaultDataSourceType>(defaultInit);
     component.setData([{ c1: 'value', c2: 'value', c3: 'value' }]);
     expect(component).toEqual(expected);
@@ -156,7 +168,10 @@ describe('Core/Models/TableModel', () => {
   });
 
   it('should set data with totalRows', () => {
-    const expected = { ...defaultExpected, ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 50 } };
+    const expected = {
+      ...defaultExpected,
+      ...{ dataSource: [{ c1: 'value', c2: 'value', c3: 'value' }], totalRows: 50 }
+    };
     component = new TableModel<defaultDataSourceType>(defaultInit);
     component.setData([{ c1: 'value', c2: 'value', c3: 'value' }], 50);
     expect(component).toEqual(expected);
@@ -221,5 +236,4 @@ describe('Core/Models/TableModel', () => {
     component.setFilters({ status: 'enabled' });
     expect(component.getAPIQueryParams()).toEqual(expected);
   });
-
 });

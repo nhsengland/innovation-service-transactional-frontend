@@ -5,10 +5,8 @@ import { Component, Input } from '@angular/core';
   templateUrl: './action-link.component.html'
 })
 export class ActionLinkComponent {
-
   @Input() href = '';
   @Input() text = '';
 
-  constructor() { }
-
+  constructor() {}
 }

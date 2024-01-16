@@ -9,7 +9,7 @@ export enum NotificationCategoryTypeEnum {
   ORGANISATION_SUGGESTIONS = 'ORGANISATION_SUGGESTIONS', // QA, Innovator
   ADMIN = 'ADMIN', // QA, A, Innovator
   ACCOUNT = 'ACCOUNT', // Innovator
-  AUTOMATIC = 'AUTOMATIC', // QA , A, Innovator
+  AUTOMATIC = 'AUTOMATIC' // QA , A, Innovator
 }
 
 export const QANotificationCategories = [
@@ -20,7 +20,7 @@ export const QANotificationCategories = [
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.ADMIN,
   NotificationCategoryTypeEnum.AUTOMATIC
-]
+];
 
 export const ANotificationCategories = [
   NotificationCategoryTypeEnum.SUPPORT,
@@ -29,14 +29,14 @@ export const ANotificationCategories = [
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.ADMIN,
   NotificationCategoryTypeEnum.AUTOMATIC
-]
+];
 
 export const NANotificationCategories = [
   NotificationCategoryTypeEnum.NEEDS_ASSESSMENT,
   NotificationCategoryTypeEnum.MESSAGES,
   NotificationCategoryTypeEnum.TASK,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT
-]
+];
 
 export const InnovatorNotificationCategories = [
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
@@ -48,7 +48,7 @@ export const InnovatorNotificationCategories = [
   NotificationCategoryTypeEnum.DOCUMENTS,
   NotificationCategoryTypeEnum.AUTOMATIC,
   NotificationCategoryTypeEnum.ADMIN
-]
+];
 
 export enum NotificationContextDetailEnum {
   // TASK
@@ -63,7 +63,7 @@ export enum NotificationContextDetailEnum {
   // MESSAGES
   ME01_THREAD_CREATION = 'ME01_THREAD_CREATION',
   ME02_THREAD_ADD_FOLLOWERS = 'ME02_THREAD_ADD_FOLLOWERS',
-  ME03_THREAD_MESSAGE_CREATION ='ME03_THREAD_MESSAGE_CREATION',
+  ME03_THREAD_MESSAGE_CREATION = 'ME03_THREAD_MESSAGE_CREATION',
   // SUPPORT
   ST01_SUPPORT_STATUS_TO_ENGAGING = 'ST01_SUPPORT_STATUS_TO_ENGAGING',
   ST02_SUPPORT_STATUS_TO_OTHER = 'ST02_SUPPORT_STATUS_TO_OTHER',
@@ -116,5 +116,5 @@ export enum NotificationContextDetailEnum {
   AU05_SUPPORT_KPI_OVERDUE = 'AU05_SUPPORT_KPI_OVERDUE',
   AU06_ACCESSOR_IDLE_WAITING = 'AU06_ACCESSOR_IDLE_WAITING',
   AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER = 'AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER',
-  AU09_TRANSFER_EXPIRED = 'AU09_TRANSFER_EXPIRED',
+  AU09_TRANSFER_EXPIRED = 'AU09_TRANSFER_EXPIRED'
 }

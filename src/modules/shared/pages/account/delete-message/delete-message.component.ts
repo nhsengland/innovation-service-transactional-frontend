@@ -2,15 +2,12 @@ import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-
 @Component({
   selector: 'shared-pages-account-delete-message',
   templateUrl: './delete-message.component.html'
 })
 export class PageAccountDeleteMessageComponent extends CoreComponent {
-
   constructor() {
-
     super();
     this.setPageTitle('Delete account successful');
 
@@ -18,7 +15,5 @@ export class PageAccountDeleteMessageComponent extends CoreComponent {
       type: 'SUCCESS',
       title: 'You have successfully deleted your account'
     };
-
   }
-
 }

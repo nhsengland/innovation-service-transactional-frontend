@@ -7,20 +7,18 @@ import { CustomValidators } from '../validators/custom-validators';
 import { FormCheckboxGroupComponent } from './checkbox-group.component';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
+  template: ` <form [formGroup]="form">
     <theme-form-checkbox-group [id]="id" [groupName]="groupName" [items]="items"></theme-form-checkbox-group>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormCheckboxGroupComponent) childComponent?: FormCheckboxGroupComponent;
 
   form = new FormGroup({
     testField: new FormGroup({
       'value 1': new FormControl(false),
       'value 2': new FormControl(false),
-      'value 3': new FormControl(false),
+      'value 3': new FormControl(false)
     })
   });
 
@@ -31,30 +29,20 @@ class HostComponent {
     { value: 'value 2', label: 'label 2' },
     { value: 'value 3', label: 'label 3' }
   ];
-
 }
 
-
 describe('FormCheckboxGroupComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormCheckboxGroupComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormCheckboxGroupComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -100,7 +88,5 @@ describe('FormCheckboxGroupComponent', () => {
     expect(hostComponent.childComponent?.isChecked('value 2')).toBe(false);
     expect(hostComponent.childComponent?.isChecked('value 3')).toBe(false);
     expect(hostComponent.childComponent?.isChecked('unknown values')).toBe(false);
-
   });
-
 });

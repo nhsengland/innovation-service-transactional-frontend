@@ -5,7 +5,6 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 
-
 // Base.
 import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
@@ -17,6 +16,7 @@ import { PageUsersRoleActivateComponent } from './pages/users/roles/role-activat
 import { PageUsersRoleChangeComponent } from './pages/users/roles/role-change.component';
 import { PageUsersRoleInactivateComponent } from './pages/users/roles/role-inactivate.component';
 import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
+import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
@@ -65,15 +65,8 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 
-
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    AdminRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, AdminRoutingModule],
   declarations: [
     // Base
     ContextInnovationOutletComponent,
@@ -82,6 +75,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // Pages.
     PageAccountManageAccountInfoComponent,
     // Users
+    PageUserEmailComponent,
     PageUserFindComponent,
     PageUserInfoComponent,
     PageUserNewComponent,
@@ -136,4 +130,4 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     OrganisationUnitDataResolver
   ]
 })
-export class AdminModule { }
+export class AdminModule {}

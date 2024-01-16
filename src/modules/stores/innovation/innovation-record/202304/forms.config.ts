@@ -1,8 +1,36 @@
 import { FormEngineParameterModel } from '@app/base/forms';
 
 import { FormSelectableFieldType } from '../ir-versions.types';
-import { catalogAreas, catalogCarbonReductionPlan, catalogCareSettings, catalogCategory, catalogEvidenceType, catalogCostComparison, catalogHasCostKnowledge, catalogHasPatents, catalogHasRegulationKnowledge, catalogIntendedUserGroupsEngaged, catalogInvolvedAACProgrammes, catalogKeyHealthInequalities, catalogMainPurpose, catalogNeedsSupportAnyArea, catalogOfficeLocation, catalogOptionBestDescribesInnovation, catalogPathwayKnowledge, catalogPatientRange, catalogRevenues, catalogStandardsType, catalogEvidenceSubmitType, catalogYesInProgressNotYet, catalogYesNo, catalogYesNoNotRelevant, catalogYesNoNotSure, catalogYesNotYet, catalogYesNotYetNo, catalogHasRevenueModel } from './catalog.types';
-
+import {
+  catalogAreas,
+  catalogCarbonReductionPlan,
+  catalogCareSettings,
+  catalogCategory,
+  catalogCostComparison,
+  catalogEvidenceSubmitType,
+  catalogEvidenceType,
+  catalogHasCostKnowledge,
+  catalogHasPatents,
+  catalogHasRegulationKnowledge,
+  catalogHasRevenueModel,
+  catalogIntendedUserGroupsEngaged,
+  catalogInvolvedAACProgrammes,
+  catalogKeyHealthInequalities,
+  catalogMainPurpose,
+  catalogNeedsSupportAnyArea,
+  catalogOfficeLocation,
+  catalogOptionBestDescribesInnovation,
+  catalogPathwayKnowledge,
+  catalogPatientRange,
+  catalogRevenues,
+  catalogStandardsType,
+  catalogYesInProgressNotYet,
+  catalogYesNo,
+  catalogYesNoNotRelevant,
+  catalogYesNoNotSure,
+  catalogYesNotYet,
+  catalogYesNotYetNo
+} from './catalog.types';
 
 // Shared.
 export const yesNoItems: FormSelectableFieldType<catalogYesNo> = [
@@ -21,7 +49,6 @@ export const yesNotYetNoItems: FormSelectableFieldType<catalogYesNotYetNo> = [
   { value: 'NO', label: 'No' }
 ];
 
-
 // Section 1.
 // Section 1.1.
 export const locationItems: FormSelectableFieldType<catalogOfficeLocation | ''> = [
@@ -30,7 +57,7 @@ export const locationItems: FormSelectableFieldType<catalogOfficeLocation | ''> 
   { value: 'Wales', label: 'Wales' },
   { value: 'Northern Ireland', label: 'Northern Ireland' },
   { value: '', label: 'SEPARATOR' },
-  { value: 'Based outside UK', label: 'I\'m based outside of the UK' }
+  { value: 'Based outside UK', label: "I'm based outside of the UK" }
 ];
 
 export const countriesItems: FormSelectableFieldType<string> = [
@@ -285,69 +312,166 @@ export const mainPurposeItems: FormSelectableFieldType<catalogMainPurpose> = [
   { value: 'PROVIDE_TREATMENT', label: 'Providing treatment or therapy' },
   { value: 'MANAGE_CONDITION', label: 'Managing a condition' },
   { value: 'ENABLING_CARE', label: 'Enabling care, services or communication' },
-  { value: 'RISKS_CLIMATE_CHANGE', label: 'Supporting the NHS to mitigate the risks or effects of climate change and severe weather conditions' }
+  {
+    value: 'RISKS_CLIMATE_CHANGE',
+    label: 'Supporting the NHS to mitigate the risks or effects of climate change and severe weather conditions'
+  }
 ];
 
 export const involvedAACProgrammesItems: FormSelectableFieldType<catalogInvolvedAACProgrammes> = [
   { value: 'No', label: 'No', exclusive: true },
   { value: 'SEPARATOR', label: 'SEPARATOR' },
   { value: 'Health Innovation Network', label: 'Health Innovation Network' },
-  { value: 'Artificial Intelligence in Health and Care Award', label: 'Artificial Intelligence in Health and Care Award' },
+  {
+    value: 'Artificial Intelligence in Health and Care Award',
+    label: 'Artificial Intelligence in Health and Care Award'
+  },
   { value: 'Clinical Entrepreneur Programme', label: 'Clinical Entrepreneur Programme' },
   { value: 'Early Access to Medicines Scheme', label: 'Early Access to Medicines Scheme' },
-  { value: 'Innovation for Healthcare Inequalities Programme', label: 'Innovation for Healthcare Inequalities Programme' },
+  {
+    value: 'Innovation for Healthcare Inequalities Programme',
+    label: 'Innovation for Healthcare Inequalities Programme'
+  },
   { value: 'Innovation and Technology Payment Programme', label: 'Innovation and Technology Payment Programme' },
   { value: 'NHS Innovation Accelerator', label: 'NHS Innovation Accelerator' },
   { value: 'NHS Insights Prioritisation Programme', label: 'NHS Insights Prioritisation Programme' },
   { value: 'Pathway Transformation Fund', label: 'Pathway Transformation Fund' },
   { value: 'Rapid Uptake Products Programme', label: 'Rapid Uptake Products Programme' },
-  { value: 'Small Business Research Initiative for Healthcare', label: 'Small Business Research Initiative for Healthcare' },
+  {
+    value: 'Small Business Research Initiative for Healthcare',
+    label: 'Small Business Research Initiative for Healthcare'
+  },
   { value: 'Test beds', label: 'Test beds' }
 ];
-
 
 // Section 2.
 // // Section 2.1.
 export const benefitsOrImpactItems: FormSelectableFieldType<string> = [
   { value: 'Reduces mortality', label: 'Reduces mortality', group: 'Benefits for patients and people' },
-  { value: 'Reduces need for further treatment', label: 'Reduces need for further treatment', group: 'Benefits for patients and people' },
+  {
+    value: 'Reduces need for further treatment',
+    label: 'Reduces need for further treatment',
+    group: 'Benefits for patients and people'
+  },
   { value: 'Reduces adverse events', label: 'Reduces adverse events', group: 'Benefits for patients and people' },
-  { value: 'Enables earlier or more accurate diagnosis', label: 'Enables earlier or more accurate diagnosis', group: 'Benefits for patients and people' },
-  { value: 'Reduces risks, side effects or complications', label: 'Reduces risks, side effects or complications', group: 'Benefits for patients and people' },
-  { value: 'Prevents a condition occurring or exacerbating', label: 'Prevents a condition occurring or exacerbating', group: 'Benefits for patients and people' },
-  { value: 'Avoids a test, procedure or unnecessary treatment', label: 'Avoids a test, procedure or unnecessary treatment', group: 'Benefits for patients and people' },
-  { value: 'Enables a test, procedure or treatment to be done non-invasively', label: 'Enables a test, procedure or treatment to be done non-invasively', group: 'Benefits for patients and people' },
+  {
+    value: 'Enables earlier or more accurate diagnosis',
+    label: 'Enables earlier or more accurate diagnosis',
+    group: 'Benefits for patients and people'
+  },
+  {
+    value: 'Reduces risks, side effects or complications',
+    label: 'Reduces risks, side effects or complications',
+    group: 'Benefits for patients and people'
+  },
+  {
+    value: 'Prevents a condition occurring or exacerbating',
+    label: 'Prevents a condition occurring or exacerbating',
+    group: 'Benefits for patients and people'
+  },
+  {
+    value: 'Avoids a test, procedure or unnecessary treatment',
+    label: 'Avoids a test, procedure or unnecessary treatment',
+    group: 'Benefits for patients and people'
+  },
+  {
+    value: 'Enables a test, procedure or treatment to be done non-invasively',
+    label: 'Enables a test, procedure or treatment to be done non-invasively',
+    group: 'Benefits for patients and people'
+  },
   { value: 'Increases self-management', label: 'Increases self-management', group: 'Benefits for patients and people' },
   { value: 'Increases quality of life', label: 'Increases quality of life', group: 'Benefits for patients and people' },
   { value: 'Enables shared care', label: 'Enables shared care', group: 'Benefits for patients and people' },
   { value: 'Alleviates pain', label: 'Alleviates pain', group: 'Benefits for patients and people' },
-  { value: 'Other benefits for patients and people', label: 'Other benefits for patients and people', group: 'Benefits for patients and people' },
-  { value: 'Reduces the length of stay or enables earlier discharge', label: 'Reduces the length of stay or enables earlier discharge', group: 'Benefits for the NHS and social care' },
-  { value: 'Reduces need for adult or paediatric critical care', label: 'Reduces need for adult or paediatric critical care', group: 'Benefits for the NHS and social care' },
-  { value: 'Reduces emergency admissions', label: 'Reduces emergency admissions', group: 'Benefits for the NHS and social care' },
-  { value: 'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', label: 'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)', group: 'Benefits for the NHS and social care' },
-  { value: 'Change in delivery of care from inpatient to day case', label: 'Change in delivery of care from inpatient to day case', group: 'Benefits for the NHS and social care' },
+  {
+    value: 'Other benefits for patients and people',
+    label: 'Other benefits for patients and people',
+    group: 'Benefits for patients and people'
+  },
+  {
+    value: 'Reduces the length of stay or enables earlier discharge',
+    label: 'Reduces the length of stay or enables earlier discharge',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Reduces need for adult or paediatric critical care',
+    label: 'Reduces need for adult or paediatric critical care',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Reduces emergency admissions',
+    label: 'Reduces emergency admissions',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value:
+      'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)',
+    label:
+      'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Change in delivery of care from inpatient to day case',
+    label: 'Change in delivery of care from inpatient to day case',
+    group: 'Benefits for the NHS and social care'
+  },
   { value: 'Increases compliance', label: 'Increases compliance', group: 'Benefits for the NHS and social care' },
-  { value: 'Improves patient management or coordination of care or services', label: 'Improves patient management or coordination of care or services', group: 'Benefits for the NHS and social care' },
+  {
+    value: 'Improves patient management or coordination of care or services',
+    label: 'Improves patient management or coordination of care or services',
+    group: 'Benefits for the NHS and social care'
+  },
   { value: 'Reduces referrals', label: 'Reduces referrals', group: 'Benefits for the NHS and social care' },
   { value: 'Takes less time', label: 'Takes less time', group: 'Benefits for the NHS and social care' },
-  { value: 'Uses no staff or a lower grade of staff', label: 'Uses no staff or a lower grade of staff', group: 'Benefits for the NHS and social care' },
-  { value: 'Leads to fewer appointments', label: 'Leads to fewer appointments', group: 'Benefits for the NHS and social care' },
+  {
+    value: 'Uses no staff or a lower grade of staff',
+    label: 'Uses no staff or a lower grade of staff',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Leads to fewer appointments',
+    label: 'Leads to fewer appointments',
+    group: 'Benefits for the NHS and social care'
+  },
   { value: 'Is cost saving', label: 'Is cost saving', group: 'Benefits for the NHS and social care' },
   { value: 'Increases efficiency', label: 'Increases efficiency', group: 'Benefits for the NHS and social care' },
   { value: 'Improves performance', label: 'Improves performance', group: 'Benefits for the NHS and social care' },
-  { value: 'Reduces carbon emissions and supports the NHS to achieve net zero', label: 'Reduces carbon emissions and supports the NHS to achieve net zero', group: 'Benefits for the NHS and social care' },
-  { value: 'Other environmental benefits', label: 'Other environmental benefits', group: 'Benefits for the NHS and social care' },
-  { value: 'Other benefits for the NHS and social care', label: 'Other benefits for the NHS and social care', group: 'Benefits for the NHS and social care' }
+  {
+    value: 'Reduces carbon emissions and supports the NHS to achieve net zero',
+    label: 'Reduces carbon emissions and supports the NHS to achieve net zero',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Other environmental benefits',
+    label: 'Other environmental benefits',
+    group: 'Benefits for the NHS and social care'
+  },
+  {
+    value: 'Other benefits for the NHS and social care',
+    label: 'Other benefits for the NHS and social care',
+    group: 'Benefits for the NHS and social care'
+  }
 ];
 
 export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS', label: `Blood and immune system conditions` },
   { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ALLERGIES', label: `Blood and immune system conditions - Allergies` },
-  { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ANAPHYLAXIS', label: `Blood and immune system conditions - Anaphylaxis` },
-  { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_BLOOD_CONDITIONS', label: `Blood and immune system conditions - Blood conditions` },
-  { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_LYMPHOEDEMA', label: `Blood and immune system conditions - Lymphoedema` },
-  { value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_SYSTEMIC_LUPUS_ERYTHEMATOSUS', label: `Blood and immune system conditions - Systemic lupus erythematosus` },
+  {
+    value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ANAPHYLAXIS',
+    label: `Blood and immune system conditions - Anaphylaxis`
+  },
+  {
+    value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_BLOOD_CONDITIONS',
+    label: `Blood and immune system conditions - Blood conditions`
+  },
+  {
+    value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_LYMPHOEDEMA',
+    label: `Blood and immune system conditions - Lymphoedema`
+  },
+  {
+    value: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_SYSTEMIC_LUPUS_ERYTHEMATOSUS',
+    label: `Blood and immune system conditions - Systemic lupus erythematosus`
+  },
   { value: 'CANCER', label: `Cancer` },
   { value: 'CANCER_BLADDER_CANCER', label: `Cancer - Bladder cancer` },
   { value: 'CANCER_BLOOD_AND_BONE_MARROW_CANCERS', label: `Cancer - Blood and bone marrow cancers` },
@@ -374,58 +498,151 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'CANCER_THYROID_CANCER', label: `Cancer - Thyroid cancer` },
   { value: 'CANCER_UPPER_AIRWAYS_TRACT_CANCERS', label: `Cancer - Upper airways tract cancers` },
   { value: 'CARDIOVASCULAR_CONDITIONS', label: `Cardiovascular conditions` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_ACUTE_CORONARY_SYNDROMES', label: `Cardiovascular conditions - Acute coronary syndromes` },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_ACUTE_CORONARY_SYNDROMES',
+    label: `Cardiovascular conditions - Acute coronary syndromes`
+  },
   { value: 'CARDIOVASCULAR_CONDITIONS_AORTIC_ANEURYSMS', label: `Cardiovascular conditions - Aortic aneurysms` },
   { value: 'CARDIOVASCULAR_CONDITIONS_CRANIAL_ANEURYSMS', label: `Cardiovascular conditions - Cranial aneurysms` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_EMBOLISM_AND_THROMBOSIS', label: `Cardiovascular conditions - Embolism and thrombosis` },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_EMBOLISM_AND_THROMBOSIS',
+    label: `Cardiovascular conditions - Embolism and thrombosis`
+  },
   { value: 'CARDIOVASCULAR_CONDITIONS_HEART_FAILURE', label: `Cardiovascular conditions - Heart failure` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_HEART_RHYTHM_CONDITIONS', label: `Cardiovascular conditions - Heart rhythm conditions` },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_HEART_RHYTHM_CONDITIONS',
+    label: `Cardiovascular conditions - Heart rhythm conditions`
+  },
   { value: 'CARDIOVASCULAR_CONDITIONS_HYPERTENSION', label: `Cardiovascular conditions - Hypertension` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_PERIPHERAL_CIRCULATORY_CONDITIONS', label: `Cardiovascular conditions - Peripheral circulatory conditions` },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_PERIPHERAL_CIRCULATORY_CONDITIONS',
+    label: `Cardiovascular conditions - Peripheral circulatory conditions`
+  },
   { value: 'CARDIOVASCULAR_CONDITIONS_STABLE_ANGINA', label: `Cardiovascular conditions - Stable angina` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_STROKE_AND_TRANSIENT_ISCHAEMIC_ATTACK', label: `Cardiovascular conditions - Stroke and transient ischaemic attack` },
-  { value: 'CARDIOVASCULAR_CONDITIONS_STRUCTURAL_HEART_DEFECTS', label: `Cardiovascular conditions - Structural heart defects` },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_STROKE_AND_TRANSIENT_ISCHAEMIC_ATTACK',
+    label: `Cardiovascular conditions - Stroke and transient ischaemic attack`
+  },
+  {
+    value: 'CARDIOVASCULAR_CONDITIONS_STRUCTURAL_HEART_DEFECTS',
+    label: `Cardiovascular conditions - Structural heart defects`
+  },
   { value: 'CARDIOVASCULAR_CONDITIONS_VARICOSE_VEINS', label: `Cardiovascular conditions - Varicose veins` },
   { value: 'CHRONIC_AND_NEUROPATHIC_PAIN', label: `Chronic and neuropathic pain` },
   { value: 'CHRONIC_FATIGUE_SYNDROME', label: `Chronic fatigue syndrome` },
   { value: 'CYSTIC_FIBROSIS', label: `Cystic fibrosis` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS', label: `Diabetes and other endocrinal, nutritional and metabolic conditions` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_ADRENAL_DYSFUNCTION', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Adrenal dysfunction` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_DIABETES', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Diabetes` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_FAILURE_TO_THRIVE', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Failure to thrive` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_LIPID_DISORDERS', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Lipid disorders` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_MALNUTRITION', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Malnutrition` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_METABOLIC_CONDITIONS', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Metabolic conditions` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_OBESITY', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Obesity` },
-  { value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_THYROID_DISORDERS', label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Thyroid disorders` },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_ADRENAL_DYSFUNCTION',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Adrenal dysfunction`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_DIABETES',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Diabetes`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_FAILURE_TO_THRIVE',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Failure to thrive`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_LIPID_DISORDERS',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Lipid disorders`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_MALNUTRITION',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Malnutrition`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_METABOLIC_CONDITIONS',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Metabolic conditions`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_OBESITY',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Obesity`
+  },
+  {
+    value: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_THYROID_DISORDERS',
+    label: `Diabetes and other endocrinal, nutritional and metabolic conditions - Thyroid disorders`
+  },
   { value: 'DIGESTIVE_TRACT_CONDITIONS', label: `Digestive tract conditions` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_CHOLELITHIASIS_AND_CHOLECYSTITIS', label: `Digestive tract conditions - Cholelithiasis and cholecystitis` },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_CHOLELITHIASIS_AND_CHOLECYSTITIS',
+    label: `Digestive tract conditions - Cholelithiasis and cholecystitis`
+  },
   { value: 'DIGESTIVE_TRACT_CONDITIONS_COELIAC_DISEASE', label: `Digestive tract conditions - Coeliac disease` },
   { value: 'DIGESTIVE_TRACT_CONDITIONS_CONSTIPATION', label: `Digestive tract conditions - Constipation` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_DIARRHOEA_AND_VOMITING', label: `Digestive tract conditions - Diarrhoea and vomiting` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_DIVERTICULAR_DISEASE', label: `Digestive tract conditions - Diverticular disease` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_FAECAL_INCONTINENCE', label: `Digestive tract conditions - Faecal incontinence` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_GASTRO_OESOPHAGEAL_REFLUX_INCLUDING_BARRETTS_OESOPHAGUS', label: `Digestive tract conditions - Gastro-oesophageal reflux, including Barrett's oesophagus` },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_DIARRHOEA_AND_VOMITING',
+    label: `Digestive tract conditions - Diarrhoea and vomiting`
+  },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_DIVERTICULAR_DISEASE',
+    label: `Digestive tract conditions - Diverticular disease`
+  },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_FAECAL_INCONTINENCE',
+    label: `Digestive tract conditions - Faecal incontinence`
+  },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_GASTRO_OESOPHAGEAL_REFLUX_INCLUDING_BARRETTS_OESOPHAGUS',
+    label: `Digestive tract conditions - Gastro-oesophageal reflux, including Barrett's oesophagus`
+  },
   { value: 'DIGESTIVE_TRACT_CONDITIONS_GASTROPARESIS', label: `Digestive tract conditions - Gastroparesis` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_HAEMORRHOIDS_AND_OTHER_ANAL_CONDITIONS', label: `Digestive tract conditions - Haemorrhoids and other anal conditions` },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_HAEMORRHOIDS_AND_OTHER_ANAL_CONDITIONS',
+    label: `Digestive tract conditions - Haemorrhoids and other anal conditions`
+  },
   { value: 'DIGESTIVE_TRACT_CONDITIONS_HERNIA', label: `Digestive tract conditions - Hernia` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_INFLAMMATORY_BOWEL_DISEASE', label: `Digestive tract conditions - Inflammatory bowel disease` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_IRRITABLE_BOWEL_SYNDROME', label: `Digestive tract conditions - Irritable bowel syndrome` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_LOWER_GASTROINTESTINAL_LESIONS', label: `Digestive tract conditions - Lower gastrointestinal lesions` },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_INFLAMMATORY_BOWEL_DISEASE',
+    label: `Digestive tract conditions - Inflammatory bowel disease`
+  },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_IRRITABLE_BOWEL_SYNDROME',
+    label: `Digestive tract conditions - Irritable bowel syndrome`
+  },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_LOWER_GASTROINTESTINAL_LESIONS',
+    label: `Digestive tract conditions - Lower gastrointestinal lesions`
+  },
   { value: 'DIGESTIVE_TRACT_CONDITIONS_PANCREATITIS', label: `Digestive tract conditions - Pancreatitis` },
-  { value: 'DIGESTIVE_TRACT_CONDITIONS_UPPER_GASTROINTESTINAL_BLEEDING', label: `Digestive tract conditions - Upper gastrointestinal bleeding` },
+  {
+    value: 'DIGESTIVE_TRACT_CONDITIONS_UPPER_GASTROINTESTINAL_BLEEDING',
+    label: `Digestive tract conditions - Upper gastrointestinal bleeding`
+  },
   { value: 'EAR_NOSE_AND_THROAT_CONDITIONS', label: `Ear, nose and throat conditions` },
   { value: 'EYE_CONDITIONS', label: `Eye conditions` },
   { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH', label: `Fertility, pregnancy and childbirth` },
-  { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_CONTRACEPTION', label: `Fertility, pregnancy and childbirth - Contraception` },
+  {
+    value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_CONTRACEPTION',
+    label: `Fertility, pregnancy and childbirth - Contraception`
+  },
   { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_FERTILITY', label: `Fertility, pregnancy and childbirth - Fertility` },
-  { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_INTRAPARTUM_CARE', label: `Fertility, pregnancy and childbirth - Intrapartum care` },
-  { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_POSTNATAL_CARE', label: `Fertility, pregnancy and childbirth - Postnatal care` },
+  {
+    value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_INTRAPARTUM_CARE',
+    label: `Fertility, pregnancy and childbirth - Intrapartum care`
+  },
+  {
+    value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_POSTNATAL_CARE',
+    label: `Fertility, pregnancy and childbirth - Postnatal care`
+  },
   { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_PREGNANCY', label: `Fertility, pregnancy and childbirth - Pregnancy` },
-  { value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_TERMINATION_OF_PREGNANCY_SERVICES', label: `Fertility, pregnancy and childbirth - Termination of pregnancy services` },
+  {
+    value: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_TERMINATION_OF_PREGNANCY_SERVICES',
+    label: `Fertility, pregnancy and childbirth - Termination of pregnancy services`
+  },
   { value: 'GYNAECOLOGICAL_CONDITIONS', label: `Gynaecological conditions` },
-  { value: 'GYNAECOLOGICAL_CONDITIONS_ENDOMETRIOSIS_AND_FIBROIDS', label: `Gynaecological conditions - Endometriosis and fibroids` },
-  { value: 'GYNAECOLOGICAL_CONDITIONS_HEAVY_MENSTRUAL_BLEEDING', label: `Gynaecological conditions - Heavy menstrual bleeding` },
+  {
+    value: 'GYNAECOLOGICAL_CONDITIONS_ENDOMETRIOSIS_AND_FIBROIDS',
+    label: `Gynaecological conditions - Endometriosis and fibroids`
+  },
+  {
+    value: 'GYNAECOLOGICAL_CONDITIONS_HEAVY_MENSTRUAL_BLEEDING',
+    label: `Gynaecological conditions - Heavy menstrual bleeding`
+  },
   { value: 'GYNAECOLOGICAL_CONDITIONS_MENOPAUSE', label: `Gynaecological conditions - Menopause` },
   { value: 'GYNAECOLOGICAL_CONDITIONS_UTERINE_PROLAPSE', label: `Gynaecological conditions - Uterine prolapse` },
   { value: 'GYNAECOLOGICAL_CONDITIONS_VAGINAL_CONDITIONS', label: `Gynaecological conditions - Vaginal conditions` },
@@ -437,7 +654,10 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'INFECTIONS_HEALTHCARE_ASSOCIATED_INFECTIONS', label: `Infections - Healthcare-associated infections` },
   { value: 'INFECTIONS_HIV_AND_AIDS', label: `Infections - HIV and AIDS` },
   { value: 'INFECTIONS_INFLUENZA', label: `Infections - Influenza` },
-  { value: 'INFECTIONS_MENINGITIS_AND_MENINGOCOCCAL_SEPTICAEMIA', label: `Infections - Meningitis and meningococcal septicaemia` },
+  {
+    value: 'INFECTIONS_MENINGITIS_AND_MENINGOCOCCAL_SEPTICAEMIA',
+    label: `Infections - Meningitis and meningococcal septicaemia`
+  },
   { value: 'INFECTIONS_SEPSIS', label: `Infections - Sepsis` },
   { value: 'INFECTIONS_SKIN_INFECTIONS', label: `Infections - Skin infections` },
   { value: 'INFECTIONS_TUBERCULOSIS', label: `Infections - Tuberculosis` },
@@ -450,22 +670,70 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'LIVER_CONDITIONS_CHRONIC_LIVER_DISEASE', label: `Liver conditions - Chronic liver disease` },
   { value: 'LIVER_CONDITIONS_HEPATITIS', label: `Liver conditions - Hepatitis` },
   { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS', label: `Mental health and behavioural conditions` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ADDICTION', label: `Mental health and behavioural conditions - Addiction` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ALCOHOL_USE_DISORDERS', label: `Mental health and behavioural conditions - Alcohol-use disorders` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ANXIETY', label: `Mental health and behavioural conditions - Anxiety` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ATTENTION_DEFICIT_DISORDER', label: `Mental health and behavioural conditions - Attention deficit disorder` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_AUTISM', label: `Mental health and behavioural conditions - Autism` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_BIPOLAR_DISORDER', label: `Mental health and behavioural conditions - Bipolar disorder` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DELIRIUM', label: `Mental health and behavioural conditions - Delirium` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEMENTIA', label: `Mental health and behavioural conditions - Dementia` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEPRESSION', label: `Mental health and behavioural conditions - Depression` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DRUG_MISUSE', label: `Mental health and behavioural conditions - Drug misuse` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_EATING_DISORDERS', label: `Mental health and behavioural conditions - Eating disorders` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_MENTAL_HEALTH_SERVICES', label: `Mental health and behavioural conditions - Mental health services` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PERSONALITY_DISORDERS', label: `Mental health and behavioural conditions - Personality disorders` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PSYCHOSIS_AND_SCHIZOPHRENIA', label: `Mental health and behavioural conditions - Psychosis and schizophrenia` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SELF_HARM', label: `Mental health and behavioural conditions - Self-harm` },
-  { value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SUICIDE_PREVENTION', label: `Mental health and behavioural conditions - Suicide prevention` },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ADDICTION',
+    label: `Mental health and behavioural conditions - Addiction`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ALCOHOL_USE_DISORDERS',
+    label: `Mental health and behavioural conditions - Alcohol-use disorders`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ANXIETY',
+    label: `Mental health and behavioural conditions - Anxiety`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ATTENTION_DEFICIT_DISORDER',
+    label: `Mental health and behavioural conditions - Attention deficit disorder`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_AUTISM',
+    label: `Mental health and behavioural conditions - Autism`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_BIPOLAR_DISORDER',
+    label: `Mental health and behavioural conditions - Bipolar disorder`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DELIRIUM',
+    label: `Mental health and behavioural conditions - Delirium`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEMENTIA',
+    label: `Mental health and behavioural conditions - Dementia`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEPRESSION',
+    label: `Mental health and behavioural conditions - Depression`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DRUG_MISUSE',
+    label: `Mental health and behavioural conditions - Drug misuse`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_EATING_DISORDERS',
+    label: `Mental health and behavioural conditions - Eating disorders`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_MENTAL_HEALTH_SERVICES',
+    label: `Mental health and behavioural conditions - Mental health services`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PERSONALITY_DISORDERS',
+    label: `Mental health and behavioural conditions - Personality disorders`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PSYCHOSIS_AND_SCHIZOPHRENIA',
+    label: `Mental health and behavioural conditions - Psychosis and schizophrenia`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SELF_HARM',
+    label: `Mental health and behavioural conditions - Self-harm`
+  },
+  {
+    value: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SUICIDE_PREVENTION',
+    label: `Mental health and behavioural conditions - Suicide prevention`
+  },
   { value: 'MULTIPLE_LONG_TERM_CONDITIONS', label: `Multiple long-term conditions` },
   { value: 'MUSCULOSKELETAL_CONDITIONS', label: `Musculoskeletal conditions` },
   { value: 'MUSCULOSKELETAL_CONDITIONS_ARTHRITIS', label: `Musculoskeletal conditions - Arthritis` },
@@ -474,22 +742,37 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'MUSCULOSKELETAL_CONDITIONS_JOINT_REPLACEMENT', label: `Musculoskeletal conditions - Joint replacement` },
   { value: 'MUSCULOSKELETAL_CONDITIONS_KNEE_CONDITIONS', label: `Musculoskeletal conditions - Knee conditions` },
   { value: 'MUSCULOSKELETAL_CONDITIONS_LOW_BACK_PAIN', label: `Musculoskeletal conditions - Low back pain` },
-  { value: 'MUSCULOSKELETAL_CONDITIONS_MAXILLOFACIAL_CONDITIONS', label: `Musculoskeletal conditions - Maxillofacial conditions` },
+  {
+    value: 'MUSCULOSKELETAL_CONDITIONS_MAXILLOFACIAL_CONDITIONS',
+    label: `Musculoskeletal conditions - Maxillofacial conditions`
+  },
   { value: 'MUSCULOSKELETAL_CONDITIONS_OSTEOPOROSIS', label: `Musculoskeletal conditions - Osteoporosis` },
   { value: 'MUSCULOSKELETAL_CONDITIONS_SPINAL_CONDITIONS', label: `Musculoskeletal conditions - Spinal conditions` },
   { value: 'NEUROLOGICAL_CONDITIONS', label: `Neurological conditions` },
   { value: 'NEUROLOGICAL_CONDITIONS_EPILEPSY', label: `Neurological conditions - Epilepsy` },
   { value: 'NEUROLOGICAL_CONDITIONS_HEADACHES', label: `Neurological conditions - Headaches` },
-  { value: 'NEUROLOGICAL_CONDITIONS_METASTATIC_SPINAL_CORD_COMPRESSION', label: `Neurological conditions - Metastatic spinal cord compression` },
+  {
+    value: 'NEUROLOGICAL_CONDITIONS_METASTATIC_SPINAL_CORD_COMPRESSION',
+    label: `Neurological conditions - Metastatic spinal cord compression`
+  },
   { value: 'NEUROLOGICAL_CONDITIONS_MOTOR_NEURONE_DISEASE', label: `Neurological conditions - Motor neurone disease` },
   { value: 'NEUROLOGICAL_CONDITIONS_MULTIPLE_SCLEROSIS', label: `Neurological conditions - Multiple sclerosis` },
-  { value: 'NEUROLOGICAL_CONDITIONS_PARKINSONS_DISEASE_TREMOR_AND_DYSTONIA', label: `Neurological conditions - Parkinson's disease, tremor and dystonia` },
+  {
+    value: 'NEUROLOGICAL_CONDITIONS_PARKINSONS_DISEASE_TREMOR_AND_DYSTONIA',
+    label: `Neurological conditions - Parkinson's disease, tremor and dystonia`
+  },
   { value: 'NEUROLOGICAL_CONDITIONS_SPASTICITY', label: `Neurological conditions - Spasticity` },
-  { value: 'NEUROLOGICAL_CONDITIONS_TRANSIENT_LOSS_OF_CONSCIOUSNESS', label: `Neurological conditions - Transient loss of consciousness` },
+  {
+    value: 'NEUROLOGICAL_CONDITIONS_TRANSIENT_LOSS_OF_CONSCIOUSNESS',
+    label: `Neurological conditions - Transient loss of consciousness`
+  },
   { value: 'ORAL_AND_DENTAL_HEALTH', label: `Oral and dental health` },
   { value: 'RESPIRATORY_CONDITIONS', label: `Respiratory conditions` },
   { value: 'RESPIRATORY_CONDITIONS_ASTHMA', label: `Respiratory conditions - Asthma` },
-  { value: 'RESPIRATORY_CONDITIONS_CHRONIC_OBSTRUCTIVE_PULMONARY_DISEASE', label: `Respiratory conditions - Chronic obstructive pulmonary disease` },
+  {
+    value: 'RESPIRATORY_CONDITIONS_CHRONIC_OBSTRUCTIVE_PULMONARY_DISEASE',
+    label: `Respiratory conditions - Chronic obstructive pulmonary disease`
+  },
   { value: 'RESPIRATORY_CONDITIONS_CYSTIC_FIBROSIS', label: `Respiratory conditions - Cystic fibrosis` },
   { value: 'RESPIRATORY_CONDITIONS_MESOTHELIOMA', label: `Respiratory conditions - Mesothelioma` },
   { value: 'RESPIRATORY_CONDITIONS_PNEUMONIA', label: `Respiratory conditions - Pneumonia` },
@@ -504,7 +787,10 @@ export const diseasesConditionsImpactItems: FormSelectableFieldType<string> = [
   { value: 'SKIN_CONDITIONS_WOUND_MANAGEMENT', label: `Skin conditions - Wound management` },
   { value: 'SLEEP_AND_SLEEP_CONDITIONS', label: `Sleep and sleep conditions` },
   { value: 'UROLOGICAL_CONDITIONS', label: `Urological conditions` },
-  { value: 'UROLOGICAL_CONDITIONS_LOWER_URINARY_TRACT_SYMPTOMS', label: `Urological conditions - Lower urinary tract symptoms` },
+  {
+    value: 'UROLOGICAL_CONDITIONS_LOWER_URINARY_TRACT_SYMPTOMS',
+    label: `Urological conditions - Lower urinary tract symptoms`
+  },
   { value: 'UROLOGICAL_CONDITIONS_URINARY_INCONTINENCE', label: `Urological conditions - Urinary incontinence` },
   { value: 'UROLOGICAL_CONDITIONS_URINARY_TRACT_INFECTION', label: `Urological conditions - Urinary tract infection` }
 ];
@@ -526,7 +812,10 @@ export const keyHealthInequalitiesItems: FormSelectableFieldType<catalogKeyHealt
   { value: 'SEVER_MENTAL_ILLNESS', label: 'Severe mental illness' },
   { value: 'CHRONIC_RESPIRATORY_DISEASE', label: 'Chronic respiratory disease' },
   { value: 'EARLY_CANCER_DIAGNOSIS', label: 'Early cancer diagnosis' },
-  { value: 'HYPERTENSION_CASE_FINDING', label: 'Hypertension case finding and optimal management and lipid optimal management' },
+  {
+    value: 'HYPERTENSION_CASE_FINDING',
+    label: 'Hypertension case finding and optimal management and lipid optimal management'
+  },
   { value: 'SEPARATOR', label: 'SEPARATOR' },
   { value: 'NONE', label: 'None of those listed', exclusive: true }
 ];
@@ -551,19 +840,24 @@ export const evidenceSubmitTypeItems: FormSelectableFieldType<catalogEvidenceSub
 
 export const evidenceTypeItems: FormSelectableFieldType<catalogEvidenceType> = [
   { value: 'DATA_PUBLISHED', label: 'Data published, but not in a peer reviewed journal' },
-  { value: 'NON_RANDOMISED_COMPARATIVE_DATA', label: 'Non-randomised comparative data published in a peer reviewed journal' },
-  { value: 'NON_RANDOMISED_NON_COMPARATIVE_DATA', label: 'Non-randomised non-comparative data published in a peer reviewed journal' },
+  {
+    value: 'NON_RANDOMISED_COMPARATIVE_DATA',
+    label: 'Non-randomised comparative data published in a peer reviewed journal'
+  },
+  {
+    value: 'NON_RANDOMISED_NON_COMPARATIVE_DATA',
+    label: 'Non-randomised non-comparative data published in a peer reviewed journal'
+  },
   { value: 'CONFERENCE', label: 'Poster or abstract presented at a conference' },
   { value: 'RANDOMISED_CONTROLLED_TRIAL', label: 'Randomised controlled trial published in a peer reviewed journal' },
   { value: 'UNPUBLISHED_DATA', label: 'Unpublished data' }
 ];
 
-
 // Section 3.
 // // Section 3.1.
 export const hasMarketResearchItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
   { value: 'YES', label: 'Yes' },
-  { value: 'IN_PROGRESS', label: 'I\'m currently doing market research' },
+  { value: 'IN_PROGRESS', label: "I'm currently doing market research" },
   { value: 'NOT_YET', label: 'Not yet' }
 ];
 
@@ -584,7 +878,6 @@ export const innovationPathwayKnowledgeItems: FormSelectableFieldType<catalogPat
   { value: 'NOT_PART_PATHWAY', label: 'Does not form part of a care pathway' }
 ];
 
-
 // Section 4.
 // // Section 4.1.
 export const involvedUsersDesignProcessItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
@@ -600,14 +893,19 @@ export const testedWithIntendedUsersItems: FormSelectableFieldType<catalogYesInP
 ];
 
 export const intendedUserGroupsEngagedItems: FormSelectableFieldType<catalogIntendedUserGroupsEngaged> = [
-  { value: 'CLINICAL_SOCIAL_CARE_WORKING_INSIDE_UK', label: 'Clinical or social care professionals working in the UK health and social care system' },
-  { value: 'CLINICAL_SOCIAL_CARE_WORKING_OUTSIDE_UK', label: 'Clinical or social care professionals working outside the UK' },
+  {
+    value: 'CLINICAL_SOCIAL_CARE_WORKING_INSIDE_UK',
+    label: 'Clinical or social care professionals working in the UK health and social care system'
+  },
+  {
+    value: 'CLINICAL_SOCIAL_CARE_WORKING_OUTSIDE_UK',
+    label: 'Clinical or social care professionals working outside the UK'
+  },
   { value: 'NON_CLINICAL_HEALTHCARE', label: 'Non-clinical healthcare staff' },
   { value: 'PATIENTS', label: 'Patients' },
   { value: 'SERVICE_USERS', label: 'Service users' },
-  { value: 'CARERS', label: 'Carers' },
+  { value: 'CARERS', label: 'Carers' }
 ];
-
 
 // Section 5.
 // // Section 5.1.
@@ -635,23 +933,31 @@ export const standardsTypeItems: FormSelectableFieldType<catalogStandardsType> =
 export const standardsHasMetItems: FormSelectableFieldType<catalogYesInProgressNotYet> = [
   { value: 'YES', label: 'Yes' },
   { value: 'IN_PROGRESS', label: 'I am actively working towards it' },
-  { value: 'NOT_YET', label: 'Not yet' },
+  { value: 'NOT_YET', label: 'Not yet' }
 ];
 
 // // Section 5.2.
 export const hasPatentsItems: FormSelectableFieldType<catalogHasPatents> = [
-  { value: 'HAS_AT_LEAST_ONE', label: 'I have one or more patents', conditional: new FormEngineParameterModel({ id: 'patentNumbers', dataType: 'text', label: 'Patent number(s)', validations: { isRequired: [true, 'Patent number(s) required'], maxLength: 100 } }) },
+  {
+    value: 'HAS_AT_LEAST_ONE',
+    label: 'I have one or more patents',
+    conditional: new FormEngineParameterModel({
+      id: 'patentNumbers',
+      dataType: 'text',
+      label: 'Patent number(s)',
+      validations: { isRequired: [true, 'Patent number(s) required'], maxLength: 100 }
+    })
+  },
   { value: 'APPLIED_AT_LEAST_ONE', label: 'I have applied for one or more patents' },
   { value: 'HAS_NONE', label: 'I do not have any patents, but believe I have freedom to operate' }
 ];
-
 
 // Section 6.
 // // Section 6.1.
 export const hasRevenueModelItems: FormSelectableFieldType<catalogHasRevenueModel> = [
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' },
-  { value: 'DONT_KNOW', label: 'I do not know' },
+  { value: 'DONT_KNOW', label: 'I do not know' }
 ];
 export const revenuesItems: FormSelectableFieldType<catalogRevenues> = [
   { value: 'ADVERTISING', label: 'Advertising' },
@@ -685,12 +991,16 @@ export const patientRangeItems: FormSelectableFieldType<catalogPatientRange> = [
 
 export const costComparisonItems: FormSelectableFieldType<catalogCostComparison> = [
   { value: 'CHEAPER', label: 'My innovation is cheaper to purchase' },
-  { value: 'COSTS_MORE_WITH_SAVINGS', label: 'My innovation costs more to purchase, but has greater benefits that will lead to overall cost savings' },
-  { value: 'COSTS_MORE', label: 'My innovation costs more to purchase and has greater benefits, but will lead to higher costs overall' },
+  {
+    value: 'COSTS_MORE_WITH_SAVINGS',
+    label: 'My innovation costs more to purchase, but has greater benefits that will lead to overall cost savings'
+  },
+  {
+    value: 'COSTS_MORE',
+    label: 'My innovation costs more to purchase and has greater benefits, but will lead to higher costs overall'
+  },
   { value: 'NOT_SURE', label: 'I am not sure' }
 ];
-
-
 
 // Section 8.
 // // Section 8.1.

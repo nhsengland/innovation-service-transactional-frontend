@@ -7,19 +7,20 @@ import { CustomValidators } from '@app/base/forms';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-
 @Component({
   selector: 'shared-pages-innovation-export-request-new',
   templateUrl: './export-request-new.component.html'
 })
 export class PageInnovationExportRequestNewComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   baseUrl: string;
 
-  form = new FormGroup({
-    requestReason: new FormControl<string>('', CustomValidators.required('An explanation is required')),
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      requestReason: new FormControl<string>('', CustomValidators.required('An explanation is required'))
+    },
+    { updateOn: 'blur' }
+  );
 
   requestAgainId: string;
 
@@ -27,21 +28,23 @@ export class PageInnovationExportRequestNewComponent extends CoreComponent imple
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`;
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${
+      this.innovationId
+    }/record/export-requests`;
 
     this.requestAgainId = this.activatedRoute.snapshot.queryParams.requestAgainId;
 
     this.setPageTitle('Explain why you want to share this innovation record', { showPage: false });
-    this.setBackLink('Go back', `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`);
-
+    this.setBackLink(
+      'Go back',
+      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`
+    );
   }
 
   ngOnInit(): void {
-
     if (!this.requestAgainId) {
       this.setPageStatus('READY');
     } else {
@@ -50,12 +53,9 @@ export class PageInnovationExportRequestNewComponent extends CoreComponent imple
         this.setPageStatus('READY');
       });
     }
-
   }
 
-
   onSubmit(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
@@ -63,16 +63,14 @@ export class PageInnovationExportRequestNewComponent extends CoreComponent imple
 
     const body = {
       requestReason: this.form.get('requestReason')?.value ?? ''
-    }
+    };
 
     this.innovationsService.createExportRequest(this.innovationId, body).subscribe(() => {
-
-      this.setRedirectAlertSuccess(`You've requested permission to use the data in this innovation record`, { message: 'You will be notified when the innovator responds to this request.', width: '2.thirds' });
+      this.setRedirectAlertSuccess(`You've requested permission to use the data in this innovation record`, {
+        message: 'You will be notified when the innovator responds to this request.',
+        width: '2.thirds'
+      });
       this.redirectTo(this.baseUrl);
-
     });
-
   }
-
-
 }

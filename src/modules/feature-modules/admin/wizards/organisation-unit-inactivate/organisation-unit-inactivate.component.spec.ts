@@ -14,27 +14,17 @@ import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/user
 import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './steps/innovations-step.component';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
-
 describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponent', () => {
-
   let component: WizardOrganisationUnitInactivateComponent;
   let fixture: ComponentFixture<WizardOrganisationUnitInactivateComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(WizardOrganisationUnitInactivateComponent);
@@ -42,5 +32,4 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponen
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
-
 });

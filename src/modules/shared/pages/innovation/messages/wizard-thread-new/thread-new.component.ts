@@ -18,43 +18,43 @@ import { WarningStepInputType, WarningStepOutputType } from './steps/warning-ste
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { omit } from 'lodash';
 
-
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new',
   templateUrl: './thread-new.component.html'
 })
 export class WizardInnovationThreadNewComponent extends CoreComponent implements OnInit {
-
   innovation: ContextInnovationType;
 
   wizard = new WizardModel<{
-    innovationOwnerAndCollaborators: { name: string, role: string }[],
+    innovationOwnerAndCollaborators: { name: string; role: string }[];
     organisationsStep: {
-      organisationUnits: { id: string, name: string, users: { id: string, userRoleId: string, name: string }[] }[]
-    },
+      organisationUnits: { id: string; name: string; users: { id: string; userRoleId: string; name: string }[] }[];
+    };
     subjectMessageStep: {
-      subject: string,
-      message: string,
-      file: null | File,
-      fileName: string
-    }
+      subject: string;
+      message: string;
+      file: null | File;
+      fileName: string;
+    };
   }>({});
 
   datasets: {
-    organisationUnits: InnovationSupportsListDTO
+    organisationUnits: InnovationSupportsListDTO;
   };
 
   constructor(
     private innovationsService: InnovationsService,
     private fileUploadService: FileUploadService
   ) {
-
     super();
 
     this.innovation = this.stores.context.getInnovation();
 
     this.wizard.data = {
-      innovationOwnerAndCollaborators: this.innovation.owner && this.innovation.owner.isActive ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }] : [],
+      innovationOwnerAndCollaborators:
+        this.innovation.owner && this.innovation.owner.isActive
+          ? [{ name: this.innovation.owner?.name ?? '', role: 'Owner' }]
+          : [],
       organisationsStep: { organisationUnits: [] },
       subjectMessageStep: { subject: '', message: '', file: null, fileName: '' }
     };
@@ -62,45 +62,50 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.datasets = {
       organisationUnits: []
     };
-
   }
 
   ngOnInit(): void {
-
     const subscriptions: {
-      empty: Observable<null>,
-      collaborators?: Observable<InnovationCollaboratorsListDTO>
-      supports?: Observable<InnovationSupportsListDTO>
+      empty: Observable<null>;
+      collaborators?: Observable<InnovationCollaboratorsListDTO>;
+      supports?: Observable<InnovationSupportsListDTO>;
     } = {
       empty: of(null)
     };
 
     if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-      subscriptions.collaborators = this.innovationsService.getInnovationCollaboratorsList(this.innovation.id, ['active']);
+      subscriptions.collaborators = this.innovationsService.getInnovationCollaboratorsList(this.innovation.id, [
+        'active'
+      ]);
     }
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
       subscriptions.supports = this.innovationsService.getInnovationSupportsList(this.innovation.id, true);
     }
 
-
     forkJoin(subscriptions).subscribe({
       next: response => {
-
         if (response.collaborators) {
           this.wizard.data.innovationOwnerAndCollaborators = [
             ...this.wizard.data.innovationOwnerAndCollaborators,
-            ...response.collaborators.data.filter(c => c.isActive).map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
+            ...response.collaborators.data
+              .filter(c => c.isActive)
+              .map(item => ({ name: item.name ?? '', role: 'Collaborator' })) // maybe do item.role ?? 'Collaborator' in the future
           ];
-
         }
 
         if (response.supports) {
-
           // Engaging organisation units except the user unit, if accessor.
-          this.datasets.organisationUnits = response.supports.filter(item => item.status === InnovationSupportStatusEnum.ENGAGING || item.status === InnovationSupportStatusEnum.WAITING);
+          this.datasets.organisationUnits = response.supports.filter(
+            item =>
+              item.status === InnovationSupportStatusEnum.ENGAGING ||
+              item.status === InnovationSupportStatusEnum.WAITING
+          );
           if (this.stores.authentication.isAccessorType()) {
-            this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id);
+            this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
+              item =>
+                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+            );
           }
 
           // Keep only active engaging accessor
@@ -108,14 +113,15 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             return {
               ...item,
               engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
-            }
+            };
           });
 
-          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.engagingAccessors.length > 0);
+          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
+            item => item.engagingAccessors.length > 0
+          );
 
           // Show first step if there's engaging organisations.
           if (this.stores.authentication.isInnovatorType() && this.datasets.organisationUnits.length === 0) {
-
             this.wizard.addStep(
               new WizardStepModel<WarningStepInputType, WarningStepOutputType>({
                 id: 'WarningStep',
@@ -127,13 +133,13 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
                 }
               })
             );
-
           } else if (this.datasets.organisationUnits.length > 0) {
-
             this.wizard.addStep(
               new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
                 id: 'organisationsStep',
-                title: this.stores.authentication.isInnovatorType() ? 'Who do you want to notify about this message?' : 'Would you like to notify other support organisations about this message?',
+                title: this.stores.authentication.isInnovatorType()
+                  ? 'Who do you want to notify about this message?'
+                  : 'Would you like to notify other support organisations about this message?',
                 component: WizardInnovationThreadNewOrganisationsStepComponent,
                 data: {
                   innovation: { id: this.innovation.id },
@@ -147,7 +153,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
                 }
               })
             );
-
           }
         }
 
@@ -165,53 +170,46 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
               fileName: ''
             },
             outputs: {
-              previousStepEvent: data => this.onPreviousStep(data, this.onSubjectMessageStepOut, this.onOrganisationsStepIn),
+              previousStepEvent: data =>
+                this.onPreviousStep(data, this.onSubjectMessageStepOut, this.onOrganisationsStepIn),
               submitEvent: data => this.onSubmitStep(data, this.onSubjectMessageStepOut),
               cancelEvent: () => this.redirectToThreadsList()
             }
           })
         );
-
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
-
   }
 
-
   onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
-    if (this.wizard.currentStepNumber() === 1) { this.redirectToThreadsList(); return; }
+    if (this.wizard.currentStepNumber() === 1) {
+      this.redirectToThreadsList();
+      return;
+    }
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoPreviousStep();
-
   }
 
   onNextStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.wizard.gotoNextStep();
-
   }
 
   onSubmitStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
-
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
     this.onSubmit();
-
   }
-
-
 
   // Steps mappings.
   onOrganisationsStepIn(): void {
@@ -248,7 +246,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   }
 
   onSubmit(): void {
-
     this.setPageStatus('LOADING');
 
     const file = this.wizard.data.subjectMessageStep.file;
@@ -260,23 +257,28 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     };
 
     if (file) {
-
       const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
 
-      this.fileUploadService.uploadFile(httpUploadBody, file).pipe(
-        switchMap(response => {
-          const fileData = omit(response, 'url');
-          body = {
-            ...body,
-            file: {
-              name: this.wizard.data.subjectMessageStep.fileName,
-              file: fileData
-            }
-          }
-          return this.innovationsService.createThread(this.innovation.id, body);
-        })).subscribe({
+      this.fileUploadService
+        .uploadFile(httpUploadBody, file)
+        .pipe(
+          switchMap(response => {
+            const fileData = omit(response, 'url');
+            body = {
+              ...body,
+              file: {
+                name: this.wizard.data.subjectMessageStep.fileName,
+                file: fileData
+              }
+            };
+            return this.innovationsService.createThread(this.innovation.id, body);
+          })
+        )
+        .subscribe({
           next: () => {
-            this.setRedirectAlertSuccess('The message has been sent successfully', { message: 'Your file has been added to file library.' });
+            this.setRedirectAlertSuccess('The message has been sent successfully', {
+              message: 'Your file has been added to file library.'
+            });
             this.redirectToThreadsList();
           },
           error: () => {
@@ -287,7 +289,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     } else {
       this.createThread(body);
     }
-
   }
 
   createThread(body: UploadThreadDocumentType) {
@@ -303,47 +304,61 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     });
   }
 
-  private getNotifiableTeamsList(): { followersUserRoleIds: string[], visibleList: SubjectMessageStepInputType['teams'] } {
-
+  private getNotifiableTeamsList(): {
+    followersUserRoleIds: string[];
+    visibleList: SubjectMessageStepInputType['teams'];
+  } {
     if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-
       return {
-        followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item => item.users.map(u => u.userRoleId)),
+        followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
+          item.users.map(u => u.userRoleId)
+        ),
         visibleList: [
-          { name: 'Innovators', users: this.wizard.data.innovationOwnerAndCollaborators.map(item => ({ name: `${item.name} (${item.role})` })) },
+          {
+            name: 'Innovators',
+            users: this.wizard.data.innovationOwnerAndCollaborators.map(item => ({
+              name: `${item.name} (${item.role})`
+            }))
+          },
           ...this.wizard.data.organisationsStep.organisationUnits.map(item => ({ name: item.name, users: item.users }))
         ]
       };
-
     } else if (this.stores.authentication.isInnovatorType()) {
-
-      if ([InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(this.innovation.status) && this.innovation.assignedTo) {
+      if (
+        [InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(
+          this.innovation.status
+        ) &&
+        this.innovation.assignedTo
+      ) {
         return {
           followersUserRoleIds: [this.innovation.assignedTo.userRoleId],
-          visibleList: [{
-            name: 'Needs assessment team',
-            users: [{ name: this.innovation.assignedTo.name }]
-          }]
+          visibleList: [
+            {
+              name: 'Needs assessment team',
+              users: [{ name: this.innovation.assignedTo.name }]
+            }
+          ]
         };
       } else if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
         return {
-          followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item => item.users.map(u => u.userRoleId)),
-          visibleList: this.wizard.data.organisationsStep.organisationUnits.map(item => ({ name: item.name, users: item.users }))
+          followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
+            item.users.map(u => u.userRoleId)
+          ),
+          visibleList: this.wizard.data.organisationsStep.organisationUnits.map(item => ({
+            name: item.name,
+            users: item.users
+          }))
         };
       } else {
         return { followersUserRoleIds: [], visibleList: [] };
       }
-
-    } else { // Should never happen!
+    } else {
+      // Should never happen!
       return { followersUserRoleIds: [], visibleList: [] };
     }
-
-
   }
 
   private redirectToThreadsList(): void {
     this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/threads`);
   }
-
-
 }

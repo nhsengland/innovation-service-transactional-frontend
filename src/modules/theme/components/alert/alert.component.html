@@ -1,21 +1,17 @@
-  <div *ngIf="type" class="nhsuk-grid-row">
-    <div [class]="widthCSS">
+<div *ngIf="type" class="nhsuk-grid-row">
+  <div [class]="widthCSS">
+    <div class="nhsuk-error-summary nhsuk-u-margin-bottom-4" [ngClass]="borderColorCSS" role="alert" tabindex="-1" attr.aria-labelledby="summary-title-{{ id }}">
+      <h2 id="summary-title-{{ id }}" class="nhsuk-error-summary__title">{{ title }}</h2>
+      <div class="nhsuk-error-summary__body">
+        <ng-content></ng-content>
 
-      <div class="nhsuk-error-summary nhsuk-u-margin-bottom-4" [ngClass]="borderColorCSS" role="alert" tabindex="-1" attr.aria-labelledby="summary-title-{{ id }}">
-        <h2 id="summary-title-{{ id }}" class="nhsuk-error-summary__title"> {{ title }} </h2>
-        <div class="nhsuk-error-summary__body">
-
-          <ng-content></ng-content>
-
-          <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list" [ngClass]="{'nhsuk-error-summary__list': type === 'ERROR' }">
-            <li [ngClass]="fontItemColorCSS" *ngFor="let item of itemsList">
-                <a href="javascript:void(0)" *ngIf="item.callback !== undefined" (click)="onItemClick(item.callback)">{{ item.title }}<br />{{ (item.description || '') | translate }}</a>
-                <span *ngIf="item.callback === undefined">{{ item.title }}<br />{{ (item.description || '') | translate }}</span>
-            </li>
-          </ul>
-
-        </div>
+        <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list" [ngClass]="{ 'nhsuk-error-summary__list': type === 'ERROR' }">
+          <li [ngClass]="fontItemColorCSS" *ngFor="let item of itemsList">
+            <a href="javascript:void(0)" *ngIf="item.callback !== undefined" (click)="onItemClick(item.callback)">{{ item.title }}<br />{{ item.description || "" | translate }}</a>
+            <span *ngIf="item.callback === undefined">{{ item.title }}<br />{{ item.description || "" | translate }}</span>
+          </li>
+        </ul>
       </div>
-
     </div>
   </div>
+</div>

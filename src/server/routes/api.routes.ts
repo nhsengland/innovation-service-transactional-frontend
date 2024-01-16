@@ -9,10 +9,8 @@ import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from 'src/globals';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
-
 const apiRouter = express.Router();
 let axiosInstance: AxiosInstance;
-
 
 function getRequestHandler(): AxiosInstance {
   if (!axiosInstance) {
@@ -22,7 +20,6 @@ function getRequestHandler(): AxiosInstance {
 }
 
 function parseAPIUrl(url: string): string {
-
   const match = url.match(/\/api(?:\/(innovations|users|admins))?(?:(\/.*))?$/);
   let apiUrl: string;
 
@@ -54,18 +51,16 @@ function parseAPIUrl(url: string): string {
 
 // Authenticated API proxy endpoints.
 apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
-
   const requestHandler = getRequestHandler();
   const oid = req.session.id;
   const accessToken = await getAccessTokenBySessionId(oid);
 
   if (oid && accessToken) {
-
     const url = parseAPIUrl(req.url);
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ...req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] }
+        ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] })
       }
     };
 
@@ -75,7 +70,6 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
     };
 
     const fail = (error: any) => {
-
       getAppInsightsClient().trackTrace({
         message: `Error calling API URL: ${url}`,
         severity: SeverityLevel.Warning,
@@ -86,16 +80,15 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
           route: req.route,
           authenticatedUser: (req.session as any).oid,
           apiStatusCode: error.response && error.response.status,
-          apiData: error.response && error.response.data,
+          apiData: error.response && error.response.data
         }
-      })
+      });
 
       if (error.response && error.response.status) {
         res.status(error.response.status).send(error.response.data);
       } else {
         res.status(500).send();
       }
-
     };
 
     switch (req.method.toUpperCase()) {
@@ -120,22 +113,20 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
       default:
         res.status(405).send();
     }
-
-  }
-  else {
+  } else {
     res.status(401).send();
   }
-
 });
-
 
 // Unauthenticated endpoint: Innovation transfer check endpoint.
 apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/check`, (req, res) => {
-
   const requestHandler = getRequestHandler();
 
-  requestHandler.get<{ userExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/${req.params.id}/check`)
-    .then(response => { res.status(response.status).send(response.data); })
+  requestHandler
+    .get<{ userExists: boolean }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/transfers/${req.params.id}/check`)
+    .then(response => {
+      res.status(response.status).send(response.data);
+    })
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
@@ -145,19 +136,23 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
           query: req.query,
           path: req.path,
           route: req.route,
-          authenticatedUser: (req.session as any).oid,
+          authenticatedUser: (req.session as any).oid
         }
-      })
+      });
       res.status(500).send();
     });
-
 });
 
 apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id/check`, (req, res) => {
   const requestHandler = getRequestHandler();
 
-  requestHandler.get<{ userExists: boolean, collaboratorStatus: InnovationCollaboratorStatusEnum }>(`${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`)
-    .then(response => { res.status(response.status).send(response.data) })
+  requestHandler
+    .get<{ userExists: boolean; collaboratorStatus: InnovationCollaboratorStatusEnum }>(
+      `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/collaborators/${req.params.id}/check`
+    )
+    .then(response => {
+      res.status(response.status).send(response.data);
+    })
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
@@ -167,12 +162,11 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id
           query: req.query,
           path: req.path,
           route: req.route,
-          authenticatedUser: (req.session as any).oid,
+          authenticatedUser: (req.session as any).oid
         }
-      })
+      });
       res.status(error.response.status).send();
     });
-
 });
 
 export default apiRouter;

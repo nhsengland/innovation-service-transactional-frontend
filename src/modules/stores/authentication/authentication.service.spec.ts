@@ -8,49 +8,39 @@ import { AuthenticationService } from './authentication.service';
 import { StoresModule } from '../stores.module';
 
 describe('Stores/AuthenticationStore/AuthenticationService', () => {
-
   let httpMock: HttpTestingController;
   let envVaraiblesStore: EnvironmentVariablesStore;
   let service: AuthenticationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      providers: [
-        AuthenticationService,
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
-      ]
+      imports: [HttpClientTestingModule, CoreModule, StoresModule],
+      providers: [AuthenticationService, { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }]
     });
 
     httpMock = TestBed.inject(HttpTestingController);
     envVaraiblesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(AuthenticationService);
-
   });
 
   afterEach(() => {
     httpMock.verify();
   });
 
-
   it('should run verifyUserSession() and return success', () => {
-
     const responseMock = true;
     const expected = true;
     let response: any = null;
 
-    service.verifyUserSession().subscribe({ next: success => response = success, error: error => response = error });
+    service
+      .verifyUserSession()
+      .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     const httpRequest = httpMock.expectOne(`${envVaraiblesStore.APP_URL}/session`);
     httpRequest.flush(responseMock);
 
     expect(httpRequest.request.method).toBe('HEAD');
     expect(response).toBe(expected);
-
   });
 
   // it('should run verifyUserSession() and return error', () => {
@@ -83,5 +73,4 @@ describe('Stores/AuthenticationStore/AuthenticationService', () => {
   //   expect(response).toEqual(expected);
 
   // });
-
 });

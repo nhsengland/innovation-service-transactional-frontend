@@ -1,5 +1,4 @@
 export class UrlModel {
-
   private protocol: 'http' | 'https';
   private host: string;
   private port: number | null;
@@ -27,9 +26,7 @@ export class UrlModel {
   }
 
   private parseUrl(s: string): void {
-
     try {
-
       const url = new URL(s);
       this.setProtocol(url.protocol);
       this.setHost(url.hostname);
@@ -37,23 +34,31 @@ export class UrlModel {
       this.path = decodeURI(this.clearStartAndEndSlashes(url.pathname));
 
       // Try to parse QueryParams and find each ones type, defaulting mainly to string.
-      this.queryParams = (url.search ? JSON.parse('{"' + decodeURIComponent(url.search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"').replace('?', '') + '"}') : {});
+      this.queryParams = url.search
+        ? JSON.parse(
+            '{"' +
+              decodeURIComponent(url.search)
+                .replace(/"/g, '\\"')
+                .replace(/&/g, '","')
+                .replace(/=/g, '":"')
+                .replace('?', '') +
+              '"}'
+          )
+        : {};
       Object.entries(this.queryParams).forEach(([key, value]) => {
-        if ((value as string).charAt(0) === '{') { // If it is possibly an object
-          try { this.queryParams[key] = JSON.parse(value) as { [key: string]: any }; }
-          catch (error) { }
+        if ((value as string).charAt(0) === '{') {
+          // If it is possibly an object
+          try {
+            this.queryParams[key] = JSON.parse(value) as { [key: string]: any };
+          } catch (error) {}
         } else {
           this.queryParams[key] = value;
         }
       });
-
-    } catch (error) { }
-
+    } catch (error) {}
   }
 
-
   setProtocol(protocol: string): UrlModel {
-
     protocol = protocol.replace(/[^a-zA-Z]+/g, '').toLowerCase(); // Removes /: chars, keeping only letters.
 
     if (['http', 'https'].includes(protocol)) {
@@ -92,9 +97,7 @@ export class UrlModel {
     return this;
   }
 
-
   buildUrl(): string {
-
     // Replace pathParams.
     for (const [key, value] of Object.entries(this.pathParams)) {
       this.path = this.path.replace(`:${key}`, value as string);
@@ -105,22 +108,32 @@ export class UrlModel {
     queryParams = Object.keys(this.queryParams)
       .filter(key => this.queryParams[key] !== undefined)
       .map(key => {
-
         let value: string;
 
-        if (Array.isArray(this.queryParams[key])) { // When queryParam is an array.
-          value = (this.queryParams[key] as any[]).map(qp => typeof qp === 'object' ? JSON.stringify(qp) : qp).join(','); 
+        if (Array.isArray(this.queryParams[key])) {
+          // When queryParam is an array.
+          value = (this.queryParams[key] as any[])
+            .map(qp => (typeof qp === 'object' ? JSON.stringify(qp) : qp))
+            .join(',');
+        } else if (typeof this.queryParams[key] === 'object') {
+          value = JSON.stringify(this.queryParams[key]);
+        } // When queryParam is an object.
+        else {
+          value = encodeURIComponent(this.queryParams[key]);
         }
-        else if (typeof this.queryParams[key] === 'object') { value = JSON.stringify(this.queryParams[key]); } // When queryParam is an object.
-        else { value = encodeURIComponent(this.queryParams[key]); }
 
         return `${key}=${value}`;
       })
       .join('&');
     queryParams = (queryParams ? '?' : '') + queryParams;
 
-    return encodeURI(this.protocol + '://' + this.host + (this.port ? ':' + this.port : '') + (this.path ? '/' + this.path : '') + queryParams);
-
+    return encodeURI(
+      this.protocol +
+        '://' +
+        this.host +
+        (this.port ? ':' + this.port : '') +
+        (this.path ? '/' + this.path : '') +
+        queryParams
+    );
   }
-
 }

@@ -6,13 +6,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { FormTextareaComponent } from './textarea.component';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
+  template: ` <form [formGroup]="form">
     <theme-form-textarea [id]="id" [controlName]="controlName"></theme-form-textarea>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormTextareaComponent) childComponent?: FormTextareaComponent;
 
   form = new FormGroup({
@@ -21,37 +19,26 @@ class HostComponent {
 
   id = 'FormInputId';
   controlName = 'testField';
-
 }
 
-
 describe('FormTextareaComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormTextareaComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormTextareaComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
     hostFixture.detectChanges();
     expect(hostComponent).toBeTruthy();
   });
-
 
   it('should form control field be invalid and with error', () => {
     hostFixture.detectChanges();
@@ -69,5 +56,4 @@ describe('FormTextareaComponent', () => {
     expect(hostComponent.childComponent?.hasError).toBe(false);
     expect(hostComponent.childComponent?.error.message).toBe('');
   });
-
 });

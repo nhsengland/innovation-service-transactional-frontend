@@ -4,36 +4,33 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 
-
 @Component({
   selector: 'app-admin-pages-terms-of-use-terms-of-use-list',
   templateUrl: './terms-of-use-list.component.html'
 })
 export class PageTermsOfUseListComponent extends CoreComponent implements OnInit {
-
   terms: TableModel<{
-    id: string,
-    name: string,
-    touType: string,
-    summary: string,
-    releasedAt?: string,
-    createdAt: string
+    id: string;
+    name: string;
+    touType: string;
+    summary: string;
+    releasedAt?: string;
+    createdAt: string;
   }>;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private usersService: AdminUsersService
   ) {
-
     super();
     this.setPageTitle('Terms of use');
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
       case 'versionCreationSuccess':
-        this.setAlertSuccess('You\'ve successfully created new version');
+        this.setAlertSuccess("You've successfully created new version");
         break;
       case 'versionUpdatedSuccess':
-        this.setAlertSuccess('You\'ve successfully updated version');
+        this.setAlertSuccess("You've successfully updated version");
         break;
       default:
         break;
@@ -49,13 +46,15 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
   getTerms(): void {
     this.setPageStatus('LOADING');
     this.usersService.getListOfTerms(this.terms.getAPIQueryParams()).subscribe({
-      next: (response) => {
+      next: response => {
         this.terms.setData(response.data, response.count);
         this.setPageStatus('READY');
       },
       error: () => {
         this.setPageStatus('ERROR');
-        this.setAlertError('Unable to fetch terms of use', { message: 'Please try again or contact us for further help'})
+        this.setAlertError('Unable to fetch terms of use', {
+          message: 'Please try again or contact us for further help'
+        });
       }
     });
   }
@@ -64,5 +63,4 @@ export class PageTermsOfUseListComponent extends CoreComponent implements OnInit
     this.terms.setPage(event.pageNumber);
     this.getTerms();
   }
-
 }

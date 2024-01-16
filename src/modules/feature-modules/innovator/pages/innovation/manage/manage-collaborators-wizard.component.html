@@ -1,17 +1,13 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
       </ng-container>
 
       <ng-container *ngIf="wizard.isSummaryStep()">
-
         <dl class="nhsuk-summary-list">
-
           <ng-container *ngFor="let item of wizard.getSummary()">
             <div class="nhsuk-summary-list__row">
               <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -29,11 +25,7 @@
         </dl>
 
         <button (click)="onSubmitWizard()" [disabled]="!submitButton.isActive" class="nhsuk-button">{{ submitButton.label }}</button>
-
       </ng-container>
-
     </div>
   </div>
-
-
 </theme-content-wrapper>

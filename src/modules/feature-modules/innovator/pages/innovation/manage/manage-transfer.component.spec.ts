@@ -11,13 +11,10 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { PageInnovationManageTransferComponent } from './manage-transfer.component';
 
-
 describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountInnovationsTransferComponent', () => {
-
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
@@ -30,13 +27,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -47,9 +38,7 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
     authenticationStore = TestBed.inject(AuthenticationStore);
     innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageInnovationManageTransferComponent);
@@ -78,7 +67,6 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
   //   expect(component.formInnovationsItems).toEqual(expected);
 
   // });
-
 
   // it('should NOT have initial information loaded', () => {
 
@@ -119,7 +107,6 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
   //   expect(component.stepNumber).toBe(2);
 
   // });
-
 
   // it('should run onSubmit() with invalid form', () => {
 
@@ -169,5 +156,4 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
   //   expect(component.alert).toEqual(expected);
 
   // });
-
 });

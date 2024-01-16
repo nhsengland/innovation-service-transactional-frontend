@@ -7,14 +7,19 @@ import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { AdminUsersService, changeUserRoleDTO, GetInnovationsByOwnerIdDTO } from '../../../services/users.service';
 
-
 @Component({
   selector: 'app-admin-pages-users-role-change',
   templateUrl: './role-change.component.html'
 })
 export class PageUsersRoleChangeComponent extends CoreComponent implements OnInit {
-
-  user: (UserInfo & { rolesDescription: string[], innovations?: GetInnovationsByOwnerIdDTO }) = { id: '', email: '', name: '', isActive: false, roles: [], rolesDescription: [] };
+  user: UserInfo & { rolesDescription: string[]; innovations?: GetInnovationsByOwnerIdDTO } = {
+    id: '',
+    email: '',
+    name: '',
+    isActive: false,
+    roles: [],
+    rolesDescription: []
+  };
 
   currentRole: string = '';
   newRole: string = '';
@@ -28,26 +33,25 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
     private activatedRoute: ActivatedRoute,
     private usersService: AdminUsersService
   ) {
-
     super();
 
     this.user.id = this.activatedRoute.snapshot.params.userId;
-
   }
 
   ngOnInit(): void {
-
     this.usersService.getUserInfo(this.user.id).subscribe({
       next: userInfo => {
+        userInfo.roles = userInfo.roles.filter(
+          r => r.role === UserRoleEnum.ACCESSOR || r.role === UserRoleEnum.QUALIFYING_ACCESSOR
+        );
 
-        userInfo.roles = userInfo.roles.filter(r => r.role === UserRoleEnum.ACCESSOR || r.role === UserRoleEnum.QUALIFYING_ACCESSOR);
-
-        if(userInfo.roles.filter(r => r.isActive).length === 0){
+        if (userInfo.roles.filter(r => r.isActive).length === 0) {
           this.redirectTo('/admin/dashboard');
           return;
         }
 
-        this.currentRole = userInfo.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'qualifying accessor' : 'accessor';
+        this.currentRole =
+          userInfo.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'qualifying accessor' : 'accessor';
         this.newRole = userInfo.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? 'accessor' : 'qualifying accessor';
 
         this.user = {
@@ -68,29 +72,33 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
           })
         };
 
-        this.setPageTitle(`Change ${this.currentRole} ${userInfo.roles.length > 1 ? 'roles' : 'role'} to ${this.newRole}`);
+        this.setPageTitle(
+          `Change ${this.currentRole} ${userInfo.roles.length > 1 ? 'roles' : 'role'} to ${this.newRole}`
+        );
 
         this.setPageStatus('READY');
       },
       error: () => {
         this.setPageStatus('ERROR');
 
-        this.setAlertError('Unable to fetch the necessary information', { message: 'Please try again or contact us for further help' })
+        this.setAlertError('Unable to fetch the necessary information', {
+          message: 'Please try again or contact us for further help'
+        });
       }
     });
-
-
   }
 
   onSubmit(): void {
-
     this.submitButton = { isActive: true, label: 'Saving...' };
 
     const body: changeUserRoleDTO = {
       role: {
-        name: this.user.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR ? AccessorOrganisationRoleEnum.ACCESSOR : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
+        name:
+          this.user.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR
+            ? AccessorOrganisationRoleEnum.ACCESSOR
+            : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
         organisationId: this.user.roles[0].organisation?.id!
-      },
+      }
     };
 
     this.usersService.changeUserRole(this.user.id, body).subscribe({
@@ -102,7 +110,5 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
         this.setAlertUnknownError();
       }
     });
-
   }
-
 }

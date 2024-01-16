@@ -16,9 +16,7 @@ import { AccessorModule } from '@modules/feature-modules/accessor/accessor.modul
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { InnovationChangeAccessorsComponent } from './support-change-accessors.component';
 
-
 describe('FeatureModules/Accessor/Innovation/InnovationChangeAccessorsComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
@@ -31,13 +29,7 @@ describe('FeatureModules/Accessor/Innovation/InnovationChangeAccessorsComponent'
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -52,7 +44,6 @@ describe('FeatureModules/Accessor/Innovation/InnovationChangeAccessorsComponent'
     activatedRoute.snapshot.params = { innovationId: 'Inno01' };
 
     authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
-
   });
 
   it('should create the component', () => {
@@ -60,5 +51,4 @@ describe('FeatureModules/Accessor/Innovation/InnovationChangeAccessorsComponent'
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

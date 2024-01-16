@@ -12,9 +12,7 @@ import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.mo
 
 import { PageAccountInfoComponent } from './account-info.component';
 
-
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () => {
-
   let authenticationStore: AuthenticationStore;
 
   let component: PageAccountInfoComponent;
@@ -22,27 +20,18 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () =
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        InnovatorModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
     authenticationStore = TestBed.inject(AuthenticationStore);
     authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageAccountInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

@@ -1,14 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
-
         <ng-container *ngIf="stepNumber === 1">
           <p>Let your supporting organisations know why you have decided to stop sharing this innovation.</p>
-          <theme-form-textarea controlName="message" label="Why have you decided to stop sharing your innovation?" [pageUniqueField]="false"
-            lengthLimit="xs"></theme-form-textarea>
+          <theme-form-textarea controlName="message" label="Why have you decided to stop sharing your innovation?" [pageUniqueField]="false" lengthLimit="xs"></theme-form-textarea>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
         </ng-container>
 
@@ -17,18 +13,20 @@
             <div class="nhsuk-heading-m nhsuk-warning-callout__label">
               <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you stop sharing your innovation </span>
             </div>
-            <p>Your support organisations will no longer be able to see your innovation record or interact with you. If you would like support in the future, you can resubmit your innovation record for a needs reassessment.</p>
+            <p>
+              Your support organisations will no longer be able to see your innovation record or interact with you. If you would like support in the future, you can resubmit your
+              innovation record for a needs reassessment.
+            </p>
           </div>
-          <theme-form-input controlName="confirmation" label="Are you sure you want to stop sharing your innovation?"
+          <theme-form-input
+            controlName="confirmation"
+            label="Are you sure you want to stop sharing your innovation?"
             description="To confirm, please type the following: stop sharing my innovation"
-            [pageUniqueField]="false"></theme-form-input>
-          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="form.pending || form.invalid">Stop
-            sharing innovation</button>
+            [pageUniqueField]="false"
+          ></theme-form-input>
+          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="form.pending || form.invalid">Stop sharing innovation</button>
         </ng-container>
-
       </form>
-
     </div>
   </div>
-
 </theme-content-wrapper>

@@ -178,7 +178,7 @@ import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/secti
     PluralTranslatePipe,
 
     // Components
-    OrganisationSuggestionsCardComponent,
+    OrganisationSuggestionsCardComponent
   ],
   providers: [
     // Resolvers.
@@ -212,4 +212,4 @@ import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/secti
     PluralTranslatePipe
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

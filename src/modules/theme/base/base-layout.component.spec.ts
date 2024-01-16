@@ -11,36 +11,21 @@ import { HeaderComponent } from '@modules/theme/components/header/header.compone
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
 import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
 
-
 describe('Theme/Base/BaseLayoutComponent', () => {
-
   let component: BaseLayoutComponent;
   let fixture: ComponentFixture<BaseLayoutComponent>;
 
-  beforeEach( () => {
-     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
-        CoreModule,
-        StoresModule
-      ],
-      declarations: [
-        BaseLayoutComponent,
-        FooterComponent,
-        HeaderComponent,
-        ActivityTimeoutComponent
-      ]
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [RouterTestingModule, HttpClientTestingModule, CoreModule, StoresModule],
+      declarations: [BaseLayoutComponent, FooterComponent, HeaderComponent, ActivityTimeoutComponent]
     });
   });
 
   it('should create the componnet', () => {
-
     fixture = TestBed.createComponent(BaseLayoutComponent);
     component = fixture.componentInstance;
 
     expect(component).toBeTruthy();
-
   });
-
 });

@@ -9,18 +9,20 @@ import { FormGroupedCheckboxArrayComponent } from './grouped-checkbox-array.comp
 import { CustomValidators } from '../validators/custom-validators';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
-    <theme-form-grouped-checkbox-array [id]="id" [arrayName]="arrayName" [groupedItems]="groupedItems"></theme-form-grouped-checkbox-array>
+  template: ` <form [formGroup]="form">
+    <theme-form-grouped-checkbox-array
+      [id]="id"
+      [arrayName]="arrayName"
+      [groupedItems]="groupedItems"
+    ></theme-form-grouped-checkbox-array>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormGroupedCheckboxArrayComponent) childComponent?: FormGroupedCheckboxArrayComponent;
 
   form = new FormGroup({
     testField: new FormArray([
-      new FormControl('inner value 1'),
+      new FormControl('inner value 1')
       // new FormControl('value 2')
     ]),
     testFieldConditional: new FormControl('')
@@ -31,35 +33,45 @@ class HostComponent {
   groupedItems = [
     { value: 'value 1', label: 'label 1', items: [{ value: 'inner value 1', label: 'inner label 1' }] },
     { value: 'value 2', label: 'label 2', items: [{ value: 'inner value 2', label: 'inner label 2' }] },
-    { value: 'value 3', label: 'value 3', items: [{ value: 'inner value 3.1', label: 'inner label 3.1' }, { value: 'inner value 3.2', label: 'inner label 3.2' }] },
-    { value: 'value 4', label: 'value 4', items: [{ value: 'inner value 4.1', label: 'inner label 4.1' }, { value: 'inner value 4.2', label: 'inner label 4.2' }] },
-    { value: 'value 5', label: 'value 5', items: [{ value: 'inner value 5.1', label: 'inner label 5.1' }, { value: 'inner value 5.2', label: 'inner label 5.2' }] }
+    {
+      value: 'value 3',
+      label: 'value 3',
+      items: [
+        { value: 'inner value 3.1', label: 'inner label 3.1' },
+        { value: 'inner value 3.2', label: 'inner label 3.2' }
+      ]
+    },
+    {
+      value: 'value 4',
+      label: 'value 4',
+      items: [
+        { value: 'inner value 4.1', label: 'inner label 4.1' },
+        { value: 'inner value 4.2', label: 'inner label 4.2' }
+      ]
+    },
+    {
+      value: 'value 5',
+      label: 'value 5',
+      items: [
+        { value: 'inner value 5.1', label: 'inner label 5.1' },
+        { value: 'inner value 5.2', label: 'inner label 5.2' }
+      ]
+    }
   ];
-
 }
 
-
 describe('FormGroupCheckboxArrayComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormInputComponent,
-        FormGroupedCheckboxArrayComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormInputComponent, FormGroupedCheckboxArrayComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -113,7 +125,6 @@ describe('FormGroupCheckboxArrayComponent', () => {
 
     const expected = ['inner value 2', 'inner value 3.1', 'inner value 3.2', 'inner value 5.1'];
     expect(hostComponent.childComponent?.fieldArrayControl.value).toEqual(expected);
-
   });
 
   it('should show inner items', () => {
@@ -127,5 +138,4 @@ describe('FormGroupCheckboxArrayComponent', () => {
 
     expect(hostComponent.childComponent?.filteredGI[2].showHideStatus).toBe('opened');
   });
-
 });

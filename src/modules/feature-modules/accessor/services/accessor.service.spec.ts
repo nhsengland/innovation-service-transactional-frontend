@@ -9,14 +9,10 @@ import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/cor
 import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
-import {
-  AccessorService,
-} from './accessor.service';
+import { AccessorService } from './accessor.service';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
-
 describe('FeatureModules/Accessor/Services/AccessorService', () => {
-
   let httpMock: HttpTestingController;
 
   let envVariablesStore: EnvironmentVariablesStore;
@@ -27,15 +23,8 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        CoreModule,
-        StoresModule,
-        AccessorModule
-      ],
-      providers: [
-        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
-      ]
+      imports: [HttpClientTestingModule, CoreModule, StoresModule, AccessorModule],
+      providers: [{ provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -49,7 +38,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     service = TestBed.inject(AccessorService);
 
     authenticationStore.getUserId = () => 'UserId01';
-
   });
 
   afterEach(() => {
@@ -57,18 +45,17 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
   });
 
   it('should run suggestNewOrganisations() and return success', () => {
-
     const responseMock = { id: 'id01' };
     const expected = responseMock;
     let response: any = null;
 
-    service.suggestNewOrganisations('Inno01', { organisationUnits: [], type: SupportLogType.STATUS_UPDATE, description: '' }).subscribe({ next: success => response = success, error: error => response = error });
+    service
+      .suggestNewOrganisations('Inno01', { organisationUnits: [], type: SupportLogType.STATUS_UPDATE, description: '' })
+      .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.API_INNOVATIONS_URL}/v1/Inno01/support-logs`);
     httpRequest.flush(responseMock);
     expect(httpRequest.request.method).toBe('POST');
     expect(response).toEqual(expected);
-
   });
-
 });

@@ -5,28 +5,27 @@ import { FormEngineParameterModel, WizardEngineModel } from '@modules/shared/for
 import { InnovationSections as InnovationSection_202209 } from './202209/catalog.types';
 import { InnovationSections as InnovationSection_202304 } from './202304/catalog.types';
 
-
 export type InnovationSectionsVersions = InnovationSection_202209 | InnovationSection_202304;
 
-
 export type FormSelectableFieldType<T> = {
-  value: 'SEPARATOR' | Writeable<T>,
-  label: 'SEPARATOR' | string,
-  description?: string,
-  group?: string,
-  conditional?: FormEngineParameterModel,
-  exclusive?: boolean
+  value: 'SEPARATOR' | Writeable<T>;
+  label: 'SEPARATOR' | string;
+  description?: string;
+  group?: string;
+  conditional?: FormEngineParameterModel;
+  exclusive?: boolean;
 }[];
 
-
 export type InnovationSectionConfigType<T = InnovationSectionsVersions> = {
-  id: T,
-  title: string,
-  wizard: WizardEngineModel,
-  evidences?: WizardEngineModel,
-  allStepsList?: InnovationSectionStepLabels
+  id: T;
+  title: string;
+  wizard: WizardEngineModel;
+  evidences?: WizardEngineModel;
+  allStepsList?: InnovationSectionStepLabels;
 };
 
-export type InnovationSectionsListType = { title: string, sections: InnovationSectionConfigType[] }[];
+export type InnovationSectionsListType = { title: string; sections: InnovationSectionConfigType[] }[];
 
-export type InnovationSectionStepLabels = {[q:string]: {label: string, description?: string, conditional?: boolean}};
+export type InnovationSectionStepLabels = {
+  [q: string]: { label: string; description?: string; conditional?: boolean };
+};

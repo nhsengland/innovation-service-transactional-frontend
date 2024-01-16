@@ -1,12 +1,15 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <section>
-
     <div *ngIf="organisation.hasInactiveUnits" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
         <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
-          <div class="nhsuk-heading-m nhsuk-warning-callout__label"><span role="text"><span class="nhsuk-u-visually-hidden">Important: </span> Inactive Status </span></div>
-          <p>You have one or more inactive statuses. To activate an organisation or unit so it's visible to innovators, you must add at least one Qualifying Accessor (QA) user to the desired organisation or unit.</p>
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span> Inactive Status </span>
+          </div>
+          <p>
+            You have one or more inactive statuses. To activate an organisation or unit so it's visible to innovators, you must add at least one Qualifying Accessor (QA) user to
+            the desired organisation or unit.
+          </p>
         </div>
       </div>
     </div>
@@ -22,18 +25,19 @@
         <dl class="nhsuk-summary-list">
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
-            <dd class="nhsuk-summary-list__value">{{ organisation.name }} <span
-                class="nhsuk-hint nhsuk-u-margin-bottom-0"> {{organisation.acronym }} </span></dd>
+            <dd class="nhsuk-summary-list__value">
+              {{ organisation.name }} <span class="nhsuk-hint nhsuk-u-margin-bottom-0"> {{ organisation.acronym }} </span>
+            </dd>
             <dd class="nhsuk-summary-list__actions">
-              <a routerLink="edit"> Change <span class="nhsuk-u-visually-hidden"> {{ organisation.name | lowercase }}
-                  information</span></a>
+              <a routerLink="edit">
+                Change <span class="nhsuk-u-visually-hidden"> {{ organisation.name | lowercase }} information</span></a
+              >
             </dd>
           </div>
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Status</dt>
             <dd class="nhsuk-summary-list__value">
-              <theme-tag type="{{ organisation.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
-                label="{{ organisation.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+              <theme-tag type="{{ organisation.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ organisation.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
             </dd>
             <dd class="nhsuk-summary-list__actions"></dd>
           </div>
@@ -54,15 +58,11 @@
         </dl>
       </div>
     </div>
-
   </section>
 
-
   <section>
-
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-
         <h2 class="nhsuk-heading-l">Units</h2>
 
         <div class="nhsuk-action-link nhsuk-u-margin-bottom-4">
@@ -71,14 +71,11 @@
             <span class="nhsuk-action-link__text">Create a new unit</span>
           </a>
         </div>
-
       </div>
     </div>
 
-    <div class="nhsuk-grid-row nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5"
-      *ngIf="organisation.organisationUnits.length; else noOrganisationUnitsMessage">
+    <div class="nhsuk-grid-row nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5" *ngIf="organisation.organisationUnits.length; else noOrganisationUnitsMessage">
       <div class="nhsuk-grid-column-two-thirds">
-
         <div class="d-flex nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
           <div>Associated unit</div>
           <div class="ml-auto">
@@ -88,36 +85,28 @@
 
         <dl class="nhsuk-u-margin-0 nhsuk-u-font-size-19">
           <ng-container *ngFor="let unit of organisation.organisationUnits">
-
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
               <dt class="mr-auto">
-                <a routerLink="unit/{{unit.id}}" title="View">
+                <a routerLink="unit/{{ unit.id }}" title="View">
                   {{ unit.name }} ({{ unit.acronym }})
                   <span class="nhsuk-u-visually-hidden">organisation unit</span>
                 </a>
                 <div *ngIf="unit.isActive" class="nhsuk-u-margin-bottom-0">{{ unit.userCount }} users</div>
               </dt>
               <dd class="ml-auto">
-                <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}"
-                  label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
+                <theme-tag type="{{ unit.isActive ? 'SUCCESS' : 'NEUTRAL' }}" label="{{ unit.isActive ? 'Active' : 'Inactive' }}"></theme-tag>
               </dd>
             </div>
-
           </ng-container>
         </dl>
-
       </div>
     </div>
 
     <ng-template #noOrganisationUnitsMessage>
       <div class="nhsuk-grid-column-two-thirds">
-
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
         <p class="nhsuk-u-padding-top-4">No units attached.</p>
-
       </div>
     </ng-template>
-
   </section>
-
 </theme-content-wrapper>

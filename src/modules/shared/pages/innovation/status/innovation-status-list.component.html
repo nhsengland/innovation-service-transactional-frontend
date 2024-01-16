@@ -1,10 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-
       <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-bottom-9">
-        <caption class="nhsuk-u-visually-hidden">Innovation status key</caption>
+        <caption class="nhsuk-u-visually-hidden">
+          Innovation status key
+        </caption>
         <thead class="nhsuk-table__head">
           <tr>
             <th scope="col">Status</th>
@@ -15,17 +15,18 @@
           <tr *ngFor="let status of visibleStatus" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Status</span>
-              <theme-tag type="{{ 'shared.catalog.innovation.grouped_status.' + status + '.cssColorClass' | translate }}" label="{{ 'shared.catalog.innovation.grouped_status.' + status + '.name' | translate }}"></theme-tag>
+              <theme-tag
+                type="{{ 'shared.catalog.innovation.grouped_status.' + status + '.cssColorClass' | translate }}"
+                label="{{ 'shared.catalog.innovation.grouped_status.' + status + '.name' | translate }}"
+              ></theme-tag>
             </td>
             <td class="nhsuk-table__cell">
               <span class="nhsuk-table-responsive__heading">Definition</span>
-              {{ 'shared.catalog.innovation.grouped_status.' + status + '.description' | translate }}
+              {{ "shared.catalog.innovation.grouped_status." + status + ".description" | translate }}
             </td>
           </tr>
         </tbody>
       </table>
-
     </div>
   </div>
-
 </theme-content-wrapper>

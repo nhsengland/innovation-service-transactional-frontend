@@ -1,13 +1,25 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <theme-form-input controlName="name" description="Enter the name of terms of use with a maximum of 500 characters" label="What should we call your terms of use version?" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-input
+          controlName="name"
+          description="Enter the name of terms of use with a maximum of 500 characters"
+          label="What should we call your terms of use version?"
+          [pageUniqueField]="false"
+        ></theme-form-input>
         <theme-form-radio-group controlName="touType" [items]="typeItems" label="Which users do these terms of use relate to?" [pageUniqueField]="false"></theme-form-radio-group>
-        <theme-form-textarea controlName="summary" label="What are the key changes in this version?" description="Summarise changes" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
+        <theme-form-textarea
+          controlName="summary"
+          label="What are the key changes in this version?"
+          description="Summarise changes"
+          [pageUniqueField]="false"
+          lengthLimit="xl"
+        ></theme-form-textarea>
         <div>
-          <p>If you would like to show this summary of changes to the selected users of this service, tick the checkbox below. If not, your changes will be saved but not shared.</p>
+          <p>
+            If you would like to show this summary of changes to the selected users of this service, tick the checkbox below. If not, your changes will be saved but not shared.
+          </p>
           <div *ngIf="form.value.notifyUser" class="nhsuk-warning-callout">
             <h3 class="nhsuk-warning-callout__label">
               <span role="text">
@@ -19,10 +31,10 @@
           </div>
         </div>
         <theme-form-checkbox controlName="notifyUser" label="Yes, notify all relevant Innovation Service users"></theme-form-checkbox>
-        <button  type="submit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" >{{ (form.value.notifyUser) ? 'Save and send out changes to users' : 'Save update' }}</button>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
+          {{ form.value.notifyUser ? "Save and send out changes to users" : "Save update" }}
+        </button>
       </form>
-
     </div>
   </div>
-
 </theme-content-wrapper>

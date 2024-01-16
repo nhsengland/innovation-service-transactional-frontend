@@ -12,9 +12,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { SharedModule } from '@modules/shared/shared.module';
 import { PageInnovationTaskDetailsComponent } from './task-details.component';
 
-
 describe('Shared/Pages/Innovation/PageInnovationTaskDetailsComponent', () => {
-
   let activatedRoute: ActivatedRoute;
 
   let innovationsService: InnovationsService;
@@ -24,13 +22,7 @@ describe('Shared/Pages/Innovation/PageInnovationTaskDetailsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        SharedModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -38,14 +30,11 @@ describe('Shared/Pages/Innovation/PageInnovationTaskDetailsComponent', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
 
     innovationsService = TestBed.inject(InnovationsService);
-
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(PageInnovationTaskDetailsComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
-
 });

@@ -18,13 +18,14 @@ import { AssessmentService } from '../../../services/assessment.service';
   templateUrl: './assessment-edit.component.html'
 })
 export class InnovationAssessmentEditComponent extends CoreComponent implements OnInit {
-
   @ViewChildren(FormEngineComponent) formEngineComponent?: QueryList<FormEngineComponent>;
 
   innovationId: string;
   innovationName: string;
   assessmentId: string;
   stepId: number;
+
+  entrypointUrl: string = '';
 
   form: {
     sections: {
@@ -39,13 +40,13 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   currentAnswers: { [key: string]: any };
 
   saveButton: {
-    disabled: boolean,
-    label: 'Save changes' | 'All changes are saved'
+    disabled: boolean;
+    label: 'Save changes' | 'All changes are saved';
   } = { disabled: true, label: 'All changes are saved' };
 
   isValidStepId(): boolean {
     const id = this.stepId;
-    return (1 <= Number(id) && Number(id) <= 2);
+    return 1 <= Number(id) && Number(id) <= 2;
   }
 
   constructor(
@@ -54,7 +55,6 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     protected organisationsService: OrganisationsService,
     protected innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -69,29 +69,35 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     this.currentAnswers = {};
   }
 
-
   ngOnInit(): void {
+    this.entrypointUrl = this.stores.context.getPreviousUrl() ?? '';
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
-      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId),
+      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
     ]).subscribe(([organisationUnits, needsAssessment]) => {
-
       // Update last step with the organisations list with description and pre-select all checkboxes.
       NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.CONSTANTS.URLS.WHO_WE_ARE}" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
-      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].groupedItems = organisationUnits.map(item => ({ value: item.id, label: item.name, items: item.organisationUnits.map(i => ({ value: i.id, label: i.name })) }));
+      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].groupedItems = organisationUnits.map(item => ({
+        value: item.id,
+        label: item.name,
+        items: item.organisationUnits.map(i => ({ value: i.id, label: i.name }))
+      }));
 
       this.innovationName = this.stores.context.getInnovation().name;
 
       this.form.data = {
         ...needsAssessment,
-        suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce((unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)], [])
+        suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce(
+          (unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)],
+          []
+        )
       };
 
       this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
 
       // Only autosave if the assessment has not been submitted.
-      if(!this.assessmentHasBeenSubmitted) {
+      if (!this.assessmentHasBeenSubmitted) {
         this.subscriptions.push(
           interval(1000 * 60).subscribe(() => {
             if (!this.saveButton.disabled) {
@@ -102,13 +108,10 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       }
 
       this.setPageStatus('READY');
-
     });
 
     this.subscriptions.push(
-
       this.activatedRoute.params.subscribe(params => {
-
         this.stepId = Number(params.stepId);
 
         if (!this.isValidStepId()) {
@@ -122,14 +125,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
               { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
             ];
-            this.setBackLink('Back to innovation', `/assessment/innovations/${this.innovationId}`);
+            this.setBackLink(
+              'Go back',
+              this.entrypointUrl.endsWith('/new')
+                ? `/assessment/innovations/${this.innovationId}/overview`
+                : this.entrypointUrl
+            );
+
             break;
           case 2:
             this.form.sections = [
               { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
               { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
             ];
-            this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
+            this.setBackLink(
+              'Go back',
+              `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`
+            );
             break;
         }
 
@@ -142,25 +154,25 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
         this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
         this.setPageStatus('READY');
-
       })
     );
-
   }
 
-  onSubmit(action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'): void {
-
+  onSubmit(
+    action: 'saveAsDraft' | 'submit' | 'saveAsDraftFirstSection' | 'saveAsDraftSecondSection' | 'autosave'
+  ): void {
     let isFirstStepValid = true;
     let isSecondStepValid = true;
 
     // This section is not easy to test. TOIMPROVE: Include this code on unit test.
     (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
-
       let formData: MappedObjectType;
 
       if (action === 'submit') {
         formData = engine.getFormValues(true);
-        if (!formData?.valid) { isSecondStepValid = false; }
+        if (!formData?.valid) {
+          isSecondStepValid = false;
+        }
       } else {
         formData = engine.getFormValues(false);
       }
@@ -169,10 +181,12 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
         ...this.currentAnswers,
         // Update to null empty values.
         ...Object.entries(formData?.data).reduce((accumulator, [key, value]) => {
-          return { ...accumulator, [key]: key !== 'suggestedOrganisationUnitsIds' && UtilsHelper.isEmpty(value) ? null : value };
+          return {
+            ...accumulator,
+            [key]: key !== 'suggestedOrganisationUnitsIds' && UtilsHelper.isEmpty(value) ? null : value
+          };
         }, {})
-      }
-
+      };
     });
 
     if (action === 'saveAsDraftFirstSection' || action === 'saveAsDraftSecondSection') {
@@ -187,53 +201,64 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       const firstStepParameters = [...NEEDS_ASSESSMENT_QUESTIONS.innovation, ...NEEDS_ASSESSMENT_QUESTIONS.innovator];
       const firstStepForm = FormEngineHelper.buildForm(firstStepParameters, this.form.data);
 
-      if (!firstStepForm.valid) { isFirstStepValid = false; }
+      if (!firstStepForm.valid) {
+        isFirstStepValid = false;
+      }
     }
 
     const isValid = isFirstStepValid && isSecondStepValid;
 
-    this.assessmentService.updateInnovationNeedsAssessment(this.innovationId, this.assessmentId, (this.stepId === 2 && action === 'submit' && isValid), this.currentAnswers).subscribe({
-      next: () => {
-        switch (action) {
-          case 'autosave':
-          case 'saveAsDraft':
-            this.saveButton = { disabled: true, label: 'All changes are saved' };
-            break;
-          case 'saveAsDraftFirstSection':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
-            break;
-          case 'saveAsDraftSecondSection':
-            this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
-            break;
-          case 'submit':
-            if (isValid) {
-              this.setRedirectAlertSuccess('Needs assessment successfully completed');
-              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
-            }
-            else {
-              if (isFirstStepValid) {
-                this.setAlertError('All questions must be completed before submit');
+    this.assessmentService
+      .updateInnovationNeedsAssessment(
+        this.innovationId,
+        this.assessmentId,
+        this.stepId === 2 && action === 'submit' && isValid,
+        this.currentAnswers
+      )
+      .subscribe({
+        next: () => {
+          switch (action) {
+            case 'autosave':
+            case 'saveAsDraft':
+              this.saveButton = { disabled: true, label: 'All changes are saved' };
+              break;
+            case 'saveAsDraftFirstSection':
+              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/2`);
+              break;
+            case 'saveAsDraftSecondSection':
+              this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`);
+              break;
+            case 'submit':
+              if (isValid) {
+                this.setRedirectAlertSuccess('Needs assessment successfully completed');
+                this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
+              } else {
+                if (isFirstStepValid) {
+                  this.setAlertError('All questions must be completed before submit');
+                } else {
+                  this.setAlertError('All questions must be completed before submit', {
+                    itemsList: [
+                      {
+                        title: 'Go to step 1 and start filling in all incomplete questions',
+                        callback: `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1?error=true`
+                      }
+                    ]
+                  });
+                }
               }
-              else {
-                this.setAlertError('All questions must be completed before submit', {
-                  itemsList: [{
-                    title: "Go to step 1 and start filling in all incomplete questions",
-                    callback: `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1?error=true`,
-                  }]
-                });
-              }
-            }
-            break;
-          default:
-            break;
-        }
-      },
-      error: () => this.setAlertError('An error occurred when starting needs assessment. Please try again or contact us for further help')
-    });
+              break;
+            default:
+              break;
+          }
+        },
+        error: () =>
+          this.setAlertError(
+            'An error occurred when starting needs assessment. Please try again or contact us for further help'
+          )
+      });
   }
 
   onFormChange(): void {
     this.saveButton = { disabled: false, label: 'Save changes' };
   }
-
 }

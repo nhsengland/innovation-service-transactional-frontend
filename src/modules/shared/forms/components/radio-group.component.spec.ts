@@ -10,13 +10,11 @@ import { FormTextareaComponent } from '../components/textarea.component';
 import { FormRadioGroupComponent } from './radio-group.component';
 
 @Component({
-  template: `
-  <form [formGroup]="form">
+  template: ` <form [formGroup]="form">
     <theme-form-radio-group [id]="id" [controlName]="controlName" [items]="items"></theme-form-radio-group>
   </form>`
 })
 class HostComponent {
-
   @ViewChild(FormRadioGroupComponent) childComponent?: FormRadioGroupComponent;
 
   form = new FormGroup({
@@ -32,35 +30,29 @@ class HostComponent {
     {
       value: 'value 3',
       label: 'value 3',
-      conditional: new FormEngineParameterModel({ id: 'testFieldConditional', dataType: 'text', label: 'First part of your postcode', description: 'For example SW1', validations: { isRequired: true } })
-    },
+      conditional: new FormEngineParameterModel({
+        id: 'testFieldConditional',
+        dataType: 'text',
+        label: 'First part of your postcode',
+        description: 'For example SW1',
+        validations: { isRequired: true }
+      })
+    }
   ];
-
 }
 
-
 describe('FormRadioGroupComponent', () => {
-
   let hostComponent: HostComponent;
   let hostFixture: ComponentFixture<HostComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        TranslateModule.forRoot(),
-      ],
-      declarations: [
-        HostComponent,
-        FormInputComponent,
-        FormTextareaComponent,
-        FormRadioGroupComponent,
-      ],
+      imports: [ReactiveFormsModule, TranslateModule.forRoot()],
+      declarations: [HostComponent, FormInputComponent, FormTextareaComponent, FormRadioGroupComponent]
     });
 
     hostFixture = TestBed.createComponent(HostComponent);
     hostComponent = hostFixture.componentInstance;
-
   });
 
   it('should create the component', () => {
@@ -97,5 +89,4 @@ describe('FormRadioGroupComponent', () => {
     hostFixture.detectChanges();
     expect(hostComponent.childComponent?.isConditionalFieldVisible('testFieldConditional')).toBe(true);
   });
-
 });

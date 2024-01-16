@@ -9,8 +9,10 @@ import { MessageStepInputType, MessageStepOutputType } from './message-step.type
   selector: 'shared-pages-innovation-actions-wizard-task-new-message-step',
   templateUrl: './message-step.component.html'
 })
-export class WizardTaskNewMessageStepComponent extends CoreComponent implements WizardStepComponentType<MessageStepInputType, MessageStepOutputType>, OnInit {
-
+export class WizardTaskNewMessageStepComponent
+  extends CoreComponent
+  implements WizardStepComponentType<MessageStepInputType, MessageStepOutputType>, OnInit
+{
   @Input() title = '';
   @Input() isSubmitStep = false;
   @Input() data: MessageStepInputType = {
@@ -22,34 +24,39 @@ export class WizardTaskNewMessageStepComponent extends CoreComponent implements 
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<MessageStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<MessageStepOutputType>>();
 
-  form = new FormGroup({
-    message: new FormControl<string>('', CustomValidators.required('Please enter a message'))
-  }, { updateOn: 'blur' });
+  form = new FormGroup(
+    {
+      message: new FormControl<string>('', CustomValidators.required('Please enter a message'))
+    },
+    { updateOn: 'blur' }
+  );
 
   constructor() {
     super();
   }
 
   ngOnInit() {
-
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
 
     this.form.get('message')?.setValue(this.data.message);
 
-    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.data.selectedSection);
+    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(
+      this.data.selectedSection
+    );
 
-    this.title =  sectionIdentification ? `Assign a task for section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'` : '';
+    this.title = sectionIdentification
+      ? `Assign a task for section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
+      : '';
 
-    this.setPageTitle(this.title, {size: 'l'});
+    this.setPageTitle(this.title, { size: 'l' });
 
     this.setPageStatus('READY');
-
   }
 
   prepareOutputData(): MessageStepOutputType {
     return {
       message: this.form.value.message ?? ''
-    }
+    };
   }
 
   onCancelStep(): void {
@@ -61,14 +68,11 @@ export class WizardTaskNewMessageStepComponent extends CoreComponent implements 
   }
 
   onSubmitStep(): void {
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
 
     this.submitEvent.emit({ isComplete: true, data: this.prepareOutputData() });
-
   }
-
 }

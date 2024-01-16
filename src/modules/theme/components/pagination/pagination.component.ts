@@ -7,7 +7,6 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaginationComponent {
-
   @Input() currentPage = 1;
   @Input() pageSize = 20;
   @Input() totalRows = 0;
@@ -16,11 +15,10 @@ export class PaginationComponent {
   totalPages = 0;
   private nTabs = 5;
 
-  constructor() { }
+  constructor() {}
 
   getPages(): number[] {
-
-    this.totalPages = Math.ceil(this.totalRows / this.pageSize)
+    this.totalPages = Math.ceil(this.totalRows / this.pageSize);
 
     // Default shows current with the two numbers before and after
     let start = this.currentPage - 2;
@@ -66,5 +64,4 @@ export class PaginationComponent {
     this.currentPage = page;
     this.updatePageEvent.emit({ pageNumber: page });
   }
-
 }

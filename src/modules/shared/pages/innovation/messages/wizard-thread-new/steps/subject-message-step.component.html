@@ -1,8 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-
       <div *ngIf="data.teams.length === 0" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
         <h2 class="nhsuk-warning-callout__label">
           <span role="text">
@@ -10,7 +8,10 @@
             There is no one to be notified about this message
           </span>
         </h2>
-        <p>Currently, there is no one assigned or actively providing support to your innovation. However, this message is visible to anyone with access to this innovation, including the organisations that may be assigned to support you in the near future.</p>
+        <p>
+          Currently, there is no one assigned or actively providing support to your innovation. However, this message is visible to anyone with access to this innovation, including
+          the organisations that may be assigned to support you in the near future.
+        </p>
       </div>
 
       <ng-container *ngIf="data.teams.length > 0">
@@ -26,7 +27,6 @@
       </ng-container>
 
       <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
-
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
 
         <theme-form-input controlName="subject" label="Enter a subject for your thread" width="full" [pageUniqueField]="false"></theme-form-input>
@@ -35,10 +35,19 @@
 
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
 
-        <theme-form-file-upload-descriptive description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF." [pageUniqueField]="false" [config]="configInputFile"></theme-form-file-upload-descriptive>
+        <theme-form-file-upload-descriptive
+          description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF."
+          [pageUniqueField]="false"
+          [config]="configInputFile"
+        ></theme-form-file-upload-descriptive>
 
         <div *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
-          <theme-form-checkbox controlName="confirmation" [label]="formConfirmationField.label" [description]="formConfirmationField.description" size="small"></theme-form-checkbox>
+          <theme-form-checkbox
+            controlName="confirmation"
+            [label]="formConfirmationField.label"
+            [description]="formConfirmationField.description"
+            size="small"
+          ></theme-form-checkbox>
         </div>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Send message</button>
@@ -47,7 +56,6 @@
       <div>
         <a href="javascript:void()" (click)="onCancelStep()">Cancel</a>
       </div>
-
     </div>
   </div>
 </theme-content-wrapper>

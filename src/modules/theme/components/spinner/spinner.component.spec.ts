@@ -6,31 +6,21 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { SpinnerComponent } from './spinner.component';
 
-
 describe('Theme/Components/Spinner/SpinnerComponent', () => {
-
   let component: SpinnerComponent;
   let fixture: ComponentFixture<SpinnerComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ThemeModule
-      ],
-      declarations: [
-
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, ThemeModule],
+      declarations: []
     });
 
     fixture = TestBed.createComponent(SpinnerComponent);
     component = fixture.componentInstance;
-
   });
 
   it('should create instance', () => {
     expect(component).toBeTruthy();
   });
-
 });

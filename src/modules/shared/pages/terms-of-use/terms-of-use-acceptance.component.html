@@ -1,9 +1,6 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div class="nhsuk-grid-row">
-
     <div class="nhsuk-grid-column-two-thirds">
-
       <p>We've updated our <a [href]="policyURL">terms of use</a> and <a routerLink="/policies/cookies-policy">cookies policy</a>.</p>
 
       <div *ngIf="termsOfUseVersion.summary">
@@ -15,21 +12,21 @@
 
       <p>By continuing you agree to our updated terms of use.</p>
       <button type="button" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-right-3" (click)="onAgree()">Agree and continue</button>
-
     </div>
 
     <div class="nhsuk-grid-column-one-third">
-      <div class="nhsuk-card x-card-top-border ">
+      <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
-          <h2 class="nhsuk-card__heading nhsuk-heading-m"> Other options </h2>
+          <h2 class="nhsuk-card__heading nhsuk-heading-m">Other options</h2>
           <ul class="nhsuk-list">
-            <li>If you do not agree to the new terms, you cannot use your Innovation Service account. <a href="{{ appUrl }}/signout">Sign out and go to the Innovation Service homepage</a>.</li>
+            <li>
+              If you do not agree to the new terms, you cannot use your Innovation Service account.
+              <a href="{{ appUrl }}/signout">Sign out and go to the Innovation Service homepage</a>.
+            </li>
             <li>If you no longer need your account and want to delete your information, you can <a href="{{ CONSTANTS.URLS.CONTACT_US }}">contact us. </a></li>
           </ul>
         </div>
       </div>
     </div>
-
   </div>
-
 </theme-content-wrapper>

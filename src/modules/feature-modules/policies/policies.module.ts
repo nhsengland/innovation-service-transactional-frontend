@@ -10,14 +10,8 @@ import { CookiesInfoComponent } from './pages/cookies/cookies-info.component';
 import { CookiesEditComponent } from './pages/cookies/cookies-edit.component';
 import { CookiesEditConfirmationComponent } from './pages/cookies/cookies-edit-confirmation.component';
 
-
 @NgModule({
-  imports: [
-    ThemeModule,
-    SharedModule,
-
-    PoliciesRoutingModule
-  ],
+  imports: [ThemeModule, SharedModule, PoliciesRoutingModule],
   declarations: [
     // Pages.
     CookiesInfoComponent,
@@ -25,4 +19,4 @@ import { CookiesEditConfirmationComponent } from './pages/cookies/cookies-edit-c
     CookiesEditConfirmationComponent
   ]
 })
-export class PoliciesModule { }
+export class PoliciesModule {}

@@ -1,9 +1,14 @@
 import { FormEngineHelper } from './form-engine.helper';
-import { ALL_PARAMETER_TYPES_EMPTY, CHOOSABLE_PARAMETER_TYPES, CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS, ALL_PARAMETERS_HIDDEN, PARAMETERS_WITH_VALIDATIONS, PARAMETERS_VALUES } from '../../tests/form-engine.mock';
-
+import {
+  ALL_PARAMETER_TYPES_EMPTY,
+  CHOOSABLE_PARAMETER_TYPES,
+  CHOOSABLE_PARAMETER_TYPES_WITH_CONDITIONALS,
+  ALL_PARAMETERS_HIDDEN,
+  PARAMETERS_WITH_VALIDATIONS,
+  PARAMETERS_VALUES
+} from '../../tests/form-engine.mock';
 
 describe('FormEngineHelper', () => {
-
   it('should create empty and valid form', () => {
     const expected = {};
     const form = FormEngineHelper.buildForm([]);
@@ -17,7 +22,7 @@ describe('FormEngineHelper', () => {
       radioGroupField: null,
       checkboxGroupField: {},
       checkboxArrayField: [],
-      fieldsGroupField: [],
+      fieldsGroupField: []
     };
     const form = FormEngineHelper.buildForm(ALL_PARAMETER_TYPES_EMPTY);
     expect(form.valid).toBe(true);
@@ -81,7 +86,6 @@ describe('FormEngineHelper', () => {
     expect(FormEngineHelper.getFormValues(form, CHOOSABLE_PARAMETER_TYPES)).toEqual(expected);
   });
 
-
   it('should return a few errors', () => {
     const expected = {
       // textField1: 'shared.forms_module.validations.invalid_format', // All ok with this parameter.
@@ -102,12 +106,8 @@ describe('FormEngineHelper', () => {
     expect(FormEngineHelper.getErrors(form)).toEqual(expected);
   });
 
-
-
   it('should return empty validation message', () => {
-
     const validationMessageTestSuite = [
-
       { test: {}, expected: '' },
 
       { test: { required: true }, expected: 'shared.forms_module.validations.required' },
@@ -123,13 +123,10 @@ describe('FormEngineHelper', () => {
       { test: { maxHexadecimal: { max: 10 } }, expected: 'shared.forms_module.validations.max_hexadecimal (10)' },
 
       { test: { unknownValidation: true }, expected: '' }
-
     ];
 
     validationMessageTestSuite.forEach(v => {
       expect(FormEngineHelper.getValidationMessage(v.test).message).toBe(v.expected);
     });
-
   });
-
 });

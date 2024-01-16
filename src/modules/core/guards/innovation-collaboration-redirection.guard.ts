@@ -12,23 +12,20 @@ import { InnovationService } from '../services/innovation.service';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { CANCELLED } from 'dns';
 
-
 @Injectable()
-export class InnovationCollaborationRedirectionGuard  {
-
+export class InnovationCollaborationRedirectionGuard {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
     private loggerService: LoggerService,
     private innovationService: InnovationService
-  ) { }
+  ) {}
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot): Observable<boolean> {
     const collaboratorId = activatedRouteSnapshot.params.collaboratorId;
 
     return this.innovationService.getInnovationCollaboration(collaboratorId).pipe(
       map(response => {
-
         let redirectUrl = '';
 
         if (response.collaboratorStatus !== InnovationCollaboratorStatusEnum.PENDING) {
@@ -48,9 +45,10 @@ export class InnovationCollaborationRedirectionGuard  {
 
         return false;
       }),
-      catchError((e) => { // Request no longer valid, redirect to error.
+      catchError(e => {
+        // Request no longer valid, redirect to error.
         let redirectUrl = '';
-        
+
         this.loggerService.trackTrace('[InnovationCollaborationRedirectionGuard] error', Severity.ERROR, { error: e });
 
         redirectUrl = '/transactional/error';
@@ -64,10 +62,7 @@ export class InnovationCollaborationRedirectionGuard  {
         }
 
         return of(false);
-
       })
     );
-
   }
-
 }

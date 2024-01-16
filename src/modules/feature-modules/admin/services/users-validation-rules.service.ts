@@ -23,139 +23,173 @@ export enum ValidationRuleEnum {
   UserCanHaveAssessmentOrAccessorRole = 'UserCanHaveAssessmentOrAccessorRole'
 }
 
-export type GetActivateRoleUserRules = ValidationRuleEnum.UserHasAnyAdminRole
-    | ValidationRuleEnum.UserHasAnyInnovatorRole
-    | ValidationRuleEnum.UserHasAnyAssessmentRole
-    | ValidationRuleEnum.UserHasAnyAccessorRole
-    | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
-    | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
-    | ValidationRuleEnum.OrganisationUnitIsActive
-    | ValidationRuleEnum.UserAlreadyHasRoleInUnit;
+export type GetActivateRoleUserRules =
+  | ValidationRuleEnum.UserHasAnyAdminRole
+  | ValidationRuleEnum.UserHasAnyInnovatorRole
+  | ValidationRuleEnum.UserHasAnyAssessmentRole
+  | ValidationRuleEnum.UserHasAnyAccessorRole
+  | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
+  | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
+  | ValidationRuleEnum.OrganisationUnitIsActive
+  | ValidationRuleEnum.UserAlreadyHasRoleInUnit;
 
-export type GetInactivateRoleUserRules = ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne
-    | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit
-    | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser;
+export type GetInactivateRoleUserRules =
+  | ValidationRuleEnum.AssessmentUserIsNotTheOnlyOne
+  | ValidationRuleEnum.LastQualifyingAccessorUserOnOrganisationUnit
+  | ValidationRuleEnum.NoInnovationsSupportedOnlyByThisUser;
 
-export type CanAddRoleRules = ValidationRuleEnum.UserHasAnyAdminRole
-    | ValidationRuleEnum.UserHasAnyInnovatorRole
-    | ValidationRuleEnum.UserHasAnyAssessmentRole
-    | ValidationRuleEnum.UserHasAnyAccessorRole
-    | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
-    | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
-    | ValidationRuleEnum.UserAlreadyHasRoleInUnit;
+export type CanAddRoleRules =
+  | ValidationRuleEnum.UserHasAnyAdminRole
+  | ValidationRuleEnum.UserHasAnyInnovatorRole
+  | ValidationRuleEnum.UserHasAnyAssessmentRole
+  | ValidationRuleEnum.UserHasAnyAccessorRole
+  | ValidationRuleEnum.UserHasAnyQualifyingAccessorRole
+  | ValidationRuleEnum.UserHasAnyAccessorRoleInOtherOrganisation
+  | ValidationRuleEnum.UserAlreadyHasRoleInUnit;
 
-export type CanAddAnyRoleRules = ValidationRuleEnum.UserHasAnyAdminRole
-    | ValidationRuleEnum.UserHasAnyInnovatorRole
-    | ValidationRuleEnum.UserCanHaveAssessmentOrAccessorRole;
+export type CanAddAnyRoleRules =
+  | ValidationRuleEnum.UserHasAnyAdminRole
+  | ValidationRuleEnum.UserHasAnyInnovatorRole
+  | ValidationRuleEnum.UserCanHaveAssessmentOrAccessorRole;
 
 export type ValidationResult<T> = {
   rule: T;
   valid: boolean;
 };
-export type Validations<T> = { validations: ValidationResult<T>[]; };
+export type Validations<T> = { validations: ValidationResult<T>[] };
 
 //#region Deprecated Payloads
 export type AdminValidationResponseDTO = {
   validations: {
-    rule: 'AssessmentUserIsNotTheOnlyOne' | 'LastQualifyingAccessorUserOnOrganisationUnit' | 'LastUserOnOrganisationUnit' | 'NoInnovationsSupportedOnlyByThisUser',
-    valid: boolean,
+    rule:
+      | 'AssessmentUserIsNotTheOnlyOne'
+      | 'LastQualifyingAccessorUserOnOrganisationUnit'
+      | 'LastUserOnOrganisationUnit'
+      | 'NoInnovationsSupportedOnlyByThisUser';
+    valid: boolean;
     data?: {
-      supports?: { count: number, innovations: { id: string, name: string }[] }
-    }
-  }[]
+      supports?: { count: number; innovations: { id: string; name: string }[] };
+    };
+  }[];
 };
 export type getLockUserRulesInDTO = {
   validations: {
-    operation: string,
-    valid: boolean,
-    meta?: {
-      supports: {
-        count: number;
-        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-      }
-    } | { organisation: { id: string, name: string } } | {}
-  }[]
+    operation: string;
+    valid: boolean;
+    meta?:
+      | {
+          supports: {
+            count: number;
+            innovations: { innovationId: string; innovationName: string; unitId: string; unitName: string }[];
+          };
+        }
+      | { organisation: { id: string; name: string } }
+      | {};
+  }[];
 };
 export type getLockUserRulesOutDTO = {
   key: string;
   valid: boolean;
-  meta: { [key: string]: any }
+  meta: { [key: string]: any };
 };
 export type getOrganisationRoleRulesOutDTO = {
   key: keyof getOrgnisationRoleRulesInDTO;
   valid: boolean;
-  meta: { [key: string]: any }
+  meta: { [key: string]: any };
 };
 export type getOrgnisationRoleRulesInDTO = {
   lastAccessorUserOnOrganisationUnit: {
-    valid: boolean,
+    valid: boolean;
     meta?: {
       supports: {
         count: number;
-        innovations: { innovationId: string, innovationName: string; unitId: string; unitName: string }[]
-      }
-    }
-  }
+        innovations: { innovationId: string; innovationName: string; unitId: string; unitName: string }[];
+      };
+    };
+  };
 };
 //#endregion
 
 @Injectable()
 export class UsersValidationRulesService extends CoreService {
-
-  constructor() { super(); }
-
+  constructor() {
+    super();
+  }
 
   // TODO: This payloads are not updated with new validations changes
   getLockUserRules(userId: string): Observable<AdminValidationResponseDTO> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'LOCK_USER' });
-    return this.http.get<AdminValidationResponseDTO>(url.buildUrl()).pipe(take(1), map(response => response));
-
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'LOCK_USER' });
+    return this.http.get<AdminValidationResponseDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
   // TODO: This payloads are not updated with new validations changes
   getUserRoleRules(userId: string): Observable<getOrganisationRoleRulesOutDTO[]> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'UPDATE_USER_ROLE' });
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'UPDATE_USER_ROLE' });
     return this.http.get<getOrgnisationRoleRulesInDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => Object.entries(response).map(([key, item]) => ({
-        key: key as keyof getOrgnisationRoleRulesInDTO,
-        valid: item.valid,
-        meta: item.meta || {}
-      }))
+      map(response =>
+        Object.entries(response).map(([key, item]) => ({
+          key: key as keyof getOrgnisationRoleRulesInDTO,
+          valid: item.valid,
+          meta: item.meta || {}
+        }))
       )
     );
-
   }
 
-
   getActivateRoleUserRules(userId: string, userRoleId: string): Observable<Validations<GetActivateRoleUserRules>> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ACTIVATE_USER_ROLE', roleId: userRoleId });
-    return this.http.get<Validations<GetActivateRoleUserRules>>(url.buildUrl()).pipe(take(1), map(response => response));
-
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'ACTIVATE_USER_ROLE', roleId: userRoleId });
+    return this.http.get<Validations<GetActivateRoleUserRules>>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
   getInactivateRoleUserRules(userId: string, userRoleId: string): Observable<Validations<GetInactivateRoleUserRules>> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'INACTIVATE_USER_ROLE', roleId: userRoleId });
-    return this.http.get<Validations<GetInactivateRoleUserRules>>(url.buildUrl()).pipe(take(1), map(response => response));
-
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'INACTIVATE_USER_ROLE', roleId: userRoleId });
+    return this.http.get<Validations<GetInactivateRoleUserRules>>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 
-  canAddRole(userId: string, params: { role: UserRoleEnum, organisationUnitIds?: string[] }): Observable<Validations<CanAddRoleRules>['validations']> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_USER_ROLE', ...params });
-    return this.http.get<Validations<CanAddRoleRules>>(url.buildUrl()).pipe(take(1), map(response => response.validations));
-
+  canAddRole(
+    userId: string,
+    params: { role: UserRoleEnum; organisationUnitIds?: string[] }
+  ): Observable<Validations<CanAddRoleRules>['validations']> {
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'ADD_USER_ROLE', ...params });
+    return this.http.get<Validations<CanAddRoleRules>>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.validations)
+    );
   }
 
   canAddAnyRole(userId: string): Observable<Validations<CanAddAnyRoleRules>['validations']> {
-
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/validate').setPathParams({ userId }).setQueryParams({ operation: 'ADD_ANY_USER_ROLE' });
-    return this.http.get<Validations<CanAddAnyRoleRules>>(url.buildUrl()).pipe(take(1), map(response => response.validations));
-
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/validate')
+      .setPathParams({ userId })
+      .setQueryParams({ operation: 'ADD_ANY_USER_ROLE' });
+    return this.http.get<Validations<CanAddAnyRoleRules>>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response.validations)
+    );
   }
-
 }

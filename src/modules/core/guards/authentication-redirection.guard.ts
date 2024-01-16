@@ -4,18 +4,15 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-
 @Injectable()
-export class AuthenticationRedirectionGuard  {
-
+export class AuthenticationRedirectionGuard {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private authentication: AuthenticationStore
-  ) { }
+  ) {}
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userContext = this.authentication.getUserContextInfo();
 
@@ -29,22 +26,34 @@ export class AuthenticationRedirectionGuard  {
       return false;
     }
 
-    if (!state.url.endsWith('terms-of-use') && userContext?.type !== 'ADMIN' && !this.authentication.isTermsOfUseAccepted()) {
+    if (
+      !state.url.endsWith('terms-of-use') &&
+      userContext?.type !== 'ADMIN' &&
+      !this.authentication.isTermsOfUseAccepted()
+    ) {
       const path = this.authentication.userUrlBasePath() + '/terms-of-use';
       this.router.navigateByUrl(path);
       return false;
     }
-    
-    if (!state.url.endsWith('announcements') && !state.url.includes('terms-of-use') && userContext.type !== 'ADMIN' && this.authentication.hasAnnouncements()) {
+
+    if (
+      !state.url.endsWith('announcements') &&
+      !state.url.includes('terms-of-use') &&
+      userContext.type !== 'ADMIN' &&
+      this.authentication.hasAnnouncements()
+    ) {
       this.router.navigate(['announcements']);
       return false;
     }
 
     if (pathSegment === 'dashboard') {
-      const alert = activatedRouteSnapshot.queryParams.state === 'CHANGE_PASSWORD' ? {
-        alert: activatedRouteSnapshot.queryParams.state
-      } : undefined
-      this.router.navigateByUrl(this.authentication.userUrlBasePath(), alert && {state: alert});
+      const alert =
+        activatedRouteSnapshot.queryParams.state === 'CHANGE_PASSWORD'
+          ? {
+              alert: activatedRouteSnapshot.queryParams.state
+            }
+          : undefined;
+      this.router.navigateByUrl(this.authentication.userUrlBasePath(), alert && { state: alert });
       return false;
     }
 
@@ -54,7 +63,5 @@ export class AuthenticationRedirectionGuard  {
       this.router.navigateByUrl(this.authentication.userUrlBasePath());
       return false;
     }
-
   }
-
 }

@@ -15,7 +15,6 @@ export enum AccessorOrganisationRoleEnum {
   QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR'
 }
 
-
 export enum TermsOfUseTypeEnum {
   INNOVATOR = 'INNOVATOR',
   SUPPORT_ORGANISATION = 'SUPPORT_ORGANISATION'

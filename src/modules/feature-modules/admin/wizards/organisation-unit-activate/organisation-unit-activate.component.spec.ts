@@ -17,13 +17,10 @@ import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/s
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
-
 describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent', () => {
-
   let activatedRoute: ActivatedRoute;
   let router: Router;
   let routerSpy: jest.SpyInstance;
-
 
   let organisationsService: OrganisationsService;
 
@@ -32,13 +29,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        RouterTestingModule,
-        CoreModule,
-        StoresModule,
-        AdminModule
-      ]
+      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
@@ -51,12 +42,15 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
 
     activatedRoute.snapshot.params = { organisationId: '_org01', organisationUnitId: '_orgUnit01' };
 
-    organisationsService.getOrganisationUnitInfo = () => of({
-      id: '_org01', name: 'Org name', acronym: 'ORG', isActive: true, canActivate: false,
-    });
-
+    organisationsService.getOrganisationUnitInfo = () =>
+      of({
+        id: '_org01',
+        name: 'Org name',
+        acronym: 'ORG',
+        isActive: true,
+        canActivate: false
+      });
   });
-
 
   it('should create the component', () => {
     fixture = TestBed.createComponent(WizardOrganisationUnitActivateComponent);
@@ -65,9 +59,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
     expect(component).toBeTruthy();
   });
 
-
   it('should have initial information loaded and wizard with initial steps', () => {
-
     const expected = {
       organisation: { id: '_org01' },
       organisationUnit: { id: '_orgUnit01', name: 'Org name' },
@@ -79,7 +71,5 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
 
     fixture.detectChanges();
     expect(component.wizard.data).toEqual(expected);
-
   });
-
 });

@@ -7,7 +7,6 @@ import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
 import { hasPatentsItems } from './forms.config';
 
-
 // Labels.
 const stepsLabels = {
   q1: { label: 'Do you have any patents for your innovation?' },
@@ -17,12 +16,10 @@ const stepsLabels = {
   }
 };
 
-
 // Types.
 type InboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
 type StepPayloadType = InboundPayloadType;
 type OutboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
-
 
 // Logic.
 export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
@@ -31,21 +28,39 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        parameters: [{
-          id: 'hasPatents', dataType: 'radio-group', label: stepsLabels.q1.label,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: hasPatentsItems
-        }]
+        parameters: [
+          {
+            id: 'hasPatents',
+            dataType: 'radio-group',
+            label: stepsLabels.q1.label,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: hasPatentsItems
+          }
+        ]
       }),
       new FormEngineModel({
-        parameters: [{
-          id: 'hasOtherIntellectual', dataType: 'radio-group', label: stepsLabels.q2.label, description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: [
-            { value: 'YES', label: 'Yes', conditional: new FormEngineParameterModel({ id: 'otherIntellectual', dataType: 'text', label: 'Type of intellectual property', validations: { isRequired: [true, 'Type of intellectual property is required'], maxLength: 100 } }) },
-            { value: 'NO', label: 'No' }
-          ]
-        }]
+        parameters: [
+          {
+            id: 'hasOtherIntellectual',
+            dataType: 'radio-group',
+            label: stepsLabels.q2.label,
+            description: stepsLabels.q2.description,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: [
+              {
+                value: 'YES',
+                label: 'Yes',
+                conditional: new FormEngineParameterModel({
+                  id: 'otherIntellectual',
+                  dataType: 'text',
+                  label: 'Type of intellectual property',
+                  validations: { isRequired: [true, 'Type of intellectual property is required'], maxLength: 100 }
+                })
+              },
+              { value: 'NO', label: 'No' }
+            ]
+          }
+        ]
       })
     ],
     showSummary: true,
@@ -56,18 +71,15 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
-
   return {
     hasPatents: data.hasPatents,
     ...(data.patentNumbers && { patentNumbers: data.patentNumbers }),
     ...(data.hasOtherIntellectual && { hasOtherIntellectual: data.hasOtherIntellectual }),
     ...(data.otherIntellectual && { otherIntellectual: data.otherIntellectual })
   };
-
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
-
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({
@@ -91,5 +103,4 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   return toReturn;
-
 }

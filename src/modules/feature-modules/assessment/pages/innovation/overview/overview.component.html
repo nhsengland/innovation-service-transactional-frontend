@@ -1,5 +1,4 @@
 <theme-content-wrapper [status]="pageStatus">
-
   <div *ngIf="innovation?.owner && !innovation?.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span>User Locked</span>
@@ -10,7 +9,6 @@
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <ng-container [ngSwitch]="innovation?.status">
-
     <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
       <div class="nhsuk-action-link">
         <a *ngIf="!innovation?.assessment?.id" class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.id || '' }}/assessments/new">
@@ -51,7 +49,7 @@
         <theme-svg-icon type="success"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
         <h2 class="nhsuk-heading-m">
-          {{ innovation?.assessment?.reassessmentCount ? 'Needs reassessment complete' : 'Needs assessment complete' }}
+          {{ innovation?.assessment?.reassessmentCount ? "Needs reassessment complete" : "Needs assessment complete" }}
         </h2>
       </div>
 
@@ -66,12 +64,9 @@
           <dt class="nhsuk-summary-list__key">Assessor</dt>
           <dd class="nhsuk-summary-list__value">{{ innovation?.assessment?.assignedTo?.name }}</dd>
         </div>
-
       </dl>
     </ng-container>
-
   </ng-container>
-
 
   <ng-container *ngIf="innovation?.status && innovation?.status !== 'WAITING_NEEDS_ASSESSMENT'">
     <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>
@@ -112,21 +107,19 @@
           <tr *ngFor="let collaborator of innovationCollaborators" role="row" class="nhsuk-table__row">
             <td class="nhsuk-table__cell">{{ collaborator.name }}</td>
             <td class="nhsuk-table__cell">{{ collaborator.email }}</td>
-            <td class="nhsuk-table__cell ">{{ collaborator.role }}</td>
+            <td class="nhsuk-table__cell">{{ collaborator.role }}</td>
           </tr>
         </tbody>
       </table>
     </div>
   </details>
-
 </theme-content-wrapper>
-
 
 <ng-template #exemptionTemplate let-exemption="exemption">
   <ng-container *ngIf="exemption">
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Innovation exempt from KPI reports</dt>
-      <dd class="nhsuk-summary-list__value">{{ 'shared.catalog.assessment_exemptions.reasons.' + exemption.reason | translate }}</dd>
+      <dd class="nhsuk-summary-list__value">{{ "shared.catalog.assessment_exemptions.reasons." + exemption.reason | translate }}</dd>
       <dd class="nhsuk-summary-list__actions">
         <a routerLink="../assessments/{{ innovation?.assessment?.id }}/exemption-info">View details<span class="nhsuk-u-visually-hidden"> regarding exemption</span></a>
       </dd>

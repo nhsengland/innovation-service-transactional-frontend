@@ -9,7 +9,6 @@ import { ContextService } from './context/context.service';
 import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
 
-
 @NgModule({
   providers: [
     AuthenticationStore,

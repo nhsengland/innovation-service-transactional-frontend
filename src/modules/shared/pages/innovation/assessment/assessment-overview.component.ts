@@ -9,17 +9,19 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { maturityLevelItems, yesNoItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import {
+  maturityLevelItems,
+  yesNoItems,
+  yesPartiallyNoItems
+} from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
   templateUrl: './assessment-overview.component.html'
 })
 export class PageInnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
-
   innovationId: string;
   assessmentId: string;
   innovation: ContextInnovationType;
@@ -27,9 +29,9 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   assessment?: InnovationNeedsAssessmentInfoDTO;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
-  innovationReassessment: { label?: string, value: null | string }[] = [];
-  innovationSummary: { label?: string, value: null | string, comment: string }[] = [];
-  innovatorSummary: { label?: string, value: null | string, comment: string }[] = [];
+  innovationReassessment: { label?: string; value: null | string }[] = [];
+  innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
+  innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
   // Flags
   isAdminType: boolean;
@@ -45,7 +47,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
-
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -57,23 +58,21 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isQualifyingAccessorRole = this.isAccessorType && this.stores.authentication.isQualifyingAccessorRole();
-
   }
 
-
   ngOnInit(): void {
-
     this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId).subscribe(response => {
-
       this.assessment = response;
 
       this.assessmentHasBeenSubmitted = !!response.finishedAt;
-      this.shouldShowUpdatedAt = DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
+      this.shouldShowUpdatedAt =
+        DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
 
       if (this.assessment.reassessment) {
         this.innovationReassessment = [
           {
-            label: 'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
+            label:
+              'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
             value: yesNoItems.find(item => item.value === response.reassessment?.updatedInnovationRecord)?.label || ''
           },
           {
@@ -133,17 +132,18 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
-      this.setPageTitle(!this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment', { hint: `Innovation ${this.innovation.name}` });
+      this.setPageTitle(!this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment', {
+        hint: `Innovation ${this.innovation.name}`
+      });
 
       // Throw notification read dismiss.
       if (this.isInnovatorType) {
-        this.stores.context.dismissNotification(this.innovationId, { contextDetails: [NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR] });
+        this.stores.context.dismissNotification(this.innovationId, {
+          contextDetails: [NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR]
+        });
       }
 
       this.setPageStatus('READY');
-
     });
-
   }
-
 }

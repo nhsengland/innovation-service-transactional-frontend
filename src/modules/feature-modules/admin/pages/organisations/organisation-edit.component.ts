@@ -13,13 +13,11 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { EDIT_ORGANISATION_UNIT_QUESTIONS } from './organisation-edit-unit.config';
 import { EDIT_ORGANISATIONS_QUESTIONS } from './organisation-edit.config';
 
-
 @Component({
   selector: 'app-admin-pages-organisations-organisations-edit',
   templateUrl: './organisation-edit.component.html'
 })
 export class PageOrganisationEditComponent extends CoreComponent implements OnInit {
-
   organisationId: string;
   unitId: string;
   submitBtnClicked = false;
@@ -58,11 +56,18 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
   }
 
   ngOnInit(): void {
-    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe((organisation) => {
-      const data = (this.module === 'Organisation') ? ({ name: organisation.name, acronym: organisation.acronym }) : organisation.organisationUnits.filter(unit => (unit.id === this.unitId))[0];
-      this.wizard.gotoStep(1).setAnswers(this.wizard.runInboundParsing({ ...data })).runRules();
-      this.setPageStatus('READY');
-    },
+    this.organisationsService.getOrganisationInfo(this.organisationId).subscribe(
+      organisation => {
+        const data =
+          this.module === 'Organisation'
+            ? { name: organisation.name, acronym: organisation.acronym }
+            : organisation.organisationUnits.filter(unit => unit.id === this.unitId)[0];
+        this.wizard
+          .gotoStep(1)
+          .setAnswers(this.wizard.runInboundParsing({ ...data }))
+          .runRules();
+        this.setPageStatus('READY');
+      },
       () => {
         this.setPageStatus('ERROR');
         this.alert = {
@@ -72,14 +77,13 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         };
       }
     );
-
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
-    if (action === 'next' && !formData.valid) { // Don't move forward if step is NOT valid.
+    if (action === 'next' && !formData.valid) {
+      // Don't move forward if step is NOT valid.
       return;
     }
 
@@ -87,8 +91,11 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
 
     switch (action) {
       case 'previous':
-        if (this.wizard.isFirstStep()) { this.redirectTo(`organisations/${this.organisationId}`); }
-        else { this.wizard.previousStep(); }
+        if (this.wizard.isFirstStep()) {
+          this.redirectTo(`organisations/${this.organisationId}`);
+        } else {
+          this.wizard.previousStep();
+        }
         break;
       case 'next':
         this.wizard.nextStep();
@@ -96,7 +103,6 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
       default: // Should NOT happen!
         break;
     }
-
   }
 
   onSubmitWizard(): void {
@@ -106,34 +112,35 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
     switch (this.module) {
       case 'Organisation':
         this.adminOrganisationsService.updateOrganisation(body, this.organisationId).subscribe({
-          next: (response) => {
-            (response.organisationId) ?
-              this.redirectTo(`admin/organisations/${response.organisationId}`, { alert: 'updateOrganisationSuccess' })
-              : this.alert = { type: 'ERROR', title: 'Error updating organisation' };
+          next: response => {
+            response.organisationId
+              ? this.redirectTo(`admin/organisations/${response.organisationId}`, {
+                  alert: 'updateOrganisationSuccess'
+                })
+              : (this.alert = { type: 'ERROR', title: 'Error updating organisation' });
             this.submitBtnClicked = false;
           },
-          error: (err) => this.errorResponse(err)
+          error: err => this.errorResponse(err)
         });
         break;
       case 'Unit':
         this.adminOrganisationsService.updateUnit(body, this.unitId, this.organisationId).subscribe({
-          next: (response) => {
+          next: response => {
             if (response.unitId) {
               this.setRedirectAlertSuccess('You have successfully updated the organisation unit');
             } else {
-              this.setRedirectAlertError('Error updating unit')
+              this.setRedirectAlertError('Error updating unit');
             }
             this.redirectTo(`admin/organisations/${this.organisationId}/unit/${this.unitId}`);
 
             this.submitBtnClicked = false;
           },
-          error: (err) => this.errorResponse(err)
+          error: err => this.errorResponse(err)
         });
         break;
       default:
         break;
     }
-
   }
 
   errorResponse(error: { id: string }): void {

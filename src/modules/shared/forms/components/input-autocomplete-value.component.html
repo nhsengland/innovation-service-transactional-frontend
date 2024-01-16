@@ -1,5 +1,4 @@
-<div class="nhsuk-form-group" [ngClass]="{'nhsuk-form-group--error': hasError}">
-
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
       <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id"> {{ label }} </label>
@@ -14,12 +13,22 @@
   </ng-container>
 
   <ng-container *ngIf="hasError">
-    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
-      <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
-    </span>
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
   </ng-container>
 
-  <input type="text" matInput [formControl]="fieldControl" [id]="id" [name]="controlName" type="text" [placeholder]="placeholder" [value]="fieldControl.value" class="nhsuk-input" [matAutocomplete]="auto" (blur)="onInputBlur()">
+  <input
+    type="text"
+    matInput
+    [formControl]="fieldControl"
+    [id]="id"
+    [name]="controlName"
+    type="text"
+    [placeholder]="placeholder"
+    [value]="fieldControl.value"
+    class="nhsuk-input"
+    [matAutocomplete]="auto"
+    (blur)="onInputBlur()"
+  />
 
   <mat-autocomplete #auto="matAutocomplete" autoActiveFirstOption>
     <ng-container *ngIf="filteredItems$ | async as filteredItems">
@@ -35,8 +44,17 @@
   </mat-autocomplete>
 
   <ng-container *ngIf="anyConditionalField">
-    <div id="conditional-{{ id }}" class="nhsuk-radios__conditional" [ngClass]="{'nhsuk-radios__conditional--hidden': fieldControl.value !== 'Other condition', 'error': isConditionalFieldError(anyConditionalField.id)}">
-      <theme-form-input [formControl]="conditionalFormControl(anyConditionalField.id)" [label]="anyConditionalField.label" [description]="anyConditionalField.description" [pageUniqueField]="false"></theme-form-input>
+    <div
+      id="conditional-{{ id }}"
+      class="nhsuk-radios__conditional"
+      [ngClass]="{ 'nhsuk-radios__conditional--hidden': fieldControl.value !== 'Other condition', error: isConditionalFieldError(anyConditionalField.id) }"
+    >
+      <theme-form-input
+        [formControl]="conditionalFormControl(anyConditionalField.id)"
+        [label]="anyConditionalField.label"
+        [description]="anyConditionalField.description"
+        [pageUniqueField]="false"
+      ></theme-form-input>
     </div>
   </ng-container>
 
@@ -44,5 +62,4 @@
       <span id="default__assistiveHint" style="display: none;">
       When autocomplete results are available use up and down arrows to review and enter to select. Touch device users, explore by touch or with swipe gestures.
     </span> -->
-
 </div>

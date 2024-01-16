@@ -2,7 +2,11 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { EmailNotificationPreferencesDTO, NotificationPreferenceEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import {
+  EmailNotificationPreferencesDTO,
+  NotificationPreferenceEnum,
+  NotificationsService
+} from '@modules/shared/services/notifications.service';
 import { AuthenticationStore } from '@modules/stores';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
@@ -11,24 +15,22 @@ import { AuthenticationModel } from '@modules/stores/authentication/authenticati
   templateUrl: './email-notifications-list.component.html'
 })
 export class PageAccountEmailNotificationsListComponent extends CoreComponent implements OnInit {
-
   isAnyOn: boolean = false;
   hasMultipleRoles: boolean = false;
-  currentRole: null | { id: string, description: string };
+  currentRole: null | { id: string; description: string };
   displayName: string;
 
   currentUserContext: AuthenticationModel['userContext'];
 
-  formPreferencesList: { value: string, cssClass: string, preference: string, title: string, description: string }[] = [];
+  formPreferencesList: { value: string; cssClass: string; preference: string; title: string; description: string }[] =
+    [];
 
   preferencesResponse: EmailNotificationPreferencesDTO;
-
 
   constructor(
     private notificationsService: NotificationsService,
     private authenticationStore: AuthenticationStore
   ) {
-
     super();
 
     this.setPageTitle('Email notifications preferences');
@@ -42,30 +44,29 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
     } else {
       this.currentRole = {
         id: this.currentUserContext.roleId,
-        description: `${this.authenticationStore.getRoleDescription(this.currentUserContext.type)}${this.authenticationStore.isAccessorType() ? ` (${this.currentUserContext.organisationUnit?.name.trimEnd()})` : ''}`
+        description: `${this.authenticationStore.getRoleDescription(this.currentUserContext.type)}${
+          this.authenticationStore.isAccessorType()
+            ? ` (${this.currentUserContext.organisationUnit?.name.trimEnd()})`
+            : ''
+        }`
       };
     }
 
     this.preferencesResponse = {};
-
   }
 
   ngOnInit(): void {
-
     this.getEmailNotificationTypes();
     this.checkMultipleRoles();
-
   }
 
   private getEmailNotificationTypes(): void {
-
     this.setPageStatus('LOADING');
 
     this.notificationsService.getEmailNotificationsPreferences().subscribe(response => {
+      this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES);
 
-      this.isAnyOn = Object.values(response).some(item => item === NotificationPreferenceEnum.YES)
-
-      this.formPreferencesList = Object.keys(response).map((category) => ({
+      this.formPreferencesList = Object.keys(response).map(category => ({
         value: category,
         preference: this.getCategoryToggleInfo(response[category]).status,
         cssClass: this.getCategoryToggleInfo(response[category]).cssClass,
@@ -77,15 +78,12 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
       this.setPageStatus('READY');
     });
-
   }
 
   unsubscribeAllNotifications(): void {
-
     this.setPageStatus('LOADING');
 
     const body: { preferences: EmailNotificationPreferencesDTO } = { preferences: {} };
-
 
     Object.keys(this.preferencesResponse).forEach(key => {
       body.preferences[key] = this.isAnyOn ? NotificationPreferenceEnum.NO : NotificationPreferenceEnum.YES;
@@ -99,47 +97,48 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.setAlertSuccess('Your email notification preferences have been updated');
       },
       error: () => {
-        this.setAlertError('An error occurred when updating your notification preferences. Please try again or contact us for further help');
+        this.setAlertError(
+          'An error occurred when updating your notification preferences. Please try again or contact us for further help'
+        );
       }
     });
-
   }
 
   private checkMultipleRoles(): void {
-
     this.setPageStatus('LOADING');
 
     const user = this.authenticationStore.getUserInfo();
 
     this.hasMultipleRoles = user.roles.length > 1;
-
   }
 
-  private getCategoryMessages(category: string): { title: string, description: string } {
-
+  private getCategoryMessages(category: string): { title: string; description: string } {
     const role = this.currentUserContext?.type;
 
     if (this.translationExists('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role)) {
       return {
-        title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.title'),
-        description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.description')
+        title: this.translate(
+          'shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.title'
+        ),
+        description: this.translate(
+          'shared.catalog.innovation.email_notification_preferences.' + category + '.' + role + '.description'
+        )
       };
     } else {
       return {
         title: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.SHARED.title'),
-        description: this.translate('shared.catalog.innovation.email_notification_preferences.' + category + '.SHARED.description')
+        description: this.translate(
+          'shared.catalog.innovation.email_notification_preferences.' + category + '.SHARED.description'
+        )
       };
-    };
+    }
+  }
 
-  };
-
-  private getCategoryToggleInfo(status: string): { cssClass: string, status: string } {
-
+  private getCategoryToggleInfo(status: string): { cssClass: string; status: string } {
     if (status === 'YES') {
       return { cssClass: 'nhsuk-tag--green', status: 'On' };
     } else {
       return { cssClass: 'nhsuk-tag--grey', status: 'Off' };
     }
-
   }
 }
