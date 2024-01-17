@@ -14,7 +14,7 @@ import {
   CSVGeneratorSectionsNotFoundError,
   DocumentGeneratorInnovationInfoError
 } from '../errors';
-import { addCompanyInfoToAllSectionsPayload, getInnovationInfo, getSections } from '../pdf/parser';
+import { getIRDocumentExportData, getInnovationInfo, getSections } from '../pdf/parser';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 export const generateCSVHandler = async (innovationId: string, body: any, config: any) => {
@@ -49,9 +49,11 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
     throw new CSVGeneratorParserError(error);
   }
 
-  innovationInfo.owner?.organisation && addCompanyInfoToAllSectionsPayload(innovationInfo.owner.organisation, content);
-
-  const response = await generateCSVHandler(innovationId, content, config);
+  const response = await generateCSVHandler(
+    innovationId,
+    getIRDocumentExportData(content, innovationInfo.owner?.organisation),
+    config
+  );
 
   return response;
 };

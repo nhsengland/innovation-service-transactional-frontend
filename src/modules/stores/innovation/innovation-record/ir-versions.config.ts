@@ -14,13 +14,16 @@ import {
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
 
-export type AllSectionsOutboundPayloadType = {
+export type AllSectionsOutboundPayloadType = SectionsOutboundPayloadType[];
+
+export type SectionsOutboundPayloadType = {
   title: string;
   sections: {
     section: string;
     answers: { label: string; value: string }[];
+    status?: 'SUBMITTED' | 'UNKNOWN' | 'NOT_STARTED' | 'DRAFT' | null;
   }[];
-}[];
+};
 
 export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
 export const irVersionsClinicalMainCategoryItems = [
