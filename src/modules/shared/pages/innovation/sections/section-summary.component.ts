@@ -7,9 +7,9 @@ import { ContextInnovationType } from '@app/base/types';
 import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
+import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { SectionInfoType } from './section-info.component';
-import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
