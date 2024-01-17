@@ -8,7 +8,6 @@ import {
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202209/catalog.types';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionsListType } from '@modules/stores/innovation/innovation-record/ir-versions.types';
@@ -19,7 +18,6 @@ import {
 } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
-import { SectionSummaryInputData } from './section-summary.component';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -175,6 +173,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         ) {
           // If accessor, only view information if section is submitted.
           summaryList = [];
+          evidencesList = [];
         } else {
           // Special business rule around section 2.2.
           sectionInfo.hasEvidences = !!(
