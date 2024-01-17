@@ -3,7 +3,6 @@ import axios from 'axios';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
-  SectionsOutboundPayloadType,
   getAllSectionsSummary
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
