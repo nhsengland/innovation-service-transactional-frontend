@@ -745,6 +745,9 @@ export const locale = {
             AU09_TRANSFER_EXPIRED: {
               title: `Your request to transfer ownership of innovation {{innovationName}} has expired. You can create a new transfer request in `,
               link: `manage innovation.`
+            },
+            AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
+              title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
             }
           },
           section_status: {
