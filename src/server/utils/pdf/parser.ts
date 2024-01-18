@@ -46,21 +46,22 @@ export const generatePDFHandler = async (innovationId: string, body: any, config
   return response.data;
 };
 
-export type innovationRecordDocumentExportDataType = {
+export type InnovationRecordDocumentExportDataType = {
   sections: AllSectionsOutboundPayloadType;
   startSectionIndex: number;
 };
 
 export const getIRDocumentExportData = (
+  documentType: 'CSV' | 'PDF',
   allSectionsData: AllSectionsOutboundPayloadType,
   companyInfo?: { name: string; size: null | string; registrationNumber: null | string }
-): innovationRecordDocumentExportDataType => {
-  let sectionDataWithCompany: innovationRecordDocumentExportDataType = {
+): InnovationRecordDocumentExportDataType => {
+  let sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
     sections: allSectionsData,
     startSectionIndex: companyInfo ? 0 : 1
   };
 
-  if (companyInfo) {
+  if ((documentType === 'PDF' && companyInfo) || documentType === 'CSV') {
     sectionDataWithCompany.sections = [
       {
         title: 'Company Details',
@@ -71,15 +72,15 @@ export const getIRDocumentExportData = (
             answers: [
               {
                 label: 'What is the name of your company?',
-                value: companyInfo.name ?? ''
+                value: companyInfo?.name ?? ''
               },
               {
                 label: 'Do you have a UK company registration number?',
-                value: companyInfo.registrationNumber ?? ''
+                value: companyInfo?.registrationNumber ?? ''
               },
               {
                 label: 'What is the size of your company or organisation?',
-                value: companyInfo.size ?? ''
+                value: companyInfo?.size ?? ''
               }
             ]
           }
@@ -118,7 +119,7 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
 
   const response = await generatePDFHandler(
     innovationId,
-    getIRDocumentExportData(content, innovationInfo.owner?.organisation),
+    getIRDocumentExportData('PDF', content, innovationInfo.owner?.organisation),
     config
   );
 

@@ -51,7 +51,7 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   const response = await generateCSVHandler(
     innovationId,
-    getIRDocumentExportData(content, innovationInfo.owner?.organisation),
+    getIRDocumentExportData('CSV', content, innovationInfo.owner?.organisation),
     config
   );
 
