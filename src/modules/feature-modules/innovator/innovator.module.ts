@@ -49,6 +49,7 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
+import { NewInnovationForbiddenPageGuard } from './guards/new-innovation-forbidden-page.guard';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -95,6 +96,7 @@ import { InnovatorService } from './services/innovator.service';
     FirstTimeSigninGuard,
     ManageGuard,
     ShareInnovationRecordGuard,
+    NewInnovationForbiddenPageGuard,
 
     // Services.
     InnovatorService
