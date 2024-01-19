@@ -206,6 +206,7 @@ const routes: Routes = [
           { path: 'new', pathMatch: 'full', component: PageUserNewComponent },
           {
             path: ':userId',
+            runGuardsAndResolvers: 'always',
             resolve: { user: mapToResolve(ServiceUserDataResolver) },
             data: { breadcrumb: (data: { user: { id: string; name: string } }) => `${data.user.name}` },
             children: [
