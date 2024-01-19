@@ -58,7 +58,6 @@ export class PageUserEmailComponent extends CoreComponent {
     if (email !== emailConfirmation) {
       this.setAlertError('The email addresses do not match');
       this.form.get('emailConfirmation')?.setErrors({ customError: true, message: 'The email addresses do not match' });
-      console.log('this.form.valid', this.form.valid);
     }
 
     if (!this.form.valid) {
