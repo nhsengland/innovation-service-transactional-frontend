@@ -44,6 +44,7 @@
                 name="{{ filter.key }}CheckboxInputFilter"
                 class="nhsuk-input search-input-icon nhsuk-u-margin-bottom-3"
                 (input)="onCheckboxInputFilter(filter, $event)"
+                attr.aria-label="Search for {{ filter.key }} filter"
               />
               <theme-form-checkbox-array [arrayName]="filter.key" [items]="filter.items" size="small" [pageUniqueField]="false" />
             </theme-collapsible-filter>
@@ -81,9 +82,10 @@
 
       <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
         <dt *ngIf="!this.filtersModel.hasSelectedFilters" class="nhsuk-u-font-size-16">No filter has been selected</dt>
+        <dd></dd>
 
         <ng-container *ngFor="let filter of this.filtersModel.selected$ | async; last as isLast">
-          <div class="d-flex align-items-center" [ngClass]="isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
+          <dt class="d-flex align-items-center" [ngClass]="isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
             <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
               <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
               <dd class="width-75">
@@ -114,13 +116,18 @@
             </ng-container>
 
             <div *ngIf="filter.type === 'CHECKBOXES'">
-              <ng-container *ngFor="let checkbox of filter.selected">
-                <!-- TODO: Think of a better way to make this dynamic -->
-                <dt *ngIf="checkbox.key === 'assignedToMe'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing innovations assigned to me</dt>
-                <dt *ngIf="checkbox.key === 'suggestedOnly'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing suggested innovations</dt>
-              </ng-container>
+              <dl class="nhsuk-u-margin-0">
+                <ng-container *ngFor="let checkbox of filter.selected">
+                  <!-- TODO: Think of a better way to make this dynamic -->
+                  <dt *ngIf="checkbox.key === 'assignedToMe'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing innovations assigned to me</dt>
+                  <dd></dd>
+                  <dt *ngIf="checkbox.key === 'suggestedOnly'" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">Viewing suggested innovations</dt>
+                  <dd></dd>
+                </ng-container>
+              </dl>
             </div>
-          </div>
+          </dt>
+          <dd></dd>
         </ng-container>
       </dl>
 
@@ -139,11 +146,11 @@
       </ng-container>
 
       <ng-container *ngIf="innovationCardsData.length > 0">
-        <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list">
           <ng-container *ngFor="let item of innovationCardsData">
             <theme-advanced-search-innovation-card [innovationCardData]="item" />
           </ng-container>
-        </dl>
+        </div>
       </ng-container>
 
       <div class="nhsuk-u-padding-bottom-4">

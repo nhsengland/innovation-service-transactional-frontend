@@ -1,5 +1,5 @@
 <div class="nhsuk-summary-list__row">
-  <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
+  <div class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
     <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-font-weight-normal nhsuk-u-font-size-16">
       <li *ngIf="innovationCardData.innovationStatus.status !== 'WITHDRAWN'">
         <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
@@ -91,5 +91,5 @@
         <span>None</span>
       </ng-template>
     </ul>
-  </dt>
+  </div>
 </div>
