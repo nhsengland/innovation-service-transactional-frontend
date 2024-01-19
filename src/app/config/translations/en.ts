@@ -713,9 +713,6 @@ export const locale = {
               title: `{{unitName}} are no longer supporting innovations through the NHS Innovation Service. This means they will no longer be supporting innovation {{innovationName}}. `,
               link: `View your current support organisations.`
             },
-            AP08_USER_EMAIL_ADDRESS_UPDATED: {
-              title: `Your email has been updated on the NHS Innovation Service.`
-            },
             // AUTOMATIC
             AU01_INNOVATOR_INCOMPLETE_RECORD: {
               title: `Your innovation record remains in draft. `,
