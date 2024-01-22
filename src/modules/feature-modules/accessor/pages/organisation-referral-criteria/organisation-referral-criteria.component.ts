@@ -210,7 +210,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
         },
         {
           type: 'BULLET_LIST',
-          values: [{ description: 'Accelerate Wales' }, { description: 'Digital Health Ecosystem Wales (DHEW)' }]
+          values: [{ description: 'Digital Health Ecosystem Wales (DHEW)' }]
         },
         {
           type: 'PARAGRAPH',
@@ -229,7 +229,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
             { description: 'Access to Science Parks' },
             {
               description: 'Subject Expertise and Thematic Focus Groups',
-              subBullets: ['Digital & AI', 'Telehealth', 'Precision medicine (advanced therapies, early diagnostics)']
+              subBullets: ['Digital & AI', 'Precision medicine (advanced therapies, early diagnostics)']
             },
             { description: 'User Centred Design / Product Design' },
             { description: 'Research and Development' },
