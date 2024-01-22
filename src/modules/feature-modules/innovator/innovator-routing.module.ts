@@ -68,7 +68,7 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
@@ -93,7 +93,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
-import { NewInnovationForbiddenPageGuard } from './guards/new-innovation-forbidden-page.guard';
+import { checkStatusGuard } from './guards/check-status.guard';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -351,7 +351,7 @@ const routes: Routes = [
 
               {
                 path: 'documents',
-                canActivate: mapToCanActivate([NewInnovationForbiddenPageGuard]),
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED]), false],
                 data: { breadcrumb: 'Documents' },
                 children: [
                   {
@@ -508,7 +508,7 @@ const routes: Routes = [
 
               {
                 path: 'support-summary',
-                canActivate: mapToCanActivate([NewInnovationForbiddenPageGuard]),
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], false)],
                 data: { breadcrumb: 'Support summary' },
                 children: [
                   {
