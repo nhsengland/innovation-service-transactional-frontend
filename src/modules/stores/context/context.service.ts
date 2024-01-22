@@ -15,6 +15,8 @@ import { NGXLogger } from 'ngx-logger';
 import { AuthenticationStore } from '../authentication/authentication.store';
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { AuthenticationModel } from '../authentication/authentication.models';
+import { ContextInnovationType } from './context.types';
 
 type InnovationNotificationsDTO = {
   count: number;
@@ -82,14 +84,13 @@ export class ContextService {
     );
   }
 
-  setInnovationContext(
+  getInnovationContextInfo(
     innovationId: string,
-    contextStore: ContextStore
-  ): Observable<null | { id: string; name: string }> {
-    const requestUserType = this.authenticationStore.getUserType();
+    userContext: AuthenticationModel['userContext']
+  ): Observable<ContextInnovationType> {
     const qp: { fields: ('assessment' | 'supports')[] } = { fields: [] };
 
-    switch (requestUserType) {
+    switch (userContext?.type) {
       case UserRoleEnum.INNOVATOR:
         qp.fields = ['assessment', 'supports'];
         break;
@@ -107,25 +108,19 @@ export class ContextService {
         break;
     }
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId')
-      .setPathParams({ innovationId })
-      .setQueryParams(qp);
-
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
     return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        const userContext = this.authenticationStore.getUserContextInfo();
-
         let support: undefined | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string };
 
-        if (this.authenticationStore.isAccessorType()) {
+        if (userContext?.type === UserRoleEnum.ACCESSOR || userContext?.type === UserRoleEnum.QUALIFYING_ACCESSOR) {
           support = (response.supports ?? []).find(
             item => item.organisationUnitId === userContext?.organisationUnit?.id
           );
         }
 
-        contextStore.setInnovation({
+        return {
           id: response.id,
           name: response.name,
           status:
@@ -170,19 +165,7 @@ export class ContextService {
           countryName: response.countryName,
           description: response.description,
           postCode: response.postCode
-        });
-
-        return {
-          id: response.id,
-          name: response.name
         };
-      }),
-      catchError(error => {
-        contextStore.clearInnovation();
-        this.router.navigateByUrl('error/forbidden-innovation');
-
-        this.logger.error('Error fetching data innovation data', error);
-        return of(null);
       })
     );
   }

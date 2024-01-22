@@ -94,6 +94,8 @@ import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/inno
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { checkStatusGuard } from './guards/check-status.guard';
+import { checkRoleGuard } from './guards/check-role.guard';
+import { UserRoleEnum } from '@app/base/enums';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -351,7 +353,7 @@ const routes: Routes = [
 
               {
                 path: 'documents',
-                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED]), false],
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], false)],
                 data: { breadcrumb: 'Documents' },
                 children: [
                   {
