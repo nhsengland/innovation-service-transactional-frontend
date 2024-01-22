@@ -146,11 +146,11 @@
       </ng-container>
 
       <ng-container *ngIf="innovationCardsData.length > 0">
-        <div class="nhsuk-summary-list">
-          <ng-container *ngFor="let item of innovationCardsData">
+        <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0" *ngFor="let item of innovationCardsData">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
             <theme-advanced-search-innovation-card [innovationCardData]="item" />
-          </ng-container>
-        </div>
+          </dt>
+        </dl>
       </ng-container>
 
       <div class="nhsuk-u-padding-bottom-4">
