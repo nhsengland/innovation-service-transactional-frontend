@@ -1,95 +1,94 @@
-<div class="nhsuk-summary-list__row">
-  <div class="nhsuk-summary-list__key nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
-    <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-font-weight-normal nhsuk-u-font-size-16">
-      <li *ngIf="innovationCardData.innovationStatus.status !== 'WITHDRAWN'">
-        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
-          {{ innovationCardData.name }}
-        </a>
-      </li>
-      <li *ngIf="innovationCardData.innovationStatus.status === 'WITHDRAWN'">
-        <span class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
-          {{ innovationCardData.name }}
-        </span>
-      </li>
+<div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
+  <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-font-weight-normal nhsuk-u-font-size-16">
+    <li *ngIf="innovationCardData.innovationStatus.status !== 'WITHDRAWN'">
+      <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
+        {{ innovationCardData.name }}
+      </a>
+    </li>
+    <li *ngIf="innovationCardData.innovationStatus.status === 'WITHDRAWN'">
+      <span class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
+        {{ innovationCardData.name }}
+      </span>
+    </li>
 
-      <li>
-        <div class="d-flex flex-direction-column">
-          <span>
-            {{ innovationCardData.owner }}.<ng-container *ngIf="innovationCardData.countryName">
-              {{ innovationCardData.countryName }}<ng-container *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</ng-container>
-            </ng-container>
-          </span>
-          <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
-            Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.medium_date" | translate) }}
-          </span>
-        </div>
-      </li>
-
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Categories: </span>
-        <span>{{ categoriesList }}</span>
-      </li>
-
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Care settings: </span>
-        <span>{{ careSettingsList }}</span>
-      </li>
-
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
-        <span>{{ diseasesAndConditionsList }}</span>
-      </li>
-
-      <ng-container *ngIf="isAdminType">
-        <li class="nhsuk-u-margin-bottom-1">
-          <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
-          <span>{{ keyHealthInequalitiesList }}</span>
-        </li>
-
-        <li class="nhsuk-u-margin-bottom-1">
-          <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
-          <span>{{ involvedAACProgrammesList }}</span>
-        </li>
-      </ng-container>
-
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Engaging units ({{ innovationCardData.engagingUnits.length }}): </span>
-        <ng-container *ngIf="innovationCardData.engagingUnits.length > 0; else none">
-          <ng-container *ngFor="let unit of innovationCardData.engagingUnits">
-            <theme-tag [type]="'WHITE'" label="{{ unit }}" class="nhsuk-u-margin-left-1" />
+    <li>
+      <div class="d-flex flex-direction-column">
+        <span>
+          {{ innovationCardData.owner }}.<ng-container *ngIf="innovationCardData.countryName">
+            {{ innovationCardData.countryName }}<ng-container *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</ng-container>
           </ng-container>
+        </span>
+        <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
+          Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.medium_date" | translate) }}
+        </span>
+      </div>
+    </li>
+
+    <li class="nhsuk-u-margin-bottom-1">
+      <span class="nhsuk-u-font-weight-bold">Categories: </span>
+      <span>{{ categoriesList }}</span>
+    </li>
+
+    <li class="nhsuk-u-margin-bottom-1">
+      <span class="nhsuk-u-font-weight-bold">Care settings: </span>
+      <span>{{ careSettingsList }}</span>
+    </li>
+
+    <li class="nhsuk-u-margin-bottom-1">
+      <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
+      <span>{{ diseasesAndConditionsList }}</span>
+    </li>
+
+    <ng-container *ngIf="isAdminType">
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
+        <span>{{ keyHealthInequalitiesList }}</span>
+      </li>
+
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
+        <span>{{ involvedAACProgrammesList }}</span>
+      </li>
+    </ng-container>
+
+    <li class="nhsuk-u-margin-bottom-1">
+      <span class="nhsuk-u-font-weight-bold">Engaging units ({{ innovationCardData.engagingUnits.length }}): </span>
+      <ng-container *ngIf="innovationCardData.engagingUnits.length > 0; else none">
+        <ng-container *ngFor="let unit of innovationCardData.engagingUnits">
+          <theme-tag [type]="'WHITE'" label="{{ unit }}" class="nhsuk-u-margin-left-1" />
         </ng-container>
-      </li>
+      </ng-container>
+    </li>
 
-      <li *ngIf="isAccessorType">
-        <span class="nhsuk-u-font-weight-bold">Support status: </span>
-        <span class="nhsuk-u-font-weight-bold">
-          <theme-tag
-            type="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.cssColorClass' | translate }}"
-            label="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.name' | translate }}"
-          />
-        </span>
-        <span *ngIf="innovationCardData.supportStatus.updatedAt" class="font-color-secondary">
-          Status updated on {{ innovationCardData.supportStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span
-        >
-      </li>
+    <li *ngIf="isAccessorType">
+      <span class="nhsuk-u-font-weight-bold">Support status: </span>
+      <span class="nhsuk-u-font-weight-bold">
+        <theme-tag
+          type="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.name' | translate }}"
+        />
+      </span>
+      <span *ngIf="innovationCardData.supportStatus.updatedAt" class="font-color-secondary">
+        Status updated on {{ innovationCardData.supportStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span
+      >
+    </li>
 
-      <li *ngIf="isAdminType">
-        <span class="nhsuk-u-font-weight-bold">Innovation status: </span>
-        <span class="nhsuk-u-font-weight-bold">
-          <theme-tag
-            type="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.cssColorClass' | translate }}"
-            label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.name' | translate }}"
-          />
-        </span>
-        <span *ngIf="innovationCardData.innovationStatus.updatedAt" class="font-color-secondary">
-          Record last updated on {{ innovationCardData.innovationStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span
-        >
-      </li>
+    <li *ngIf="isAdminType">
+      <span class="nhsuk-u-font-weight-bold">Innovation status: </span>
+      <span class="nhsuk-u-font-weight-bold">
+        <theme-tag
+          type="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.name' | translate }}"
+        />
+      </span>
+      <span *ngIf="innovationCardData.innovationStatus.updatedAt" class="font-color-secondary">
+        Record last updated on {{ innovationCardData.innovationStatus.updatedAt | date: ("app.date_formats.medium_date" | translate) }}</span
+      >
+    </li>
 
-      <ng-template #none>
-        <span>None</span>
-      </ng-template>
-    </ul>
-  </div>
+    <ng-template #none>
+      <span>None</span>
+    </ng-template>
+  </ul>
 </div>
+<hr class="nhsuk-section-break nhsuk-section-break--visible" />
