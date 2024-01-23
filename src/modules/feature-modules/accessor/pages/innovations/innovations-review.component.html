@@ -60,14 +60,14 @@
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
                     <a
-                      *ngIf="currentTab.key !== 'ENGAGING' && item.assessment?.id"
+                      *ngIf="item.supportStatus !== 'ENGAGING' && item.assessment?.id"
                       routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
                       attr.aria-label="View {{ item.name }} innovation assessment details"
                     >
                       {{ item.name }}
                     </a>
-                    <span *ngIf="currentTab.key !== 'ENGAGING' && !item.assessment?.id"> {{ item.name }} </span>
-                    <a *ngIf="currentTab.key === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation">
+                    <span *ngIf="item.supportStatus !== 'ENGAGING' && !item.assessment?.id"> {{ item.name }} </span>
+                    <a *ngIf="item.supportStatus === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation">
                       {{ item.name }}
                     </a>
                   </div>
