@@ -200,7 +200,6 @@ export class ContextStore extends Store<ContextModel> {
     return this.contextService.getInnovationContextInfo(innovationId, context).pipe(
       tap(innovation => {
         this.setInnovation(innovation);
-        return innovation;
       })
     );
   }
