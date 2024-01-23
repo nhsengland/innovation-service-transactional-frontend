@@ -353,7 +353,7 @@ const routes: Routes = [
 
               {
                 path: 'documents',
-                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], false)],
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                 data: { breadcrumb: 'Documents' },
                 children: [
                   {
@@ -510,7 +510,7 @@ const routes: Routes = [
 
               {
                 path: 'support-summary',
-                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], false)],
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                 data: { breadcrumb: 'Support summary' },
                 children: [
                   {

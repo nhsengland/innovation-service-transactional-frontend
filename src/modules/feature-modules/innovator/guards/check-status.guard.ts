@@ -6,7 +6,7 @@ import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-export function checkStatusGuard(statusList: InnovationStatusEnum[], allowList: boolean = true): CanActivateFn {
+export function checkStatusGuard(statusList: InnovationStatusEnum[], blockList: boolean = false): CanActivateFn {
   return (route: ActivatedRouteSnapshot) => {
     const router: Router = inject(Router);
     const contextService: ContextService = inject(ContextService);
@@ -16,9 +16,9 @@ export function checkStatusGuard(statusList: InnovationStatusEnum[], allowList: 
       .getInnovationContextInfo(route.params.innovationId, authenticationStore.getUserContextInfo())
       .pipe(
         map(contextInfo => {
-          const allowStatusCheck = allowList
-            ? statusList.includes(contextInfo.status)
-            : !statusList.includes(contextInfo.status);
+          const allowStatusCheck = blockList
+            ? !statusList.includes(contextInfo.status)
+            : statusList.includes(contextInfo.status);
 
           if (allowStatusCheck) {
             return true;
