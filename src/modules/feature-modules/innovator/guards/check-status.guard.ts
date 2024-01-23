@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import { AuthenticationStore, ContextService } from '@modules/stores';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-// import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 

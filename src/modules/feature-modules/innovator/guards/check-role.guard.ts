@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { UserRoleEnum } from '@app/base/enums';
-import { AuthenticationService, AuthenticationStore } from '@modules/stores';
+import { AuthenticationStore } from '@modules/stores';
 
 export function checkRoleGuard(roles: UserRoleEnum[]): CanActivateFn {
   return () => {
