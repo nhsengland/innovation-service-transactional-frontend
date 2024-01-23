@@ -5,10 +5,8 @@
         {{ innovationCardData.name }}
       </a>
     </li>
-    <li *ngIf="innovationCardData.innovationStatus.status === 'WITHDRAWN'">
-      <span class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
-        {{ innovationCardData.name }}
-      </span>
+    <li *ngIf="innovationCardData.innovationStatus.status === 'WITHDRAWN'" class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19">
+      {{ innovationCardData.name }}
     </li>
 
     <li>
@@ -24,31 +22,16 @@
       </div>
     </li>
 
-    <li class="nhsuk-u-margin-bottom-1">
-      <span class="nhsuk-u-font-weight-bold">Categories: </span>
-      <span>{{ categoriesList }}</span>
-    </li>
+    <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Categories: </span>{{ categoriesList }}</li>
 
-    <li class="nhsuk-u-margin-bottom-1">
-      <span class="nhsuk-u-font-weight-bold">Care settings: </span>
-      <span>{{ careSettingsList }}</span>
-    </li>
+    <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Care settings: </span>{{ careSettingsList }}</li>
 
-    <li class="nhsuk-u-margin-bottom-1">
-      <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
-      <span>{{ diseasesAndConditionsList }}</span>
-    </li>
+    <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>{{ diseasesAndConditionsList }}</li>
 
     <ng-container *ngIf="isAdminType">
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
-        <span>{{ keyHealthInequalitiesList }}</span>
-      </li>
+      <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Health inequalities: </span>{{ keyHealthInequalitiesList }}</li>
 
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
-        <span>{{ involvedAACProgrammesList }}</span>
-      </li>
+      <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">AAC involvement: </span>{{ involvedAACProgrammesList }}</li>
     </ng-container>
 
     <li class="nhsuk-u-margin-bottom-1">
@@ -61,8 +44,8 @@
     </li>
 
     <li *ngIf="isAccessorType">
-      <span class="nhsuk-u-font-weight-bold">Support status: </span>
-      <span class="nhsuk-u-font-weight-bold">
+      <span class="nhsuk-u-font-weight-bold"
+        >Support status:
         <theme-tag
           type="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.cssColorClass' | translate }}"
           label="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.supportStatus.status + '.name' | translate }}"
@@ -74,8 +57,8 @@
     </li>
 
     <li *ngIf="isAdminType">
-      <span class="nhsuk-u-font-weight-bold">Innovation status: </span>
-      <span class="nhsuk-u-font-weight-bold">
+      <span class="nhsuk-u-font-weight-bold"
+        >Innovation status:
         <theme-tag
           type="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.cssColorClass' | translate }}"
           label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.innovationStatus.status + '.name' | translate }}"
