@@ -10,10 +10,8 @@
     </li>
 
     <li class="d-flex flex-direction-column">
-      {{ innovationCardData.owner }}.
-      <ng-container *ngIf="innovationCardData.countryName">
-        {{ innovationCardData.countryName }}
-        <ng-container *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</ng-container>
+      {{ innovationCardData.owner }}.<ng-container *ngIf="innovationCardData.countryName">
+        {{ innovationCardData.countryName }}<ng-container *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</ng-container>
       </ng-container>
       <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
         Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.medium_date" | translate) }}
