@@ -1,18 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { ContextStore } from './context.store';
-import { NGXLogger } from 'ngx-logger';
-import { AuthenticationStore } from '../authentication/authentication.store';
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { AuthenticationModel } from '../authentication/authentication.models';
@@ -31,11 +27,7 @@ export class ContextService {
 
   constructor(
     private http: HttpClient,
-    private envVariablesStore: EnvironmentVariablesStore,
-    //
-    private authenticationStore: AuthenticationStore,
-    private router: Router,
-    private logger: NGXLogger
+    private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
   getUserUnreadNotifications(): Observable<{ total: number }> {
