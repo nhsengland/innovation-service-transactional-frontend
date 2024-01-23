@@ -83,16 +83,12 @@ export class ContextService {
     const qp: { fields: ('assessment' | 'supports')[] } = { fields: [] };
 
     switch (userContext?.type) {
-      case UserRoleEnum.INNOVATOR:
-        qp.fields = ['assessment', 'supports'];
-        break;
       case UserRoleEnum.ASSESSMENT:
         qp.fields = ['assessment'];
         break;
+      case UserRoleEnum.INNOVATOR:
       case UserRoleEnum.ACCESSOR:
       case UserRoleEnum.QUALIFYING_ACCESSOR:
-        qp.fields = ['assessment', 'supports'];
-        break;
       case UserRoleEnum.ADMIN:
         qp.fields = ['assessment', 'supports'];
         break;

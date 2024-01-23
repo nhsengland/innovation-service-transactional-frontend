@@ -2,7 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
@@ -198,7 +198,7 @@ export class ContextStore extends Store<ContextModel> {
     }
 
     return this.contextService.getInnovationContextInfo(innovationId, context).pipe(
-      map(innovation => {
+      tap(innovation => {
         this.setInnovation(innovation);
         return innovation;
       })
