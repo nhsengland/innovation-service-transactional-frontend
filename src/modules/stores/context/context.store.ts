@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
-import { Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 
 import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
@@ -11,6 +11,7 @@ import { ContextService } from './context.service';
 import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
+import { AuthenticationModel } from '../authentication/authentication.models';
 
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
@@ -186,6 +187,21 @@ export class ContextStore extends Store<ContextModel> {
     }
 
     this.setState();
+  }
+
+  getOrLoadInnovation(
+    innovationId: string,
+    context: AuthenticationModel['userContext']
+  ): Observable<ContextInnovationType> {
+    if (this.state.innovation) {
+      return of(this.state.innovation);
+    }
+
+    return this.contextService.getInnovationContextInfo(innovationId, context).pipe(
+      tap(innovation => {
+        this.setInnovation(innovation);
+      })
+    );
   }
 
   /**
