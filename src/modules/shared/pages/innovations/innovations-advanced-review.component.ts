@@ -197,6 +197,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         response.data.forEach(result => {
           const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
+          const translatedDiseases = result.diseasesAndConditions?.length
+            ? result.diseasesAndConditions?.map(item => (item === 'NONE' ? 'None' : item))
+            : ['Question not answered'];
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
           const innovationData: InnovationCardData = {
@@ -207,7 +210,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             postCode: result.postcode,
             categories: this.translateLists(result.categories, categoriesItems, result.otherCategoryDescription),
             careSettings: this.translateLists(result.careSettings, careSettingsItems, result.otherCareSetting),
-            diseasesAndConditions: this.translateLists(result.diseasesAndConditions, diseasesConditionsImpactItems),
+            diseasesAndConditions: translatedDiseases,
             keyHealthInequalities: this.translateLists(
               result.keyHealthInequalities,
               keyHealthInequalitiesItems,
