@@ -269,16 +269,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return DatesHelper.translateTwoDatesOrder(date.startDate, date.endDate);
   }
 
-  onCheckboxInputFilter(filter: Filter, e: Event): void {
-    const search = (e.target as HTMLInputElement).value;
-    this.filtersModel.updateDataset(filter, search);
-  }
-
-  clearFilters(): void {
-    this.autocompleteInputs?.forEach(i => (i.nativeElement.value = ''));
-    this.filtersModel.clearAll();
-  }
-
   private translateLists(rawArr: null | string[], translations: any[], other?: null | string): string[] {
     return rawArr?.length ? rawArr.map(i => this.findTranslation(translations, i, other)) : ['Question not answered'];
   }

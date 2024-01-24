@@ -7,6 +7,7 @@ import { DynamicModule } from 'ng-dynamic-component';
 // Modules.
 import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // Pages.
 // // Account.
@@ -96,6 +97,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
+import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wrapper.component';
 
 @NgModule({
   imports: [
@@ -106,7 +108,8 @@ import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/secti
 
     // Modules.
     ThemeModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [
     // Pages.
@@ -178,7 +181,8 @@ import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/secti
     PluralTranslatePipe,
 
     // Components
-    OrganisationSuggestionsCardComponent
+    OrganisationSuggestionsCardComponent,
+    FiltersWrapperComponent
   ],
   providers: [
     // Resolvers.
