@@ -36,7 +36,6 @@ export class PageUserEmailComponent extends CoreComponent {
     super();
 
     this.setPageTitle("Change user's email");
-    this.setBackLink('Go back');
 
     this.user = {
       id: this.activatedRoute.snapshot.params.userId,
