@@ -43,6 +43,8 @@ export class SvgIconComponent implements OnInit {
 
   svgColors: { stroke: string; fill: string } = { stroke: '', fill: '' };
 
+  constructor() {}
+
   ngOnInit(): void {
     if (!this.customColor) {
       switch (this.type) {

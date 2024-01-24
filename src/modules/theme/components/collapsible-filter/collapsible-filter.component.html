@@ -20,10 +20,7 @@
 </div>
 
 <ng-template #filterIcon>
-  <svg *ngIf="isOpen() === false" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
-  </svg>
+  <theme-svg-icon *ngIf="isOpen() === false" type="plus" />
   <svg *ngIf="isOpen() === true" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
     <circle cx="12" cy="12" r="10"></circle>
     <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>

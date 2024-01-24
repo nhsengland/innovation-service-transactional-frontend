@@ -112,13 +112,13 @@
 
 <ng-template #menuItemTemplateLink let-item="item" let-css="css" let-showIcon="showIcon">
   <div class="d-flex align-items-center">
-    <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
-      >{{ item.label }}
-      <theme-svg-icon type="chevron-right" />
+    <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }">
+      <span>{{ item.label }}</span>
+      <theme-svg-icon *ngIf="showIcon" type="chevron-right" />
     </a>
     <a *ngIf="item.fullReload" [href]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
       >{{ item.label }}
-      <theme-svg-icon type="chevron-right" />
+      <theme-svg-icon *ngIf="showIcon" type="chevron-right" />
     </a>
     <theme-notification-tag *ngIf="notifications[item.id]" [label]="notifications[item.id]" class="nhsuk-u-padding-right-2 nhsuk-u-padding-bottom-3"></theme-notification-tag>
   </div>
