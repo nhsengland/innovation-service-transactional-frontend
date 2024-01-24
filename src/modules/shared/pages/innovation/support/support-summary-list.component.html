@@ -21,18 +21,7 @@
                   attr.aria-controls="engaging-section-{{ unitItem.id }}"
                 >
                   <theme-svg-icon *ngIf="!unitItem.isOpened" type="plus" />
-                  <svg
-                    *ngIf="unitItem.isOpened"
-                    class="nhsuk-icon__minus nhsuk-u-margin-top-1 nhsuk-u-margin-right-2"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    height="25"
-                    width="25"
-                    aria-hidden="true"
-                  >
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
-                  </svg>
+                  <theme-svg-icon *ngIf="unitItem.isOpened" type="minus" />
                   <span class="nhsuk-u-margin-left-2"> {{ unitItem.sameOrganisation ? unitItem.name + " (your organisation)" : unitItem.name }}</span>
                 </button>
                 <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
@@ -161,7 +150,7 @@
       <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link">
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
         <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
-          <theme-svg-icon type="action"></theme-svg-icon>
+          <theme-svg-icon type="arrow-right-circle" />
           <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
         </a>
       </div>

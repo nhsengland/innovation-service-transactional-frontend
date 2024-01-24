@@ -10,15 +10,17 @@ type SvgPaletteDataType = { [key in SvgPaletteColorsType]: { stroke: string; fil
 export class SvgIconComponent implements OnInit {
   @Input() type:
     | ''
-    | 'action'
     | 'success'
     | 'error'
     | 'edit'
     | 'chevron-left'
     | 'chevron-right'
+    | 'close'
+    | 'arrow-right-circle'
     | 'arrow-left'
     | 'arrow-right'
-    | 'plus' = '';
+    | 'plus'
+    | 'minus' = '';
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
   @Input() fill? = '';
 

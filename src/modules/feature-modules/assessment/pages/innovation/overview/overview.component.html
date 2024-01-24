@@ -12,7 +12,7 @@
     <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
       <div class="nhsuk-action-link">
         <a *ngIf="!innovation?.assessment?.id" class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.id || '' }}/assessments/new">
-          <theme-svg-icon type="action"></theme-svg-icon>
+          <theme-svg-icon type="arrow-right-circle" />
           <span class="nhsuk-action-link__text">Start the needs assessment process</span>
         </a>
         <a *ngIf="innovation?.assessment?.id" routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button">Continue needs assessment</a>
