@@ -1,0 +1,61 @@
+<div *ngIf="model">
+  <dl class="nhsuk-u-margin-top-1 nhsuk-u-margin-bottom-1 nhsuk-u-padding-2 bg-color-grey">
+    <dt *ngIf="!this.model.hasSelectedFilters" class="nhsuk-u-font-size-16">No filter has been selected</dt>
+    <dd></dd>
+
+    <ng-container *ngFor="let filter of this.model.selected$ | async; last as isLast">
+      <dt class="d-flex align-items-center" [ngClass]="isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
+        <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
+          <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
+          <dd class="width-75">
+            <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
+              <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
+              </a>
+              <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
+            </span>
+          </dd>
+        </ng-container>
+
+        <ng-container *ngIf="filter.type === 'DATE_RANGE'">
+          <dt class="width-20 nhsuk-u-font-size-16">Submitted {{ getDaterangeFilterTitle(filter) }}</dt>
+          <dd class="width-75">
+            <ng-container *ngFor="let selected of filter.selected; let i = index">
+              <span class="d-inline-block bordered-item nhsuk-u-margin-1">
+                <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                  <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
+                </a>
+
+                <span class="nhsuk-u-font-size-14">
+                  {{ selected.value | date: ("app.date_formats.long_date" | translate) }}
+                </span>
+              </span>
+
+              <span class="nhsuk-u-font-size-16" *ngIf="i === 0 && filter.selected?.length === 2"> and </span>
+            </ng-container>
+          </dd>
+        </ng-container>
+
+        <div *ngIf="filter.type === 'CHECKBOXES'">
+          <dl class="nhsuk-u-margin-0">
+            <ng-container *ngFor="let checkbox of filter.selected">
+              <dt *ngIf="checkboxesTranslations.has(checkbox.key)" class="nhsuk-u-font-size-16 nhsuk-u-margin-top-2">
+                {{ checkboxesTranslations.get(checkbox.key) }}
+              </dt>
+              <dd></dd>
+            </ng-container>
+          </dl>
+        </div>
+      </dt>
+      <dd></dd>
+    </ng-container>
+  </dl>
+</div>
+
+<ng-template #closeIcon>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
+    <path
+      d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
+    ></path>
+  </svg>
+</ng-template>

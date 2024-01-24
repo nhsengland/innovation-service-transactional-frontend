@@ -98,6 +98,7 @@ import { UsersService } from './services/users.service';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
 import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wrapper.component';
+import { FiltersSelectionWrapperComponent } from './components/filters-selection-wrapper/filters-selection-wrapper.component';
 
 @NgModule({
   imports: [
@@ -182,7 +183,8 @@ import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wr
 
     // Components
     OrganisationSuggestionsCardComponent,
-    FiltersWrapperComponent
+    FiltersWrapperComponent,
+    FiltersSelectionWrapperComponent
   ],
   providers: [
     // Resolvers.

@@ -13,7 +13,7 @@ type BaseFilter = { key: string } & FilterOptions;
 
 type CheckboxesFilter = {
   type: 'CHECKBOXES';
-  checkboxes: ({ title: string; defaultValue?: boolean } & BaseFilter)[];
+  checkboxes: ({ title: string; defaultValue?: boolean; translation: string } & BaseFilter)[];
   selected?: { key: string; value: boolean }[];
 };
 
@@ -209,6 +209,18 @@ export class FiltersModel {
         this.updateDataset(filter, '');
       }
     }
+  }
+
+  getCheckboxesSelectionTranslations(): Map<string, string> {
+    const translations = new Map<string, string>();
+    for (const filter of this.filters) {
+      if (filter.type === 'CHECKBOXES') {
+        for (const checkbox of filter.checkboxes) {
+          translations.set(checkbox.key, checkbox.translation);
+        }
+      }
+    }
+    return translations;
   }
 
   #updateFilters(): void {
