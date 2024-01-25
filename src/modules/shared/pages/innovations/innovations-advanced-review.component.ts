@@ -33,8 +33,6 @@ type AdvancedReviewSortByKeysType = {
   templateUrl: './innovations-advanced-review.component.html'
 })
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
-  @ViewChildren('autocompleteSearchInput') autocompleteInputs?: QueryList<ElementRef<HTMLInputElement>>;
-
   baseUrl: string;
 
   isAdminType: boolean;
