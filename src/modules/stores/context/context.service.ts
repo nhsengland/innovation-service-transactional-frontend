@@ -96,7 +96,10 @@ export class ContextService {
         break;
     }
 
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/:innovationId').setPathParams({ innovationId });
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId')
+      .setPathParams({ innovationId })
+      .setQueryParams(qp);
     return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => {
