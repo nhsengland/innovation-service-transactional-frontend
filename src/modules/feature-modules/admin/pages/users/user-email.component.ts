@@ -46,7 +46,7 @@ export class PageUserEmailComponent extends CoreComponent {
     this.setPageStatus('READY');
   }
 
-  emailAlreadyExistsError(): void {
+  private emailAlreadyExistsError(): void {
     this.form
       .get('email')
       ?.setErrors({ customError: true, message: 'Another user is registered with this email address' });
@@ -55,6 +55,9 @@ export class PageUserEmailComponent extends CoreComponent {
 
   onSubmit(): void {
     this.resetAlert();
+
+    this.form.get('email')?.updateValueAndValidity();
+    this.form.get('emailConfirmation')?.updateValueAndValidity();
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
