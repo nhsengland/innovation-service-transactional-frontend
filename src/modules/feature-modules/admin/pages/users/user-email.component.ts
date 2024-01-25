@@ -46,6 +46,13 @@ export class PageUserEmailComponent extends CoreComponent {
     this.setPageStatus('READY');
   }
 
+  emailAlreadyExistsError(): void {
+    this.form
+      .get('email')
+      ?.setErrors({ customError: true, message: 'Another user is registered with this email address' });
+    this.setAlertError('Another user is registered with this email address');
+  }
+
   onSubmit(): void {
     this.resetAlert();
 
@@ -53,6 +60,10 @@ export class PageUserEmailComponent extends CoreComponent {
 
     const email = this.form.get('email')?.value;
     const emailConfirmation = this.form.get('emailConfirmation')?.value;
+
+    if (email === this.user.email) {
+      this.emailAlreadyExistsError();
+    }
 
     if (email !== emailConfirmation) {
       this.setAlertError('The email addresses do not match');
@@ -67,14 +78,16 @@ export class PageUserEmailComponent extends CoreComponent {
 
     if (email) {
       this.usersService.changeUserEmail(this.user.id, email).subscribe({
-        next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'changeEmailSuccess' }),
+        next: () => {
+          this.setRedirectAlertSuccess(
+            'The email address linked to this account has been changed. The user has been notified.'
+          );
+          this.redirectTo(`/admin/users/${this.user.id}`);
+        },
         error: res => {
           this.submitButton = { isActive: true, label: 'Confirm' };
           if (res.status === 409) {
-            this.form
-              .get('email')
-              ?.setErrors({ customError: true, message: 'Another user is registered with this email address' });
-            this.setAlertError('Another user is registered with this email address');
+            this.emailAlreadyExistsError();
           } else {
             this.setAlertUnknownError();
           }

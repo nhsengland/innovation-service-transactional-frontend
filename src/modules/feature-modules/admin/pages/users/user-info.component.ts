@@ -42,9 +42,6 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
     super();
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'changeEmailSuccess':
-        this.setAlertSuccess('The email address linked to this account has been changed. The user has been notified. ');
-        break;
       case 'lockSuccess':
         this.setAlertSuccess('User locked successfully');
         break;
