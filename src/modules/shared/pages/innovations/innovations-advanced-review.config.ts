@@ -21,12 +21,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
           key: 'assignedToMe',
           title: 'Only show innovations assigned to me',
           defaultValue: false,
+          translation: "Viewing innovations assigned to me",
           options: { updateOn: 'change' }
         },
         {
           key: 'suggestedOnly',
           title: 'Only show suggested innovations for my organisation',
           defaultValue: true,
+          translation: "Viewing suggested innovations",
           options: { updateOn: 'change' }
         }
       ]

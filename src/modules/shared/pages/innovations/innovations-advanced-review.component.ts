@@ -9,8 +9,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
-import { DatesHelper } from '@app/base/helpers';
-import { Filter, FiltersModel } from '@modules/core/models/filters/filters.model';
+import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import {
   careSettingsItems,
   categoriesItems,
@@ -256,27 +255,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.orderDir = this.sortByData[selectKey as AdvancedReviewSortByKeys].order;
     this.pageNumber = 1;
     this.getInnovationsList();
-  }
-
-  onRemoveFilter(filterKey: string, selection: string): void {
-    this.filtersModel.removeSelection(filterKey, selection);
-  }
-
-  getDaterangeFilterTitle(filter: Filter): string {
-    if (filter.type !== 'DATE_RANGE') return '';
-
-    const date = this.filtersModel.getFilterValue(filter);
-    return DatesHelper.translateTwoDatesOrder(date.startDate, date.endDate);
-  }
-
-  onCheckboxInputFilter(filter: Filter, e: Event): void {
-    const search = (e.target as HTMLInputElement).value;
-    this.filtersModel.updateDataset(filter, search);
-  }
-
-  clearFilters(): void {
-    this.autocompleteInputs?.forEach(i => (i.nativeElement.value = ''));
-    this.filtersModel.clearAll();
   }
 
   private translateLists(rawArr: null | string[], translations: any[], other?: null | string): string[] {
