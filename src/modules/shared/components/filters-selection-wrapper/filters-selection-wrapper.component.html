@@ -7,7 +7,7 @@
       <dt class="d-flex align-items-center" [ngClass]="isLast ? 'border-bottom-0' : 'border-bottom-neutral'">
         <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
           <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
-          <dd class="width-75">
+          <dd>
             <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
               <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
                 <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
@@ -18,8 +18,8 @@
         </ng-container>
 
         <ng-container *ngIf="filter.type === 'DATE_RANGE'">
-          <dt class="width-20 nhsuk-u-font-size-16">Submitted {{ getDaterangeFilterTitle(filter) }}</dt>
-          <dd class="width-75">
+          <dt class="width-20 nhsuk-u-font-size-16">{{ filter.selectionTitle }} {{ getDaterangeFilterTitle(filter) }}</dt>
+          <dd>
             <ng-container *ngFor="let selected of filter.selected; let i = index">
               <span class="d-inline-block bordered-item nhsuk-u-margin-1">
                 <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">

@@ -21,14 +21,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
           key: 'assignedToMe',
           title: 'Only show innovations assigned to me',
           defaultValue: false,
-          translation: "Viewing innovations assigned to me",
+          translation: 'Viewing innovations assigned to me',
           options: { updateOn: 'change' }
         },
         {
           key: 'suggestedOnly',
           title: 'Only show suggested innovations for my organisation',
           defaultValue: true,
-          translation: "Viewing suggested innovations",
+          translation: 'Viewing suggested innovations',
           options: { updateOn: 'change' }
         }
       ]
@@ -83,6 +83,7 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       type: 'DATE_RANGE',
       key: 'submittedAt',
       title: 'Filter by date',
+      selectionTitle: 'Submitted',
       state: 'closed',
       startDate: { key: 'startDate', label: 'Submitted after', description: 'For example, 2005 or 21/11/2014' },
       endDate: { key: 'endDate', label: 'Submitted before', description: 'For example, 2005 or 21/11/2014' }
@@ -98,8 +99,12 @@ const InnovationListDatasets: Record<string, Dataset> = {
   diseasesAndConditions: diseasesConditionsImpactItems,
   categories: [...categoriesItems, { value: 'OTHER', label: 'Other' }],
   careSettings: [...careSettingsItems, { value: 'OTHER', label: 'Other' }],
-  keyHealthInequalities: keyHealthInequalitiesItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ value: i.value, label: i.label }) ),
-  involvedAACProgrammes: involvedAACProgrammesItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ value: i.value, label: i.label }) )
+  keyHealthInequalities: keyHealthInequalitiesItems
+    .filter(i => i.label !== 'SEPARATOR')
+    .map(i => ({ value: i.value, label: i.label })),
+  involvedAACProgrammes: involvedAACProgrammesItems
+    .filter(i => i.label !== 'SEPARATOR')
+    .map(i => ({ value: i.value, label: i.label }))
 };
 
 export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {

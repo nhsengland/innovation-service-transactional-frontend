@@ -29,6 +29,7 @@ type DateRangeFilter = {
   startDate: DateFilter;
   endDate: DateFilter;
   selected?: { key: string; value: string }[];
+  selectionTitle: string; // This is used in the selection since title !== selection title
 } & CollapsibleFilter;
 
 type SearchFilter = BaseFilter & { placeholder?: string; maxLength?: number };
