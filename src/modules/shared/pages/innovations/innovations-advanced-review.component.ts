@@ -210,7 +210,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             postCode: result.postcode,
             categories: this.translateLists(result.categories, categoriesItems, result.otherCategoryDescription),
             careSettings: this.translateLists(result.careSettings, careSettingsItems, result.otherCareSetting),
-            diseasesAndConditions: translatedDiseases,
+            diseasesAndConditions: this.translateLists(
+              result.diseasesAndConditions,
+              diseasesConditionsImpactItems,
+              'None'
+            ),
             keyHealthInequalities: this.translateLists(
               result.keyHealthInequalities,
               keyHealthInequalitiesItems,
