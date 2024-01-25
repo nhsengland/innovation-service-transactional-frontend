@@ -197,9 +197,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         response.data.forEach(result => {
           const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
-          const translatedDiseases = result.diseasesAndConditions?.length
-            ? result.diseasesAndConditions?.map(item => (item === 'NONE' ? 'None' : item))
-            : ['Question not answered'];
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
           const innovationData: InnovationCardData = {
