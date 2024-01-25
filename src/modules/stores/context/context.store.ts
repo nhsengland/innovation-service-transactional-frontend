@@ -193,7 +193,7 @@ export class ContextStore extends Store<ContextModel> {
     innovationId: string,
     context: AuthenticationModel['userContext']
   ): Observable<ContextInnovationType> {
-    if (this.state.innovation) {
+    if (this.state.innovation && this.state.innovation.id === innovationId) {
       return of(this.state.innovation);
     }
 
