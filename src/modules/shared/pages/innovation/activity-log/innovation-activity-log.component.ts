@@ -81,7 +81,6 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   }
 
   onFormChange(): void {
-    console.log('Entrou');
     if (!this.form.valid) {
       this.form.markAllAsTouched();
     }
