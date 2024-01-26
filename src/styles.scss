@@ -797,3 +797,18 @@ a.app-tag {
   background-repeat: no-repeat;
   background-position: center left 3px;
 }
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-close .icon {
+  display: inline-block;
+  .nhsuk-icon__close {
+    fill: $color_nhsuk-black;
+    height: 20px;
+    width: 20px;
+  }
+}
