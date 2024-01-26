@@ -156,7 +156,8 @@ export class ContextStore extends Store<ContextModel> {
         otherCategoryDescription: '',
         countryName: '',
         description: '',
-        postCode: ''
+        postCode: '',
+        expiry: 0
       };
     }
     return this.state.innovation;
@@ -193,7 +194,11 @@ export class ContextStore extends Store<ContextModel> {
     innovationId: string,
     context: AuthenticationModel['userContext']
   ): Observable<ContextInnovationType> {
-    if (this.state.innovation && this.state.innovation.id === innovationId) {
+    if (
+      this.state.innovation &&
+      this.state.innovation.id === innovationId &&
+      Date.now() < this.state.innovation.expiry
+    ) {
       return of(this.state.innovation);
     }
 
