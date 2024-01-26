@@ -820,3 +820,12 @@ a.app-tag {
 .nhsuk-header__logo .icon {
   display: inline;
 }
+
+.recent-innovations-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  .nhsuk-icon__chevron-right {
+    fill: $color_nhsuk-grey-1;
+  }
+}

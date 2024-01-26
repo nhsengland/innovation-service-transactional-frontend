@@ -25,8 +25,8 @@ export class SvgIconComponent implements OnInit {
     | 'notification-tag'
     | 'back-to-top'
     | 'logo' = '';
+
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
-  @Input() fill? = '';
 
   svgPaletteData: SvgPaletteDataType = {
     green: {
@@ -48,8 +48,6 @@ export class SvgIconComponent implements OnInit {
   };
 
   svgColors: { stroke: string; fill: string } = { stroke: '', fill: '' };
-
-  constructor() {}
 
   ngOnInit(): void {
     if (!this.customColor) {

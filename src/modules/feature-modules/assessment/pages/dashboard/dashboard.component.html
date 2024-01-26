@@ -12,24 +12,19 @@
       <h2 class="nhsuk-card__heading nhsuk-heading-m">Recent innovations you have worked on</h2>
       <ul class="nhsuk-list">
         <li *ngFor="let item of latestInnovations.getRecords()" class="bottom-border-separator nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-0">
-          <a
-            class="d-flex align-items-center justify-content-space-between"
-            *ngIf="!item.assessment?.id"
-            routerLink="/assessment/innovations/{{ item.id }}"
-            attr.aria-label="View {{ item.name }} innovation"
-          >
+          <a class="recent-innovations-link" *ngIf="!item.assessment?.id" routerLink="/assessment/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation">
             <span>{{ item.name }}</span>
-            <theme-svg-icon type="chevron-right" [fill]="'#4c6272'" />
+            <theme-svg-icon type="chevron-right" />
           </a>
           <a
-            class="d-flex align-items-center justify-content-space-between"
+            class="recent-innovations-link"
             *ngIf="item.assessment?.id"
             routerLink="/assessment/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
             attr.aria-label="View {{ item.name }} innovation assessment details"
           >
             <span>{{ item.name }}</span>
 
-            <theme-svg-icon type="chevron-right" [fill]="'#4c6272'" />
+            <theme-svg-icon type="chevron-right" />
           </a>
         </li>
       </ul>
