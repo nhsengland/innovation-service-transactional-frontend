@@ -13,6 +13,7 @@ export class SvgIconComponent implements OnInit {
     | 'success'
     | 'error'
     | 'edit'
+    | 'search'
     | 'chevron-left'
     | 'chevron-right'
     | 'close'
