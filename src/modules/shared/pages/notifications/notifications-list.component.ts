@@ -16,6 +16,8 @@ import {
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
+import { FiltersModel } from '@modules/core/models/filters/filters.model';
+import { getConfig } from './notifications-list.config';
 
 type FilterKeysType = 'contextTypes';
 type FiltersType = {
@@ -32,42 +34,16 @@ type FiltersType = {
 export class PageNotificationsListComponent extends CoreComponent implements OnInit {
   emailNotificationPreferencesLink = '';
 
-  notificationsList = new TableModel<
-    NotificationsListOutDTO['data'][0],
-    { contextTypes: NotificationCategoryTypeEnum[]; unreadOnly: boolean }
-  >();
+  notificationsList = new TableModel<NotificationsListOutDTO['data'][0], Record<string, any>>();
 
-  form = new FormGroup(
-    {
-      contextTypes: new FormArray([]),
-      unreadOnly: new UntypedFormControl(false)
-    },
-    { updateOn: 'change' }
-  );
-
-  anyFilterSelected = false;
-  filters: FiltersType[] = [{ key: 'contextTypes', title: 'Types', showHideStatus: 'opened', selected: [] }];
-
-  datasets: { [key in FilterKeysType]: { label: string; value: string }[] } = {
-    contextTypes: []
-  };
-
-  get selectedFilters(): FiltersType[] {
-    if (!this.anyFilterSelected) {
-      return [];
-    }
-    return this.filters.filter(i => i.selected.length > 0);
-  }
+  filtersModel!: FiltersModel;
+  form!: FormGroup;
 
   constructor(private notificationsService: NotificationsService) {
     super();
     this.setPageTitle('Notifications');
 
-    if (
-      ['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(
-        this.stores.authentication.getUserType() ?? ''
-      )
-    ) {
+    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(this.stores.authentication.getUserType() ?? '')) {
       this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
     }
 
@@ -78,42 +54,44 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
         action: { label: 'Action', align: 'right', orderable: false }
       })
       .setOrderBy('createdAt', 'descending');
-
-    const userType = this.stores.authentication.getUserType();
-
-    let contextTypesSubset: NotificationCategoryTypeEnum[];
-    switch (userType) {
-      case UserRoleEnum.INNOVATOR:
-        contextTypesSubset = InnovatorNotificationCategories;
-        break;
-      case UserRoleEnum.ASSESSMENT:
-        contextTypesSubset = NANotificationCategories;
-        break;
-      case UserRoleEnum.QUALIFYING_ACCESSOR:
-        contextTypesSubset = QANotificationCategories;
-        break;
-      case UserRoleEnum.ACCESSOR:
-        contextTypesSubset = ANotificationCategories;
-        break;
-      default:
-        contextTypesSubset = [];
-        break;
-    }
-
-    this.datasets.contextTypes = contextTypesSubset.map(item => ({
-      label: this.translate(`shared.catalog.innovation.notification_context_types.${item}.${userType}.title`),
-      value: item
-    }));
   }
 
   ngOnInit(): void {
+    const role = this.stores.authentication.getUserType();
+
+    let categories: NotificationCategoryTypeEnum[] = [];
+    switch (role) {
+      case UserRoleEnum.INNOVATOR:
+        categories = InnovatorNotificationCategories;
+        break;
+      case UserRoleEnum.ASSESSMENT:
+        categories = NANotificationCategories;
+        break;
+      case UserRoleEnum.QUALIFYING_ACCESSOR:
+        categories = QANotificationCategories;
+        break;
+      case UserRoleEnum.ACCESSOR:
+        categories = ANotificationCategories;
+        break;
+    }
+
+    const datasets = {
+      contextTypes: categories.map(cur => ({
+        label: this.translate(`shared.catalog.innovation.notification_context_types.${cur}.${role}.title`),
+        value: cur
+      }))
+    };
+    const { filters } = getConfig();
+
+    this.filtersModel = new FiltersModel({ filters, datasets });
+    this.form = this.filtersModel.form;
+
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
 
     this.onFormChange();
   }
 
   // API methods.
-
   getNotificationsList(column?: string): void {
     this.setPageStatus('LOADING');
 
@@ -183,51 +161,15 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   }
 
   // Interaction methods.
-
   onFormChange(): void {
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.filters.forEach(filter => {
-      const f = this.form.get(filter.key)!.value as string[];
-      filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
-    });
-
-    this.anyFilterSelected =
-      this.form.get('unreadOnly')!.value || this.filters.filter(i => i.selected.length > 0).length > 0;
-
-    this.notificationsList.setFilters({
-      contextTypes: this.form.get('contextTypes')!.value,
-      unreadOnly: this.form.get('unreadOnly')!.value
-    });
+    this.filtersModel.handleStateChanges();
+    this.notificationsList.setFilters(this.filtersModel.getAPIQueryParams());
 
     this.notificationsList.setPage(1);
-
     this.getNotificationsList();
-  }
-
-  onOpenCloseFilter(filterKey: FilterKeysType): void {
-    const filter = this.filters.find(i => i.key === filterKey);
-
-    switch (filter?.showHideStatus) {
-      case 'opened':
-        filter.showHideStatus = 'closed';
-        break;
-      case 'closed':
-        filter.showHideStatus = 'opened';
-        break;
-      default:
-        break;
-    }
-  }
-
-  onRemoveFilter(filterKey: FilterKeysType, value: string): void {
-    const formFilter = this.form.get(filterKey) as FormArray;
-    const formFilterIndex = formFilter.controls.findIndex(i => i.value === value);
-
-    if (formFilterIndex > -1) {
-      formFilter.removeAt(formFilterIndex);
-    }
   }
 
   onTableOrder(column: string): void {
