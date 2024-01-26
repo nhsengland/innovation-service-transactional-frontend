@@ -107,5 +107,5 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   description: 'Description',
   otherCategoryDescription: null,
   postCode: null,
-  expiry: 5000
+  expiryAt: 5000
 };

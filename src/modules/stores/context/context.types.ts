@@ -65,5 +65,5 @@ export type ContextInnovationType = {
   collaboratorId?: string;
   createdAt?: DateISOType;
   reassessmentCount: number;
-  expiry: number;
+  expiryAt: number;
 };

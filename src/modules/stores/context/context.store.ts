@@ -157,7 +157,7 @@ export class ContextStore extends Store<ContextModel> {
         countryName: '',
         description: '',
         postCode: '',
-        expiry: 0
+        expiryAt: 0
       };
     }
     return this.state.innovation;
@@ -197,7 +197,7 @@ export class ContextStore extends Store<ContextModel> {
     if (
       this.state.innovation &&
       this.state.innovation.id === innovationId &&
-      Date.now() < this.state.innovation.expiry
+      Date.now() < this.state.innovation.expiryAt
     ) {
       return of(this.state.innovation);
     }
