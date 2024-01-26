@@ -21,7 +21,10 @@ export class SvgIconComponent implements OnInit {
     | 'arrow-left'
     | 'arrow-right'
     | 'plus'
-    | 'minus' = '';
+    | 'minus'
+    | 'notification-tag'
+    | 'back-to-top'
+    | 'logo' = '';
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
   @Input() fill? = '';
 

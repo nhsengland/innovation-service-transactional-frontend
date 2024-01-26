@@ -805,10 +805,18 @@ a.app-tag {
 }
 
 .tag-close .icon {
-  display: inline-block;
+  display: inline;
   .nhsuk-icon__close {
     fill: $color_nhsuk-black;
     height: 20px;
     width: 20px;
   }
+}
+
+.go-to-top .icon {
+  display: inline;
+}
+
+.nhsuk-header__logo .icon {
+  display: inline;
 }

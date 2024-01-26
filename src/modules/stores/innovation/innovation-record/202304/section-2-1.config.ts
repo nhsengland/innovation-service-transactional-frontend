@@ -161,7 +161,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
       })
     );
   } else {
-    delete data.diseasesConditionsImpact;
+    data.diseasesConditionsImpact = ['NONE'];
   }
 
   steps.push(

@@ -11,13 +11,12 @@ import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
+import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import {
   getInnovationRecordConfig,
   innovationSectionsWithFiles
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
-import { SectionSummaryInputData } from './section-summary.component';
 
 export type SectionInfoType = {
   id: string;
@@ -173,11 +172,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       if (
         (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) &&
-        this.innovation.status === 'IN_PROGRESS' &&
         this.sectionSummaryData.sectionInfo.status.id === 'DRAFT'
       ) {
         // If accessor, only view information if section is submitted.
         this.sectionSummaryData.summaryList = [];
+        this.sectionSummaryData.evidencesList = [];
       } else {
         // Special business rule around section 2.2.
         this.sectionSummaryData.sectionInfo.hasEvidences = !!(

@@ -1,0 +1,53 @@
+<div *ngIf="form && model">
+  <form [formGroup]="form">
+    <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">{{ title }}</h2>
+
+    <ng-container *ngFor="let filter of model.filters">
+      <ng-container *ngIf="filter.type === 'CHECKBOXES'">
+        <ng-container *ngFor="let checkbox of filter.checkboxes">
+          <div class="nhsuk-u-margin-bottom-2">
+            <theme-form-checkbox [controlName]="checkbox.key" [label]="checkbox.title" size="small"></theme-form-checkbox>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="filter.type === 'CHECKBOX_GROUP'">
+        <theme-collapsible-filter [title]="filter.title" [description]="filter.description" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
+          <input
+            #autocompleteSearchInput
+            *ngIf="filter.searchable"
+            fixedContentContainer
+            id="{{ filter.key }}CheckboxInputFilter"
+            type="text"
+            name="{{ filter.key }}CheckboxInputFilter"
+            class="nhsuk-input search-input-icon nhsuk-u-margin-bottom-3"
+            (input)="onCheckboxInputFilter(filter, $event)"
+            attr.aria-label="Search for {{ filter.key }} filter"
+          />
+          <theme-form-checkbox-array [arrayName]="filter.key" [items]="filter.items" size="small" [pageUniqueField]="false" />
+        </theme-collapsible-filter>
+      </ng-container>
+
+      <ng-container *ngIf="filter.type === 'DATE_RANGE'">
+        <theme-collapsible-filter [title]="filter.title" [description]="filter.description" [preOpen]="filter.state === 'opened'" [scrollable]="filter.scrollable">
+          <theme-form-input
+            controlName="{{ filter.key }}::{{ filter.startDate.key }}"
+            [label]="filter.startDate.label"
+            [description]="filter.startDate.description"
+            [pageUniqueField]="false"
+          ></theme-form-input>
+          <theme-form-input
+            controlName="{{ filter.key }}::{{ filter.endDate.key }}"
+            [label]="filter.endDate.label"
+            [description]="filter.endDate.description"
+            [pageUniqueField]="false"
+          ></theme-form-input>
+        </theme-collapsible-filter>
+      </ng-container>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" />
+    </ng-container>
+  </form>
+
+  <a href="javascript:void(0)" (click)="clearFilters()" class="nhsuk-u-font-size-19">Clear filters</a>
+</div>

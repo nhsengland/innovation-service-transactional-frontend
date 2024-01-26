@@ -19,6 +19,7 @@ export type AllSectionsOutboundPayloadType = {
   sections: {
     section: string;
     answers: { label: string; value: string }[];
+    status: 'SUBMITTED' | 'UNKNOWN' | 'NOT_STARTED' | 'DRAFT';
   }[];
 }[];
 
@@ -65,7 +66,7 @@ export function getAllSectionsSummary(
     title: i.title,
     sections: i.sections.map(s => ({
       section: s.title,
-      status: sectionMap.get(s.id as any)?.section.status ?? INNOVATION_SECTION_STATUS.UNKNOWN,
+      status: sectionMap.get(s.id as any)?.section.status ?? 'UNKNOWN',
       answers: s.wizard
         .runSummaryParsing(s.wizard.runInboundParsing(sectionMap.get(s.id as any)?.data ?? {}))
         .filter(item => item.type !== 'button' && !item.isFile)

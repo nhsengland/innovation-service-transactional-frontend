@@ -307,20 +307,9 @@ export class InnovationsService extends CoreService {
     filters: F = {} as F,
     pagination: Paginated<S[]> = { take: 100, skip: 0 }
   ): Observable<APIListResponse<InnovationListNewFullDTO, S>> {
-    const qp = {
-      ...filters,
-      dateFilters:
-        filters.dateFilters &&
-        filters.dateFilters.map(f => ({
-          field: f.key,
-          startDate: f.startDate ?? undefined,
-          endDate: f.endDate ?? undefined
-        }))
-    };
-
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({
       fields,
-      ...qp,
+      ...filters,
       ...pagination
     });
     return this.http.get<APIListResponse<InnovationListNewFullDTO, S>>(url.buildUrl()).pipe(take(1));
@@ -765,21 +754,17 @@ export class InnovationsService extends CoreService {
 
   getInnovationActivityLog(
     innovationId: string,
-    queryParams: APIQueryParamsType<{ activityTypes: ActivityLogTypesEnum[]; startDate: string; endDate: string }>
+    queryParams: APIQueryParamsType<{
+      activityTypes: ActivityLogTypesEnum[];
+      dateFilters?: { key: 'createdAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
+    }>
   ): Observable<InnovationActivityLogListDTO> {
     const { filters, ...qParams } = queryParams;
-    const qp = {
-      ...qParams,
-      ...(filters.activityTypes ? { activityTypes: filters.activityTypes } : {}),
-      ...(filters.startDate ? { startDate: filters.startDate } : {}),
-      ...(filters.endDate ? { endDate: filters.endDate } : {})
-    };
-
     const userUrlBasePath = this.stores.authentication.userUrlBasePath();
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/activities')
       .setPathParams({ innovationId })
-      .setQueryParams(qp);
+      .setQueryParams({ ...filters, ...qParams });
 
     return this.http.get<InnovationActivityLogListInDTO>(url.buildUrl()).pipe(
       take(1),

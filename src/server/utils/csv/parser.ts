@@ -9,8 +9,13 @@ import { sectionType } from '@modules/stores/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 
-import { CSVGeneratorParserError, CSVGeneratorSectionsNotFoundError } from '../errors';
-import { getSections } from '../pdf/parser';
+import {
+  CSVGeneratorParserError,
+  CSVGeneratorSectionsNotFoundError,
+  DocumentGeneratorInnovationInfoError
+} from '../errors';
+import { getIRDocumentExportData, getInnovationInfo, getSections } from '../pdf/parser';
+import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 export const generateCSVHandler = async (innovationId: string, body: any, config: any) => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/csv`;
@@ -24,6 +29,13 @@ export const generateCSVHandler = async (innovationId: string, body: any, config
 export const generateCSV = async (innovationId: string, config: any, version?: string) => {
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType; data: MappedObjectType }[];
+  let innovationInfo: InnovationInfoDTO;
+
+  try {
+    innovationInfo = await getInnovationInfo(innovationId, config);
+  } catch (error: any) {
+    throw new DocumentGeneratorInnovationInfoError(error);
+  }
 
   try {
     sections = await getSections(innovationId, config, version);
@@ -37,7 +49,11 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
     throw new CSVGeneratorParserError(error);
   }
 
-  const response = await generateCSVHandler(innovationId, content, config);
+  const response = await generateCSVHandler(
+    innovationId,
+    getIRDocumentExportData('CSV', content, innovationInfo.owner?.organisation),
+    config
+  );
 
   return response;
 };

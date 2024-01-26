@@ -39,3 +39,10 @@ export class CSVGeneratorInnovationNotFoundError extends Error {
     this.name = 'CSVGeneratorInnovationNotFoundError';
   }
 }
+
+export class DocumentGeneratorInnovationInfoError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'DocumentGeneratorInnovationInfoError';
+  }
+}
