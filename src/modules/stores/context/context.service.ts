@@ -155,7 +155,8 @@ export class ContextService {
           otherCategoryDescription: response.otherCategoryDescription,
           countryName: response.countryName,
           description: response.description,
-          postCode: response.postCode
+          postCode: response.postCode,
+          expiryAt: Date.now() + 5000
         };
       })
     );
