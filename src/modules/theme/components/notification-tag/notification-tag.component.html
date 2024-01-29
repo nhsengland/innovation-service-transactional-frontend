@@ -1,7 +1,7 @@
 <ng-container *ngIf="visibleLabel">
-  <ng-container *ngIf="visibleLabel === 'dot'; else notificationBadge">
+  <div class="notification-tag" *ngIf="visibleLabel === 'dot'; else notificationBadge">
     <theme-svg-icon type="notification-tag" />
-  </ng-container>
+  </div>
 </ng-container>
 
 <ng-template #notificationBadge>
