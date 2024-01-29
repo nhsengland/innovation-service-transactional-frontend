@@ -1,48 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormArray, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { InnovationActivityLogListDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { ACTIVITY_LOG_ITEMS, ActivityLogTypesEnum } from '@modules/stores/innovation';
 
-import { DatesHelper } from '@app/base/helpers';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { Dataset, FiltersModel } from '@modules/core/models/filters/filters.model';
+import { getConfig } from './innovation-activity-log.config';
 
-enum FilterTypeEnum {
-  CHECKBOX = 'CHECKBOX',
-  DATERANGE = 'DATERANGE'
-}
-
-type FilterKeysType = 'activityTypes' | 'activityDate';
 type ActivitiesListType = InnovationActivityLogListDTO['data'][0] & {
   showHideStatus: 'opened' | 'closed';
   showHideText: string;
-};
-
-type FiltersType = {
-  key: FilterKeysType;
-  title: string;
-  showHideStatus: 'opened' | 'closed';
-  type: FilterTypeEnum;
-  selected: {
-    label: string;
-    value: string;
-    formControl?: string;
-  }[];
-};
-
-type DatasetType = {
-  [key: string]: {
-    label: string;
-    description?: string;
-    value: string;
-    formControl?: string;
-  }[];
 };
 
 @Component({
@@ -54,70 +27,12 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   ACTIVITY_LOG_ITEMS = ACTIVITY_LOG_ITEMS;
 
-  activitiesList = new TableModel<
-    ActivitiesListType,
-    { activityTypes: ActivityLogTypesEnum[]; startDate: string; endDate: string }
-  >();
+  activitiesList = new TableModel<ActivitiesListType, Record<string, any>>();
 
   currentDateOrderBy: 'ascending' | 'descending';
 
-  form = new FormGroup(
-    {
-      activityTypes: new FormArray([]),
-      startDate: new FormControl(null, CustomValidators.parsedDateStringValidator()),
-      endDate: new FormControl(null, CustomValidators.parsedDateStringValidator())
-    },
-    { updateOn: 'blur' }
-  );
-
-  anyFilterSelected = false;
-  filters: FiltersType[] = [
-    {
-      key: 'activityTypes',
-      title: 'Activity Types',
-      showHideStatus: 'closed',
-      type: FilterTypeEnum.CHECKBOX,
-      selected: []
-    },
-    {
-      key: 'activityDate',
-      title: 'Activity Date',
-      showHideStatus: 'closed',
-      type: FilterTypeEnum.DATERANGE,
-      selected: []
-    }
-  ];
-
-  datasets: DatasetType = {
-    activityTypes: Object.keys(ActivityLogTypesEnum)
-      .filter(item => item !== ActivityLogTypesEnum.COMMENTS)
-      .map(i => ({
-        label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
-        value: i,
-        description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
-      })),
-    activityDate: [
-      {
-        label: 'Activity date after',
-        description: 'For example, 2005 or 21/11/2014',
-        value: '',
-        formControl: 'startDate'
-      },
-      {
-        label: 'Activity date before',
-        description: 'For example, 2005 or 21/11/2014',
-        value: '',
-        formControl: 'endDate'
-      }
-    ]
-  };
-
-  get selectedFilters(): FiltersType[] {
-    if (!this.anyFilterSelected) {
-      return [];
-    }
-    return this.filters.filter(i => i.selected.length > 0);
-  }
+  filtersModel!: FiltersModel;
+  form!: FormGroup;
 
   constructor(private innovationsService: InnovationsService) {
     super();
@@ -128,6 +43,20 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
+    const { filters } = getConfig();
+    const datasets: Record<string, Dataset> = {
+      activityTypes: Object.keys(ActivityLogTypesEnum)
+        .filter(i => i !== ActivityLogTypesEnum.COMMENTS)
+        .map(i => ({
+          value: i,
+          label: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.title`),
+          description: this.translate(`shared.catalog.innovation.activity_log_groups.${i}.description`)
+        }))
+    };
+
+    this.filtersModel = new FiltersModel({ filters, datasets });
+    this.form = this.filtersModel.form;
+
     this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(1000)).subscribe(() => this.onFormChange()));
 
     this.setPageTitle('Activity log');
@@ -154,68 +83,15 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   onFormChange(): void {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
-      return;
     }
 
     this.setPageStatus('LOADING');
 
-    for (const filter of this.filters) {
-      if (filter.type === FilterTypeEnum.CHECKBOX) {
-        const f = this.form.get(filter.key)!.value as string[];
-        filter.selected = this.datasets[filter.key].filter(i => f.includes(i.value));
-      }
+    this.filtersModel.handleStateChanges();
+    this.activitiesList.setFilters(this.filtersModel.getAPIQueryParams());
 
-      if (filter.type === FilterTypeEnum.DATERANGE) {
-        const selected = [];
-
-        for (const option of this.datasets[filter.key]) {
-          const date = this.getDateByControlName(option.formControl!);
-
-          if (date !== null) {
-            selected.push({
-              ...option,
-              value: date
-            });
-          }
-        }
-
-        filter.selected = selected;
-      }
-    }
-
-    this.anyFilterSelected = this.filters.filter(i => i.selected.length > 0).length > 0;
-
-    this.activitiesList.setFilters({
-      activityTypes: this.form.get('activityTypes')!.value,
-      startDate: this.getDateByControlName('startDate') ?? '',
-      endDate: this.getDateByControlName('endDate') ?? ''
-    });
-
+    this.activitiesList.setPage(1);
     this.getActivitiesLogList();
-  }
-
-  onOpenCloseFilter(filterKey: FilterKeysType): void {
-    const filter = this.filters.find(i => i.key === filterKey);
-
-    switch (filter?.showHideStatus) {
-      case 'opened':
-        filter.showHideStatus = 'closed';
-        break;
-      case 'closed':
-        filter.showHideStatus = 'opened';
-        break;
-      default:
-        break;
-    }
-  }
-
-  onRemoveFilter(filterKey: FilterKeysType, value: string): void {
-    const formFilter = this.form.get(filterKey) as FormArray;
-    const formFilterIndex = formFilter.controls.findIndex(i => i.value === value);
-
-    if (formFilterIndex > -1) {
-      formFilter.removeAt(formFilterIndex);
-    }
   }
 
   onDateOrderBy(order: 'ascending' | 'descending'): void {
@@ -242,30 +118,5 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
   onPageChange(event: { pageNumber: number }): void {
     this.activitiesList.setPage(event.pageNumber);
     this.getActivitiesLogList();
-  }
-
-  // Daterange helpers
-  getDaterangeFilterTitle(filter: FiltersType): string {
-    const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
-    const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
-
-    if (afterDate !== null && (beforeDate === null || beforeDate === '')) return 'Activity after';
-
-    if ((afterDate === null || afterDate === '') && beforeDate !== null) return 'Activity before';
-
-    return 'Activity between';
-  }
-
-  onRemoveDateRangeFilter(formControlName: string, value: string): void {
-    const formValue = this.getDateByControlName(formControlName);
-
-    if (formValue === value) {
-      this.form.patchValue({ [formControlName]: null });
-    }
-  }
-
-  getDateByControlName(formControlName: string) {
-    const value = this.form.get(formControlName)!.value;
-    return DatesHelper.parseIntoValidFormat(value);
   }
 }

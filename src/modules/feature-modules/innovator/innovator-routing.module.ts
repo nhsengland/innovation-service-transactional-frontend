@@ -68,7 +68,7 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
@@ -93,6 +93,9 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { checkStatusGuard } from './guards/check-status.guard';
+import { checkRoleGuard } from './guards/check-role.guard';
+import { UserRoleEnum } from '@app/base/enums';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -354,6 +357,7 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
+                    canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                     pathMatch: 'full',
                     component: PageInnovationDocumentsListComponent,
                     data: { breadcrumb: null }
@@ -378,8 +382,17 @@ const routes: Routes = [
                         component: PageInnovationDocumentInfoComponent,
                         data: { breadcrumb: null }
                       },
-                      { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
-                      { path: 'edit/:stepId', pathMatch: 'full', component: PageInnovationDocumentsNewditComponent }
+                      {
+                        path: 'edit',
+                        pathMatch: 'full',
+                        redirectTo: 'edit/1'
+                      },
+                      {
+                        path: 'edit/:stepId',
+                        canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
+                        pathMatch: 'full',
+                        component: PageInnovationDocumentsNewditComponent
+                      }
                     ]
                   }
                 ]
@@ -506,6 +519,7 @@ const routes: Routes = [
 
               {
                 path: 'support-summary',
+                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                 data: { breadcrumb: 'Support summary' },
                 children: [
                   {

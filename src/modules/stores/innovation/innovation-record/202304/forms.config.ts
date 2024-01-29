@@ -823,8 +823,10 @@ export const keyHealthInequalitiesItems: FormSelectableFieldType<catalogKeyHealt
 // // Section 2.2.
 export const needsSupportAnyAreaItems: FormSelectableFieldType<catalogNeedsSupportAnyArea> = [
   { value: 'RESEARCH_GOVERNANCE', label: 'Research governance, including research ethics approvals' },
-  { value: 'DATA_SHARING', label: 'Data sharing' },
+  { value: 'DATA_SHARING', label: 'Accessing and sharing health and care data' },
   { value: 'CONFIDENTIAL_PATIENT_DATA', label: 'Use of confidential patient data' },
+  { value: 'APPROVAL_DATA_STUDIES', label: 'Approval of data studies' },
+  { value: 'UNDERSTANDING_LAWS', label: 'Understanding the laws that regulate the use of health and care data' },
   { value: 'SEPARATOR', label: 'SEPARATOR' },
   { value: 'DO_NOT_NEED_SUPPORT', label: 'No, I do not need support', exclusive: true }
 ];

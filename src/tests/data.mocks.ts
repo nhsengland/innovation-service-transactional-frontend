@@ -106,5 +106,6 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   countryName: 'England',
   description: 'Description',
   otherCategoryDescription: null,
-  postCode: null
+  postCode: null,
+  expiryAt: 5000
 };

@@ -141,6 +141,8 @@ export const catalogNeedsSupportAnyArea = [
   'RESEARCH_GOVERNANCE',
   'DATA_SHARING',
   'CONFIDENTIAL_PATIENT_DATA',
+  'APPROVAL_DATA_STUDIES',
+  'UNDERSTANDING_LAWS',
   'DO_NOT_NEED_SUPPORT'
 ] as const;
 export type catalogNeedsSupportAnyArea = (typeof catalogNeedsSupportAnyArea)[number];

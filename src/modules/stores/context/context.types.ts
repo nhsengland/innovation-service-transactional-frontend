@@ -52,7 +52,11 @@ export type ContextInnovationType = {
   postCode: string | null;
   categories: string[];
   otherCategoryDescription: string | null;
-  owner?: { name: string; isActive: boolean; organisation?: { name: string; size: null | string } };
+  owner?: {
+    name: string;
+    isActive: boolean;
+    organisation?: { name: string; size: null | string; registrationNumber: null | string };
+  };
   loggedUser: { isOwner: boolean };
   assessment?: { id: string; createdAt: DateISOType; finishedAt: null | DateISOType };
   assignedTo?: { id: string; userRoleId: string; name: string };
@@ -61,4 +65,5 @@ export type ContextInnovationType = {
   collaboratorId?: string;
   createdAt?: DateISOType;
   reassessmentCount: number;
+  expiryAt: number;
 };
