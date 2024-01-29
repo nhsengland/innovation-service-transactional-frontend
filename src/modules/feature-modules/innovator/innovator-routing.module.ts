@@ -353,11 +353,11 @@ const routes: Routes = [
 
               {
                 path: 'documents',
-                canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                 data: { breadcrumb: 'Documents' },
                 children: [
                   {
                     path: '',
+                    canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
                     pathMatch: 'full',
                     component: PageInnovationDocumentsListComponent,
                     data: { breadcrumb: null }
@@ -382,8 +382,17 @@ const routes: Routes = [
                         component: PageInnovationDocumentInfoComponent,
                         data: { breadcrumb: null }
                       },
-                      { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
-                      { path: 'edit/:stepId', pathMatch: 'full', component: PageInnovationDocumentsNewditComponent }
+                      {
+                        path: 'edit',
+                        pathMatch: 'full',
+                        redirectTo: 'edit/1'
+                      },
+                      {
+                        path: 'edit/:stepId',
+                        canActivate: [checkStatusGuard([InnovationStatusEnum.CREATED], true)],
+                        pathMatch: 'full',
+                        component: PageInnovationDocumentsNewditComponent
+                      }
                     ]
                   }
                 ]
