@@ -28,10 +28,7 @@ import { PageInnovationManageCollaboratorsInfoComponent } from './pages/innovati
 import { PageInnovationManageCollaboratorsOverviewComponent } from './pages/innovation/manage/manage-collaborators-overview.component';
 import { PageInnovationManageCollaboratorsWizardComponent } from './pages/innovation/manage/manage-collaborators-wizard.component';
 import { PageInnovationManageOverviewComponent } from './pages/innovation/manage/manage-overview.component';
-import { PageInnovationManageStopSharingOverviewComponent } from './pages/innovation/manage/manage-stop-sharing-overview.component';
-import { PageInnovationManageStopSharingComponent } from './pages/innovation/manage/manage-stop-sharing.component';
 import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
-import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
@@ -96,6 +93,8 @@ import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/in
 import { checkStatusGuard } from './guards/check-status.guard';
 import { checkRoleGuard } from './guards/check-role.guard';
 import { UserRoleEnum } from '@app/base/enums';
+import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
+import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -598,19 +597,19 @@ const routes: Routes = [
                         ]
                       },
                       {
-                        path: 'stop-sharing',
+                        path: 'archive',
                         data: { breadcrumb: 'Stop sharing', layout: { type: 'full' } },
                         children: [
                           {
                             path: '',
                             pathMatch: 'full',
-                            component: PageInnovationManageStopSharingOverviewComponent,
+                            component: PageInnovationManageArchiveOverviewComponent,
                             data: { breadcrumb: null }
                           },
                           {
                             path: 'request',
                             pathMatch: 'full',
-                            component: PageInnovationManageStopSharingComponent,
+                            component: PageInnovationManageArchiveComponent,
                             data: { breadcrumb: null }
                           }
                         ]
@@ -632,12 +631,6 @@ const routes: Routes = [
                             data: { breadcrumb: null }
                           }
                         ]
-                      },
-                      {
-                        path: 'withdraw',
-                        pathMatch: 'full',
-                        component: PageInnovationManageWithdrawComponent,
-                        data: { breadcrumb: 'Withdraw', layout: { type: 'full' } }
                       }
                     ]
                   },

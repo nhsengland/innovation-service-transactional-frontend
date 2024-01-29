@@ -654,6 +654,18 @@ export const locale = {
             WI01_INNOVATION_WITHDRAWN: {
               title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`
             },
+            AI01_INNOVATION_ARCHIVED_TO_SELF: {
+              title: `Innovation {{innovationName}} has been archived.`
+            },
+            AI02_INNOVATION_ARCHIVED_TO_COLLABORATORS: {
+              title: `Innovation {{innovationName}} has been archived by its owner.`
+            },
+            AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A: {
+              title: `Innovation {{innovationName}} has been archived by its owner. You can view an archived copy of the innovation record.`
+            },
+            AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT: {
+              title: `Innovation {{innovationName}} has been archived by its owner during the needs assessment/reassessment process. You do not need to take any further action for this innovation.`
+            },
             SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: {
               title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.`
             },

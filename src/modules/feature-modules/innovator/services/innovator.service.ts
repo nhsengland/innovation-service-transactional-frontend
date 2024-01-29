@@ -167,9 +167,9 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  pauseInnovation(innovationId: string, message: string): Observable<{ id: string }> {
+  archiveInnovation(innovationId: string, message: string): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/pause')
+      .addPath('v1/:innovationId/archive')
       .setPathParams({ innovationId });
     return this.http.patch<{ id: string }>(url.buildUrl(), { message }).pipe(
       take(1),
