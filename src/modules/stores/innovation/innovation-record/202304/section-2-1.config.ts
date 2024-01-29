@@ -146,6 +146,10 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
   steps.splice(4);
 
   if (data.impactDiseaseCondition === 'YES') {
+    data.diseasesConditionsImpact = data.diseasesConditionsImpact?.filter(item =>
+      diseasesConditionsImpactItems.flatMap(item => item.value).includes(item)
+    );
+
     steps.push(
       new FormEngineModel({
         parameters: [
