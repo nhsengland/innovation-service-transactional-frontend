@@ -164,7 +164,9 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
               break;
           }
 
-          this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${this.taskId}`);
+          this.redirectTo(`/${this.userUrlBasePath()}/innovations/${this.innovationId}/tasks/${this.taskId}`, {
+            action: this.status
+          });
         },
 
         error: () => {
