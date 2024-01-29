@@ -190,10 +190,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   background-color: var(--warning-color);
 }
 
-.fill-white {
-  fill: var(--white);
-}
-
 .font-color-text {
   color: $nhsuk-text-color;
 }
@@ -460,6 +456,27 @@ $service-manual-container-size: 1100px; // Container width variable.
   box-shadow: none;
   padding: 5px 16px 4px;
   margin: 0;
+}
+
+.form-input-appended-button-search {
+  background-color: $nhsuk-button-color;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: none;
+  height: 40px;
+  width: 44px;
+  padding: 0;
+
+  &:hover {
+    background-color: $nhsuk-button-hover-color;
+    border: 0;
+  }
+
+  .nhsuk-icon__search {
+    fill: $color_nhsuk-white;
+    height: 27px;
+    width: 27px;
+  }
 }
 
 .form-checkboxes-small {
@@ -775,8 +792,35 @@ a.app-tag {
 }
 
 .search-input-icon {
-  padding-left: 40px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 20 20'%3E%3Cpath d='M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z'%3E%3C/path%3E%3C/svg%3E");
+  padding-left: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='27' height='27' viewBox='0 0 24 24'%3E%3Cpath d='M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: center left 4px;
+  background-position: center left 3px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tag-close .icon {
+  display: inline;
+  .nhsuk-icon__close {
+    fill: $color_nhsuk-black;
+    height: 20px;
+    width: 20px;
+  }
+}
+
+.go-to-top .icon {
+  display: inline;
+}
+
+.nhsuk-header__logo .icon {
+  display: inline;
+}
+
+.recent-innovations-link .icon .nhsuk-icon__chevron-right {
+  fill: $color_nhsuk-grey-1;
 }

@@ -20,22 +20,24 @@
     <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
   </ng-container>
 
-  <input
-    #input
-    [formControl]="fieldControl"
-    [id]="id"
-    [name]="controlName"
-    [type]="type"
-    [placeholder]="placeholder"
-    [value]="fieldControl.value"
-    [maxlength]="lengthLimitCharacters ?? null"
-    class="nhsuk-input"
-    [ngClass]="inputCssClass"
-    [attr.aria-invalid]="hasError ? 'true' : null"
-    [attr.aria-describedby]="ariaDescribedBy"
-  />
+  <div class="d-flex">
+    <input
+      #input
+      [formControl]="fieldControl"
+      [id]="id"
+      [name]="controlName"
+      [type]="type"
+      [placeholder]="placeholder"
+      [value]="fieldControl.value"
+      [maxlength]="lengthLimitCharacters ?? null"
+      class="nhsuk-input"
+      [ngClass]="inputCssClass"
+      [attr.aria-invalid]="hasError ? 'true' : null"
+      [attr.aria-describedby]="ariaDescribedBy"
+    />
 
-  <ng-content select="[append]"></ng-content>
+    <ng-content select="[append]"></ng-content>
+  </div>
 
   <div *ngIf="lengthLimit" class="nhsuk-hint" aria-live="polite">You have {{ currentAvailableCharacters }} characters remaining</div>
 </div>

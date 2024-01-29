@@ -9,7 +9,12 @@
           <dt class="width-20 nhsuk-u-font-size-16">{{ filter.title }}</dt>
           <dd>
             <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
-              <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+              <a
+                class="tag-close"
+                href="javascript:void(0)"
+                (click)="onRemoveFilter(filter.key, selected.key)"
+                attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter"
+              >
                 <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
               </a>
               <span class="nhsuk-u-font-size-14">{{ selected.value }}</span>
@@ -22,7 +27,12 @@
           <dd>
             <ng-container *ngFor="let selected of filter.selected; let i = index">
               <span class="d-inline-block bordered-item nhsuk-u-margin-1">
-                <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.key)" attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter">
+                <a
+                  class="tag-close"
+                  href="javascript:void(0)"
+                  (click)="onRemoveFilter(filter.key, selected.key)"
+                  attr.aria-label="Remove {{ selected.value }} from {{ filter.title }} filter"
+                >
                   <ng-container *ngTemplateOutlet="closeIcon"></ng-container>
                 </a>
 
@@ -53,9 +63,5 @@
 </div>
 
 <ng-template #closeIcon>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
-    <path
-      d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
-    ></path>
-  </svg>
+  <theme-svg-icon type="close" />
 </ng-template>
