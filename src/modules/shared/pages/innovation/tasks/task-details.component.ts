@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -53,7 +53,15 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
-    this.setBackLink('Go back');
+    if (
+      !(
+        this.stores.context.getPreviousUrl() &&
+        this.activatedRoute.snapshot.queryParams?.action === InnovationTaskStatusEnum.CANCELLED &&
+        (this.isAccessorType || this.isAssessmentType)
+      )
+    ) {
+      this.setBackLink('Go back');
+    }
 
     if (this.sectionId) {
       this.innovationsService
