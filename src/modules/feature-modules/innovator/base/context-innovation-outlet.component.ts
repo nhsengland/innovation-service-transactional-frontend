@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ContextStore } from '@modules/stores';
+import { DateISOType } from '@app/base/types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -18,6 +20,11 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     userIsOwner: boolean;
   } = { id: '', name: '', userIsOwner: false };
 
+  innovationStatusUpdatedAt: null | DateISOType = null;
+  innovationStatus: InnovationStatusEnum;
+
+  showArchivedBanner: boolean = false;
+
   constructor(
     private router: Router,
     private contextStore: ContextStore
@@ -27,6 +34,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
+
+    this.innovationStatus = this.contextStore.getInnovation().status;
 
     this.onRouteChange();
   }
@@ -42,5 +51,11 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       name: innovation.name,
       userIsOwner: innovation.loggedUser.isOwner
     };
+    this.innovationStatus = this.contextStore.getInnovation().status;
+    this.innovationStatusUpdatedAt = this.contextStore.getInnovation().statusUpdatedAt;
+
+    this.showArchivedBanner =
+      this.innovationStatus === 'ARCHIVED' && !this.router.url.includes('record/sections') ? true : false;
+    console.log(this.showArchivedBanner);
   }
 }

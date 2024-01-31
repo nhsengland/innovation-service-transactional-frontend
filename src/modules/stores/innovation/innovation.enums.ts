@@ -8,7 +8,8 @@ export enum InnovationStatusEnum {
   ABANDONED = 'ABANDONED',
   COMPLETE = 'COMPLETE',
   WITHDRAWN = 'WITHDRAWN',
-  PAUSED = 'PAUSED'
+  PAUSED = 'PAUSED',
+  ARCHIVED = 'ARCHIVED'
 }
 
 export enum InnovationGroupedStatusEnum {
@@ -19,7 +20,8 @@ export enum InnovationGroupedStatusEnum {
   RECEIVING_SUPPORT = 'RECEIVING_SUPPORT',
   NO_ACTIVE_SUPPORT = 'NO_ACTIVE_SUPPORT',
   AWAITING_NEEDS_REASSESSMENT = 'AWAITING_NEEDS_REASSESSMENT',
-  WITHDRAWN = 'WITHDRAWN'
+  WITHDRAWN = 'WITHDRAWN',
+  ARCHIVED = 'ARCHIVED'
 }
 
 export enum InnovationSupportStatusEnum {

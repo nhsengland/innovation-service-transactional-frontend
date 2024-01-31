@@ -661,7 +661,8 @@ export const locale = {
               title: `Innovation {{innovationName}} has been archived by its owner.`
             },
             AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A: {
-              title: `Innovation {{innovationName}} has been archived by its owner. You can view an archived copy of the innovation record.`
+              title: `Innovation {{innovationName}} has been archived by its owner. `,
+              link: `You can view an archived copy of the innovation record.`
             },
             AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT: {
               title: `Innovation {{innovationName}} has been archived by its owner during the needs assessment/reassessment process. You do not need to take any further action for this innovation.`
@@ -852,6 +853,11 @@ export const locale = {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
               description: 'This innovation has been withdrawn by the innovator.'
+            },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--red',
+              description: 'The innovator has archived this innovation.'
             }
           },
           export_request_status: {
