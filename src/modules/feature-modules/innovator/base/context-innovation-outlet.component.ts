@@ -18,10 +18,10 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     id: string;
     name: string;
     userIsOwner: boolean;
-  } = { id: '', name: '', userIsOwner: false };
+    statusUpdatedAt: null | DateISOType;
+  } = { id: '', name: '', userIsOwner: false, statusUpdatedAt: null };
 
   innovationStatusUpdatedAt: null | DateISOType = null;
-  innovationStatus: InnovationStatusEnum;
 
   showArchivedBanner: boolean = false;
 
@@ -35,8 +35,6 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .subscribe(e => this.onRouteChange(e))
     );
 
-    this.innovationStatus = this.contextStore.getInnovation().status;
-
     this.onRouteChange();
   }
 
@@ -49,13 +47,14 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     this.innovation = {
       id: innovation.id,
       name: innovation.name,
-      userIsOwner: innovation.loggedUser.isOwner
+      userIsOwner: innovation.loggedUser.isOwner,
+      statusUpdatedAt: innovation.statusUpdatedAt
     };
-    this.innovationStatus = this.contextStore.getInnovation().status;
-    this.innovationStatusUpdatedAt = this.contextStore.getInnovation().statusUpdatedAt;
 
     this.showArchivedBanner =
-      this.innovationStatus === 'ARCHIVED' && !this.router.url.includes('record/sections') ? true : false;
+      this.contextStore.getInnovation().status === 'ARCHIVED' && !this.router.url.includes('record/sections')
+        ? true
+        : false;
     console.log(this.showArchivedBanner);
   }
 }

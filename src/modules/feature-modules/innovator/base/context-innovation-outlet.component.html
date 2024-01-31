@@ -7,7 +7,7 @@
   <ng-container *ngIf="showArchivedBanner">
     <div class="nhsuk-card d-flex flex-direction-column nhsuk-u-padding-5 nhsuk-u-font-size-19">
       <span>
-        <strong>This innovation was archived on {{ innovationStatusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</strong>
+        <strong>This innovation was archived on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</strong>
       </span>
       <span>
         You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. If you want support on your
