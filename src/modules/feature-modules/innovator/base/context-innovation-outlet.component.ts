@@ -55,6 +55,5 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       this.contextStore.getInnovation().status === 'ARCHIVED' && !this.router.url.includes('record/sections')
         ? true
         : false;
-    console.log(this.showArchivedBanner);
   }
 }
