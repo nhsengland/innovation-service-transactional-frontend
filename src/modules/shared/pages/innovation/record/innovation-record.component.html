@@ -69,7 +69,7 @@
           Submit record for needs assessment
         </button>
         <button
-          *ngIf="innovation.status === 'PAUSED'"
+          *ngIf="innovation.status === 'ARCHIVED'"
           routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send"
           [disabled]="!allSectionsSubmitted"
           class="nhsuk-button nhsuk-u-margin-bottom-4"

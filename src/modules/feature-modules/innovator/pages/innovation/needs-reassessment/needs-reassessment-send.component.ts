@@ -62,7 +62,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
-          if (this.innovation.status === InnovationStatusEnum.PAUSED) {
+          if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
             this.redirectTo(`${this.baseUrl}/record`);
           } else {
             this.redirectTo(`${this.baseUrl}/how-to-proceed`);

@@ -24,7 +24,7 @@
 
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'PAUSED'">
+      <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'ARCHIVED'">
         <p *ngIf="isInnovatorType">Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="!isInnovatorType">Use messages to talk to the innovator and other organisations supporting this innovation.</p>
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">

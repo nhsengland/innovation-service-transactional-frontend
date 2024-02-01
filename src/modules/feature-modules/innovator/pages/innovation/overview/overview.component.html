@@ -50,7 +50,7 @@
   </dl>
 
   <div>
-    <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="innovation?.status === 'PAUSED'">
+    <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="innovation?.status === 'ARCHIVED'">
       You have stopped sharing this innovation on {{ innovation?.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. If you want support with your innovation,
       <a routerLink="/innovator/innovations/{{ innovationId }}/record">go to the innovation record</a> and reshare it for a needs reassessment.
     </span>
