@@ -21,8 +21,6 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     statusUpdatedAt: null | DateISOType;
   } = { id: '', name: '', userIsOwner: false, statusUpdatedAt: null };
 
-  innovationStatusUpdatedAt: null | DateISOType = null;
-
   showArchivedBanner: boolean = false;
 
   constructor(
