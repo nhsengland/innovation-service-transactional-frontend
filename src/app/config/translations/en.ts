@@ -858,11 +858,6 @@ export const locale = {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',
               description: 'This innovation has been withdrawn by the innovator.'
-            },
-            ARCHIVED: {
-              name: 'Archived',
-              cssColorClass: 'nhsuk-tag--red',
-              description: 'The innovator has archived this innovation.'
             }
           },
           export_request_status: {

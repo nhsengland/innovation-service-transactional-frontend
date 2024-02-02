@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
+import { AuthenticationStore, ContextStore } from '@modules/stores';
 import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
@@ -27,7 +27,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore
+    private contextStore: ContextStore,
+    private authentication: AuthenticationStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -51,9 +52,11 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       statusUpdatedAt: innovation.statusUpdatedAt
     };
 
+    const baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${innovation.id}`;
+
+    const pageRootCheckRegex = new RegExp(`${baseUrl.replace(/\//g, '\\/')}\/[a-zA-Z\-]*$`);
+
     this.showArchivedBanner =
-      this.contextStore.getInnovation().status === 'ARCHIVED' && !this.router.url.includes('record/sections')
-        ? true
-        : false;
+      this.contextStore.getInnovation().status === 'ARCHIVED' && pageRootCheckRegex.test(this.router.url);
   }
 }
