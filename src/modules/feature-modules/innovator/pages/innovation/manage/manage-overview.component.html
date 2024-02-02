@@ -17,27 +17,27 @@
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Invite or manage users</h2>
-      <p class="nhsuk-u-margin-bottom-1">To invite someone to collaborate on your innovation, you will need their email address.</p>
-      <a routerLink="collaborators" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-margin-top-3">Invite or manage users</a>
+      <p class="nhsuk-u-margin-bottom-3">To invite someone to collaborate on your innovation, you will need their email address.</p>
+      <a routerLink="collaborators" class="nhsuk-link nhsuk-link--no-visited-state">Invite or manage users</a>
     </div>
   </div>
 
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Transfer ownership</h2>
-      <p *ngIf="!isActiveInnovation" class="nhsuk-u-margin-bottom-1">You have already requested to transfer ownership of this innovation.</p>
-      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-1">To transfer the ownership of an innovation to someone else, you will need their email address.</p>
-      <a *ngIf="isActiveInnovation" routerLink="transfer" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-margin-top-3"> Transfer innovation ownership </a>
+      <p *ngIf="!isActiveInnovation" class="nhsuk-u-margin-bottom-3">You have already requested to transfer ownership of this innovation.</p>
+      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-3">To transfer the ownership of an innovation to someone else, you will need their email address.</p>
+      <a *ngIf="isActiveInnovation" routerLink="transfer" class="nhsuk-link nhsuk-link--no-visited-state"> Transfer innovation ownership </a>
     </div>
   </div>
 
   <div *ngIf="!(isArchived || isWaitingAssessment)" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Archive innovation</h2>
-      <p class="nhsuk-u-margin-bottom-1">
+      <p class="nhsuk-u-margin-bottom-3">
         All support will end when you archive your innovation. If you want support on your innovation in future, you can submit your record for a needs reassessment.
       </p>
-      <a routerLink="archive" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-margin-top-3">Archive this innovation</a>
+      <a routerLink="archive" class="nhsuk-link nhsuk-link--no-visited-state">Archive this innovation</a>
     </div>
   </div>
 </theme-content-wrapper>
