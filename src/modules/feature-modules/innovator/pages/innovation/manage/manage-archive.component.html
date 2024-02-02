@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-column-two-thirds">
       <form [formGroup]="form" (ngSubmit)="onSubmitForm()">
         <ng-container *ngIf="stepNumber === 1">
-          <theme-form-textarea controlName="message" label="Why have you decided to archive this innovation?" [pageUniqueField]="false" lengthLimit="xs"></theme-form-textarea>
+          <theme-form-textarea controlName="message" label="Why have you decided to archive this innovation?" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
         </ng-container>
 
