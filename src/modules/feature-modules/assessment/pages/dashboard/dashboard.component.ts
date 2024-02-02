@@ -12,7 +12,8 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 
 @Component({
   selector: 'app-assessment-pages-dashboard',
-  templateUrl: './dashboard.component.html'
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent extends CoreComponent implements OnInit {
   user: {

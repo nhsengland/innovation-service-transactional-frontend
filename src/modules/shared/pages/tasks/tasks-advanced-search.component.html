@@ -10,10 +10,8 @@
 
         <theme-form-input controlName="innovationName" [pageUniqueField]="false" label="Search by innovation name">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-button form-input-appended-button fill-white" style="padding: 4px 12px 0px 10px" id="search-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
-                <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z"></path>
-              </svg>
+            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+              <theme-svg-icon type="search" />
               <span class="nhsuk-u-visually-hidden">Search</span>
             </button>
           </ng-container>
@@ -56,12 +54,13 @@
               <dt class="width-15 nhsuk-u-font-size-16">{{ filter.title }}</dt>
               <dd class="width-75">
                 <span *ngFor="let selected of filter.selected" class="d-inline-block bordered-item nhsuk-u-margin-1">
-                  <a href="javascript:void(0)" (click)="onRemoveFilter(filter.key, selected.value)" attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter">
-                    <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
-                      <path
-                        d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
-                      ></path>
-                    </svg>
+                  <a
+                    class="tag-close"
+                    href="javascript:void(0)"
+                    (click)="onRemoveFilter(filter.key, selected.value)"
+                    attr.aria-label="Remove {{ selected.label }} from {{ filter.title }} filter"
+                  >
+                    <theme-svg-icon type="close" />
                   </a>
                   <span class="nhsuk-u-font-size-14">{{ selected.label }}</span>
                 </span>
@@ -161,12 +160,6 @@
 </theme-content-wrapper>
 
 <ng-template #filterIcon let-showHideStatus="showHideStatus">
-  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
-  </svg>
-  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
-  </svg>
+  <theme-svg-icon *ngIf="showHideStatus === 'closed'" type="plus" />
+  <theme-svg-icon *ngIf="showHideStatus === 'opened'" type="minus" />
 </ng-template>

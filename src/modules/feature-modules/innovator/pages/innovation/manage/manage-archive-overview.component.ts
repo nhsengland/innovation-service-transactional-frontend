@@ -47,7 +47,7 @@ export class PageInnovationManageArchiveOverviewComponent extends CoreComponent 
         queryParams: {
           take: 100,
           skip: 0,
-          filters: { status: [InnovationStatusEnum.PAUSED], hasAccessThrough: ['owner'] }
+          filters: { status: [InnovationStatusEnum.ARCHIVED], hasAccessThrough: ['owner'] }
         }
       })
       .subscribe(innovations => {

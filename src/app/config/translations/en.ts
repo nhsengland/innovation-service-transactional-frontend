@@ -849,6 +849,11 @@ export const locale = {
               cssColorClass: 'nhsuk-tag--purple',
               description: 'The innovation has been sent for needs reassessment.'
             },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--red',
+              description: 'The innovator has archived this innovation.'
+            },
             WITHDRAWN: {
               name: 'Withdrawn',
               cssColorClass: 'nhsuk-tag--red',

@@ -51,7 +51,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         {
           id: 'updatedInnovationRecord',
           dataType: 'radio-group',
-          label: currentValues.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
+          label:
+            currentValues.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
           validations: { isRequired: [true, 'Choose one option'] },
           items: yesNoItems
         }
@@ -63,9 +64,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
         {
           id: 'description',
           dataType: 'textarea',
-          label: currentValues.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
+          label:
+            currentValues.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
           description:
-            currentValues.status === InnovationStatusEnum.PAUSED
+            currentValues.status === InnovationStatusEnum.ARCHIVED
               ? 'Let us know what has changed and what support you now need with your innovation.'
               : 'Enter your comment',
           validations: { isRequired: [true, 'A comment is required'] },
@@ -96,12 +98,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push(
     {
-      label: data.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
+      label: data.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
       value: yesNoItems.find(item => item.value === data.updatedInnovationRecord)?.label,
       editStepNumber: 1
     },
     {
-      label: data.status === InnovationStatusEnum.PAUSED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
+      label: data.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
       value: data.description,
       editStepNumber: 2
     }

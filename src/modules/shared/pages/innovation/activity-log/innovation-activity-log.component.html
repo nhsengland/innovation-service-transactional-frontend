@@ -127,20 +127,10 @@
 </theme-content-wrapper>
 
 <ng-template #filterIcon let-showHideStatus="showHideStatus">
-  <svg *ngIf="showHideStatus === 'closed'" class="nhsuk-icon nhsuk-icon__plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M12 8v8M8 12h8"></path>
-  </svg>
-  <svg *ngIf="showHideStatus === 'opened'" class="nhsuk-icon nhsuk-icon__minus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" height="25" width="25">
-    <circle cx="12" cy="12" r="10"></circle>
-    <path fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M8 12h8"></path>
-  </svg>
+  <theme-svg-icon *ngIf="showHideStatus === 'closed'" type="plus" />
+  <theme-svg-icon *ngIf="showHideStatus === 'opened'" type="minus" />
 </ng-template>
 
 <ng-template #closeIcon>
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" aria-hidden="true" focusable="false" height="20" width="20">
-    <path
-      d="M13.41 12l5.3-5.29a1 1 0 1 0-1.42-1.42L12 10.59l-5.29-5.3a1 1 0 0 0-1.42 1.42l5.3 5.29-5.3 5.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l5.29-5.3 5.29 5.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z"
-    ></path>
-  </svg>
+  <theme-svg-icon type="close" />
 </ng-template>

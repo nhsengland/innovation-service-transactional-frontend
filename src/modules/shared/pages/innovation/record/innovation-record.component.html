@@ -69,7 +69,7 @@
           Submit record for needs assessment
         </button>
         <button
-          *ngIf="innovation.status === 'PAUSED'"
+          *ngIf="innovation.status === 'ARCHIVED'"
           routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send"
           [disabled]="!allSectionsSubmitted"
           class="nhsuk-button nhsuk-u-margin-bottom-4"
@@ -186,7 +186,7 @@
       <ng-container *ngIf="!isAdminType">
         <div class="nhsuk-action-link nhsuk-u-padding-top-5">
           <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
-            <theme-svg-icon type="action"></theme-svg-icon>
+            <theme-svg-icon type="arrow-right-circle" />
             <span class="nhsuk-action-link__text"> View all the questions and answers </span>
           </a>
         </div>

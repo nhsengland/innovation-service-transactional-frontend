@@ -8,7 +8,6 @@ export enum InnovationStatusEnum {
   ABANDONED = 'ABANDONED',
   COMPLETE = 'COMPLETE',
   WITHDRAWN = 'WITHDRAWN',
-  PAUSED = 'PAUSED',
   ARCHIVED = 'ARCHIVED'
 }
 
