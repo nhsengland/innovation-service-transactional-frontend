@@ -157,11 +157,11 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  withdrawInnovation(innovationId: string, message: string): Observable<{ id: string }> {
+  withdrawInnovation(innovationId: string, message: string): Observable<void> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/withdraw')
       .setPathParams({ innovationId });
-    return this.http.patch<{ id: string }>(url.buildUrl(), { message }).pipe(
+    return this.http.patch<void>(url.buildUrl(), { message }).pipe(
       take(1),
       map(response => response)
     );
