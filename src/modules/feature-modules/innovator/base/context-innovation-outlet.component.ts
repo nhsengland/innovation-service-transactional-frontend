@@ -52,7 +52,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
     const baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${innovation.id}`;
 
-    const pageRootCheckRegex = new RegExp(`${baseUrl.replace(/\//g, '\\/')}\/[a-zA-Z\-]*$`);
+    const pageRootCheckRegex = new RegExp(`(${baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
 
     this.showArchivedBanner =
       this.contextStore.getInnovation().status === 'ARCHIVED' && pageRootCheckRegex.test(this.router.url);
