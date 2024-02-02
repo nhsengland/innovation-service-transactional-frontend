@@ -665,7 +665,7 @@ export const locale = {
               link: `You can view an archived copy of the innovation record.`
             },
             AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT: {
-              title: `Innovation {{innovationName}} has been archived by its owner during the needs assessment/reassessment process. You do not need to take any further action for this innovation.`
+              title: `Innovation {{innovationName}} has been archived by its owner during the needs {{assessmentType}} process. You do not need to take any further action for this innovation.`
             },
             SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: {
               title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.`
