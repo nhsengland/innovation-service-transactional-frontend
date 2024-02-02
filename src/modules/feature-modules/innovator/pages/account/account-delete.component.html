@@ -3,11 +3,20 @@
     <div class="nhsuk-grid-column-three-quarters">
       <form [formGroup]="form">
         <ng-container *ngIf="stepNumber === 1 && innovator.isOwner">
-          <p *ngIf="!innovator.hasCollaborators && !innovator.hasPendingTransfer">Your innovations will be withdrawn if you delete your account.</p>
-          <p *ngIf="innovator.hasCollaborators || innovator.hasPendingTransfer">
-            If you delete your account, your innovations will be withdrawn and everyone working on them will lose access to them.
-            <span *ngIf="innovator.hasPendingTransfer"> Unless they are pending transfer of ownership.</span>
-          </p>
+          <div class="nhsuk-u-margin-bottom-6">
+            <p *ngIf="!innovator.hasCollaborators && !innovator.hasPendingTransfer">Your innovations will be archived if you delete your account.</p>
+            <p *ngIf="!innovator.hasCollaborators && innovator.hasPendingTransfer">
+              If you delete your account, your innovations will be archived, unless they are pending transfer of ownership.
+            </p>
+            <p *ngIf="innovator.hasCollaborators && !innovator.hasPendingTransfer">
+              If you delete your account, your innovations will be archived and your collaborators will lose access to them.
+            </p>
+            <p *ngIf="innovator.hasCollaborators && innovator.hasPendingTransfer">
+              If you delete your account, your innovations will be archived and your collaborators will lose access to them.
+            </p>
+
+            <p>All support organisations you have shared your data with, will be able to view an archived version of your innovation.</p>
+          </div>
           <div class="d-flex align-items-center justify-content-space-between">
             <h2 class="nhsuk-heading-m">Your innovations</h2>
           </div>
