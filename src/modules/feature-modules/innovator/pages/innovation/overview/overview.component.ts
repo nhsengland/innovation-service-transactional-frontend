@@ -147,7 +147,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         });
       }
 
-      if (this.innovation.loggedUser.isOwner && this.innovation.status === 'PAUSED') {
+      if (this.innovation.loggedUser.isOwner && this.innovation.status === 'ARCHIVED') {
         this.stores.context.dismissNotification(this.innovationId, {
           contextDetails: [NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF]
         });

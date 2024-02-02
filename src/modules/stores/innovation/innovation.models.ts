@@ -150,7 +150,7 @@ export const INNOVATION_STATUS = {
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
   COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' },
   WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
-  PAUSED: { label: 'Paused', cssClass: 'nhsuk-tag--dark-grey' }
+  ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
 };
 
 export const INNOVATION_SUPPORT_STATUS = {

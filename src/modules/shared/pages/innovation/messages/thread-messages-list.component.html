@@ -44,7 +44,7 @@
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'PAUSED'">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'ARCHIVED'">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 
           <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
@@ -98,7 +98,7 @@
             </p>
 
             <div
-              *ngIf="this.innovation.status !== 'PAUSED' && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
+              *ngIf="this.innovation.status !== 'ARCHIVED' && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
               [ngClass]="{
                 'nhsuk-body-s': true,
                 'nhsuk-u-margin-bottom-0': true,
