@@ -81,7 +81,23 @@
             <div class="nhsuk-heading-m nhsuk-warning-callout__label">
               <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you delete your account </span>
             </div>
-            <p *ngIf="!innovator.isOwner && innovator.isCollaborator">You will lose access to any innovations you are working on as a collaborator.</p>
+            <ng-container *ngIf="!innovator.hasCollaborators">
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li *ngIf="!innovator.hasPendingTransfer">all innovations will be archived</li>
+                <li *ngIf="innovator.hasPendingTransfer">all collaborators will lose access to archived innovations</li>
+                <li>all support organisations you have shared your data with, will be able to view an archived version of your innovation</li>
+              </ul>
+            </ng-container>
+            <ng-container *ngIf="innovator.hasCollaborators">
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li *ngIf="!innovator.hasPendingTransfer">all innovations will be archived</li>
+                <li *ngIf="innovator.hasPendingTransfer">all innovations will be archived unless you have a pending transfer request and it is accepted within 30 days</li>
+                <li>all innovations will be archived unless you have a pending transfer request and it is accepted within 30 days</li>
+                <li>all support organisations you have shared your data with, will be able to view an archived version of your innovation</li>
+              </ul>
+            </ng-container>
+
+            <!-- <p *ngIf="!innovator.isOwner && innovator.isCollaborator">You will lose access to any innovations you are working on as a collaborator.</p>
             <ng-container *ngIf="innovator.isOwner">
               <ng-container *ngIf="!innovator.isCollaborator && !innovator.hasPendingTransfer; else innovatorIsCollaboratorOrHasPendingTransfer">
                 <p *ngIf="!innovator.hasCollaborators">Your innovations will be withdrawn and you will no longer have access to them.</p>
@@ -97,7 +113,7 @@
                   </li>
                 </ul>
               </ng-template>
-            </ng-container>
+            </ng-container> -->
           </div>
           <ng-container *ngIf="innovator.isOwner && stepNumber === 3">
             <p>If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
