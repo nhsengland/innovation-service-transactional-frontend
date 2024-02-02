@@ -31,12 +31,11 @@
     </div>
   </div>
 
-  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div *ngIf="!isArchived" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Archive innovation</h2>
-      <p *ngIf="!isActiveInnovation">You cannot withdraw this innovation as you have requested to transfer its ownership.</p>
-      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-1">To withdraw an innovation you are no longer working on you will need to enter your password.</p>
-      <a *ngIf="isActiveInnovation" routerLink="withdraw" class="nhsuk-link nhsuk-link--no-visited-state">Archive this innovation</a>
+      <p class="nhsuk-u-margin-bottom-1">To withdraw an innovation you are no longer working on you will need to enter your password.</p>
+      <a routerLink="archive" class="nhsuk-link nhsuk-link--no-visited-state">Archive this innovation</a>
     </div>
   </div>
 </theme-content-wrapper>

@@ -22,7 +22,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
 
   isActiveInnovation = false;
   isInProgressInnovation = false;
-  isInPause = false;
+  isArchived = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
 
   constructor(private innovatorService: InnovatorService) {
@@ -33,8 +33,8 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
       this.isInProgressInnovation = true;
-    } else if (this.innovation.status === InnovationStatusEnum.PAUSED) {
-      this.isInPause = true;
+    } else if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
+      this.isArchived = true;
     }
   }
 
