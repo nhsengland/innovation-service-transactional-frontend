@@ -4,17 +4,15 @@
     <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation.userIsOwner ? "Innovation owner" : "Innovation collaborator" }}</p>
   </div>
 
-  <ng-container *ngIf="showArchivedBanner">
-    <div class="nhsuk-card d-flex flex-direction-column nhsuk-u-padding-5 nhsuk-u-font-size-19">
-      <span>
-        <strong>This innovation was archived on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</strong>
-      </span>
-      <span>
-        You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. If you want support on your
-        innovation in future, you can submit your record for a needs reassessment.
-      </span>
-    </div>
-  </ng-container>
+  <div *ngIf="showArchivedBanner" class="nhsuk-card d-flex flex-direction-column nhsuk-u-padding-5 nhsuk-u-font-size-19">
+    <span>
+      <strong>This innovation was archived on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</strong>
+    </span>
+    <span>
+      You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. If you want support on your innovation
+      in future, you can submit your record for a needs reassessment.
+    </span>
+  </div>
 
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 </div>

@@ -44,7 +44,6 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
     } else if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
       this.isArchived = true;
     }
-    console.log(this.isWaitingAssessment);
   }
 
   ngOnInit(): void {

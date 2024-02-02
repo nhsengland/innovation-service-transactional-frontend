@@ -52,6 +52,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
     const baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${innovation.id}`;
 
+    // Regex to check for all 'root' innovation's pages only (i.e.: '/overview', 'tasks'), while children are ignored (i.e: 'thread/:id', 'record/sections/:sectionId', etc.). 'manage' endpoint is an exception, since it redirects to '/manage/innovation'
     const pageRootCheckRegex = new RegExp(`(${baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
 
     this.showArchivedBanner =
