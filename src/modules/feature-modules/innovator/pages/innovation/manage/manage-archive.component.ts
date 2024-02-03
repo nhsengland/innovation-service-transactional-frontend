@@ -10,12 +10,14 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 import { ContextInnovationType } from '@modules/stores';
 
 @Component({
-  selector: 'app-innovator-pages-innovation-manage-stop-sharing',
-  templateUrl: './manage-stop-sharing.component.html'
+  selector: 'app-innovator-pages-innovation-manage-archive',
+  templateUrl: './manage-archive.component.html'
 })
-export class PageInnovationManageStopSharingComponent extends CoreComponent implements OnInit {
+export class PageInnovationManageArchiveComponent extends CoreComponent implements OnInit {
   innovationId: string;
   innovation: ContextInnovationType;
+
+  userEmail: string;
 
   stepNumber: 1 | 2 = 1;
 
@@ -29,16 +31,21 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
+    this.userEmail = this.stores.authentication.getUserInfo().email;
 
-    this.setPageTitle(`Stop sharing '${this.innovation.name}' innovation`, { size: 'l' });
+    this.setPageTitle(`Archive ${this.innovation.name} innovation`, { size: 'xl', width: '2.thirds' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
     this.form = new FormGroup(
       {
         message: new FormControl<string>('', CustomValidators.required('A message is required')),
+        email: new FormControl<string>('', [
+          CustomValidators.required('Your email is required'),
+          CustomValidators.equalTo(this.userEmail)
+        ]),
         confirmation: new FormControl<string>('', [
           CustomValidators.required('A confirmation text is necessary'),
-          CustomValidators.equalTo('stop sharing my innovation')
+          CustomValidators.equalTo('archive innovation')
         ])
       },
       { updateOn: 'blur' }
@@ -59,16 +66,15 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
     }
 
     this.innovatorService
-      .pauseInnovation(this.innovationId!, this.form.get('message')!.value)
+      .archiveInnovation(this.innovationId!, this.form.get('message')!.value)
       .pipe(
         concatMap(() => {
           return this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update First Time SignIn information.
         })
       )
       .subscribe(() => {
-        this.setRedirectAlertSuccess('You have stopped sharing your innovation', {
-          message:
-            'You will not be able to interact with your support organisations anymore. If you would like support in the future, you can resubmit your innovation record for a needs reassessment.'
+        this.setRedirectAlertSuccess('You have archived your innovation', {
+          message: 'All support has ended. You cannot send or reply to messages. All open tasks have been cancelled.'
         });
         this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
       });
@@ -78,7 +84,7 @@ export class PageInnovationManageStopSharingComponent extends CoreComponent impl
     this.stepNumber--;
 
     if (this.stepNumber === 0) {
-      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/stop-sharing`);
+      this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`);
     }
   }
 
