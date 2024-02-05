@@ -68,7 +68,7 @@
     </ng-container>
   </ng-container>
 
-  <ng-container *ngIf="innovation?.status && innovation?.status !== 'WAITING_NEEDS_ASSESSMENT'">
+  <ng-container *ngIf="showCards">
     <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>
   </ng-container>
 

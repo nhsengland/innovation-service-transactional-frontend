@@ -109,9 +109,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovatorSummary = [{ label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' }];
 
-      this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
-        this.innovationSupport.status
-      );
+      this.showCards =
+        [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
+          this.innovationSupport.status
+        ) && this.innovation.status !== 'ARCHIVED';
 
       this.innovationCollaborators = collaborators.data;
 

@@ -18,6 +18,7 @@ import {
   AssessmentExemptionTypeDTO,
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-assessment-pages-innovation-overview',
@@ -26,6 +27,8 @@ import {
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   innovation: null | InnovationInfoDTO = null;
+
+  showCards: boolean = true;
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string }[] = [];
@@ -62,6 +65,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .pipe(
         switchMap(innovationInfo => {
           this.innovation = innovationInfo;
+
+          this.showCards = ![InnovationStatusEnum.ARCHIVED, InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT].includes(
+            this.innovation.status
+          );
 
           this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
