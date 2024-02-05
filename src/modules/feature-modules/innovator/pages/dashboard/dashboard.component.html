@@ -73,6 +73,15 @@
           </li>
         </ul>
       </ng-container>
+
+      <ng-container *ngIf="user.innovationsArchived.length > 0">
+        <h2>Archived innovations</h2>
+        <ul class="nhsuk-grid-row nhsuk-card-group">
+          <li *ngFor="let innovation of user.innovationsArchived" class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>
+          </li>
+        </ul>
+      </ng-container>
     </div>
 
     <div class="nhsuk-grid-column-one-third">

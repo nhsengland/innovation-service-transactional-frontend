@@ -37,6 +37,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       description: null | string;
       groupedStatus: keyof typeof InnovationGroupedStatusEnum;
     }[];
+    innovationsArchived: {
+      id: string;
+      name: string;
+      description: null | string;
+      groupedStatus: keyof typeof InnovationGroupedStatusEnum;
+    }[];
     passwordResetAt: string;
     firstTimeSignInAt: string | null;
   };
@@ -55,6 +61,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       displayName: user.displayName,
       innovationsOwner: [],
       innovationsCollaborator: [],
+      innovationsArchived: [],
       passwordResetAt: user.passwordResetAt || '',
       firstTimeSignInAt: user.firstTimeSignInAt
     };
@@ -99,6 +106,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
       this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
       this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
+      this.user.innovationsArchived = this.getArchivedInnovationsList(
+        innovationsListOwner,
+        innovationsListCollaborator
+      );
 
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
@@ -136,6 +147,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
+    let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = ['id', 'name', 'groupedStatus'];
+    let pagination: { take: 100; skip: 0; order: { name: 'ASC' } };
+
     this.innovatorService
       .updateTransferInnovation(
         transferId,
@@ -146,6 +160,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           forkJoin([
             this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
             this.innovatorService.getInnovationTransfers(true),
+
             this.innovationsService.getInnovationsList({
               fields: ['groupedStatus', 'statistics'],
               queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 }
@@ -153,7 +168,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.innovationsService.getInnovationsList({
               fields: ['groupedStatus', 'statistics'],
               queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 }
-            })
+            }),
+            this.innovationsService.getInnovationsList2(
+              queryFields,
+              { search: undefined, groupedStatuses: [InnovationGroupedStatusEnum.ARCHIVED] },
+              pagination
+            )
           ])
         )
       )
@@ -161,6 +181,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.innovationTransfers = innovationsTransfers;
         this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
         this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
+        this.user.innovationsArchived = this.getArchivedInnovationsList(
+          innovationsListOwner,
+          innovationsListCollaborator
+        );
 
         this.setAlertSuccess(
           accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`
@@ -188,11 +212,25 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   private getInnovationsListInformation(innovationList: InnovationsListDTO) {
-    return innovationList.data.map(innovation => ({
-      id: innovation.id,
-      name: innovation.name,
-      description: this.buildDescriptionString(innovation),
-      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-    }));
+    return innovationList.data
+      .map(innovation => ({
+        id: innovation.id,
+        name: innovation.name,
+        description: this.buildDescriptionString(innovation),
+        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+      }))
+      .filter(item => item.groupedStatus !== 'ARCHIVED');
+  }
+
+  private getArchivedInnovationsList(ownerList: InnovationsListDTO, collaboratorList: InnovationsListDTO) {
+    return [...ownerList.data, ...collaboratorList.data]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .filter(item => item.groupedStatus === 'ARCHIVED')
+      .map(innovation => ({
+        id: innovation.id,
+        name: innovation.name,
+        description: this.buildDescriptionString(innovation),
+        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+      }));
   }
 }
