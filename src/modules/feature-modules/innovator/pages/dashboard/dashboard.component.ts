@@ -104,12 +104,18 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         return;
       }
 
-      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
-      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
-      this.user.innovationsArchived = this.getArchivedInnovationsListInformation(
-        innovationsListOwner,
-        innovationsListCollaborator
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+        item => item.groupedStatus !== 'ARCHIVED'
       );
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+        item => item.groupedStatus !== 'ARCHIVED'
+      );
+      this.user.innovationsArchived = this.user.innovationsArchived = [
+        ...this.getInnovationsListInformation(innovationsListOwner),
+        ...this.getInnovationsListInformation(innovationsListCollaborator)
+      ]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter(item => item.groupedStatus === 'ARCHIVED');
 
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
@@ -171,12 +177,18 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       )
       .subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
         this.innovationTransfers = innovationsTransfers;
-        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
-        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
-        this.user.innovationsArchived = this.getArchivedInnovationsListInformation(
-          innovationsListOwner,
-          innovationsListCollaborator
+        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
         );
+        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
+        );
+        this.user.innovationsArchived = [
+          ...this.getInnovationsListInformation(innovationsListOwner),
+          ...this.getInnovationsListInformation(innovationsListCollaborator)
+        ]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter(item => item.groupedStatus === 'ARCHIVED');
 
         this.setAlertSuccess(
           accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`
@@ -204,25 +216,11 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   private getInnovationsListInformation(innovationList: InnovationsListDTO) {
-    return innovationList.data
-      .map(innovation => ({
-        id: innovation.id,
-        name: innovation.name,
-        description: this.buildDescriptionString(innovation),
-        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-      }))
-      .filter(item => item.groupedStatus !== 'ARCHIVED');
-  }
-
-  private getArchivedInnovationsListInformation(ownerList: InnovationsListDTO, collaboratorList: InnovationsListDTO) {
-    return [...ownerList.data, ...collaboratorList.data]
-      .sort((a, b) => a.name.localeCompare(b.name))
-      .filter(item => item.groupedStatus === 'ARCHIVED')
-      .map(innovation => ({
-        id: innovation.id,
-        name: innovation.name,
-        description: this.buildDescriptionString(innovation),
-        groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
-      }));
+    return innovationList.data.map(innovation => ({
+      id: innovation.id,
+      name: innovation.name,
+      description: this.buildDescriptionString(innovation),
+      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+    }));
   }
 }
