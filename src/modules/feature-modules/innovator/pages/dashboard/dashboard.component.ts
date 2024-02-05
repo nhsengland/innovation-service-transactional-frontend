@@ -147,9 +147,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
-    let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = ['id', 'name', 'groupedStatus'];
-    let pagination: { take: 100; skip: 0; order: { name: 'ASC' } };
-
     this.innovatorService
       .updateTransferInnovation(
         transferId,
@@ -168,12 +165,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.innovationsService.getInnovationsList({
               fields: ['groupedStatus', 'statistics'],
               queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 }
-            }),
-            this.innovationsService.getInnovationsList2(
-              queryFields,
-              { search: undefined, groupedStatuses: [InnovationGroupedStatusEnum.ARCHIVED] },
-              pagination
-            )
+            })
           ])
         )
       )
