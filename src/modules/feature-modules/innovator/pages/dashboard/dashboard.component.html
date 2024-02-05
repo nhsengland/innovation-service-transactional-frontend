@@ -66,7 +66,7 @@
       </ul>
 
       <ng-container *ngIf="user.innovationsCollaborator.length > 0">
-        <h2>Innovations you are working on as a collaborator</h2>
+        <h2>Innovations you are collaborating on</h2>
         <ul class="nhsuk-grid-row nhsuk-card-group">
           <li *ngFor="let innovation of user.innovationsCollaborator" class="nhsuk-grid-column-full nhsuk-card-group__item">
             <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>

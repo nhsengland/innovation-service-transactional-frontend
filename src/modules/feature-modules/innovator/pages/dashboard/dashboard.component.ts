@@ -106,7 +106,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
       this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
       this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
-      this.user.innovationsArchived = this.getArchivedInnovationsList(
+      this.user.innovationsArchived = this.getArchivedInnovationsListInformation(
         innovationsListOwner,
         innovationsListCollaborator
       );
@@ -173,7 +173,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         this.innovationTransfers = innovationsTransfers;
         this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
         this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
-        this.user.innovationsArchived = this.getArchivedInnovationsList(
+        this.user.innovationsArchived = this.getArchivedInnovationsListInformation(
           innovationsListOwner,
           innovationsListCollaborator
         );
@@ -214,7 +214,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       .filter(item => item.groupedStatus !== 'ARCHIVED');
   }
 
-  private getArchivedInnovationsList(ownerList: InnovationsListDTO, collaboratorList: InnovationsListDTO) {
+  private getArchivedInnovationsListInformation(ownerList: InnovationsListDTO, collaboratorList: InnovationsListDTO) {
     return [...ownerList.data, ...collaboratorList.data]
       .sort((a, b) => a.name.localeCompare(b.name))
       .filter(item => item.groupedStatus === 'ARCHIVED')
