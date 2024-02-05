@@ -32,14 +32,14 @@
                   <p *ngIf="innovation.collaboratorsCount > 0">
                     You have {{ innovation.collaboratorsCount }} {{ innovation.collaboratorsCount > 1 ? "collaborators" : "collaborator" }} working on this innovation.
                   </p>
-                  <p>If you do not want this innovation to be withdrawn, you can transfer its ownership.</p>
+                  <p>If you do not want this innovation to be archived, you can transfer its ownership.</p>
                 </ng-container>
                 <ng-template #innovationHasPendingTransfer>
                   <p>You have requested to transfer ownership of this innovation.</p>
                   <p>
                     This request is pending. If your request is rejected or has not been accepted within
                     {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) }}
-                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be withdrawn.
+                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be archived.
                   </p>
                 </ng-template>
               </dd>
@@ -50,7 +50,7 @@
           </dl>
 
           <div *ngIf="!innovator.hasOnlyPendingTransfers" class="nhsuk-u-margin-bottom-3">
-            <theme-form-checkbox controlName="confirm" size="small" label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
+            <theme-form-checkbox controlName="confirm" size="small" label="I understand that my innovations will be archived, if I delete my account."></theme-form-checkbox>
           </div>
 
           <div *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
@@ -71,7 +71,7 @@
                 </span>
               </div>
               <p>This transfer is waiting to be accepted by its new owner.</p>
-              <p>If you delete your account, and the transfer is rejected or expires, your innovation will be withdrawn and everyone will lose access to it.</p>
+              <p>If you delete your account, and the transfer is rejected or expires, your innovation will archived.</p>
             </div>
           </ng-container>
         </ng-container>
