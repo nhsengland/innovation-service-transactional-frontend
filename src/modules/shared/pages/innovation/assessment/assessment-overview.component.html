@@ -135,7 +135,7 @@
       <ng-container *ngIf="isAccessorType">
         <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Continue to innovation</a>
         <a
-          *ngIf="isQualifyingAccessorRole"
+          *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED'"
           routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
           class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
         >
