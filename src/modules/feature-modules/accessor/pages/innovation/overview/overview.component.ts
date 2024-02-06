@@ -114,7 +114,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.showCards =
         [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
           this.innovationSupport.status
-        ) && this.innovation.status !== 'ARCHIVED';
+        ) && !this.isArchived;
 
       this.innovationCollaborators = collaborators.data;
 

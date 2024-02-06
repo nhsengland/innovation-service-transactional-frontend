@@ -105,12 +105,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             }
           ];
 
-          const isArchived = this.innovation.status === 'ARCHIVED';
           this.innovatorSummary = [
             { label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' },
             {
               label: 'Contact preference',
-              value: isArchived
+              value: this.isArchived
                 ? 'Not available'
                 : UtilsHelper.getContactPreferenceValue(
                     this.innovation.owner?.contactByEmail,
@@ -120,10 +119,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             },
             {
               label: 'Contact details',
-              value: isArchived ? 'Not available' : this.innovation.owner?.contactDetails || ''
+              value: this.isArchived ? 'Not available' : this.innovation.owner?.contactDetails || ''
             },
-            { label: 'Email address', value: isArchived ? 'Not available' : this.innovation.owner?.email || '' },
-            { label: 'Phone number', value: isArchived ? 'Not available' : this.innovation.owner?.mobilePhone || '' }
+            { label: 'Email address', value: this.isArchived ? 'Not available' : this.innovation.owner?.email || '' },
+            {
+              label: 'Phone number',
+              value: this.isArchived ? 'Not available' : this.innovation.owner?.mobilePhone || ''
+            }
           ];
 
           return forkJoin([

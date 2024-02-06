@@ -18,9 +18,6 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     userIsOwner: boolean;
   } = { id: '', name: '', userIsOwner: false };
 
-  showArchivedBanner: boolean = false;
-  currentUrl: string = '';
-
   constructor(
     private router: Router,
     private contextStore: ContextStore
