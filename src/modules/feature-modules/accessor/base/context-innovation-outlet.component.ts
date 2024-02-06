@@ -28,7 +28,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .subscribe(e => this.onRouteChange(e))
     );
 
-    this.subscriptions.unsubscribe();
+    this.onRouteChange();
   }
 
   ngOnDestroy(): void {
