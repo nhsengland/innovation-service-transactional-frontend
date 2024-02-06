@@ -37,6 +37,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       description: null | string;
       groupedStatus: keyof typeof InnovationGroupedStatusEnum;
     }[];
+    innovationsArchived: {
+      id: string;
+      name: string;
+      description: null | string;
+      groupedStatus: keyof typeof InnovationGroupedStatusEnum;
+    }[];
     passwordResetAt: string;
     firstTimeSignInAt: string | null;
   };
@@ -55,6 +61,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       displayName: user.displayName,
       innovationsOwner: [],
       innovationsCollaborator: [],
+      innovationsArchived: [],
       passwordResetAt: user.passwordResetAt || '',
       firstTimeSignInAt: user.firstTimeSignInAt
     };
@@ -97,8 +104,18 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         return;
       }
 
-      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
-      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+        item => item.groupedStatus !== 'ARCHIVED'
+      );
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+        item => item.groupedStatus !== 'ARCHIVED'
+      );
+      this.user.innovationsArchived = this.user.innovationsArchived = [
+        ...this.getInnovationsListInformation(innovationsListOwner),
+        ...this.getInnovationsListInformation(innovationsListCollaborator)
+      ]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .filter(item => item.groupedStatus === 'ARCHIVED');
 
       if (innovationsTransfers) {
         this.innovationTransfers = innovationsTransfers;
@@ -146,6 +163,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           forkJoin([
             this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
             this.innovatorService.getInnovationTransfers(true),
+
             this.innovationsService.getInnovationsList({
               fields: ['groupedStatus', 'statistics'],
               queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 }
@@ -159,8 +177,18 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       )
       .subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
         this.innovationTransfers = innovationsTransfers;
-        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner);
-        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator);
+        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
+        );
+        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
+        );
+        this.user.innovationsArchived = [
+          ...this.getInnovationsListInformation(innovationsListOwner),
+          ...this.getInnovationsListInformation(innovationsListCollaborator)
+        ]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter(item => item.groupedStatus === 'ARCHIVED');
 
         this.setAlertSuccess(
           accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`
