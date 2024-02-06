@@ -27,13 +27,15 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
+
+    this.subscriptions.unsubscribe();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private onRouteChange(event: NavigationEnd): void {
+  private onRouteChange(event?: NavigationEnd): void {
     const innovation = this.contextStore.getInnovation();
     this.data.innovation = {
       id: innovation.id,
@@ -43,7 +45,10 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     };
 
     // Do not show link, ON assessments route.
-    if (event.url.endsWith(`/assessments/${innovation.assessment?.id}`) || innovation.status === 'ARCHIVED') {
+    if (
+      (event && event.url.endsWith(`/assessments/${innovation.assessment?.id}`)) ||
+      innovation.status === 'ARCHIVED'
+    ) {
       this.data.link = null;
     } else {
       this.data.link = {

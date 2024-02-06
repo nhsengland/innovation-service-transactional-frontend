@@ -1,8 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ContextInnovationType, DateISOType } from '@app/base/types';
+import { ContextInnovationType } from '@app/base/types';
 import { AuthenticationStore, ContextStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { filter } from 'rxjs';
 
 @Component({
@@ -10,7 +9,7 @@ import { filter } from 'rxjs';
   templateUrl: './header-archived-banner.component.html'
 })
 export class HeaderArchivedBannerComponent implements OnInit {
-  showBanner: boolean = false;
+  showBanner: boolean = true;
   baseUrl: string = '';
   regEx: RegExp = RegExp('');
   isInnovator: boolean;
@@ -25,6 +24,7 @@ export class HeaderArchivedBannerComponent implements OnInit {
     this.innovation = this.context.getInnovation();
     this.baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
     this.regEx = new RegExp(`(${this.baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
+
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
       this.showBanner = this.regEx.test(this.router.url);
     });

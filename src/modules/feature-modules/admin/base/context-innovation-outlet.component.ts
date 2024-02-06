@@ -27,13 +27,15 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
+
+    this.subscriptions.unsubscribe();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private onRouteChange(event: NavigationEnd): void {
+  private onRouteChange(event?: NavigationEnd): void {
     const innovation = this.contextStore.getInnovation();
     this.data.innovation = {
       id: innovation.id,

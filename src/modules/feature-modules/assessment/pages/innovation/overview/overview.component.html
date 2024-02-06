@@ -66,6 +66,41 @@
         </div>
       </dl>
     </ng-container>
+
+    <ng-container *ngSwitchCase="'ARCHIVED'">
+      <div class="d-flex">
+        <theme-svg-icon type="success"></theme-svg-icon>
+        <span class="nhsuk-u-margin-right-2"></span>
+        <h2 class="nhsuk-heading-m">
+          {{ innovation?.assessment?.reassessmentCount ? "Needs reassessment complete" : "Needs assessment complete" }}
+        </h2>
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+      <dl class="nhsuk-summary-list">
+        <ng-container *ngTemplateOutlet="exemptionTemplate; context: { exemption: assessmentExemption }"></ng-container>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Assigned assessor</dt>
+          <dd class="nhsuk-summary-list__value">{{ innovation?.assessment?.assignedTo?.name }}</dd>
+          <dd class="nhsuk-summary-list__actions width-30"></dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Support status</dt>
+          <dd class="nhsuk-summary-list__value">
+            <theme-tag
+              type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.status + '.cssColorClass' | translate }}"
+              label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.status + '.name' | translate }}"
+            ></theme-tag>
+            <p class="font-color-secondary nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
+              Archived on {{ innovation?.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.
+            </p>
+          </dd>
+          <dd class="nhsuk-summary-list__actions width-30 nhsuk-u-font-size-16">
+            <a routerLink="/assessment/innovation-statuses" arial-label="View innovation status information">What does this status mean?</a>
+          </dd>
+        </div>
+      </dl>
+    </ng-container>
   </ng-container>
 
   <ng-container *ngIf="showCards">

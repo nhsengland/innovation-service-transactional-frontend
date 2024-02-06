@@ -8,10 +8,10 @@
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <div class="nhsuk-u-margin-bottom-8">
-    <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2" [ngClass]="innovation.status === 'ARCHIVED' ? 'border-bottom-0' : 'border-bottom-neutral'">
+    <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2" [ngClass]="isArchived ? 'border-bottom-0' : 'border-bottom-neutral'">
       <div class="nhsuk-summary-list__row">
-        <dt class="nhsuk-summary-list__key" [ngClass]="innovation.status === 'ARCHIVED' ? 'border-bottom-0' : 'border-bottom-neutral'">Support status</dt>
-        <dd class="nhsuk-summary-list__value" [ngClass]="innovation.status === 'ARCHIVED' ? 'border-bottom-0' : 'border-bottom-neutral'">
+        <dt class="nhsuk-summary-list__key" [ngClass]="isArchived ? 'border-bottom-0' : 'border-bottom-neutral'">Support status</dt>
+        <dd class="nhsuk-summary-list__value" [ngClass]="isArchived ? 'border-bottom-0' : 'border-bottom-neutral'">
           <theme-tag
             type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}"
             label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
@@ -45,9 +45,7 @@
         </dd>
       </div>
     </dl>
-    <p *ngIf="innovation.status === 'ARCHIVED'" class="nhsuk-u-font-size-16">
-      Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.
-    </p>
+    <p *ngIf="isArchived" class="nhsuk-u-font-size-16">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
     <hr class="nhsuk-section-break nhsuk-section-break--visible" />
   </div>
 

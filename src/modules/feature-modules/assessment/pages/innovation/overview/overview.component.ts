@@ -28,6 +28,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: null | InnovationInfoDTO = null;
 
+  isArchived: boolean = false;
   showCards: boolean = true;
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
@@ -65,6 +66,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .pipe(
         switchMap(innovationInfo => {
           this.innovation = innovationInfo;
+
+          this.isArchived = this.innovation.status === 'ARCHIVED';
 
           this.showCards = ![InnovationStatusEnum.ARCHIVED, InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT].includes(
             this.innovation.status

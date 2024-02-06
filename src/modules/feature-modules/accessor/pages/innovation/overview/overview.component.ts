@@ -35,6 +35,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     engagingAccessors: { name: string }[];
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED, engagingAccessors: [] };
 
+  isArchived: boolean = false;
   showCards: boolean = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
@@ -50,6 +51,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
+    this.isArchived = this.innovation.status === 'ARCHIVED';
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }
