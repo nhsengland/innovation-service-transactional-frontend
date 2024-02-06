@@ -125,7 +125,7 @@
       <ng-container *ngIf="isAssessmentType">
         <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Continue to innovation</a>
         <a
-          *ngIf="innovation.status !== 'ARCHIVED'"
+          *ngIf="!isArchived"
           routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit"
           class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
           >Edit assessment</a
@@ -135,7 +135,7 @@
       <ng-container *ngIf="isAccessorType">
         <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Continue to innovation</a>
         <a
-          *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED'"
+          *ngIf="isQualifyingAccessorRole && !isArchived"
           routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
           class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
         >
