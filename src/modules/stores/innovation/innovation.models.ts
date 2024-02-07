@@ -148,7 +148,6 @@ export const INNOVATION_STATUS = {
   IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
   // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
-  COMPLETE: { label: 'Complete', cssClass: 'nhsuk-tag--green' },
   WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
   ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
 };

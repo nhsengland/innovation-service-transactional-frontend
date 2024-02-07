@@ -7,9 +7,9 @@ import { TableModel } from '@app/base/models';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-to-do-list',
@@ -29,6 +29,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   // Flags
   isClosedActionsLoading = false;
   isInnovatorType: boolean;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -45,6 +46,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.innovation = this.stores.context.getInnovation();
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
 
     this.allTasksList = new TableModel({
       visibleColumns: {
