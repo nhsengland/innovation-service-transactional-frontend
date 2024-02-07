@@ -22,7 +22,7 @@
     </ng-template>
   </ng-container>
 
-  <ng-container *ngIf="isArchived">
+  <ng-container *ngIf="!isAdmin && isArchived">
     <p class="nhsuk-u-margin-bottom-6">You cannot send or reply to messages about this innovation as it is archived.</p>
   </ng-container>
 
