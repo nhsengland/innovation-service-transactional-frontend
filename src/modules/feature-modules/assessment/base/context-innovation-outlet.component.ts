@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
+import { ContextInnovationType, ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 @Component({
@@ -27,14 +27,17 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
+
+    this.onRouteChange();
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private onRouteChange(event: NavigationEnd): void {
+  private onRouteChange(event?: NavigationEnd): void {
     const innovation = this.contextStore.getInnovation();
+
     this.data.innovation = {
       id: innovation.id,
       name: innovation.name,
@@ -44,9 +47,10 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
     // Do not show link, if ON any assessments/* route.
     if (
-      event.url.endsWith(`/assessments/new`) ||
-      event.url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
-      event.url.includes(`/assessments/${innovation.assessment?.id}/edit`)
+      event &&
+      (event.url.endsWith(`/assessments/new`) ||
+        event.url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
+        event.url.includes(`/assessments/${innovation.assessment?.id}/edit`))
     ) {
       this.data.link = null;
     } else {

@@ -7,43 +7,49 @@
   </div>
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
-  <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-8">
-    <div class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key">Support status</dt>
-      <dd class="nhsuk-summary-list__value">
-        <theme-tag
-          type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}"
-          label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
-        ></theme-tag>
-      </dd>
-      <dd class="nhsuk-summary-list__actions width-25">
-        <a
-          *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"
-          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
-          >Change support status</a
-        >
-      </dd>
-    </div>
+  <div class="nhsuk-u-margin-bottom-8">
+    <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key" [ngClass]="isArchived ? 'border-bottom-0 width-20' : 'border-bottom-neutral'">Support status</dt>
+        <dd class="nhsuk-summary-list__value" [ngClass]="isArchived ? 'border-bottom-0' : 'border-bottom-neutral'">
+          <theme-tag
+            type="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.cssColorClass' | translate }}"
+            label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
+          ></theme-tag>
+        </dd>
+        <dd *ngIf="!isArchived" class="nhsuk-summary-list__actions width-25">
+          <a
+            *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"
+            routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
+            >Change support status</a
+          >
+        </dd>
+      </div>
 
-    <div *ngIf="innovationSupport.engagingAccessors.length > 0 || innovationSupport.status === 'ENGAGING'" class="nhsuk-summary-list__row">
-      <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
-      <dd class="nhsuk-summary-list__value">
-        <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
-          <li *ngFor="let accessor of innovationSupport.engagingAccessors">
-            {{ accessor.name }}
-          </li>
-          <li *ngIf="innovationSupport.engagingAccessors.length === 0">No accessors assigned</li>
-        </ul>
-      </dd>
-      <dd class="nhsuk-summary-list__actions">
-        <a
-          *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
-          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
-          >Change accessors</a
-        >
-      </dd>
-    </div>
-  </dl>
+      <div *ngIf="innovationSupport.engagingAccessors.length > 0 || innovationSupport.status === 'ENGAGING'" class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Assigned accessors</dt>
+        <dd class="nhsuk-summary-list__value">
+          <ul class="nhsuk-list nhsuk-u-margin-bottom-2">
+            <li *ngFor="let accessor of innovationSupport.engagingAccessors">
+              {{ accessor.name }}
+            </li>
+            <li *ngIf="innovationSupport.engagingAccessors.length === 0">No accessors assigned</li>
+          </ul>
+        </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a
+            *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
+            routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
+            >Change accessors</a
+          >
+        </dd>
+      </div>
+    </dl>
+    <ng-container *ngIf="isArchived">
+      <p class="nhsuk-u-font-size-16">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+    </ng-container>
+  </div>
 
   <a
     *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
@@ -53,7 +59,7 @@
     Change support status
   </a>
 
-  <ng-container *ngIf="isAccessorRole">
+  <ng-container *ngIf="isAccessorRole && !isArchived">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3"
       >Request status update</a
     >

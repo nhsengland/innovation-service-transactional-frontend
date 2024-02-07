@@ -3,9 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { AuthenticationStore, ContextStore } from '@modules/stores';
-import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -18,22 +16,17 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     id: string;
     name: string;
     userIsOwner: boolean;
-    statusUpdatedAt: null | DateISOType;
-  } = { id: '', name: '', userIsOwner: false, statusUpdatedAt: null };
-
-  showArchivedBanner: boolean = false;
+  } = { id: '', name: '', userIsOwner: false };
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private authentication: AuthenticationStore
+    private contextStore: ContextStore
   ) {
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
-
     this.onRouteChange();
   }
 
@@ -46,16 +39,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     this.innovation = {
       id: innovation.id,
       name: innovation.name,
-      userIsOwner: innovation.loggedUser.isOwner,
-      statusUpdatedAt: innovation.statusUpdatedAt
+      userIsOwner: innovation.loggedUser.isOwner
     };
-
-    const baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${innovation.id}`;
-
-    // Regex to check for all 'root' innovation's pages only (i.e.: '/overview', 'tasks'), while children are ignored (i.e: 'thread/:id', 'record/sections/:sectionId', etc.). 'manage' endpoint is an exception, since it redirects to '/manage/innovation'
-    const pageRootCheckRegex = new RegExp(`(${baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
-
-    this.showArchivedBanner =
-      this.contextStore.getInnovation().status === 'ARCHIVED' && pageRootCheckRegex.test(this.router.url);
   }
 }
