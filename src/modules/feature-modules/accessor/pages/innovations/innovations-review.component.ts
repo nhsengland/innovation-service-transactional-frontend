@@ -11,6 +11,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -19,8 +20,10 @@ type TabType = {
   secondaryDescription?: string;
   showAssignedToMeFilter: boolean;
   showSuggestedOnlyFilter: boolean;
+  showClosedByMyOrganisationFilter: boolean;
   link: string;
   queryParams: { status: InnovationSupportStatusEnum | 'ALL'; assignedToMe?: boolean; suggestedOnly?: boolean };
+  queryFields: Parameters<InnovationsService['getInnovationsList2']>[0];
   notifications: NotificationValueType;
 };
 
@@ -37,7 +40,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   form = new FormGroup(
     {
       assignedToMe: new FormControl(false),
-      suggestedOnly: new FormControl(true)
+      suggestedOnly: new FormControl(true),
+      closedByMyOrganisation: new FormControl(false)
     },
     { updateOn: 'change' }
   );
@@ -51,13 +55,21 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       mainCategory: string | null;
       countryName: string | null;
       postCode: string | null;
-      supportStatus: InnovationSupportStatusEnum;
       accessors: string[];
       assessment: {
         id: string;
       } | null;
       notifications: number;
       engagingOrganisations: string[];
+      support: {
+        status: InnovationSupportStatusEnum;
+        updatedAt: DateISOType | null;
+        updatedBy: string | null;
+        closedReason?: {
+          value: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+          label: string | null;
+        };
+      } | null;
     },
     InnovationsListFiltersType
   >;
@@ -80,18 +92,40 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+          queryFields: [
+            'id',
+            'name',
+            'updatedAt',
+            'mainCategory',
+            'statistics.notifications',
+            'engagingOrganisations',
+            'engagingUnits'
+          ],
           notifications: null
         },
         {
           key: InnovationSupportStatusEnum.CLOSED,
           title: 'Closed',
-          mainDescription: 'Your organisation has closed its engagement with these innovations.',
+          mainDescription: 'All innovations that your organisation has engaged with in the past.',
+          secondaryDescription:
+            'These have either been closed by your organisation, or the innovator has archived their innovation, or stopped sharing their data with your organisation.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: true,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.CLOSED },
+          queryFields: [
+            'id',
+            'name',
+            'support.updatedAt',
+            'support.updatedBy',
+            'support.closedReason',
+            'statistics.notifications',
+            'engagingOrganisations'
+          ],
           notifications: null
         }
       ];
@@ -104,8 +138,18 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'All innovations shared with your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: true,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: 'ALL', suggestedOnly: false, assignedToMe: false },
+          queryFields: [
+            'id',
+            'name',
+            'submittedAt',
+            'countryName',
+            'mainCategory',
+            'support.status',
+            'statistics.notifications'
+          ],
           notifications: null
         },
         {
@@ -116,8 +160,18 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'If your organisation has been suggested to support an innovation, you must assign a status within 30 days of submission.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: true,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+          queryFields: [
+            'id',
+            'name',
+            'submittedAt',
+            'countryName',
+            'mainCategory',
+            'statistics.notifications',
+            'engagingOrganisations'
+          ],
           notifications: null
         },
         {
@@ -126,8 +180,18 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.ENGAGING },
+          queryFields: [
+            'id',
+            'name',
+            'updatedAt',
+            'mainCategory',
+            'statistics.notifications',
+            'engagingOrganisations',
+            'engagingUnits'
+          ],
           notifications: null
         },
         {
@@ -136,8 +200,18 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Waiting for an internal decision to progress.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.WAITING },
+          queryFields: [
+            'id',
+            'name',
+            'updatedAt',
+            'countryName',
+            'mainCategory',
+            'statistics.notifications',
+            'engagingOrganisations'
+          ],
           notifications: null
         },
         {
@@ -146,18 +220,40 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           mainDescription: 'Your organisation has no suitable offer for these innovations.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.UNSUITABLE },
+          queryFields: [
+            'id',
+            'name',
+            'updatedAt',
+            'countryName',
+            'mainCategory',
+            'statistics.notifications',
+            'engagingOrganisations'
+          ],
           notifications: null
         },
         {
           key: InnovationSupportStatusEnum.CLOSED,
           title: 'Closed',
-          mainDescription: 'Your organisation has closed its engagement with these innovations.',
+          mainDescription: 'All innovations that your organisation has engaged with in the past.',
+          secondaryDescription:
+            'These have either been closed by your organisation, or the innovator has archived their innovation, or stopped sharing their data with your organisation.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
+          showClosedByMyOrganisationFilter: true,
           link: '/accessor/innovations',
           queryParams: { status: InnovationSupportStatusEnum.CLOSED },
+          queryFields: [
+            'id',
+            'name',
+            'support.updatedAt',
+            'support.updatedBy',
+            'support.closedReason',
+            'statistics.notifications',
+            'engagingOrganisations'
+          ],
           notifications: null
         }
       ];
@@ -169,8 +265,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       mainDescription: '',
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
+      showClosedByMyOrganisationFilter: false,
       link: '',
       queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+      queryFields: [],
       notifications: null
     };
 
@@ -187,24 +285,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   getInnovationsList(column?: string): void {
     this.setPageStatus('LOADING');
 
-    let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
-      'id',
-      'name',
-      'updatedAt',
-      'submittedAt',
-      'countryName',
-      'mainCategory',
-      'postcode',
-      'support.status',
-      'assessment.id',
-      'statistics.notifications',
-      'engagingOrganisations',
-      'engagingUnits'
-    ];
-
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
 
-    this.innovationsService.getInnovationsList2(queryFields, filters, { take, skip, order }).subscribe({
+    this.innovationsService.getInnovationsList2(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
       next: response => {
         this.innovationsList.setData(
           response.data.map((item, index) => {
@@ -220,14 +303,28 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                 : '',
               countryName: item.countryName,
               postCode: item.postcode,
-              supportStatus: item.support.status,
               assessment: item.assessment,
               notifications: item.statistics?.notifications,
               accessors: (response.data[index].engagingUnits ?? []).flatMap(s =>
                 (s.assignedAccessors ?? []).map(u => u.name)
               ),
-
-              engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? []
+              engagingOrganisations: item.engagingOrganisations?.map(org => org.acronym) ?? [],
+              support: item.support && {
+                status: item.support.status,
+                updatedAt: item.support.updatedAt,
+                updatedBy: item.support.updatedBy,
+                closedReason: {
+                  value: item.support.closedReason,
+                  label:
+                    item.support.closedReason === InnovationStatusEnum.ARCHIVED
+                      ? 'Archived'
+                      : item.support.closedReason === 'STOPPED_SHARED'
+                        ? 'Stopped sharing'
+                        : item.support.closedReason === InnovationSupportStatusEnum.CLOSED
+                          ? 'Closed'
+                          : null
+                }
+              }
             };
           }),
           response.count
@@ -250,7 +347,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe: false,
-            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false,
+            closedByMyOrganisation: false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
@@ -268,7 +366,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-            suggestedOnly: false
+            suggestedOnly: false,
+            closedByMyOrganisation: false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
@@ -282,13 +381,13 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
       case InnovationSupportStatusEnum.WAITING:
       case InnovationSupportStatusEnum.UNSUITABLE:
-      case InnovationSupportStatusEnum.CLOSED:
         this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe: false,
-            suggestedOnly: false
+            suggestedOnly: false,
+            closedByMyOrganisation: false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
@@ -300,20 +399,40 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setOrderBy('updatedAt', 'descending');
         break;
 
+      case InnovationSupportStatusEnum.CLOSED:
+        this.innovationsList
+          .clearData()
+          .setFilters({
+            supportStatuses: filteredArr,
+            assignedToMe: false,
+            suggestedOnly: false,
+            closedByMyOrganisation: this.form.get('closedByMyOrganisation')?.value ?? false
+          })
+          .setVisibleColumns({
+            name: { label: 'Innovation', orderable: true },
+            'support.updatedAt': { label: 'Closed date', orderable: true },
+            'support.updatedBy': { label: 'Closed by', orderable: false },
+            'support.closedReason': { label: 'Reason', orderable: true },
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: true }
+          })
+          .setOrderBy('support.updatedAt', 'descending');
+        break;
+
       case 'ALL':
         this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: undefined,
             assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false
+            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false,
+            closedByMyOrganisation: false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
-            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+            'support.status': { label: 'Support status', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
         break;

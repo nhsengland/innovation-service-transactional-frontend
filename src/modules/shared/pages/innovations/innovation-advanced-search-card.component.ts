@@ -1,10 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 export type InnovationCardData = {
   id: string;
   name: string;
+  status: InnovationStatusEnum;
+  updatedAt: DateISOType;
   owner: string;
   countryName?: string | null;
   postCode: null | string;
@@ -15,14 +19,11 @@ export type InnovationCardData = {
   involvedAACProgrammes: string[];
   submittedAt: null | DateISOType;
   engagingUnits: string[];
-  supportStatus: {
-    status: string;
-    updatedAt: DateISOType;
-  };
-  innovationStatus: {
-    status: string;
-    updatedAt: DateISOType;
-  };
+  support: {
+    status: InnovationSupportStatusEnum;
+    updatedAt: DateISOType | null;
+    closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+  } | null;
 };
 
 @Component({
@@ -34,6 +35,9 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
   isAdminType: boolean;
   isAccessorType: boolean;
+
+  isAccessorTypeAndArchivedInnovation: boolean = false;
+  isAccessorTypeAndStoppedSharingInnovation: boolean = false;
 
   @Input({ required: true }) innovationCardData!: InnovationCardData;
 
@@ -52,6 +56,10 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.isAccessorType = this.stores.authentication.isAccessorType();
   }
   ngOnInit(): void {
+    this.isAccessorTypeAndArchivedInnovation =
+      this.isAccessorType && this.innovationCardData.support?.closedReason === 'ARCHIVED';
+    this.isAccessorTypeAndStoppedSharingInnovation =
+      this.isAccessorType && this.innovationCardData.support?.closedReason === 'STOPPED_SHARED';
     this.categoriesList = this.getFormattedList(this.innovationCardData.categories);
     this.careSettingsList = this.getFormattedList(this.innovationCardData.careSettings);
     this.diseasesAndConditionsList = this.getFormattedList(this.innovationCardData.diseasesAndConditions);
