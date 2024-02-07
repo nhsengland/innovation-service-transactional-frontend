@@ -13,9 +13,8 @@
       <span>
         <strong>This innovation was archived on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</strong>
       </span>
-      <span>
-        You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. If you want support on your
-        innovation in future, you can submit your record for a needs reassessment.
+      <span> You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. 
+        <ng-container *ngIf="isOwner">If you want support on your innovation in future, you can submit your record for a needs reassessment.</ng-container>
       </span>
     </div>
   </ng-template>
