@@ -112,7 +112,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
   }
 
   ngOnInit(): void {
