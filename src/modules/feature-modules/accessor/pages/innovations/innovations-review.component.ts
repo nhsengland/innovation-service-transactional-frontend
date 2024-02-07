@@ -428,7 +428,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt': { label: 'Closed date', orderable: true },
             'support.updatedBy': { label: 'Closed by', orderable: false },
             'support.closedReason': { label: 'Reason', orderable: true },
-            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: true }
+            engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('support.updatedAt', 'descending');
         break;
