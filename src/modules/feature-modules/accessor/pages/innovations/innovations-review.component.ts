@@ -100,6 +100,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'name',
             'updatedAt',
             'mainCategory',
+            'assessment.id',
+            'support.status',
             'statistics.notifications',
             'engagingOrganisations',
             'engagingUnits'
@@ -120,6 +122,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           queryFields: [
             'id',
             'name',
+            'assessment.id',
+            'support.status',
             'support.updatedAt',
             'support.updatedBy',
             'support.closedReason',
@@ -147,6 +151,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'submittedAt',
             'countryName',
             'mainCategory',
+            'assessment.id',
             'support.status',
             'statistics.notifications'
           ],
@@ -169,6 +174,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'submittedAt',
             'countryName',
             'mainCategory',
+            'assessment.id',
+            'support.status',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -188,6 +195,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'name',
             'updatedAt',
             'mainCategory',
+            'assessment.id',
+            'support.status',
             'statistics.notifications',
             'engagingOrganisations',
             'engagingUnits'
@@ -209,6 +218,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'updatedAt',
             'countryName',
             'mainCategory',
+            'assessment.id',
+            'support.status',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -229,6 +240,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'updatedAt',
             'countryName',
             'mainCategory',
+            'assessment.id',
+            'support.status',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -248,6 +261,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           queryFields: [
             'id',
             'name',
+            'assessment.id',
+            'support.status',
             'support.updatedAt',
             'support.updatedBy',
             'support.closedReason',
