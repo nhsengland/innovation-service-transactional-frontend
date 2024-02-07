@@ -11,7 +11,7 @@ import {
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { LocalStorageHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { NotificationContextDetailEnum } from '@app/base/enums';
 import { ActivatedRoute } from '@angular/router';
 
 type sectionsListType = {

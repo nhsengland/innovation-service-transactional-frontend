@@ -124,6 +124,40 @@
                           >Delete this entry</a
                         >
                       </ng-container>
+
+                      <ng-container *ngSwitchCase="'INNOVATION_ARCHIVED'">
+                        <p>
+                          <span class="nhsuk-u-font-weight-bold">Innovation archived</span>
+                          <span class="nhsuk-hint nhsuk-u-font-size-14">
+                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                            by
+                            <span class="nhsuk-u-font-weight-bold">{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span>
+                          </span>
+                        </p>
+                        <theme-tag
+                          type="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.cssColorClass' | translate }}"
+                          label="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.name' | translate }}"
+                        ></theme-tag>
+                        <ng-container *ngIf="historyItem.params.message">
+                          <p class="nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">Message</p>
+                          <p class="nhsuk-body-s nhsuk-u-margin-bottom-2">{{ historyItem.params.message }}</p>
+                        </ng-container>
+                      </ng-container>
+
+                      <ng-container *ngSwitchCase="'STOP_SHARE'">
+                        <p>
+                          <span class="nhsuk-u-font-weight-bold">Innovator stopped sharing</span>
+                          <span class="nhsuk-hint nhsuk-u-font-size-14">
+                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                            by
+                            <span class="nhsuk-u-font-weight-bold">{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span>
+                          </span>
+                        </p>
+                        <theme-tag
+                          type="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.cssColorClass' | translate }}"
+                          label="{{ 'shared.catalog.innovation.support_status.' + historyItem.params.supportStatus + '.name' | translate }}"
+                        ></theme-tag>
+                      </ng-container>
                     </ng-container>
 
                     <hr *ngIf="!historyIsLast" class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3" />
