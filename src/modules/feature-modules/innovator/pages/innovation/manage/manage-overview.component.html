@@ -31,7 +31,7 @@
     </div>
   </div>
 
-  <div *ngIf="!(isArchived || isWaitingAssessment)" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div *ngIf="innovation.status === 'IN_PROGRESS'" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Archive innovation</h2>
       <p class="nhsuk-u-margin-bottom-3">
