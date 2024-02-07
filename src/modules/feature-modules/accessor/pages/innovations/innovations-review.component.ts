@@ -432,7 +432,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             submittedAt: { label: 'Submitted', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
-            supportStatus: { label: 'Support status', align: 'right', orderable: false }
+            'support.status': { label: 'Support status', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
         break;
