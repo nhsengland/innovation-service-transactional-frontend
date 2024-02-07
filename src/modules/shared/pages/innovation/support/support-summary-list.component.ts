@@ -13,6 +13,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { LocalStorageHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum } from '@app/base/enums';
 import { ActivatedRoute } from '@angular/router';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -85,7 +86,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           historyList: [],
           isLoading: false,
           isOpened: false,
-          canDoProgressUpdates: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id,
+          canDoProgressUpdates: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id && this.innovation.status !== InnovationStatusEnum.ARCHIVED,
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
         this.sectionsList[1].unitsList = response.BEEN_ENGAGED.map(item => ({
