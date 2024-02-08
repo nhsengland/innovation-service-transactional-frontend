@@ -3,16 +3,18 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { DateISOType } from '@app/base/types';
+import { ContextInnovationType, DateISOType } from '@app/base/types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
-  selector: 'app-innovator-pages-innovation-manage-stop-sharing-overview',
-  templateUrl: './manage-stop-sharing-overview.component.html'
+  selector: 'app-innovator-pages-innovation-manage-archive-overview',
+  templateUrl: './manage-archive-overview.component.html'
 })
-export class PageInnovationManageStopSharingOverviewComponent extends CoreComponent implements OnInit {
+export class PageInnovationManageArchiveOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
+
+  innovation: ContextInnovationType;
 
   innovations: TableModel<{ id: string; name: string; statusUpdatedAt: null | DateISOType }>;
 
@@ -24,7 +26,8 @@ export class PageInnovationManageStopSharingOverviewComponent extends CoreCompon
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.setPageTitle('Stop sharing this innovation');
+    this.innovation = this.stores.context.getInnovation();
+
     this.setBackLink('Go back', `/innovator/innovations/${this.innovationId}/manage/innovation`);
 
     this.innovations = new TableModel({
@@ -37,6 +40,8 @@ export class PageInnovationManageStopSharingOverviewComponent extends CoreCompon
   }
 
   ngOnInit() {
+    this.setPageTitle(`Archive ${this.innovation.name} innovation`);
+
     this.innovationsService
       .getInnovationsList({
         queryParams: {

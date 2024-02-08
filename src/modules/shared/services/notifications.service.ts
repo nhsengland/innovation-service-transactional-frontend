@@ -272,6 +272,11 @@ export class NotificationsService extends CoreService {
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation`
                   };
                   break;
+                case NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A:
+                  link = {
+                    label: 'Click to go to innovation',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`
+                  };
               }
               break;
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -174,12 +174,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'owner.companyName',
       'engagingUnits',
       'support.status',
-      'support.updatedAt'
+      'support.updatedAt',
+      'support.closedReason'
     ];
 
     if (this.isAdminType) {
       // filter out unavailable fields if Admin
-      queryFields = queryFields.filter(item => !['support.status', 'support.updatedAt'].includes(item));
+      queryFields = queryFields.filter(
+        item => !['support.status', 'support.updatedAt', 'support.closedReason'].includes(item)
+      );
     }
     if (this.isAccessorType) {
       // filter out unavailable fields for QA/A
@@ -199,6 +202,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           const innovationData: InnovationCardData = {
             id: result.id,
             name: result.name,
+            status: result.status,
+            updatedAt: result.updatedAt,
             owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
             countryName: result.countryName ?? null,
             postCode: result.postcode,
@@ -217,11 +222,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
             submittedAt: result.submittedAt,
             engagingUnits: engagingUnits,
-            supportStatus: {
-              status: result.support ? result.support.status : '',
-              updatedAt: result.support ? result.support.updatedAt! : ''
-            },
-            innovationStatus: { status: result.groupedStatus, updatedAt: result.updatedAt }
+            support: result.support && {
+              status: result.support.status,
+              updatedAt: result.support.updatedAt,
+              closedReason: result.support.closedReason
+            }
           };
 
           this.innovationCardsData.push(innovationData);

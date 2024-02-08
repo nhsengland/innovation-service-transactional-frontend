@@ -6,12 +6,14 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
+  <p *ngIf="isArchived">All open tasks were cancelled when this innovation was archived.</p>
+    
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <!-- Use this container to orchestrate different states acording to different types -->
   <ng-container [ngSwitch]="userType">
     <ng-container *ngSwitchCase="'ASSESSMENT'">
-      <ng-container *ngIf="['NEEDS_ASSESSMENT', 'IN_PROGRESS', 'COMPLETE'].includes(innovation.status); then requestActionBtn"></ng-container>
+      <ng-container *ngIf="['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status); then requestActionBtn"></ng-container>
 
       <p *ngIf="['CREATED', 'WAITING_NEEDS_ASSESSMENT', 'AWAITING_NEEDS_REASSESSMENT'].includes(innovation.status)">
         Once you have started the needs {{ innovation.status === "AWAITING_NEEDS_REASSESSMENT" ? "reassessment" : "assessment" }} process, you can request innovators to add more
@@ -35,11 +37,11 @@
   </ng-container>
 
   <ng-template #actionTrackerList>
+    <h2 class="nhsuk-u-margin-bottom-2">
+      {{ tablesTitles.topTableTitle }}
+    </h2>
+    
     <ng-container *ngIf="userType === 'INNOVATOR'">
-      <h2 class="nhsuk-u-margin-bottom-2">
-        {{ tablesTitles.topTableTitle }}
-      </h2>
-
       <ng-container *ngIf="topList.count === 0 && bottomList.count === 0">
         <p class="nhsuk-u-padding-top-3">There are no tasks assigned to you yet.</p>
       </ng-container>
@@ -50,9 +52,6 @@
     </ng-container>
 
     <ng-container *ngIf="userType !== 'INNOVATOR'">
-      <h2 class="nhsuk-u-margin-bottom-2">
-        {{ tablesTitles.topTableTitle }}
-      </h2>
       <p *ngIf="topList.count === 0" class="nhsuk-u-padding-top-5">There are no tasks.</p>
     </ng-container>
 

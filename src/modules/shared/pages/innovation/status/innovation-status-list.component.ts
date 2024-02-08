@@ -15,7 +15,8 @@ export class PageInnovationStatusListComponent extends CoreComponent {
     InnovationGroupedStatusEnum.AWAITING_SUPPORT,
     InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
     InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT,
-    InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT
+    InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
+    InnovationGroupedStatusEnum.ARCHIVED
   ];
 
   constructor() {
@@ -24,5 +25,9 @@ export class PageInnovationStatusListComponent extends CoreComponent {
     this.setPageTitle('Innovation status key');
     this.setBackLink('Go back');
     this.setPageStatus('READY');
+
+    if (this.stores.authentication.isAssessmentType()) {
+      this.visibleStatus = this.visibleStatus.filter(status => status === InnovationGroupedStatusEnum.ARCHIVED);
+    }
   }
 }

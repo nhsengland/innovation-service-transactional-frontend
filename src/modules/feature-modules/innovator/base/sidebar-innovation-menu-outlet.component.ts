@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
@@ -53,7 +53,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ||
+        innovation.status === InnovationStatusEnum.ARCHIVED
           ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }]
           : []),
         { label: 'Tasks to do', url: `/innovator/innovations/${innovation.id}/tasks` },

@@ -39,6 +39,7 @@ import { TagComponent } from './components/tag/tag.component';
 import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 import { SelectComponent } from './components/search/select.component';
 import { FormsModule } from '@angular/forms';
+import { HeaderArchivedBannerComponent } from './components/header/header-archived-banner.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,9 @@ import { FormsModule } from '@angular/forms';
 
     InnovationAdvancedSearchCardComponent,
 
-    SelectComponent
+    SelectComponent,
+
+    HeaderArchivedBannerComponent
   ],
   providers: [],
   exports: [
@@ -130,7 +133,9 @@ import { FormsModule } from '@angular/forms';
 
     SelectComponent,
 
-    InnovationAdvancedSearchCardComponent
+    InnovationAdvancedSearchCardComponent,
+
+    HeaderArchivedBannerComponent
   ]
 })
 export class ThemeModule {}

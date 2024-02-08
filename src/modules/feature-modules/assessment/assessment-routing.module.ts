@@ -480,6 +480,8 @@ const routes: Routes = [
         ]
       },
 
+      { path: 'innovation-statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
+
       {
         path: 'notifications',
         pathMatch: 'full',
