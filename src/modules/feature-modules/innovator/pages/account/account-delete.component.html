@@ -77,19 +77,17 @@
               <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you delete your account </span>
             </div>
 
-            <ng-container>
-              <ng-container *ngIf="!innovator.hasPendingTransfer">
-                <li class="nhsuk-u-margin-bottom-3">all innovations will be archived</li>
-              </ng-container>
+            <ul class="nhsuk-list nhsuk-list--bullet">
+              <li *ngIf="!innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">all innovations will be archived</li>
 
-              <ng-container *ngIf="innovator.hasPendingTransfer">
-                <li class="nhsuk-u-margin-bottom-3">all innovations will be archived unless you have a pending transfer request and it is accepted within 30 days</li>
-              </ng-container>
+              <li *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
+                all innovations will be archived unless you have a pending transfer request and it is accepted within 30 days
+              </li>
 
               <li *ngIf="innovator.hasCollaborators" class="nhsuk-u-margin-bottom-3">all collaborators will lose access to archived innovations</li>
 
               <li>all support organisations you have shared your data with, will be able to view an archived version of your innovation</li>
-            </ng-container>
+            </ul>
           </div>
           <ng-container *ngIf="innovator.isOwner && stepNumber === 3">
             <p>If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
