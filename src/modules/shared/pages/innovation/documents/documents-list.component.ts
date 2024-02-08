@@ -17,6 +17,7 @@ import {
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
 
 @Component({
@@ -35,6 +36,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   // Flags
   isAdmin: boolean;
   isInnovatorType: boolean;
+  isArchived: boolean;
 
   // Filter
   form = new FormGroup(
@@ -65,6 +67,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.setPageTitle('Documents');
 
     this.innovation = this.stores.context.getInnovation();
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
