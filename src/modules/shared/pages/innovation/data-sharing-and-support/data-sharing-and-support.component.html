@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="isInnovatorType && !isArchived">
         <app-organisation-suggestions-card [suggestions]="organisationSuggestions" [shares]="shares"></app-organisation-suggestions-card>
 
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
@@ -107,16 +107,22 @@
         </dl>
       </div>
 
-      <button *ngIf="userType === 'INNOVATOR'" routerLink="/innovator/innovations/{{ innovationId }}/support/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
-        Change preferences
-      </button>
+      <ng-container *ngIf="!isArchived">
+        <button
+          *ngIf="userType === 'INNOVATOR'"
+          routerLink="/innovator/innovations/{{ innovationId }}/support/edit"
+          class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"
+        >
+          Change preferences
+        </button>
 
-      <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link nhsuk-u-padding-top-5">
-        <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link__link">
-          <theme-svg-icon type="arrow-right-circle" />
-          <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
-        </a>
-      </div>
+        <div *ngIf="isQualifyingAccessorRole" class="nhsuk-action-link nhsuk-u-padding-top-5">
+          <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link__link">
+            <theme-svg-icon type="arrow-right-circle" />
+            <span class="nhsuk-action-link__text">Suggest other organisations to support this innovation</span>
+          </a>
+        </div>
+      </ng-container>
     </div>
   </div>
 </theme-content-wrapper>

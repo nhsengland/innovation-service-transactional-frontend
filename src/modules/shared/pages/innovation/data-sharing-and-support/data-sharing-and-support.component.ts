@@ -5,7 +5,7 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
-import { InnovationService, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
@@ -53,6 +53,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   isInnovatorType: boolean;
   isAssessmentType: boolean;
   isAccessorType: boolean;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,6 +72,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
 
     this.setPageTitle('Data sharing preferences', { hint: 'All organisations' });
   }
