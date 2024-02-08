@@ -6,7 +6,7 @@ export enum InnovationStatusEnum {
   IN_PROGRESS = 'IN_PROGRESS',
   // NEEDS_ASSESSMENT_REVIEW = 'NEEDS_ASSESSMENT_REVIEW',
   ABANDONED = 'ABANDONED',
-  WITHDRAWN = 'WITHDRAWN',
+  WITHDRAWN = 'WITHDRAWN', // Important to filter out this status when is not admin
   ARCHIVED = 'ARCHIVED'
 }
 
@@ -18,7 +18,7 @@ export enum InnovationGroupedStatusEnum {
   RECEIVING_SUPPORT = 'RECEIVING_SUPPORT',
   NO_ACTIVE_SUPPORT = 'NO_ACTIVE_SUPPORT',
   AWAITING_NEEDS_REASSESSMENT = 'AWAITING_NEEDS_REASSESSMENT',
-  WITHDRAWN = 'WITHDRAWN',
+  WITHDRAWN = 'WITHDRAWN', // Important to filter out this status when is not admin
   ARCHIVED = 'ARCHIVED'
 }
 
