@@ -17,31 +17,32 @@
           </p>
         </ng-container>
 
-        <p class="nhsuk-u-margin-0 nhsuk-u-font-size-16">
-          {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
-          <a href="javascript:void(0)" (click)="onShowParticipantsClick()"> {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span> </a>
-        </p>
+        <ng-container *ngIf="!isArchived">
+          <p class="nhsuk-u-margin-0 nhsuk-u-font-size-16">
+            {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
+            <a href="javascript:void(0)" (click)="onShowParticipantsClick()"> {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span> </a>
+          </p>
 
-        <ng-container *ngIf="showFollowersHideStatus === 'opened'">
-          <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
-            <dt
-              *ngFor="let follower of threadFollowers"
-              class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral"
-            >
-              <span *ngIf="follower.role.role === 'INNOVATOR'; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? "Owner" : "Collaborator" }})</span>
-              <ng-template #notInnovator>
-                <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
-              </ng-template>
-            </dt>
-            <dt
-              *ngIf="showAddRecipientsLink"
-              class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral"
-            >
-              <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
-            </dt>
-          </dl>
+          <ng-container *ngIf="showFollowersHideStatus === 'opened'">
+            <dl class="nhsuk-u-margin-0 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+              <dt
+                *ngFor="let follower of threadFollowers"
+                class="nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral"
+              >
+                <span *ngIf="follower.role.role === 'INNOVATOR'; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? "Owner" : "Collaborator" }})</span>
+                <ng-template #notInnovator>
+                  <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
+                </ng-template>
+              </dt>
+              <dt
+                *ngIf="showAddRecipientsLink"
+                class="nhsuk-u-font-weight-bold nhsuk-u-margin-0 nhsuk-u-padding-left-4 nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-1 nhsuk-body-s border-left-inset-neutral"
+              >
+                <a routerLink="{{ threadsLink }}/{{ threadId }}/recipients">Add recipients</a>
+              </dt>
+            </dl>
+          </ng-container>
         </ng-container>
-
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
         <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && !isArchived">
