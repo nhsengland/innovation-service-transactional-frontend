@@ -268,7 +268,7 @@ export type SupportSummaryOrganisationsListDTO = {
 };
 export type SupportSummaryOrganisationHistoryDTO = {
   id: string;
-  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE';
+  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE' | 'INNOVATION_ARCHIVED' | 'STOP_SHARE';
   createdAt: DateISOType;
   createdBy: { id: string; name: string; displayRole: string };
   params: {
