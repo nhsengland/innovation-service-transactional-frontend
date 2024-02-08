@@ -4,7 +4,7 @@
       <strong>This innovation was archived by the innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</strong>
     </span>
     <span>
-      You can view an archived version of the innovation record, support summary, tasks, messages, and documents. All open tasks have been cancelled. You cannot reply to
+      You can view an archived version of the innovation record, support summary, tasks, messages and documents. All open tasks have been cancelled. You cannot send or reply to
       messages.</span
     >
   </div>
@@ -13,7 +13,8 @@
       <span>
         <strong>This innovation was archived on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</strong>
       </span>
-      <span> You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators. 
+      <span>
+        You can continue to update your innovation record when it is archived. These changes can only be viewed by you and your collaborators.
         <ng-container *ngIf="isOwner">If you want support on your innovation in future, you can submit your record for a needs reassessment.</ng-container>
       </span>
     </div>
