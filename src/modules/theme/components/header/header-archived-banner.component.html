@@ -3,10 +3,11 @@
     <span>
       <strong>This innovation was archived by the innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</strong>
     </span>
-    <span>
+    <span *ngIf="!isAdmin">
       You can view an archived version of the innovation record, support summary, tasks, messages and documents. All open tasks have been cancelled. You cannot send or reply to
-      messages.</span
-    >
+      messages.
+    </span>
+    <span *ngIf="isAdmin"> You can view an archived version of the innovation record, support summary, tasks, messages and documents. All open tasks have been cancelled. </span>
   </div>
   <ng-template #innovatorBanner>
     <div class="nhsuk-card d-flex flex-direction-column nhsuk-u-padding-5 nhsuk-u-font-size-19">
