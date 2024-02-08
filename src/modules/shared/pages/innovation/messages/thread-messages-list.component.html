@@ -42,35 +42,36 @@
               </dt>
             </dl>
           </ng-container>
+
+          <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false">
+            <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
+
+            <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
+
+            <theme-form-file-upload-descriptive
+              description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF."
+              [pageUniqueField]="false"
+              [config]="configInputFile"
+            ></theme-form-file-upload-descriptive>
+
+            <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">
+              Send message
+              <span class="nhsuk-u-visually-hidden">
+                for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ("app.date_formats.long_date_time" | translate) }}
+              </span>
+            </button>
+          </form>
+
+          <div class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral">
+            <span class="nhsuk-u-visually-hidden">Information: </span>
+            <span
+              >Once sent, all recipients in this thread will be notified. For transparency reasons, this message can be seen and replied to by everyone who has access to this
+              innovation.</span
+            >
+          </div>
         </ng-container>
-        <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
-
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && !isArchived">
-          <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
-
-          <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
-
-          <theme-form-file-upload-descriptive
-            description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF."
-            [pageUniqueField]="false"
-            [config]="configInputFile"
-          ></theme-form-file-upload-descriptive>
-
-          <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">
-            Send message
-            <span class="nhsuk-u-visually-hidden">
-              for conversation with subject {{ threadInfo?.subject }} created at {{ threadInfo?.createdAt | date: ("app.date_formats.long_date_time" | translate) }}
-            </span>
-          </button>
-        </form>
-
-        <div class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral">
-          <span class="nhsuk-u-visually-hidden">Information: </span>
-          <span
-            >Once sent, all recipients in this thread will be notified. For transparency reasons, this message can be seen and replied to by everyone who has access to this
-            innovation.</span
-          >
-        </div>
 
         <ng-container *ngIf="messagesList.getTotalRowsNumber() > 0">
           <div *ngFor="let message of messagesList.getRecords()" class="nhsuk-card bg-color-grey nhsuk-u-margin-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-padding-3">
