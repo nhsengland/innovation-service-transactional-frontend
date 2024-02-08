@@ -7,7 +7,7 @@
           <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
         </p>
 
-        <ng-container *ngIf="isAssessmentType || isAccessorType">
+        <ng-container *ngIf="(isAssessmentType || isAccessorType) && !isArchived">
           <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
             <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
           </p>
@@ -44,7 +44,7 @@
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && innovation.status !== 'ARCHIVED'">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false && !isArchived">
           <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 
           <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
@@ -98,7 +98,7 @@
             </p>
 
             <div
-              *ngIf="this.innovation.status !== 'ARCHIVED' && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
+              *ngIf="!isArchived && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
               [ngClass]="{
                 'nhsuk-body-s': true,
                 'nhsuk-u-margin-bottom-0': true,

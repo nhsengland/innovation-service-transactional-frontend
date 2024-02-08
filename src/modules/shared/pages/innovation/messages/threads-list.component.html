@@ -22,9 +22,13 @@
     </ng-template>
   </ng-container>
 
+  <ng-container *ngIf="!isAdmin && isArchived">
+    <p class="nhsuk-u-margin-bottom-6">You cannot send or reply to messages about this innovation as it is archived.</p>
+  </ng-container>
+
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="canCreateThread && !isAdmin && innovation.status !== 'ARCHIVED'">
+      <ng-container *ngIf="canCreateThread && !isAdmin && !isArchived">
         <p *ngIf="isInnovatorType">Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
         <p *ngIf="!isInnovatorType">Use messages to talk to the innovator and other organisations supporting this innovation.</p>
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
