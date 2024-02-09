@@ -31,8 +31,8 @@ export class HeaderArchivedBannerComponent implements OnInit {
     this.regEx = new RegExp(`(${this.baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
 
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-      this.showBanner = this.regEx.test(this.router.url);
       this.innovation = this.context.getInnovation();
+      this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
     });
   }
   ngOnInit(): void {
