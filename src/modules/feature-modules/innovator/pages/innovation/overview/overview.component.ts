@@ -149,7 +149,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       if (this.innovation.loggedUser.isOwner && this.innovation.status === 'ARCHIVED') {
         this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.SH03_INNOVATION_STOPPED_SHARED_TO_SELF]
+          contextDetails: [NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER]
         });
       }
 
