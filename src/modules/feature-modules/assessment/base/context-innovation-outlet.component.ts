@@ -76,6 +76,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
           break;
 
         case InnovationStatusEnum.IN_PROGRESS:
+        case InnovationStatusEnum.ARCHIVED:
           this.data.link = {
             label: 'View needs assessment',
             url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`

@@ -12,7 +12,9 @@ export class HeaderArchivedBannerComponent implements OnInit {
   showBanner: boolean = true;
   baseUrl: string = '';
   regEx: RegExp = RegExp('');
+
   isInnovator: boolean;
+  isAdmin: boolean;
   isOwner: boolean;
   innovation: ContextInnovationType;
 
@@ -22,13 +24,15 @@ export class HeaderArchivedBannerComponent implements OnInit {
     private context: ContextStore
   ) {
     this.isInnovator = this.authentication.isInnovatorType();
+    this.isAdmin = this.authentication.isAdminRole();
     this.innovation = this.context.getInnovation();
     this.isOwner = this.innovation.loggedUser.isOwner;
     this.baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
     this.regEx = new RegExp(`(${this.baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
 
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-      this.showBanner = this.regEx.test(this.router.url);
+      this.innovation = this.context.getInnovation();
+      this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
     });
   }
   ngOnInit(): void {
