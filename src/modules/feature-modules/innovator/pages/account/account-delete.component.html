@@ -3,11 +3,16 @@
     <div class="nhsuk-grid-column-three-quarters">
       <form [formGroup]="form">
         <ng-container *ngIf="stepNumber === 1 && innovator.isOwner">
-          <p *ngIf="!innovator.hasCollaborators && !innovator.hasPendingTransfer">Your innovations will be withdrawn if you delete your account.</p>
-          <p *ngIf="innovator.hasCollaborators || innovator.hasPendingTransfer">
-            If you delete your account, your innovations will be withdrawn and everyone working on them will lose access to them.
-            <span *ngIf="innovator.hasPendingTransfer"> Unless they are pending transfer of ownership.</span>
-          </p>
+          <div class="nhsuk-u-margin-bottom-6">
+            <ng-container *ngIf="!innovator.hasCollaborators">
+              <p *ngIf="!innovator.hasPendingTransfer">Your innovations will be archived if you delete your account.</p>
+              <p *ngIf="innovator.hasPendingTransfer">If you delete your account, your innovations will be archived, unless they are pending transfer of ownership.</p>
+            </ng-container>
+
+            <p *ngIf="innovator.hasCollaborators">If you delete your account, your innovations will be archived and your collaborators will lose access to them.</p>
+
+            <p>All support organisations you have shared your data with, will be able to view an archived version of your innovation.</p>
+          </div>
           <div class="d-flex align-items-center justify-content-space-between">
             <h2 class="nhsuk-heading-m">Your innovations</h2>
           </div>
@@ -23,14 +28,14 @@
                   <p *ngIf="innovation.collaboratorsCount > 0">
                     You have {{ innovation.collaboratorsCount }} {{ innovation.collaboratorsCount > 1 ? "collaborators" : "collaborator" }} working on this innovation.
                   </p>
-                  <p>If you do not want this innovation to be withdrawn, you can transfer its ownership.</p>
+                  <p>If you do not want this innovation to be archived, you can transfer its ownership.</p>
                 </ng-container>
                 <ng-template #innovationHasPendingTransfer>
                   <p>You have requested to transfer ownership of this innovation.</p>
                   <p>
                     This request is pending. If your request is rejected or has not been accepted within
                     {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) }}
-                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be withdrawn.
+                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be archived.
                   </p>
                 </ng-template>
               </dd>
@@ -41,14 +46,14 @@
           </dl>
 
           <div *ngIf="!innovator.hasOnlyPendingTransfers" class="nhsuk-u-margin-bottom-3">
-            <theme-form-checkbox controlName="confirm" size="small" label="I understand that my innovations will be withdrawn, if I delete my account."></theme-form-checkbox>
+            <theme-form-checkbox controlName="confirm" size="small" label="I understand that my innovations will be archived, if I delete my account."></theme-form-checkbox>
           </div>
 
           <div *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
             <theme-form-checkbox
               controlName="confirmPendingTransfer"
               size="small"
-              label="I understand that any innovations that are pending transfer of ownership will be withdrawn 30 days after the transfer was requested, if the new owner does not accept it."
+              label="I understand that any innovations that are pending transfer of ownership will be archived, if the new owner does not accept it within 30 days after the transfer was requested."
             ></theme-form-checkbox>
           </div>
         </ng-container>
@@ -61,8 +66,7 @@
                   <span class="nhsuk-u-visually-hidden">Important: </span> You have requested to transfer ownership of your {{ innovation.name }} innovation
                 </span>
               </div>
-              <p>This transfer is waiting to be accepted by its new owner.</p>
-              <p>If you delete your account, and the transfer is rejected or expires, your innovation will be withdrawn and everyone will lose access to it.</p>
+              <p>If you delete your account, and the transfer is rejected or expires, your innovation will be archived.</p>
             </div>
           </ng-container>
         </ng-container>
@@ -72,23 +76,18 @@
             <div class="nhsuk-heading-m nhsuk-warning-callout__label">
               <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> When you delete your account </span>
             </div>
-            <p *ngIf="!innovator.isOwner && innovator.isCollaborator">You will lose access to any innovations you are working on as a collaborator.</p>
-            <ng-container *ngIf="innovator.isOwner">
-              <ng-container *ngIf="!innovator.isCollaborator && !innovator.hasPendingTransfer; else innovatorIsCollaboratorOrHasPendingTransfer">
-                <p *ngIf="!innovator.hasCollaborators">Your innovations will be withdrawn and you will no longer have access to them.</p>
-                <p *ngIf="innovator.hasCollaborators">Your innovations will be withdrawn and everyone working on them will lose access to them.</p>
-              </ng-container>
-              <ng-template #innovatorIsCollaboratorOrHasPendingTransfer>
-                <ul>
-                  <li *ngIf="!innovator.hasCollaborators">your innovations will be withdrawn and you will no longer have access to them</li>
-                  <li *ngIf="innovator.hasCollaborators">your innovations will be withdrawn and everyone working on them will lose access to them</li>
-                  <li *ngIf="innovator.isCollaborator">you will lose access to any innovations you are working on as a collaborator</li>
-                  <li *ngIf="innovator.hasPendingTransfer">
-                    innovations that are pending transfer of ownership will be withdrawn if the transfer is rejected or has expired as it hasn't been accepted within 30 days
-                  </li>
-                </ul>
-              </ng-template>
-            </ng-container>
+
+            <ul class="nhsuk-list nhsuk-list--bullet">
+              <li *ngIf="!innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">all innovations will be archived</li>
+
+              <li *ngIf="innovator.hasPendingTransfer" class="nhsuk-u-margin-bottom-3">
+                all innovations will be archived unless you have a pending transfer request and it is accepted within 30 days
+              </li>
+
+              <li *ngIf="innovator.hasCollaborators" class="nhsuk-u-margin-bottom-3">all collaborators will lose access to archived innovations</li>
+
+              <li>all support organisations you have shared your data with, will be able to view an archived version of your innovation</li>
+            </ul>
           </div>
           <ng-container *ngIf="innovator.isOwner && stepNumber === 3">
             <p>If you want to keep a copy of your innovation record, you should download a PDF version before you delete your account.</p>
