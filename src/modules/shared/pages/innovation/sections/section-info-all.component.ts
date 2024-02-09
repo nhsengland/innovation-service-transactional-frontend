@@ -51,8 +51,10 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
+  isAdmin: boolean;
 
   isInnovationInCreatedStatus: boolean;
+  isInnovationInArchivedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
 
@@ -87,7 +89,9 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
+    this.isInnovationInArchivedStatus = this.innovation.status === InnovationStatusEnum.ARCHIVED;
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =
@@ -97,7 +101,10 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+    if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
+      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+    }
+
     this.setPageTitle('All sections questions and answers', { hint: 'Innovation record' });
 
     this.getSectionsData();

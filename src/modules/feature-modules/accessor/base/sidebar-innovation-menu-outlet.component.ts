@@ -18,6 +18,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
   isAllSectionsDetailsPage: boolean = false;
+  isInnovationRecordPage: boolean = false;
+  isInnovationInArchivedStatus: boolean = false;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];
@@ -73,6 +75,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.generateSidebar();
 
     this.isAllSectionsDetailsPage = this.router.url.includes('/all');
+    this.isInnovationRecordPage = this.router.url.endsWith('/record');
+
+    this.isInnovationInArchivedStatus = this.contextStore.getInnovation().status === InnovationStatusEnum.ARCHIVED;
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;

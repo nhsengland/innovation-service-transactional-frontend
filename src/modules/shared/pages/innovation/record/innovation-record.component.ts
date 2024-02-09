@@ -41,7 +41,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
+  isLoggedUserOwner: boolean;
   isInnovationInCreatedStatus: boolean;
+  isInnovationInArchivedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
 
@@ -68,7 +70,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdminType = this.stores.authentication.isAdminRole();
+    this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
+    this.isInnovationInArchivedStatus = this.innovation.status === InnovationStatusEnum.ARCHIVED;
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =

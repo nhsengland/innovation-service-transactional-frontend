@@ -99,6 +99,7 @@ import { FileUploadService } from '@modules/shared/services/file-upload.service'
 import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
 import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wrapper.component';
 import { FiltersSelectionWrapperComponent } from './components/filters-selection-wrapper/filters-selection-wrapper.component';
+import { PageInnovationRecordWrapperComponent } from './pages/innovation/record/innovation-record-wrapper.component';
 
 @NgModule({
   imports: [
@@ -154,6 +155,7 @@ import { FiltersSelectionWrapperComponent } from './components/filters-selection
     PageInnovationThreadRecipientsComponent,
 
     PageInnovationRecordDownloadComponent,
+    PageInnovationRecordWrapperComponent,
     PageInnovationRecordComponent,
     PageInnovationSectionInfoComponent,
     PageInnovationAllSectionsInfoComponent,
