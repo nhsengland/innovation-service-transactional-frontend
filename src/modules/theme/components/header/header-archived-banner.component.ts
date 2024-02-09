@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   templateUrl: './header-archived-banner.component.html'
 })
 export class HeaderArchivedBannerComponent implements OnInit {
-  showBanner: boolean = true;
+  showBanner: boolean;
   baseUrl: string = '';
   regEx: RegExp = RegExp('');
 
@@ -27,15 +27,23 @@ export class HeaderArchivedBannerComponent implements OnInit {
     this.isAdmin = this.authentication.isAdminRole();
     this.innovation = this.context.getInnovation();
     this.isOwner = this.innovation.loggedUser.isOwner;
+
     this.baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
     this.regEx = new RegExp(`(${this.baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
 
+    this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
+
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-      this.innovation = this.context.getInnovation();
-      this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
+      this.checkShowBanner();
     });
   }
+
   ngOnInit(): void {
-    this.showBanner = this.regEx.test(this.router.url);
+    this.checkShowBanner();
+  }
+
+  private checkShowBanner() {
+    this.innovation = this.context.getInnovation();
+    this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
   }
 }
