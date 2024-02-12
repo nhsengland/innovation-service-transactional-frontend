@@ -28,9 +28,7 @@ export class HeaderArchivedBannerComponent implements OnInit {
     this.innovation = this.context.getInnovation();
     this.isOwner = this.innovation.loggedUser.isOwner;
 
-    this.baseUrl = `${this.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
-    this.regEx = new RegExp(`(${this.baseUrl.replace(/\//g, '\\/')}\/)(manage\/innovation?|[a-zA-Z-]*)$`);
-
+    this.regEx = new RegExp(/innovations\/[\w\-]+\/([\w\-]+|manage\/innovation)(\?.*)?$/);
     this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
 
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
