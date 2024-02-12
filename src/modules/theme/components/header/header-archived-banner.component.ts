@@ -9,7 +9,7 @@ import { filter } from 'rxjs';
   templateUrl: './header-archived-banner.component.html'
 })
 export class HeaderArchivedBannerComponent implements OnInit {
-  showBanner: boolean;
+  showBanner: boolean = false;
   baseUrl: string = '';
   regEx: RegExp = RegExp('');
 
@@ -29,7 +29,6 @@ export class HeaderArchivedBannerComponent implements OnInit {
     this.isOwner = this.innovation.loggedUser.isOwner;
 
     this.regEx = new RegExp(/innovations\/[\w\-]+\/([\w\-]+|manage\/innovation)(\?.*)?$/);
-    this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
 
     this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
       this.checkShowBanner();
