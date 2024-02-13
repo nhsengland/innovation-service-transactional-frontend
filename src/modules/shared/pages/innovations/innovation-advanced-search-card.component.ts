@@ -3,11 +3,13 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 export type InnovationCardData = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
+  groupedStatus: InnovationGroupedStatusEnum;
   updatedAt: DateISOType;
   owner: string;
   countryName?: string | null;

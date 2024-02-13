@@ -203,6 +203,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             id: result.id,
             name: result.name,
             status: result.status,
+            groupedStatus: result.groupedStatus,
             updatedAt: result.updatedAt,
             owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
             countryName: result.countryName ?? null,
