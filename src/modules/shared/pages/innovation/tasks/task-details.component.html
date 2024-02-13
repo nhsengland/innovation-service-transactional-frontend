@@ -107,7 +107,9 @@
                 </a>
               </li>
               <li class="nhsuk-u-margin-bottom-4">
-                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"> View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a>
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}">
+                  View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
+                >
               </li>
               <li>
                 <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
@@ -120,7 +122,7 @@
             <ul class="nhsuk-list">
               <li>
                 <a
-                  *ngIf="['DONE', 'DECLINED'].includes(task.status) && task.sameOrganisation"
+                  *ngIf="!isArchived && ['DONE', 'DECLINED'].includes(task.status) && task.sameOrganisation"
                   routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen"
                   class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3"
                 >
@@ -137,7 +139,9 @@
                 </a>
               </li>
               <li class="nhsuk-u-margin-bottom-4">
-                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}">View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a>
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"
+                  >View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
+                >
               </li>
               <li [ngSwitch]="task.status">
                 <a *ngSwitchCase="'DONE'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
