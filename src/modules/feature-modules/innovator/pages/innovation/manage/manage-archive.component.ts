@@ -76,7 +76,7 @@ export class PageInnovationManageArchiveComponent extends CoreComponent implemen
         this.setRedirectAlertSuccess('You have archived your innovation', {
           message: 'All support has ended. You cannot send or reply to messages. All open tasks have been cancelled.'
         });
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation`);
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/overview`);
       });
   }
 

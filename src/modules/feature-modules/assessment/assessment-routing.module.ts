@@ -48,7 +48,7 @@ import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
 import { WizardInnovationThreadNewComponent } from '@modules/shared/pages/innovation/messages/wizard-thread-new/thread-new.component';
 import { PageInnovationRecordDownloadComponent } from '@modules/shared/pages/innovation/record/innovation-record-download.component';
-import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
+import { PageInnovationRecordWrapperComponent } from '@modules/shared/pages/innovation/record/innovation-record-wrapper.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
@@ -202,7 +202,12 @@ const routes: Routes = [
                 path: 'record',
                 data: { breadcrumb: 'Innovation record' },
                 children: [
-                  { path: '', pathMatch: 'full', component: PageInnovationRecordComponent, data: { breadcrumb: null } },
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationRecordWrapperComponent,
+                    data: { breadcrumb: null }
+                  },
 
                   {
                     path: 'download',

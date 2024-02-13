@@ -52,7 +52,7 @@ import { PageInnovationDocumentsListComponent } from '@modules/shared/pages/inno
 import { PageEveryoneWorkingOnInnovationComponent } from '@modules/shared/pages/innovation/everyone-working-on-innovation/everyone-working-on-innovation.component';
 import { PageInnovationThreadMessagesListComponent } from '@modules/shared/pages/innovation/messages/thread-messages-list.component';
 import { PageInnovationThreadsListComponent } from '@modules/shared/pages/innovation/messages/threads-list.component';
-import { PageInnovationRecordComponent } from '@modules/shared/pages/innovation/record/innovation-record.component';
+import { PageInnovationRecordWrapperComponent } from '@modules/shared/pages/innovation/record/innovation-record-wrapper.component';
 import { PageInnovationSectionEvidenceInfoComponent } from '@modules/shared/pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innovation/sections/section-info.component';
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
@@ -395,7 +395,7 @@ const routes: Routes = [
                   {
                     path: '',
                     pathMatch: 'full',
-                    component: PageInnovationRecordComponent,
+                    component: PageInnovationRecordWrapperComponent,
                     data: { breadcrumb: null }
                   },
 
