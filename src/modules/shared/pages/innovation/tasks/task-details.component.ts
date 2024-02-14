@@ -55,13 +55,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
-    if (
-      !(
-        this.stores.context.getPreviousUrl() &&
-        this.activatedRoute.snapshot.queryParams?.action === InnovationTaskStatusEnum.CANCELLED &&
-        (this.isAccessorType || this.isAssessmentType)
-      )
-    ) {
+    const taskAction = this.activatedRoute.snapshot.queryParams?.action;
+
+    if (!(this.stores.context.getPreviousUrl() && taskAction)) {
       this.setBackLink('Go back');
     }
 
