@@ -11,8 +11,8 @@
       </ng-template>
     </li>
 
-    <li *ngIf="isAccessorTypeAndArchivedInnovation" class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">
-      Innovation archived on {{ innovationCardData.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}
+    <li *ngIf="isInnovationInArchivedStatus" class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">
+      Innovation archived on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}
     </li>
 
     <li *ngIf="isAccessorTypeAndStoppedSharingInnovation" class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">Innovation has stopped sharing their data with your organisation</li>
