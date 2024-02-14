@@ -167,7 +167,6 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
           authenticatedUser: (req.session as any).oid
         }
       });
-      //res.redirect(`${ENVIRONMENT.BASE_PATH}/signout`);
       res.redirect(ENVIRONMENT.BASE_URL);
     } else {
       getAppInsightsClient().trackTrace({
@@ -402,10 +401,7 @@ function setAccessTokenBySessionId(sessionId: string, response: AuthenticationRe
 function deleteAccessTokenBySessionId(sessionId: string): void {
   const account = userSessions.get(sessionId);
   if (account) {
-    console.log('Removing account from cache');
-    //const cache = confidentialClientApplication.getTokenCache();
-    // confidentialClientApplication.getTokenCache().removeAccount(account.account);
-    //confidentialClientApplication.clearCache();
+    confidentialClientApplication.getTokenCache().removeAccount(account.account);
   }
   userSessions.delete(sessionId);
 }
