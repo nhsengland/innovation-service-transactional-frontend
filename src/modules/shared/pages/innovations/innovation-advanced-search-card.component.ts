@@ -9,6 +9,7 @@ export type InnovationCardData = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
+  statusUpdatedAt: DateISOType;
   groupedStatus: InnovationGroupedStatusEnum;
   updatedAt: DateISOType;
   owner: string;
@@ -38,6 +39,8 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   isAdminType: boolean;
   isAccessorType: boolean;
 
+  isInnovationInArchivedStatus: boolean = false;
+
   isAccessorTypeAndArchivedInnovation: boolean = false;
   isAccessorTypeAndStoppedSharingInnovation: boolean = false;
 
@@ -58,10 +61,12 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.isAccessorType = this.stores.authentication.isAccessorType();
   }
   ngOnInit(): void {
-    this.isAccessorTypeAndArchivedInnovation =
-      this.isAccessorType && this.innovationCardData.support?.closedReason === 'ARCHIVED';
+    this.isInnovationInArchivedStatus = this.innovationCardData.status === InnovationStatusEnum.ARCHIVED;
+
+    this.isAccessorTypeAndArchivedInnovation = this.isAccessorType && this.isInnovationInArchivedStatus;
     this.isAccessorTypeAndStoppedSharingInnovation =
       this.isAccessorType && this.innovationCardData.support?.closedReason === 'STOPPED_SHARED';
+
     this.categoriesList = this.getFormattedList(this.innovationCardData.categories);
     this.careSettingsList = this.getFormattedList(this.innovationCardData.careSettings);
     this.diseasesAndConditionsList = this.getFormattedList(this.innovationCardData.diseasesAndConditions);

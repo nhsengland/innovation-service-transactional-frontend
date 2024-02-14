@@ -102,6 +102,7 @@ export type InnovationListSelectType =
   | 'id'
   | 'name'
   | 'status'
+  | 'statusUpdatedAt'
   | 'groupedStatus'
   | 'submittedAt'
   | 'updatedAt'
@@ -136,6 +137,7 @@ export type InnovationListNewFullDTO = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
+  statusUpdatedAt: DateISOType;
   groupedStatus: InnovationGroupedStatusEnum;
   submittedAt: DateISOType | null;
   updatedAt: DateISOType;
