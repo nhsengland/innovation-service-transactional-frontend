@@ -109,7 +109,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         }
       ];
 
-      this.innovatorSummary = [{ label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' }];
+      this.innovatorSummary = [{ label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' }];
 
       this.showCards =
         [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
@@ -152,7 +152,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         contextDetails: [
           NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER,
           NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE,
-          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING
+          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
+          NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A
         ]
       });
 

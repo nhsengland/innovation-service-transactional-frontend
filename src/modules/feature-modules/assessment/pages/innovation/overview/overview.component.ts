@@ -106,7 +106,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           ];
 
           this.innovatorSummary = [
-            { label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' },
+            { label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' },
             {
               label: 'Contact preference',
               value: this.isArchived
@@ -173,7 +173,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           contextDetails: [
             NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT,
             NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED,
-            NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED
+            NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED,
+            NotificationContextDetailEnum.AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT
           ]
         });
 
