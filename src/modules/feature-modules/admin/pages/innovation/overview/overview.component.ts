@@ -93,7 +93,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ];
 
       this.innovatorDetails = [
-        { label: 'Owner', value: innovation.owner?.name ?? '[deleted account]' },
+        { label: 'Name', value: innovation.owner?.name ?? '[deleted account]' },
         {
           label: 'Last login',
           value: this.datePipe.transform(
