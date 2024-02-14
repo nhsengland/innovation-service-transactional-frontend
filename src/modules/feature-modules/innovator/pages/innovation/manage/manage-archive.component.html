@@ -16,11 +16,11 @@
             [pageUniqueField]="false"
           ></theme-form-input>
           <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="form.pending || form.invalid">Archive innovation</button>
+          <div>
+            <a routerLink="/innovator/innovations/{{ innovationId }}/manage/innovation">Cancel</a>
+          </div>
         </ng-container>
       </form>
     </div>
-  </div>
-  <div>
-    <a routerLink="/innovator/innovations/{{ innovationId }}">Cancel</a>
   </div>
 </theme-content-wrapper>
