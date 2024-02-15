@@ -8,6 +8,7 @@ import {
   InnovationDocumentInfoOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
+import { ContextInnovationType } from '@modules/stores';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
@@ -15,6 +16,7 @@ import { getAllSectionsList } from '@modules/stores/innovation/innovation-record
   templateUrl: './document-info.component.html'
 })
 export class PageInnovationDocumentInfoComponent extends CoreComponent implements OnInit {
+  innovation: ContextInnovationType;
   innovationId: string;
   documentId: string;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
@@ -23,7 +25,8 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
   // Flags
-  canDelete = false;
+  canDelete: boolean = false;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,9 +34,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   ) {
     super();
 
+    this.innovation = this.stores.context.getInnovation();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
+
+    this.isArchived = this.innovation.status === 'ARCHIVED';
   }
 
   ngOnInit(): void {

@@ -21,6 +21,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   errorOnSubmitStep: boolean = false;
 
   innovation: ContextInnovationType;
+  isArchived: boolean;
   sectionId: InnovationSectionEnum;
   baseUrl: string;
 
@@ -44,6 +45,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     );
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
 
+    this.isArchived = this.innovation.status === 'ARCHIVED';
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
@@ -55,8 +58,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   ngOnInit(): void {
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
+    const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
+
     this.sectionSubmittedText = sectionIdentification
-      ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
+      ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
@@ -176,7 +181,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                   this.innovation.status !== InnovationStatusEnum.CREATED &&
                   this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
                 ) {
-                  this.submitButton.label = 'Submit updates';
+                  this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
                 }
               }
 

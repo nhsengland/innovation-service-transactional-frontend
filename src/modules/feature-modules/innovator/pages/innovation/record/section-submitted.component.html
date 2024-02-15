@@ -12,7 +12,7 @@
         </p>
       </ng-container>
 
-      <p>
+      <p *ngIf="!isArchived">
         Send a message to those who are supporting you to let them know about the changes you have made.
         <a routerLink="/innovator/innovations/{{ innovation.id }}/threads" target="_blank" rel="noopener noreferrer">Go to messages (opens in a new window).</a>
       </p>
