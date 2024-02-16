@@ -11,6 +11,8 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
 export class InnovationSectionSubmittedComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
 
+  isArchived: boolean;
+
   section: {
     id: InnovationSectionEnum;
     openTasksCount: number;
@@ -32,9 +34,13 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
 
     this.setPageTitle('What you can do next', { size: 'l' });
     this.setBackLink('Go back', this.sectionLink);
+
+    this.isArchived = this.innovation.status === 'ARCHIVED';
   }
 
   ngOnInit() {
+    this.isArchived && this.setPageTitle('');
+
     this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: sectionInfo => {
         this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;

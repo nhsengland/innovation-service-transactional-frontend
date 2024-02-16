@@ -26,16 +26,18 @@
                 <ng-container *ngIf="innovation.expirationTransferDate === null; else innovationHasPendingTransfer">
                   <p *ngIf="innovation.collaboratorsCount === 0">There are no collaborators working on this innovation.</p>
                   <p *ngIf="innovation.collaboratorsCount > 0">
-                    You have {{ innovation.collaboratorsCount }} {{ innovation.collaboratorsCount > 1 ? "collaborators" : "collaborator" }} working on this innovation.
+                    <span>You have {{ innovation.collaboratorsCount }} {{ innovation.collaboratorsCount > 1 ? "collaborators" : "collaborator" }} working on this innovation.</span>
                   </p>
                   <p>If you do not want this innovation to be archived, you can transfer its ownership.</p>
                 </ng-container>
                 <ng-template #innovationHasPendingTransfer>
                   <p>You have requested to transfer ownership of this innovation.</p>
                   <p>
-                    This request is pending. If your request is rejected or has not been accepted within
-                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) }}
-                    {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be archived.
+                    <span
+                      >This request is pending. If your request is rejected or has not been accepted within
+                      {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) }}
+                      {{ getDeadlineForPendingTransferInDays(innovation.expirationTransferDate!) > 1 ? "days" : "day" }}, your innovation will be archived.
+                    </span>
                   </p>
                 </ng-template>
               </dd>

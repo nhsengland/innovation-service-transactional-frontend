@@ -6,7 +6,7 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
-  <ng-container *ngIf="!canCreateThread && !isAdmin">
+  <ng-container *ngIf="!canCreateThread && !isAdmin && !isArchived">
     <div *ngIf="innovation.owner; else missingOwner" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
