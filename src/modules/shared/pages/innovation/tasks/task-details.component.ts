@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { ContextInnovationType } from '@modules/stores';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
@@ -13,6 +14,7 @@ import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum }
   templateUrl: './task-details.component.html'
 })
 export class PageInnovationTaskDetailsComponent extends CoreComponent implements OnInit {
+  innovation: ContextInnovationType;
   innovationId: string;
   sectionId: InnovationSectionEnum;
   taskId: string;
@@ -33,12 +35,15 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAdmin: boolean;
   isArchived: boolean;
 
+  displaySectionLink: boolean;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
     super();
 
+    this.innovation = this.stores.context.getInnovation();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionId =
       this.activatedRoute.snapshot.queryParams.sectionId ?? this.activatedRoute.snapshot.params.sectionId;
@@ -52,11 +57,14 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isArchived = this.stores.context.getInnovation().status === InnovationStatusEnum.ARCHIVED;
+
+    this.displaySectionLink = !(this.isArchived && (this.isAccessorType || this.isAssessmentType));
   }
 
   ngOnInit(): void {
     const taskAction = this.activatedRoute.snapshot.queryParams?.action;
 
+    console.log(this.displaySectionLink);
     if (!(this.stores.context.getPreviousUrl() && taskAction)) {
       this.setBackLink('Go back');
     }

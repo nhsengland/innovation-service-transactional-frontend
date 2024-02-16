@@ -40,9 +40,14 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Section</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
-            <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
+            <span *ngIf="isArchived && (isAccessorType || isAssessmentType); else showSectionLink">
               {{ sectionTitle }}
-            </a>
+            </span>
+            <ng-template #showSectionLink>
+              <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">
+                {{ sectionTitle }}
+              </a>
+            </ng-template>
           </dd>
         </div>
         <div class="nhsuk-summary-list__row">
