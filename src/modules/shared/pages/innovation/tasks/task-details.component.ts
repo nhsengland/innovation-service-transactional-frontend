@@ -54,7 +54,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.stores.context.getInnovation().status === InnovationStatusEnum.ARCHIVED;
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
   }
 
   ngOnInit(): void {
