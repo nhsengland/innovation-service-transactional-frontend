@@ -35,8 +35,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAdmin: boolean;
   isArchived: boolean;
 
-  displaySectionLink: boolean;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -57,14 +55,11 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isArchived = this.stores.context.getInnovation().status === InnovationStatusEnum.ARCHIVED;
-
-    this.displaySectionLink = !(this.isArchived && (this.isAccessorType || this.isAssessmentType));
   }
 
   ngOnInit(): void {
     const taskAction = this.activatedRoute.snapshot.queryParams?.action;
 
-    console.log(this.displaySectionLink);
     if (!(this.stores.context.getPreviousUrl() && taskAction)) {
       this.setBackLink('Go back');
     }
