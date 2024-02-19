@@ -111,9 +111,11 @@
                   View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
                 >
               </li>
-              <li>
-                <a *ngIf="task.status === 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
-                <a *ngIf="task.status !== 'OPEN'" routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
+              <li *ngIf="task.status === 'OPEN'">
+                <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
+              </li>
+              <li *ngIf="!isArchived && task.status !== 'OPEN'">
+                <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
               </li>
             </ul>
           </ng-container>
@@ -143,8 +145,8 @@
                   >View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
                 >
               </li>
-              <li [ngSwitch]="task.status">
-                <a *ngSwitchCase="'DONE'" routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
+              <li *ngIf="!isArchived && task.status === 'DONE'">
+                <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
               </li>
             </ul>
           </ng-container>
