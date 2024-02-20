@@ -1,0 +1,45 @@
+<div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div class="nhsuk-grid-column-three-quarters">
+    <h2 class="nhsuk-heading-l">Two-step verification</h2>
+    <p>Two-step verification adds a layer of security to your account. We will send you a security code to your phone or email for you to use when logging in.</p>
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key">Status</dt>
+        <dd class="nhsuk-summary-list__value">
+          <theme-on-off-tag [isOn]="true" />
+        </dd>
+        <dd class="nhsuk-summary-list__actions">
+          <a [routerLink]="'mfa/edit'" [queryParams]="isMFAOn ? { mode: 'turn-off' } : { mode: 'set-mfa' }">
+            {{ isMFAOn ? "Turn off" : "Turn on" }}
+          </a>
+        </dd>
+      </div>
+
+      <ng-container *ngIf="MFAMode">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Verification method</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ "Email" }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a [routerLink]="'mfa/edit'" [queryParams]="MFAMode === 'EMAIL' ? { mode: 'phone' } : { mode: 'set-mfa' }">
+              {{ "Change" }}
+            </a>
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ MFAMode === "EMAIL" ? "Email" : "Phone number" }}</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ MFAMode === "EMAIL" ? "pablo.codeglia@bjss.com" : "******846" }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a *ngIf="MFAMode === 'PHONE'" [routerLink]="'mfa/edit'" [queryParams]="{ mode: 'phone' }">
+              {{ "Change" }}
+            </a>
+          </dd>
+        </div>
+      </ng-container>
+    </dl>
+  </div>
+</div>

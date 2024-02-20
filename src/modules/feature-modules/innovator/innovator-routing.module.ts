@@ -95,6 +95,7 @@ import { checkRoleGuard } from './guards/check-role.guard';
 import { UserRoleEnum } from '@app/base/enums';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -739,7 +740,24 @@ const routes: Routes = [
                 path: 'delete',
                 pathMatch: 'full',
                 component: PageAccountDeleteComponent,
-                data: { breadcrumb: 'Delete your account', layout: { type: 'full' } }
+                data: { breadcrumb: 'null', layout: { type: 'full' } }
+              },
+              {
+                path: 'mfa',
+                data: { layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: 'edit'
+                  },
+                  {
+                    path: 'edit',
+                    pathMatch: 'full',
+                    component: PageAccountMFAEditComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           }
