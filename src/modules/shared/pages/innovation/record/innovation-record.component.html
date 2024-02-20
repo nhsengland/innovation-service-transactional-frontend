@@ -64,7 +64,7 @@
         </div>
 
         <button
-          *ngIf="isInnovationInCreatedStatus"
+          *ngIf="isInnovationInCreatedStatus || (isArchiveBeforeShare && isLoggedUserOwner)"
           routerLink="/innovator/innovations/{{ innovationId }}/record/support"
           [disabled]="!allSectionsSubmitted"
           class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"
@@ -72,7 +72,7 @@
           Submit record for needs assessment
         </button>
         <button
-          *ngIf="isInnovationInArchivedStatus && isLoggedUserOwner"
+          *ngIf="isInnovationInArchivedStatus && !isArchiveBeforeShare && isLoggedUserOwner"
           routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send"
           [disabled]="!allSectionsSubmitted"
           class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"

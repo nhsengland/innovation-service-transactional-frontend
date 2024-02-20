@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
@@ -26,7 +26,11 @@ export class ShareInnovationRecordGuard {
           true
         );
 
-        if (innovation.status === InnovationStatusEnum.CREATED && allSectionsSubmitted) {
+        if (
+          allSectionsSubmitted &&
+          (innovation.status === InnovationStatusEnum.CREATED ||
+            (innovation.status === InnovationStatusEnum.ARCHIVED && !innovation.assessment))
+        ) {
           return true;
         } else {
           this.router.navigateByUrl(`innovator/innovations/${innovationId}/record`);
