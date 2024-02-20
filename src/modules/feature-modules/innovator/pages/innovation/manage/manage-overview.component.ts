@@ -21,9 +21,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
   innovation: ContextInnovationType;
 
   isActiveInnovation = false;
-  isInProgressInnovation = false;
   isArchived = false;
-  isWaitingAssessment = false;
   innovationTransfers: GetInnovationTransfersDTO = [];
 
   constructor(private innovatorService: InnovatorService) {
@@ -32,16 +30,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
 
     this.innovation = this.stores.context.getInnovation();
 
-    if (
-      [InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT, InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT].includes(
-        this.innovation.status
-      )
-    ) {
-      this.isWaitingAssessment = true;
-    }
-    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
-      this.isInProgressInnovation = true;
-    } else if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
+    if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
       this.isArchived = true;
     }
   }
