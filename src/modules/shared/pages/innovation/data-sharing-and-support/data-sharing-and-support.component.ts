@@ -186,7 +186,8 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
         this.stores.context.dismissNotification(this.innovationId, {
           contextDetails: [
             NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR,
-            NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR
+            NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR,
+            NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER
           ]
         });
 
