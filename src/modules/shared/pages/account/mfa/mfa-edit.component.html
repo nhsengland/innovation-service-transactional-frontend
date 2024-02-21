@@ -27,15 +27,7 @@
             <div>
               <p>When you log in, we can send you a security code via text message or phone call. The number you choose will be used to send all future codes.</p>
 
-              <theme-select-component
-                [id]="'countryCode'"
-                [label]="'Country code'"
-                [selectList]="[
-                  { key: '+44', text: 'United Kingdom +44' },
-                  { key: '+351', text: 'Portugal +351' }
-                ]"
-                (selectChanged)="onSortByChange($event)"
-              />
+              <theme-select-component [id]="'countryCode'" [label]="'Country code'" [selectList]="countryList" [defaultValueKey]="'+44'" (selectChanged)="onSortByChange($event)" />
               <theme-form-input controlName="phone" label="Enter phone number" [pageUniqueField]="false"></theme-form-input>
               <theme-form-input controlName="phoneConfirmation" label="Confirm phone number" [pageUniqueField]="false"></theme-form-input>
             </div>

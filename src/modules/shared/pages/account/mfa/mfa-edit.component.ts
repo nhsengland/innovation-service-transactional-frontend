@@ -3,6 +3,8 @@ import { FormControl, FormGroup, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@modules/shared/forms';
+import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
+import { fullCountryCodeList } from './mfa-edit.config';
 
 @Component({
   selector: 'shared-pages-account-mfa-edit',
@@ -17,6 +19,11 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   showItems: boolean = true;
   submitButton = { isActive: true, label: 'Continue' };
   editMode: 'set-mfa' | 'turn-off' | 'phone' | 'email' = 'set-mfa';
+
+  countryList: SelectComponentInputType[] = fullCountryCodeList.map(country => ({
+    key: country.code,
+    text: `${country.name} ${country.code}`
+  }));
 
   userEmail: string = this.stores.authentication.getUserInfo().email;
 
@@ -53,6 +60,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   }
 
   ngOnInit(): void {
+    console.log(this.countryList);
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
         this.editMode = queryParams.mode;

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { fullCountryCodeList } from './mfa-edit.config';
 
 @Component({
   selector: 'app-account-mfa-list',
@@ -14,5 +15,7 @@ export class AccountMFAListComponent extends CoreComponent implements OnInit {
 
     this.isMFAOn = true;
   }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(fullCountryCodeList);
+  }
 }
