@@ -1,22 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { CustomValidators } from '@modules/shared/forms';
+import { CustomValidators, FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
-import { fullCountryCodeList } from './mfa-edit.config';
+import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, fullCountryCodeList } from './mfa-edit.config';
 
 @Component({
   selector: 'shared-pages-account-mfa-edit',
   templateUrl: './mfa-edit.component.html'
 })
 export class PageAccountMFAEditComponent extends CoreComponent implements OnInit {
-  turnOffItems = [
+  @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
+
+  wizard = new WizardEngineModel({});
+
+  private _turnOffItems = [
     { value: 'true', label: 'Yes' },
     { value: 'false', label: 'No' }
   ];
+  public get turnOffItems() {
+    return this._turnOffItems;
+  }
+  public set turnOffItems(value) {
+    this._turnOffItems = value;
+  }
 
   showItems: boolean = true;
+  buttonLabel: string = 'Continue';
   submitButton = { isActive: true, label: 'Continue' };
   editMode: 'set-mfa' | 'turn-off' | 'phone' | 'email' = 'set-mfa';
 
@@ -60,34 +71,80 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   }
 
   ngOnInit(): void {
-    console.log(this.countryList);
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => {
         this.editMode = queryParams.mode;
-
-        switch (this.editMode) {
-          case 'phone':
-            this.setPageTitle('Set two-step verification method to phone');
-            break;
-          case 'email':
-            this.setPageTitle('Set two-step verification method to email');
-            break;
-          case 'set-mfa':
-            this.setPageTitle('Set two-step verification');
-            break;
-          case 'turn-off':
-            this.setPageTitle('Turn off two-step verification?');
-            break;
-        }
-
+        this.setupWizard();
         this.setPageStatus('READY');
       })
     );
   }
 
-  onSubmitStep() {}
+  setupWizard(): void {
+    if (this.editMode === 'set-mfa') {
+      this.wizard = new WizardEngineModel(MFA_SET_UP);
+    }
+    if (this.editMode === 'turn-off') {
+      this.wizard = new WizardEngineModel(MFA_TURN_OFF);
+    }
+    if (this.editMode === 'email') {
+      this.wizard = new WizardEngineModel(MFA_EMAIL);
+    }
+    if (this.editMode === 'phone') {
+      this.wizard = new WizardEngineModel(MFA_PHONE);
+    }
 
-  onSortByChange(selectKey: string): void {
-    this.form.get('countryCode')?.setValue(selectKey);
+    this.wizard
+      .gotoStep(1)
+      .setAnswers(this.wizard.runInboundParsing({ userEmail: this.userEmail, wizardMode: this.editMode }))
+      .runRules();
+
+    this.buttonLabel = this.wizard.isLastStep() ? 'Save' : 'Continue';
+
+    this.setPageTitle(this.wizard.currentStepTitle());
+  }
+
+  onSubmitStep(action: 'previous' | 'next'): void {
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    this.wizard.isSummaryStep;
+
+    if (action === 'next' && !formData.valid) {
+      // Don't move forward if step is NOT valid.
+      return;
+    }
+
+    this.wizard.addAnswers(formData.data).runRules();
+    this.wizard.currentStepTitle;
+    switch (action) {
+      case 'previous':
+        if (this.wizard.isFirstStep()) {
+          return;
+        } else {
+          this.wizard.previousStep();
+        }
+        break;
+      case 'next':
+        if (this.wizard.isLastStep()) {
+          this.onSubmitWizard();
+          return;
+        }
+        this.wizard.nextStep();
+        break;
+      default: // Should NOT happen!
+        break;
+    }
+    if (this.wizard.isLastStep()) {
+      this.onSubmitWizard();
+      return;
+    }
+
+    this.buttonLabel = this.wizard.isLastStep() ? 'Save' : 'Continue';
+
+    this.setPageTitle(this.wizard.currentStepTitle());
+  }
+
+  onSubmitWizard() {
+    const wizardData = this.wizard.runOutboundParsing();
+    console.log(wizardData);
   }
 }

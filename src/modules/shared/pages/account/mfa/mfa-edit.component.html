@@ -1,57 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
-      <form [formGroup]="form">
-        <ng-container [ngSwitch]="editMode">
-          <ng-container *ngSwitchCase="'set-mfa'">
-            <div>
-              <p>
-                Each time you log in we will send you a unique code to enter to add a layer of security to your account. You can choose to receive this code via email, text message
-                or phone call.
-              </p>
-              <theme-form-radio-group controlName="verificationMethodItems" [items]="verificationMethodItems" [pageUniqueField]="false"></theme-form-radio-group>
-            </div>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'email'">
-            <div>
-              <p>
-                When you log in, we'll send a security code to the email address linked with your account: <span class="nhsuk-u-font-weight-bold">{{ userEmail }}</span>
-              </p>
-
-              <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
-            </div>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'phone'">
-            <div>
-              <p>When you log in, we can send you a security code via text message or phone call. The number you choose will be used to send all future codes.</p>
-
-              <theme-select-component [id]="'countryCode'" [label]="'Country code'" [selectList]="countryList" [defaultValueKey]="'+44'" (selectChanged)="onSortByChange($event)" />
-              <theme-form-input controlName="phone" label="Enter phone number" [pageUniqueField]="false"></theme-form-input>
-              <theme-form-input controlName="phoneConfirmation" label="Confirm phone number" [pageUniqueField]="false"></theme-form-input>
-            </div>
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'turn-off'">
-            <div>
-              <p>By turning off two-step verification, you'll only use a password to log in. This will remove an additional layer of security from your account.</p>
-
-              <theme-form-radio-group controlName="turnOffItems" [items]="turnOffItems" [pageUniqueField]="false"></theme-form-radio-group>
-            </div>
-          </ng-container>
-        </ng-container>
-      </form>
-
-      <hr />
-
-      <div>
-        <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">{{ submitButton.label }}</button>
-      </div>
-
-      <div>
-        <a routerLink="/innovator/account/manage-account">{{ "Cancel" }} </a>
-      </div>
+      <p>{{ wizard.currentStep().description }}</p>
+      <theme-form-engine formId="mfaForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+      <button type="submit" form="questionForm" class="nhsuk-button" (click)="onSubmitStep('next')">{{ buttonLabel }}</button>
     </div>
   </div>
+  <a routerLink="/innovator/account/manage-account">{{ "Cancel" }} </a>
 </theme-content-wrapper>

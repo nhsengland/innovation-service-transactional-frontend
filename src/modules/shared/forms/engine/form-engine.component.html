@@ -130,6 +130,10 @@
           </fieldset>
         </div>
 
+        <div *ngSwitchCase="'select-component'">
+          <theme-form-select [controlName]="p.id" [selectItems]="p.selectItems ?? { selectList: [] }" />
+        </div>
+
         <div *ngSwitchDefault>
           <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>

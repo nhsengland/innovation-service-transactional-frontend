@@ -1,11 +1,11 @@
-/* 
-Lists downloaded from http://country.io/
-*/
+// /*
+// Lists downloaded from http://country.io/
+// */
 
-import { locale } from '@app/config/translations/en';
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
-export const countryCodesList = {
+const countryCodesList = {
   BD: '+880',
   BE: '+32',
   BF: '+226',
@@ -258,7 +258,7 @@ export const countryCodesList = {
   MZ: '+258'
 };
 
-export const countryList = {
+const countryList = {
   BD: 'Bangladesh',
   BE: 'Belgium',
   BF: 'Burkina Faso',
@@ -523,6 +523,51 @@ export const fullCountryCodeList: CountryCodeList = Object.entries(countryList)
     return { name: v, iso: k, code: Object.entries(countryCodesList).find(e => e[0] === k)?.[1] ?? '' };
   });
 
+// Payloads definitions
+
+type InboundPayloadType = {
+  userEmail: string;
+  wizardMode: 'set-mfa' | 'turn-off' | 'phone' | 'email';
+};
+type StepPayloadType = {
+  userEmail: string;
+  wizardMode: 'set-mfa' | 'turn-off' | 'phone' | 'email';
+  yesOrNo?: boolean;
+  selectMethod?: 'EMAIL' | 'PHONE';
+  confirmationEmail?: string;
+  countryCode?: number;
+  phoneNumber?: number;
+  confirmationPhoneNumber?: number;
+};
+type OutboundPayloadType = { type: 'none' | 'email' } | { type: 'phone'; phoneNumber: string };
+
+// Consts
+
+const selectCountryList: SelectComponentInputType[] = fullCountryCodeList.map(country => ({
+  key: country.code,
+  text: `${country.name} ${country.code}`
+}));
+
+const verificationMethodItems = [
+  {
+    value: 'EMAIL',
+    label: 'Email me',
+    description: "We'll send a security code to the email address linked with your account."
+  },
+  {
+    value: 'PHONE',
+    label: 'Send me a text message or phone me',
+    description: 'Receive a security code by text message or phone call.'
+  }
+];
+
+const turnOffItems = [
+  { value: 'true', label: 'Yes' },
+  { value: 'false', label: 'No' }
+];
+
+// Steps labels
+
 const stepsLabels = {
   l1: {
     label: 'Set two-step verification',
@@ -539,22 +584,162 @@ const stepsLabels = {
     description:
       'When you log in, we can send you a security code via text message or phone call. The number you choose will be used to send all future codes.'
   },
-  l4: { label: 'Set two-step verification method to email' }
+  l4: {
+    label: 'Set two-step verification method to email',
+    description: `When you log in, we'll send a security code to the email address linked with your account: '$ {currentValues.userEmail}'`
+  }
 };
 
-export const SET_UP_MFA_QUESTIONS: WizardEngineModel = new WizardEngineModel({
-  showSummary: false,
-  steps: [
-    new FormEngineModel({
-      parameters: [
-        {
-          id: 'selectMethod',
-          dataType: 'radio-group',
-          label: stepsLabels.l1.label,
-          description: stepsLabels.l1.description,
-          validations: { isRequired: [true, 'Choose one option'] }
-        }
-      ]
-    })
+// Steps
+
+const selectMethodStep = new FormEngineModel({
+  label: stepsLabels.l1.label,
+  description: stepsLabels.l1.description,
+  parameters: [
+    {
+      id: 'selectMethod',
+      dataType: 'radio-group',
+      validations: { isRequired: [true, 'Choose one option'] },
+      items: verificationMethodItems
+    }
   ]
 });
+
+const turnOffStep = new FormEngineModel({
+  label: stepsLabels.l2.label,
+  description: stepsLabels.l2.description,
+  parameters: [
+    {
+      id: 'yesOrNo',
+      dataType: 'radio-group',
+      validations: { isRequired: [true, 'Choose one option'] },
+      items: turnOffItems
+    }
+  ]
+});
+
+const phoneStep = new FormEngineModel({
+  label: stepsLabels.l3.label,
+  description: stepsLabels.l3.description,
+  parameters: [
+    {
+      id: 'countryCode',
+      dataType: 'select-component',
+      label: 'Country code',
+      selectItems: { selectList: selectCountryList, defaultKey: '+44' }
+    },
+    {
+      id: 'phoneNumber',
+      dataType: 'number',
+      label: 'Enter phone number',
+      validations: { isRequired: [true, 'Your phone number is required'] }
+    },
+    {
+      id: 'confirmationPhoneNumber',
+      dataType: 'number',
+      label: 'Confirm phone number',
+      validations: {
+        isRequired: [true, 'Phone confirmation is required'],
+        equalToField: ['phoneNumber', 'Phone numbers do not match']
+      }
+    }
+  ]
+});
+
+// Wizards
+
+export const MFA_SET_UP: WizardEngineModel = new WizardEngineModel({
+  steps: [selectMethodStep],
+  showSummary: false,
+  runtimeRules: [
+    (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+      wizardSetMFARuntimeRules(steps, currentValues, currentStep)
+  ],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data)
+});
+
+export const MFA_TURN_OFF: WizardEngineModel = new WizardEngineModel({
+  steps: [turnOffStep],
+  showSummary: false,
+  runtimeRules: [],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data)
+});
+
+export const MFA_EMAIL: WizardEngineModel = new WizardEngineModel({
+  steps: [],
+  showSummary: false,
+  runtimeRules: [
+    (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+      wizardEmailRuntimeRules(steps, currentValues, currentStep)
+  ],
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data)
+});
+
+export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
+  steps: [phoneStep],
+  showSummary: false,
+  inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
+  outboundParsing: (data: StepPayloadType) => outboundParsing(data)
+});
+
+function wizardSetMFARuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
+  // Email step is defined here to be able to use data.userEmail
+  const emailStep = new FormEngineModel({
+    label: stepsLabels.l4.label,
+    description: `When you log in, we'll send a security code to the email address linked with your account: ${data.userEmail}`,
+    parameters: [
+      {
+        id: 'confirmationEmail',
+        dataType: 'text',
+        label: 'Enter your email to confirm',
+        validations: { isRequired: [true, 'Your email is required'] }
+      }
+    ]
+  });
+
+  if (data.selectMethod === 'EMAIL') {
+    steps.push(emailStep);
+  }
+  if (data.selectMethod === 'PHONE') {
+    steps.push(phoneStep);
+  }
+}
+
+function wizardEmailRuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
+  // Email step is defined here to be able to use data.userEmail
+  const emailStep = new FormEngineModel({
+    label: stepsLabels.l4.label,
+    description: `When you log in, we'll send a security code to the email address linked with your account: ${data.userEmail}`,
+    parameters: [
+      {
+        id: 'confirmationEmail',
+        dataType: 'text',
+        label: 'Enter your email to confirm',
+        validations: {
+          isRequired: [true, 'Your email is required'],
+          equalTo: [data.userEmail, 'The email addresses do not match']
+        }
+      }
+    ]
+  });
+
+  steps.push(emailStep);
+}
+
+function inboundParsing(data: InboundPayloadType): StepPayloadType {
+  return {
+    userEmail: data.userEmail,
+    wizardMode: data.wizardMode
+  };
+}
+
+function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+  const parsedPhone = `${data.countryCode} ${data.phoneNumber}`;
+
+  return data.phoneNumber
+    ? { type: 'phone', phoneNumber: parsedPhone }
+    : { type: data.confirmationEmail ? 'email' : 'none' };
+}

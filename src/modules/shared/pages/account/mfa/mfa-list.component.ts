@@ -15,7 +15,5 @@ export class AccountMFAListComponent extends CoreComponent implements OnInit {
 
     this.isMFAOn = true;
   }
-  ngOnInit(): void {
-    console.log(fullCountryCodeList);
-  }
+  ngOnInit(): void {}
 }
