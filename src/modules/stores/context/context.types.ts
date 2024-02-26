@@ -47,6 +47,7 @@ export type ContextInnovationType = {
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: null | DateISOType;
+  archivedStatus?: InnovationStatusEnum;
   countryName: string | null;
   description: string | null;
   postCode: string | null;

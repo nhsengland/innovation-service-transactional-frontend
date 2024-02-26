@@ -175,6 +175,7 @@ export type InnovationInfoDTO = {
   name: string;
   description: null | string;
   status: InnovationStatusEnum;
+  archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
   submittedAt: null | DateISOType;
   countryName: null | string;
