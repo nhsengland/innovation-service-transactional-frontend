@@ -75,7 +75,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
+        status:
+          support?.status ?? this.isArchived
+            ? InnovationSupportStatusEnum.CLOSED
+            : InnovationSupportStatusEnum.UNASSIGNED,
         engagingAccessors: support?.engagingAccessors ?? []
       };
 

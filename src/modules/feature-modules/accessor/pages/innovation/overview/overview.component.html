@@ -52,7 +52,7 @@
   </div>
 
   <a
-    *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
+    *ngIf="!isArchived && isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
     routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
     class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
   >
