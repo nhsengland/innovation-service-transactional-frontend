@@ -57,7 +57,6 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   }
 
   onChangeSelect(): void {
-    console.log('changed value');
     this.fieldControl.setValue(this.selectedField);
     this.cdr.detectChanges();
   }

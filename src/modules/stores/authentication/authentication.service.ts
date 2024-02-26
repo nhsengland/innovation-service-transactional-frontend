@@ -39,11 +39,7 @@ type GetUserInfoDTO = {
   }[];
 };
 
-export type UpdateMFAInfoDTO =
-  | {
-      type: 'none' | 'phone';
-    }
-  | { type: 'phone'; phoneNumber: string };
+export type MFAInfoDTO = { type: 'none' } | { type: 'email' } | { type: 'phone'; phoneNumber: string };
 
 export type UpdateUserInfoDTO = {
   displayName: string;
@@ -99,6 +95,14 @@ export class AuthenticationService {
     );
   }
 
+  getUserMFAInfo(): Observable<MFAInfoDTO> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/mfa');
+    return this.http.get<MFAInfoDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
   getUserInfo(): Observable<GetUserInfoDTO> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
     return this.http.get<GetUserInfoDTO>(url.buildUrl()).pipe(
@@ -146,7 +150,7 @@ export class AuthenticationService {
     );
   }
 
-  updateUserMFAInfo(body: UpdateMFAInfoDTO): Observable<{ id: string }> {
+  updateUserMFAInfo(body: MFAInfoDTO): Observable<{ id: string }> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/mfa');
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

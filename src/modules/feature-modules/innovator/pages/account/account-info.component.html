@@ -8,7 +8,9 @@
     </div>
   </div>
 
-  <app-account-mfa-list />
+  <ng-container *ngIf="pageStatus === 'READY'">
+    <app-account-mfa-list [MFAInfo]="MFAInfo" />
+  </ng-container>
 
   <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-full">

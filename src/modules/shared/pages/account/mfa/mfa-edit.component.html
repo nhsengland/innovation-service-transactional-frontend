@@ -1,10 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-three-quarters">
+    <div *ngIf="wizard.isQuestionStep()" class="nhsuk-grid-column-three-quarters">
       <p>{{ wizard.currentStep().description }}</p>
       <theme-form-engine formId="mfaForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
-      <button type="submit" form="questionForm" class="nhsuk-button" (click)="onSubmitStep('next')">{{ buttonLabel }}</button>
+      <button type="submit" form="mfaForm" [disabled]="!formButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')">{{ formButton.label }}</button>
     </div>
   </div>
-  <a routerLink="/innovator/account/manage-account">{{ "Cancel" }} </a>
+  <a routerLink="/{{ manageAccountPageUrl }}">{{ "Cancel" }} </a>
 </theme-content-wrapper>

@@ -3,6 +3,7 @@
 // */
 
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
 const countryCodesList = {
@@ -525,13 +526,16 @@ export const fullCountryCodeList: CountryCodeList = Object.entries(countryList)
 
 // Payloads definitions
 
+export type MFAWizardModeType = 'set-mfa' | 'turn-off' | 'phone' | 'email';
+
 type InboundPayloadType = {
   userEmail: string;
-  wizardMode: 'set-mfa' | 'turn-off' | 'phone' | 'email';
+  wizardMode: MFAWizardModeType;
 };
+
 type StepPayloadType = {
   userEmail: string;
-  wizardMode: 'set-mfa' | 'turn-off' | 'phone' | 'email';
+  wizardMode: MFAWizardModeType;
   yesOrNo?: boolean;
   selectMethod?: 'EMAIL' | 'PHONE';
   confirmationEmail?: string;
@@ -539,6 +543,7 @@ type StepPayloadType = {
   phoneNumber?: number;
   confirmationPhoneNumber?: number;
 };
+
 type OutboundPayloadType = { type: 'none' | 'email' } | { type: 'phone'; phoneNumber: string };
 
 // Consts
@@ -611,6 +616,7 @@ const turnOffStep = new FormEngineModel({
   parameters: [
     {
       id: 'yesOrNo',
+      description: '',
       dataType: 'radio-group',
       validations: { isRequired: [true, 'Choose one option'] },
       items: turnOffItems
@@ -646,10 +652,28 @@ const phoneStep = new FormEngineModel({
   ]
 });
 
+function getEmailStep(userEmail: string): FormEngineModel {
+  return new FormEngineModel({
+    label: stepsLabels.l4.label,
+    description: `When you log in, we'll send a security code to the email address linked with your account: ${userEmail}`,
+    parameters: [
+      {
+        id: 'confirmationEmail',
+        dataType: 'text',
+        label: 'Enter your email to confirm',
+        validations: {
+          isRequired: [true, 'Your email is required'],
+          equalTo: [userEmail, 'The email addresses do not match']
+        }
+      }
+    ]
+  });
+}
+
 // Wizards
 
 export const MFA_SET_UP: WizardEngineModel = new WizardEngineModel({
-  steps: [selectMethodStep],
+  steps: [selectMethodStep, new FormEngineModel({})],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
@@ -662,7 +686,6 @@ export const MFA_SET_UP: WizardEngineModel = new WizardEngineModel({
 export const MFA_TURN_OFF: WizardEngineModel = new WizardEngineModel({
   steps: [turnOffStep],
   showSummary: false,
-  runtimeRules: [],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
 });
@@ -686,47 +709,19 @@ export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
 });
 
 function wizardSetMFARuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
-  // Email step is defined here to be able to use data.userEmail
-  const emailStep = new FormEngineModel({
-    label: stepsLabels.l4.label,
-    description: `When you log in, we'll send a security code to the email address linked with your account: ${data.userEmail}`,
-    parameters: [
-      {
-        id: 'confirmationEmail',
-        dataType: 'text',
-        label: 'Enter your email to confirm',
-        validations: { isRequired: [true, 'Your email is required'] }
-      }
-    ]
-  });
-
   if (data.selectMethod === 'EMAIL') {
-    steps.push(emailStep);
+    steps.splice(1);
+    steps.push(getEmailStep(data.userEmail));
   }
   if (data.selectMethod === 'PHONE') {
+    steps.splice(1);
     steps.push(phoneStep);
   }
 }
 
 function wizardEmailRuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
-  // Email step is defined here to be able to use data.userEmail
-  const emailStep = new FormEngineModel({
-    label: stepsLabels.l4.label,
-    description: `When you log in, we'll send a security code to the email address linked with your account: ${data.userEmail}`,
-    parameters: [
-      {
-        id: 'confirmationEmail',
-        dataType: 'text',
-        label: 'Enter your email to confirm',
-        validations: {
-          isRequired: [true, 'Your email is required'],
-          equalTo: [data.userEmail, 'The email addresses do not match']
-        }
-      }
-    ]
-  });
-
-  steps.push(emailStep);
+  steps.splice(0);
+  steps.push(getEmailStep(data.userEmail));
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -736,7 +731,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   };
 }
 
-function outboundParsing(data: StepPayloadType): OutboundPayloadType {
+function outboundParsing(data: StepPayloadType): MFAInfoDTO {
   const parsedPhone = `${data.countryCode} ${data.phoneNumber}`;
 
   return data.phoneNumber

@@ -10,7 +10,7 @@ import { Store } from '../store.class';
 
 import { UserRoleEnum } from './authentication.enums';
 import { AuthenticationModel } from './authentication.models';
-import { AuthenticationService, UpdateMFAInfoDTO, UpdateUserInfoDTO } from './authentication.service';
+import { AuthenticationService, MFAInfoDTO, UpdateUserInfoDTO } from './authentication.service';
 
 @Injectable()
 export class AuthenticationStore extends Store<AuthenticationModel> {
@@ -173,7 +173,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.authenticationService.updateUserInfo(body);
   }
 
-  updateMfaInfo$(body: UpdateMFAInfoDTO): Observable<{ id: string }> {
+  updateMfaInfo$(body: MFAInfoDTO): Observable<{ id: string }> {
     return this.authenticationService.updateUserMFAInfo(body);
   }
 

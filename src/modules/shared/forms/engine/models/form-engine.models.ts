@@ -35,7 +35,6 @@ export class FormEngineParameterModel {
     | 'file-upload'
     | 'file-upload-array'
     | 'select-component';
-  7313;
   label?: string;
   description?: string;
   placeholder?: string;

@@ -1,10 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, UntypedFormControl } from '@angular/forms';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
-import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
-import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, fullCountryCodeList } from './mfa-edit.config';
+import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
+import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } from './mfa-edit.config';
+import { AuthenticationService } from '@modules/stores';
+import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { combineLatest, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'shared-pages-account-mfa-edit',
@@ -12,101 +13,71 @@ import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, fullCountryCodeList } f
 })
 export class PageAccountMFAEditComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
+  @Input({ required: true }) currentMFAMode: 'phone' | 'email' | 'none' = 'none';
 
   wizard = new WizardEngineModel({});
 
-  private _turnOffItems = [
-    { value: 'true', label: 'Yes' },
-    { value: 'false', label: 'No' }
-  ];
-  public get turnOffItems() {
-    return this._turnOffItems;
-  }
-  public set turnOffItems(value) {
-    this._turnOffItems = value;
-  }
-
   showItems: boolean = true;
-  buttonLabel: string = 'Continue';
-  submitButton = { isActive: true, label: 'Continue' };
-  editMode: 'set-mfa' | 'turn-off' | 'phone' | 'email' = 'set-mfa';
-
-  countryList: SelectComponentInputType[] = fullCountryCodeList.map(country => ({
-    key: country.code,
-    text: `${country.name} ${country.code}`
-  }));
-
+  formButton = { isActive: true, label: 'Continue' };
+  wizardMode: MFAWizardModeType = 'set-mfa';
   userEmail: string = this.stores.authentication.getUserInfo().email;
+  newPhoneNumber: string = '';
+  manageAccountPageUrl = `${this.stores.authentication.userUrlBasePath()}/account/manage-account`;
 
-  verificationMethodItems = [
-    {
-      value: 'true',
-      label: 'Email me',
-      description: "We'll send a security code to the email address linked with your account."
-    },
-    {
-      value: 'false',
-      label: 'Send me a text message or phone me',
-      description: 'Receive a security code by text message or phone call.'
-    }
-  ];
-
-  form = new FormGroup({
-    turnOffItems: new UntypedFormControl('', CustomValidators.required('Choose one option')),
-    verificationMethodItems: new UntypedFormControl('', CustomValidators.required('Choose one option')),
-    email: new FormControl<string>('', [
-      CustomValidators.required('Your email is required'),
-      CustomValidators.equalTo(this.userEmail, 'The email is incorrect')
-    ]),
-    countryCode: new FormControl<string>(''),
-    phone: new FormControl<number | null>(null, [CustomValidators.required('Your phone number is required')]),
-    phoneConfirmation: new FormControl<number | null>(null, [
-      CustomValidators.required('Phone confirmation is required'),
-      CustomValidators.equalToField('phone', 'Phone numbers do not match')
-    ])
-  });
-
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private authenticationService: AuthenticationService
+  ) {
     super();
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe(queryParams => {
-        this.editMode = queryParams.mode;
-        this.setupWizard();
+    this.setPageStatus('LOADING');
+
+    combineLatest([this.activatedRoute.queryParams, this.authenticationService.getUserMFAInfo()]).subscribe({
+      next: ([queryParams, mfaInfo]) => {
+        if (!queryParams.mode) {
+          this.redirectTo(this.manageAccountPageUrl);
+        } else {
+          this.wizardMode = queryParams.mode;
+          this.currentMFAMode = mfaInfo.type;
+
+          this.setupWizard();
+        }
         this.setPageStatus('READY');
-      })
-    );
+      }
+    });
   }
 
   setupWizard(): void {
-    if (this.editMode === 'set-mfa') {
-      this.wizard = new WizardEngineModel(MFA_SET_UP);
-    }
-    if (this.editMode === 'turn-off') {
-      this.wizard = new WizardEngineModel(MFA_TURN_OFF);
-    }
-    if (this.editMode === 'email') {
-      this.wizard = new WizardEngineModel(MFA_EMAIL);
-    }
-    if (this.editMode === 'phone') {
-      this.wizard = new WizardEngineModel(MFA_PHONE);
+    switch (this.wizardMode) {
+      case 'set-mfa':
+        this.wizard = new WizardEngineModel(MFA_SET_UP);
+        break;
+      case 'turn-off':
+        this.wizard = new WizardEngineModel(MFA_TURN_OFF);
+        break;
+      case 'email':
+        this.wizard = new WizardEngineModel(MFA_EMAIL);
+        break;
+      case 'phone':
+        this.wizard = new WizardEngineModel(MFA_PHONE);
+        break;
+      default:
+        this.redirectTo(this.manageAccountPageUrl);
     }
 
     this.wizard
-      .gotoStep(1)
-      .setAnswers(this.wizard.runInboundParsing({ userEmail: this.userEmail, wizardMode: this.editMode }))
+      .setAnswers(this.wizard.runInboundParsing({ userEmail: this.userEmail, wizardMode: this.wizardMode }))
       .runRules();
 
-    this.buttonLabel = this.wizard.isLastStep() ? 'Save' : 'Continue';
+    this.formButton.label = this.wizard.isLastStep() ? 'Save' : 'Continue';
 
     this.setPageTitle(this.wizard.currentStepTitle());
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
     const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
-    this.wizard.isSummaryStep;
 
     if (action === 'next' && !formData.valid) {
       // Don't move forward if step is NOT valid.
@@ -114,6 +85,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
     }
 
     this.wizard.addAnswers(formData.data).runRules();
+
     this.wizard.currentStepTitle;
     switch (action) {
       case 'previous':
@@ -126,25 +98,64 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
       case 'next':
         if (this.wizard.isLastStep()) {
           this.onSubmitWizard();
-          return;
+        } else {
+          this.wizard.nextStep();
         }
-        this.wizard.nextStep();
         break;
       default: // Should NOT happen!
         break;
     }
-    if (this.wizard.isLastStep()) {
-      this.onSubmitWizard();
-      return;
-    }
-
-    this.buttonLabel = this.wizard.isLastStep() ? 'Save' : 'Continue';
 
     this.setPageTitle(this.wizard.currentStepTitle());
+
+    this.formButton.label = this.wizard.isLastStep() ? 'Save' : 'Continue';
   }
 
   onSubmitWizard() {
-    const wizardData = this.wizard.runOutboundParsing();
-    console.log(wizardData);
+    const wizardData = this.wizard.runOutboundParsing() as MFAInfoDTO;
+    this.formButton.isActive = false;
+
+    this.authenticationService.updateUserMFAInfo(wizardData).subscribe({
+      next: response => {
+        if (wizardData.type === 'phone') {
+          this.setRedirectAlertSuccess(
+            this.currentMFAMode === 'phone'
+              ? `Your phone number has been changed to ${this.getCensoredPhoneNumber(wizardData.phoneNumber)}`
+              : this.wizardMode === 'phone'
+                ? 'Your two-step verification method has been changed to phone'
+                : 'You have set up two-step verification on your account',
+            {
+              message: 'A security code will be sent to your phone when you log in to your account.'
+            }
+          );
+        }
+
+        if (wizardData.type === 'email') {
+          this.setRedirectAlertSuccess(
+            this.currentMFAMode === 'phone'
+              ? 'Your two-step verification method has been changed to email'
+              : 'You have set up two-step verification on your account',
+            {
+              message: 'A security code will be sent to your email when you log in to your account. '
+            }
+          );
+        }
+
+        if (wizardData.type === 'none') {
+          this.setRedirectAlertSuccess('You have turned off two-step verification on your account', {
+            message: 'You will only use your password to log in.'
+          });
+        }
+        this.redirectTo(`/innovator/account/manage-account`);
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
+    });
+  }
+
+  private getCensoredPhoneNumber(number: string): string {
+    return `${number.replace(/ /g, '').slice(0, -3).replace(/./g, '*')}${number.slice(-3)}`;
   }
 }
