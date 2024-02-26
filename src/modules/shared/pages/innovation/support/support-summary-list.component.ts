@@ -86,7 +86,9 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           historyList: [],
           isLoading: false,
           isOpened: false,
-          canDoProgressUpdates: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id && this.innovation.status !== InnovationStatusEnum.ARCHIVED,
+          canDoProgressUpdates:
+            this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id &&
+            this.innovation.status !== InnovationStatusEnum.ARCHIVED,
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
         this.sectionsList[1].unitsList = response.BEEN_ENGAGED.map(item => ({
