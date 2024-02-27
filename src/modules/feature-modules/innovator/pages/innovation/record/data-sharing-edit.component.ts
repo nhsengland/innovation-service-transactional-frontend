@@ -85,6 +85,9 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
       )
       .subscribe({
         next: () => {
+          // Make sure the innovation is refetched
+          this.stores.context.clearInnovation();
+
           this.setRedirectAlertSuccess(
             'You have successfully submitted your innovation record for a needs assessment',
             { message: `The needs assessment team will contact you within 1 week.` }
