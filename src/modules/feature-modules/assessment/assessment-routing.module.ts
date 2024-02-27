@@ -72,6 +72,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -539,6 +540,23 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageAssessmentAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'mfa',
+                data: { layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: 'edit'
+                  },
+                  {
+                    path: 'edit',
+                    pathMatch: 'full',
+                    component: PageAccountMFAEditComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           },

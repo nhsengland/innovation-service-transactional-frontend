@@ -1,0 +1,5 @@
+<ul class="nhsuk-list app-side-nav__list">
+  <li *ngFor="let item of sidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+    <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url"> {{ item.label }} </a>
+  </li>
+</ul>

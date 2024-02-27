@@ -64,6 +64,8 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
+import { PageAccountInfoComponent } from './pages/account/account-info.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AdminRoutingModule],
@@ -71,9 +73,11 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // Base
     ContextInnovationOutletComponent,
     SidebarInnovationMenuOutletComponent,
+    SidebarAccountMenuOutletComponent,
 
     // Pages.
     PageAccountManageAccountInfoComponent,
+    PageAccountInfoComponent,
     // Users
     PageUserEmailComponent,
     PageUserFindComponent,

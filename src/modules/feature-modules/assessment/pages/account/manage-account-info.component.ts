@@ -1,18 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { AuthenticationService } from '@modules/stores';
+import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 
 @Component({
   selector: 'app-assessment-pages-manage-account-info',
   templateUrl: './manage-account-info.component.html'
 })
-export class PageAssessmentAccountManageAccountInfoComponent extends CoreComponent {
+export class PageAssessmentAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
     passwordResetAt: null | string;
   };
 
-  constructor() {
+  MFAInfo: MFAInfoDTO = { type: 'none' };
+
+  constructor(private authenticationService: AuthenticationService) {
     super();
     this.setPageTitle('Manage account');
 
@@ -20,7 +24,15 @@ export class PageAssessmentAccountManageAccountInfoComponent extends CoreCompone
     this.user = {
       passwordResetAt: user.passwordResetAt
     };
+  }
 
-    this.setPageStatus('READY');
+  ngOnInit(): void {
+    this.authenticationService.getUserMFAInfo().subscribe({
+      next: response => {
+        this.MFAInfo = response;
+        console.log('response:', response);
+        this.setPageStatus('READY');
+      }
+    });
   }
 }

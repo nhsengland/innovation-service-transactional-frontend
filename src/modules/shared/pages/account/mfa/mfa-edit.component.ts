@@ -154,7 +154,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
             message: 'You will only use your password to log in.'
           });
         }
-        this.redirectTo(`/innovator/account/manage-account`);
+        this.redirectTo(this.manageAccountPageUrl);
       },
       error: () => {
         this.setPageStatus('ERROR');

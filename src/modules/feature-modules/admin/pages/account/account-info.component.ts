@@ -2,13 +2,14 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { AuthenticationService, MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { AuthenticationService } from '@modules/stores';
+import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 
 @Component({
-  selector: 'app-accessor-pages-manage-account-info',
-  templateUrl: './manage-account-info.component.html'
+  selector: 'shared-pages-account-account-info',
+  templateUrl: './account-info.component.html'
 })
-export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent implements OnInit {
+export class PageAccountInfoComponent extends CoreComponent implements OnInit {
   changePassword = `${this.CONSTANTS.APP_URL}/change-password`;
 
   user: {
@@ -19,7 +20,7 @@ export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent
 
   constructor(private authenticationService: AuthenticationService) {
     super();
-    this.setPageTitle('Manage account');
+    // this.setPageTitle('Manage account');
 
     const user = this.stores.authentication.getUserInfo();
     this.user = {
@@ -31,7 +32,6 @@ export class PageAccessorAccountManageAccountInfoComponent extends CoreComponent
     this.authenticationService.getUserMFAInfo().subscribe({
       next: response => {
         this.MFAInfo = response;
-        console.log('response:', response);
         this.setPageStatus('READY');
       }
     });

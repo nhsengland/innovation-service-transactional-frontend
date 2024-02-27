@@ -32,7 +32,6 @@ export class PageAccountInfoComponent extends CoreComponent implements OnInit {
     this.authenticationService.getUserMFAInfo().subscribe({
       next: response => {
         this.MFAInfo = response;
-        console.log('response:', response);
         this.setPageStatus('READY');
       }
     });
