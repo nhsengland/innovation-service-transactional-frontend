@@ -1,7 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, map, startWith } from 'rxjs/operators';
 
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -24,8 +24,12 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   ) {
     this.subscriptions.add(
       this.router.events
-        .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.onRouteChange(e))
+        .pipe(
+          filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+          map((e: NavigationEnd) => e.url),
+          startWith(this.router.url)
+        )
+        .subscribe((url: string) => this.onRouteChange(url))
     );
   }
 
@@ -33,8 +37,9 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  private onRouteChange(event: NavigationEnd): void {
+  private onRouteChange(url: string): void {
     const innovation = this.contextStore.getInnovation();
+
     this.data.innovation = {
       id: innovation.id,
       name: innovation.name,
@@ -44,9 +49,9 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
     // Do not show link, if ON any assessments/* route.
     if (
-      event.url.endsWith(`/assessments/new`) ||
-      event.url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
-      event.url.includes(`/assessments/${innovation.assessment?.id}/edit`)
+      url.endsWith(`/assessments/new`) ||
+      url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
+      url.includes(`/assessments/${innovation.assessment?.id}/edit`)
     ) {
       this.data.link = null;
     } else {
@@ -72,6 +77,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
           break;
 
         case InnovationStatusEnum.IN_PROGRESS:
+        case InnovationStatusEnum.ARCHIVED:
           this.data.link = {
             label: 'View needs assessment',
             url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`

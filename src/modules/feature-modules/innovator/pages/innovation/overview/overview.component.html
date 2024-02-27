@@ -26,9 +26,12 @@
       <dt class="nhsuk-summary-list__key">Innovation status</dt>
       <dd class="nhsuk-summary-list__value">
         <theme-tag
-        type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}"
-        label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"
+          type="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.grouped_status.' + innovation?.groupedStatus + '.name' | translate }}"
         ></theme-tag>
+        <p class="font-color-secondary nhsuk-body-s nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-0" *ngIf="innovation?.status === 'ARCHIVED'">
+          Archived on {{ innovation?.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.
+        </p>
         <ng-container *ngIf="innovation?.engagingOrganisationsCount">
           <div class="nhsuk-u-margin-top-2 nhsuk-u-font-size-14 font-color-secondary">
             {{ innovation?.engagingOrganisationsCount }} engaging {{ "dictionary.organisation" | pluralTranslate: innovation?.engagingOrganisationsCount | translate }}.
@@ -48,13 +51,6 @@
       </dd>
     </div>
   </dl>
-
-  <div>
-    <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0" *ngIf="innovation?.status === 'PAUSED'">
-      You have stopped sharing this innovation on {{ innovation?.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. If you want support with your innovation,
-      <a routerLink="/innovator/innovations/{{ innovationId }}/record">go to the innovation record</a> and reshare it for a needs reassessment.
-    </span>
-  </div>
 
   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-section-break--s" />
 

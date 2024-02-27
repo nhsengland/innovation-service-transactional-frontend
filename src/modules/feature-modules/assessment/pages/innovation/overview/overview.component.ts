@@ -18,6 +18,7 @@ import {
   AssessmentExemptionTypeDTO,
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-assessment-pages-innovation-overview',
@@ -26,6 +27,9 @@ import {
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   innovation: null | InnovationInfoDTO = null;
+
+  isArchived: boolean = false;
+  showCards: boolean = true;
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string }[] = [];
@@ -63,6 +67,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         switchMap(innovationInfo => {
           this.innovation = innovationInfo;
 
+          this.isArchived = this.innovation.status === 'ARCHIVED';
+
+          this.showCards = ![InnovationStatusEnum.ARCHIVED, InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT].includes(
+            this.innovation.status
+          );
+
           this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
           this.innovationSummary = [
@@ -96,19 +106,26 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           ];
 
           this.innovatorSummary = [
-            { label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' },
+            { label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' },
             {
               label: 'Contact preference',
-              value:
-                UtilsHelper.getContactPreferenceValue(
-                  this.innovation.owner?.contactByEmail,
-                  this.innovation.owner?.contactByPhone,
-                  this.innovation.owner?.contactByPhoneTimeframe
-                ) || ''
+              value: this.isArchived
+                ? 'Not available'
+                : UtilsHelper.getContactPreferenceValue(
+                    this.innovation.owner?.contactByEmail,
+                    this.innovation.owner?.contactByPhone,
+                    this.innovation.owner?.contactByPhoneTimeframe
+                  ) || ''
             },
-            { label: 'Contact details', value: this.innovation.owner?.contactDetails || '' },
-            { label: 'Email address', value: this.innovation.owner?.email || '' },
-            { label: 'Phone number', value: this.innovation.owner?.mobilePhone || '' }
+            {
+              label: 'Contact details',
+              value: this.isArchived ? 'Not available' : this.innovation.owner?.contactDetails || ''
+            },
+            { label: 'Email address', value: this.isArchived ? 'Not available' : this.innovation.owner?.email || '' },
+            {
+              label: 'Phone number',
+              value: this.isArchived ? 'Not available' : this.innovation.owner?.mobilePhone || ''
+            }
           ];
 
           return forkJoin([
@@ -156,7 +173,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           contextDetails: [
             NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT,
             NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED,
-            NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED
+            NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED,
+            NotificationContextDetailEnum.AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT
           ]
         });
 

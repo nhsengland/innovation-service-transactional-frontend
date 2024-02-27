@@ -151,12 +151,13 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         switch (status) {
           case 'COMPLETED':
             this.showOnlyCompleted = true;
-            this.setPageTitle('Assessment completed innovations');
+            this.setPageTitle('Needs assessment complete');
             this.setBackLink('Go back', `${this.userUrlBasePath()}/innovations`);
             this.availableGroupedStatus = [
               InnovationGroupedStatusEnum.AWAITING_SUPPORT,
               InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
-              InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT
+              InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
+              InnovationGroupedStatusEnum.ARCHIVED
             ];
             break;
           case 'NEEDS_ASSESSMENT':

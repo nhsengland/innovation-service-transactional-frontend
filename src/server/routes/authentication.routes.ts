@@ -167,7 +167,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
           authenticatedUser: (req.session as any).oid
         }
       });
-      res.redirect(`${ENVIRONMENT.BASE_PATH}/signout`);
+      res.redirect(ENVIRONMENT.BASE_URL);
     } else {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${
@@ -246,21 +246,28 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
           method: req.method
         }
       });
-      res.redirect(OAUTH_CONFIG.signoutRedirectUrl);
+      res.redirect(ENVIRONMENT.BASE_URL);
   }
 });
 
-authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, (req, res) => {
+authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signout`, async (req, res) => {
   const redirectUrl = (req.query.redirectUrl as string) || OAUTH_CONFIG.signoutRedirectUrl;
-  const azLogoutUri =
-    `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout` +
-    `?p=${OAUTH_CONFIG.signinPolicy}` + // add policy information
-    `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}`; // add post logout redirect uri
+  const token = await getAccessTokenBySessionId(req.session.id);
+
+  // Because of SSO / Remind me we need to redirect to the logout URL with the id token, if we don't have the token we
+  // can assume that the user isn't logged in for now (he wouldn't have the sign out link)
+  // If in the future we allow sign out without logged in we need to have the token somehow
+  const safeB2CLogoutUrl = token
+    ? `https://${OAUTH_CONFIG.tenantName}.b2clogin.com/${OAUTH_CONFIG.tenantName}.onmicrosoft.com/oauth2/v2.0/logout` +
+      `?p=${OAUTH_CONFIG.signinPolicy}` + // add policy information
+      `&id_token_hint=${token}` + // add id token
+      `&post_logout_redirect_uri=${encodeURIComponent(redirectUrl)}` // add post logout redirect uri
+    : ENVIRONMENT.BASE_URL;
 
   const oid = req.session.id;
   req.session.destroy(() => {
     deleteAccessTokenBySessionId(oid);
-    res.redirect(azLogoutUri);
+    res.redirect(safeB2CLogoutUrl);
   });
 });
 
@@ -392,6 +399,10 @@ function setAccessTokenBySessionId(sessionId: string, response: AuthenticationRe
 }
 
 function deleteAccessTokenBySessionId(sessionId: string): void {
+  const account = userSessions.get(sessionId);
+  if (account) {
+    confidentialClientApplication.getTokenCache().removeAccount(account.account);
+  }
   userSessions.delete(sessionId);
 }
 //#endregion

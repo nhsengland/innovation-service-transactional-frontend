@@ -31,10 +31,7 @@ import { PageInnovationManageCollaboratorsInfoComponent } from './pages/innovati
 import { PageInnovationManageCollaboratorsOverviewComponent } from './pages/innovation/manage/manage-collaborators-overview.component';
 import { PageInnovationManageCollaboratorsWizardComponent } from './pages/innovation/manage/manage-collaborators-wizard.component';
 import { PageInnovationManageOverviewComponent } from './pages/innovation/manage/manage-overview.component';
-import { PageInnovationManageStopSharingOverviewComponent } from './pages/innovation/manage/manage-stop-sharing-overview.component';
-import { PageInnovationManageStopSharingComponent } from './pages/innovation/manage/manage-stop-sharing.component';
 import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
-import { PageInnovationManageWithdrawComponent } from './pages/innovation/manage/manage-withdraw.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
@@ -49,6 +46,8 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
+import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
+import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -76,10 +75,9 @@ import { InnovatorService } from './services/innovator.service';
     PageInnovationManageCollaboratorsOverviewComponent,
     PageInnovationManageCollaboratorsWizardComponent,
     PageInnovationManageOverviewComponent,
-    PageInnovationManageStopSharingOverviewComponent,
-    PageInnovationManageStopSharingComponent,
+    PageInnovationManageArchiveOverviewComponent,
+    PageInnovationManageArchiveComponent,
     PageInnovationManageTransferComponent,
-    PageInnovationManageWithdrawComponent,
     PageInnovationNeedsReassessmentSendComponent,
     InnovationOverviewComponent,
     InnovationSectionEvidenceEditComponent,

@@ -102,9 +102,6 @@ export class AnnouncementsService extends CoreService {
     const url = new UrlModel(this.API_ADMIN_URL)
       .addPath('v1/announcements/:announcementId')
       .setPathParams({ announcementId });
-    return this.http.delete<void>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1));
   }
 }

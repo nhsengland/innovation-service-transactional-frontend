@@ -5,7 +5,7 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
-import { InnovationService, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
@@ -32,11 +32,13 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       name: string;
       acronym: string;
       status?: InnovationSupportStatusEnum;
+      suggestedByPhrase: string | null;
       organisationUnits: {
         id: string;
         name: string;
         acronym: string;
         status: InnovationSupportStatusEnum;
+        suggestedByPhrase: string | null;
       }[];
     };
     shared?: boolean;
@@ -53,6 +55,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   isInnovatorType: boolean;
   isAssessmentType: boolean;
   isAccessorType: boolean;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,8 +74,13 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
 
-    this.setPageTitle('Data sharing preferences', { hint: 'All organisations' });
+    if (this.isQualifyingAccessorRole) {
+      this.setPageTitle('Suggest organisations to support');
+    } else {
+      this.setPageTitle('Data sharing preferences', { hint: 'All organisations' });
+    }
   }
 
   ngOnInit(): void {
@@ -86,8 +94,14 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       innovationSupports: this.innovationsService.getInnovationSupportsList(this.innovationId, false)
     };
 
-    if (this.userType === UserRoleEnum.INNOVATOR) {
+    if (this.isInnovatorType) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
+      subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
+        this.innovationId
+      );
+    }
+
+    if (this.isAccessorType) {
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
         this.innovationId
       );
@@ -119,6 +133,20 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
       this.organisations = results.organisationsList.map(organisation => {
         if (organisation.organisationUnits.length === 1) {
+          // filter accessors who suggested the current organisation
+          const accessorsWhoSuggestedOrg = results.organisationSuggestions?.accessors.filter(
+            accessor => !!accessor.suggestedOrganisations.find(so => so.id === organisation.id)
+          );
+
+          // check if current organisation was suggested by needs assessment team
+          const isOrgSuggestedByAssessmentTeam =
+            !!results.organisationSuggestions?.assessment.suggestedOrganisations.find(so => so.id === organisation.id);
+
+          const suggestedBy = [
+            ...(isOrgSuggestedByAssessmentTeam ? ['the needs assessment team'] : []),
+            ...(accessorsWhoSuggestedOrg?.map(ac => ac.organisation.acronym) || [])
+          ];
+
           return {
             info: {
               id: organisation.id,
@@ -127,7 +155,8 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
               organisationUnits: [],
               status:
                 results.innovationSupports.find(item => item.organisation.id === organisation.id)?.status ||
-                InnovationSupportStatusEnum.UNASSIGNED
+                InnovationSupportStatusEnum.UNASSIGNED,
+              suggestedByPhrase: this.createSubmittedByPhrase(suggestedBy)
             },
             ...([
               UserRoleEnum.ADMIN,
@@ -146,17 +175,41 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
             showHideDescription: null
           };
         } else {
+          const organisationUnits = organisation.organisationUnits.map(organisationUnit => {
+            // filter accessors who suggested the current unit
+            const accessorsWhoSuggestedUnit = results.organisationSuggestions?.accessors.filter(
+              accessor =>
+                !!accessor.suggestedOrganisations
+                  .find(so => so.id === organisation.id)
+                  ?.organisationUnits?.find(ou => ou.id === organisationUnit.id)
+            );
+
+            // check if current unit was suggested by needs assessment team
+            const isUnitSuggestedByAssessmentTeam = !!results.organisationSuggestions?.assessment.suggestedOrganisations
+              .find(so => so.id === organisation.id)
+              ?.organisationUnits?.find(ou => ou.id === organisationUnit.id);
+
+            const suggestedBy = [
+              ...(isUnitSuggestedByAssessmentTeam ? ['the needs assessment team'] : []),
+              ...(accessorsWhoSuggestedUnit?.map(ac => ac.organisation.acronym) || [])
+            ];
+
+            return {
+              ...organisationUnit,
+              status:
+                results.innovationSupports.find(item => item.organisation.unit.id === organisationUnit.id)?.status ||
+                InnovationSupportStatusEnum.UNASSIGNED,
+              suggestedByPhrase: this.createSubmittedByPhrase(suggestedBy)
+            };
+          });
+
           return {
             info: {
               id: organisation.id,
               name: organisation.name,
               acronym: organisation.acronym,
-              organisationUnits: organisation.organisationUnits.map(organisationUnit => ({
-                ...organisationUnit,
-                status:
-                  results.innovationSupports.find(item => item.organisation.unit.id === organisationUnit.id)?.status ||
-                  InnovationSupportStatusEnum.UNASSIGNED
-              }))
+              suggestedByPhrase: null,
+              organisationUnits
             },
             ...([
               UserRoleEnum.ADMIN,
@@ -184,7 +237,8 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
         this.stores.context.dismissNotification(this.innovationId, {
           contextDetails: [
             NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR,
-            NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR
+            NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR,
+            NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER
           ]
         });
 
@@ -216,5 +270,17 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
       default:
         break;
     }
+  }
+
+  createSubmittedByPhrase(submittedBy: string[]): string | null {
+    if (submittedBy.length === 0) {
+      return null;
+    }
+
+    if (submittedBy.length === 1) {
+      return `Suggested by ${submittedBy[0]}.`;
+    }
+
+    return `Suggested by ${submittedBy.slice(0, -1).join(', ')} and ${submittedBy.pop()}.`;
   }
 }

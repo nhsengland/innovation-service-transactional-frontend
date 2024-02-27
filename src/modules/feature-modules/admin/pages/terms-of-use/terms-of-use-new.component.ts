@@ -13,7 +13,7 @@ import { AdminUsersService } from '../../services/users.service';
 export class PageTermsOfUseNewComponent extends CoreComponent implements OnInit {
   typeItems: { value: string; label: string }[] = [
     { label: 'Support organisation', value: 'SUPPORT_ORGANISATION' },
-    { label: 'Innovations', value: 'INNOVATOR' }
+    { label: 'Innovators', value: 'INNOVATOR' }
   ];
   module: 'New' | 'Edit';
   id: string;

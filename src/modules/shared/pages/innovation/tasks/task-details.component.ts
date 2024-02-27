@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -31,6 +31,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAccessorType: boolean;
   isAssessmentType: boolean;
   isAdmin: boolean;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -50,10 +51,15 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
+    this.isArchived = this.stores.context.getInnovation().status === InnovationStatusEnum.ARCHIVED;
   }
 
   ngOnInit(): void {
-    this.setBackLink('Go back');
+    const taskAction = this.activatedRoute.snapshot.queryParams?.action;
+
+    if (!(this.stores.context.getPreviousUrl() && taskAction)) {
+      this.setBackLink('Go back');
+    }
 
     if (this.sectionId) {
       this.innovationsService

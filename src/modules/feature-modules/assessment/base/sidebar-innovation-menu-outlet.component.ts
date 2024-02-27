@@ -18,6 +18,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
   isAllSectionsDetailsPage: boolean = false;
+  isInnovationRecordPage: boolean = false;
+  isInnovationInArchivedStatus: boolean = false;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];
@@ -54,14 +56,17 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ||
-        innovation.status === InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT
-          ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]
-          : []),
         { label: 'Tasks', url: `/assessment/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/assessment/innovations/${innovation.id}/threads` },
         ...(innovation.status !== InnovationStatusEnum.CREATED
           ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }]
+          : []),
+        ...([
+          InnovationStatusEnum.IN_PROGRESS,
+          InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT,
+          InnovationStatusEnum.ARCHIVED
+        ].includes(innovation.status)
+          ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]
           : []),
         { label: 'Data sharing preferences', url: `/assessment/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
@@ -73,6 +78,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.generateSidebar();
 
     this.isAllSectionsDetailsPage = this.router.url.includes('/all');
+    this.isInnovationRecordPage = this.router.url.endsWith('/record');
+
+    this.isInnovationInArchivedStatus = this.contextStore.getInnovation().status === InnovationStatusEnum.ARCHIVED;
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;

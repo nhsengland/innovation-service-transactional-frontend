@@ -39,6 +39,7 @@ export type SectionInfoType = {
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
+  isArchived: boolean;
   sectionId: string;
 
   sectionSubmittedText: string = '';
@@ -71,6 +72,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.innovation = this.stores.context.getInnovation();
+    this.isArchived = this.innovation.status === 'ARCHIVED';
 
     this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup =>
       sectionsGroup.sections.map(section => section.id)
@@ -123,8 +125,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+    const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
+
     this.sectionSubmittedText = sectionIdentification
-      ? `You have submitted section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
+      ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
     this.setPageTitle(this.translate(sectionIdentification!.section.title), {
@@ -197,7 +201,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             this.innovation.status !== InnovationStatusEnum.CREATED &&
             this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
           ) {
-            this.sectionSummaryData.sectionInfo.submitButton.label = 'Submit updates';
+            this.sectionSummaryData.sectionInfo.submitButton.label = !this.isArchived
+              ? 'Submit updates'
+              : 'Save updates';
           }
         } else {
           this.sectionSummaryData.sectionInfo.submitButton.show = false;

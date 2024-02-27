@@ -35,6 +35,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     engagingAccessors: { name: string }[];
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED, engagingAccessors: [] };
 
+  isArchived: boolean = false;
   showCards: boolean = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
@@ -50,6 +51,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
+    this.isArchived = this.innovation.status === 'ARCHIVED';
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }
@@ -73,7 +75,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
+        status:
+          // The support status is whatever comes from the support, if there's no support (first occurrence) then it's
+          // status depends on the archive status. Closed if the innovation is archived unassigned otherwise
+          support?.status ?? this.isArchived
+            ? InnovationSupportStatusEnum.CLOSED
+            : InnovationSupportStatusEnum.UNASSIGNED,
         engagingAccessors: support?.engagingAccessors ?? []
       };
 
@@ -107,11 +114,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         }
       ];
 
-      this.innovatorSummary = [{ label: 'Owner', value: this.innovation.owner?.name ?? '[deleted account]' }];
+      this.innovatorSummary = [{ label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' }];
 
-      this.showCards = [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
-        this.innovationSupport.status
-      );
+      this.showCards =
+        [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
+          this.innovationSupport.status
+        ) && !this.isArchived;
 
       this.innovationCollaborators = collaborators.data;
 
@@ -149,7 +157,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         contextDetails: [
           NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER,
           NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE,
-          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING
+          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
+          NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A
         ]
       });
 

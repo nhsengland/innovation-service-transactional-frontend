@@ -69,6 +69,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   isAccessorType: boolean;
   isAdmin: boolean;
   isFollower: boolean = false;
+  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -111,6 +112,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
+    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
   }
 
   ngOnInit(): void {

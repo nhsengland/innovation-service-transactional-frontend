@@ -12,12 +12,15 @@
     <ng-container *ngIf="isInnovatorType">
       <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
         <div class="nhsuk-grid-column-full">
-          <ng-container *ngIf="isInnovationInCreatedStatus; else innovationSharedText">
+          <ng-container *ngIf="isInnovationInCreatedStatus">
             <p>You'll need to complete all 11 sections of your innovation record before you can submit your record for a needs assessment.</p>
             <p>
               If you are unable to answer a question yet, you can still mark the section as complete. This will help us match you with organisations that can support you in these
               areas.
             </p>
+          </ng-container>
+          <ng-container *ngIf="isInnovationInArchivedStatus && isLoggedUserOwner; else innovationSharedText">
+            <p>You archived this innovation on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. All support has ended.</p>
           </ng-container>
           <ng-template #innovationSharedText>
             <p>
@@ -61,18 +64,18 @@
         </div>
 
         <button
-          *ngIf="isInnovationInCreatedStatus"
+          *ngIf="isInnovationInCreatedStatus || (isArchiveBeforeShare && isLoggedUserOwner)"
           routerLink="/innovator/innovations/{{ innovationId }}/record/support"
           [disabled]="!allSectionsSubmitted"
-          class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-6"
+          class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"
         >
           Submit record for needs assessment
         </button>
         <button
-          *ngIf="innovation.status === 'PAUSED'"
+          *ngIf="isInnovationInArchivedStatus && !isArchiveBeforeShare && isLoggedUserOwner"
           routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send"
           [disabled]="!allSectionsSubmitted"
-          class="nhsuk-button nhsuk-u-margin-bottom-4"
+          class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"
         >
           Submit record for needs reassessment
         </button>

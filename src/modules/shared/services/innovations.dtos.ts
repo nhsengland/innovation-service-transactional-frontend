@@ -35,6 +35,7 @@ export type InnovationsListFiltersType = {
   engagingOrganisationUnits?: string[];
   assignedToMe?: boolean;
   suggestedOnly?: boolean;
+  closedByMyOrganisation?: boolean;
   latestWorkedByMe?: boolean;
   hasAccessThrough?: ('owner' | 'collaborator')[];
   dateFilter?: {
@@ -101,6 +102,7 @@ export type InnovationListSelectType =
   | 'id'
   | 'name'
   | 'status'
+  | 'statusUpdatedAt'
   | 'groupedStatus'
   | 'submittedAt'
   | 'updatedAt'
@@ -124,6 +126,8 @@ export type InnovationListSelectType =
   | 'suggestedOrganisations'
   | 'support.status'
   | 'support.updatedAt'
+  | 'support.updatedBy'
+  | 'support.closedReason'
   | 'assessment.id'
   | 'statistics.notifications'
   | 'statistics.tasks'
@@ -133,10 +137,10 @@ export type InnovationListNewFullDTO = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
+  statusUpdatedAt: DateISOType;
   groupedStatus: InnovationGroupedStatusEnum;
   submittedAt: DateISOType | null;
   updatedAt: DateISOType;
-
   // Document fields
   careSettings: catalogCareSettings[] | null;
   otherCareSetting: string | null;
@@ -156,7 +160,12 @@ export type InnovationListNewFullDTO = {
     | null;
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
   owner: { id: string; name: string | null; companyName: string | null } | null;
-  support: { status: InnovationSupportStatusEnum; updatedAt: DateISOType | null };
+  support: {
+    status: InnovationSupportStatusEnum;
+    updatedAt: DateISOType | null;
+    updatedBy: string | null;
+    closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+  } | null;
   assessment: { id: string } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
@@ -166,6 +175,7 @@ export type InnovationInfoDTO = {
   name: string;
   description: null | string;
   status: InnovationStatusEnum;
+  archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
   submittedAt: null | DateISOType;
   countryName: null | string;
@@ -261,7 +271,7 @@ export type SupportSummaryOrganisationsListDTO = {
 };
 export type SupportSummaryOrganisationHistoryDTO = {
   id: string;
-  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE';
+  type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE' | 'INNOVATION_ARCHIVED' | 'STOP_SHARE';
   createdAt: DateISOType;
   createdBy: { id: string; name: string; displayRole: string };
   params: {

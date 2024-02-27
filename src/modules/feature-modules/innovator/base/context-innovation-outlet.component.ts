@@ -27,7 +27,6 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
-
     this.onRouteChange();
   }
 

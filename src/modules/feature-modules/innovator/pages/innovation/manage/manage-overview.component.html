@@ -17,7 +17,7 @@
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Invite or manage users</h2>
-      <p class="nhsuk-u-margin-bottom-1">To invite someone to collaborate on your innovation, you will need their email address.</p>
+      <p class="nhsuk-u-margin-bottom-3">To invite someone to collaborate on your innovation, you will need their email address.</p>
       <a routerLink="collaborators" class="nhsuk-link nhsuk-link--no-visited-state">Invite or manage users</a>
     </div>
   </div>
@@ -25,37 +25,19 @@
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
       <h2>Transfer ownership</h2>
-      <p *ngIf="!isActiveInnovation" class="nhsuk-u-margin-bottom-1">You have already requested to transfer ownership of this innovation.</p>
-      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-1">To transfer the ownership of an innovation to someone else, you will need their email address.</p>
+      <p *ngIf="!isActiveInnovation" class="nhsuk-u-margin-bottom-3">You have already requested to transfer ownership of this innovation.</p>
+      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-3">To transfer the ownership of an innovation to someone else, you will need their email address.</p>
       <a *ngIf="isActiveInnovation" routerLink="transfer" class="nhsuk-link nhsuk-link--no-visited-state"> Transfer innovation ownership </a>
     </div>
   </div>
 
-  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div *ngIf="innovation.status !== 'ARCHIVED'" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2>Stop sharing this innovation</h2>
-      <p *ngIf="!isActiveInnovation">You cannot stop sharing this innovation as you have requested to transfer its ownership.</p>
-      <p *ngIf="!isInProgressInnovation && !isInPause && isActiveInnovation">
-        You are not sharing your innovation with any support organisations yet. When you have submitted your innovation record and the needs assessment process has been completed,
-        you can stop sharing your innovation with your support organisations whenever you decide.
+      <h2>Archive innovation</h2>
+      <p class="nhsuk-u-margin-bottom-3">
+        All support will end when you archive your innovation. If you want support on your innovation in future, you can submit your record for a needs reassessment.
       </p>
-      <p *ngIf="isInPause && isActiveInnovation">
-        You stopped sharing this innovation on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. If you want support with your innovation, go to
-        your innovation record and submit it for a needs reassessment.
-      </p>
-      <p *ngIf="isInProgressInnovation && isActiveInnovation" class="nhsuk-u-margin-bottom-1">
-        If you want to take a break, you can stop sharing your innovation with your support organisations.
-      </p>
-      <a *ngIf="isInProgressInnovation && isActiveInnovation" routerLink="stop-sharing" class="nhsuk-link nhsuk-link--no-visited-state"> Stop sharing this innovation </a>
-    </div>
-  </div>
-
-  <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
-    <div class="nhsuk-grid-column-two-thirds">
-      <h2>Withdraw this innovation</h2>
-      <p *ngIf="!isActiveInnovation">You cannot withdraw this innovation as you have requested to transfer its ownership.</p>
-      <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-1">To withdraw an innovation you are no longer working on you will need to enter your password.</p>
-      <a *ngIf="isActiveInnovation" routerLink="withdraw" class="nhsuk-link nhsuk-link--no-visited-state">Withdraw this innovation</a>
+      <a routerLink="archive" class="nhsuk-link nhsuk-link--no-visited-state">Archive this innovation</a>
     </div>
   </div>
 </theme-content-wrapper>

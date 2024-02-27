@@ -41,9 +41,13 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
+  isLoggedUserOwner: boolean;
   isInnovationInCreatedStatus: boolean;
+  isInnovationInArchivedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
+  // This flag is to differ archivals that happened while innovation was not shared.
+  isArchiveBeforeShare: boolean;
 
   allSectionsSubmitted = false;
   isAdminType: boolean;
@@ -68,11 +72,14 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdminType = this.stores.authentication.isAdminRole();
+    this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
+    this.isInnovationInArchivedStatus = this.innovation.status === InnovationStatusEnum.ARCHIVED;
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =
       this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;
+    this.isArchiveBeforeShare = this.isInnovationInArchivedStatus && !this.innovation.assessment;
   }
 
   ngOnInit(): void {

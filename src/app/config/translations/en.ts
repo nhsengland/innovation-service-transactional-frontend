@@ -651,17 +651,30 @@ export const locale = {
               title: `Innovation {{innovationName}} has rejected your request to use their innovation record data. `,
               link: `View reason.`
             },
-            WI01_INNOVATION_WITHDRAWN: {
-              title: `Innovation {{innovationName}} has been withdrawn by its owner. You can no longer access this innovation.`
+            AI01_INNOVATION_ARCHIVED_TO_SELF: {
+              title: `Innovation {{innovationName}} has been archived.`
             },
-            SH01_INNOVATION_STOPPED_SHARED_TO_ASSIGNED_USERS: {
-              title: `You no longer have access to innovation {{innovationName}}. The innovator has stopped sharing their innovation with all support organisations.`
+            AI02_INNOVATION_ARCHIVED_TO_COLLABORATORS: {
+              title: `Innovation {{innovationName}} has been archived by its owner.`
             },
-            SH03_INNOVATION_STOPPED_SHARED_TO_SELF: {
-              title: `You have stopped sharing innovation {{innovationName}} with all support organisations.`
+            AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A: {
+              title: `Innovation {{innovationName}} has been archived by its owner. `,
+              link: `You can view an archived copy of the innovation.`
+            },
+            AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT: {
+              title: `Innovation {{innovationName}} has been archived by its owner during the needs {{assessmentType}} process. You do not need to take any further action for this innovation.`
+            },
+            SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER: {
+              title: `You have stopped sharing the data for innovation {{innovationName}} with {{organisationName}}. This innovation is no longer visible to this organisation.`
+            },
+            SH05_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_QA_A: {
+              title: `Innovation {{innovationName}} has stopped sharing their data with your organisation. You no longer have access to this innovation.`
             },
             DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR: {
               title: `The owner of innovation {{innovationName}} has deleted their account. The innovation is awaiting a new owner.`
+            },
+            DA02_OWNER_DELETED_ACCOUNT_WITHOUT_PENDING_TRANSFER_TO_COLLABORATOR: {
+              title: `The owner of innovation {{innovationName}} has deleted their account. You no longer have access to this innovation.`
             },
             MC01_COLLABORATOR_INVITE_EXISTING_USER: {
               title: `{{requestUserName}} has invited you to collaborate on innovation {{innovationName}}. You have 30 days to respond. `,
@@ -835,6 +848,11 @@ export const locale = {
               name: 'Awaiting needs reassessment',
               cssColorClass: 'nhsuk-tag--purple',
               description: 'The innovation has been sent for needs reassessment.'
+            },
+            ARCHIVED: {
+              name: 'Archived',
+              cssColorClass: 'nhsuk-tag--red',
+              description: 'The innovator has archived this innovation.'
             },
             WITHDRAWN: {
               name: 'Withdrawn',

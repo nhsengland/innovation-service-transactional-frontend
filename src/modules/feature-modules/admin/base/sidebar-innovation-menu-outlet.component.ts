@@ -16,6 +16,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   sidebarItems: { label: string; url: string; children?: { label: string; url: string }[] }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
+  isInnovationRecordPage: boolean = false;
+  isInnovationInArchivedStatus: boolean = false;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; url: string }[] }[] = [];
   private _sidebarItems: { label: string; url: string }[] = [];
@@ -50,25 +52,28 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
       this._sidebarItems = [
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS
-          ? [{ label: 'Support summary', url: `/admin/innovations/${innovation.id}/support-summary` }]
-          : []),
         { label: 'Tasks', url: `/admin/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED
+        ...(innovation.status !== InnovationStatusEnum.CREATED &&
+        innovation.archivedStatus !== InnovationStatusEnum.CREATED
           ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }]
+          : []),
+        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ||
+        innovation.archivedStatus === InnovationStatusEnum.IN_PROGRESS
+          ? [{ label: 'Support summary', url: `/admin/innovations/${innovation.id}/support-summary` }]
           : []),
         { label: 'Data sharing preferences', url: `/admin/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
-        // ...(innovation.status !== InnovationStatusEnum.CREATED && innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT ?
-        //   [{ label: 'Needs assessment', url: `/admin/innovations/${innovation.id}/assessments/${innovation.assessment?.id}` }] : []
-        // ),
       ];
     }
   }
 
   private onRouteChange(): void {
     this.generateSidebar();
+
+    this.isInnovationRecordPage = this.router.url.endsWith('/record');
+
+    this.isInnovationInArchivedStatus = this.contextStore.getInnovation().status === InnovationStatusEnum.ARCHIVED;
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
