@@ -5,6 +5,7 @@
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
+import { CurrentMFAModeType } from './mfa-edit.component';
 
 const countryCodesList = {
   BD: '+880',
@@ -531,11 +532,13 @@ export type MFAWizardModeType = 'set-mfa' | 'turn-off' | 'phone' | 'email';
 type InboundPayloadType = {
   userEmail: string;
   wizardMode: MFAWizardModeType;
+  currentMFAMode: CurrentMFAModeType;
 };
 
 type StepPayloadType = {
   userEmail: string;
   wizardMode: MFAWizardModeType;
+  currentMFAMode: CurrentMFAModeType;
   yesOrNo?: boolean;
   selectMethod?: 'EMAIL' | 'PHONE';
   confirmationEmail?: string;
@@ -543,8 +546,6 @@ type StepPayloadType = {
   phoneNumber?: number;
   confirmationPhoneNumber?: number;
 };
-
-type OutboundPayloadType = { type: 'none' | 'email' } | { type: 'phone'; phoneNumber: string };
 
 // Consts
 
@@ -624,37 +625,70 @@ const turnOffStep = new FormEngineModel({
   ]
 });
 
-const phoneStep = new FormEngineModel({
-  label: stepsLabels.l3.label,
-  description: stepsLabels.l3.description,
-  parameters: [
-    {
-      id: 'countryCode',
-      dataType: 'select-component',
-      label: 'Country code',
-      selectItems: { selectList: selectCountryList, defaultKey: '+44' }
-    },
-    {
-      id: 'phoneNumber',
-      dataType: 'number',
-      label: 'Enter phone number',
-      validations: { isRequired: [true, 'Your phone number is required'] }
-    },
-    {
-      id: 'confirmationPhoneNumber',
-      dataType: 'number',
-      label: 'Confirm phone number',
-      validations: {
-        isRequired: [true, 'Phone confirmation is required'],
-        equalToField: ['phoneNumber', 'Phone numbers do not match']
-      }
-    }
-  ]
-});
+// const phoneStep = new FormEngineModel({
+//   label: stepsLabels.l3.label,
+//   description: stepsLabels.l3.description,
+//   parameters: [
+//     {
+//       id: 'countryCode',
+//       dataType: 'select-component',
+//       label: 'Country code',
+//       selectItems: { selectList: selectCountryList, defaultKey: '+44' }
+//     },
+//     {
+//       id: 'phoneNumber',
+//       dataType: 'number',
+//       label: 'Enter phone number',
+//       validations: { isRequired: [true, 'Your phone number is required'] }
+//     },
+//     {
+//       id: 'confirmationPhoneNumber',
+//       dataType: 'number',
+//       label: 'Confirm phone number',
+//       validations: {
+//         isRequired: [true, 'Phone confirmation is required'],
+//         equalToField: ['phoneNumber', 'Phone numbers do not match']
+//       }
+//     }
+//   ]
+// });
 
-function getEmailStep(userEmail: string): FormEngineModel {
+function getPhoneStep(currentMFAMode: CurrentMFAModeType): FormEngineModel {
   return new FormEngineModel({
-    label: stepsLabels.l4.label,
+    label:
+      currentMFAMode === 'phone'
+        ? 'Change your phone number'
+        : `${currentMFAMode === 'none' ? 'Set' : 'Change'} two-step verification method to phone`,
+    description: stepsLabels.l3.description,
+    parameters: [
+      {
+        id: 'countryCode',
+        dataType: 'select-component',
+        label: 'Country code',
+        selectItems: { selectList: selectCountryList, defaultKey: '+44' }
+      },
+      {
+        id: 'phoneNumber',
+        dataType: 'number',
+        label: 'Enter phone number',
+        validations: { isRequired: [true, 'Your phone number is required'] }
+      },
+      {
+        id: 'confirmationPhoneNumber',
+        dataType: 'number',
+        label: 'Confirm phone number',
+        validations: {
+          isRequired: [true, 'Phone confirmation is required'],
+          equalToField: ['phoneNumber', 'Phone numbers do not match']
+        }
+      }
+    ]
+  });
+}
+
+function getEmailStep(userEmail: string, currentMFAMode: CurrentMFAModeType): FormEngineModel {
+  return new FormEngineModel({
+    label: `${currentMFAMode === 'phone' ? 'Change' : 'Set'} two-step verification method to email`,
     description: `When you log in, we'll send a security code to the email address linked with your account: ${userEmail}`,
     parameters: [
       {
@@ -702,32 +736,42 @@ export const MFA_EMAIL: WizardEngineModel = new WizardEngineModel({
 });
 
 export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
-  steps: [phoneStep],
+  steps: [],
   showSummary: false,
+  runtimeRules: [
+    (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
+      wizardPhoneRuntimeRules(steps, currentValues, currentStep)
+  ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data)
 });
 
+function wizardPhoneRuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
+  steps.splice(0);
+  steps.push(getPhoneStep(data.currentMFAMode));
+}
+
 function wizardSetMFARuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
   if (data.selectMethod === 'EMAIL') {
     steps.splice(1);
-    steps.push(getEmailStep(data.userEmail));
+    steps.push(getEmailStep(data.userEmail, data.currentMFAMode));
   }
   if (data.selectMethod === 'PHONE') {
     steps.splice(1);
-    steps.push(phoneStep);
+    steps.push(getPhoneStep(data.currentMFAMode));
   }
 }
 
 function wizardEmailRuntimeRules(steps: FormEngineModel[], data: StepPayloadType, currentStep: number | 'summary') {
   steps.splice(0);
-  steps.push(getEmailStep(data.userEmail));
+  steps.push(getEmailStep(data.userEmail, data.currentMFAMode));
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     userEmail: data.userEmail,
-    wizardMode: data.wizardMode
+    wizardMode: data.wizardMode,
+    currentMFAMode: data.currentMFAMode
   };
 }
 

@@ -7,13 +7,15 @@ import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { combineLatest, forkJoin } from 'rxjs';
 
+export type CurrentMFAModeType = 'phone' | 'email' | 'none';
+
 @Component({
   selector: 'shared-pages-account-mfa-edit',
   templateUrl: './mfa-edit.component.html'
 })
 export class PageAccountMFAEditComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
-  @Input({ required: true }) currentMFAMode: 'phone' | 'email' | 'none' = 'none';
+  @Input({ required: true }) currentMFAMode: CurrentMFAModeType = 'none';
 
   wizard = new WizardEngineModel({});
 
@@ -68,7 +70,13 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
     }
 
     this.wizard
-      .setAnswers(this.wizard.runInboundParsing({ userEmail: this.userEmail, wizardMode: this.wizardMode }))
+      .setAnswers(
+        this.wizard.runInboundParsing({
+          userEmail: this.userEmail,
+          wizardMode: this.wizardMode,
+          currentMFAMode: this.currentMFAMode
+        })
+      )
       .runRules();
 
     this.formButton.label = this.wizard.isLastStep() ? 'Save' : 'Continue';
