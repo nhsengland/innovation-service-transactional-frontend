@@ -131,7 +131,13 @@
         </div>
 
         <div *ngSwitchCase="'select-component'">
-          <theme-form-select [controlName]="p.id" [selectItems]="p.selectItems ?? { selectList: [] }" />
+          <theme-form-select
+            [controlName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [pageUniqueField]="onlyOneField"
+            [selectItems]="p.selectItems ?? { selectList: [] }"
+          />
         </div>
 
         <div *ngSwitchDefault>

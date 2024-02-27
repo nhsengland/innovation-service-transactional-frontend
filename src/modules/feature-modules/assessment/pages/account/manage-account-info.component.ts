@@ -30,7 +30,6 @@ export class PageAssessmentAccountManageAccountInfoComponent extends CoreCompone
     this.authenticationService.getUserMFAInfo().subscribe({
       next: response => {
         this.MFAInfo = response;
-        console.log('response:', response);
         this.setPageStatus('READY');
       }
     });
