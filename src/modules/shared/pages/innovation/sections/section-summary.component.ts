@@ -6,9 +6,8 @@ import { ContextInnovationType } from '@app/base/types';
 
 import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
-import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { SectionInfoType } from './section-info.component';
 
 export type SectionSummaryInputData = {
@@ -56,7 +55,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   isInnovatorType: boolean;
   isAccessorType: boolean;
   isAssessmentType: boolean;
-  shouldShowDocuments = false;
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -107,11 +105,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       const questionToAdd = { label: 'Patent number(s)', conditional: true };
       this.allSteps.splice(1, 0, questionToAdd);
     }
-
-    this.shouldShowDocuments =
-      this.innovation.status !== InnovationStatusEnum.CREATED ||
-      (this.innovation.status === InnovationStatusEnum.CREATED &&
-        innovationSectionsWithFiles.includes(this.sectionData!.sectionInfo!.id));
 
     this.setPageStatus('READY');
   }
