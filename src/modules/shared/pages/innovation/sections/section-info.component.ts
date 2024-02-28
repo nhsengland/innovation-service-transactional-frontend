@@ -144,8 +144,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionSummaryData.sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
     this.shouldShowDocuments =
-      (this.innovation.status !== InnovationStatusEnum.ARCHIVED &&
-        innovationSectionsWithFiles.includes(this.sectionSummaryData.sectionInfo.id)) ||
       this.innovation.status !== InnovationStatusEnum.CREATED ||
       (this.innovation.status === InnovationStatusEnum.CREATED &&
         innovationSectionsWithFiles.includes(this.sectionSummaryData.sectionInfo.id));
