@@ -37,6 +37,8 @@ export class AssessmentService extends CoreService {
   // }
 
   createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
+    this.stores.context.clearInnovation();
+
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/assessments')
       .setPathParams({ innovationId });

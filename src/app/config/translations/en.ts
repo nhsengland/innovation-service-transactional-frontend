@@ -344,19 +344,19 @@ export const locale = {
 
             INNOVATION_MANAGEMENT: {
               QUALIFYING_ACCESSOR: {
-                title: 'Withdrawals and export requests',
+                title: 'Archived innovations and export requests',
                 description:
-                  'Get notified when an innovator withdraws or stops sharing an innovation you are supporting. Find out when your innovation record export requests are approved or rejected.'
+                  'Get notified when an innovation you are supporting is archived or stops sharing their data with you. Find out when your innovation record export requests are approved or rejected.'
               },
               ACCESSOR: {
-                title: 'Withdrawals and export requests',
+                title: 'Archived innovations and export requests',
                 description:
-                  'Get notified when an innovator withdraws or stops sharing an innovation you are supporting. Find out when your innovation record export requests are approved or rejected.'
+                  'Get notified when an innovation you are supporting is archived or stops sharing their data with you. Find out when your innovation record export requests are approved or rejected.'
               },
               ASSESSMENT: {
-                title: 'Innovation withdrawals',
+                title: 'Archived innovations',
                 description:
-                  'Get notified when an innovator withdraws an innovation during the needs assessment process.'
+                  'Get notified when an innovator archives an innovation during the needs assessment process.'
               }
             },
 
