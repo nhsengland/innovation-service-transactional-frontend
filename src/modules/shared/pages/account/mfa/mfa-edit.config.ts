@@ -539,7 +539,7 @@ type StepPayloadType = {
   userEmail: string;
   wizardMode: MFAWizardModeType;
   currentMFAMode: CurrentMFAModeType;
-  yesOrNo?: boolean;
+  turnOff?: boolean;
   selectMethod?: 'EMAIL' | 'PHONE';
   confirmationEmail?: string;
   countryCode?: string;
@@ -607,7 +607,7 @@ const turnOffStep = new FormEngineModel({
   description: stepsLabels.l2.description,
   parameters: [
     {
-      id: 'yesOrNo',
+      id: 'turnOff',
       description: '',
       dataType: 'radio-group',
       validations: { isRequired: [true, 'Choose one option'] },
