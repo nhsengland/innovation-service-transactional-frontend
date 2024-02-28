@@ -94,29 +94,29 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
 
     this.wizard.addAnswers(formData.data).runRules();
 
-    this.wizard.currentStepTitle;
-    switch (action) {
-      case 'previous':
-        if (this.wizard.isFirstStep()) {
-          return;
-        } else {
-          this.wizard.previousStep();
-        }
-        break;
-      case 'next':
-        if (this.wizard.isLastStep()) {
-          this.onSubmitWizard();
-        } else {
+    if (this.wizard.isLastStep()) {
+      this.onSubmitWizard();
+    } else {
+      this.wizard.currentStepTitle;
+      switch (action) {
+        case 'previous':
+          if (this.wizard.isFirstStep()) {
+            return;
+          } else {
+            this.wizard.previousStep();
+          }
+          break;
+        case 'next':
           this.wizard.nextStep();
-        }
-        break;
-      default: // Should NOT happen!
-        break;
+          break;
+        default: // Should NOT happen!
+          break;
+      }
+
+      this.setPageTitle(this.wizard.currentStepTitle());
+
+      this.formButton.label = this.wizard.isLastStep() ? 'Save' : 'Continue';
     }
-
-    this.setPageTitle(this.wizard.currentStepTitle());
-
-    this.formButton.label = this.wizard.isLastStep() ? 'Save' : 'Continue';
   }
 
   onSubmitWizard() {

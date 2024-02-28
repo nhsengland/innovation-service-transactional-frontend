@@ -98,7 +98,7 @@ export class FormEngineParameterModel {
     previousUploadedFiles?: { id: string; name: string }[];
   };
 
-  selectItems?: { selectList: SelectComponentInputType[]; defaultKey?: string };
+  selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;

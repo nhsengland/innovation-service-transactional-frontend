@@ -2,11 +2,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Injector,
   Input,
   OnInit,
   Output,
+  ViewChild,
   forwardRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -36,7 +38,6 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
-  cssClass = '';
 
   selectedField: string = '';
 
