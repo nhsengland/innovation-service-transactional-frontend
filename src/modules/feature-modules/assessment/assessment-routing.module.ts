@@ -11,7 +11,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Assessment module pages.
 // // Account.
-import { PageAssessmentAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -538,7 +538,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAssessmentAccountManageAccountInfoComponent,
+                component: PageSharedAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
               },
               {

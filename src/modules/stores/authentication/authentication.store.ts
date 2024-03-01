@@ -173,7 +173,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.authenticationService.updateUserInfo(body);
   }
 
-  updateMfaInfo$(body: MFAInfoDTO): Observable<{ id: string }> {
+  updateMfaInfo$(body: MFAInfoDTO): Observable<void> {
     return this.authenticationService.updateUserMFAInfo(body);
   }
 

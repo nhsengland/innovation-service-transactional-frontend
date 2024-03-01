@@ -12,7 +12,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Innovator module pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
-import { PageAccountInfoComponent } from './pages/account/account-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 // // Collaboration Invites.
 import { PageCollaborationInviteComponent } from './pages/collaboration-invite/collaboration-invite.component';
 // // Dashboard.
@@ -91,8 +91,6 @@ import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/inno
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { checkStatusGuard } from './guards/check-status.guard';
-import { checkRoleGuard } from './guards/check-role.guard';
-import { UserRoleEnum } from '@app/base/enums';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
@@ -733,7 +731,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAccountInfoComponent,
+                component: PageSharedAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
               },
               {

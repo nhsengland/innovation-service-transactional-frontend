@@ -12,7 +12,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Pages.
 // // Account.
-import { PageAssessmentAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -37,8 +36,7 @@ import { AssessmentService } from './services/assessment.service';
     SidebarInnovationMenuOutletComponent,
 
     // Pages.
-    // // Account.
-    PageAssessmentAccountManageAccountInfoComponent,
+
     // // Dashboard.
     DashboardComponent,
     // // Innovation.

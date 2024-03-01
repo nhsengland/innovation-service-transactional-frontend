@@ -10,8 +10,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 
 // Admin module pages.
-// // Account.
-import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+
 // // Users
 import { PageUsersRoleActivateComponent } from './pages/users/roles/role-activate.component';
 import { PageUsersRoleChangeComponent } from './pages/users/roles/role-change.component';
@@ -46,6 +45,8 @@ import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-ne
 // // Account.
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
+
 // // Innovation.
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
 import { PageInnovationAssessmentOverviewComponent } from '@modules/shared/pages/innovation/assessment/assessment-overview.component';
@@ -82,7 +83,6 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
-import { PageAccountInfoComponent } from './pages/account/account-info.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -327,7 +327,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAccountInfoComponent
+                component: PageSharedAccountManageAccountInfoComponent
               },
               {
                 path: 'mfa',

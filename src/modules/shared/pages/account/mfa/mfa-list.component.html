@@ -22,9 +22,7 @@
             {{ MFAInfo.type === "email" ? "Email" : "Phone" }}
           </dd>
           <dd class="nhsuk-summary-list__actions">
-            <a [routerLink]="'mfa/edit'" [queryParams]="MFAInfo.type === 'email' ? { mode: 'phone' } : { mode: 'email' }">
-              {{ "Change" }}
-            </a>
+            <a [routerLink]="'mfa/edit'" [queryParams]="MFAInfo.type === 'email' ? { mode: 'phone' } : { mode: 'email' }"> Change </a>
           </dd>
         </div>
 
@@ -34,9 +32,7 @@
             {{ MFAInfo.type === "email" ? userEmail : currentCensoredPhoneNumber }}
           </dd>
           <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="MFAInfo.type === 'phone'" [routerLink]="'mfa/edit'" [queryParams]="{ mode: 'phone' }">
-              {{ "Change" }}
-            </a>
+            <a *ngIf="MFAInfo.type === 'phone'" [routerLink]="'mfa/edit'" [queryParams]="{ mode: 'phone' }"> Change </a>
           </dd>
         </div>
       </ng-container>

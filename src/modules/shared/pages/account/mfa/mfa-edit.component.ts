@@ -128,7 +128,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
         if (wizardData.type === 'phone') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
-              ? `Your phone number has been changed to ${this.getCensoredPhoneNumber(wizardData.phoneNumber)}`
+              ? `Your phone number has been changed to ${getCensoredPhoneNumber(wizardData.phoneNumber)}`
               : this.wizardMode === 'phone'
                 ? 'Your two-step verification method has been changed to phone'
                 : 'You have set up two-step verification on your account',
@@ -162,8 +162,8 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
       }
     });
   }
+}
 
-  private getCensoredPhoneNumber(number: string): string {
-    return `${number.replace(/ /g, '').slice(0, -3).replace(/./g, '*')}${number.slice(-3)}`;
-  }
+export function getCensoredPhoneNumber(number: string | undefined): string {
+  return number ? `${number.replace(/ /g, '').slice(0, -3).replace(/./g, '*')}${number.slice(-3)}` : '*****';
 }

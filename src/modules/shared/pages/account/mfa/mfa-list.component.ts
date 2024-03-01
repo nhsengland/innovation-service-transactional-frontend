@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
-import { fullCountryCodeList } from './mfa-edit.config';
-import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { getCensoredPhoneNumber } from './mfa-edit.component';
 
 @Component({
   selector: 'app-account-mfa-list',
@@ -19,12 +18,8 @@ export class AccountMFAListComponent extends CoreComponent implements OnInit {
   }
   ngOnInit(): void {
     if (this.MFAInfo.type === 'phone') {
-      this.currentCensoredPhoneNumber = this.getCensoredPhoneNumber(this.MFAInfo.phoneNumber);
+      this.currentCensoredPhoneNumber = getCensoredPhoneNumber(this.MFAInfo.phoneNumber);
     }
     this.isMFAOn = ['phone', 'email'].includes(this.MFAInfo.type);
-  }
-
-  private getCensoredPhoneNumber(number: string): string {
-    return `${number.replace(/ /g, '').slice(0, -3).replace(/./g, '*')}${number.slice(-3)}`;
   }
 }

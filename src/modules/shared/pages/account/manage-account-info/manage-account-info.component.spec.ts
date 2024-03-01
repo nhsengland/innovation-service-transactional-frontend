@@ -10,7 +10,7 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { PageAccountInfoComponent } from './account-info.component';
+import { PageAccountInfoComponent } from './manage-account-info.component';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () => {
   let authenticationStore: AuthenticationStore;

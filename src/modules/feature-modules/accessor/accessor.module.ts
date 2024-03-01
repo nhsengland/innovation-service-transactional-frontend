@@ -12,7 +12,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Pages.
 // // Account.
-import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
 // // Tasks.
 import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
@@ -40,7 +39,7 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
 
     // Pages.
     // // Account.
-    PageAccessorAccountManageAccountInfoComponent,
+
     // // Actions.
     TasksListComponent,
     // // Dashboard.

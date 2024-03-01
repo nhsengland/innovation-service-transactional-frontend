@@ -11,7 +11,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Accessor module pages.
 // // Account.
-import { PageAccessorAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 // // Tasks.
 import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
@@ -587,7 +587,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAccessorAccountManageAccountInfoComponent,
+                component: PageSharedAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
               },
               {

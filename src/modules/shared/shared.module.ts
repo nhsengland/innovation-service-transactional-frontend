@@ -101,6 +101,7 @@ import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wr
 import { FiltersSelectionWrapperComponent } from './components/filters-selection-wrapper/filters-selection-wrapper.component';
 import { PageInnovationRecordWrapperComponent } from './pages/innovation/record/innovation-record-wrapper.component';
 import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.component';
+import { PageSharedAccountManageAccountInfoComponent } from './pages/account/manage-account-info/manage-account-info.component';
 
 @NgModule({
   imports: [
@@ -122,6 +123,7 @@ import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.compon
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsEditComponent,
     PageAccountManageDetailsInfoComponent,
+    PageSharedAccountManageAccountInfoComponent,
     PageAccountMFAEditComponent,
     // // Tasks.
     PageTasksAdvancedSearchComponent,
