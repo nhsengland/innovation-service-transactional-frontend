@@ -38,7 +38,7 @@ const addDocumentItems = [
   { value: 'NO', label: 'No' }
 ];
 
-export const SUPPORT_SUMMARY_PROGRESS_UPDATE: WizardEngineModel = new WizardEngineModel({
+export const SUPPORT_SUMMARY_NO_MILESTONES_PROGRESS_UPDATE: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
       label: 'Add progress update',
