@@ -10,13 +10,13 @@ import { CoreModule, AppInjector } from '@modules/core';
 import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
-import { PageAccountInfoComponent } from './manage-account-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from './manage-account-info.component';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () => {
   let authenticationStore: AuthenticationStore;
 
-  let component: PageAccountInfoComponent;
-  let fixture: ComponentFixture<PageAccountInfoComponent>;
+  let component: PageSharedAccountManageAccountInfoComponent;
+  let fixture: ComponentFixture<PageSharedAccountManageAccountInfoComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,7 +30,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () =
   });
 
   it('should create the component', () => {
-    fixture = TestBed.createComponent(PageAccountInfoComponent);
+    fixture = TestBed.createComponent(PageSharedAccountManageAccountInfoComponent);
     component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
