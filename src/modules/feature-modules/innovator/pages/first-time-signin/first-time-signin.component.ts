@@ -39,6 +39,9 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     this.wizard.addAnswers(formData.data).runRules();
 
+    console.log('this.wizard.currentAnswers');
+    console.log(this.wizard.currentAnswers);
+
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {

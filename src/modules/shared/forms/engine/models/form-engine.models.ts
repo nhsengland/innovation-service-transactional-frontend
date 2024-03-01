@@ -55,6 +55,7 @@ export class FormEngineParameterModel {
     urlFormat?: boolean | [boolean, string];
   };
   lengthLimit?: TextareaLengthLimitType;
+  cssOverride?: string;
 
   additional?: FormEngineParameterModel[];
 
@@ -104,6 +105,7 @@ export class FormEngineParameterModel {
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
+    this.cssOverride = data.cssOverride;
 
     this.lengthLimit = data.lengthLimit;
     this.additional = data.additional;
