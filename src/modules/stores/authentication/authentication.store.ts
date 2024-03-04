@@ -164,12 +164,15 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         hasAnnouncements: false,
         passwordResetAt: null,
         firstTimeSignInAt: null,
-        organisations: []
+        organisations: [],
+        howDidYouFindUsAnswers: null
       }
     );
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
+    console.log('updateUserInfo$ (store)');
+    console.log(body);
     return this.authenticationService.updateUserInfo(body);
   }
 

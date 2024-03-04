@@ -3,6 +3,7 @@ import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from './authentication.enums';
 import { PhoneUserPreferenceEnum } from './authentication.service';
+import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 export class AuthenticationModel {
   isSignIn: boolean = false;
@@ -42,5 +43,6 @@ export class AuthenticationModel {
       description: null | string;
       organisationUnits: { id: string; name: string; acronym: string }[];
     }[];
+    howDidYouFindUsAnswers: null | HowDidYouFindUsAnswersType;
   };
 }

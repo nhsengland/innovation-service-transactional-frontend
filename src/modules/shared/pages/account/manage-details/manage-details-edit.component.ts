@@ -93,8 +93,11 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
   onSubmitWizard(): void {
     const wizardData = this.wizard.runOutboundParsing();
 
+    const howDidYouFindUsAnswers = this.stores.authentication.getUserInfo().howDidYouFindUsAnswers;
+
     let body: UpdateUserInfoDTO = {
-      displayName: wizardData.displayName
+      displayName: wizardData.displayName,
+      howDidYouFindUsAnswers: howDidYouFindUsAnswers
     };
 
     if (this.stores.authentication.isInnovatorType()) {
@@ -105,7 +108,8 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
         contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,
         mobilePhone: wizardData.mobilePhone || null,
         contactDetails: wizardData.contactDetails || null,
-        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {}),
+        howDidYouFindUsAnswers: howDidYouFindUsAnswers
       };
     }
 

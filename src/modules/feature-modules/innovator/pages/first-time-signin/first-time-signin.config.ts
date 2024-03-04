@@ -54,39 +54,18 @@ const howDidYouFindUsItems: {
   }
 };
 
-type HowDidYouFindUsType = {
-  EVENT: {
-    selected: boolean;
-    label: string;
-    comment?: string | undefined;
-  };
-  READING: {
-    selected: boolean;
-    label: string;
-    comment?: string | undefined;
-  };
-  RECOMMENDATION_COLLEAGUE: {
-    selected: boolean;
-    label: string;
-  };
-  RECOMMENDATION_ORG: {
-    selected: boolean;
-    label: string;
-    comment?: string | undefined;
-  };
-  SEARCH_ENGINE: {
-    selected: boolean;
-    label: string;
-  };
-  SOCIAL_MEDIA: {
-    selected: boolean;
-    label: string;
-  };
-  OTHER: {
-    selected: boolean;
-    label: string;
-    comment?: string | undefined;
-  };
+export type HowDidYouFindUsAnswersType = {
+  event?: boolean;
+  eventComment?: string;
+  reading?: boolean;
+  readingComment?: string;
+  recommendationColleague?: boolean;
+  recommendationOrg?: boolean;
+  recommendationOrgComment?: string;
+  searchEngine?: boolean;
+  socialMedia?: boolean;
+  other?: boolean;
+  otherComment?: string;
 };
 
 type StepPayloadType = {
@@ -113,7 +92,7 @@ type OutboundPayloadType = {
     size: string;
     registrationNumber?: string;
   };
-  howDidYouFindUs: HowDidYouFindUsType;
+  howDidYouFindUsAnswers: HowDidYouFindUsAnswersType;
 };
 
 export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -345,7 +324,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
             : undefined
       }
     }),
-    howDidYouFindUs: howDidYouFindUsDataOutboundParsing(data)
+    howDidYouFindUsAnswers: howDidYouFindUsDataOutboundParsing(data)
   };
 }
 
@@ -398,74 +377,42 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   return toReturn;
 }
 
-function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFindUsType {
-  return {
-    [HowDidYouFindUsEnums.EVENT]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.EVENT),
-      label: howDidYouFindUsItems.EVENT.label,
-      comment: data.howDidYouFindUsEvent
-    },
-    [HowDidYouFindUsEnums.READING]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.READING),
-      label: howDidYouFindUsItems.READING.label,
-      comment: data.howDidYouFindUsReading
-    },
-    [HowDidYouFindUsEnums.RECOMMENDATION_COLLEAGUE]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.RECOMMENDATION_COLLEAGUE),
-      label: howDidYouFindUsItems.RECOMMENDATION_COLLEAGUE.label
-    },
-    [HowDidYouFindUsEnums.RECOMMENDATION_ORG]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.RECOMMENDATION_ORG),
-      label: howDidYouFindUsItems.RECOMMENDATION_ORG.label,
-
-      comment: data.howDidYouFindUsRecommendation
-    },
-    [HowDidYouFindUsEnums.SEARCH_ENGINE]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.SEARCH_ENGINE),
-      label: howDidYouFindUsItems.SEARCH_ENGINE.label
-    },
-    [HowDidYouFindUsEnums.SOCIAL_MEDIA]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.SOCIAL_MEDIA),
-      label: howDidYouFindUsItems.SOCIAL_MEDIA.label
-    },
-    [HowDidYouFindUsEnums.OTHER]: {
-      selected: data.howDidYouFindUsList.includes(HowDidYouFindUsEnums.OTHER),
-      label: howDidYouFindUsItems.OTHER.label,
-      comment: data.howDidYouFindUsOther
-    }
+function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFindUsAnswersType {
+  let answers = {
+    ...(data.howDidYouFindUsList.includes('EVENT')
+      ? { event: true, eventComment: data.howDidYouFindUsEvent ?? '' }
+      : null),
+    ...(data.howDidYouFindUsList.includes('READING')
+      ? { reading: true, readingComment: data.howDidYouFindUsReading ?? '' }
+      : null),
+    ...(data.howDidYouFindUsList.includes('RECOMMENDATION_COLLEAGUE') ? { recommendationColleague: true } : null),
+    ...(data.howDidYouFindUsList.includes('RECOMMENDATION_ORG')
+      ? { recommendationOrg: true, recommendationOrgComment: data.howDidYouFindUsRecommendation }
+      : null),
+    ...(data.howDidYouFindUsList.includes('SEARCH_ENGINE') ? { searchEngine: true } : null),
+    ...(data.howDidYouFindUsList.includes('SOCIAL_MEDIA') ? { socialMedia: true } : null),
+    ...(data.howDidYouFindUsList.includes('OTHER')
+      ? { other: true, otherComment: data.howDidYouFindUsOther ?? '' }
+      : null)
   };
+
+  return answers;
 }
 
 function howDidYouFindUsDataSummaryParsing(data: StepPayloadType): string {
-  console.log('data.howDidYouFindUsList');
-  console.log(data.howDidYouFindUsList);
-  const parsedItems = howDidYouFindUsDataOutboundParsing(data);
-  console.log('parsed items: ', parsedItems);
-
   let summaryData: string = '';
 
-  Object.entries(parsedItems).forEach(([key, value], index) => {
-    if (value.selected) {
-      summaryData += value.label;
+  data.howDidYouFindUsList.forEach(item => {
+    summaryData += howDidYouFindUsItems[item as HowDidYouFindUsEnums].label;
 
-      if (key === 'EVENT' && parsedItems.EVENT.comment) {
-        summaryData += ` - ${parsedItems.EVENT.comment}`;
-      }
-      if (key === 'READING' && parsedItems.READING.comment) {
-        summaryData += ` - ${parsedItems.READING.comment}`;
-      }
-      if (key === 'RECOMMENDATION_ORG' && parsedItems.RECOMMENDATION_ORG.comment) {
-        summaryData += ` - ${parsedItems.RECOMMENDATION_ORG.comment}`;
-      }
-      if (key === 'OTHER' && parsedItems.OTHER.comment) {
-        summaryData += ` - ${parsedItems.OTHER.comment}`;
-      }
-      summaryData += '\n\n';
-    }
+    if (item === 'EVENT' && data.howDidYouFindUsEvent) summaryData += ` - ${data.howDidYouFindUsEvent}`;
+    if (item === 'READING' && data.howDidYouFindUsReading) summaryData += ` - ${data.howDidYouFindUsReading}`;
+    if (item === 'RECOMMENDATION_ORG' && data.howDidYouFindUsRecommendation)
+      summaryData += ` - ${data.howDidYouFindUsRecommendation}`;
+    if (item === 'OTHER' && data.howDidYouFindUsOther) summaryData += ` - ${data.howDidYouFindUsOther}`;
+
+    summaryData += '\n\n';
   });
 
-  console.log('summaryData');
-  console.log(summaryData);
   return summaryData;
-  return '';
 }

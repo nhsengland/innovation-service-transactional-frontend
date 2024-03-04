@@ -9,6 +9,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
+import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 type GetUserInfoDTO = {
   id: string;
@@ -37,6 +38,7 @@ type GetUserInfoDTO = {
     description: null | string;
     organisationUnits: { id: string; name: string; acronym: string }[];
   }[];
+  howDidYouFindUsAnswers: HowDidYouFindUsAnswersType;
 };
 
 export type UpdateUserInfoDTO = {
@@ -54,6 +56,7 @@ export type UpdateUserInfoDTO = {
     description?: string;
     registrationNumber?: string;
   };
+  howDidYouFindUsAnswers: null | HowDidYouFindUsAnswersType;
 };
 
 export type GetTermsOfUseLastVersionInfoDTO = {
@@ -127,12 +130,15 @@ export class AuthenticationService {
         hasAnnouncements: response.hasAnnouncements,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
-        organisations: response.organisations
+        organisations: response.organisations,
+        howDidYouFindUsAnswers: response.howDidYouFindUsAnswers
       }))
     );
   }
 
   updateUserInfo(body: UpdateUserInfoDTO): Observable<{ id: string }> {
+    console.log('updateUserInfo (service)');
+    console.log(body);
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
