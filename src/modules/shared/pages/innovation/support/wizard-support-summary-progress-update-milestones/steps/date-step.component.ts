@@ -52,7 +52,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   }
 
   ngOnInit(): void {
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.form
       .get('date')
@@ -75,7 +75,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
       day: this.form.value.date?.day ?? '',
       month: this.form.value.date?.month ?? '',
       year: this.form.value.date?.year ?? ''
-      //dateISOString: `${year}-${month}-${day}`;
     };
   }
 
@@ -84,10 +83,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   }
 
   onNextStep(): void {
-    if (!this.form.valid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    this.resetAlert();
 
     const inputDate = Date.parse(
       DatesHelper.constructISODateString(
@@ -98,6 +94,19 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     );
 
     const isDateInFuture = inputDate > Date.parse(this.dateNowISOString);
+
+    if (isDateInFuture) {
+      this.setAlertError('The date provided is in the future', {
+        itemsList: [{ title: 'The date must be in the past or today' }],
+        width: '2.thirds'
+      });
+      this.form.get('date')?.setErrors({ customError: true, message: 'The date must be in the past or today' });
+    }
+
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
   }

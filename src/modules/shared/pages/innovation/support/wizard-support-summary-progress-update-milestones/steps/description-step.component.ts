@@ -53,7 +53,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionSt
   }
 
   ngOnInit(): void {
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.form.get('description')?.setValue(this.data.description);
     this.form.get('file')?.setValue(this.data.file);

@@ -46,7 +46,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
 
   ngOnInit(): void {
     this.title = `You have selected the ${this.data.selectedCategories[0].name} category`;
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.subcategoriesItems.push(
       { value: 'Select one or more subcategories', label: 'HEADING' },

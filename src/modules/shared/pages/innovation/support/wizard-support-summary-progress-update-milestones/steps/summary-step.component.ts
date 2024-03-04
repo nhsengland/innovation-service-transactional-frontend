@@ -49,7 +49,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepCo
   }
 
   ngOnInit(): void {
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.setPageStatus('READY');
   }

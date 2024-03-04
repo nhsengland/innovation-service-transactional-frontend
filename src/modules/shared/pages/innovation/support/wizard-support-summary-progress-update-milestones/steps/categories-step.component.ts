@@ -87,7 +87,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
 
     this.form.get('otherCategory')?.setValue(this.data.otherCategory);
 
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.setPageStatus('READY');
   }
