@@ -94,7 +94,6 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   onValueChange(): void {
-    console.log('formGroup', this.formGroup);
     if (!this.checkValidDate()) {
       this.formGroup.setErrors({
         ...this.formGroup.errors,

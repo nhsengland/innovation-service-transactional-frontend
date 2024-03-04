@@ -61,7 +61,6 @@ export class WizardModel<T> {
       this.currentStepNumberHolder--;
     }
 
-    console.log('');
     return this;
   }
 
