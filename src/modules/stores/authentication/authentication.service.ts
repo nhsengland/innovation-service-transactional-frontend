@@ -38,7 +38,6 @@ type GetUserInfoDTO = {
     description: null | string;
     organisationUnits: { id: string; name: string; acronym: string }[];
   }[];
-  howDidYouFindUsAnswers: HowDidYouFindUsAnswersType;
 };
 
 export type UpdateUserInfoDTO = {
@@ -56,7 +55,7 @@ export type UpdateUserInfoDTO = {
     description?: string;
     registrationNumber?: string;
   };
-  howDidYouFindUsAnswers: null | HowDidYouFindUsAnswersType;
+  howDidYouFindUsAnswers?: null | HowDidYouFindUsAnswersType;
 };
 
 export type GetTermsOfUseLastVersionInfoDTO = {
@@ -130,15 +129,12 @@ export class AuthenticationService {
         hasAnnouncements: response.hasAnnouncements,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
-        organisations: response.organisations,
-        howDidYouFindUsAnswers: response.howDidYouFindUsAnswers
+        organisations: response.organisations
       }))
     );
   }
 
   updateUserInfo(body: UpdateUserInfoDTO): Observable<{ id: string }> {
-    console.log('updateUserInfo (service)');
-    console.log(body);
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

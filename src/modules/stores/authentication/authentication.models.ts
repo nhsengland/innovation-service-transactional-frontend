@@ -43,6 +43,5 @@ export class AuthenticationModel {
       description: null | string;
       organisationUnits: { id: string; name: string; acronym: string }[];
     }[];
-    howDidYouFindUsAnswers: null | HowDidYouFindUsAnswersType;
   };
 }

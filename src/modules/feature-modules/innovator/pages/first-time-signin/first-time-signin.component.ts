@@ -39,9 +39,6 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     this.wizard.addAnswers(formData.data).runRules();
 
-    // console.log('this.wizard.currentAnswers');
-    // console.log(this.wizard.currentAnswers);
-
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
@@ -67,14 +64,10 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
   onSubmitWizard(): void {
     this.isSaving = true;
     const wizardData = this.wizard.runOutboundParsing();
-    console.log('wizardData');
-    console.log(wizardData);
 
     of(true)
       .pipe(
         concatMap(() => {
-          console.log('wizardData.howDidYouFindUs');
-          console.log(wizardData.howDidYouFindUsAnswers);
           return this.stores.authentication.updateUserInfo$({
             displayName: wizardData.innovatorName,
             mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
