@@ -105,6 +105,8 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesComponent } from 
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/categories-step.component';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/subcategories-step.component';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/date-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/summary-step.component';
 
 @NgModule({
   imports: [
@@ -175,6 +177,8 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepCo
     WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent,
 
     InnovationSectionSummaryComponent,
     // // Innovations.

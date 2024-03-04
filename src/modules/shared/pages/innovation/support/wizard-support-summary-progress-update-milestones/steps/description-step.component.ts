@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FileTypes, FormEngineParameterModel, FormGroup } from '@app/base/forms';
+import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { DescriptionStepInputType, DescriptionStepOutputType } from './description-step.types';
 
@@ -17,6 +17,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionSt
   @Input() title = '';
   @Input() data: DescriptionStepInputType = {
     selectedCategories: [],
+    otherCategory: null,
     selectedSubcategories: [],
     description: '',
     file: null,
@@ -28,20 +29,17 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionSt
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<DescriptionStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<DescriptionStepOutputType>>();
 
-  form = new FormGroup(
-    {
-      description: new FormControl<string>('', [
-        CustomValidators.required('Description is required'),
-        Validators.maxLength(2000)
-      ]),
-      file: new FormControl<File | null>(null, [
-        CustomValidators.emptyFileValidator(),
-        CustomValidators.maxFileSizeValidator(20)
-      ]),
-      fileName: new FormControl<string>('')
-    },
-    { updateOn: 'blur' }
-  );
+  form = new FormGroup({
+    description: new FormControl<string>('', [
+      CustomValidators.required('Description is required'),
+      Validators.maxLength(2000)
+    ]),
+    file: new FormControl<File | null>(null, [
+      CustomValidators.emptyFileValidator(),
+      CustomValidators.maxFileSizeValidator(20)
+    ]),
+    fileName: new FormControl<string>('')
+  });
 
   configInputFile = {
     acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],

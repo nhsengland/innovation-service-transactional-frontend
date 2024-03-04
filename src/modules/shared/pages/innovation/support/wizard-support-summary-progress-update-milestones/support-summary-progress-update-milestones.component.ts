@@ -6,18 +6,22 @@ import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@a
 import { SUPPORT_SUMMARY_MILESTONES_ARRAYS } from './constants';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './steps/categories-step.component';
 import { CategoriesStepInputType, CategoriesStepOutputType } from './steps/categories-step.types';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './steps/date-step.component';
+import { DateStepInputType, DateStepOutputType } from './steps/date-step.types';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent } from './steps/description-step.component';
 import { DescriptionStepInputType, DescriptionStepOutputType } from './steps/description-step.types';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent } from './steps/subcategories-step.component';
 import { SubcategoriesStepInputType, SubcategoriesStepOutputType } from './steps/subcategories-step.types';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './steps/summary-step.component';
+import { SummaryStepInputType } from './steps/summary-step.types';
 
 type MilestoneData = {
   categoriesStep: {
-    categories: string[];
+    categories: { name: string; description: string }[];
     otherCategory: string | null;
   };
   subcategoriesStep: {
-    subcategories: string[];
+    subcategories: { name: string; description: string }[];
   };
   descriptionStep: {
     description: string;
@@ -25,7 +29,9 @@ type MilestoneData = {
     fileName: string;
   };
   dateStep: {
-    date: string;
+    day: string;
+    month: string;
+    year: string;
   };
 };
 
@@ -38,6 +44,8 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
   milestonesType: 'ONE_LEVEL' | 'TWO_LEVEL';
 
+  userOrgAcronym;
+
   wizard = new WizardModel<MilestoneData>({});
 
   constructor() {
@@ -45,9 +53,11 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     this.innovation = this.stores.context.getInnovation();
 
-    const userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
+    this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
 
-    this.milestonesType = SUPPORT_SUMMARY_MILESTONES_ARRAYS[userOrgAcronym].some(org => org.subcategories !== undefined)
+    this.milestonesType = SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].some(
+      org => org.subcategories !== undefined
+    )
       ? 'TWO_LEVEL'
       : 'ONE_LEVEL';
 
@@ -65,7 +75,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         fileName: ''
       },
       dateStep: {
-        date: ''
+        day: '',
+        month: '',
+        year: ''
+        //dateISOString: '',
       }
     };
   }
@@ -77,6 +90,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         title: 'Add a progress update',
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent,
         data: {
+          userOrgAcronym: this.userOrgAcronym,
           milestonesType: this.milestonesType,
           categories: this.getOrgCategories(),
           otherCategory: null,
@@ -97,6 +111,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent,
         data: {
           selectedCategories: this.wizard.data.categoriesStep.categories,
+          otherCategory: this.wizard.data.categoriesStep.otherCategory,
           selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories,
           description: this.wizard.data.descriptionStep.description,
           file: this.wizard.data.descriptionStep.file,
@@ -110,6 +125,42 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       })
     );
 
+    this.wizard.addStep(
+      new WizardStepModel<DateStepInputType, DateStepOutputType>({
+        id: 'dateStep',
+        title: `Select a date for this progress update`,
+        component: WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent,
+        data: {
+          day: this.wizard.data.dateStep.day,
+          month: this.wizard.data.dateStep.month,
+          year: this.wizard.data.dateStep.year
+        },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data, this.onDateStepOut, this.onDescriptionStepIn),
+          nextStepEvent: data => this.onNextStep(data, this.onDateStepOut, this.onSummaryStepIn)
+        }
+      })
+    );
+
+    this.wizard.addStep(
+      new WizardStepModel<SummaryStepInputType, null>({
+        id: 'summaryStep',
+        title: `Check your progress update`,
+        component: WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent,
+        data: {
+          categoriesStep: this.wizard.data.categoriesStep,
+          subcategoriesStep: this.wizard.data.subcategoriesStep,
+          descriptionStep: this.wizard.data.descriptionStep,
+          dateStep: this.wizard.data.dateStep
+        },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data, this.onDateStepIn),
+          submitEvent: data => this.onSubmit(data),
+          goToStepEvent: stepId => this.onGoToStep(stepId)
+        }
+      })
+    );
+
     this.setPageStatus('READY');
   }
 
@@ -117,9 +168,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     name: string;
     description: string;
   }[] {
-    const userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
-
-    return SUPPORT_SUMMARY_MILESTONES_ARRAYS[userOrgAcronym].map(org => {
+    return SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].map(org => {
       return {
         name: org.name,
         description: org.description
@@ -131,11 +180,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     name: string;
     description: string;
   }[] {
-    const userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
-
     return (
-      SUPPORT_SUMMARY_MILESTONES_ARRAYS[userOrgAcronym].filter(
-        org => org.name === this.wizard.data.categoriesStep.categories[0]
+      SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].filter(
+        org => org.name === this.wizard.data.categoriesStep.categories[0]?.name
       )[0]?.subcategories ?? []
     );
   }
@@ -143,6 +190,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   // Steps mappings.
   onCategoriesStepIn(): void {
     this.wizard.setStepData<CategoriesStepInputType>('categoriesStep', {
+      userOrgAcronym: this.userOrgAcronym,
       milestonesType: this.milestonesType,
       categories: this.getOrgCategories(),
       otherCategory: this.wizard.data.categoriesStep.otherCategory,
@@ -153,7 +201,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   onCategoriesStepOut(stepData: WizardStepEventType<CategoriesStepOutputType>): void {
     if (
       this.milestonesType === 'TWO_LEVEL' &&
-      stepData.data.categories[0] !== this.wizard.data.categoriesStep.categories[0]
+      stepData.data.categories[0].name !== this.wizard.data.categoriesStep.categories[0]?.name
     ) {
       this.wizard.data.subcategoriesStep.subcategories = [];
     }
@@ -170,6 +218,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
   onSubcategoriesStepIn(): void {
     this.wizard.setStepData<SubcategoriesStepInputType>('subcategoriesStep', {
+      userOrgAcronym: this.userOrgAcronym,
       subcategories: this.getCategorySubcategories(),
       selectedCategories: this.wizard.data.categoriesStep.categories,
       selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories
@@ -185,6 +234,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   onDescriptionStepIn(): void {
     this.wizard.setStepData<DescriptionStepInputType>('descriptionStep', {
       selectedCategories: this.wizard.data.categoriesStep.categories,
+      otherCategory: this.wizard.data.categoriesStep.otherCategory,
       selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories,
       description: this.wizard.data.descriptionStep.description,
       file: this.wizard.data.descriptionStep.file,
@@ -200,11 +250,35 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     };
   }
 
-  onDateStepIn(): void {}
+  onDateStepIn(): void {
+    this.wizard.setStepData<DateStepInputType>('dateStep', {
+      day: this.wizard.data.dateStep.day,
+      month: this.wizard.data.dateStep.month,
+      year: this.wizard.data.dateStep.year
+    });
+  }
 
-  onDateStepOut(stepData: WizardStepEventType<DescriptionStepOutputType>): void {}
+  onDateStepOut(stepData: WizardStepEventType<DateStepOutputType>): void {
+    this.wizard.data.dateStep = {
+      day: stepData.data.day,
+      month: stepData.data.month,
+      year: stepData.data.year
+    };
+  }
 
-  onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
+  onSummaryStepIn(): void {
+    this.wizard.setStepData<SummaryStepInputType>('summaryStep', {
+      categoriesStep: this.wizard.data.categoriesStep,
+      subcategoriesStep: this.wizard.data.subcategoriesStep,
+      descriptionStep: this.wizard.data.descriptionStep,
+      dateStep: this.wizard.data.dateStep
+    });
+  }
+
+  onPreviousStep<T extends WizardStepEventType<MappedObjectType | null>>(
+    stepData: T,
+    ...args: ((data: T) => void)[]
+  ): void {
     this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
@@ -224,17 +298,38 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     this.wizard.gotoNextStep();
   }
 
-  onSubmitStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
+  onSubmit<T extends WizardStepEventType<MappedObjectType | null>>(stepData: T, ...args: ((data: T) => void)[]): void {
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
-    //this.onSubmit();
+    this.onWizardSubmit();
   }
 
-  private redirectToSupportSummaryList(): void {
-    this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`
-    );
+  onGoToStep(stepId: string): void {
+    switch (stepId) {
+      case 'categoriesStep':
+        this.onCategoriesStepIn();
+        break;
+      case 'subcategoriesStep':
+        this.onSubcategoriesStepIn();
+        break;
+      case 'descriptionStep':
+        this.onDescriptionStepIn();
+        break;
+      case 'dateStep':
+        this.onDateStepIn();
+        break;
+      default:
+        return;
+    }
+
+    const stepNumber = this.wizard.steps.findIndex(step => step.id === stepId) + 1;
+
+    if (stepNumber === undefined) {
+      return;
+    }
+
+    this.wizard.gotoStep(stepNumber);
   }
 
   manageSubcategoriesStep(): void {
@@ -247,6 +342,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
           title: '',
           component: WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent,
           data: {
+            userOrgAcronym: this.userOrgAcronym,
             subcategories: categorySubcategories,
             selectedCategories: this.wizard.data.categoriesStep.categories,
             selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories
@@ -261,5 +357,15 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     } else {
       this.wizard.removeStep('subcategoriesStep');
     }
+  }
+
+  onWizardSubmit(): void {
+    console.log('onWizardSubmit');
+  }
+
+  private redirectToSupportSummaryList(): void {
+    this.redirectTo(
+      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`
+    );
   }
 }

@@ -41,4 +41,11 @@ export class DatesHelper {
     if (before !== null && UtilsHelper.isEmpty(after)) return 'before';
     return 'between';
   }
+
+  static constructISODateString(year: string, month: string, day: string): string {
+    const dayString = ('0' + day).slice(-2);
+    const monthString = ('0' + month).slice(-2);
+
+    return `${year}/${monthString}/${dayString}`;
+  }
 }

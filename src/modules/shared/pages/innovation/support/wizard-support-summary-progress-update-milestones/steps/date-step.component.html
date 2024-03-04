@@ -1,8 +1,10 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
+      <p class="nhsuk-u-margin-bottom-7">You can backdate a progress update within the time your organisation has been engaging with this innovation.</p>
+
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
-        <theme-form-checkbox-array arrayName="subcategories" [items]="subcategoriesItems" [pageUniqueField]="false"></theme-form-checkbox-array>
+        <theme-form-date-input title="Enter date" [pageUniqueField]="false"></theme-form-date-input>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
       </form>

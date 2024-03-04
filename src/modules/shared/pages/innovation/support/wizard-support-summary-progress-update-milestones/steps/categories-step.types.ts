@@ -1,11 +1,12 @@
 export type CategoriesStepInputType = {
+  userOrgAcronym: string;
   milestonesType: 'ONE_LEVEL' | 'TWO_LEVEL';
   categories: { name: string; description: string }[];
   otherCategory: string | null;
-  selectedCategories: string[];
+  selectedCategories: { name: string; description: string }[];
 };
 
 export type CategoriesStepOutputType = {
-  categories: string[];
+  categories: { name: string; description: string }[];
   otherCategory: string | null;
 };

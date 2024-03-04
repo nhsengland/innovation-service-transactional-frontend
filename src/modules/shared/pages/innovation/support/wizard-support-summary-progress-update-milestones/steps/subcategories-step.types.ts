@@ -1,9 +1,10 @@
 export type SubcategoriesStepInputType = {
+  userOrgAcronym: string;
   subcategories: { name: string; description: string }[];
-  selectedCategories: string[];
-  selectedSubcategories: string[];
+  selectedCategories: { name: string; description: string }[];
+  selectedSubcategories: { name: string; description: string }[];
 };
 
 export type SubcategoriesStepOutputType = {
-  subcategories: string[];
+  subcategories: { name: string; description: string }[];
 };

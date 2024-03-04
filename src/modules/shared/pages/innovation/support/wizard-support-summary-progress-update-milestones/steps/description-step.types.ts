@@ -1,6 +1,7 @@
 export type DescriptionStepInputType = {
-  selectedCategories: string[];
-  selectedSubcategories: string[];
+  selectedCategories: { name: string; description: string }[];
+  otherCategory: string | null;
+  selectedSubcategories: { name: string; description: string }[];
   description: string;
   file: null | File;
   fileName: string;

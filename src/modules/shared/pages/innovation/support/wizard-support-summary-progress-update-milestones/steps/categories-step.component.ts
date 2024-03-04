@@ -4,6 +4,7 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
+import { SUPPORT_SUMMARY_MILESTONES_ARRAYS } from '../constants';
 
 import { CategoriesStepInputType, CategoriesStepOutputType } from './categories-step.types';
 
@@ -17,6 +18,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
 {
   @Input() title = '';
   @Input() data: CategoriesStepInputType = {
+    userOrgAcronym: '',
     milestonesType: 'ONE_LEVEL',
     categories: [],
     otherCategory: null,
@@ -39,15 +41,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
   constructor() {
     super();
 
-    this.setPageTitle(this.title);
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 
   ngOnInit(): void {
-    console.log('milestonesType', this.data.milestonesType);
-    console.log('categories', this.data.categories);
-    console.log('selectedCategories', this.data.selectedCategories);
-
     this.categoriesItems.push(
       ...this.data.categories.map(category => ({
         value: category.name,
@@ -69,32 +66,28 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
     if (this.data.milestonesType === 'ONE_LEVEL') {
       this.form.addControl(
         'oneLevelMilestoneCategories',
-        new FormArray<FormControl<string>>([], {
-          validators: CustomValidators.requiredCheckboxArray('Choose at least one category'),
-          updateOn: 'change'
-        })
+        new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray('Choose at least one category')])
       );
 
       this.categoriesItems.unshift({ value: 'Select one or more progress categories', label: 'HEADING' });
 
       this.data.selectedCategories.forEach(item => {
-        (this.form.get('oneLevelMilestoneCategories') as FormArray).push(new FormControl<string>(item));
+        (this.form.get('oneLevelMilestoneCategories') as FormArray).push(new FormControl<string>(item.name));
       });
     } else {
       this.form.addControl(
         'twoLevelMilestoneCategory',
-        new FormControl<null | string>(null, {
-          validators: CustomValidators.required('Select one progress category'),
-          updateOn: 'change'
-        })
+        new FormControl<null | string>(null, [CustomValidators.required('Select one progress category')])
       );
 
       if (this.data.selectedCategories[0]) {
-        this.form.get('twoLevelMilestoneCategory')?.setValue(this.data.selectedCategories[0]);
+        this.form.get('twoLevelMilestoneCategory')?.setValue(this.data.selectedCategories[0].name);
       }
     }
 
     this.form.get('otherCategory')?.setValue(this.data.otherCategory);
+
+    this.setPageTitle(this.title);
 
     this.setPageStatus('READY');
   }
@@ -109,7 +102,16 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
       categories = [...(this.form.value.twoLevelMilestoneCategory ? [this.form.value.twoLevelMilestoneCategory] : [])];
     }
 
-    return { categories, otherCategory: this.form.value.otherCategory ?? null };
+    const categoriesWithDescription = (categories ?? []).map(categoryName => {
+      return {
+        name: categoryName,
+        description:
+          SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.data.userOrgAcronym]?.find(category => category.name === categoryName)
+            ?.description || ''
+      };
+    });
+
+    return { categories: categoriesWithDescription, otherCategory: this.form.value.otherCategory ?? null };
   }
 
   onPreviousStep(): void {

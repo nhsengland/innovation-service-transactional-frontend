@@ -11,9 +11,11 @@ export type WizardStepComponentType<InputType, OutputType> = {
   previousStepEvent: EventEmitter<WizardStepEventType<OutputType>>;
   nextStepEvent: EventEmitter<WizardStepEventType<OutputType>>;
   submitEvent: EventEmitter<WizardStepEventType<OutputType>>;
+  goToStepEvent?: EventEmitter<string>;
 
   onCancel?: () => void;
   onPreviousStep?: (data?: OutputType) => void;
   onNextStep?: (data?: OutputType) => void;
   onSubmit?: (data?: OutputType) => void;
+  onGoToStep?: (stepId: string) => void;
 };
