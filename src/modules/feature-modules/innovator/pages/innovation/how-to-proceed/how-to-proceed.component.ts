@@ -7,7 +7,7 @@ import { CustomValidators } from '@app/base/forms';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 enum FormFieldActionsEnum {
-  WITHDRAW = 'WITHDRAW',
+  ARCHIVE = 'ARCHIVE',
   DELETE_ACCOUNT = 'DELETE_ACCOUNT',
   NEEDS_REASSESSMENT = 'NEEDS_REASSESSMENT',
   NO_ACTION = 'NO_ACTION'
@@ -24,18 +24,18 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
   form: FormGroup;
 
   formfieldAction = {
-    title: 'Choose how to continue with your innovation',
-    description: `There are no organisations actively supporting your innovation at this moment in time. Here's what you can do next.`,
+    title: 'Decide what to do next with your innovation',
+    description: `There are no organisations currently providing support to your innovation. Here's what you can do next.`,
     items: [
       {
-        value: FormFieldActionsEnum.NO_ACTION,
-        label: `Don´t do anything yet`,
-        description: `You might want to leave your innovation idle for a period of time if you're working on something in the background or need a break from progressing with your innovation. This offer to choose your preferred next step will remain active.`
+        value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
+        label: `Find out if you qualify for a needs reassessment`,
+        description: `If you have significantly progressed your innovation or introduced major changes since your first needs assessment, you can submit your innovation for a needs reassessment. You may be offered a different type of support following the reassessment.`
       },
       {
-        value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
-        label: `See if you qualify for a needs reassessment`,
-        description: `You might want to submit your innovation for a needs reassessment if you have significantly progressed your innovation or introduced major changes since the first Needs Assessment. This might mean you need a different type of support.`
+        value: FormFieldActionsEnum.NO_ACTION,
+        label: `Decide later`,
+        description: `If you're not sure what to do next, you can decide later.`
       }
     ]
   };
@@ -46,16 +46,18 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     const isOwner = this.stores.context.getInnovation().loggedUser.isOwner;
 
     if (isOwner) {
-      this.formfieldAction.items.push(
+      this.formfieldAction.items.splice(
+        1,
+        0,
         {
-          value: FormFieldActionsEnum.WITHDRAW,
-          label: `Withdraw your innovation`,
-          description: `You might want to withdraw your innovation if you no longer need support from the organisations. Your current innovation will be closed, but you will keep your Innovation Service account.`
+          value: FormFieldActionsEnum.ARCHIVE,
+          label: `Archive your innovation`,
+          description: `You can continue to edit and update your innovation record when it is archived. You cannot access support during this time. If you want support on your innovation in future, you can submit your record for a needs reassessment.`
         },
         {
           value: FormFieldActionsEnum.DELETE_ACCOUNT,
           label: `Delete your account`,
-          description: `If you delete your account your innovation will be withdrawn and you will no longer have access to the Innovation Service.`
+          description: `If you delete your account, your innovations will be archived and your collaborators will lose access to them. You will not be able to access the NHS Innovation Service.`
         }
       );
     }
@@ -89,8 +91,8 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     }
 
     switch (this.form.get('action')?.value) {
-      case FormFieldActionsEnum.WITHDRAW:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/withdraw`);
+      case FormFieldActionsEnum.ARCHIVE:
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`);
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:
