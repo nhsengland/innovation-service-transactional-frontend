@@ -4,6 +4,8 @@ import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
+import { CreateSupportSummaryProgressUpdateType } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { SUPPORT_SUMMARY_MILESTONES } from './constants';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './steps/categories-step.component';
 import { CategoriesStepInputType, CategoriesStepOutputType } from './steps/categories-step.types';
@@ -49,7 +51,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
   wizard = new WizardModel<MilestoneData>({});
 
-  constructor() {
+  constructor(private innovationsService: InnovationsService) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -313,7 +315,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     this.resetAlert();
 
     args.forEach(element => element.bind(this)(stepData));
-    this.onWizardSubmit();
+    this.onSubmitWizard();
   }
 
   onGoToStep(stepId: string): void {
@@ -370,8 +372,55 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     }
   }
 
-  onWizardSubmit(): void {
-    console.log('onWizardSubmit');
+  onSubmitWizard(): void {
+    const initialData = {
+      description: this.wizard.data.descriptionStep.description,
+      /* document: {
+        name: this.wizard.data.descriptionStep.fileName
+                file: {
+          id: this.wizard.data.descriptionStep.file?.id,
+          name: this.wizard.data.descriptionStep.file?.name,
+          size: this.wizard.data.descriptionStep.file?.size,
+          extension: this.wizard.data.descriptionStep.file?.extension
+        } 
+      },*/
+      createdAt: new Date(
+        +this.wizard.data.dateStep.year,
+        +this.wizard.data.dateStep.month - 1,
+        +this.wizard.data.dateStep.day
+      )
+    };
+
+    const categories = this.wizard.data.categoriesStep.categories
+      .filter(category => category.name !== 'OTHER')
+      .map(category => category.name);
+
+    const otherCategory = this.wizard.data.categoriesStep.otherCategory;
+    if (otherCategory) {
+      categories.push(otherCategory);
+    }
+
+    const requestData: CreateSupportSummaryProgressUpdateType =
+      this.milestonesType === 'ONE_LEVEL'
+        ? { ...initialData, categories }
+        : {
+            ...initialData,
+            category: categories[0],
+            subCategories: this.wizard.data.subcategoriesStep.subcategories.map(subcategory => subcategory.name)
+          };
+
+    this.innovationsService.createSupportSummaryProgressUpdate(this.innovation.id, requestData).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your progress update has been added to the support summary', {
+          message: 'The innovator has been notified about your update.'
+        });
+        this.redirectToSupportSummaryList();
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
+    });
   }
 
   private redirectToSupportSummaryList(): void {

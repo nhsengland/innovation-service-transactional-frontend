@@ -290,11 +290,16 @@ export type SupportSummaryOrganisationHistoryDTO = {
     file?: { id: string; name: string; url: string };
   };
 }[];
+
+type SimpleProgressUpdateParams = { title: string };
+type OneLevelProgressUpdateParams = { categories: string[] };
+type TwoLevelProgressUpdateParams = { category: string; subCategories: string[] };
+
 export type CreateSupportSummaryProgressUpdateType = {
-  title: string;
   description: string;
   document?: { name: string; description?: string; file?: Omit<FileUploadType, 'url'> };
-};
+  createdAt?: Date;
+} & (SimpleProgressUpdateParams | OneLevelProgressUpdateParams | TwoLevelProgressUpdateParams);
 
 // Support log
 export enum SupportLogType {
