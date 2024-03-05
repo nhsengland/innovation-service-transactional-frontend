@@ -36,7 +36,7 @@
           >View support status</a
         >
       </div>
-      <p>Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
+      <p *ngIf="isArchived">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
     </div>
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
