@@ -25,9 +25,5 @@ export class PageInnovationStatusListComponent extends CoreComponent {
     this.setPageTitle('Innovation status key');
     this.setBackLink('Go back');
     this.setPageStatus('READY');
-
-    if (this.stores.authentication.isAssessmentType()) {
-      this.visibleStatus = this.visibleStatus.filter(status => status === InnovationGroupedStatusEnum.ARCHIVED);
-    }
   }
 }
