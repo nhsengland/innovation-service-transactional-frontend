@@ -1,6 +1,7 @@
 import { AsyncValidatorFn } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
+import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
 export class FormEngineModel {
   label?: string;
@@ -32,7 +33,8 @@ export class FormEngineParameterModel {
     | 'radio-group'
     | 'fields-group'
     | 'file-upload'
-    | 'file-upload-array';
+    | 'file-upload-array'
+    | 'select-component';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -53,6 +55,8 @@ export class FormEngineParameterModel {
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string];
+    equalTo?: string | [string, string];
+    equalToField?: string | [string, string];
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;
@@ -95,6 +99,8 @@ export class FormEngineParameterModel {
     previousUploadedFiles?: { id: string; name: string }[];
   };
 
+  selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
+
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
     this.dataType = data.dataType || 'text';
@@ -112,6 +118,8 @@ export class FormEngineParameterModel {
 
     this.groupedItems = data.groupedItems;
     this.items = data.items;
+
+    this.selectItems = data.selectItems;
 
     if (data.fieldsGroupConfig) {
       this.fieldsGroupConfig = {

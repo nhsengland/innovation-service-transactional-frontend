@@ -13,7 +13,6 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 // Pages.
 // // Account.
 import { PageAccountDeleteComponent } from './pages/account/account-delete.component';
-import { PageAccountInfoComponent } from './pages/account/account-info.component';
 // // Collaboration Invites.
 import { PageCollaborationInviteComponent } from './pages/collaboration-invite/collaboration-invite.component';
 // // Dashboard.
@@ -60,7 +59,7 @@ import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/
     // Pages.
     // // Account.
     PageAccountDeleteComponent,
-    PageAccountInfoComponent,
+
     // // Collaboration invites.
     PageCollaborationInviteComponent,
     // // Dashboard.

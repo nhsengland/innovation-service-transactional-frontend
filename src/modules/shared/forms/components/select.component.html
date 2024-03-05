@@ -1,0 +1,24 @@
+<div class="nhsuk-form-group">
+  <ng-container *ngIf="label && pageUniqueField">
+    <h1 class="nhsuk-label-wrapper">
+      <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id">
+        {{ label }}
+      </label>
+    </h1>
+  </ng-container>
+  <ng-container *ngIf="label && !pageUniqueField">
+    <label class="nhsuk-label" [for]="id">
+      {{ label }}
+    </label>
+  </ng-container>
+
+  <ng-container *ngIf="description">
+    <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+  </ng-container>
+
+  <select #select class="nhsuk-select" id="{{ id }}" [(ngModel)]="selectedField" (change)="this.onChangeSelect()" [attr.aria-label]="label ?? 'select'">
+    <option *ngFor="let item of selectItems.selectList" [ngValue]="item.key">
+      <span>{{ item.text }}</span>
+    </option>
+  </select>
+</div>
