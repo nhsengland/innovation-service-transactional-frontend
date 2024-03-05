@@ -67,8 +67,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
 
     of(true)
       .pipe(
-        concatMap(() => {
-          return this.stores.authentication.updateUserInfo$({
+        concatMap(() =>
+          this.stores.authentication.updateUserInfo$({
             displayName: wizardData.innovatorName,
             mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
 
@@ -86,8 +86,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
                   isShadow: true
                 },
             howDidYouFindUsAnswers: wizardData.howDidYouFindUsAnswers
-          });
-        }),
+          })
+        ),
 
         // Initialize authentication in order to update First Time SignIn information.
         concatMap(() => this.stores.authentication.initializeAuthentication$())
