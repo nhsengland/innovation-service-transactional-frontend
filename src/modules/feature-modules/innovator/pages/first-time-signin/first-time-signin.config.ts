@@ -240,8 +240,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 id: 'howDidYouFindUsEvent',
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.EVENT.conditionalPlaceholder,
-                cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'howDidYouFindUsItems.EVENT.conditionalPlaceholder'] }
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.EVENT.conditionalPlaceholder}`] }
               })
             },
             {
@@ -251,8 +251,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 id: 'howDidYouFindUsReading',
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.READING.conditionalPlaceholder,
-                cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'howDidYouFindUsItems.READING.conditionalPlaceholder'] }
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.READING.conditionalPlaceholder}`] }
               })
             },
             {
@@ -266,8 +266,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 id: 'howDidYouFindUsRecommendation',
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder,
-                cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder'] }
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder}`] }
               })
             },
             {
