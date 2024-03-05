@@ -4,7 +4,7 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { SUPPORT_SUMMARY_MILESTONES_ARRAYS } from '../constants';
+import { SUPPORT_SUMMARY_MILESTONES } from '../constants';
 
 import { CategoriesStepInputType, CategoriesStepOutputType } from './categories-step.types';
 
@@ -106,7 +106,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
       return {
         name: categoryName,
         description:
-          SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.data.userOrgAcronym]?.find(category => category.name === categoryName)
+          SUPPORT_SUMMARY_MILESTONES[this.data.userOrgAcronym]?.find(category => category.name === categoryName)
             ?.description || ''
       };
     });

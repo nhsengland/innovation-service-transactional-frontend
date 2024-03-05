@@ -4,7 +4,7 @@ import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
-import { SUPPORT_SUMMARY_MILESTONES_ARRAYS } from './constants';
+import { SUPPORT_SUMMARY_MILESTONES } from './constants';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './steps/categories-step.component';
 import { CategoriesStepInputType, CategoriesStepOutputType } from './steps/categories-step.types';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './steps/date-step.component';
@@ -56,9 +56,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
 
-    this.milestonesType = SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].some(
-      org => org.subcategories !== undefined
-    )
+    this.milestonesType = SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].some(org => org.subcategories !== undefined)
       ? 'TWO_LEVEL'
       : 'ONE_LEVEL';
 
@@ -177,7 +175,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     name: string;
     description: string;
   }[] {
-    return SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].map(org => {
+    return SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].map(org => {
       return {
         name: org.name,
         description: org.description
@@ -190,7 +188,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     description: string;
   }[] {
     return (
-      SUPPORT_SUMMARY_MILESTONES_ARRAYS[this.userOrgAcronym].filter(
+      SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].filter(
         org => org.name === this.wizard.data.categoriesStep.categories[0]?.name
       )[0]?.subcategories ?? []
     );

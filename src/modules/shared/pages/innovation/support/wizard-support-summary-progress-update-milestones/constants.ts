@@ -9,7 +9,7 @@ type Milestones = {
   }[];
 };
 
-export const SUPPORT_SUMMARY_MILESTONES_ARRAYS: Milestones = {
+export const SUPPORT_SUMMARY_MILESTONES: Milestones = {
   HIN: [
     {
       name: 'Universal',
@@ -91,10 +91,46 @@ export const SUPPORT_SUMMARY_MILESTONES_ARRAYS: Milestones = {
       description:
         'The advised tender process has completed and awarded. This product is now awarded will be available to the NHS.'
     }
+  ],
+  NICE: [
+    {
+      name: 'NICE Advice support offered',
+      description: 'The team have offered the innovator support from one of the NICE Advice services.'
+    },
+    {
+      name: 'Call arranged with innovator',
+      description:
+        'The NICE Advice team have arranged a call with the innovator to discuss the service offers in more detail.'
+    },
+    {
+      name: 'Signposted to alternative support',
+      description: 'The innovator has been referred to an alternative service for support.'
+    },
+    { name: 'NICE surgery', description: 'The innovator is undergoing a project with NICE Advice: NICE surgery.' },
+    {
+      name: 'Evidence gap analysis',
+      description: 'The innovator is undergoing a project with NICE Advice: evidence gap analysis.'
+    },
+    {
+      name: 'Scientific Advice',
+      description: 'The innovator is undergoing a project with NICE Advice: Scientific Advice.'
+    },
+    {
+      name: 'System engagement meeting',
+      description: 'The innovator is undergoing a project with NICE Advice: system engagement meeting.'
+    },
+    {
+      name: 'Health economic review',
+      description: 'The innovator is undergoing a project with NICE Advice: health economic review.'
+    },
+    {
+      name: 'Selected for NICE guidance output',
+      description: "The innovation has been selected for inclusion in one of NICE's guidance producing programmes."
+    }
   ]
 };
 
-export const SUPPORT_SUMMARY_MILESTONES = {
+/* export const SUPPORT_SUMMARY_MILESTONES = {
   // Two level milestones
   HIN: {
     Universal: {
@@ -184,3 +220,4 @@ export const SUPPORT_SUMMARY_MILESTONES = {
     OTHER: true
   }
 };
+ */
