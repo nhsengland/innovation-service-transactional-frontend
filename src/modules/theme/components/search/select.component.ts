@@ -10,7 +10,7 @@ export class SelectComponent implements OnInit {
   @Input({ required: true }) id: string = '';
   @Input({ required: true }) label: string = '';
   @Input({ required: true }) selectList: SelectComponentInputType[] = [];
-  @Input() defaultValueKey: string = '';
+  @Input() defaultValueKey?: string;
   @Output() selectChanged = new EventEmitter<string>();
 
   selectedField: string = '';

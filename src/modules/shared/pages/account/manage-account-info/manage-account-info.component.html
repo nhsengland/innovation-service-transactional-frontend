@@ -10,13 +10,11 @@
 
   <app-account-mfa-list [MFAInfo]="MFAInfo" />
 
-  <ng-container *ngIf="isInnovator">
-    <div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
-      <div class="nhsuk-grid-column-full">
-        <h2 class="nhsuk-heading-l">Delete your account</h2>
-        <p>You will need to confirm your email address to delete your account.</p>
-        <a routerLink="delete"> Delete your account </a>
-      </div>
+  <div *ngIf="isInnovator" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">Delete your account</h2>
+      <p>You will need to confirm your email address to delete your account.</p>
+      <a routerLink="delete"> Delete your account </a>
     </div>
-  </ng-container>
+  </div>
 </theme-content-wrapper>

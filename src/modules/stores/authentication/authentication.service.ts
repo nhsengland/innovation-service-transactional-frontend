@@ -152,9 +152,6 @@ export class AuthenticationService {
 
   updateUserMFAInfo(body: MFAInfoDTO): Observable<void> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/mfa');
-    return this.http.put<void>(url.buildUrl(), body).pipe(
-      take(1),
-      map(response => response)
-    );
+    return this.http.put<void>(url.buildUrl(), body).pipe(take(1));
   }
 }

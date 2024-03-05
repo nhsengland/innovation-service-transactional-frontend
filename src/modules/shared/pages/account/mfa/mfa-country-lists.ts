@@ -1,3 +1,7 @@
+// /*
+// Lists downloaded from http://country.io/
+// */
+
 export const countryCodesList = {
   BD: '+880',
   BE: '+32',

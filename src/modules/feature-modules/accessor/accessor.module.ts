@@ -37,9 +37,6 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     SidebarAccountMenuOutletComponent,
     SidebarInnovationMenuOutletComponent,
 
-    // Pages.
-    // // Account.
-
     // // Actions.
     TasksListComponent,
     // // Dashboard.

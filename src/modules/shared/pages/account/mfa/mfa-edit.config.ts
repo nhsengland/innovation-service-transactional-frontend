@@ -1,7 +1,3 @@
-// /*
-// Lists downloaded from http://country.io/
-// */
-
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
@@ -91,7 +87,6 @@ const turnOffStep = new FormEngineModel({
   parameters: [
     {
       id: 'turnOff',
-      description: '',
       dataType: 'radio-group',
       validations: { isRequired: [true, 'Choose one option'] },
       items: turnOffItems
