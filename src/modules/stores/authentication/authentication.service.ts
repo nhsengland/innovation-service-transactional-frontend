@@ -9,6 +9,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
+import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 type GetUserInfoDTO = {
   id: string;
@@ -54,6 +55,7 @@ export type UpdateUserInfoDTO = {
     description?: string;
     registrationNumber?: string;
   };
+  howDidYouFindUsAnswers?: null | HowDidYouFindUsAnswersType;
 };
 
 export type GetTermsOfUseLastVersionInfoDTO = {

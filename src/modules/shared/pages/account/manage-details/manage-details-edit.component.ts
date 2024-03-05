@@ -105,7 +105,8 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
         contactByPhoneTimeframe: wizardData.contactByPhoneTimeframe || null,
         mobilePhone: wizardData.mobilePhone || null,
         contactDetails: wizardData.contactDetails || null,
-        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {})
+        ...(wizardData.organisation ? { organisation: wizardData.organisation } : {}),
+        howDidYouFindUsAnswers: {}
       };
     }
 
