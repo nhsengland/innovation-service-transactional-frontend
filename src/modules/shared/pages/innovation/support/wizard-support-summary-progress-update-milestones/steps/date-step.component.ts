@@ -1,10 +1,13 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
+import { GenericErrorsEnum } from '@app/base/enums';
 import { FileTypes, FormGroup } from '@app/base/forms';
-import { DatesHelper } from '@app/base/helpers';
-import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
+import { ContextInnovationType, WizardStepComponentType, WizardStepEventType } from '@app/base/types';
+import { InnovationValidationRules } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { DateStepInputType, DateStepOutputType } from './date-step.types';
 
 @Component({
@@ -27,6 +30,8 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<DateStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<DateStepOutputType>>();
 
+  innovation: ContextInnovationType;
+
   dateNowISOString = new Date().toISOString().slice(0, 10);
 
   form = new FormGroup(
@@ -45,9 +50,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     maxFileSize: 20 // In Mb.
   };
 
-  constructor() {
+  constructor(private innovationsService: InnovationsService) {
     super();
 
+    this.innovation = this.stores.context.getInnovation();
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 
@@ -85,29 +91,58 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   onNextStep(): void {
     this.resetAlert();
 
-    const inputDate = Date.parse(
-      DatesHelper.constructISODateString(
-        this.form.value.date?.year!,
-        this.form.value.date?.month!,
-        this.form.value.date?.day!
-      )
-    );
-
-    const isDateInFuture = inputDate > Date.parse(this.dateNowISOString);
-
-    if (isDateInFuture) {
-      this.setAlertError('The date provided is in the future', {
-        itemsList: [{ title: 'The date must be in the past or today' }],
-        width: '2.thirds'
-      });
-      this.form.get('date')?.setErrors({ customError: true, message: 'The date must be in the past or today' });
-    }
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
+    const dateString = `${this.form.value.date?.year!}-${this.form.value.date?.month!}-${this.form.value.date?.day!}`;
+
+    const data = {
+      supportId: this.innovation.support?.id!,
+      date: dateString,
+      status: this.innovation.support?.status!
+    };
+
+    this.innovationsService
+      .getInnovationRules(this.innovation.id, InnovationValidationRules.checkIfSupportStatusAtDate, data)
+      .subscribe({
+        next: res => {
+          const supportStatusValidation = res.validations.find(
+            validation => validation.rule === InnovationValidationRules.checkIfSupportStatusAtDate
+          );
+
+          if (!supportStatusValidation?.valid) {
+            this.setAlertError('Your organisation was not engaging with this innovation on the date provided', {
+              itemsList: [
+                {
+                  title: 'The date provided must be during the time your organisation was engaging with this innovation'
+                }
+              ],
+              width: '2.thirds'
+            });
+            this.form.get('date')?.setErrors({
+              customError: true,
+              message: 'The date provided must be during the time your organisation was engaging with this innovation'
+            });
+            this.form.markAllAsTouched();
+            return;
+          }
+          this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
+        },
+        error: ({ error: err }: HttpErrorResponse) => {
+          if (err.error === GenericErrorsEnum.INVALID_PAYLOAD) {
+            this.setAlertError('The date provided is in the future', {
+              itemsList: [{ title: 'The date must be in the past or today' }],
+              width: '2.thirds'
+            });
+            this.form.get('date')?.setErrors({ customError: true, message: 'The date must be in the past or today' });
+            this.form.markAllAsTouched();
+          } else {
+            this.setAlertUnknownError();
+          }
+          return;
+        }
+      });
   }
 }

@@ -211,6 +211,14 @@ export type InnovationInfoDTO = {
 
 export type InnovationSharesListDTO = { organisation: { id: string; name: string; acronym: string } }[];
 
+export enum InnovationValidationRules {
+  checkIfSupportStatusAtDate = 'checkIfSupportStatusAtDate'
+}
+
+export type InnovationRulesDTO = {
+  validations: { rule: InnovationValidationRules; valid: boolean; details?: any }[];
+};
+
 // Innovation collaborators.
 export type InnovationCollaboratorsListDTO = {
   count: number;

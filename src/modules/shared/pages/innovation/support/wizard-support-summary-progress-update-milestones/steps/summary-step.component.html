@@ -57,12 +57,7 @@
         <div *ngIf="data.descriptionStep.file" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Uploaded document</dt>
           <dd class="nhsuk-summary-list__value">
-            <p>
-              {{ data.descriptionStep.file.name }}
-            </p>
-            <p>
-              {{ data.descriptionStep.fileName }}
-            </p>
+            <a href="javascript:void(0)" class="nhsuk-u-font-size-19" (click)="downloadFile(data.descriptionStep.file)"> {{ data.descriptionStep.fileName }} </a>
           </dd>
           <dd class="nhsuk-summary-list__actions">
             <a href="javascript:void(0)" (click)="onGotoStep('descriptionStep')">Change<span class="nhsuk-u-visually-hidden"> uploaded document </span></a>
@@ -71,7 +66,7 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Date of update</dt>
           <dd class="nhsuk-summary-list__value">
-            <!--             {{ data.dateStep.year + "-" + data.dateStep.month + "-" + data.dateStep.day | date: ("app.date_formats.long_date" | translate) }} -->
+            {{ data.date | date: ("app.date_formats.long_date" | translate) }}
           </dd>
           <dd class="nhsuk-summary-list__actions">
             <a href="javascript:void(0)" (click)="onGotoStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date of update </span></a>

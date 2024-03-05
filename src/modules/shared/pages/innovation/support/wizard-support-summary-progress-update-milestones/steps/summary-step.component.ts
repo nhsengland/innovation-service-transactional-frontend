@@ -1,10 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
-import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { DescriptionStepInputType } from './description-step.types';
 import { SummaryStepInputType } from './summary-step.types';
 
 @Component({
@@ -29,11 +26,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepCo
       file: null,
       fileName: ''
     },
-    dateStep: {
-      day: '',
-      month: '',
-      year: ''
-    }
+    date: ''
   };
 
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<null>>();
@@ -52,6 +45,15 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepCo
     this.setPageTitle(this.title, { width: '2.thirds' });
 
     this.setPageStatus('READY');
+  }
+
+  downloadFile(file: File): void {
+    const a = document.createElement('a');
+    const objectUrl = URL.createObjectURL(file);
+    a.href = objectUrl;
+    a.download = file.name;
+    a.click();
+    URL.revokeObjectURL(objectUrl);
   }
 
   onPreviousStep(): void {

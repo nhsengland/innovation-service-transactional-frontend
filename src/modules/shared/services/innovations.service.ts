@@ -48,7 +48,9 @@ import {
   InnovationsListInDTO,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
-  getInnovationCollaboratorInfoDTO
+  getInnovationCollaboratorInfoDTO,
+  InnovationRulesDTO,
+  InnovationValidationRules
 } from './innovations.dtos';
 
 export type InnovationsTasksListFilterType = {
@@ -365,6 +367,27 @@ export class InnovationsService extends CoreService {
       .addPath('v1/:innovationId/shares')
       .setPathParams({ innovationId });
     return this.http.get<InnovationSharesListDTO>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  getInnovationRules(
+    innovationId: string,
+    operation: InnovationValidationRules,
+    inputData: {
+      [name: string]: string;
+    }
+  ): Observable<InnovationRulesDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/validate')
+      .setPathParams({ innovationId })
+      .setQueryParams({
+        operation,
+        ...inputData
+      });
+
+    return this.http.get<InnovationRulesDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );

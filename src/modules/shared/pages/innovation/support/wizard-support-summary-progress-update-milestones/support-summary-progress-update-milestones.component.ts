@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { DatesHelper } from '@app/base/helpers';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 import { SUPPORT_SUMMARY_MILESTONES_ARRAYS } from './constants';
@@ -78,7 +79,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         day: '',
         month: '',
         year: ''
-        //dateISOString: '',
       }
     };
   }
@@ -110,12 +110,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         title: `Add a description to your progress update`,
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent,
         data: {
-          selectedCategories: this.wizard.data.categoriesStep.categories,
-          otherCategory: this.wizard.data.categoriesStep.otherCategory,
-          selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories,
-          description: this.wizard.data.descriptionStep.description,
-          file: this.wizard.data.descriptionStep.file,
-          fileName: this.wizard.data.descriptionStep.fileName
+          selectedCategories: [],
+          otherCategory: null,
+          selectedSubcategories: [],
+          description: '',
+          file: null,
+          fileName: ''
         },
         outputs: {
           previousStepEvent: data =>
@@ -131,9 +131,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         title: `Select a date for this progress update`,
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent,
         data: {
-          day: this.wizard.data.dateStep.day,
-          month: this.wizard.data.dateStep.month,
-          year: this.wizard.data.dateStep.year
+          day: '',
+          month: '',
+          year: ''
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onDateStepOut, this.onDescriptionStepIn),
@@ -148,10 +148,19 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         title: `Check your progress update`,
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent,
         data: {
-          categoriesStep: this.wizard.data.categoriesStep,
-          subcategoriesStep: this.wizard.data.subcategoriesStep,
-          descriptionStep: this.wizard.data.descriptionStep,
-          dateStep: this.wizard.data.dateStep
+          categoriesStep: {
+            categories: [],
+            otherCategory: null
+          },
+          subcategoriesStep: {
+            subcategories: []
+          },
+          descriptionStep: {
+            description: '',
+            file: null,
+            fileName: ''
+          },
+          date: ''
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onDateStepIn),
@@ -271,7 +280,11 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       categoriesStep: this.wizard.data.categoriesStep,
       subcategoriesStep: this.wizard.data.subcategoriesStep,
       descriptionStep: this.wizard.data.descriptionStep,
-      dateStep: this.wizard.data.dateStep
+      date: DatesHelper.constructISODateString(
+        this.wizard.data.dateStep.year,
+        this.wizard.data.dateStep.month,
+        this.wizard.data.dateStep.day
+      )
     });
   }
 
