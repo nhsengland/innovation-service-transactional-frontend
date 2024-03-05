@@ -241,7 +241,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.EVENT.conditionalPlaceholder,
                 cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'Description is required'] }
+                validations: { isRequired: [true, 'howDidYouFindUsItems.EVENT.conditionalPlaceholder'] }
               })
             },
             {
@@ -252,7 +252,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.READING.conditionalPlaceholder,
                 cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'Description is required'] }
+                validations: { isRequired: [true, 'howDidYouFindUsItems.READING.conditionalPlaceholder'] }
               })
             },
             {
@@ -267,7 +267,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder,
                 cssOverride: 'nhsuk-u-margin-bottom-6',
-                validations: { isRequired: [true, 'Description is required'] }
+                validations: { isRequired: [true, 'howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder'] }
               })
             },
             {
@@ -285,7 +285,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
                 id: 'howDidYouFindUsOther',
                 dataType: 'text',
                 placeholder: howDidYouFindUsItems.OTHER.conditionalPlaceholder,
-                validations: { isRequired: [true, 'Description is required'] }
+                validations: { isRequired: [true, 'Explain where you heard about the service'] }
               })
             }
           ]
