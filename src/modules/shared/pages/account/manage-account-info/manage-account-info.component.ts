@@ -16,7 +16,7 @@ export class PageSharedAccountManageAccountInfoComponent extends CoreComponent i
     passwordResetAt: null | DateISOType;
   };
 
-  MFAInfo: MFAInfoDTO = { type: 'none' };
+  MFAInfo: MFAInfoDTO | null = null;
 
   isInnovator: boolean = this.stores.authentication.isInnovatorType();
 

@@ -8,7 +8,9 @@
     </div>
   </div>
 
-  <app-account-mfa-list [MFAInfo]="MFAInfo" />
+  <ng-container *ngIf="MFAInfo">
+    <app-account-mfa-list [MFAInfo]="MFAInfo" />
+  </ng-container>
 
   <div *ngIf="isInnovator" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-full">
