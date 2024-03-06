@@ -1,5 +1,4 @@
 export type CategoriesStepInputType = {
-  userOrgAcronym: string;
   milestonesType: 'ONE_LEVEL' | 'TWO_LEVEL';
   categories: { name: string; description: string }[];
   otherCategory: string | null;

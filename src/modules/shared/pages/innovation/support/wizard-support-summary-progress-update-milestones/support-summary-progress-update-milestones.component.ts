@@ -90,13 +90,13 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   }
 
   ngOnInit(): void {
+    // Set wizard steps
     this.wizard.addStep(
       new WizardStepModel<CategoriesStepInputType, CategoriesStepOutputType>({
         id: 'categoriesStep',
         title: 'Add a progress update',
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent,
         data: {
-          userOrgAcronym: this.userOrgAcronym,
           milestonesType: this.milestonesType,
           categories: this.getOrgCategories(),
           otherCategory: null,
@@ -205,7 +205,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   // Steps mappings.
   onCategoriesStepIn(): void {
     this.wizard.setStepData<CategoriesStepInputType>('categoriesStep', {
-      userOrgAcronym: this.userOrgAcronym,
       milestonesType: this.milestonesType,
       categories: this.getOrgCategories(),
       otherCategory: this.wizard.data.categoriesStep.otherCategory,
@@ -214,6 +213,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   }
 
   onCategoriesStepOut(stepData: WizardStepEventType<CategoriesStepOutputType>): void {
+    // If two level milestones and the accessor selected a different category, clean selected subcategories
     if (
       this.milestonesType === 'TWO_LEVEL' &&
       stepData.data.categories[0].name !== this.wizard.data.categoriesStep.categories[0]?.name
@@ -226,6 +226,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       otherCategory: stepData.data.otherCategory
     };
 
+    // If two level milestones, check if selected category has subcategories and if we need to add the subcategory step
     if (this.milestonesType === 'TWO_LEVEL') {
       this.manageSubcategoriesStep();
     }
@@ -233,7 +234,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
   onSubcategoriesStepIn(): void {
     this.wizard.setStepData<SubcategoriesStepInputType>('subcategoriesStep', {
-      userOrgAcronym: this.userOrgAcronym,
       subcategories: this.getCategorySubcategories(),
       selectedCategories: this.wizard.data.categoriesStep.categories,
       selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories
@@ -342,18 +342,19 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         return;
     }
 
-    const stepNumber = this.wizard.steps.findIndex(step => step.id === stepId) + 1;
+    const nextStepNumber = this.wizard.steps.findIndex(step => step.id === stepId) + 1;
 
-    if (stepNumber === undefined) {
+    if (nextStepNumber === undefined) {
       return;
     }
 
-    this.wizard.gotoStep(stepNumber);
+    this.wizard.gotoStep(nextStepNumber);
   }
 
   manageSubcategoriesStep(): void {
     const categorySubcategories = this.getCategorySubcategories();
 
+    // If selected category has subcategories, add subcategory step as second step, otherwise remove subcategory step
     if (categorySubcategories.length) {
       this.wizard.addStep(
         new WizardStepModel<SubcategoriesStepInputType, SubcategoriesStepOutputType>({
@@ -361,7 +362,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
           title: '',
           component: WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent,
           data: {
-            userOrgAcronym: this.userOrgAcronym,
             subcategories: categorySubcategories,
             selectedCategories: this.wizard.data.categoriesStep.categories,
             selectedSubcategories: this.wizard.data.subcategoriesStep.subcategories
@@ -390,15 +390,18 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       )
     };
 
+    // Get the selected categories name's
     const categories = this.wizard.data.categoriesStep.categories
       .filter(category => category.name !== 'OTHER')
       .map(category => category.name);
 
+    // If other category was selected, push the given name to categories
     const otherCategory = this.wizard.data.categoriesStep.otherCategory;
     if (otherCategory) {
       categories.push(otherCategory);
     }
 
+    // Create the body for the request according to milestones type
     let body: CreateSupportSummaryProgressUpdateType =
       this.milestonesType === 'ONE_LEVEL'
         ? { ...initialData, categories }
@@ -408,6 +411,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
             subCategories: this.wizard.data.subcategoriesStep.subcategories.map(subcategory => subcategory.name)
           };
 
+    // If a file was provided, upload it and create a support summary progress update, otherwise, only create a support summary progress update
     const file = this.wizard.data.descriptionStep.file;
     if (file) {
       const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };

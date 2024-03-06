@@ -4,7 +4,6 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { SUPPORT_SUMMARY_MILESTONES } from '../constants';
 
 import { SubcategoriesStepInputType, SubcategoriesStepOutputType } from './subcategories-step.types';
 
@@ -18,7 +17,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
 {
   @Input() title = '';
   @Input() data: SubcategoriesStepInputType = {
-    userOrgAcronym: '',
     subcategories: [],
     selectedCategories: [],
     selectedSubcategories: []
@@ -46,8 +44,8 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
 
   ngOnInit(): void {
     this.title = `You have selected the ${this.data.selectedCategories[0].name} category`;
-    this.setPageTitle(this.title, { width: '2.thirds' });
 
+    // Add each subcategory as an option to select on the form
     this.subcategoriesItems.push(
       { value: 'Select one or more subcategories', label: 'HEADING' },
       ...this.data.subcategories.map(subcategory => ({
@@ -57,10 +55,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
       }))
     );
 
+    // Select the subcategories previously selected by the user
     this.data.selectedSubcategories.forEach(item => {
       (this.form.get('subcategories') as FormArray).push(new FormControl<string>(item.name));
     });
 
+    this.setPageTitle(this.title, { width: '2.thirds' });
     this.setPageStatus('READY');
   }
 
@@ -69,9 +69,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
       return {
         name: subcategoryName,
         description:
-          SUPPORT_SUMMARY_MILESTONES[this.data.userOrgAcronym]
-            ?.find(category => category.name === this.data.selectedCategories[0].name)
-            ?.subcategories?.find(subcategory => subcategory.name === subcategoryName)?.description || ''
+          this.data.subcategories.find(subcategory => subcategory.name === subcategoryName)?.description || ''
       };
     });
 

@@ -58,8 +58,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   }
 
   ngOnInit(): void {
-    this.setPageTitle(this.title, { width: '2.thirds' });
-
+    // Set the date previously given by the user
     this.form
       .get('date')
       ?.get('day')
@@ -73,6 +72,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
       ?.get('year')
       ?.setValue(this.data.year || this.dateNowISOString.split('-')[0]);
 
+    this.setPageTitle(this.title, { width: '2.thirds' });
     this.setPageStatus('READY');
   }
 
@@ -89,12 +89,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   }
 
   onNextStep(): void {
-    this.resetAlert();
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
+
+    this.resetAlert();
 
     const dateString = `${this.form.value.date?.year!}-${this.form.value.date?.month!}-${this.form.value.date?.day!}`;
 
@@ -104,6 +104,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
       status: this.innovation.support?.status!
     };
 
+    // Check if organisation was engaging with the innovation on the date provided and if the date is not in the future
     this.innovationsService
       .getInnovationRules(this.innovation.id, InnovationValidationRules.checkIfSupportStatusAtDate, data)
       .subscribe({
@@ -121,11 +122,13 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
               ],
               width: '2.thirds'
             });
+
             this.form.get('date')?.setErrors({
               customError: true,
               message: 'The date provided must be during the time your organisation was engaging with this innovation'
             });
             this.form.markAllAsTouched();
+
             return;
           }
           this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
@@ -136,6 +139,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
               itemsList: [{ title: 'The date must be in the past or today' }],
               width: '2.thirds'
             });
+
             this.form.get('date')?.setErrors({ customError: true, message: 'The date must be in the past or today' });
             this.form.markAllAsTouched();
           } else {

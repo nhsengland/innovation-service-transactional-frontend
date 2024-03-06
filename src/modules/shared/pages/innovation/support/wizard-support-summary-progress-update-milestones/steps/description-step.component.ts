@@ -53,12 +53,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionSt
   }
 
   ngOnInit(): void {
-    this.setPageTitle(this.title, { width: '2.thirds' });
-
+    // Set the answers previously given by the user
     this.form.get('description')?.setValue(this.data.description);
     this.form.get('file')?.setValue(this.data.file);
     this.form.get('fileName')?.setValue(this.data.fileName);
 
+    this.setPageTitle(this.title, { width: '2.thirds' });
     this.setPageStatus('READY');
   }
 

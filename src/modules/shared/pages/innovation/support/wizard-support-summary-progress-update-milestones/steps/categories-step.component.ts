@@ -4,7 +4,6 @@ import { FormArray, FormControl } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
-import { SUPPORT_SUMMARY_MILESTONES } from '../constants';
 
 import { CategoriesStepInputType, CategoriesStepOutputType } from './categories-step.types';
 
@@ -18,7 +17,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
 {
   @Input() title = '';
   @Input() data: CategoriesStepInputType = {
-    userOrgAcronym: '',
     milestonesType: 'ONE_LEVEL',
     categories: [],
     otherCategory: null,
@@ -45,6 +43,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
   }
 
   ngOnInit(): void {
+    // Add each category as an option to select on the form
     this.categoriesItems.push(
       ...this.data.categories.map(category => ({
         value: category.name,
@@ -63,6 +62,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
       }
     );
 
+    // If one level milestones, use checkboxes (multiple selections), otherwise use radio buttons (single selection)
     if (this.data.milestonesType === 'ONE_LEVEL') {
       this.form.addControl(
         'oneLevelMilestoneCategories',
@@ -71,6 +71,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
 
       this.categoriesItems.unshift({ value: 'Select one or more progress categories', label: 'HEADING' });
 
+      // Select the categories previously selected by the user
       this.data.selectedCategories.forEach(item => {
         (this.form.get('oneLevelMilestoneCategories') as FormArray).push(new FormControl<string>(item.name));
       });
@@ -80,20 +81,22 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
         new FormControl<null | string>(null, [CustomValidators.required('Select one progress category')])
       );
 
+      // Select the category previously selected by the user
       if (this.data.selectedCategories[0]) {
         this.form.get('twoLevelMilestoneCategory')?.setValue(this.data.selectedCategories[0].name);
       }
     }
 
+    // Set the other category input text field with text previously given by the user
     this.form.get('otherCategory')?.setValue(this.data.otherCategory);
 
     this.setPageTitle(this.title, { width: '2.thirds' });
-
     this.setPageStatus('READY');
   }
 
   prepareOutputData(): CategoriesStepOutputType {
     let categories: string[] = [];
+
     if (this.data.milestonesType === 'ONE_LEVEL') {
       categories = [
         ...(this.form.value.oneLevelMilestoneCategories ? this.form.value.oneLevelMilestoneCategories : [])
@@ -105,9 +108,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
     const categoriesWithDescription = (categories ?? []).map(categoryName => {
       return {
         name: categoryName,
-        description:
-          SUPPORT_SUMMARY_MILESTONES[this.data.userOrgAcronym]?.find(category => category.name === categoryName)
-            ?.description || ''
+        description: this.data.categories.find(category => category.name === categoryName)?.description || ''
       };
     });
 
