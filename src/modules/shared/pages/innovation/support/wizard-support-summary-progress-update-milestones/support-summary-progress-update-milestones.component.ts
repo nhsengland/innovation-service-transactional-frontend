@@ -4,8 +4,11 @@ import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { CreateSupportSummaryProgressUpdateType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { omit } from 'lodash';
+import { switchMap } from 'rxjs/operators';
 import { SUPPORT_SUMMARY_MILESTONES } from './constants';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './steps/categories-step.component';
 import { CategoriesStepInputType, CategoriesStepOutputType } from './steps/categories-step.types';
@@ -51,7 +54,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
   wizard = new WizardModel<MilestoneData>({});
 
-  constructor(private innovationsService: InnovationsService) {
+  constructor(
+    private innovationsService: InnovationsService,
+    private fileUploadService: FileUploadService
+  ) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -373,17 +379,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   }
 
   onSubmitWizard(): void {
+    this.setPageStatus('LOADING');
+
     const initialData = {
       description: this.wizard.data.descriptionStep.description,
-      /* document: {
-        name: this.wizard.data.descriptionStep.fileName
-                file: {
-          id: this.wizard.data.descriptionStep.file?.id,
-          name: this.wizard.data.descriptionStep.file?.name,
-          size: this.wizard.data.descriptionStep.file?.size,
-          extension: this.wizard.data.descriptionStep.file?.extension
-        } 
-      },*/
       createdAt: new Date(
         +this.wizard.data.dateStep.year,
         +this.wizard.data.dateStep.month - 1,
@@ -400,7 +399,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       categories.push(otherCategory);
     }
 
-    const requestData: CreateSupportSummaryProgressUpdateType =
+    let body: CreateSupportSummaryProgressUpdateType =
       this.milestonesType === 'ONE_LEVEL'
         ? { ...initialData, categories }
         : {
@@ -409,18 +408,53 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
             subCategories: this.wizard.data.subcategoriesStep.subcategories.map(subcategory => subcategory.name)
           };
 
-    this.innovationsService.createSupportSummaryProgressUpdate(this.innovation.id, requestData).subscribe({
-      next: () => {
-        this.setRedirectAlertSuccess('Your progress update has been added to the support summary', {
-          message: 'The innovator has been notified about your update.'
+    const file = this.wizard.data.descriptionStep.file;
+    if (file) {
+      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+
+      this.fileUploadService
+        .uploadFile(httpUploadBody, file)
+        .pipe(
+          switchMap(response => {
+            const fileData = omit(response, 'url');
+
+            body = {
+              ...body,
+              document: {
+                name: this.wizard.data.descriptionStep.fileName,
+                file: fileData
+              }
+            };
+
+            return this.innovationsService.createSupportSummaryProgressUpdate(this.innovation.id, body);
+          })
+        )
+        .subscribe({
+          next: () => this.onSubmitWizardSuccess(),
+          error: () => this.onSubmitWizardError()
         });
-        this.redirectToSupportSummaryList();
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
+    } else {
+      this.createSupportSummaryProgressUpdate(body);
+    }
+  }
+
+  createSupportSummaryProgressUpdate(body: CreateSupportSummaryProgressUpdateType): void {
+    this.innovationsService.createSupportSummaryProgressUpdate(this.innovation.id, body).subscribe({
+      next: () => this.onSubmitWizardSuccess(),
+      error: () => this.onSubmitWizardError()
     });
+  }
+
+  onSubmitWizardSuccess(): void {
+    this.setRedirectAlertSuccess('Your progress update has been added to the support summary', {
+      message: 'The innovator has been notified about your update.'
+    });
+    this.redirectToSupportSummaryList();
+  }
+
+  onSubmitWizardError(): void {
+    this.setAlertUnknownError();
+    this.setPageStatus('READY');
   }
 
   private redirectToSupportSummaryList(): void {
