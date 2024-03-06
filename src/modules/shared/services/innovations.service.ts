@@ -290,9 +290,10 @@ export class InnovationsService extends CoreService {
       assignedToMe: boolean;
       closedByMyOrganisation: boolean;
       diseasesAndConditions: string[];
-      dateFilters?: { key: 'submittedAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
-      engagingOrganisations?: string[];
-      engagingUnits?: string[];
+      dateFilters: { key: 'submittedAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
+      engagingOrganisations: string[];
+      engagingUnits: string[];
+      latestWorkedByMe: boolean;
       locations: catalogOfficeLocation[];
       suggestedOnly: boolean;
       supportStatuses: InnovationSupportStatusEnum[];
