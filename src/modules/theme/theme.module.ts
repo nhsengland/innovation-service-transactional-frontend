@@ -40,6 +40,8 @@ import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/inn
 import { SelectComponent } from './components/search/select.component';
 import { FormsModule } from '@angular/forms';
 import { HeaderArchivedBannerComponent } from './components/header/header-archived-banner.component';
+import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component';
+import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
 
 @NgModule({
   imports: [
@@ -78,6 +80,7 @@ import { HeaderArchivedBannerComponent } from './components/header/header-archiv
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
+    OnOffTagComponent,
     StatisticsCardsComponent,
 
     InnovationRecordExportComponent,
@@ -91,7 +94,8 @@ import { HeaderArchivedBannerComponent } from './components/header/header-archiv
 
     SelectComponent,
 
-    HeaderArchivedBannerComponent
+    HeaderArchivedBannerComponent,
+    AccountMFAListComponent
   ],
   providers: [],
   exports: [
@@ -122,6 +126,7 @@ import { HeaderArchivedBannerComponent } from './components/header/header-archiv
     PaginationComponent,
     SpinnerComponent,
     TagComponent,
+    OnOffTagComponent,
     StatisticsCardsComponent,
 
     ChipsFilterComponent,
@@ -135,7 +140,9 @@ import { HeaderArchivedBannerComponent } from './components/header/header-archiv
 
     InnovationAdvancedSearchCardComponent,
 
-    HeaderArchivedBannerComponent
+    HeaderArchivedBannerComponent,
+
+    AccountMFAListComponent
   ]
 })
 export class ThemeModule {}

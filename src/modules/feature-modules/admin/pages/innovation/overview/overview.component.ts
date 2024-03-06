@@ -32,6 +32,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     status: InnovationSupportStatusEnum;
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
+  isArchived: boolean = false;
+
   innovationSummary: { label: string; value: null | string }[] = [];
 
   innovatorDetails: { label: string; value: null | string }[] = [];
@@ -55,6 +57,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.innovation = this.stores.context.getInnovation();
+    this.isArchived = this.innovation.status === 'ARCHIVED';
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }

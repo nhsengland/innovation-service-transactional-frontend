@@ -107,6 +107,8 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStep
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/description-step.component';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/date-step.component';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/summary-step.component';
+import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.component';
+import { PageSharedAccountManageAccountInfoComponent } from './pages/account/manage-account-info/manage-account-info.component';
 
 @NgModule({
   imports: [
@@ -128,6 +130,8 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepCompon
     PageAccountEmailNotificationsListComponent,
     PageAccountManageDetailsEditComponent,
     PageAccountManageDetailsInfoComponent,
+    PageSharedAccountManageAccountInfoComponent,
+    PageAccountMFAEditComponent,
     // // Tasks.
     PageTasksAdvancedSearchComponent,
     // // Error.
