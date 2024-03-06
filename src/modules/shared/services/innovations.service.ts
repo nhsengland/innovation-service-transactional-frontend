@@ -288,13 +288,15 @@ export class InnovationsService extends CoreService {
     F extends Partial<{
       search: string;
       assignedToMe: boolean;
-      engagingOrganisations?: string[];
-      locations: catalogOfficeLocation[];
-      supportStatus: InnovationSupportStatusEnum[];
-      suggestedOnly: boolean;
+      closedByMyOrganisation: boolean;
       diseasesAndConditions: string[];
       dateFilters?: { key: 'submittedAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
-      closedByMyOrganisation: boolean;
+      engagingOrganisations?: string[];
+      engagingUnits?: string[];
+      locations: catalogOfficeLocation[];
+      suggestedOnly: boolean;
+      supportStatuses: InnovationSupportStatusEnum[];
+      supportUnit: string;
     }>,
     // selects
     // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)

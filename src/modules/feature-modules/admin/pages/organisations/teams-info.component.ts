@@ -6,11 +6,10 @@ import { UserRoleEnum } from '@app/base/enums';
 import { APIQueryParamsType } from '@app/base/types';
 
 import { TableModel } from '@app/base/models';
-import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { ObservedValueOf, forkJoin } from 'rxjs';
+import { ObservedValueOf } from 'rxjs';
 import { OrganisationDataResolver } from '../../resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
 
@@ -41,7 +40,10 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
   inactiveUsers: { id: string; name: string; email: string }[] = [];
 
   innovationsLoading: boolean = false;
-  innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({ pageSize: 5 });
+  innovationsList = new TableModel<
+    { id: string; name: string; support: { status: InnovationSupportStatusEnum } | null },
+    { supportUnit: string; supportStatuses: InnovationSupportStatusEnum[] }
+  >({ pageSize: 5 });
 
   constructor(
     private innovationsService: InnovationsService,
@@ -79,7 +81,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
           status: { label: 'Status', orderable: false, align: 'right' }
         })
         .setFilters({
-          engagingOrganisationUnits: [this.unit.id],
+          supportUnit: this.unit.id,
           supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING]
         });
     } else {
@@ -88,13 +90,8 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    forkJoin([
-      this.usersService.getUsersList({ queryParams: this.usersListFilters }),
-      ...(this.isUnitTeamPage
-        ? [this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() })]
-        : [])
-    ]).subscribe({
-      next: ([users, innovations]) => {
+    this.usersService.getUsersList({ queryParams: this.usersListFilters }).subscribe({
+      next: users => {
         this.activeUsers = users.data
           .filter(item => item.isActive)
           .map(item => ({ id: item.id, name: item.name, email: item.email }));
@@ -102,7 +99,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
           .filter(item => !item.isActive)
           .map(item => ({ id: item.id, name: item.name, email: item.email }));
         if (this.isUnitTeamPage) {
-          this.innovationsList.setData(innovations.data, innovations.count);
+          this.getInnovationsList();
         }
 
         this.setPageStatus('READY');
@@ -118,17 +115,25 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
     this.innovationsLoading = true;
     this.innovationsList.setPage(event.pageNumber);
 
-    this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }).subscribe({
-      next: innovations => {
-        this.innovationsList.setData(innovations.data, innovations.count);
-      },
-      complete: () => {
-        this.innovationsLoading = false;
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-      }
-    });
+    this.getInnovationsList();
+  }
+
+  getInnovationsList() {
+    const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
+
+    this.innovationsService
+      .getInnovationsList2(['id', 'name', 'support.status'], filters, { take, skip, order: { name: 'ASC' } })
+      .subscribe({
+        next: innovations => {
+          this.innovationsList.setData(innovations.data, innovations.count);
+        },
+        complete: () => {
+          this.innovationsLoading = false;
+        },
+        error: () => {
+          this.setPageStatus('ERROR');
+          this.setAlertUnknownError();
+        }
+      });
   }
 }
