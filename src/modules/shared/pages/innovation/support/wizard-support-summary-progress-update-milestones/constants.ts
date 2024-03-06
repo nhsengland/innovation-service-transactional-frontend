@@ -10,52 +10,6 @@ type Milestones = {
 };
 
 export const SUPPORT_SUMMARY_MILESTONES: Milestones = {
-  HIN: [
-    {
-      name: 'Universal',
-      description: 'Select a sub category on the next page',
-      subcategories: [
-        {
-          name: 'Review and respond',
-          description:
-            "Acknowledge the innovator's enquiry and respond. Review the completed engagement form or innovation record and undertake an internal review of the information provided."
-        },
-        {
-          name: 'Assess and triage',
-          description:
-            "A virtual or face to face meeting with the innovator or company to assess an innovation's potential or value proposition. To help identify any areas that require development in order to access the NHS marketplace."
-        },
-        {
-          name: 'Advise, guide and signpost',
-          description:
-            'Provide tailored advice and guidance based on the themes and topics identified during assess and triage.'
-        },
-        {
-          name: 'Develop health and care understanding',
-          description:
-            'Provide tailored advice and guidance based on the themes and topics identified during assess and triage.'
-        }
-      ]
-    },
-    {
-      name: 'Distinctive',
-      description: 'Each HIN has its own unique service offerings'
-    },
-    {
-      name: 'Teste',
-      description: 'test description',
-      subcategories: [
-        {
-          name: 'x',
-          description: 'y'
-        },
-        {
-          name: 'w',
-          description: 'z'
-        }
-      ]
-    }
-  ],
   'NHS-SC': [
     {
       name: "Procurement portal advice given with 'Find a Tender' service",
