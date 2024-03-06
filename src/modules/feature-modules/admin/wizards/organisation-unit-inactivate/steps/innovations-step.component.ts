@@ -9,7 +9,6 @@ import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationUnitStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -35,7 +34,10 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<InnovationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<InnovationsStepOutputType>>();
 
-  innovationsList = new TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>({
+  innovationsList = new TableModel<
+    { id: string; name: string; support: { status: InnovationSupportStatusEnum } | null },
+    { supportUnit: string; supportStatuses: InnovationSupportStatusEnum[] }
+  >({
     pageSize: 10
   });
   innovationStatistics: { status: InnovationSupportStatusEnum; count: number }[] = [];
@@ -64,7 +66,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent
       })
       .setFilters({
         supportStatuses: [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING],
-        engagingOrganisationUnits: [this.data.organisationUnit.id]
+        supportUnit: this.data.organisationUnit.id
       });
 
     this.form.get('agreeInnovations')!.setValue(this.data.agreeInnovations);
@@ -73,8 +75,13 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent
   }
 
   getUsersList(column?: string): void {
+    const { take, skip, filters } = this.innovationsList.getAPIQueryParams();
     forkJoin([
-      this.innovationsService.getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams() }),
+      this.innovationsService.getInnovationsList2(['id', 'name', 'support.status'], filters, {
+        take,
+        skip,
+        order: { name: 'ASC' }
+      }),
       this.statisticsService.getOrganisationUnitStatistics(this.data.organisationUnit.id, {
         statistics: [OrganisationUnitStatisticsEnum.INNOVATIONS_PER_UNIT]
       })
@@ -147,18 +154,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent
     }
   }
 
-  getUnitStatusSupport(
-    supports?: {
-      id: string;
-      status: InnovationSupportStatusEnum;
-      organisation: {
-        id: string;
-        unit: {
-          id: string;
-        };
-      };
-    }[]
-  ): InnovationSupportStatusEnum {
-    return supports && supports.length > 0 ? supports[0].status : InnovationSupportStatusEnum.WAITING;
+  getUnitStatusSupport(support: { status: InnovationSupportStatusEnum } | null): InnovationSupportStatusEnum {
+    return support?.status ?? InnovationSupportStatusEnum.WAITING;
   }
 }
