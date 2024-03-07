@@ -23,6 +23,7 @@ import { FormInputAutocompleteArrayComponent } from './components/input-autocomp
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
 import { FormFileUploadDescriptiveComponent } from './components/file-upload-descriptive.component';
+import { FormDateInputComponent } from './components/date-input.component';
 import { FormSelectComponent } from './components/select.component';
 import { SelectComponent } from '@modules/theme/components/search/select.component';
 
@@ -53,6 +54,7 @@ import { SelectComponent } from '@modules/theme/components/search/select.compone
     FormRadioGroupComponent,
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
+    FormDateInputComponent,
     FormSelectComponent
   ],
   exports: [
@@ -75,6 +77,7 @@ import { SelectComponent } from '@modules/theme/components/search/select.compone
     FormRadioGroupComponent,
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
+    FormDateInputComponent,
     FormSelectComponent
   ]
 })
