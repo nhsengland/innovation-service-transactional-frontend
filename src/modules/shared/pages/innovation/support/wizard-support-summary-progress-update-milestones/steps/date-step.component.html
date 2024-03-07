@@ -6,7 +6,7 @@
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
         <theme-form-date-input title="Enter date" [pageUniqueField]="false"></theme-form-date-input>
 
-        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="!saveButton.isActive">{{ saveButton.label }}</button>
       </form>
     </div>
   </div>

@@ -34,6 +34,8 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
 
   dateNowISOString = new Date().toISOString().slice(0, 10);
 
+  saveButton = { isActive: true, label: 'Continue' };
+
   form = new FormGroup(
     {
       date: new FormGroup({
@@ -89,8 +91,11 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   }
 
   onNextStep(): void {
+    this.saveButton = { isActive: false, label: 'Saving...' };
+
     if (!this.form.valid) {
       this.form.markAllAsTouched();
+      this.saveButton = { isActive: true, label: 'Continue' };
       return;
     }
 
@@ -129,6 +134,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
             });
             this.form.markAllAsTouched();
 
+            this.saveButton = { isActive: true, label: 'Continue' };
             return;
           }
           this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
@@ -145,6 +151,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
           } else {
             this.setAlertUnknownError();
           }
+          this.saveButton = { isActive: true, label: 'Continue' };
           return;
         }
       });
