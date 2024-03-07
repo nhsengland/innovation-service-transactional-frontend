@@ -56,18 +56,13 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
 
   ngOnInit(): void {
     // Set the date previously given by the user
-    this.form
-      .get('date')
-      ?.get('day')
-      ?.setValue(this.data.day || this.dateNowISOString.split('-')[2]);
-    this.form
-      .get('date')
-      ?.get('month')
-      ?.setValue(this.data.month || this.dateNowISOString.split('-')[1]);
-    this.form
-      .get('date')
-      ?.get('year')
-      ?.setValue(this.data.year || this.dateNowISOString.split('-')[0]);
+    this.form.setValue({
+      date: {
+        day: this.data.day || this.dateNowISOString.split('-')[2],
+        month: this.data.month || this.dateNowISOString.split('-')[1],
+        year: this.data.year || this.dateNowISOString.split('-')[0]
+      }
+    });
 
     this.setPageTitle(this.title, { width: '2.thirds' });
     this.setPageStatus('READY');
