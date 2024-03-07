@@ -286,7 +286,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       categoriesStep: this.wizard.data.categoriesStep,
       subcategoriesStep: this.wizard.data.subcategoriesStep,
       descriptionStep: this.wizard.data.descriptionStep,
-      date: DatesHelper.constructISODateString(
+      date: DatesHelper.getDateString(
         this.wizard.data.dateStep.year,
         this.wizard.data.dateStep.month,
         this.wizard.data.dateStep.day

@@ -42,7 +42,7 @@ export class DatesHelper {
     return 'between';
   }
 
-  static constructISODateString(year: string, month: string, day: string): string {
+  static getDateString(year: string, month: string, day: string): string {
     const dayString = ('0' + day).slice(-2);
     const monthString = ('0' + month).slice(-2);
 

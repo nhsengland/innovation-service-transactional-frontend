@@ -116,7 +116,7 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   checkValidDate(): boolean {
-    const currentDateString = DatesHelper.constructISODateString(
+    const currentDateString = DatesHelper.getDateString(
       this.formGroup.controls.year.value,
       this.formGroup.controls.month.value,
       this.formGroup.controls.day.value
