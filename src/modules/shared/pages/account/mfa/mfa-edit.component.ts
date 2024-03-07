@@ -6,7 +6,6 @@ import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } fro
 import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { combineLatest, forkJoin } from 'rxjs';
-import { error } from 'console';
 import { HttpErrorResponse } from '@angular/common/http';
 
 export type CurrentMFAModeType = 'phone' | 'email' | 'none';
@@ -123,13 +122,10 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
 
   onSubmitWizard() {
     const wizardData = this.wizard.runOutboundParsing() as { mfaInfo: MFAInfoDTO; turnOff: boolean };
-    console.log(wizardData.turnOff);
-    console.log(typeof wizardData.turnOff);
 
     this.formButton.isActive = false;
 
     if (this.wizardMode === 'turn-off' && wizardData.turnOff === false) {
-      console.log('cancel turnoff');
       this.redirectTo(this.manageAccountPageUrl);
       return;
     }

@@ -55,7 +55,7 @@ const turnOffItems = [
 
 const stepsLabels = {
   l1: {
-    label: 'Set uptwo-step verification',
+    label: 'Set up two-step verification',
     description:
       'Each time you log in we will send you a unique code to enter to add a layer of security to your account. You can choose to receive this code via email, text message or phone call. '
   },
