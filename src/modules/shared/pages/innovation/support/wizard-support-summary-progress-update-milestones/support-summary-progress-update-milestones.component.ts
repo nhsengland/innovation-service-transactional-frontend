@@ -196,9 +196,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     description: string;
   }[] {
     return (
-      SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].filter(
+      SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].find(
         org => org.name === this.wizard.data.categoriesStep.categories[0]?.name
-      )[0]?.subcategories ?? []
+      )?.subcategories ?? []
     );
   }
 
