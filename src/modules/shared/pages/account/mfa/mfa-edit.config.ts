@@ -18,7 +18,7 @@ type StepPayloadType = {
   userEmail: string;
   wizardMode: MFAWizardModeType;
   currentMFAMode: CurrentMFAModeType;
-  turnOff?: boolean;
+  turnOff?: 'YES' | 'NO';
   selectMethod?: 'EMAIL' | 'PHONE';
   confirmationEmail?: string;
   countryCode?: string;
@@ -47,15 +47,15 @@ const verificationMethodItems = [
 ];
 
 const turnOffItems = [
-  { value: 'true', label: 'Yes' },
-  { value: 'false', label: 'No' }
+  { value: 'YES', label: 'Yes' },
+  { value: 'NO', label: 'No' }
 ];
 
 // Steps labels
 
 const stepsLabels = {
   l1: {
-    label: 'Set two-step verification',
+    label: 'Set uptwo-step verification',
     description:
       'Each time you log in we will send you a unique code to enter to add a layer of security to your account. You can choose to receive this code via email, text message or phone call. '
   },
@@ -217,10 +217,13 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   };
 }
 
-function outboundParsing(data: StepPayloadType): MFAInfoDTO {
+function outboundParsing(data: StepPayloadType): { mfaInfo: MFAInfoDTO; turnOff: boolean } {
   const parsedPhone = `${data.countryCode} ${data.phoneNumber}`;
 
-  return data.phoneNumber
-    ? { type: 'phone', phoneNumber: parsedPhone }
-    : { type: data.confirmationEmail ? 'email' : 'none' };
+  return {
+    mfaInfo: data.phoneNumber
+      ? { type: 'phone', phoneNumber: parsedPhone }
+      : { type: data.confirmationEmail ? 'email' : 'none' },
+    turnOff: data.turnOff === 'YES' ? true : false ?? false
+  };
 }
