@@ -47,11 +47,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     { updateOn: 'blur' }
   );
 
-  configInputFile = {
-    acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
-    maxFileSize: 20 // In Mb.
-  };
-
   constructor(private innovationsService: InnovationsService) {
     super();
 
