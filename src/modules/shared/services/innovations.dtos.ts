@@ -23,6 +23,7 @@ import {
 } from '@modules/stores/innovation/innovation.enums';
 
 // Innovations.
+// TODO when we remove the old innovations list update this type to match the new one.
 export type InnovationsListFiltersType = {
   name?: null | string;
   mainCategories?: string[];
@@ -129,6 +130,9 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closedReason'
   | 'assessment.id'
+  | 'assessment.assignedTo'
+  | 'assessment.isExempt'
+  | 'assessment.updatedAt'
   | 'statistics.notifications'
   | 'statistics.tasks'
   | 'statistics.messages';
@@ -166,7 +170,7 @@ export type InnovationListNewFullDTO = {
     updatedBy: string | null;
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
-  assessment: { id: string } | null;
+  assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
