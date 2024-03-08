@@ -1,4 +1,3 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
@@ -40,56 +39,9 @@ export type InnovationsListFiltersType = Partial<{
   supportUnit: string;
 }>;
 
-export type InnovationsListInDTO = {
+export type InnovationsListDTO<T extends Partial<InnovationListFullDTO>> = {
   count: number;
-  data: {
-    id: string;
-    name: string;
-    description: null | string;
-    status: InnovationStatusEnum;
-    groupedStatus?: InnovationGroupedStatusEnum;
-    submittedAt: null | DateISOType;
-    updatedAt: null | DateISOType;
-    countryName: null | string;
-    postCode: null | string;
-    mainCategory: null | string;
-    otherMainCategoryDescription: null | string;
-    assessment?: null | {
-      id: string;
-      isExempted?: boolean;
-      createdAt: DateISOType;
-      finishedAt: null | DateISOType;
-      assignedTo: { name: string };
-      reassessmentCount: number;
-    };
-    statusUpdatedAt: null | DateISOType;
-    supports?: {
-      id: string;
-      status: InnovationSupportStatusEnum;
-      updatedAt: DateISOType;
-      organisation: {
-        id: string;
-        name: string;
-        acronym: null | string;
-        unit: {
-          id: string;
-          name: string;
-          acronym: string;
-          // Users only exists while a support is ENGAGING.
-          users?: { name: string; role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[];
-        };
-      };
-    }[];
-    notifications?: number;
-    statistics?: { messages: number; tasks: number };
-  }[];
-};
-export type InnovationsListDTO = {
-  count: number;
-  data: (InnovationsListInDTO['data'][0] & {
-    overdueStatus: null | string;
-    daysFromSubmittedAtToToday: null | number;
-  })[];
+  data: T[];
 };
 
 export type InnovationListSelectType =
@@ -130,7 +82,7 @@ export type InnovationListSelectType =
   | 'statistics.tasks'
   | 'statistics.messages';
 
-export type InnovationListNewFullDTO = {
+export type InnovationListFullDTO = {
   id: string;
   name: string;
   status: InnovationStatusEnum;

@@ -32,7 +32,7 @@ import {
   InnovationExportRequestInfoDTO,
   InnovationExportRequestsListDTO,
   InnovationInfoDTO,
-  InnovationListNewFullDTO,
+  InnovationListFullDTO,
   InnovationListSelectType,
   InnovationNeedsAssessmentInfoDTO,
   InnovationSharesListDTO,
@@ -182,7 +182,7 @@ export class InnovationsService extends CoreService {
     F extends InnovationsListFiltersType,
     // selects
     // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)
-    S extends KeysUnion<InnovationListNewFullDTO> extends infer U
+    S extends KeysUnion<InnovationListFullDTO> extends infer U
       ? U extends InnovationListSelectType
         ? U
         : never
@@ -191,13 +191,13 @@ export class InnovationsService extends CoreService {
     fields: S[] = ['id', 'name'] as S[],
     filters: F = {} as F,
     pagination: Paginated<S[]> = { take: 100, skip: 0 }
-  ): Observable<APIListResponse<InnovationListNewFullDTO, S>> {
+  ): Observable<APIListResponse<InnovationListFullDTO, S>> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams({
       fields,
       ...filters,
       ...pagination
     });
-    return this.http.get<APIListResponse<InnovationListNewFullDTO, S>>(url.buildUrl()).pipe(take(1));
+    return this.http.get<APIListResponse<InnovationListFullDTO, S>>(url.buildUrl()).pipe(take(1));
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {

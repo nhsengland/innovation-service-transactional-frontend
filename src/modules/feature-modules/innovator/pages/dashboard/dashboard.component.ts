@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
@@ -90,15 +90,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         catchError(() => of(null))
       )
     ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
-      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
         item => item.groupedStatus !== 'ARCHIVED'
       );
-      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
         item => item.groupedStatus !== 'ARCHIVED'
       );
       this.user.innovationsArchived = this.user.innovationsArchived = [
-        ...this.getInnovationsListInformation(innovationsListOwner),
-        ...this.getInnovationsListInformation(innovationsListCollaborator)
+        ...this.getInnovationsListInformation(innovationsListOwner.data),
+        ...this.getInnovationsListInformation(innovationsListCollaborator.data)
       ]
         .sort((a, b) => a.name.localeCompare(b.name))
         .filter(item => item.groupedStatus === 'ARCHIVED');
@@ -165,15 +165,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       )
       .subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
         this.innovationTransfers = innovationsTransfers;
-        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );
-        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );
         this.user.innovationsArchived = [
-          ...this.getInnovationsListInformation(innovationsListOwner),
-          ...this.getInnovationsListInformation(innovationsListCollaborator)
+          ...this.getInnovationsListInformation(innovationsListOwner.data),
+          ...this.getInnovationsListInformation(innovationsListCollaborator.data)
         ]
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(item => item.groupedStatus === 'ARCHIVED');
@@ -184,8 +184,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       });
   }
 
-  private buildDescriptionString(innovation: Pick<InnovationsListDTO['data'][0], 'statistics'>): string | null {
-    const { tasks, messages } = innovation.statistics!;
+  private buildDescriptionString(
+    statistics: Pick<InnovationListFullDTO['statistics'], 'messages' | 'tasks'>
+  ): string | null {
+    const { tasks, messages } = statistics;
 
     const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
     const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
@@ -203,14 +205,19 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     return description.length !== 0 ? `${description.join(', ')}.` : null;
   }
 
-  private getInnovationsListInformation(innovationList: {
-    data: Pick<InnovationsListDTO['data'][0], 'id' | 'name' | 'statistics' | 'groupedStatus'>[];
-  }) {
-    return innovationList.data.map(innovation => ({
+  private getInnovationsListInformation(
+    innovationList: {
+      id: string;
+      name: string;
+      statistics: Pick<InnovationListFullDTO['statistics'], 'messages' | 'tasks'>;
+      groupedStatus: keyof typeof InnovationGroupedStatusEnum;
+    }[]
+  ) {
+    return innovationList.map(innovation => ({
       id: innovation.id,
       name: innovation.name,
-      description: this.buildDescriptionString(innovation),
-      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+      description: this.buildDescriptionString(innovation.statistics),
+      groupedStatus: innovation.groupedStatus
     }));
   }
 }
