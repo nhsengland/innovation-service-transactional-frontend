@@ -153,7 +153,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.filtersModel.handleStateChanges();
 
-    let queryFields: Parameters<InnovationsService['getInnovationsList2']>[0] = [
+    let queryFields: Parameters<InnovationsService['getInnovationsList']>[0] = [
       'id',
       'name',
       'status',
@@ -191,7 +191,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     this.innovationsService
-      .getInnovationsList2(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
+      .getInnovationsList(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
       .subscribe(response => {
         this.innovationsCount = response.count;
         this.innovationCardsData = [];

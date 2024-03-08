@@ -6,17 +6,17 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { DatesHelper } from '@app/base/helpers';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import {
   GetInnovationCollaboratorInvitesDTO,
   GetInnovationTransfersDTO,
   InnovatorService
 } from '../../services/innovator.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -71,24 +71,16 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin([
-      this.innovationsService
-        .getInnovationsList({
-          fields: ['groupedStatus', 'statistics'],
-          queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0, order: { name: 'ASC' } }
-        })
-        .pipe(
-          map(response => response),
-          catchError(() => of(null))
-        ),
-      this.innovationsService
-        .getInnovationsList({
-          fields: ['groupedStatus', 'statistics'],
-          queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0, order: { name: 'ASC' } }
-        })
-        .pipe(
-          map(response => response),
-          catchError(() => of(null))
-        ),
+      this.innovationsService.getInnovationsList(
+        ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+        { hasAccessThrough: ['owner'] },
+        { take: 100, skip: 0, order: { name: 'ASC' } }
+      ),
+      this.innovationsService.getInnovationsList(
+        ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+        { hasAccessThrough: ['collaborator'] },
+        { take: 100, skip: 0, order: { name: 'ASC' } }
+      ),
       this.innovatorService.getInnovationTransfers(true).pipe(
         map(response => response),
         catchError(() => of(null))
@@ -98,21 +90,15 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         catchError(() => of(null))
       )
     ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
-      if (!innovationsListOwner || !innovationsListCollaborator) {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-        return;
-      }
-
-      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
         item => item.groupedStatus !== 'ARCHIVED'
       );
-      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
         item => item.groupedStatus !== 'ARCHIVED'
       );
       this.user.innovationsArchived = this.user.innovationsArchived = [
-        ...this.getInnovationsListInformation(innovationsListOwner),
-        ...this.getInnovationsListInformation(innovationsListCollaborator)
+        ...this.getInnovationsListInformation(innovationsListOwner.data),
+        ...this.getInnovationsListInformation(innovationsListCollaborator.data)
       ]
         .sort((a, b) => a.name.localeCompare(b.name))
         .filter(item => item.groupedStatus === 'ARCHIVED');
@@ -164,28 +150,30 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
             this.innovatorService.getInnovationTransfers(true),
 
-            this.innovationsService.getInnovationsList({
-              fields: ['groupedStatus', 'statistics'],
-              queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 }
-            }),
-            this.innovationsService.getInnovationsList({
-              fields: ['groupedStatus', 'statistics'],
-              queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 }
-            })
+            this.innovationsService.getInnovationsList(
+              ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+              { hasAccessThrough: ['owner'] },
+              { take: 100, skip: 0, order: { name: 'ASC' } }
+            ),
+            this.innovationsService.getInnovationsList(
+              ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+              { hasAccessThrough: ['collaborator'] },
+              { take: 100, skip: 0, order: { name: 'ASC' } }
+            )
           ])
         )
       )
       .subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
         this.innovationTransfers = innovationsTransfers;
-        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
+        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );
-        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator).filter(
+        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );
         this.user.innovationsArchived = [
-          ...this.getInnovationsListInformation(innovationsListOwner),
-          ...this.getInnovationsListInformation(innovationsListCollaborator)
+          ...this.getInnovationsListInformation(innovationsListOwner.data),
+          ...this.getInnovationsListInformation(innovationsListCollaborator.data)
         ]
           .sort((a, b) => a.name.localeCompare(b.name))
           .filter(item => item.groupedStatus === 'ARCHIVED');
@@ -196,8 +184,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       });
   }
 
-  private buildDescriptionString(innovation: InnovationsListDTO['data'][0]): string | null {
-    const { tasks, messages } = innovation.statistics!;
+  private buildDescriptionString(
+    statistics: Pick<InnovationListFullDTO['statistics'], 'messages' | 'tasks'>
+  ): string | null {
+    const { tasks, messages } = statistics;
 
     const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
     const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
@@ -215,12 +205,19 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     return description.length !== 0 ? `${description.join(', ')}.` : null;
   }
 
-  private getInnovationsListInformation(innovationList: InnovationsListDTO) {
-    return innovationList.data.map(innovation => ({
+  private getInnovationsListInformation(
+    innovationList: {
+      id: string;
+      name: string;
+      statistics: Pick<InnovationListFullDTO['statistics'], 'messages' | 'tasks'>;
+      groupedStatus: keyof typeof InnovationGroupedStatusEnum;
+    }[]
+  ) {
+    return innovationList.map(innovation => ({
       id: innovation.id,
       name: innovation.name,
-      description: this.buildDescriptionString(innovation),
-      groupedStatus: innovation.groupedStatus ?? InnovationGroupedStatusEnum.RECORD_NOT_SHARED // default never happens
+      description: this.buildDescriptionString(innovation.statistics),
+      groupedStatus: innovation.groupedStatus
     }));
   }
 }
