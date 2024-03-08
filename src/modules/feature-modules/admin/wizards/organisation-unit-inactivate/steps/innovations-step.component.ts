@@ -77,7 +77,7 @@ export class WizardOrganisationUnitInactivateInnovationsStepComponent
   getUsersList(column?: string): void {
     const { take, skip, filters } = this.innovationsList.getAPIQueryParams();
     forkJoin([
-      this.innovationsService.getInnovationsList2(['id', 'name', 'support.status'], filters, {
+      this.innovationsService.getInnovationsList(['id', 'name', 'support.status'], filters, {
         take,
         skip,
         order: { name: 'ASC' }

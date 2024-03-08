@@ -244,7 +244,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     const { take, skip, filters, order } = this.innovationsList.getAPIQueryParams();
 
     this.innovationsService
-      .getInnovationsList2(
+      .getInnovationsList(
         [
           'id',
           'name',
@@ -322,8 +322,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     const endDate = this.getDateByControlName('submittedEndDate') ?? undefined;
 
     this.innovationsList.setFilters({
-      name: this.form.get('search')?.value,
-      mainCategories: this.form.get('mainCategories')?.value,
+      search: this.form.get('search')?.value ?? undefined,
       locations: this.form.get('locations')?.value,
       groupedStatuses:
         groupedStatusesFilter && groupedStatusesFilter.length > 0 ? groupedStatusesFilter : this.availableGroupedStatus,

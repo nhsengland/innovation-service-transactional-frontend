@@ -122,7 +122,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
 
     this.innovationsService
-      .getInnovationsList2(['id', 'name', 'support.status'], filters, { take, skip, order: { name: 'ASC' } })
+      .getInnovationsList(['id', 'name', 'support.status'], filters, { take, skip, order: { name: 'ASC' } })
       .subscribe({
         next: innovations => {
           this.innovationsList.setData(innovations.data, innovations.count);

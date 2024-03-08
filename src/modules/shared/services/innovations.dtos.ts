@@ -23,29 +23,22 @@ import {
 } from '@modules/stores/innovation/innovation.enums';
 
 // Innovations.
-// TODO when we remove the old innovations list update this type to match the new one.
-export type InnovationsListFiltersType = {
-  name?: null | string;
-  mainCategories?: string[];
-  locations?: catalogOfficeLocation[];
-  status?: InnovationStatusEnum[];
-  assessmentSupportStatus?: 'UNASSIGNED' | 'ENGAGING' | 'NOT_ENGAGING';
-  supportStatuses?: InnovationSupportStatusEnum[];
-  groupedStatuses?: InnovationGroupedStatusEnum[];
-  engagingOrganisations?: string[];
-  engagingOrganisationUnits?: string[];
-  assignedToMe?: boolean;
-  suggestedOnly?: boolean;
-  closedByMyOrganisation?: boolean;
-  latestWorkedByMe?: boolean;
-  hasAccessThrough?: ('owner' | 'collaborator')[];
-  dateFilter?: {
-    field: 'submittedAt';
-    startDate?: DateISOType;
-    endDate?: DateISOType;
-  }[];
-  fields?: ('assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[];
-};
+export type InnovationsListFiltersType = Partial<{
+  search: string;
+  assignedToMe: boolean;
+  closedByMyOrganisation: boolean;
+  diseasesAndConditions: string[];
+  dateFilters: { field: 'submittedAt'; startDate: undefined | DateISOType; endDate: undefined | DateISOType }[];
+  engagingOrganisations: string[];
+  engagingUnits: string[];
+  groupedStatuses: InnovationGroupedStatusEnum[];
+  hasAccessThrough: ('owner' | 'collaborator')[];
+  latestWorkedByMe: boolean;
+  locations: catalogOfficeLocation[];
+  suggestedOnly: boolean;
+  supportStatuses: InnovationSupportStatusEnum[];
+  supportUnit: string;
+}>;
 
 export type InnovationsListInDTO = {
   count: number;

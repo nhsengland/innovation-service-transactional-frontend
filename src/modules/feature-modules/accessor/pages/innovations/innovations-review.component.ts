@@ -23,7 +23,7 @@ type TabType = {
   showClosedByMyOrganisationFilter: boolean;
   link: string;
   queryParams: { status: InnovationSupportStatusEnum | 'ALL'; assignedToMe?: boolean; suggestedOnly?: boolean };
-  queryFields: Parameters<InnovationsService['getInnovationsList2']>[0];
+  queryFields: Parameters<InnovationsService['getInnovationsList']>[0];
   notifications: NotificationValueType;
 };
 
@@ -302,7 +302,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
 
-    this.innovationsService.getInnovationsList2(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
+    this.innovationsService.getInnovationsList(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
       next: response => {
         this.innovationsList.setData(
           response.data.map((item, index) => {

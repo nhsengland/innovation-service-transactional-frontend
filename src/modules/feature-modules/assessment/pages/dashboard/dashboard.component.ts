@@ -57,7 +57,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp),
-      this.innovationsService.getInnovationsList2(
+      this.innovationsService.getInnovationsList(
         ['id', 'name', 'assessment.id'],
         { latestWorkedByMe: true },
         { take: 5, skip: 0 }

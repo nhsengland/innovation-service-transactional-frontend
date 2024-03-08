@@ -71,12 +71,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin([
-      this.innovationsService.getInnovationsList2(
+      this.innovationsService.getInnovationsList(
         ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
         { hasAccessThrough: ['owner'] },
         { take: 100, skip: 0, order: { name: 'ASC' } }
       ),
-      this.innovationsService.getInnovationsList2(
+      this.innovationsService.getInnovationsList(
         ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
         { hasAccessThrough: ['collaborator'] },
         { take: 100, skip: 0, order: { name: 'ASC' } }
@@ -150,12 +150,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
             this.innovatorService.getInnovationTransfers(true),
 
-            this.innovationsService.getInnovationsList2(
+            this.innovationsService.getInnovationsList(
               ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
               { hasAccessThrough: ['owner'] },
               { take: 100, skip: 0, order: { name: 'ASC' } }
             ),
-            this.innovationsService.getInnovationsList2(
+            this.innovationsService.getInnovationsList(
               ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
               { hasAccessThrough: ['collaborator'] },
               { take: 100, skip: 0, order: { name: 'ASC' } }

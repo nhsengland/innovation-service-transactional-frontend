@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { DatesHelper } from '@app/base/helpers';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
@@ -12,8 +11,6 @@ import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { KeysUnion } from '@modules/core/helpers/types.helper';
 import { APIListResponse, Paginated } from '@modules/core/models/api.model';
-import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import {
   ActivityLogItemsEnum,
   ActivityLogTypesEnum,
@@ -43,9 +40,7 @@ import {
   InnovationSupportsListDTO,
   InnovationTaskInfoDTO,
   InnovationTasksListDTO,
-  InnovationsListDTO,
   InnovationsListFiltersType,
-  InnovationsListInDTO,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
@@ -182,124 +177,9 @@ export class InnovationsService extends CoreService {
   }
 
   // Innovations.
-  getInnovationsList({
-    queryParams,
-    fields = []
-  }: {
-    queryParams?: APIQueryParamsType<InnovationsListFiltersType>;
-    fields?: InnovationsListFiltersType['fields'];
-  } = {}): Observable<InnovationsListDTO> {
-    if (!queryParams) {
-      queryParams = { take: 100, skip: 0, order: { name: 'ASC' }, filters: {} };
-    }
-
-    const requestUserType = this.stores.authentication.getUserType();
-    const { filters, ...qParams } = queryParams;
-
-    const qp = {
-      ...qParams,
-      ...(filters.name ? { name: filters.name } : {}),
-      ...(filters.mainCategories ? { mainCategories: filters.mainCategories } : {}),
-      ...(filters.locations ? { locations: filters.locations } : {}),
-      ...(filters.status ? { status: filters.status } : {}),
-      ...(filters.assessmentSupportStatus ? { assessmentSupportStatus: filters.assessmentSupportStatus } : {}),
-      ...(filters.supportStatuses ? { supportStatuses: filters.supportStatuses } : {}),
-      ...(filters.groupedStatuses ? { groupedStatuses: filters.groupedStatuses } : {}),
-      ...(filters.engagingOrganisations ? { engagingOrganisations: filters.engagingOrganisations } : {}),
-      ...(filters.engagingOrganisationUnits ? { engagingOrganisationUnits: filters.engagingOrganisationUnits } : {}),
-      ...(filters.assignedToMe !== undefined ? { assignedToMe: filters.assignedToMe } : {}),
-      ...(filters.suggestedOnly != undefined ? { suggestedOnly: filters.suggestedOnly } : {}),
-      ...(filters.latestWorkedByMe != undefined ? { latestWorkedByMe: filters.latestWorkedByMe } : {}),
-      ...(filters.hasAccessThrough != undefined ? { hasAccessThrough: filters.hasAccessThrough } : {}),
-      ...(filters.dateFilter ? { dateFilter: filters.dateFilter } : {}),
-      fields
-    };
-
-    if (!filters.latestWorkedByMe) {
-      switch (requestUserType) {
-        case UserRoleEnum.INNOVATOR:
-          qp.fields.push('statistics', 'assessment', 'supports');
-          break;
-        case UserRoleEnum.ASSESSMENT:
-          qp.fields.push('assessment', 'supports');
-          break;
-        case UserRoleEnum.ACCESSOR:
-        case UserRoleEnum.QUALIFYING_ACCESSOR:
-          qp.status = [InnovationStatusEnum.IN_PROGRESS];
-          qp.fields.push('assessment', 'supports', 'notifications');
-          break;
-        case UserRoleEnum.ADMIN:
-          qp.fields.push('assessment', 'supports');
-          break;
-        default:
-          break;
-      }
-    }
-
-    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1').setQueryParams(qp);
-    return this.http.get<InnovationsListInDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => ({
-        count: response.count,
-        data: response.data.map(item => {
-          let daysFromSubmittedAtToToday: null | number = null;
-          let overdueStatus: null | 'ALMOST_DUE' | 'OVERDUE' | 'EXEMPT' = null;
-
-          // These 2 keys, are only relevant for assessments.
-          if (this.stores.authentication.isAssessmentType() && item.submittedAt) {
-            // Only show overdues if assessment / reassessment is pending!
-            if (
-              [
-                InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT,
-                InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT,
-                InnovationStatusEnum.NEEDS_ASSESSMENT
-              ].includes(item.status)
-            ) {
-              daysFromSubmittedAtToToday = DatesHelper.dateDiff(item.submittedAt, new Date().toISOString());
-
-              if (item.assessment?.isExempted) {
-                overdueStatus = 'EXEMPT';
-              } else {
-                if (daysFromSubmittedAtToToday >= 10 && daysFromSubmittedAtToToday < 15) {
-                  overdueStatus = 'ALMOST_DUE';
-                } else if (daysFromSubmittedAtToToday >= 15) {
-                  overdueStatus = 'OVERDUE';
-                }
-              }
-            }
-          }
-
-          return {
-            ...item,
-            mainCategory:
-              item.otherMainCategoryDescription ??
-              irVersionsMainCategoryItems.find(i => i.value === item.mainCategory)?.label ??
-              '',
-            daysFromSubmittedAtToToday,
-            overdueStatus
-          };
-        })
-      }))
-    );
-  }
-
-  getInnovationsList2<
+  getInnovationsList<
     // filters
-    F extends Partial<{
-      search: string;
-      assignedToMe: boolean;
-      closedByMyOrganisation: boolean;
-      diseasesAndConditions: string[];
-      dateFilters: { key: 'submittedAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
-      engagingOrganisations: string[];
-      engagingUnits: string[];
-      hasAccessThrough: ('owner' | 'collaborator')[];
-      latestWorkedByMe: boolean;
-      locations: catalogOfficeLocation[];
-      suggestedOnly: boolean;
-      supportStatuses: InnovationSupportStatusEnum[];
-      supportUnit: string;
-    }>,
+    F extends InnovationsListFiltersType,
     // selects
     // This can be improved but currently i'm not allowing selects on all related fields to automate this (see KeysUnion in the future for this and implement in the BE)
     S extends KeysUnion<InnovationListNewFullDTO> extends infer U
