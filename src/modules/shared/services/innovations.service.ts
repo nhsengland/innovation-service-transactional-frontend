@@ -293,6 +293,7 @@ export class InnovationsService extends CoreService {
       dateFilters: { key: 'submittedAt'; startDate: null | DateISOType; endDate: null | DateISOType }[];
       engagingOrganisations: string[];
       engagingUnits: string[];
+      hasAccessThrough: ('owner' | 'collaborator')[];
       latestWorkedByMe: boolean;
       locations: catalogOfficeLocation[];
       suggestedOnly: boolean;

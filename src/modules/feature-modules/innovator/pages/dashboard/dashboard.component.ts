@@ -11,12 +11,12 @@ import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { DatesHelper } from '@app/base/helpers';
+import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import {
   GetInnovationCollaboratorInvitesDTO,
   GetInnovationTransfersDTO,
   InnovatorService
 } from '../../services/innovator.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -71,24 +71,16 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin([
-      this.innovationsService
-        .getInnovationsList({
-          fields: ['groupedStatus', 'statistics'],
-          queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0, order: { name: 'ASC' } }
-        })
-        .pipe(
-          map(response => response),
-          catchError(() => of(null))
-        ),
-      this.innovationsService
-        .getInnovationsList({
-          fields: ['groupedStatus', 'statistics'],
-          queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0, order: { name: 'ASC' } }
-        })
-        .pipe(
-          map(response => response),
-          catchError(() => of(null))
-        ),
+      this.innovationsService.getInnovationsList2(
+        ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+        { hasAccessThrough: ['owner'] },
+        { take: 100, skip: 0, order: { name: 'ASC' } }
+      ),
+      this.innovationsService.getInnovationsList2(
+        ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+        { hasAccessThrough: ['collaborator'] },
+        { take: 100, skip: 0, order: { name: 'ASC' } }
+      ),
       this.innovatorService.getInnovationTransfers(true).pipe(
         map(response => response),
         catchError(() => of(null))
@@ -98,12 +90,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
         catchError(() => of(null))
       )
     ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
-      if (!innovationsListOwner || !innovationsListCollaborator) {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-        return;
-      }
-
       this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner).filter(
         item => item.groupedStatus !== 'ARCHIVED'
       );
@@ -164,14 +150,16 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
             this.innovatorService.getInnovationTransfers(true),
 
-            this.innovationsService.getInnovationsList({
-              fields: ['groupedStatus', 'statistics'],
-              queryParams: { filters: { hasAccessThrough: ['owner'] }, take: 100, skip: 0 }
-            }),
-            this.innovationsService.getInnovationsList({
-              fields: ['groupedStatus', 'statistics'],
-              queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 }
-            })
+            this.innovationsService.getInnovationsList2(
+              ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+              { hasAccessThrough: ['owner'] },
+              { take: 100, skip: 0, order: { name: 'ASC' } }
+            ),
+            this.innovationsService.getInnovationsList2(
+              ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
+              { hasAccessThrough: ['collaborator'] },
+              { take: 100, skip: 0, order: { name: 'ASC' } }
+            )
           ])
         )
       )
@@ -196,7 +184,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       });
   }
 
-  private buildDescriptionString(innovation: InnovationsListDTO['data'][0]): string | null {
+  private buildDescriptionString(innovation: Pick<InnovationsListDTO['data'][0], 'statistics'>): string | null {
     const { tasks, messages } = innovation.statistics!;
 
     const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
@@ -215,7 +203,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     return description.length !== 0 ? `${description.join(', ')}.` : null;
   }
 
-  private getInnovationsListInformation(innovationList: InnovationsListDTO) {
+  private getInnovationsListInformation(innovationList: {
+    data: Pick<InnovationsListDTO['data'][0], 'id' | 'name' | 'statistics' | 'groupedStatus'>[];
+  }) {
     return innovationList.data.map(innovation => ({
       id: innovation.id,
       name: innovation.name,
