@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -19,6 +19,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   alertErrorsList: { title: string; description: string }[] = [];
   errorOnSubmitStep: boolean = false;
+  isChangeMode: boolean = false;
 
   innovation: ContextInnovationType;
   isArchived: boolean;
@@ -32,6 +33,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
   sectionSubmittedText: string = '';
+
+  isUpdateMode: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -64,10 +67,18 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
-      next: response => {
-        this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
-        this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+    combineLatest([
+      this.activatedRoute.queryParams,
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
+    ]).subscribe({
+      next: ([queryParams, sectionInfoResponse]) => {
+        this.wizard.setAnswers(this.wizard.runInboundParsing(sectionInfoResponse.data)).runRules();
+
+        queryParams.isChangeMode
+          ? // enables changing mode and redirects to step function
+            this.wizard.enableChangeAndGoToStep(this.activatedRoute.snapshot.params.questionId || 1)
+          : // go to regular step
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
@@ -80,7 +91,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onGotoStep(stepNumber: number): void {
-    this.wizard.gotoStep(stepNumber);
+    this.wizard.enableChangeAndGoToStep(stepNumber);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }

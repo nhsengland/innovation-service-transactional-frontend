@@ -53,6 +53,7 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
         ]
       }),
       new FormEngineModel({
+        conditionalChildren: true,
         parameters: [
           {
             id: 'currentlyCollectingEvidence',
@@ -90,7 +91,8 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
             label: stepsLabels.q3.label,
             description: stepsLabels.q3.description,
             validations: { isRequired: [true, 'A description is required'] },
-            lengthLimit: 'l'
+            lengthLimit: 'l',
+            parentLabel: 'currentlyCollectingEvidence'
           }
         ]
       })

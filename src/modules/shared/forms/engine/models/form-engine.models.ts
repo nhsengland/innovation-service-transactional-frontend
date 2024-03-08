@@ -5,6 +5,7 @@ import { SelectComponentInputType } from '@modules/theme/components/search/selec
 
 export class FormEngineModel {
   label?: string;
+  conditionalChildren?: boolean;
   description?: string;
   parameters: FormEngineParameterModel[];
   defaultData: Record<string, any>; // { [key: string]: any };
@@ -14,11 +15,13 @@ export class FormEngineModel {
     this.description = data.description;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
     this.defaultData = data.defaultData ?? {};
+    this.conditionalChildren = data.conditionalChildren ?? false;
   }
 }
 
 export class FormEngineParameterModel {
   id: string;
+  parentLabel?: string;
   dataType:
     | 'text'
     | 'textarea'
@@ -103,6 +106,7 @@ export class FormEngineParameterModel {
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
+    this.parentLabel = data.parentLabel;
     this.dataType = data.dataType || 'text';
     this.label = data.label;
     this.description = data.description;

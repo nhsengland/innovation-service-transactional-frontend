@@ -50,6 +50,7 @@ export class WizardModel<T> {
   }
 
   gotoNextStep(): this {
+    console.log('going to next step');
     if (this.currentStepNumberHolder < this.steps.length) {
       this.currentStepNumberHolder++;
     }

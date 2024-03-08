@@ -41,6 +41,7 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
+        conditionalChildren: true,
         parameters: [
           {
             id: 'hasMarketResearch',
@@ -65,6 +66,8 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+  console.log('runtimeRules!');
+
   steps.splice(1);
 
   if (['NOT_YET'].includes(currentValues.hasMarketResearch || 'NOT_YET')) {
@@ -83,7 +86,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.q2.label,
           description: stepsLabels.q2.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l'
+          lengthLimit: 'l',
+          parentLabel: 'hasMarketResearch'
         }
       ]
     }),
@@ -94,7 +98,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'radio-group',
           label: stepsLabels.q3.label,
           validations: { isRequired: [true, 'Choose one option'] },
-          items: optionBestDescribesInnovationItems
+          items: optionBestDescribesInnovationItems,
+          parentLabel: 'hasMarketResearch'
         }
       ]
     }),
@@ -106,7 +111,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.q4.label,
           description: stepsLabels.q4.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l'
+          lengthLimit: 'l',
+          parentLabel: 'hasMarketResearch'
         }
       ]
     })
