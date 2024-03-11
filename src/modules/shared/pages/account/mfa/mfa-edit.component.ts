@@ -48,7 +48,6 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
           this.setupWizard();
         }
         this.setPageStatus('READY');
-        this.wizard.currentAnswers;
       }
     });
   }
