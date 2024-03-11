@@ -41,10 +41,10 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   wizard: new WizardEngineModel({
     steps: [
       new FormEngineModel({
-        conditionalChildren: true,
         parameters: [
           {
             id: 'hasMarketResearch',
+            conditionalChildren: true,
             dataType: 'radio-group',
             label: stepsLabels.q1.label,
             description: stepsLabels.q1.description,

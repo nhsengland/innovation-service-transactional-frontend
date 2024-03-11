@@ -53,10 +53,10 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
         ]
       }),
       new FormEngineModel({
-        conditionalChildren: true,
         parameters: [
           {
             id: 'currentlyCollectingEvidence',
+            conditionalChildren: true,
             dataType: 'radio-group',
             label: stepsLabels.q2.label,
             validations: { isRequired: [true, 'Choose one option'] },

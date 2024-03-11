@@ -1,7 +1,6 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
-import e from 'express';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -113,7 +112,7 @@ export class WizardEngineModel {
   nextStep(): this {
     if (
       (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) ||
-      // if we are 'changing' and this step has no children or does not have a 'parentId' we can safely send to 'summary'. Otherwise it might have children, so ...
+      // if we are 'changing' and this step has no children or does not have a 'parentId' we can assume it's a 'standalone' step and safely go to 'summary'. Otherwise it might have children/siblings, so ...
       (this.isChangingMode &&
         !(this.canStepHaveChildren(this.currentStep()) || this.currentStep().parameters[0].parentId))
     ) {
@@ -131,41 +130,37 @@ export class WizardEngineModel {
   }
 
   canStepHaveChildren(step: FormEngineModel): boolean {
-    return step.conditionalChildren ?? false;
+    return step.parameters[0].conditionalChildren ?? false;
   }
 
   checkStepConditions(): this {
     if (typeof this.currentStepId === 'number') {
       const previousStepId = this.steps[this.currentStepId - 2].parameters[0].id;
-      const previousHasChildren = this.canStepHaveChildren(this.steps[this.currentStepId - 2]);
-      const previousStepParentId = this.steps[this.currentStepId - 2].parameters[0].parentId ?? '';
+      const previousCanHaveChildren = this.canStepHaveChildren(this.steps[this.currentStepId - 2]);
       const currentStepParentId = this.currentStep().parameters[0].parentId ?? '';
       const previousIsParentOfCurrent: boolean = previousStepId === currentStepParentId;
-      const previousIsSiblingOfCurrent: boolean = previousStepParentId === currentStepParentId;
 
-      // ... we check if the past step has children/siblings, as well as if the current one is one of them
-      if (
-        (previousHasChildren && previousIsParentOfCurrent) ||
-        (previousIsSiblingOfCurrent && this.currentChangingParentId)
-      ) {
-        // ...if it is, we set it as current parent, so we can check on following steps if they are also child/siblings, and return. Otherwise, we go to summary.
-        this.currentChangingParentId = this.currentChangingParentId ?? previousHasChildren ? previousStepId : null;
+      // ... we check if the past step can have children, and if the current one is one of them
+      if (previousCanHaveChildren && previousIsParentOfCurrent) {
+        // ...if it is, we set it as current parent, so we can check on following steps if they are also child of this one, and return to keep going. Otherwise, go to summary.
+        this.currentChangingParentId = this.currentChangingParentId ?? previousCanHaveChildren ? previousStepId : null;
+        return this;
+      }
+
+      // ... check if this is another child of the parent question, if it is, return and keep going. Otherwise, go to summary.
+      if (currentStepParentId && this.currentChangingParentId) {
         return this;
       }
     }
-    // if step is 'summary' or step has no children/siblings, reset current parent reference and go to summary
-    this.currentChangingParentId = null;
+    // if step is 'summary' or none of the above are true, go to summary.
     this.runSummaryParsing();
     this.currentStepId = 'summary';
 
     return this;
   }
 
-  stepHasConditionalChildren(): boolean {
-    return false;
-  }
-
   enableChangeAndGoToStep(step: number): this {
+    this.currentChangingParentId = null;
     this.isChangingMode = true;
     this.gotoStep(step);
     return this;
