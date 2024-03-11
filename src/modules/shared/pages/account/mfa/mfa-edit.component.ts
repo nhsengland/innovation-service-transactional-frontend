@@ -6,6 +6,7 @@ import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } fro
 import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { combineLatest, forkJoin } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 export type CurrentMFAModeType = 'phone' | 'email' | 'none';
 
@@ -120,15 +121,21 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   }
 
   onSubmitWizard() {
-    const wizardData = this.wizard.runOutboundParsing() as MFAInfoDTO;
+    const wizardData = this.wizard.runOutboundParsing() as { mfaInfo: MFAInfoDTO; turnOff: boolean };
+
     this.formButton.isActive = false;
 
-    this.authenticationService.updateUserMFAInfo(wizardData).subscribe({
+    if (this.wizardMode === 'turn-off' && wizardData.turnOff === false) {
+      this.redirectTo(this.manageAccountPageUrl);
+      return;
+    }
+
+    this.authenticationService.updateUserMFAInfo(wizardData.mfaInfo).subscribe({
       next: response => {
-        if (wizardData.type === 'phone') {
+        if (wizardData.mfaInfo.type === 'phone') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
-              ? `Your phone number has been changed to ${getCensoredPhoneNumber(wizardData.phoneNumber)}`
+              ? `Your phone number has been changed to ${getCensoredPhoneNumber(wizardData.mfaInfo.phoneNumber)}`
               : this.wizardMode === 'phone'
                 ? 'Your two-step verification method has been changed to phone'
                 : 'You have set up two-step verification on your account',
@@ -138,27 +145,27 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
           );
         }
 
-        if (wizardData.type === 'email') {
+        if (wizardData.mfaInfo.type === 'email') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
               ? 'Your two-step verification method has been changed to email'
               : 'You have set up two-step verification on your account',
             {
-              message: 'A security code will be sent to your email when you log in to your account. '
+              message: 'A security code will be sent to your email when you log in to your account.'
             }
           );
         }
 
-        if (wizardData.type === 'none') {
+        if (wizardData.mfaInfo.type === 'none') {
           this.setRedirectAlertSuccess('You have turned off two-step verification on your account', {
             message: 'You will only use your password to log in.'
           });
         }
         this.redirectTo(this.manageAccountPageUrl);
       },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
+      error: ({ error: err }: HttpErrorResponse) => {
+        this.formButton.isActive = true;
+        this.setAlertError(err.message, { width: '2.thirds' });
       }
     });
   }

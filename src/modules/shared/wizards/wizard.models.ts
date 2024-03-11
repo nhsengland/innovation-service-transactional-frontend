@@ -8,14 +8,25 @@ export class WizardModel<T> {
 
   private currentStepNumberHolder: number;
 
-  constructor(data?: Partial<WizardModel<T>>) {
-    this.steps = data?.steps || [];
-    this.data = data?.data || {};
+  constructor(initialData?: Partial<WizardModel<T>>) {
+    this.steps = initialData?.steps || [];
+    this.data = initialData?.data || {};
     this.currentStepNumberHolder = 1;
   }
 
-  addStep(step: WizardStepModel): this {
-    this.steps.push(step);
+  addStep(newStep: WizardStepModel, index?: number): this {
+    if (!this.steps.some(step => step.id === newStep.id)) {
+      if (index !== undefined) {
+        this.steps.splice(index, 0, newStep);
+      } else {
+        this.steps.push(newStep);
+      }
+    }
+    return this;
+  }
+
+  removeStep(stepId: string): this {
+    this.steps = this.steps.filter(step => step.id !== stepId);
     return this;
   }
 
@@ -74,6 +85,7 @@ export class WizardStepModel<InputType = any, OutputType = any> {
     previousStepEvent?: (data: WizardStepEventType<OutputType>) => void;
     nextStepEvent?: (data: WizardStepEventType<OutputType>) => void;
     submitEvent?: (data: WizardStepEventType<OutputType>) => void;
+    goToStepEvent?: (stepId: string) => void;
   };
 
   constructor(data: WizardStepModel<InputType, OutputType>) {

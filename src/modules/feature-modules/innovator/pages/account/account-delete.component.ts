@@ -10,7 +10,6 @@ import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
 import { GetOwnedInnovations, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { CookieService } from 'ngx-cookie-service';
-import { catchError, forkJoin, map, of } from 'rxjs';
 
 @Component({
   selector: 'shared-pages-account-account-delete',
@@ -50,7 +49,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
       email: email,
       roleId: roleId,
       isOwner: false,
-      isCollaborator: false,
+      isCollaborator: this.stores.authentication.hasInnovationCollaborations(),
       hasCollaborators: false,
       hasPendingTransfer: false,
       hasOnlyPendingTransfers: false,
@@ -79,30 +78,9 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
   }
 
   ngOnInit(): void {
-    forkJoin([
-      this.innovatorService.getOwnedInnovations().pipe(
-        map(response => response),
-        catchError(() => of(null))
-      ),
-      this.innovationsService
-        .getInnovationsList({
-          fields: ['groupedStatus', 'statistics'],
-          queryParams: { filters: { hasAccessThrough: ['collaborator'] }, take: 100, skip: 0 }
-        })
-        .pipe(
-          map(response => response),
-          catchError(() => of(null))
-        )
-    ]).subscribe(([innovationsListOwner, innovationsListCollaborator]) => {
-      if (!innovationsListOwner || !innovationsListCollaborator) {
-        this.setPageStatus('ERROR');
-        this.setAlertUnknownError();
-        return;
-      }
-
+    this.innovatorService.getOwnedInnovations().subscribe(innovationsListOwner => {
       this.innovator.ownedInnovations = innovationsListOwner;
       this.innovator.isOwner = innovationsListOwner.length > 0 ? true : false;
-      this.innovator.isCollaborator = innovationsListCollaborator.count > 0 ? true : false;
 
       this.innovator.ownedInnovations.forEach(innovation => {
         if (innovation.collaboratorsCount > 0) this.innovator.hasCollaborators = true;

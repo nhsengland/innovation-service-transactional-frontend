@@ -131,8 +131,8 @@
       <td class="nhsuk-table__cell text-align-right">
         <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("status") }}</span>
         <theme-tag
-          type="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.cssColorClass' | translate }}"
-          label="{{ 'shared.catalog.innovation.support_status.' + item.supports?.[0]?.status + '.name' | translate }}"
+          type="{{ 'shared.catalog.innovation.support_status.' + item.support?.status + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.support_status.' + item.support?.status + '.name' | translate }}"
         ></theme-tag>
       </td>
     </tr>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-base-sidebar-account-menu-outlet',
+  selector: 'app-base-sidebar-account-menu-outlet-innovator',
   templateUrl: './sidebar-account-menu-outlet.component.html'
 })
 export class SidebarAccountMenuOutletComponent {

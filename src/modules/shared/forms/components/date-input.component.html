@@ -1,0 +1,82 @@
+<div class="nhsuk-form-group {{ divCssOverride }}" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+  <div class="d-flex">
+    <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy" role="group">
+      <ng-container *ngIf="title && pageUniqueField">
+        <legend class="nhsuk-fieldset__legend nhsuk-label--l nhsuk-u-margin-bottom-3">
+          <h1 class="nhsuk-fieldset__heading">
+            {{ title }}
+          </h1>
+        </legend>
+      </ng-container>
+      <ng-container *ngIf="title && !pageUniqueField">
+        <legend class="nhsuk-fieldset__legend">
+          {{ title }}
+        </legend>
+      </ng-container>
+
+      <ng-container *ngIf="description">
+        <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+      </ng-container>
+
+      <ng-container *ngIf="hasError">
+        <span id="error-{{ id }}" class="nhsuk-error-message" role="alert">
+          <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }}
+        </span>
+      </ng-container>
+
+      <div class="nhsuk-date-input" [id]="id">
+        <div class="nhsuk-date-input__item">
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label nhsuk-date-input__label" for="day-{{ id }}"> Day </label>
+            <input
+              class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2"
+              [ngClass]="{ 'nhsuk-input--error': hasError }"
+              [formControl]="formGroup.controls.day"
+              id="day-{{ id }}"
+              name="day"
+              type="text"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              maxlength="2"
+              [attr.aria-invalid]="hasError ? 'true' : null"
+            />
+          </div>
+        </div>
+        <div class="nhsuk-date-input__item">
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label nhsuk-date-input__label" for="month-{{ id }}"> Month </label>
+            <input
+              class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-2"
+              [ngClass]="{ 'nhsuk-input--error': hasError }"
+              [formControl]="formGroup.controls.month"
+              id="month-{{ id }}"
+              name="month"
+              type="text"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              maxlength="2"
+              [attr.aria-invalid]="hasError ? 'true' : null"
+            />
+          </div>
+        </div>
+        <div class="nhsuk-date-input__item">
+          <div class="nhsuk-form-group">
+            <label class="nhsuk-label nhsuk-date-input__label" for="year-{{ id }}"> Year </label>
+            <input
+              class="nhsuk-input nhsuk-date-input__input nhsuk-input--width-4"
+              [ngClass]="{ 'nhsuk-input--error': hasError }"
+              [formControl]="formGroup.controls.year"
+              id="year-{{ id }}"
+              name="year"
+              type="text"
+              pattern="[0-9]*"
+              inputmode="numeric"
+              maxlength="4"
+              [attr.aria-invalid]="hasError ? 'true' : null"
+            />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>

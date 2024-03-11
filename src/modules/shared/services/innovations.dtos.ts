@@ -1,4 +1,3 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from '@app/base/enums';
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 
@@ -23,79 +22,26 @@ import {
 } from '@modules/stores/innovation/innovation.enums';
 
 // Innovations.
-export type InnovationsListFiltersType = {
-  name?: null | string;
-  mainCategories?: string[];
-  locations?: catalogOfficeLocation[];
-  status?: InnovationStatusEnum[];
-  assessmentSupportStatus?: 'UNASSIGNED' | 'ENGAGING' | 'NOT_ENGAGING';
-  supportStatuses?: InnovationSupportStatusEnum[];
-  groupedStatuses?: InnovationGroupedStatusEnum[];
-  engagingOrganisations?: string[];
-  engagingOrganisationUnits?: string[];
-  assignedToMe?: boolean;
-  suggestedOnly?: boolean;
-  closedByMyOrganisation?: boolean;
-  latestWorkedByMe?: boolean;
-  hasAccessThrough?: ('owner' | 'collaborator')[];
-  dateFilter?: {
-    field: 'submittedAt';
-    startDate?: DateISOType;
-    endDate?: DateISOType;
-  }[];
-  fields?: ('assessment' | 'supports' | 'notifications' | 'statistics' | 'groupedStatus')[];
-};
+export type InnovationsListFiltersType = Partial<{
+  search: string;
+  assignedToMe: boolean;
+  closedByMyOrganisation: boolean;
+  diseasesAndConditions: string[];
+  dateFilters: { field: 'submittedAt'; startDate: undefined | DateISOType; endDate: undefined | DateISOType }[];
+  engagingOrganisations: string[];
+  engagingUnits: string[];
+  groupedStatuses: InnovationGroupedStatusEnum[];
+  hasAccessThrough: ('owner' | 'collaborator')[];
+  latestWorkedByMe: boolean;
+  locations: catalogOfficeLocation[];
+  suggestedOnly: boolean;
+  supportStatuses: InnovationSupportStatusEnum[];
+  supportUnit: string;
+}>;
 
-export type InnovationsListInDTO = {
+export type InnovationsListDTO<T extends Partial<InnovationListFullDTO>> = {
   count: number;
-  data: {
-    id: string;
-    name: string;
-    description: null | string;
-    status: InnovationStatusEnum;
-    groupedStatus?: InnovationGroupedStatusEnum;
-    submittedAt: null | DateISOType;
-    updatedAt: null | DateISOType;
-    countryName: null | string;
-    postCode: null | string;
-    mainCategory: null | string;
-    otherMainCategoryDescription: null | string;
-    assessment?: null | {
-      id: string;
-      isExempted?: boolean;
-      createdAt: DateISOType;
-      finishedAt: null | DateISOType;
-      assignedTo: { name: string };
-      reassessmentCount: number;
-    };
-    statusUpdatedAt: null | DateISOType;
-    supports?: {
-      id: string;
-      status: InnovationSupportStatusEnum;
-      updatedAt: DateISOType;
-      organisation: {
-        id: string;
-        name: string;
-        acronym: null | string;
-        unit: {
-          id: string;
-          name: string;
-          acronym: string;
-          // Users only exists while a support is ENGAGING.
-          users?: { name: string; role: AccessorOrganisationRoleEnum | InnovatorOrganisationRoleEnum }[];
-        };
-      };
-    }[];
-    notifications?: number;
-    statistics?: { messages: number; tasks: number };
-  }[];
-};
-export type InnovationsListDTO = {
-  count: number;
-  data: (InnovationsListInDTO['data'][0] & {
-    overdueStatus: null | string;
-    daysFromSubmittedAtToToday: null | number;
-  })[];
+  data: T[];
 };
 
 export type InnovationListSelectType =
@@ -129,11 +75,14 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closedReason'
   | 'assessment.id'
+  | 'assessment.assignedTo'
+  | 'assessment.isExempt'
+  | 'assessment.updatedAt'
   | 'statistics.notifications'
   | 'statistics.tasks'
   | 'statistics.messages';
 
-export type InnovationListNewFullDTO = {
+export type InnovationListFullDTO = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
@@ -166,7 +115,7 @@ export type InnovationListNewFullDTO = {
     updatedBy: string | null;
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
-  assessment: { id: string } | null;
+  assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
@@ -211,6 +160,14 @@ export type InnovationInfoDTO = {
 
 export type InnovationSharesListDTO = { organisation: { id: string; name: string; acronym: string } }[];
 
+export enum InnovationValidationRules {
+  checkIfSupportStatusAtDate = 'checkIfSupportStatusAtDate'
+}
+
+export type InnovationRulesDTO = {
+  validations: { rule: InnovationValidationRules; valid: boolean; details?: any }[];
+};
+
 // Innovation collaborators.
 export type InnovationCollaboratorsListDTO = {
   count: number;
@@ -231,7 +188,7 @@ export type getInnovationCollaboratorInfoDTO = {
   email: string;
   status: InnovationCollaboratorStatusEnum;
   invitedAt: DateISOType;
-  innovation: { id: string; name: string; description: null | string; owner: { id: string; name?: string } };
+  innovation: { id: string; name: string; owner: { id: string; name?: string } };
 };
 
 // Innovation support.
@@ -282,11 +239,16 @@ export type SupportSummaryOrganisationHistoryDTO = {
     file?: { id: string; name: string; url: string };
   };
 }[];
+
+type SimpleProgressUpdateParams = { title: string };
+type OneLevelProgressUpdateParams = { categories: string[] };
+type TwoLevelProgressUpdateParams = { category: string; subCategories: string[] };
+
 export type CreateSupportSummaryProgressUpdateType = {
-  title: string;
   description: string;
   document?: { name: string; description?: string; file?: Omit<FileUploadType, 'url'> };
-};
+  createdAt?: Date;
+} & (SimpleProgressUpdateParams | OneLevelProgressUpdateParams | TwoLevelProgressUpdateParams);
 
 // Support log
 export enum SupportLogType {
