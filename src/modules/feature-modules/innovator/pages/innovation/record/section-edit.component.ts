@@ -102,7 +102,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
-      if (this.wizard.isFirstStep()) {
+      if (this.wizard.isFirstStep() || this.wizard.isChangingMode) {
         this.redirectTo(this.baseUrl);
       } else {
         this.wizard.previousStep();
