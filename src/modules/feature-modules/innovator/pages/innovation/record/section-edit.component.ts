@@ -34,8 +34,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   sectionSubmittedText: string = '';
 
-  isUpdateMode: boolean = true;
-
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
@@ -90,7 +88,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     });
   }
 
-  onGotoStep(stepNumber: number): void {
+  onChangeStep(stepNumber: number): void {
     this.wizard.enableChangeAndGoToStep(stepNumber);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });

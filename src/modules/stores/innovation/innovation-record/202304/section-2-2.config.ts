@@ -92,7 +92,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
             description: stepsLabels.q3.description,
             validations: { isRequired: [true, 'A description is required'] },
             lengthLimit: 'l',
-            parentLabel: 'currentlyCollectingEvidence'
+            parentId: 'currentlyCollectingEvidence'
           }
         ]
       })

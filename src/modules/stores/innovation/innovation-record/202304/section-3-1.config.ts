@@ -85,7 +85,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           description: stepsLabels.q2.description,
           validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'l',
-          parentLabel: 'hasMarketResearch'
+          parentId: 'hasMarketResearch'
         }
       ]
     }),
@@ -97,7 +97,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.q3.label,
           validations: { isRequired: [true, 'Choose one option'] },
           items: optionBestDescribesInnovationItems,
-          parentLabel: 'hasMarketResearch'
+          parentId: 'hasMarketResearch'
         }
       ]
     }),
@@ -110,7 +110,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           description: stepsLabels.q4.description,
           validations: { isRequired: [true, 'A description is required'] },
           lengthLimit: 'l',
-          parentLabel: 'hasMarketResearch'
+          parentId: 'hasMarketResearch'
         }
       ]
     })

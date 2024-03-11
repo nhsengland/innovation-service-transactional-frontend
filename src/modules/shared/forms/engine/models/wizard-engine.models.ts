@@ -113,19 +113,17 @@ export class WizardEngineModel {
   nextStep(): this {
     if (
       (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) ||
-      // if we are 'changing' and this step has no children, or does not have a 'parentLabel' we can safely send to 'summary'. Otherwise it might have children, so ...
+      // if we are 'changing' and this step has no children or does not have a 'parentId' we can safely send to 'summary'. Otherwise it might have children, so ...
       (this.isChangingMode &&
-        !(this.canStepHaveChildren(this.currentStep()) || this.currentStep().parameters[0].parentLabel))
+        !(this.canStepHaveChildren(this.currentStep()) || this.currentStep().parameters[0].parentId))
     ) {
-      console.log('going to summary');
       this.runSummaryParsing();
       this.currentStepId = 'summary';
     } else if (typeof this.currentStepId === 'number') {
-      console.log('going into checking');
       this.currentStepId++;
       // ... we go to the next step and then...
       if (this.isChangingMode) {
-        this.checkIfUpdating();
+        this.checkStepConditions();
       }
     }
 
@@ -136,35 +134,30 @@ export class WizardEngineModel {
     return step.conditionalChildren ?? false;
   }
 
-  checkIfUpdating(): this {
-    console.log('checking');
+  checkStepConditions(): this {
     if (typeof this.currentStepId === 'number') {
       const previousStepId = this.steps[this.currentStepId - 2].parameters[0].id;
       const previousHasChildren = this.canStepHaveChildren(this.steps[this.currentStepId - 2]);
-      const previousStepParentlabel = this.steps[this.currentStepId - 2].parameters[0].parentLabel ?? '';
-      const currentStepParentlabel = this.currentStep().parameters[0].parentLabel ?? '';
-      const previousIsParentOfCurrent: boolean = previousStepId === currentStepParentlabel;
-      const previousIsSiblingOfCurrent: boolean = previousStepParentlabel === currentStepParentlabel;
+      const previousStepParentId = this.steps[this.currentStepId - 2].parameters[0].parentId ?? '';
+      const currentStepParentId = this.currentStep().parameters[0].parentId ?? '';
+      const previousIsParentOfCurrent: boolean = previousStepId === currentStepParentId;
+      const previousIsSiblingOfCurrent: boolean = previousStepParentId === currentStepParentId;
 
-      // ... we check if the past step has children/siblings, and if the current one is one of them
+      // ... we check if the past step has children/siblings, as well as if the current one is one of them
       if (
         (previousHasChildren && previousIsParentOfCurrent) ||
         (previousIsSiblingOfCurrent && this.currentChangingParentId)
       ) {
-        // ...if it is, we set it as current parent, in case the next step might also be child of the same step, and we continue
+        // ...if it is, we set it as current parent, so we can check on following steps if they are also child/siblings, and return. Otherwise, we go to summary.
         this.currentChangingParentId = this.currentChangingParentId ?? previousHasChildren ? previousStepId : null;
-        console.log('current is child of previous step');
         return this;
-      } else {
-        // ...if it's not, we don't need to keep going so we can skip and go back to 'summary'
-        console.log('current is not child of previous step');
       }
     }
-
+    // if step is 'summary' or step has no children/siblings, reset current parent reference and go to summary
     this.currentChangingParentId = null;
     this.runSummaryParsing();
     this.currentStepId = 'summary';
-    console.log('is summary');
+
     return this;
   }
 

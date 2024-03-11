@@ -21,7 +21,7 @@ export class FormEngineModel {
 
 export class FormEngineParameterModel {
   id: string;
-  parentLabel?: string;
+  parentId?: string;
   dataType:
     | 'text'
     | 'textarea'
@@ -106,7 +106,7 @@ export class FormEngineParameterModel {
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
-    this.parentLabel = data.parentLabel;
+    this.parentId = data.parentId;
     this.dataType = data.dataType || 'text';
     this.label = data.label;
     this.description = data.description;
