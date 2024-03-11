@@ -140,10 +140,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
                 ? 'Your two-step verification method has been changed to phone'
                 : 'You have set up two-step verification on your account',
             {
-              message:
-                this.currentMFAMode === 'email'
-                  ? 'A security code will be sent by text message or phone call to the number you provided when you log in to your account.'
-                  : 'A security code will be sent to your phone when you log in to your account.'
+              message: 'A security code will be sent to your phone when you log in to your account.'
             }
           );
         }

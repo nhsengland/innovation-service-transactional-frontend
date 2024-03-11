@@ -371,7 +371,8 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   toReturn.push({
     label: 'How did you find out about the NHS Innovation Service?',
     value: howDidYouFindUsDataSummaryParsing(data),
-    editStepNumber: lastMarkStep + 1
+    editStepNumber: lastMarkStep + 1,
+    allowHTML: true
   });
 
   return toReturn;
@@ -402,7 +403,10 @@ function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFin
 function howDidYouFindUsDataSummaryParsing(data: StepPayloadType): string {
   let summaryData: string = '';
 
+  summaryData += '<ul class="nhsuk-list">';
+
   data.howDidYouFindUsList.forEach(item => {
+    summaryData += '<li>';
     summaryData += howDidYouFindUsItems[item as HowDidYouFindUsEnums].label;
 
     if (item === 'EVENT' && data.howDidYouFindUsEvent) summaryData += ` - ${data.howDidYouFindUsEvent}`;
@@ -411,8 +415,9 @@ function howDidYouFindUsDataSummaryParsing(data: StepPayloadType): string {
       summaryData += ` - ${data.howDidYouFindUsRecommendation}`;
     if (item === 'OTHER' && data.howDidYouFindUsOther) summaryData += ` - ${data.howDidYouFindUsOther}`;
 
-    summaryData += '\n\n';
+    summaryData += '</li>';
   });
+  summaryData += '</ul>';
 
   return summaryData;
 }
