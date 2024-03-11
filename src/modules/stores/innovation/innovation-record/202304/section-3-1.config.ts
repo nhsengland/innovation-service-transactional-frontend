@@ -66,8 +66,6 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
-  console.log('runtimeRules!');
-
   steps.splice(1);
 
   if (['NOT_YET'].includes(currentValues.hasMarketResearch || 'NOT_YET')) {
