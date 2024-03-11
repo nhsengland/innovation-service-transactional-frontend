@@ -239,7 +239,7 @@ export type getInnovationCollaboratorInfoDTO = {
   email: string;
   status: InnovationCollaboratorStatusEnum;
   invitedAt: DateISOType;
-  innovation: { id: string; name: string; description: null | string; owner: { id: string; name?: string } };
+  innovation: { id: string; name: string; owner: { id: string; name?: string } };
 };
 
 // Innovation support.
