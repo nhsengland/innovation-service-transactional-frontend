@@ -2,7 +2,16 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div *ngIf="wizard.isQuestionStep()" class="nhsuk-grid-column-full nhsuk-u-padding-left-0">
-        <p>{{ wizard.currentStep().description }}</p>
+        <ng-container *ngIf="wizard.currentStep().parameters[0].id === 'confirmationEmail'; else description">
+          <p>
+            {{ wizard.currentStep().description }}<span class="nhsuk-u-font-weight-bold">{{ this.userEmail }}</span>
+          </p>
+          <p>Enter your email to confirm</p>
+        </ng-container>
+        <ng-template #description>
+          <p>{{ wizard.currentStep().description }}</p>
+        </ng-template>
+
         <theme-form-engine formId="mfaForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
         <button type="submit" form="mfaForm" [disabled]="!formButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')">{{ formButton.label }}</button>
       </div>
