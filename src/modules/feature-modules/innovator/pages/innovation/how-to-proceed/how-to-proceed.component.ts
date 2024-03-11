@@ -105,8 +105,9 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
       case FormFieldActionsEnum.NO_ACTION:
       default:
-        this.setRedirectAlertSuccess('Your innovation will remain with unassigned status for now', {
-          message: 'You can come back here and choose how you want to continue later.'
+        this.setRedirectAlertSuccess('There is no active support for your innovation', {
+          message:
+            'You can decide whether to submit your innovation for a needs reassessment, archive your innovation or delete your account at any time.'
         });
         this.redirectTo(this.baseUrl);
         break;
