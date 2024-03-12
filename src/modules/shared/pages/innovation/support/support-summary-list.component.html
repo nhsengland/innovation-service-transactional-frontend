@@ -14,7 +14,7 @@
             <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
               <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                 <button
-                  id="engaging-button-{{ unitItem }}"
+                  id="engaging-button-{{ unitItem.id }}"
                   (click)="onOpenCloseUnit(sectionIndex, unitIndex)"
                   class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0"
                   attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
