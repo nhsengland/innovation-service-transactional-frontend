@@ -176,47 +176,36 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.sectionSummaryData.sectionInfo.submittedBy = sectionInfo.submittedBy;
       this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
-      if (
-        (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) &&
-        this.sectionSummaryData.sectionInfo.status.id === 'DRAFT'
-      ) {
-        // If accessor, only view information if section is submitted.
-        this.sectionSummaryData.summaryList = [];
-        this.sectionSummaryData.evidencesList = [];
-      } else {
-        // Special business rule around section 2.2.
-        this.sectionSummaryData.sectionInfo.hasEvidences = !!(
-          section.evidences &&
-          sectionInfo.data.hasEvidence &&
-          sectionInfo.data.hasEvidence === 'YES'
-        );
+      // Special business rule around section 2.2.
+      this.sectionSummaryData.sectionInfo.hasEvidences = !!(
+        section.evidences &&
+        sectionInfo.data.hasEvidence &&
+        sectionInfo.data.hasEvidence === 'YES'
+      );
 
-        this.sectionSummaryData.sectionInfo.wizard
-          .setAnswers(this.sectionSummaryData.sectionInfo.wizard.runInboundParsing(sectionInfo.data))
-          .runRules();
+      this.sectionSummaryData.sectionInfo.wizard
+        .setAnswers(this.sectionSummaryData.sectionInfo.wizard.runInboundParsing(sectionInfo.data))
+        .runRules();
 
-        const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
+      const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
-        if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
-          this.sectionSummaryData.sectionInfo.submitButton.show = true;
-          if (
-            this.innovation.status !== InnovationStatusEnum.CREATED &&
-            this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-          ) {
-            this.sectionSummaryData.sectionInfo.submitButton.label = !this.isArchived
-              ? 'Submit updates'
-              : 'Save updates';
-          }
-        } else {
-          this.sectionSummaryData.sectionInfo.submitButton.show = false;
+      if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
+        this.sectionSummaryData.sectionInfo.submitButton.show = true;
+        if (
+          this.innovation.status !== InnovationStatusEnum.CREATED &&
+          this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+        ) {
+          this.sectionSummaryData.sectionInfo.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
         }
-
-        const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-
-        this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
-
-        this.sectionSummaryData.evidencesList = data.filter(item => item.evidenceId);
+      } else {
+        this.sectionSummaryData.sectionInfo.submitButton.show = false;
       }
+
+      const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
+
+      this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
+
+      this.sectionSummaryData.evidencesList = data.filter(item => item.evidenceId);
 
       this.getPreviousAndNextPagination();
 
