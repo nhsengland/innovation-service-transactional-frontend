@@ -97,7 +97,7 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
     if (!this.checkValidDate()) {
       this.formGroup.setErrors({
         ...this.formGroup.errors,
-        ...{ parsedDateString: { message: 'Please enter a valid date' } }
+        ...{ parsedDateString: { message: 'Enter a valid date' } }
       });
     } else {
       if (this.formGroup.errors && 'parsedDateString' in this.formGroup.errors) {

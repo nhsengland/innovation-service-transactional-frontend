@@ -14,7 +14,7 @@
             <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
               <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                 <button
-                  id="engaging-button-{{ unitItem.id }}"
+                  id="engaging-button-{{ unitItem }}"
                   (click)="onOpenCloseUnit(sectionIndex, unitIndex)"
                   class="d-flex button-as-link nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-padding-0"
                   attr.aria-expanded="{{ unitItem.isOpened ? 'true' : 'false' }}"
@@ -96,7 +96,10 @@
 
                       <ng-container *ngSwitchCase="'PROGRESS_UPDATE'">
                         <p>
-                          <span class="nhsuk-u-font-weight-bold">Progress update</span>
+                          <span class="nhsuk-u-font-weight-bold">Progress update: </span>
+                          <span *ngIf="historyItem.params?.title">{{ historyItem.params.title }}</span>
+                          <span *ngIf="historyItem.params?.categories?.length === 1">{{ historyItem.params.categories?.[0] }}</span>
+                          <span *ngIf="historyItem.params?.category">{{ historyItem.params.category }}</span>
                           <span class="nhsuk-hint nhsuk-u-font-size-14">
                             {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
                             by
@@ -105,12 +108,46 @@
                             >
                           </span>
                         </p>
-                        <p class="nhsuk-body-s">
-                          <span class="d-block nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
+
+                        <p *ngIf="historyItem.params?.categories?.length === 1" class="font-color-secondary">
+                          {{ historyItem.params.categories![0] | categoryDescription: unitItem.organisation.acronym }}
+                        </p>
+
+                        <p *ngIf="historyItem.params?.subCategories?.length === 1">
+                          <span>{{ historyItem.params.subCategories![0] }}:</span>
+                          <span class="font-color-secondary">
+                            {{ historyItem.params.subCategories![0] | subcategoryDescription: unitItem.organisation.acronym : historyItem.params.category! }}
+                          </span>
+                        </p>
+
+                        <ul *ngIf="historyItem.params.categories && historyItem.params.categories.length > 1" class="nhsuk-list nhsuk-list--bullet">
+                          <li *ngFor="let categories of historyItem.params.categories">
+                            {{ categories }}
+                          </li>
+                        </ul>
+
+                        <ul *ngIf="historyItem.params.subCategories && historyItem.params.subCategories.length > 1" class="nhsuk-list nhsuk-list--bullet">
+                          <li *ngFor="let subcategories of historyItem.params.subCategories">
+                            {{ subcategories }}
+                          </li>
+                        </ul>
+
+                        <p
+                          *ngIf="
+                            (historyItem.params.categories && historyItem.params.categories.length > 1) ||
+                            (historyItem.params.subCategories && historyItem.params.subCategories.length > 1)
+                          "
+                        >
+                          <a routerLink="../../../organisation/{{ unitItem.organisation.id }}/progress-categories" target="_blank" rel="noopener noreferrer"
+                            >Find out what these progress categories mean (opens in new window).</a
+                          >
+                        </p>
+                        <p>
+                          <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Comment</span>
                           <span>{{ historyItem.params.message }}</span>
                         </p>
-                        <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file" class="nhsuk-body-s">
-                          <span class="d-block nhsuk-u-font-weight-bold">Document</span>
+                        <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file">
+                          <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Document</span>
                           <span *ngIf="!historyItem.params.file">
                             No document added.
                             <a *ngIf="unitItem.canDoProgressUpdates" routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document.</a>

@@ -83,6 +83,7 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -618,6 +619,16 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+
+      {
+        path: 'organisation/:organisationId/progress-categories',
+        pathMatch: 'full',
+        data: {
+          breadcrumb: 'Progress categories',
+          layout: { type: 'full' }
+        },
+        component: PageProgressCategoriesWrapperComponent
       }
     ]
   }
