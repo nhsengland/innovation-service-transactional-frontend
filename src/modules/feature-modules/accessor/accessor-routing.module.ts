@@ -78,6 +78,7 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -619,6 +620,16 @@ const routes: Routes = [
           layout: { type: 'full' }
         },
         children: [{ path: '', pathMatch: 'full', component: TrainingAndResourcesComponent }]
+      },
+
+      {
+        path: 'organisation/:organisationId/progress-categories',
+        pathMatch: 'full',
+        data: {
+          breadcrumb: 'Progress categories',
+          layout: { type: 'full' }
+        },
+        component: PageProgressCategoriesWrapperComponent
       }
     ]
   }

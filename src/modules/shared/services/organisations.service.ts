@@ -24,7 +24,7 @@ export type GetOrganisationInfoDTO = {
   name: string;
   acronym: string;
   isActive: boolean;
-  organisationUnits: {
+  organisationUnits?: {
     id: string;
     name: string;
     acronym: string;
@@ -102,7 +102,7 @@ export class OrganisationsService extends CoreService {
         name: response.name,
         acronym: response.acronym,
         isActive: response.isActive,
-        organisationUnits: response.organisationUnits.map(item => ({
+        organisationUnits: response.organisationUnits?.map(item => ({
           id: item.id,
           name: item.name,
           acronym: item.acronym,

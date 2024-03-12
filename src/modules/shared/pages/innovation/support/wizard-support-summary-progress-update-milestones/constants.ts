@@ -1,4 +1,4 @@
-type Milestones = {
+export type Milestones = {
   [orgAcronym: string]: {
     name: string;
     description: string;
