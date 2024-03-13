@@ -86,6 +86,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       this.saveButton = { isActive: true, label: 'Continue' };
+      if (this.form.controls.date.errors?.parsedDateString) {
+        this.resetAlert();
+      }
       return;
     }
 
