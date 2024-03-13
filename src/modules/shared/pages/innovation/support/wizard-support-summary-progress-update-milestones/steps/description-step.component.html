@@ -1,0 +1,48 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h6 class="nhsuk-u-margin-bottom-3">Selected progress {{ data.selectedCategories.length > 1 ? "categories" : "category" }}:</h6>
+
+      <ng-container *ngIf="data.selectedSubcategories.length; else noSubcategories">
+        <div *ngFor="let subcategory of data.selectedSubcategories; last as lastItem" [ngClass]="{ 'nhsuk-u-margin-bottom-7': lastItem }">
+          <p class="nhsuk-u-margin-bottom-2">{{ data.selectedCategories[0].name }} - {{ subcategory.name }}</p>
+          <p class="font-color-secondary">
+            {{ subcategory.description }}
+          </p>
+        </div>
+      </ng-container>
+      <ng-template #noSubcategories>
+        <div *ngFor="let category of data.selectedCategories; last as lastItem" [ngClass]="{ 'nhsuk-u-margin-bottom-7': lastItem }">
+          <ng-container *ngIf="category.name !== 'OTHER'; else otherCategory">
+            <p class="nhsuk-u-margin-bottom-2">{{ category.name }}</p>
+            <p class="font-color-secondary">
+              {{ category.description }}
+            </p>
+          </ng-container>
+          <ng-template #otherCategory>
+            <p>{{ data.otherCategory }}</p>
+          </ng-template>
+        </div>
+      </ng-template>
+
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-textarea
+          controlName="description"
+          label="Describe the support you have provided in {{ data.selectedCategories.length > 1 ? 'these categories' : 'this category' }}"
+          [pageUniqueField]="false"
+          lengthLimit="xl"
+        ></theme-form-textarea>
+
+        <h6 class="nhsuk-u-margin-bottom-1">Upload a document (optional)</h6>
+
+        <theme-form-file-upload-descriptive
+          description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF."
+          [pageUniqueField]="false"
+          [config]="configInputFile"
+        ></theme-form-file-upload-descriptive>
+
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

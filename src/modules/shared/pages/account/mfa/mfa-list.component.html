@@ -1,0 +1,41 @@
+<div class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div class="nhsuk-grid-column-three-quarters">
+    <h2 class="nhsuk-heading-l">Two-step verification</h2>
+    <p>Two-step verification adds a layer of security to your account. We will send you a security code to your phone or email for you to use when logging in.</p>
+    <dl class="nhsuk-summary-list">
+      <div class="nhsuk-summary-list__row">
+        <dt class="nhsuk-summary-list__key vertical-align-middle">Status</dt>
+        <dd class="nhsuk-summary-list__value">
+          <theme-on-off-tag [isOn]="isMFAOn" />
+        </dd>
+        <dd class="nhsuk-summary-list__actions vertical-align-middle">
+          <a [routerLink]="'mfa/edit'" [queryParams]="isMFAOn ? { mode: 'turn-off' } : { mode: 'set-mfa' }">
+            {{ isMFAOn ? "Turn off" : "Turn on" }}
+          </a>
+        </dd>
+      </div>
+
+      <ng-container *ngIf="isMFAOn">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Verification method</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ MFAInfo.type === "email" ? "Email" : "Phone" }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a [routerLink]="'mfa/edit'" [queryParams]="MFAInfo.type === 'email' ? { mode: 'phone' } : { mode: 'email' }"> Change </a>
+          </dd>
+        </div>
+
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ MFAInfo.type === "email" ? "Email" : "Phone number" }}</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ MFAInfo.type === "email" ? userEmail : currentCensoredPhoneNumber }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a *ngIf="MFAInfo.type === 'phone'" [routerLink]="'mfa/edit'" [queryParams]="{ mode: 'phone' }"> Change </a>
+          </dd>
+        </div>
+      </ng-container>
+    </dl>
+  </div>
+</div>

@@ -12,7 +12,10 @@
         <dl class="nhsuk-summary-list">
           <div *ngFor="let item of wizard.getSummary(); let i = index" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap">
+              <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+              <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+            </dd>
             <dd class="nhsuk-summary-list__actions">
               <a href="javascript:;" (click)="wizard.gotoStep(item.editStepNumber || 1)">
                 Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a

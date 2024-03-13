@@ -14,6 +14,60 @@ const organisationDescriptions = [
   'Community benefit society'
 ] as const;
 
+enum HowDidYouFindUsEnums {
+  EVENT = 'EVENT',
+  READING = 'READING',
+  RECOMMENDATION_COLLEAGUE = 'RECOMMENDATION_COLLEAGUE',
+  RECOMMENDATION_ORG = 'RECOMMENDATION_ORG',
+  SEARCH_ENGINE = 'SEARCH_ENGINE',
+  SOCIAL_MEDIA = 'SOCIAL_MEDIA',
+  OTHER = 'OTHER'
+}
+
+const howDidYouFindUsItems: {
+  [key in keyof typeof HowDidYouFindUsEnums]: { label: string; conditionalPlaceholder?: string };
+} = {
+  EVENT: {
+    label: 'At an event',
+    conditionalPlaceholder: 'Add event name'
+  },
+  READING: {
+    label: 'Reading about the service, for example in an article, blog post or policy announcement',
+    conditionalPlaceholder: 'Add publication name or article link'
+  },
+  RECOMMENDATION_COLLEAGUE: {
+    label: 'Recommendation from a colleague or friend'
+  },
+  RECOMMENDATION_ORG: {
+    label: 'Recommendation from an organisation, for example NICE or NHS Supply Chain',
+    conditionalPlaceholder: 'Add organisation name'
+  },
+  SEARCH_ENGINE: {
+    label: 'Search engine, for example Google or Bing'
+  },
+  SOCIAL_MEDIA: {
+    label: 'Social media'
+  },
+  OTHER: {
+    label: 'Other',
+    conditionalPlaceholder: 'Explain'
+  }
+};
+
+export type HowDidYouFindUsAnswersType = {
+  event?: boolean;
+  eventComment?: string;
+  reading?: boolean;
+  readingComment?: string;
+  recommendationColleague?: boolean;
+  recommendationOrg?: boolean;
+  recommendationOrgComment?: string;
+  searchEngine?: boolean;
+  socialMedia?: boolean;
+  other?: boolean;
+  otherComment?: string;
+};
+
 type StepPayloadType = {
   innovatorName: string;
   isCompanyOrOrganisation: 'YES' | 'NO';
@@ -23,6 +77,11 @@ type StepPayloadType = {
   hasRegistrationNumber: 'YES' | 'NO';
   organisationRegistrationNumber: null | string;
   mobilePhone: null | string;
+  howDidYouFindUsList: string[];
+  howDidYouFindUsEvent?: string;
+  howDidYouFindUsReading?: string;
+  howDidYouFindUsRecommendation?: string;
+  howDidYouFindUsOther?: string;
 };
 type OutboundPayloadType = {
   innovatorName: string;
@@ -33,6 +92,7 @@ type OutboundPayloadType = {
     size: string;
     registrationNumber?: string;
   };
+  howDidYouFindUsAnswers: HowDidYouFindUsAnswersType;
 };
 
 export const FIRST_TIME_SIGNIN_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -156,8 +216,79 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
           id: 'mobilePhone',
           dataType: 'number',
           label: 'What is your phone number? (optional)',
-          description: 'If you’d like to be contacted by phone about your innovation, enter your phone number.',
+          description: "If you'd like to be contacted by phone about your innovation, enter your phone number.",
           validations: { maxLength: 20 }
+        }
+      ]
+    })
+  );
+
+  steps.push(
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'howDidYouFindUsList',
+          dataType: 'checkbox-array',
+          label: 'How did you find out about the NHS Innovation Service?',
+          description: 'Select all that apply.',
+          validations: { isRequired: [true, 'Choose at least one option'] },
+          items: [
+            {
+              value: HowDidYouFindUsEnums.EVENT,
+              label: howDidYouFindUsItems.EVENT.label,
+              conditional: new FormEngineParameterModel({
+                id: 'howDidYouFindUsEvent',
+                dataType: 'text',
+                placeholder: howDidYouFindUsItems.EVENT.conditionalPlaceholder,
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.EVENT.conditionalPlaceholder}`] }
+              })
+            },
+            {
+              value: HowDidYouFindUsEnums.READING,
+              label: howDidYouFindUsItems.READING.label,
+              conditional: new FormEngineParameterModel({
+                id: 'howDidYouFindUsReading',
+                dataType: 'text',
+                placeholder: howDidYouFindUsItems.READING.conditionalPlaceholder,
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.READING.conditionalPlaceholder}`] }
+              })
+            },
+            {
+              value: HowDidYouFindUsEnums.RECOMMENDATION_COLLEAGUE,
+              label: howDidYouFindUsItems.RECOMMENDATION_COLLEAGUE.label
+            },
+            {
+              value: HowDidYouFindUsEnums.RECOMMENDATION_ORG,
+              label: howDidYouFindUsItems.RECOMMENDATION_ORG.label,
+              conditional: new FormEngineParameterModel({
+                id: 'howDidYouFindUsRecommendation',
+                dataType: 'text',
+                placeholder: howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder,
+                cssOverride: 'nhsuk-u-margin-bottom-4',
+                validations: { isRequired: [true, `${howDidYouFindUsItems.RECOMMENDATION_ORG.conditionalPlaceholder}`] }
+              })
+            },
+            {
+              value: HowDidYouFindUsEnums.SEARCH_ENGINE,
+              label: howDidYouFindUsItems.SEARCH_ENGINE.label
+            },
+            {
+              value: HowDidYouFindUsEnums.SOCIAL_MEDIA,
+              label: howDidYouFindUsItems.SOCIAL_MEDIA.label
+            },
+            {
+              value: HowDidYouFindUsEnums.OTHER,
+              label: howDidYouFindUsItems.OTHER.label,
+              conditional: new FormEngineParameterModel({
+                id: 'howDidYouFindUsOther',
+                dataType: 'text',
+                placeholder: howDidYouFindUsItems.OTHER.conditionalPlaceholder,
+                validations: { isRequired: [true, 'Explain where you heard about the service'] }
+              })
+            }
+          ]
         }
       ]
     })
@@ -173,7 +304,8 @@ function inboundParsing(): StepPayloadType {
     organisationDescription: null,
     hasRegistrationNumber: 'NO',
     organisationRegistrationNumber: null,
-    mobilePhone: null
+    mobilePhone: null,
+    howDidYouFindUsList: []
   };
 }
 
@@ -191,7 +323,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
             ? data.organisationRegistrationNumber
             : undefined
       }
-    })
+    }),
+    howDidYouFindUsAnswers: howDidYouFindUsDataOutboundParsing(data)
   };
 }
 
@@ -233,5 +366,58 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
     editStepNumber: lastMarkStep + 1
   });
 
+  lastMarkStep = lastMarkStep + 1;
+
+  toReturn.push({
+    label: 'How did you find out about the NHS Innovation Service?',
+    value: howDidYouFindUsDataSummaryParsing(data),
+    editStepNumber: lastMarkStep + 1,
+    allowHTML: true
+  });
+
   return toReturn;
+}
+
+function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFindUsAnswersType {
+  let answers = {
+    ...(data.howDidYouFindUsList.includes('EVENT')
+      ? { event: true, eventComment: data.howDidYouFindUsEvent ?? '' }
+      : null),
+    ...(data.howDidYouFindUsList.includes('READING')
+      ? { reading: true, readingComment: data.howDidYouFindUsReading ?? '' }
+      : null),
+    ...(data.howDidYouFindUsList.includes('RECOMMENDATION_COLLEAGUE') ? { recommendationColleague: true } : null),
+    ...(data.howDidYouFindUsList.includes('RECOMMENDATION_ORG')
+      ? { recommendationOrg: true, recommendationOrgComment: data.howDidYouFindUsRecommendation }
+      : null),
+    ...(data.howDidYouFindUsList.includes('SEARCH_ENGINE') ? { searchEngine: true } : null),
+    ...(data.howDidYouFindUsList.includes('SOCIAL_MEDIA') ? { socialMedia: true } : null),
+    ...(data.howDidYouFindUsList.includes('OTHER')
+      ? { other: true, otherComment: data.howDidYouFindUsOther ?? '' }
+      : null)
+  };
+
+  return answers;
+}
+
+function howDidYouFindUsDataSummaryParsing(data: StepPayloadType): string {
+  let summaryData: string = '';
+
+  summaryData += '<ul class="nhsuk-list">';
+
+  data.howDidYouFindUsList.forEach(item => {
+    summaryData += '<li>';
+    summaryData += howDidYouFindUsItems[item as HowDidYouFindUsEnums].label;
+
+    if (item === 'EVENT' && data.howDidYouFindUsEvent) summaryData += ` - ${data.howDidYouFindUsEvent}`;
+    if (item === 'READING' && data.howDidYouFindUsReading) summaryData += ` - ${data.howDidYouFindUsReading}`;
+    if (item === 'RECOMMENDATION_ORG' && data.howDidYouFindUsRecommendation)
+      summaryData += ` - ${data.howDidYouFindUsRecommendation}`;
+    if (item === 'OTHER' && data.howDidYouFindUsOther) summaryData += ` - ${data.howDidYouFindUsOther}`;
+
+    summaryData += '</li>';
+  });
+  summaryData += '</ul>';
+
+  return summaryData;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
@@ -10,8 +10,9 @@ import { TableModel } from '@app/base/models';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
+import { DateISOType } from '@app/base/types';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
+import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 enum FilterTypeEnum {
@@ -44,7 +45,23 @@ type FiltersType = {
   templateUrl: './innovations-list.component.html'
 })
 export class InnovationsListComponent extends CoreComponent implements OnInit {
-  innovationsList = new TableModel<InnovationsListDTO['data'][number], InnovationsListFiltersType>({ pageSize: 20 });
+  innovationsList = new TableModel<
+    {
+      id: string;
+      name: string;
+      groupedStatus: InnovationGroupedStatusEnum;
+      submittedAt: DateISOType | null;
+      statusUpdatedAt: DateISOType;
+      assessment: {
+        id: string;
+        assignedTo: string | null;
+        updatedAt: DateISOType;
+        daysFromSubmittedAtToToday: number | null;
+        overdueStatus: 'EXEMPT' | 'OVERDUE' | 'ALMOST_DUE' | null;
+      } | null;
+    },
+    InnovationsListFiltersType
+  >({ pageSize: 20 });
 
   form = new FormGroup(
     {
@@ -224,8 +241,41 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   getInnovationsList(column?: string): void {
     this.setPageStatus('LOADING');
 
+    const { take, skip, filters, order } = this.innovationsList.getAPIQueryParams();
+
     this.innovationsService
-      .getInnovationsList({ queryParams: this.innovationsList.getAPIQueryParams(), fields: ['groupedStatus'] })
+      .getInnovationsList(
+        [
+          'id',
+          'name',
+          'groupedStatus',
+          'submittedAt',
+          'statusUpdatedAt',
+          'assessment.id',
+          'assessment.assignedTo',
+          'assessment.isExempt',
+          'assessment.updatedAt'
+        ],
+        filters,
+        { take, skip, order }
+      )
+      .pipe(
+        map(response => ({
+          data: response.data.map(innovation => ({
+            ...innovation,
+            assessment: innovation.assessment
+              ? {
+                  id: innovation.assessment.id,
+                  assignedTo: innovation.assessment.assignedTo,
+                  updatedAt: innovation.assessment.updatedAt,
+                  daysFromSubmittedAtToToday: this.getOverdueDays(innovation.submittedAt),
+                  overdueStatus: this.getOverdueStatus(innovation.assessment.isExempt, innovation.submittedAt)
+                }
+              : null
+          })),
+          count: response.count
+        }))
+      )
       .subscribe(response => {
         this.innovationsList.setData(response.data, response.count);
 
@@ -272,13 +322,12 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     const endDate = this.getDateByControlName('submittedEndDate') ?? undefined;
 
     this.innovationsList.setFilters({
-      name: this.form.get('search')?.value,
-      mainCategories: this.form.get('mainCategories')?.value,
+      search: this.form.get('search')?.value ?? undefined,
       locations: this.form.get('locations')?.value,
       groupedStatuses:
         groupedStatusesFilter && groupedStatusesFilter.length > 0 ? groupedStatusesFilter : this.availableGroupedStatus,
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-      ...(startDate || endDate ? { dateFilter: [{ field: 'submittedAt', startDate, endDate }] } : {})
+      ...(startDate || endDate ? { dateFilters: [{ field: 'submittedAt', startDate, endDate }] } : {})
     });
 
     this.innovationsList.setPage(1);
@@ -347,5 +396,25 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   getDateByControlName(formControlName: string) {
     const value = this.form.get(formControlName)!.value;
     return DatesHelper.parseIntoValidFormat(value);
+  }
+
+  getOverdueStatus(isExempted: boolean, submittedAt: string | null) {
+    if (!submittedAt) {
+      return null;
+    } // this shouldn't happen since submittedAt is required to reach the assessment phase
+    if (isExempted) {
+      return 'EXEMPT' as const;
+    } else {
+      const daysFromSubmittedAtToToday = this.getOverdueDays(submittedAt) ?? 0;
+      return daysFromSubmittedAtToToday >= 15
+        ? ('OVERDUE' as const)
+        : daysFromSubmittedAtToToday >= 10
+          ? ('ALMOST_DUE' as const)
+          : null;
+    }
+  }
+
+  getOverdueDays(submittedAt: string | null) {
+    return submittedAt ? DatesHelper.dateDiff(submittedAt, new Date().toISOString()) : null;
   }
 }

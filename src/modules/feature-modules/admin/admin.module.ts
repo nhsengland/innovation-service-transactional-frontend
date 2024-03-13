@@ -9,8 +9,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 import { ContextInnovationOutletComponent } from './base/context-innovation-outlet.component';
 import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-menu-outlet.component';
 // Pages.
-// // Account.
-import { PageAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+
 // // Users
 import { PageUsersRoleActivateComponent } from './pages/users/roles/role-activate.component';
 import { PageUsersRoleChangeComponent } from './pages/users/roles/role-change.component';
@@ -64,6 +63,7 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AdminRoutingModule],
@@ -71,9 +71,10 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // Base
     ContextInnovationOutletComponent,
     SidebarInnovationMenuOutletComponent,
+    SidebarAccountMenuOutletComponent,
 
     // Pages.
-    PageAccountManageAccountInfoComponent,
+
     // Users
     PageUserEmailComponent,
     PageUserFindComponent,

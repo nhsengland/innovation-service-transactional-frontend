@@ -61,10 +61,11 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       next: organisation => {
         this.organisation = {
           ...organisation,
-          hasInactiveUnits: organisation.organisationUnits.some(unit => unit.isActive === false),
-          organisationUnits: organisation.organisationUnits.map(u => ({
-            ...u
-          }))
+          hasInactiveUnits: organisation.organisationUnits?.some(unit => unit.isActive === false) || null,
+          organisationUnits:
+            organisation.organisationUnits?.map(u => ({
+              ...u
+            })) || []
         };
 
         this.setPageTitle('Organisation information');

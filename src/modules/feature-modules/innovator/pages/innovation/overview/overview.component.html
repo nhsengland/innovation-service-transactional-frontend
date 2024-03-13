@@ -1,23 +1,11 @@
 <theme-content-wrapper [status]="pageStatus">
   <ng-container *ngIf="innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt">
-    <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
-      <div class="nhsuk-card--care__heading-container">
-        <h2 class="nhsuk-card--care__heading">
-          <span role="text"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> Your innovation is currently not receiving any support </span>
-        </h2>
-        <span class="nhsuk-card--care__arrow" aria-hidden="true"></span>
-      </div>
-
-      <div class="nhsuk-card__content">
-        <p>
-          There are no organisation units currently supporting your innovation. There are also no more outstanding suggestions from your original needs assessment or from other
-          organisations.
-        </p>
-        <p>Don't worry, there are a few options available to you.</p>
-        <p>
-          <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed"> Choose how you want to proceed with your innovation </a>
-        </p>
-      </div>
+    <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
+      <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> There is no active support for your innovation</h3>
+      <ul class="nhsuk-list" role="list">
+        <li><p>There are no organisations currently providing support to your innovation.</p></li>
+        <li>Find out what options are available to you and <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed">decide what to do next.</a></li>
+      </ul>
     </div>
   </ng-container>
 

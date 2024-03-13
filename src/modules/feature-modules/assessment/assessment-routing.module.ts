@@ -11,7 +11,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Assessment module pages.
 // // Account.
-import { PageAssessmentAccountManageAccountInfoComponent } from './pages/account/manage-account-info.component';
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
@@ -72,6 +72,8 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -537,8 +539,25 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAssessmentAccountManageAccountInfoComponent,
+                component: PageSharedAccountManageAccountInfoComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'mfa',
+                data: { layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: 'edit'
+                  },
+                  {
+                    path: 'edit',
+                    pathMatch: 'full',
+                    component: PageAccountMFAEditComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           },
@@ -564,6 +583,16 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+
+      {
+        path: 'organisation/:organisationId/progress-categories',
+        pathMatch: 'full',
+        data: {
+          breadcrumb: 'Progress categories',
+          layout: { type: 'full' }
+        },
+        component: PageProgressCategoriesWrapperComponent
       }
     ]
   }

@@ -24,7 +24,7 @@
                   <theme-svg-icon *ngIf="unitItem.isOpened" type="minus" />
                   <span class="nhsuk-u-margin-left-2"> {{ unitItem.sameOrganisation ? unitItem.name + " (your organisation)" : unitItem.name }}</span>
                 </button>
-                <div class="nhsuk-u-font-size-14 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
+                <div class="nhsuk-u-font-size-16 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
                   <span
                     >Status:
                     <theme-tag
@@ -51,7 +51,7 @@
                 <button
                   *ngIf="!unitItem.isLoading && unitItem.canDoProgressUpdates"
                   routerLink="progress-update-new"
-                  class="nhsuk-button button-small nhsuk-u-margin-left-5 nhsuk-u-margin-bottom-4"
+                  class="nhsuk-button button-small nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-5"
                 >
                   Update progress
                 </button>
@@ -62,8 +62,8 @@
                       <ng-container *ngSwitchCase="'SUPPORT_UPDATE'">
                         <p>
                           <span class="nhsuk-u-font-weight-bold">Updated support status</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">
-                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                          <span class="nhsuk-hint nhsuk-u-font-size-16">
+                            {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                             by
                             <span class="nhsuk-u-font-weight-bold"
                               >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
@@ -83,8 +83,8 @@
                       <ng-container *ngSwitchCase="'SUGGESTED_ORGANISATION'">
                         <p>
                           <span class="nhsuk-u-font-weight-bold">Organisation suggested by {{ historyItem.params.suggestedByName || "Needs Assessment team" }}</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">
-                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                          <span class="nhsuk-hint nhsuk-u-font-size-16">
+                            {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                             by
                             <span class="nhsuk-u-font-weight-bold"
                               >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
@@ -96,21 +96,58 @@
 
                       <ng-container *ngSwitchCase="'PROGRESS_UPDATE'">
                         <p>
-                          <span class="nhsuk-u-font-weight-bold">Progress update</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">
-                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                          <span class="nhsuk-u-font-weight-bold">Progress update: </span>
+                          <span *ngIf="historyItem.params?.title" class="nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
+                          <span *ngIf="historyItem.params?.categories?.length === 1" class="nhsuk-u-font-weight-bold">{{ historyItem.params.categories?.[0] }}</span>
+                          <span *ngIf="historyItem.params?.category" class="nhsuk-u-font-weight-bold">{{ historyItem.params.category }}</span>
+                          <span class="nhsuk-hint nhsuk-u-font-size-16">
+                            {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                             by
                             <span class="nhsuk-u-font-weight-bold"
                               >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
                             >
                           </span>
                         </p>
-                        <p class="nhsuk-body-s">
-                          <span class="d-block nhsuk-u-font-weight-bold">{{ historyItem.params.title }}</span>
+
+                        <p *ngIf="historyItem.params?.categories?.length === 1" class="font-color-secondary">
+                          {{ historyItem.params.categories![0] | categoryDescription: unitItem.organisation.acronym }}
+                        </p>
+
+                        <p *ngIf="historyItem.params?.subCategories?.length === 1">
+                          <span>{{ historyItem.params.subCategories![0] }}:</span>
+                          <span class="font-color-secondary">
+                            {{ historyItem.params.subCategories![0] | subcategoryDescription: unitItem.organisation.acronym : historyItem.params.category! }}
+                          </span>
+                        </p>
+
+                        <ul *ngIf="historyItem.params.categories && historyItem.params.categories.length > 1" class="nhsuk-list nhsuk-list--bullet">
+                          <li *ngFor="let categories of historyItem.params.categories">
+                            {{ categories }}
+                          </li>
+                        </ul>
+
+                        <ul *ngIf="historyItem.params.subCategories && historyItem.params.subCategories.length > 1" class="nhsuk-list nhsuk-list--bullet">
+                          <li *ngFor="let subcategories of historyItem.params.subCategories">
+                            {{ subcategories }}
+                          </li>
+                        </ul>
+
+                        <p
+                          *ngIf="
+                            (historyItem.params.categories && historyItem.params.categories.length > 1) ||
+                            (historyItem.params.subCategories && historyItem.params.subCategories.length > 1)
+                          "
+                        >
+                          <a routerLink="../../../organisation/{{ unitItem.organisation.id }}/progress-categories" target="_blank" rel="noopener noreferrer"
+                            >Find out what these progress categories mean (opens in new window).</a
+                          >
+                        </p>
+                        <p>
+                          <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Comment</span>
                           <span>{{ historyItem.params.message }}</span>
                         </p>
-                        <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file" class="nhsuk-body-s">
-                          <span class="d-block nhsuk-u-font-weight-bold">Document</span>
+                        <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file">
+                          <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Document</span>
                           <span *ngIf="!historyItem.params.file">
                             No document added.
                             <a *ngIf="unitItem.canDoProgressUpdates" routerLink="../documents/new" [queryParams]="{ progressUpdateId: historyItem.id }">Add a document.</a>
@@ -128,8 +165,8 @@
                       <ng-container *ngSwitchCase="'INNOVATION_ARCHIVED'">
                         <p>
                           <span class="nhsuk-u-font-weight-bold">Innovation archived</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">
-                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                          <span class="nhsuk-hint nhsuk-u-font-size-16">
+                            {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                             by
                             <span class="nhsuk-u-font-weight-bold"
                               >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
@@ -149,8 +186,8 @@
                       <ng-container *ngSwitchCase="'STOP_SHARE'">
                         <p>
                           <span class="nhsuk-u-font-weight-bold">Innovator stopped sharing</span>
-                          <span class="nhsuk-hint nhsuk-u-font-size-14">
-                            {{ historyItem.createdAt | date: ("app.date_formats.medium_date" | translate) }}
+                          <span class="nhsuk-hint nhsuk-u-font-size-16">
+                            {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                             by
                             <span class="nhsuk-u-font-weight-bold"
                               >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span

@@ -647,7 +647,7 @@ ul.list-vertical-line {
     background: var(--primary-color);
   }
 
-  li {
+  > li {
     position: relative;
     padding-left: 24px;
     margin-bottom: 15px;

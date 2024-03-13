@@ -78,6 +78,13 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'select-component':
+          form.addControl(
+            parameter.id,
+            FormEngineHelper.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' })
+          );
+          break;
+
         case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
@@ -381,6 +388,26 @@ export class FormEngineHelper {
         : (parameter.validations.existsIn as [string[], string]);
       if (validation[0]) {
         validators.push(CustomValidators.existsInValidator(validation[0] as string[], validation[1] as string));
+      }
+    }
+
+    if (parameter.validations?.equalTo) {
+      validation =
+        typeof parameter.validations.equalTo === 'string'
+          ? [parameter.validations.equalTo, null]
+          : (parameter.validations.equalTo as [string, string]);
+      if (validation[0]) {
+        validators.push(CustomValidators.equalTo(validation[0] as string, validation[1] as string));
+      }
+    }
+
+    if (parameter.validations?.equalToField) {
+      validation =
+        typeof parameter.validations.equalToField === 'string'
+          ? [parameter.validations.equalToField, null]
+          : (parameter.validations.equalToField as [string, string]);
+      if (validation[0]) {
+        validators.push(CustomValidators.equalToField(validation[0] as string, validation[1] as string));
       }
     }
 

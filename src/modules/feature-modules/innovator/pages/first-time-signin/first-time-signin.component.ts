@@ -84,7 +84,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
               : {
                   id: this.stores.authentication.getUserInfo().organisations[0].id,
                   isShadow: true
-                }
+                },
+            howDidYouFindUsAnswers: wizardData.howDidYouFindUsAnswers
           })
         ),
 

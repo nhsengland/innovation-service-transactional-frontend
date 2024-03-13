@@ -61,7 +61,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
         const data =
           this.module === 'Organisation'
             ? { name: organisation.name, acronym: organisation.acronym }
-            : organisation.organisationUnits.filter(unit => unit.id === this.unitId)[0];
+            : organisation.organisationUnits?.filter(unit => unit.id === this.unitId)[0];
         this.wizard
           .gotoStep(1)
           .setAnswers(this.wizard.runInboundParsing({ ...data }))

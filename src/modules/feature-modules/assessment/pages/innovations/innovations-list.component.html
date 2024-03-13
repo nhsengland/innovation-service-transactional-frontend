@@ -169,20 +169,20 @@
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("submittedAt") }}</span>
                 <span>{{ innovation.submittedAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                <span *ngIf="innovation.daysFromSubmittedAtToToday" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
+                <span *ngIf="innovation.assessment?.daysFromSubmittedAtToToday" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
                   <span class="nhsuk-u-visually-hidden">Innovation was last submitted: </span>
-                  {{ innovation.daysFromSubmittedAtToToday + " " + ("dictionary.day" | pluralTranslate: innovation.daysFromSubmittedAtToToday | translate) + " ago" }}
+                  {{ innovation.assessment?.daysFromSubmittedAtToToday + " " + ("dictionary.day" | pluralTranslate: innovation.assessment?.daysFromSubmittedAtToToday | translate) + " ago" }}
                 </span>
                 <theme-tag
                   class="d-block"
-                  *ngIf="innovation.overdueStatus"
-                  type="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.overdueStatus + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.overdueStatus + '.label' | translate }}"
+                  *ngIf="innovation.assessment?.overdueStatus"
+                  type="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.label' | translate }}"
                 ></theme-tag>
               </td>
               <td class="nhsuk-table__cell fixed-width-200 word-break">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("assessedBy") }}</span>
-                {{ innovation.assessment?.assignedTo?.name ?? "Unassigned" }}
+                {{ innovation.assessment?.assignedTo ?? "Unassigned" }}
               </td>
               <td class="nhsuk-table__cell text-align-right fixed-width-175">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("groupedStatus") }}</span>

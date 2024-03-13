@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { StatisticsCardType } from '@app/base/types';
 
-import { InnovationsListDTO, InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -25,7 +24,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   cardsList: StatisticsCardType[] = [];
 
-  latestInnovations: TableModel<InnovationsListDTO['data'][0], InnovationsListFiltersType>;
+  latestInnovations: TableModel<{ id: string; name: string; assessment: { id: string } | null }>;
 
   constructor(
     private statisticsService: StatisticsService,
@@ -56,13 +55,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       ]
     };
 
-    this.latestInnovations.setFilters({
-      latestWorkedByMe: true
-    });
-
     forkJoin([
       this.statisticsService.getUserStatisticsInfo(qp),
-      this.innovationsService.getInnovationsList({ queryParams: this.latestInnovations.getAPIQueryParams() })
+      this.innovationsService.getInnovationsList(
+        ['id', 'name', 'assessment.id'],
+        { latestWorkedByMe: true },
+        { take: 5, skip: 0 }
+      )
     ]).subscribe(([statistics, innovationsList]) => {
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);
 
