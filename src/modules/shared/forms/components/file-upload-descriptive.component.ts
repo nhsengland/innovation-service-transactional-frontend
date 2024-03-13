@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { AbstractControl, ControlContainer, FormControl, Validators } from '@angular/forms';
 import { RandomGeneratorHelper } from '@app/base/helpers';
-import { Subscription } from 'rxjs';
+import { startWith, Subscription } from 'rxjs';
 import { FileTypes } from '../engine/config/form-engine.config';
 import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { CustomValidators } from '../validators/custom-validators';
@@ -90,7 +90,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.fieldChangeSubscription.add(
-      this.fieldControl[0].valueChanges.subscribe(value => {
+      this.fieldControl[0].valueChanges.pipe(startWith(this.fieldControl[0].value)).subscribe(value => {
         if (value && this.fieldControl[0].valid) {
           this.fieldControl[1].setValidators([
             CustomValidators.required('A name is required'),
