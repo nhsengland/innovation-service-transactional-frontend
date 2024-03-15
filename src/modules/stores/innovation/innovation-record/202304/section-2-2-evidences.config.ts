@@ -43,6 +43,10 @@ export const stepsLabels = {
   // }
 };
 
+const stepsParentChildRelations = {
+  evidenceSubmitType: ['evidenceType', 'description']
+};
+
 // Types.
 // type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
 type StepPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
@@ -50,6 +54,7 @@ type OutboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number
 
 // Logic.
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
+  stepsParentChildRelations: stepsParentChildRelations,
   steps: [
     new FormEngineModel({
       parameters: [

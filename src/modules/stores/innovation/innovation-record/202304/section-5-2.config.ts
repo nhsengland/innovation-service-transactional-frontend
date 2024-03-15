@@ -16,6 +16,8 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {};
+
 // Types.
 type InboundPayloadType = DocumentType202304['INTELLECTUAL_PROPERTY'];
 type StepPayloadType = InboundPayloadType;
@@ -26,6 +28,7 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'INTELLECTUAL_PROPERTY',
   title: 'Intellectual property',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

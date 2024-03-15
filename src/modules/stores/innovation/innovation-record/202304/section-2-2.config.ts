@@ -27,6 +27,10 @@ const stepsLabels = {
   q5: { label: 'Do you need support with any of these areas?' }
 };
 
+const stepsParentChildRelations = {
+  currentlyCollectingEvidence: ['summaryOngoingEvidenceGathering']
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'] & {
   evidences?: { id: string; name: string; summary: string }[];
@@ -39,6 +43,7 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of impact and benefit',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [
@@ -56,7 +61,6 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
         parameters: [
           {
             id: 'currentlyCollectingEvidence',
-            conditionalChildren: true,
             dataType: 'radio-group',
             label: stepsLabels.q2.label,
             validations: { isRequired: [true, 'Choose one option'] },
@@ -91,8 +95,7 @@ function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentSte
             label: stepsLabels.q3.label,
             description: stepsLabels.q3.description,
             validations: { isRequired: [true, 'A description is required'] },
-            lengthLimit: 'l',
-            parentId: 'currentlyCollectingEvidence'
+            lengthLimit: 'l'
           }
         ]
       })

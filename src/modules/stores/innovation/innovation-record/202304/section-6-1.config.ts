@@ -41,6 +41,12 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  hasRevenueModel: ['revenues', 'payingOrganisations', 'benefittingOrganisations', 'hasFunding'],
+  hasFunding: ['fundingDescription']
+};
+
+
 // Types.
 type InboundPayloadType = DocumentType202304['REVENUE_MODEL'];
 type StepPayloadType = InboundPayloadType;
@@ -51,6 +57,7 @@ export const SECTION_6_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REVENUE_MODEL',
   title: 'Revenue model',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

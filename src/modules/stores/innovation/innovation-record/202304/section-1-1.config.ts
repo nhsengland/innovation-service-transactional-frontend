@@ -69,6 +69,11 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  officeLocation: ['postcode', 'countryLocation'],
+  categories: ['mainCategory']
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['INNOVATION_DESCRIPTION'];
 type StepPayloadType = InboundPayloadType & {
@@ -83,6 +88,7 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

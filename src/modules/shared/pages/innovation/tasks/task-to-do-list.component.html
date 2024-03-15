@@ -7,7 +7,7 @@
   </div>
 
   <p *ngIf="isArchived">All open tasks were cancelled when this innovation was archived.</p>
-    
+
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <!-- Use this container to orchestrate different states acording to different types -->
@@ -40,7 +40,7 @@
     <h2 class="nhsuk-u-margin-bottom-2">
       {{ tablesTitles.topTableTitle }}
     </h2>
-    
+
     <ng-container *ngIf="userType === 'INNOVATOR'">
       <ng-container *ngIf="topList.count === 0 && bottomList.count === 0">
         <p class="nhsuk-u-padding-top-3">There are no tasks assigned to you yet.</p>

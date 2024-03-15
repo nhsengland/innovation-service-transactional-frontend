@@ -39,6 +39,10 @@ const stepsLabels = {
   // q7: { label: 'Share any relevant implementation planning documents', description: 'Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.' },
 };
 
+const stepsParentChildRelations = {
+  isDeployed: ['stepDeploymentPlans', 'commercialBasis', 'organisationDeploymentAffect']
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['DEPLOYMENT'];
 type StepPayloadType = InboundPayloadType & { stepDeploymentPlans: { name: string }[] };
@@ -49,6 +53,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'DEPLOYMENT',
   title: 'Deployment',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

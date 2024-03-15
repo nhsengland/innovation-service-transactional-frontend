@@ -29,6 +29,16 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  // hasMarketResearch: [
+  //   'marketResearch',
+  //   'optionBestDescribesInnovation',
+  //   'whatCompetitorsAlternativesExist'
+  // ]
+  hasMarketResearch: ['marketResearch', 'whatCompetitorsAlternativesExist'],
+  marketResearch: ['optionBestDescribesInnovation']
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['MARKET_RESEARCH'];
 type StepPayloadType = InboundPayloadType;
@@ -39,12 +49,12 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'MARKET_RESEARCH',
   title: 'Market research',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [
           {
             id: 'hasMarketResearch',
-            conditionalChildren: true,
             dataType: 'radio-group',
             label: stepsLabels.q1.label,
             description: stepsLabels.q1.description,
@@ -84,8 +94,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.q2.label,
           description: stepsLabels.q2.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l',
-          parentId: 'hasMarketResearch'
+          lengthLimit: 'l'
         }
       ]
     }),
@@ -96,8 +105,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'radio-group',
           label: stepsLabels.q3.label,
           validations: { isRequired: [true, 'Choose one option'] },
-          items: optionBestDescribesInnovationItems,
-          parentId: 'hasMarketResearch'
+          items: optionBestDescribesInnovationItems
         }
       ]
     }),
@@ -109,8 +117,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           label: stepsLabels.q4.label,
           description: stepsLabels.q4.description,
           validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 'l',
-          parentId: 'hasMarketResearch'
+          lengthLimit: 'l'
         }
       ]
     })

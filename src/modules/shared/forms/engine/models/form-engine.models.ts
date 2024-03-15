@@ -19,8 +19,6 @@ export class FormEngineModel {
 
 export class FormEngineParameterModel {
   id: string;
-  conditionalChildren?: boolean;
-  parentId?: string;
   dataType:
     | 'text'
     | 'textarea'
@@ -105,8 +103,6 @@ export class FormEngineParameterModel {
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;
-    this.conditionalChildren = data.conditionalChildren;
-    this.parentId = data.parentId;
     this.dataType = data.dataType || 'text';
     this.label = data.label;
     this.description = data.description;

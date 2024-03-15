@@ -40,6 +40,11 @@ const stepsLabels = {
   //     },
 };
 
+const stepsParentChildRelations = {
+  testedWithIntendedUsers: ['intendedUserGroupsEngaged', 'userTests'],
+  userTests: ['userTestFeedback_']
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['TESTING_WITH_USERS'];
 type StepPayloadType = InboundPayloadType & { [key in `userTestFeedback_${string}`]?: string };
@@ -50,6 +55,7 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
   wizard: new WizardEngineModel({
+    stepsParentChildRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [
