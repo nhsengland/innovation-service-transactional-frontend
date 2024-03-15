@@ -117,7 +117,8 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
         .filter(u => !userUnits.has(u.id))
         .map(u => ({ value: u.id, label: u.name }));
 
-      if (units.length === 1) {
+      // if the organisation has only one unit, don't show unit selection step
+      if (organisation?.units.length === 1) {
         data.unitIds = units.map(u => u.value);
       } else {
         steps.push(
