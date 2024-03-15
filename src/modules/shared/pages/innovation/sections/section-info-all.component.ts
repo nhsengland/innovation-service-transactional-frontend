@@ -173,41 +173,30 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           : null;
         sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
 
-        if (
-          this.stores.authentication.isAccessorType() &&
-          this.innovation.status === 'IN_PROGRESS' &&
-          sectionInfo.status.id === 'DRAFT'
-        ) {
-          // If accessor, only view information if section is submitted.
-          summaryList = [];
-          evidencesList = [];
-        } else {
-          // Special business rule around section 2.2.
-          sectionInfo.hasEvidences = !!(
-            section.evidences &&
-            responseItem.data.hasEvidence &&
-            responseItem.data.hasEvidence === 'YES'
-          );
+        // Special business rule around section 2.2.
+        sectionInfo.hasEvidences = !!(
+          section.evidences &&
+          responseItem.data.hasEvidence &&
+          responseItem.data.hasEvidence === 'YES'
+        );
 
-          sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
+        sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
 
-          const validInformation = sectionInfo.wizard.validateData();
+        const validInformation = sectionInfo.wizard.validateData();
 
-          if (sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
-            sectionInfo.submitButton.show = true;
-            if (
-              this.innovation.status !== InnovationStatusEnum.CREATED &&
-              this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-            ) {
-              sectionInfo.submitButton.label = 'Submit updates';
-            }
+        if (sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
+          sectionInfo.submitButton.show = true;
+          if (
+            this.innovation.status !== InnovationStatusEnum.CREATED &&
+            this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+          ) {
+            sectionInfo.submitButton.label = 'Submit updates';
           }
-
-          const data = sectionInfo.wizard.runSummaryParsing();
-          summaryList = data.filter(item => !item.evidenceId);
-          evidencesList = data.filter(item => item.evidenceId);
         }
 
+        const data = sectionInfo.wizard.runSummaryParsing();
+        summaryList = data.filter(item => !item.evidenceId);
+        evidencesList = data.filter(item => item.evidenceId);
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });

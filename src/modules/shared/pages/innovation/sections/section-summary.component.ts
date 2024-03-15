@@ -29,6 +29,7 @@ export type SectionStepsList = {
 })
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit {
   @Input({ required: true }) sectionData!: SectionSummaryInputData;
+  @Input() title?: string;
 
   sectionInfo: Partial<SectionInfoType> & {
     id: string;
