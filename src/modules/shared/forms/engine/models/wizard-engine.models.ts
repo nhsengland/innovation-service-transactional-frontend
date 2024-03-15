@@ -159,9 +159,11 @@ export class WizardEngineModel {
 
       const currentStepIsChildOfSetParent =
         this.currentQuestionParentsId.length &&
+        // Create an array with all children of all parents added to currentQuestionParentsId
         Object.entries(this.stepsParentChildRelations)
           .filter(([k, _v]) => this.currentQuestionParentsId.includes(k))
           .flatMap(([_k, v]) => (Array.isArray(v) ? v : v))
+          // Check if current step is in said array
           .some(step => currentStepId.includes(step));
 
       if (previousStepIsParentOfCurrent) {
