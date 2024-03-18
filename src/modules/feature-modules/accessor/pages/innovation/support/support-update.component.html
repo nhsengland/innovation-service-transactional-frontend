@@ -73,12 +73,10 @@
           ></theme-form-textarea>
 
           <div *ngIf="chosenStatus !== 'ENGAGING'" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
-            <p>Everyone will be able to see this message. It will appear on the innovation’s support summary.</p>
+            <p>Everyone will be able to see this message. It will appear on the innovation's support summary.</p>
           </div>
 
-          <button class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3" (click)="onSubmit()">
-            {{ form.get("status")?.value === "ENGAGING" ? "Confirm and send message" : "Confirm" }}
-          </button>
+          <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">{{ submitButton.label }}</button>
         </ng-container>
 
         <ng-container *ngIf="stepNumber === 4">
