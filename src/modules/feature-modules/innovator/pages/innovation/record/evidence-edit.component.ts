@@ -15,14 +15,14 @@ import { InnovationSectionEnum } from '@modules/stores/innovation';
 export class InnovationSectionEvidenceEditComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  alertErrorsList: { title: string; description: string }[] = [];
-
   innovation: ContextInnovationType;
   sectionId: InnovationSectionEnum;
   evidenceId: string;
   baseUrl: string;
 
   wizard: WizardEngineModel;
+
+  submitButton = { isActive: true, label: 'Save' };
 
   isCreation(): boolean {
     return !this.activatedRoute.snapshot.params.evidenceId;
@@ -74,11 +74,6 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   }
 
   onSubmitStep(action: 'previous' | 'next', event: Event): void {
-    // event.preventDefault();
-
-    this.alertErrorsList = [];
-    this.resetAlert();
-
     const formData = this.formEngineComponent?.getFormValues();
 
     if (action === 'previous') {
@@ -105,23 +100,15 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     if (this.wizard.isQuestionStep()) {
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     } else {
-      this.setPageStatus('LOADING');
-
-      const validInformation = this.wizard.validateData();
-
-      if (!validInformation.valid) {
-        this.alertErrorsList = validInformation.errors;
-        this.setAlertError(`Please verify what's missing with your answers`, {
-          itemsList: this.alertErrorsList,
-          width: '2.thirds'
-        });
-      }
       this.setPageTitle('Check your answers', { size: 'l' });
-      this.setPageStatus('READY');
     }
   }
 
   onSubmitEvidence(): void {
+    this.resetAlert();
+
+    this.submitButton = { isActive: false, label: 'Saving...' };
+
     this.stores.innovation
       .upsertSectionEvidenceInfo$(this.innovation.id, this.wizard.runOutboundParsing(), this.evidenceId)
       .subscribe({
@@ -133,11 +120,13 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
             `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${response.id}`
           );
         },
-        error: () =>
+        error: () => {
+          this.submitButton = { isActive: true, label: 'Save' };
           this.setAlertError(
             'An error occurred when saving your evidence. Please try again or contact us for further help.',
             { width: '2.thirds' }
-          )
+          );
+        }
       });
   }
 }
