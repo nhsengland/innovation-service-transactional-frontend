@@ -40,7 +40,9 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  isDeployed: ['stepDeploymentPlans', 'commercialBasis', 'organisationDeploymentAffect']
+  stepDeploymentPlans: 'isDeployed',
+  commercialBasis: 'isDeployed',
+  organisationDeploymentAffect: 'isDeployed'
 };
 
 // Types.
@@ -53,7 +55,7 @@ export const SECTION_8_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'DEPLOYMENT',
   title: 'Deployment',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

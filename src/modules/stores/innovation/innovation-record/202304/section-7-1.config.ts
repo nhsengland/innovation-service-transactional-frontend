@@ -39,8 +39,8 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  hasCostKnowledge: ['costDescription'],
-  patientsRange: ['eligibilityCriteria']
+  costDescription: 'hasCostKnowledge',
+  eligibilityCriteria: 'patientsRange'
 };
 
 // Types.
@@ -53,7 +53,7 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'COST_OF_INNOVATION',
   title: 'Cost of your innovation',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

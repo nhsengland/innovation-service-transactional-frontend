@@ -22,7 +22,7 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  innovationPathwayKnowledge: ['potentialPathway']
+  potentialPathway: 'innovationPathwayKnowledge'
 };
 
 // Types.
@@ -35,7 +35,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'CURRENT_CARE_PATHWAY',
   title: 'Current care pathway',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

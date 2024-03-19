@@ -28,7 +28,7 @@ export const SECTION_5_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'INTELLECTUAL_PROPERTY',
   title: 'Intellectual property',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

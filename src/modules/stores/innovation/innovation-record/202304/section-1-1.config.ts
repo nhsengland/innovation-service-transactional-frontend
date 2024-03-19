@@ -69,9 +69,10 @@ const stepsLabels = {
   }
 };
 
-const stepsParentChildRelations = {
-  officeLocation: ['postcode', 'countryLocation'],
-  categories: ['mainCategory']
+const stepsChildParentRelations = {
+  postcode: 'officeLocation',
+  countryLocation: 'officeLocation',
+  mainCategory: 'categories'
 };
 
 // Types.
@@ -88,7 +89,7 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsChildParentRelations,
     steps: [
       new FormEngineModel({
         parameters: [

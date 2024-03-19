@@ -73,9 +73,9 @@ const stepsLabels: InnovationSectionStepLabels = {
   // }
 };
 
-const stepsParentChildRelations = {
-  impactDiseaseCondition: ['diseasesConditionsImpact'],
-  estimatedCarbonReductionSavings: ['estimatedCarbonReductionSavingsDescription']
+const stepsChildParentRelations = {
+  diseasesConditionsImpact: 'impactDiseaseCondition',
+  estimatedCarbonReductionSavingsDescription: 'estimatedCarbonReductionSavings'
 };
 
 // Types.
@@ -88,7 +88,7 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'UNDERSTANDING_OF_NEEDS',
   title: 'Detailed understanding of needs and benefits',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsChildParentRelations,
     steps: [
       new FormEngineModel({
         parameters: [

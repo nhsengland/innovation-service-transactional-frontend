@@ -28,7 +28,7 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  currentlyCollectingEvidence: ['summaryOngoingEvidenceGathering']
+  summaryOngoingEvidenceGathering: 'currentlyCollectingEvidence'
 };
 
 // Types.
@@ -43,7 +43,7 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of impact and benefit',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

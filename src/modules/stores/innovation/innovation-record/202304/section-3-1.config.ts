@@ -30,13 +30,9 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  // hasMarketResearch: [
-  //   'marketResearch',
-  //   'optionBestDescribesInnovation',
-  //   'whatCompetitorsAlternativesExist'
-  // ]
-  hasMarketResearch: ['marketResearch', 'whatCompetitorsAlternativesExist'],
-  marketResearch: ['optionBestDescribesInnovation']
+  marketResearch: 'hasMarketResearch',
+  optionBestDescribesInnovation: 'hasMarketResearch',
+  whatCompetitorsAlternativesExist: 'hasMarketResearch'
 };
 
 // Types.
@@ -49,7 +45,7 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'MARKET_RESEARCH',
   title: 'Market research',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

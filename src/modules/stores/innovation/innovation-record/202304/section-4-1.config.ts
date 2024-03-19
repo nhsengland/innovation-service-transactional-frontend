@@ -40,9 +40,10 @@ const stepsLabels = {
   //     },
 };
 
-const stepsParentChildRelations = {
-  testedWithIntendedUsers: ['intendedUserGroupsEngaged', 'userTests'],
-  userTests: ['userTestFeedback_']
+const stepsChildParentRelations = {
+  intendedUserGroupsEngaged: 'testedWithIntendedUsers',
+  userTests: 'testedWithIntendedUsers',
+  userTestFeedback: 'userTests'
 };
 
 // Types.
@@ -55,7 +56,7 @@ export const SECTION_4_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'TESTING_WITH_USERS',
   title: 'Testing with users',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsChildParentRelations,
     steps: [
       new FormEngineModel({
         parameters: [

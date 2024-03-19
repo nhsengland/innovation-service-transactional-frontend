@@ -1,7 +1,6 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
-import { ThisReceiver } from '@angular/compiler';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -16,14 +15,15 @@ export type WizardSummaryType = {
 };
 
 export type StepsParentalRelationsType = {
-  [step: string]: string[];
+  [child: string]: string;
 };
 
 export class WizardEngineModel {
   isChangingMode: boolean = false;
-  currentQuestionParentsId: string[] = [];
+  entryPoint?: 'page' | 'summary' = 'page';
+  visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepType[];
-  stepsParentChildRelations: StepsParentalRelationsType;
+  stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
@@ -37,7 +37,7 @@ export class WizardEngineModel {
 
   constructor(data: Partial<WizardEngineModel>) {
     this.steps = data.steps ?? [];
-    this.stepsParentChildRelations = data.stepsParentChildRelations ?? {};
+    this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? false;
@@ -107,13 +107,36 @@ export class WizardEngineModel {
   }
 
   previousStep(): this {
-    if (typeof this.currentStepId === 'number') {
-      this.currentStepId--;
-    } else if (this.showSummary && this.currentStepId === 'summary') {
-      this.currentStepId = this.steps.length;
+    const currentStepObjectId = this.currentStep().parameters[0].id.split('_')[0];
+    console.log('this.entryPoint');
+    console.log(this.entryPoint);
+    if (this.showSummary && this.currentStepId === 'summary') {
+      this.gotoSummary();
     }
 
+    if (typeof this.currentStepId === 'number') {
+      if (!this.isChangingMode) {
+        this.currentStepId--;
+      } else {
+        // check if this is the first step ()
+        if (this.entryPoint === 'summary' && currentStepObjectId === [...this.visitedSteps][0]) {
+          this.gotoSummary();
+          return this;
+        }
+        this.currentStepId--;
+        if (this.visitedSteps.has(this.currentStep().parameters[0].id.split('_')[0])) {
+          return this;
+        } else {
+          this.previousStep();
+        }
+      }
+    }
     return this;
+  }
+
+  gotoSummary(): void {
+    this.runSummaryParsing();
+    this.currentStepId = 'summary';
   }
 
   gotoStep(step: number | 'summary'): this {
@@ -123,11 +146,16 @@ export class WizardEngineModel {
 
     this.currentStepId = parseInt(step as string, 10);
 
+    if (this.isChangingMode) {
+      this.visitedSteps.add(this.currentStep().parameters[0].id.split('_')[0]);
+    }
+
     return this;
   }
 
-  enableChangeAndGoToStep(step: number): this {
-    this.currentQuestionParentsId = [];
+  enableChangingAndGoToStep(step: number, entryPoint?: 'page' | 'summary'): this {
+    this.visitedSteps.clear();
+    this.entryPoint = entryPoint ?? 'page';
     this.isChangingMode = true;
     this.gotoStep(step);
     return this;
@@ -135,8 +163,7 @@ export class WizardEngineModel {
 
   nextStep(): this {
     if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
-      this.runSummaryParsing();
-      this.currentStepId = 'summary';
+      this.gotoSummary();
     } else if (typeof this.currentStepId === 'number') {
       this.currentStepId++;
 
@@ -148,41 +175,33 @@ export class WizardEngineModel {
     return this;
   }
 
+  getCurrentStepObjId(): string {
+    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
+    return this.currentStep().parameters[0].id.split('_')[0];
+  }
+
   checkStepConditions(): this {
     if (typeof this.currentStepId === 'number') {
-      const previousStepId = this.steps[this.currentStepId - 2].parameters[0].id;
-      const currentStepId = this.currentStep().parameters[0].id;
+      this.visitedSteps.add(this.getCurrentStepObjId());
 
-      const previousStepIsParentOfCurrent: boolean =
-        this.stepsParentChildRelations[previousStepId] &&
-        this.stepsParentChildRelations[previousStepId].some(step => currentStepId.includes(step));
+      const currentStepIsChildOfVisitedSteps = this.visitedSteps.has(
+        this.stepsChildParentRelations[this.getCurrentStepObjId()]
+      );
 
-      const currentStepIsChildOfSetParent =
-        this.currentQuestionParentsId.length &&
-        // Create an array with all children of all parents added to currentQuestionParentsId
-        Object.entries(this.stepsParentChildRelations)
-          .filter(([k, _v]) => this.currentQuestionParentsId.includes(k))
-          .flatMap(([_k, v]) => (Array.isArray(v) ? v : v))
-          // Check if current step is in said array
-          .some(step => currentStepId.includes(step));
-
-      if (previousStepIsParentOfCurrent) {
-        this.currentQuestionParentsId.push(previousStepId);
+      // Check if visitedSteps has no 'parent' steps in it, if so go to summary.
+      if (![...this.visitedSteps].some(step => Object.values(this.stepsChildParentRelations).includes(step))) {
+        this.gotoSummary();
         return this;
       }
 
-      if (!this.currentQuestionParentsId.length) {
-        this.runSummaryParsing();
-        this.currentStepId = 'summary';
+      if (currentStepIsChildOfVisitedSteps) {
         return this;
+      } else {
+        this.visitedSteps.delete(this.getCurrentStepObjId());
+        this.nextStep();
       }
-
-      if (currentStepIsChildOfSetParent) {
-        return this;
-      }
-
-      this.currentStepId++;
     }
+
     return this;
   }
 

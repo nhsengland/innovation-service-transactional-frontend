@@ -32,8 +32,8 @@ const stepsLabels = {
 };
 
 const stepsParentChildRelations = {
-  hasRegulationKnowledge: ['standardsType'],
-  standardsType: ['standardHasMet_']
+  standardsType: 'hasRegulationKnowledge',
+  standardHasMet: 'standardsType'
 };
 
 // Types.
@@ -48,7 +48,7 @@ export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REGULATIONS_AND_STANDARDS',
   title: 'Regulatory approvals, standards and certifications',
   wizard: new WizardEngineModel({
-    stepsParentChildRelations: stepsParentChildRelations,
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

@@ -19,7 +19,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   alertErrorsList: { title: string; description: string }[] = [];
   errorOnSubmitStep: boolean = false;
-  isChangeMode: boolean = false;
 
   innovation: ContextInnovationType;
   isArchived: boolean;
@@ -74,7 +73,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         queryParams.isChangeMode
           ? // enables changing mode and redirects to step function
-            this.wizard.enableChangeAndGoToStep(this.activatedRoute.snapshot.params.questionId || 1)
+
+            this.wizard.enableChangingAndGoToStep(this.activatedRoute.snapshot.params.questionId || 1)
           : // go to regular step
             this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
@@ -89,7 +89,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepNumber: number): void {
-    this.wizard.enableChangeAndGoToStep(stepNumber);
+    this.wizard.enableChangingAndGoToStep(stepNumber, 'summary');
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
@@ -102,7 +102,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
-      if (this.wizard.isFirstStep() || this.wizard.isChangingMode) {
+
+      if (
+        (!this.wizard.isChangingMode && (this.wizard.isFirstStep() || this.wizard.isSummaryStep())) ||
+        (this.wizard.entryPoint === 'page' &&
+          this.wizard.currentStep().parameters[0].id === [...this.wizard.visitedSteps][0])
+      ) {
         this.redirectTo(this.baseUrl);
       } else {
         this.wizard.previousStep();
