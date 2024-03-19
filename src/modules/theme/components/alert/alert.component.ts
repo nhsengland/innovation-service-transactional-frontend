@@ -8,7 +8,7 @@ import {
   ChangeDetectorRef,
   SimpleChanges
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, ViewportScroller } from '@angular/common';
 
 import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.helper';
 import { Router } from '@angular/router';
@@ -21,7 +21,12 @@ import { Router } from '@angular/router';
 export class AlertComponent implements OnChanges {
   @Input() type: null | '' | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = null;
   @Input() title?: string = '';
-  @Input() itemsList?: { title: string; description?: string; callback?: string | ((...p: any) => void) }[] = [];
+  @Input() itemsList?: {
+    title: string;
+    description?: string;
+    fieldId?: string;
+    callback?: string | ((...p: any) => void);
+  }[] = [];
   @Input() setFocus?: boolean;
   @Input() width?: 'full' | '2.thirds' = 'full';
 
@@ -34,7 +39,8 @@ export class AlertComponent implements OnChanges {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private cdr: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
+    private scroller: ViewportScroller
   ) {
     this.id = RandomGeneratorHelper.generateRandom();
   }
@@ -108,5 +114,9 @@ export class AlertComponent implements OnChanges {
     } else {
       callback.call(this);
     }
+  }
+
+  onScrollToAnchor(id: string): void {
+    this.scroller.scrollToAnchor(id);
   }
 }
