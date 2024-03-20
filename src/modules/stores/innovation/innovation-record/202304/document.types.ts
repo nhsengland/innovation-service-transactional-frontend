@@ -50,6 +50,7 @@ export type DocumentType202304 = {
   UNDERSTANDING_OF_NEEDS: {
     problemsTackled?: string; // Moved from section VALUE_PROPOSITION
     howInnovationWork?: string; // New field.
+    hasProductServiceOrPrototype?: catalogYesNo;
     benefitsOrImpact?: string[]; // New field.
     impactDiseaseCondition?: catalogYesNo; // New field.
     diseasesConditionsImpact?: string[];

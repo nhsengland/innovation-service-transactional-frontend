@@ -1,0 +1,32 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <ng-container *ngFor="let category of twoLevelMilestone">
+      <h4 class="nhsuk-u-margin-bottom-3">{{ category.name }}</h4>
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+      <table class="nhsuk-table">
+        <thead role="rowgroup" class="nhsuk-table__head">
+          <tr role="row">
+            <th role="columnheader" class="" scope="col">Subcategory</th>
+            <th role="columnheader" class="" scope="col">Definition</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <ng-container *ngIf="category.subcategories?.length; else noSubcategories">
+            <ng-container *ngFor="let subcategory of category.subcategories">
+              <tr role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{{ subcategory.name }}</td>
+                <td class="nhsuk-table__cell">{{ subcategory.description }}</td>
+              </tr>
+            </ng-container>
+          </ng-container>
+          <ng-template #noSubcategories>
+            <tr role="row" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">{{ category.name }}</td>
+              <td class="nhsuk-table__cell">{{ category.description }}</td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </ng-container>
+  </div>
+</div>

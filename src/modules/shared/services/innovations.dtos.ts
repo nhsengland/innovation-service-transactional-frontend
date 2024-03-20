@@ -224,6 +224,10 @@ export type SupportSummaryOrganisationsListDTO = {
       start?: DateISOType;
       end?: DateISOType;
     };
+    organisation: {
+      id: string;
+      acronym: string;
+    };
   }[];
 };
 export type SupportSummaryOrganisationHistoryDTO = {
@@ -237,6 +241,9 @@ export type SupportSummaryOrganisationHistoryDTO = {
     message?: string;
     suggestedByName?: string;
     file?: { id: string; name: string; url: string };
+    categories?: string[];
+    category?: string;
+    subCategories?: string[];
   };
 }[];
 

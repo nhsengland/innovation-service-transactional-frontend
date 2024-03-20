@@ -6,7 +6,7 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
   <div class="nhsuk-grid-column-full nhsuk-u-padding-left-0">
-    <div class="nhsuk-u-margin-top-0">
+    <div class="nhsuk-u-margin-top-0" *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))">
       <span class="nhsuk-u-visually-hidden">Information: </span>
 
       <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
@@ -14,18 +14,15 @@
       </ul>
 
       <p class="d-flex nhsuk-u-margin-0">
-        <theme-svg-icon type="success"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
+        <ng-container *ngTemplateOutlet="icon; context: { type: 'success' }" />
         {{ sections.submitted }} of {{ sections.progressBar.length }} {{ "dictionary.section" | pluralTranslate: sections.progressBar.length | translate }} completed
       </p>
       <p *ngIf="sections.draft > 0" class="d-flex nhsuk-u-margin-0">
-        <theme-svg-icon type="edit"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
+        <ng-container *ngTemplateOutlet="icon; context: { type: 'edit' }" />
         {{ sections.draft }} {{ "dictionary.section" | pluralTranslate: sections.draft | translate }} in draft
       </p>
       <p *ngIf="sections.notStarted > 0" class="d-flex">
-        <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
+        <ng-container *ngTemplateOutlet="icon; context: { type: 'error', color: 'grey' }" />
         {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
       </p>
     </div>
@@ -48,44 +45,36 @@
             </h3>
             <ng-container *ngIf="pageStatus === 'READY'">
               <ng-container *ngIf="allSectionsData[section.id] as sectionData">
-                <div class="nhsuk-u-margin-top-0 font-color-secondary">
+                <div *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))" class="nhsuk-u-margin-top-0 font-color-secondary">
                   <span class="nhsuk-u-visually-hidden">Information: </span>
                   <p class="d-flex nhsuk-u-margin-0">
                     <ng-container [ngSwitch]="sectionData.sectionInfo.status.id">
                       <ng-container *ngSwitchCase="'NOT_STARTED'">
-                        <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
-                        <span class="nhsuk-u-margin-right-2"></span>
+                        <ng-container *ngTemplateOutlet="icon; context: { type: 'error', color: 'grey' }" />
                         <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section has not been started yet.</span>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'DRAFT'">
-                        <theme-svg-icon type="edit"></theme-svg-icon>
-                        <span class="nhsuk-u-margin-right-2"></span>
+                        <ng-container *ngTemplateOutlet="icon; context: { type: 'edit' }" />
+
                         <ng-container *ngIf="isInnovatorType">
-                          <span *ngIf="innovation.status === 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4"
-                            >This section is in draft. You need to complete the section before you can submit your record for needs assessment.</span
-                          >
-                          <span *ngIf="innovation.status !== 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4"
-                            >This section is in draft and is not visible to others. Go to the section and submit updates to make it visible again.</span
-                          >
-                        </ng-container>
-                        <ng-container *ngIf="isAccessorType || isAssessmentType">
-                          <span *ngIf="isInnovationInArchivedStatus; else innovationIsNotArchived" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
-                            You cannot view this section as it was in draft when the innovation was archived.
+                          <span *ngIf="innovation.status === 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
+                            This section is in draft. You need to complete the section before you can submit your record for needs assessment.
                           </span>
-                          <ng-template #innovationIsNotArchived>
-                            <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft.</span>
-                          </ng-template>
+                          <span *ngIf="innovation.status !== 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
+                            This section is in draft. Support organisations will be able to see your last submitted version of this section. Resubmit this section to make your
+                            changes visible.
+                          </span>
                         </ng-container>
-                        <ng-container *ngIf="isAdmin">
+
+                        <ng-container *ngIf="!isInnovatorType">
                           <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft.</span>
                         </ng-container>
                       </ng-container>
 
                       <ng-container *ngSwitchCase="'SUBMITTED'">
                         <ng-container *ngIf="sectionData.sectionInfo?.date !== '' && sectionData?.sectionInfo?.submittedBy !== null">
-                          <theme-svg-icon type="success"></theme-svg-icon>
-                          <span class="nhsuk-u-margin-right-2"></span>
+                          <ng-container *ngTemplateOutlet="icon; context: { type: 'success' }" />
                           <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
                             This section was last submitted by {{ sectionData.sectionInfo.submittedBy?.name }}
                             <ng-container *ngIf="sectionData.sectionInfo?.submittedBy?.displayTag !== undefined"
@@ -128,3 +117,8 @@
     </ng-container>
   </div>
 </theme-content-wrapper>
+
+<ng-template #icon let-type="type" let-color="color">
+  <theme-svg-icon [type]="type" [customColor]="color" />
+  <span class="nhsuk-u-margin-right-2"></span>
+</ng-template>

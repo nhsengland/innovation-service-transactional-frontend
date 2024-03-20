@@ -16,12 +16,10 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
 
   organisationId: string;
 
-  alertErrorsList: { title: string; description: string }[] = [];
-
   wizard = new WizardEngineModel(NEW_UNIT_CONFIG);
 
   saveButton = { isActive: true, label: 'Continue' };
-  submitButton = { isActive: false, label: 'Submit' };
+  submitButton = { isActive: true, label: 'Submit' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -40,9 +38,6 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-    this.alertErrorsList = [];
-    this.resetAlert();
-
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
@@ -69,17 +64,6 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         } else {
           this.setPageTitle('Check the new organisation unit details', { size: 'l' });
-
-          const validInformation = this.wizard.validateData();
-
-          this.submitButton.isActive = validInformation.valid;
-          if (!validInformation.valid) {
-            this.alertErrorsList = validInformation.errors;
-            this.setAlertError(`Please verify what's missing with your answers`, {
-              itemsList: this.alertErrorsList,
-              width: '2.thirds'
-            });
-          }
         }
 
         break;
@@ -96,6 +80,8 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
   }
 
   onSubmitWizard(): void {
+    this.resetAlert();
+
     this.submitButton = { isActive: false, label: 'Saving...' };
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;

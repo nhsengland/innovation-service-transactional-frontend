@@ -35,7 +35,7 @@
           </ng-container>
         </dl>
 
-        <button class="nhsuk-button" (click)="onSubmitEvidence()">Save</button>
+        <button [disabled]="!submitButton.isActive" class="nhsuk-button" (click)="onSubmitEvidence()">{{ submitButton.label }}</button>
       </ng-container>
     </div>
   </div>

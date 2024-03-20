@@ -21,12 +21,10 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   baseUrl: string;
   innovation: ContextInnovationType;
 
-  alertErrorsList: { title: string; description: string }[] = [];
-
   wizard = new WizardEngineModel(NEEDS_REASSESSMENT_CONFIG);
 
   saveButton = { isActive: true, label: 'Continue' };
-  submitButton = { isActive: false, label: 'Send to needs reassessment' };
+  submitButton = { isActive: true, label: 'Send to needs reassessment' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -47,9 +45,6 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-    this.alertErrorsList = [];
-    this.resetAlert();
-
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
@@ -80,19 +75,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         } else {
           this.setPageTitle('Check your answers', { size: 'l' });
-
-          const validInformation = this.wizard.validateData();
-
-          this.submitButton.isActive = validInformation.valid;
-          if (!validInformation.valid) {
-            this.alertErrorsList = validInformation.errors;
-            this.setAlertError(`Please verify what's missing with your answers`, {
-              itemsList: this.alertErrorsList,
-              width: '2.thirds'
-            });
-          }
         }
-
         break;
 
       default: // Should NOT happen!
@@ -107,6 +90,8 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   }
 
   onSubmitWizard(): void {
+    this.resetAlert();
+
     this.submitButton = { isActive: false, label: 'Saving...' };
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;

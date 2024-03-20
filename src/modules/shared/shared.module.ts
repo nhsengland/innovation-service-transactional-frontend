@@ -109,6 +109,11 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/summary-step.component';
 import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.component';
 import { PageSharedAccountManageAccountInfoComponent } from './pages/account/manage-account-info/manage-account-info.component';
+import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
+import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
+import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
+import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
 
 @NgModule({
   imports: [
@@ -183,6 +188,9 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
     WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent,
+    PageProgressCategoriesWrapperComponent,
+    PageProgressCategoriesOneLevelMilestoneComponent,
+    PageProgressCategoriesTwoLevelMilestoneComponent,
 
     InnovationSectionSummaryComponent,
     // // Innovations.
@@ -200,6 +208,8 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
+    ProgressCategoriesCategoryDescriptionPipe,
+    ProgressCategoriesSubcategoryDescriptionPipe,
 
     // Components
     OrganisationSuggestionsCardComponent,

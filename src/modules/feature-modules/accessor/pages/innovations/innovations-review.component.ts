@@ -34,6 +34,9 @@ type TabType = {
 export class InnovationsReviewComponent extends CoreComponent implements OnInit {
   defaultStatus: '' | 'UNASSIGNED' | 'ENGAGING' = '';
 
+  userUnitAcronym: string;
+  userUnit: string;
+
   tabs: TabType[] = [];
   currentTab: TabType;
 
@@ -81,7 +84,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     private innovationsService: InnovationsService
   ) {
     super();
-    this.setPageTitle('Innovations');
+    this.userUnitAcronym = this.stores.authentication.state.userContext?.organisationUnit?.acronym ?? '';
+    this.userUnit = this.stores.authentication.state.userContext?.organisationUnit?.name ?? '';
+
+    this.setPageTitle('Innovations', { hint: `${this.userUnit} (${this.userUnitAcronym})` });
 
     if (this.stores.authentication.isAccessorRole()) {
       this.defaultStatus = 'ENGAGING';
@@ -89,7 +95,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         {
           key: InnovationSupportStatusEnum.ENGAGING,
           title: 'Engaging',
-          mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
+          mainDescription: 'Innovations being supported or assessed by your organisation.',
           showAssignedToMeFilter: false,
           showSuggestedOnlyFilter: false,
           showClosedByMyOrganisationFilter: false,
@@ -102,6 +108,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'mainCategory',
             'assessment.id',
             'support.status',
+            'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations',
             'engagingUnits'
@@ -184,7 +191,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         {
           key: InnovationSupportStatusEnum.ENGAGING,
           title: 'Engaging',
-          mainDescription: 'Innovations being supported, assessed or guided by your organisation.',
+          mainDescription: 'Innovations being supported or assessed by your organisation.',
           showAssignedToMeFilter: true,
           showSuggestedOnlyFilter: false,
           showClosedByMyOrganisationFilter: false,
@@ -193,10 +200,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           queryFields: [
             'id',
             'name',
-            'updatedAt',
             'mainCategory',
             'assessment.id',
             'support.status',
+            'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations',
             'engagingUnits'
@@ -215,11 +222,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           queryFields: [
             'id',
             'name',
-            'updatedAt',
             'countryName',
             'mainCategory',
             'assessment.id',
             'support.status',
+            'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -237,11 +244,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           queryFields: [
             'id',
             'name',
-            'updatedAt',
             'countryName',
             'mainCategory',
             'assessment.id',
             'support.status',
+            'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -386,12 +393,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            updatedAt: { label: 'Updated', orderable: true },
+            'support.updatedAt': { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             accessors: { label: 'Accessor', orderable: false },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('updatedAt', 'descending');
+          .setOrderBy('support.updatedAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.WAITING:
@@ -406,12 +413,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            updatedAt: { label: 'Updated', orderable: true },
+            'support.updatedAt': { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('updatedAt', 'descending');
+          .setOrderBy('support.updatedAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.CLOSED:
@@ -455,7 +462,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   onRouteChange(queryParams: Params): void {
-    this.setPageTitle('Innovations');
+    this.setPageTitle('Innovations', { hint: `${this.userUnit} (${this.userUnitAcronym})` });
 
     const currentStatus = queryParams.status;
     const currentTabIndex = this.tabs.findIndex(tab => tab.key === currentStatus);

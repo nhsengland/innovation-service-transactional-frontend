@@ -94,6 +94,7 @@ import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -760,6 +761,16 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+
+      {
+        path: 'organisation/:organisationId/progress-categories',
+        pathMatch: 'full',
+        data: {
+          breadcrumb: 'Progress categories',
+          layout: { type: 'full' }
+        },
+        component: PageProgressCategoriesWrapperComponent
       }
     ]
   }

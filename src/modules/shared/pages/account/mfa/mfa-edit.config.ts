@@ -131,12 +131,11 @@ function getPhoneStep(currentMFAMode: CurrentMFAModeType, selectedCountryCode?: 
 function getEmailStep(userEmail: string, currentMFAMode: CurrentMFAModeType): FormEngineModel {
   return new FormEngineModel({
     label: `${currentMFAMode === 'phone' ? 'Change' : 'Set'} two-step verification method to email`,
-    description: `When you log in, we'll send a security code to the email address linked with your account: ${userEmail}`,
+    description: `When you log in, we'll send a security code to the email address linked with your account: `,
     parameters: [
       {
         id: 'confirmationEmail',
         dataType: 'text',
-        label: 'Enter your email to confirm',
         validations: {
           isRequired: [true, 'Your email is required'],
           equalTo: [userEmail, 'The email addresses do not match']

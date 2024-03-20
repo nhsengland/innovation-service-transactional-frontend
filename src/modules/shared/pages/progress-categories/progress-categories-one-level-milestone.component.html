@@ -1,0 +1,20 @@
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
+    <table class="nhsuk-table">
+      <thead role="rowgroup" class="nhsuk-table__head">
+        <tr role="row">
+          <th role="columnheader" class="" scope="col">Category</th>
+          <th role="columnheader" class="" scope="col">Definition</th>
+        </tr>
+      </thead>
+      <tbody class="nhsuk-table__body">
+        <ng-container *ngFor="let category of oneLevelMilestone">
+          <tr role="row" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">{{ category.name }}</td>
+            <td class="nhsuk-table__cell font-color-secondary">{{ category.description }}</td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>

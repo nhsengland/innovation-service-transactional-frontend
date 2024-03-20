@@ -86,6 +86,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       this.saveButton = { isActive: true, label: 'Continue' };
+      if (this.form.controls.date.errors?.parsedDateString) {
+        this.resetAlert();
+      }
       return;
     }
 
@@ -112,7 +115,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
             this.setAlertError('Your organisation was not engaging with this innovation on the date provided', {
               itemsList: [
                 {
-                  title: 'The date provided must be during the time your organisation was engaging with this innovation'
+                  title:
+                    'The date provided must be during the time your organisation was engaging with this innovation',
+                  fieldId: 'day-progressUpdateDate'
                 }
               ],
               width: '2.thirds'
@@ -132,7 +137,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
         error: ({ error: err }: HttpErrorResponse) => {
           if (err.error === GenericErrorsEnum.INVALID_PAYLOAD) {
             this.setAlertError('The date provided is in the future', {
-              itemsList: [{ title: 'The date must be in the past or today' }],
+              itemsList: [{ title: 'The date must be in the past or today', fieldId: 'day-progressUpdateDate' }],
               width: '2.thirds'
             });
 
