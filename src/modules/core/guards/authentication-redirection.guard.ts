@@ -57,6 +57,12 @@ export class AuthenticationRedirectionGuard {
       return false;
     }
 
+    if (pathSegment === 'account/email-notifications') {
+      const url = `${this.authentication.userUrlBasePath()}/${pathSegment}`;
+      this.router.navigateByUrl(url);
+      return false;
+    }
+
     if (pathSegment === this.authentication.userUrlBasePath()) {
       return true;
     } else {
