@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <ng-container [ngSwitch]="this.sectionSummaryData.sectionInfo.status.id">
+        <ng-container *ngIf="!(isArchived && (isAccessorType || isAssessmentType))" [ngSwitch]="this.sectionSummaryData.sectionInfo.status.id">
           <p class="d-flex">
             <ng-container *ngSwitchCase="'NOT_STARTED'">
               <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
