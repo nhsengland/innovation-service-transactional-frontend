@@ -188,7 +188,7 @@ export class WizardEngineModel {
 
   getCurrentStepObjId(): string {
     // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-    return this.currentStep().parameters[0].id.split('_')[0];
+    return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
   }
 
   getAnswers(): { [key: string]: any } {
