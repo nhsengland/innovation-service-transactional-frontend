@@ -75,6 +75,12 @@ const routes: Routes = [
       },
       {
         canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
+        path: 'account/email-notifications',
+        pathMatch: 'full',
+        children: []
+      },
+      {
+        canActivate: mapToCanActivate([AuthenticationRedirectionGuard]),
         path: 'admin',
         loadChildren: () => import('@modules/feature-modules/admin/admin.module').then(m => m.AdminModule)
       },
