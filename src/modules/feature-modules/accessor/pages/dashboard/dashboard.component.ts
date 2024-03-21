@@ -26,6 +26,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   constructor(private statisticsService: StatisticsService) {
     super();
+
     this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
 
@@ -38,8 +39,11 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
+    if (history.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
+      const newState = history.state;
+      delete newState.alert;
+      history.replaceState(newState, '');
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = {
