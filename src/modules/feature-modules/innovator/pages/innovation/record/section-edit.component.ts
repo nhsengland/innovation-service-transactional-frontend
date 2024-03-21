@@ -33,6 +33,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   sectionSubmittedText: string = '';
 
+  displayChangeButtonList: number[] = [];
+
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
@@ -74,7 +76,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         queryParams.isChangeMode
           ? // enables changing mode and redirects to step function
 
-            this.wizard.enableChangingAndGoToStep(this.activatedRoute.snapshot.params.questionId || 1)
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
           : // go to regular step
             this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
@@ -89,7 +91,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepNumber: number): void {
-    this.wizard.enableChangingAndGoToStep(stepNumber, 'summary');
+    this.wizard.gotoStep(stepNumber, true, 'summary');
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
@@ -104,11 +106,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.wizard.addAnswers(formData?.data || {}).runRules();
 
       if (
-        (!this.wizard.isChangingMode && (this.wizard.isFirstStep() || this.wizard.isSummaryStep())) ||
-        (this.wizard.entryPoint === 'page' &&
-          this.wizard.currentStep().parameters[0].id === [...this.wizard.visitedSteps][0])
+        this.wizard.isSummaryStep() ||
+        (!this.wizard.isChangingMode && this.wizard.isFirstStep()) ||
+        (this.wizard.entryPoint === 'page' && this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0])
       ) {
-        this.redirectTo(this.baseUrl);
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
       } else {
         this.wizard.previousStep();
       }
@@ -196,6 +198,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                   this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
                 ) {
                   this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+                }
+              }
+
+              for (const [index, item] of this.wizard.getSummary().entries()) {
+                this.displayChangeButtonList.push(index);
+                if (!item.value) {
+                  break;
                 }
               }
 

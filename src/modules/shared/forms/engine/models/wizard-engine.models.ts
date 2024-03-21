@@ -107,28 +107,20 @@ export class WizardEngineModel {
   }
 
   previousStep(): this {
-    const currentStepObjectId = this.currentStep().parameters[0].id.split('_')[0];
-    console.log('this.entryPoint');
-    console.log(this.entryPoint);
     if (this.showSummary && this.currentStepId === 'summary') {
       this.gotoSummary();
     }
 
     if (typeof this.currentStepId === 'number') {
-      if (!this.isChangingMode) {
-        this.currentStepId--;
+      if (this.entryPoint === 'summary' && this.getCurrentStepObjId() === [...this.visitedSteps][0]) {
+        this.gotoSummary();
+        return this;
+      }
+      this.currentStepId--;
+      if (this.visitedSteps.has(this.getCurrentStepObjId())) {
+        return this;
       } else {
-        // check if this is the first step ()
-        if (this.entryPoint === 'summary' && currentStepObjectId === [...this.visitedSteps][0]) {
-          this.gotoSummary();
-          return this;
-        }
-        this.currentStepId--;
-        if (this.visitedSteps.has(this.currentStep().parameters[0].id.split('_')[0])) {
-          return this;
-        } else {
-          this.previousStep();
-        }
+        this.previousStep();
       }
     }
     return this;
@@ -139,25 +131,20 @@ export class WizardEngineModel {
     this.currentStepId = 'summary';
   }
 
-  gotoStep(step: number | 'summary'): this {
+  gotoStep(step: number | 'summary', isChangeMode: boolean = false, entryPoint?: 'page' | 'summary'): this {
+    this.visitedSteps.clear();
+    this.entryPoint = entryPoint ?? 'page';
+
+    this.isChangingMode = isChangeMode;
+
     if (step === 'summary') {
       this.runSummaryParsing();
     }
 
     this.currentStepId = parseInt(step as string, 10);
 
-    if (this.isChangingMode) {
-      this.visitedSteps.add(this.currentStep().parameters[0].id.split('_')[0]);
-    }
+    this.visitedSteps.add(this.getCurrentStepObjId());
 
-    return this;
-  }
-
-  enableChangingAndGoToStep(step: number, entryPoint?: 'page' | 'summary'): this {
-    this.visitedSteps.clear();
-    this.entryPoint = entryPoint ?? 'page';
-    this.isChangingMode = true;
-    this.gotoStep(step);
     return this;
   }
 
@@ -166,6 +153,7 @@ export class WizardEngineModel {
       this.gotoSummary();
     } else if (typeof this.currentStepId === 'number') {
       this.currentStepId++;
+      this.visitedSteps.add(this.getCurrentStepObjId());
 
       if (this.isChangingMode) {
         this.checkStepConditions();
@@ -175,16 +163,9 @@ export class WizardEngineModel {
     return this;
   }
 
-  getCurrentStepObjId(): string {
-    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-    return this.currentStep().parameters[0].id.split('_')[0];
-  }
-
   checkStepConditions(): this {
     if (typeof this.currentStepId === 'number') {
-      this.visitedSteps.add(this.getCurrentStepObjId());
-
-      const currentStepIsChildOfVisitedSteps = this.visitedSteps.has(
+      const isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
         this.stepsChildParentRelations[this.getCurrentStepObjId()]
       );
 
@@ -194,7 +175,7 @@ export class WizardEngineModel {
         return this;
       }
 
-      if (currentStepIsChildOfVisitedSteps) {
+      if (isCurrentStepChildOfAnyVisitedSteps) {
         return this;
       } else {
         this.visitedSteps.delete(this.getCurrentStepObjId());
@@ -203,6 +184,11 @@ export class WizardEngineModel {
     }
 
     return this;
+  }
+
+  getCurrentStepObjId(): string {
+    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
+    return this.currentStep().parameters[0].id.split('_')[0];
   }
 
   getAnswers(): { [key: string]: any } {

@@ -8,7 +8,7 @@
 
       <ng-container *ngIf="wizard.isSummaryStep()">
         <dl class="nhsuk-summary-list">
-          <ng-container *ngFor="let item of wizard.getSummary()">
+          <ng-container *ngFor="let item of wizard.getSummary(); index as i">
             <ng-container [ngSwitch]="item.type">
               <ng-container *ngSwitchCase="'button'">
                 <div class="width-max-content">
@@ -25,9 +25,9 @@
                     <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a href="javascript:void(0)" (click)="onChangeStep(item.editStepNumber || 1)"
-                      >Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
-                    >
+                    <a href="javascript:void(0)" (click)="onChangeStep(item.editStepNumber || 1)" *ngIf="displayChangeButtonList.includes(i)">
+                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                    </a>
                   </dd>
                 </div>
               </ng-container>

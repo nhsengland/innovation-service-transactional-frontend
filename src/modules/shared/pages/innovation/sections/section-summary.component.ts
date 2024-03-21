@@ -52,6 +52,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   innovation: ContextInnovationType;
 
+  displayChangeButtonList: number[] = [];
+
   // Flags
   isInnovatorType: boolean;
   isAccessorType: boolean;
@@ -83,6 +85,13 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.summaryList = this.sectionData.summaryList;
     this.evidencesList = this.sectionData.evidencesList;
     this.documentsList = this.sectionData.documentsList;
+
+    for (const [index, item] of this.summaryList.entries()) {
+      this.displayChangeButtonList.push(index);
+      if (!item.value) {
+        break;
+      }
+    }
 
     this.allSteps = Object.values(this.sectionInfo.allStepsList!);
 
