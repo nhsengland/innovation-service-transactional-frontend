@@ -70,6 +70,13 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (history.state.alert === 'CHANGE_PASSWORD') {
+      this.setAlertSuccess('You have successfully changed your password');
+      const newState = history.state;
+      delete newState.alert;
+      history.replaceState(newState, '');
+    }
+
     forkJoin([
       this.innovationsService.getInnovationsList(
         ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
@@ -132,10 +139,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
       this.setPageStatus('READY');
     });
-
-    if (this.router.getCurrentNavigation()?.extras.state?.alert === 'CHANGE_PASSWORD') {
-      this.setAlertSuccess('You have successfully changed your password');
-    }
   }
 
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
