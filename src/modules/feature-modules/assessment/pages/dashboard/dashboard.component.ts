@@ -44,7 +44,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (history.state.alert === 'CHANGE_PASSWORD') {
+    if (history.state?.alert === 'CHANGE_PASSWORD') {
       this.setAlertSuccess('You have successfully changed your password');
       const newState = history.state;
       delete newState.alert;
