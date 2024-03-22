@@ -163,7 +163,7 @@ export const SECTION_2_1: InnovationSectionConfigType<InnovationSections> = {
 };
 
 function runtimeRules(steps: WizardStepType[], data: StepPayloadType, currentStep: number | 'summary'): void {
-  steps.splice(4);
+  steps.splice(5);
 
   if (data.impactDiseaseCondition === 'YES') {
     data.diseasesConditionsImpact = data.diseasesConditionsImpact?.filter(item =>
