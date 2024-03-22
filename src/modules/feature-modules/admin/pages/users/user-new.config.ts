@@ -7,7 +7,7 @@ import { AuthenticationStore } from '@modules/stores';
 
 // Labels.
 const stepsLabels = {
-  l1: { label: "What is the new user's email?", description: 'Enter an email with a maximum of 100 characters.' },
+  l1: { label: "What is the new user's email?", description: 'Enter an email with a maximum of 254 characters.' },
   l2: {
     label: 'What is the name of the new user?',
     description: 'Enter the first name and surname. This is how their name will appear on the service.'
@@ -72,7 +72,7 @@ export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
           validations: {
             isRequired: [true, 'Email is required'],
             validEmail: true,
-            maxLength: 100
+            maxLength: 254
           }
         }
       ]
