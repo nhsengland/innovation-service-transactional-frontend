@@ -14,7 +14,7 @@
       <form [formGroup]="form">
         <h2 class="nhsuk-heading-xs nhsuk-u-margin-0">Filters</h2>
 
-        <theme-form-input id="searchInnovation" controlName="search" [pageUniqueField]="false" label="Search by innovation">
+        <theme-form-input [id]="'searchInnovation'" controlName="search" [pageUniqueField]="false" label="Search by innovation">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
