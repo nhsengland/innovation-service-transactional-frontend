@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { of } from 'rxjs';
+import { combineLatest, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
@@ -33,6 +33,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   sectionSubmittedText: string = '';
 
+  displayChangeButtonList: number[] = [];
+
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
@@ -64,10 +66,19 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
-      next: response => {
-        this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
-        this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+    combineLatest([
+      this.activatedRoute.queryParams,
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
+    ]).subscribe({
+      next: ([queryParams, sectionInfoResponse]) => {
+        this.wizard.setAnswers(this.wizard.runInboundParsing(sectionInfoResponse.data)).runRules();
+
+        queryParams.isChangeMode
+          ? // enables changing mode and redirects to step function
+
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
+          : // go to regular step
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
@@ -79,8 +90,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     });
   }
 
-  onGotoStep(stepNumber: number): void {
-    this.wizard.gotoStep(stepNumber);
+  onChangeStep(stepNumber: number): void {
+    this.wizard.gotoStep(stepNumber, true, 'summary');
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
@@ -93,8 +104,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
-      if (this.wizard.isFirstStep()) {
-        this.redirectTo(this.baseUrl);
+
+      if (
+        this.wizard.isSummaryStep() ||
+        (!this.wizard.isChangingMode && this.wizard.isFirstStep()) ||
+        (this.wizard.entryPoint === 'page' && this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0])
+      ) {
+        this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
       } else {
         this.wizard.previousStep();
       }
@@ -182,6 +198,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                   this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
                 ) {
                   this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+                }
+              }
+
+              for (const [index, item] of this.wizard.getSummary().entries()) {
+                this.displayChangeButtonList.push(index);
+                if (!item.value) {
+                  break;
                 }
               }
 

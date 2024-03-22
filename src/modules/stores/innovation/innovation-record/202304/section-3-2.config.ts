@@ -21,6 +21,10 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  potentialPathway: 'innovationPathwayKnowledge'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['CURRENT_CARE_PATHWAY'];
 type StepPayloadType = InboundPayloadType;
@@ -31,6 +35,7 @@ export const SECTION_3_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'CURRENT_CARE_PATHWAY',
   title: 'Current care pathway',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

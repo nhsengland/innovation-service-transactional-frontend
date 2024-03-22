@@ -31,6 +31,11 @@ const stepsLabels = {
   // }
 };
 
+const stepsParentChildRelations = {
+  standardsType: 'hasRegulationKnowledge',
+  standardHasMet: 'standardsType'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['REGULATIONS_AND_STANDARDS'];
 type StepPayloadType = InboundPayloadType & { standardsType: catalogStandardsType[] } & {
@@ -43,6 +48,7 @@ export const SECTION_5_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'REGULATIONS_AND_STANDARDS',
   title: 'Regulatory approvals, standards and certifications',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [
