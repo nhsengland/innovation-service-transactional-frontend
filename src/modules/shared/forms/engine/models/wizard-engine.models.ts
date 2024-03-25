@@ -112,15 +112,19 @@ export class WizardEngineModel {
     }
 
     if (typeof this.currentStepId === 'number') {
-      if (this.entryPoint === 'summary' && this.getCurrentStepObjId() === [...this.visitedSteps][0]) {
-        this.gotoSummary();
-        return this;
-      }
-      this.currentStepId--;
-      if (this.visitedSteps.has(this.getCurrentStepObjId())) {
-        return this;
+      if (!this.isChangingMode) {
+        this.currentStepId--;
       } else {
-        this.previousStep();
+        if (this.entryPoint === 'summary' && this.getCurrentStepObjId() === [...this.visitedSteps][0]) {
+          this.gotoSummary();
+          return this;
+        }
+        this.currentStepId--;
+        if (this.visitedSteps.has(this.getCurrentStepObjId())) {
+          return this;
+        } else {
+          this.previousStep();
+        }
       }
     }
     return this;
