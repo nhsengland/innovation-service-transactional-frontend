@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
   <p>If you are looking for specific innovations, use the <a routerLink="advanced-search">innovations advanced search</a>.</p>
 
-  <div class="app-tabs">
+  <div class="app-tabs nhsuk-u-margin-bottom-0">
     <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
       <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
         <div class="d-flex">
@@ -24,8 +24,10 @@
 
   <div class="nhsuk-grid-row">
     <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
-      <p class="nhsuk-u-margin-bottom-0">{{ currentTab.mainDescription }}</p>
-      <p class="nhsuk-hint">{{ currentTab.secondaryDescription }}</p>
+      <div class="nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+        <p class="nhsuk-u-margin-bottom-0">{{ currentTab.mainDescription }}</p>
+        <p class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ currentTab.secondaryDescription }}</p>
+      </div>
       <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
         <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
         <theme-form-checkbox
@@ -41,7 +43,7 @@
           size="small"
         ></theme-form-checkbox>
       </form>
-      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-2 nhsuk-u-margin-top-3" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
+      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
