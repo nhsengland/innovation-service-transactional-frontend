@@ -147,7 +147,7 @@ export const SUPPORT_SUMMARY_MILESTONES: Milestones = {
         'Gain understanding about needs, potential impacts and contribution to our strategic aims or provide support outside of a project.'
     },
     {
-      name: 'Partnership and account Management',
+      name: 'Partnership and account management',
       description:
         'Providing long term account management and building partnerships to support development of project opportunities and collaborations.'
     },
