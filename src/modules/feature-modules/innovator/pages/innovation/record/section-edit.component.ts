@@ -108,7 +108,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       if (
         this.wizard.isSummaryStep() ||
         (!this.wizard.isChangingMode && this.wizard.isFirstStep()) ||
-        (this.wizard.entryPoint === 'page' && this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0])
+        this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0]
       ) {
         this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
       } else {
@@ -203,7 +203,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
               for (const [index, item] of this.wizard.getSummary().entries()) {
                 this.displayChangeButtonList.push(index);
-                if (!item.value) {
+                if (!item.value && !item.isOptional) {
                   break;
                 }
               }

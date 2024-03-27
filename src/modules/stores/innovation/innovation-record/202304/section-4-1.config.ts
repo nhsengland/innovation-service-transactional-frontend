@@ -42,7 +42,7 @@ const stepsLabels = {
 
 const stepsChildParentRelations = {
   intendedUserGroupsEngaged: 'testedWithIntendedUsers',
-  userTests: 'testedWithIntendedUsers',
+  userTests: 'intendedUserGroupsEngaged',
   userTestFeedback: 'userTests'
 };
 
