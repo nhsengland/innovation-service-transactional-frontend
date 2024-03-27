@@ -453,7 +453,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     {
       label: stepsLabels.q9.label,
       value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: editStepNumber++
+      editStepNumber: editStepNumber++,
+      isOptional: true
     },
     {
       label: stepsLabels.q10.label,

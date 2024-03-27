@@ -52,7 +52,7 @@
                     <a
                       href="javascript:void(0);"
                       routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
-                      [queryParams]="item.value ? { isChangeMode: true } : {}"
+                      [queryParams]="!item.value && !item.isOptional ? {} : { isChangeMode: true }"
                       *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
                     >
                       Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>

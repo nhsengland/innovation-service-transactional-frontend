@@ -88,7 +88,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     for (const [index, item] of this.summaryList.entries()) {
       this.displayChangeButtonList.push(index);
-      if (!item.value) {
+      if (!item.value && !item.isOptional) {
         break;
       }
     }
