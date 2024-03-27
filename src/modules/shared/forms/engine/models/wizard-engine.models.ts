@@ -21,7 +21,6 @@ export type StepsParentalRelationsType = {
 
 export class WizardEngineModel {
   isChangingMode: boolean = false;
-  entryPoint?: 'page' | 'summary' = 'page';
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepType[];
   stepsChildParentRelations: StepsParentalRelationsType;
@@ -111,14 +110,8 @@ export class WizardEngineModel {
     if (this.showSummary && this.currentStepId === 'summary') {
       this.currentStepId = this.steps.length;
     } else if (typeof this.currentStepId === 'number') {
-      if (!this.isChangingMode) {
-        this.currentStepId--;
-      } else {
-        if (this.entryPoint === 'summary' && this.getCurrentStepObjId() === [...this.visitedSteps][0]) {
-          this.gotoSummary();
-          return this;
-        }
-        this.currentStepId--;
+      this.currentStepId--;
+      if (this.isChangingMode) {
         if (this.visitedSteps.has(this.getCurrentStepObjId())) {
           return this;
         } else {
@@ -134,9 +127,8 @@ export class WizardEngineModel {
     this.currentStepId = 'summary';
   }
 
-  gotoStep(step: number | 'summary', isChangeMode: boolean = false, entryPoint?: 'page' | 'summary'): this {
+  gotoStep(step: number | 'summary', isChangeMode: boolean = false): this {
     this.visitedSteps.clear();
-    this.entryPoint = entryPoint ?? 'page';
 
     this.isChangingMode = isChangeMode;
 

@@ -91,7 +91,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepNumber: number): void {
-    this.wizard.gotoStep(stepNumber, true, 'summary');
+    this.wizard.gotoStep(stepNumber, true);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
