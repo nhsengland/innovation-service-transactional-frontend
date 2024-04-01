@@ -231,12 +231,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   onSubmit(): void {
-    this.submitButton = { isActive: false, label: 'Saving...' };
-
     if (!this.form.valid) {
       this.form.markAllAsTouched();
       return;
     }
+
+    this.submitButton = { isActive: false, label: 'Saving...' };
 
     const body = {
       status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
