@@ -20,7 +20,7 @@ enum FilterTypeEnum {
   DATERANGE = 'DATERANGE'
 }
 
-type FilterKeysType = 'locations' | 'groupedStatuses' | 'submittedDate';
+type FilterKeysType = 'locations' | 'groupedStatuses' | 'lastAssessmentRequestAt';
 
 type DatasetType = {
   [key: string]: {
@@ -50,7 +50,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       id: string;
       name: string;
       groupedStatus: InnovationGroupedStatusEnum;
-      submittedAt: DateISOType | null;
+      lastAssessmentRequestAt: DateISOType | null;
       statusUpdatedAt: DateISOType;
       assessment: {
         id: string;
@@ -87,7 +87,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       active: true
     },
     {
-      key: 'submittedDate',
+      key: 'lastAssessmentRequestAt',
       title: 'Filter by date',
       showHideStatus: 'closed',
       type: FilterTypeEnum.DATERANGE,
@@ -107,7 +107,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   datasets: DatasetType = {
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     groupedStatuses: [],
-    submittedDate: [
+    lastAssessmentRequestAt: [
       {
         label: 'Submitted after',
         description: 'For example, 2005 or 21/11/2014',
@@ -149,11 +149,11 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.innovationsList
       .setVisibleColumns({
         name: { label: 'Innovation', orderable: true },
-        submittedAt: { label: 'Submitted', orderable: true },
+        lastAssessmentRequestAt: { label: 'Submitted', orderable: true },
         assessedBy: { label: 'Assessed by', orderable: false },
         groupedStatus: { label: 'Status', orderable: false, align: 'right' }
       })
-      .setOrderBy('submittedAt', 'descending');
+      .setOrderBy('lastAssessmentRequestAt', 'descending');
   }
 
   ngOnInit(): void {
@@ -249,7 +249,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'id',
           'name',
           'groupedStatus',
-          'submittedAt',
+          'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
           'assessment.assignedTo',
@@ -268,8 +268,11 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
                   id: innovation.assessment.id,
                   assignedTo: innovation.assessment.assignedTo,
                   updatedAt: innovation.assessment.updatedAt,
-                  daysFromSubmittedAtToToday: this.getOverdueDays(innovation.submittedAt),
-                  overdueStatus: this.getOverdueStatus(innovation.assessment.isExempt, innovation.submittedAt)
+                  daysFromSubmittedAtToToday: this.getOverdueDays(innovation.lastAssessmentRequestAt),
+                  overdueStatus: this.getOverdueStatus(
+                    innovation.assessment.isExempt,
+                    innovation.lastAssessmentRequestAt
+                  )
                 }
               : null
           })),
@@ -327,7 +330,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       groupedStatuses:
         groupedStatusesFilter && groupedStatusesFilter.length > 0 ? groupedStatusesFilter : this.availableGroupedStatus,
       assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-      ...(startDate || endDate ? { dateFilters: [{ field: 'submittedAt', startDate, endDate }] } : {})
+      ...(startDate || endDate ? { dateFilters: [{ field: 'lastAssessmentRequestAt', startDate, endDate }] } : {})
     });
 
     this.innovationsList.setPage(1);
