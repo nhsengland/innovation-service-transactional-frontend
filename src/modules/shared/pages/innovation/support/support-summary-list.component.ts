@@ -115,13 +115,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             : ''
         }));
 
-        if (
-          this.sectionsList[0].unitsList.length ||
-          this.sectionsList[1].unitsList.length ||
-          this.sectionsList[2].unitsList.length
-        ) {
-          this.isSuggestionsListEmpty = false;
-        }
+        this.isSuggestionsListEmpty = !this.sectionsList.some(s => s.unitsList.length > 0);
+
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
 
         // open the support summary entry specified in the query parameter
