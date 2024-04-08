@@ -45,6 +45,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   isInnovatorType: boolean;
   isAccessorType: boolean;
 
+  isSuggestionsListEmpty: boolean = true;
+
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
@@ -113,6 +115,13 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             : ''
         }));
 
+        if (
+          this.sectionsList[0].unitsList.length ||
+          this.sectionsList[1].unitsList.length ||
+          this.sectionsList[2].unitsList.length
+        ) {
+          this.isSuggestionsListEmpty = false;
+        }
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
 
         // open the support summary entry specified in the query parameter
