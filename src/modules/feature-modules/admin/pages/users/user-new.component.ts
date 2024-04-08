@@ -113,7 +113,7 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
 
     this.setPageStatus('LOADING');
 
-    this.usersService.getUserInfo(encodeURIComponent(this.wizard.currentAnswers.email)).subscribe({
+    this.usersService.getUserInfo(this.wizard.currentAnswers.email).subscribe({
       next: response => {
         this.user = {
           ...response,
