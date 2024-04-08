@@ -107,7 +107,7 @@ export class CustomValidators {
 
   static validEmailValidator(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      return new RegExp(/^[a-zA-Z0-9.!#$%&'^_`{}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(control.value)
+      return new RegExp(/^[a-zA-Z0-9.!#$%&'^_`{}~-]{1,64}@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/).test(control.value)
         ? null
         : { validEmail: message ? { message } : true };
     };
