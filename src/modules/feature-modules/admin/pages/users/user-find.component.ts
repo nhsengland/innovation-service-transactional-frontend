@@ -45,7 +45,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
 
     this.formSubmitted = true;
 
-    this.usersService.getUserInfo(this.form.get('email')!.value).subscribe({
+    this.usersService.getUserInfo(encodeURIComponent(this.form.get('email')!.value)).subscribe({
       next: response => {
         this.searchUser = {
           ...response,
