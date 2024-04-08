@@ -38,6 +38,11 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  costDescription: 'hasCostKnowledge',
+  eligibilityCriteria: 'patientsRange'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['COST_OF_INNOVATION'];
 type StepPayloadType = InboundPayloadType;
@@ -48,6 +53,7 @@ export const SECTION_7_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'COST_OF_INNOVATION',
   title: 'Cost of your innovation',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

@@ -21,7 +21,7 @@ export type ContextPageLayoutType = {
     type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
     title?: string;
     message?: string;
-    itemsList?: { title: string; description?: string; callback?: string | ((...p: any) => void) }[];
+    itemsList?: { title: string; description?: string; fieldId?: string; callback?: string | ((...p: any) => void) }[];
     width?: 'full' | '2.thirds';
     setFocus?: boolean;
     persistOneRedirect?: boolean;

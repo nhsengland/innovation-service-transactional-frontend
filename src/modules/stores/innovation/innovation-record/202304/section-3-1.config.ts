@@ -29,6 +29,12 @@ const stepsLabels = {
   }
 };
 
+const stepsParentChildRelations = {
+  marketResearch: 'hasMarketResearch',
+  optionBestDescribesInnovation: 'hasMarketResearch',
+  whatCompetitorsAlternativesExist: 'hasMarketResearch'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['MARKET_RESEARCH'];
 type StepPayloadType = InboundPayloadType;
@@ -39,6 +45,7 @@ export const SECTION_3_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'MARKET_RESEARCH',
   title: 'Market research',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

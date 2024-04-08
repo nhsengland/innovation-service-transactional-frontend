@@ -27,7 +27,11 @@ export type InnovationsListFiltersType = Partial<{
   assignedToMe: boolean;
   closedByMyOrganisation: boolean;
   diseasesAndConditions: string[];
-  dateFilters: { field: 'submittedAt'; startDate: undefined | DateISOType; endDate: undefined | DateISOType }[];
+  dateFilters: {
+    field: 'submittedAt' | 'lastAssessmentRequestAt';
+    startDate: undefined | DateISOType;
+    endDate: undefined | DateISOType;
+  }[];
   engagingOrganisations: string[];
   engagingUnits: string[];
   groupedStatuses: InnovationGroupedStatusEnum[];
@@ -51,6 +55,7 @@ export type InnovationListSelectType =
   | 'statusUpdatedAt'
   | 'groupedStatus'
   | 'submittedAt'
+  | 'lastAssessmentRequestAt'
   | 'updatedAt'
   // Document fields
   | 'careSettings'
@@ -89,6 +94,7 @@ export type InnovationListFullDTO = {
   statusUpdatedAt: DateISOType;
   groupedStatus: InnovationGroupedStatusEnum;
   submittedAt: DateISOType | null;
+  lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
   // Document fields
   careSettings: catalogCareSettings[] | null;

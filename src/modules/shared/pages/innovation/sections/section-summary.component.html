@@ -10,7 +10,7 @@
             </dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap"></dd>
             <dd class="nhsuk-summary-list__actions">
-              <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem">
+              <a href="javascript:void(0);" routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem">
                 Start <span class="nhsuk-u-visually-hidden"> section</span></a
               >
             </dd>
@@ -20,48 +20,50 @@
     </ng-container>
 
     <ng-container *ngIf="!sectionInfo.isNotStarted">
-      <ng-container *ngIf="(isAccessorType || isAssessmentType) && sectionInfo.status.id === 'DRAFT'; else showSummary">
+      <ng-container *ngIf="(isAccessorType || isAssessmentType) && sectionInfo.status.id === 'DRAFT'">
         <div *ngIf="innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>You cannot see this section because it is in draft. If you need to see this section, create a task or send a message to the innovator asking them to resubmit it.</p>
+          <p>This is the last submitted version of this section. You cannot see any updates the innovator makes to the section, while it is in draft.</p>
+          <p>When they resubmit the section you'll be able to see any changes they have made.</p>
         </div>
       </ng-container>
 
-      <ng-template #showSummary>
-        <ng-container *ngIf="summaryList.length > 0">
-          <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
-            <ng-container *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
-              <ng-container [ngSwitch]="item.type">
-                <ng-container *ngSwitchCase="'button'">
-                  <div *ngIf="isInnovatorType" class="width-max-content">
-                    <dt class="nhsuk-u-margin-top-5">
-                      <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
-                    </dt>
-                  </div>
-                </ng-container>
-                <ng-container *ngSwitchDefault>
-                  <div class="nhsuk-summary-list__row">
-                    <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
-                    <dd class="nhsuk-summary-list__value text-pre-wrap">
-                      <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                      <span *ngIf="!item.allowHTML">{{ item.value }}</span>
-                    </dd>
-                    <dd class="nhsuk-summary-list__actions">
-                      <a
-                        href="javascript:void(0);"
-                        routerLink="/{{ this.baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
-                        *ngIf="isInnovatorType && item.editStepNumber"
-                      >
-                        Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
-                      >
-                    </dd>
-                  </div>
-                </ng-container>
+      <h2 *ngIf="title">{{ title }}</h2>
+
+      <ng-container *ngIf="summaryList.length > 0">
+        <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
+          <ng-container *ngFor="let item of summaryList; index as i" class="nhsuk-summary-list__row">
+            <ng-container [ngSwitch]="item.type">
+              <ng-container *ngSwitchCase="'button'">
+                <div *ngIf="isInnovatorType" class="width-max-content">
+                  <dt class="nhsuk-u-margin-top-5">
+                    <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
+                  </dt>
+                </div>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">
+                    <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
+                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                  </dd>
+                  <dd class="nhsuk-summary-list__actions">
+                    <a
+                      href="javascript:void(0);"
+                      routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
+                      [queryParams]="!item.value && !item.isOptional ? {} : { isChangeMode: true }"
+                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
+                    >
+                      Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                    </a>
+                  </dd>
+                </div>
               </ng-container>
             </ng-container>
-          </dl>
-        </ng-container>
-      </ng-template>
+          </ng-container>
+        </dl>
+      </ng-container>
 
       <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
         <ng-container *ngIf="!isSectionDetailsPage && documentsList.length > 0">

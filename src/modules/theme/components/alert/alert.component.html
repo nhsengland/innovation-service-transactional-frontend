@@ -7,8 +7,11 @@
 
         <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list" [ngClass]="{ 'nhsuk-error-summary__list': type === 'ERROR' }">
           <li [ngClass]="fontItemColorCSS" *ngFor="let item of itemsList">
+            <a href="javascript:void(0)" *ngIf="item.fieldId !== undefined" (click)="onScrollToAnchor(item.fieldId)">
+              {{ item.title }}
+            </a>
             <a href="javascript:void(0)" *ngIf="item.callback !== undefined" (click)="onItemClick(item.callback)">{{ item.title }}<br />{{ item.description || "" | translate }}</a>
-            <span *ngIf="item.callback === undefined">{{ item.title }}<br />{{ item.description || "" | translate }}</span>
+            <span *ngIf="item.fieldId === undefined && item.callback === undefined">{{ item.title }}<br />{{ item.description || "" | translate }}</span>
           </li>
         </ul>
       </div>

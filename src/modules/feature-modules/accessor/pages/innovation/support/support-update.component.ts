@@ -23,6 +23,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   innovationId: string;
   supportId: string;
   stepNumber: number;
+  submitButton = { isActive: true, label: 'Confirm' };
 
   formAccessorsList: { value: string; label: string }[] = [];
   selectedAccessors: typeof this.accessorsList = [];
@@ -195,6 +196,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             width: 'full',
             size: 'l'
           });
+          this.submitButton.label = 'Confirm';
           this.stepNumber = 3;
         }
 
@@ -212,6 +214,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           (this.form.get('accessors')?.value ?? []).includes(item.id)
         );
 
+        this.submitButton.label = 'Confirm and send message';
         this.stepNumber++;
         this.setPageTitle(`Change support status to ${this.chosenStatus?.toLowerCase()}`, { size: 'l' });
 
@@ -233,6 +236,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       return;
     }
 
+    this.submitButton = { isActive: false, label: 'Saving...' };
+
     const body = {
       status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
       accessors: this.selectedAccessors.map(item => ({
@@ -242,28 +247,39 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       message: this.form.get('message')?.value ?? ''
     };
 
-    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe(() => {
-      if (
-        this.chosenStatus &&
-        this.currentStatus === InnovationSupportStatusEnum.ENGAGING &&
-        [
-          InnovationSupportStatusEnum.CLOSED,
-          InnovationSupportStatusEnum.WAITING,
-          InnovationSupportStatusEnum.UNSUITABLE
-        ].includes(this.chosenStatus)
-      ) {
-        this.setAlertSuccess('Support status updated', {
-          message: this.getMessageStatusUpdated()?.message,
-          itemsList: this.getMessageStatusUpdated()?.itemsList
-        });
-        this.stepNumber = 4;
-        this.onSubmitStep();
-      } else {
-        this.setRedirectAlertSuccess('Support status updated', {
-          message: this.getMessageStatusUpdated()?.message,
-          itemsList: this.getMessageStatusUpdated()?.itemsList
-        });
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
+    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe({
+      next: () => {
+        if (
+          this.chosenStatus &&
+          this.currentStatus === InnovationSupportStatusEnum.ENGAGING &&
+          [
+            InnovationSupportStatusEnum.CLOSED,
+            InnovationSupportStatusEnum.WAITING,
+            InnovationSupportStatusEnum.UNSUITABLE
+          ].includes(this.chosenStatus)
+        ) {
+          this.setAlertSuccess('Support status updated', {
+            message: this.getMessageStatusUpdated()?.message,
+            itemsList: this.getMessageStatusUpdated()?.itemsList
+          });
+          this.stepNumber = 4;
+          this.onSubmitStep();
+        } else {
+          this.setRedirectAlertSuccess('Support status updated', {
+            message: this.getMessageStatusUpdated()?.message,
+            itemsList: this.getMessageStatusUpdated()?.itemsList
+          });
+          this.redirectTo(
+            this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`
+          );
+        }
+      },
+      error: () => {
+        this.submitButton = {
+          isActive: true,
+          label: this.form.get('status')?.value === 'ENGAGING' ? 'Confirm and send message' : 'Confirm'
+        };
+        this.setAlertUnknownError();
       }
     });
   }

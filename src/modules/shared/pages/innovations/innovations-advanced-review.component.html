@@ -5,7 +5,7 @@
       <h2 *ngIf="isAccessorType" class="nhsuk-heading-xs nhsuk-u-margin-0">Search innovation by name or company</h2>
 
       <form [formGroup]="form">
-        <theme-form-input [placeholder]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false">
+        <theme-form-input [id]="'searchInnovation'" [placeholder]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />

@@ -69,6 +69,12 @@ const stepsLabels = {
   }
 };
 
+const stepsChildParentRelations = {
+  postcode: 'officeLocation',
+  countryLocation: 'officeLocation',
+  mainCategory: 'categories'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['INNOVATION_DESCRIPTION'];
 type StepPayloadType = InboundPayloadType & {
@@ -83,6 +89,7 @@ export const SECTION_1_1: InnovationSectionConfigType<InnovationSections> = {
   id: 'INNOVATION_DESCRIPTION',
   title: 'Description of innovation',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsChildParentRelations,
     steps: [
       new FormEngineModel({
         parameters: [
@@ -446,7 +453,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     {
       label: stepsLabels.q9.label,
       value: data.areas?.map(v => areasItems.find(item => item.value === v)?.label).join('\n'),
-      editStepNumber: editStepNumber++
+      editStepNumber: editStepNumber++,
+      isOptional: true
     },
     {
       label: stepsLabels.q10.label,

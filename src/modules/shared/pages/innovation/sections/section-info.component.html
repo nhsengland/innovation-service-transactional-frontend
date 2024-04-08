@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <ng-container [ngSwitch]="this.sectionSummaryData.sectionInfo.status.id">
+        <ng-container *ngIf="!(isArchived && (isAccessorType || isAssessmentType))" [ngSwitch]="this.sectionSummaryData.sectionInfo.status.id">
           <p class="d-flex">
             <ng-container *ngSwitchCase="'NOT_STARTED'">
               <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
@@ -17,7 +17,7 @@
 
               <ng-container *ngIf="isInnovatorType">
                 <ng-container *ngIf="innovation.status !== 'CREATED'">
-                  <span>This section is in draft and is not visible to others. Submit updates to make it visible again.</span>
+                  <span>This section is in draft. Any changes you make to this section will not be visible to others until you submit updates.</span>
                 </ng-container>
                 <ng-container *ngIf="innovation.status === 'CREATED'">
                   <div>
@@ -66,12 +66,8 @@
         <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
       </ng-container>
 
-      <ng-container *ngIf="sectionSummaryData.summaryList.length > 0">
-        <h2>Questions and answers</h2>
-      </ng-container>
-
       <ng-container *ngIf="pageStatus === 'READY'">
-        <shared-innovation-summary [sectionData]="this.sectionSummaryData" />
+        <shared-innovation-summary [sectionData]="this.sectionSummaryData" title="Questions and answers" />
       </ng-container>
 
       <ng-container *ngIf="this.sectionSummaryData.sectionInfo.hasEvidences">

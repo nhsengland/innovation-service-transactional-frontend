@@ -27,6 +27,10 @@ const stepsLabels = {
   q5: { label: 'Do you need support with any of these areas?' }
 };
 
+const stepsParentChildRelations = {
+  summaryOngoingEvidenceGathering: 'currentlyCollectingEvidence'
+};
+
 // Types.
 type InboundPayloadType = DocumentType202304['EVIDENCE_OF_EFFECTIVENESS'] & {
   evidences?: { id: string; name: string; summary: string }[];
@@ -39,6 +43,7 @@ export const SECTION_2_2: InnovationSectionConfigType<InnovationSections> = {
   id: 'EVIDENCE_OF_EFFECTIVENESS',
   title: 'Evidence of impact and benefit',
   wizard: new WizardEngineModel({
+    stepsChildParentRelations: stepsParentChildRelations,
     steps: [
       new FormEngineModel({
         parameters: [

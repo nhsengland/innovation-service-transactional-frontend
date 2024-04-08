@@ -29,6 +29,7 @@ export type SectionStepsList = {
 })
 export class InnovationSectionSummaryComponent extends CoreComponent implements OnInit {
   @Input({ required: true }) sectionData!: SectionSummaryInputData;
+  @Input() title?: string;
 
   sectionInfo: Partial<SectionInfoType> & {
     id: string;
@@ -50,6 +51,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   isSectionDetailsPage: string | undefined;
 
   innovation: ContextInnovationType;
+
+  displayChangeButtonList: number[] = [];
 
   // Flags
   isInnovatorType: boolean;
@@ -82,6 +85,13 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.summaryList = this.sectionData.summaryList;
     this.evidencesList = this.sectionData.evidencesList;
     this.documentsList = this.sectionData.documentsList;
+
+    for (const [index, item] of this.summaryList.entries()) {
+      this.displayChangeButtonList.push(index);
+      if (!item.value && !item.isOptional) {
+        break;
+      }
+    }
 
     this.allSteps = Object.values(this.sectionInfo.allStepsList!);
 
