@@ -1,8 +1,9 @@
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { CustomValidators, FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import { CurrentMFAModeType } from './mfa-edit.component';
 import { fullCountryCodeList } from './mfa-country-lists';
+import { CustomFormGroupValidators } from '@modules/shared/forms/validators/custom-validators';
 
 // Payloads definitions
 
@@ -120,8 +121,7 @@ function getPhoneStep(currentMFAMode: CurrentMFAModeType, selectedCountryCode?: 
         dataType: 'number',
         label: 'Confirm phone number',
         validations: {
-          isRequired: [true, 'Phone confirmation is required'],
-          equalToField: ['phoneNumber', 'Phone numbers do not match']
+          isRequired: [true, 'Phone confirmation is required']
         }
       }
     ]
@@ -178,6 +178,9 @@ export const MFA_EMAIL: WizardEngineModel = new WizardEngineModel({
 
 export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
   steps: [],
+  formValidations: [
+    CustomFormGroupValidators.mustMatch('phoneNumber', 'confirmationPhoneNumber', 'Phone numbers do not match')
+  ],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>

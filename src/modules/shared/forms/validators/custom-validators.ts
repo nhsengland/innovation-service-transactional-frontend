@@ -1,6 +1,30 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
+export class CustomFormGroupValidators {
+  static mustMatch(fieldName: string, confirmationFieldName: string, message?: string | null): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const field = group.get(fieldName);
+      const confirmationField = group.get(confirmationFieldName);
+
+      if (!field || !confirmationField) {
+        return null;
+      }
+
+      if (confirmationField.errors && !confirmationField.errors.mustMatch) {
+        return null;
+      }
+
+      if (field.value !== confirmationField.value) {
+        confirmationField.setErrors({ required: { message } });
+      } else {
+        confirmationField.setErrors(null);
+      }
+
+      return null;
+    };
+  }
+}
 export class CustomValidators {
   static required(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null =>
