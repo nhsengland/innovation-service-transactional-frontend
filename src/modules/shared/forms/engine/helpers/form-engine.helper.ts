@@ -281,6 +281,9 @@ export class FormEngineHelper {
     if (error.uploadError) {
       return { message: 'shared.forms_module.validations.upload_error', params: {} };
     }
+    if (error.mustMatch) {
+      return { message: error.message, params: {} };
+    }
     if (error.customError) {
       return { message: error.message, params: {} };
     }

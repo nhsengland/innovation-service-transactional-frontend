@@ -52,6 +52,13 @@ const turnOffItems = [
   { value: 'NO', label: 'No' }
 ];
 
+// Form validations
+const phoneConfirmationValidation = CustomFormGroupValidators.mustMatch(
+  'phoneNumber',
+  'confirmationPhoneNumber',
+  'Phone numbers do not match'
+);
+
 // Steps labels
 
 const stepsLabels = {
@@ -149,6 +156,7 @@ function getEmailStep(userEmail: string, currentMFAMode: CurrentMFAModeType): Fo
 
 export const MFA_SET_UP: WizardEngineModel = new WizardEngineModel({
   steps: [selectMethodStep, new FormEngineModel({})],
+  formValidations: [phoneConfirmationValidation],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
@@ -178,9 +186,7 @@ export const MFA_EMAIL: WizardEngineModel = new WizardEngineModel({
 
 export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
   steps: [],
-  formValidations: [
-    CustomFormGroupValidators.mustMatch('phoneNumber', 'confirmationPhoneNumber', 'Phone numbers do not match')
-  ],
+  formValidations: [phoneConfirmationValidation],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>

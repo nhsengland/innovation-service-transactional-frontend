@@ -2,7 +2,7 @@ import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@an
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 export class CustomFormGroupValidators {
-  static mustMatch(fieldName: string, confirmationFieldName: string, message?: string | null): ValidatorFn {
+  static mustMatch(fieldName: string, confirmationFieldName: string, errorMessage: string | null): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const field = group.get(fieldName);
       const confirmationField = group.get(confirmationFieldName);
@@ -16,7 +16,7 @@ export class CustomFormGroupValidators {
       }
 
       if (field.value !== confirmationField.value) {
-        confirmationField.setErrors({ required: { message } });
+        confirmationField.setErrors({ mustMatch: true, message: errorMessage });
       } else {
         confirmationField.setErrors(null);
       }
