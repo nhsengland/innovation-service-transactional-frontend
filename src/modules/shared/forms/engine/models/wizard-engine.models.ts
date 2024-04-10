@@ -110,7 +110,6 @@ export class WizardEngineModel {
   }
 
   getFormValidations(): ValidatorFn[] {
-    console.log('form validations:', this.formValidations);
     return this.formValidations;
   }
 

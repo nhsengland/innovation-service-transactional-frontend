@@ -14,17 +14,17 @@ import { CustomValidators } from '../../validators/custom-validators';
 
 export class FormEngineHelper {
   static buildForm(
-    stepParameters: FormEngineParameterModel[],
+    parameters: FormEngineParameterModel[],
     values: { [key: string]: any } = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
-    stepParameters = stepParameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
+    parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
 
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
-    stepParameters.forEach(parameter => {
+    parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
       const additionalFields = parameter.additional || [];
