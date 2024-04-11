@@ -5,7 +5,29 @@
     </div>
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
-
+  <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
+    <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> New suggestion</h3>
+    <ul class="nhsuk-list" role="list">
+      <h3 class="nhsuk-heading-m">{{ '{{ suggester_unit}}'}} has suggested your organisation to support this innovation</h3>
+      <li>
+        <p class="nhsuk-u-margin-bottom-0">They added this comment:</p>
+        <p nhsuk-u-font-size-19>
+          {{
+            "We believe this innovation is deserving of your support. We are looking for an organisation to assist with regulatory approvals, develop a compelling value proposition, and provide evidence to substantiate claims of benefits before we can begin our support."
+          }}
+        </p>
+      </li>
+      <li></li>
+      <li>
+        <p><a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed">Send a reply in messages</a></p>
+      </li>
+      <div class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-0 border-left-inset-neutral">
+        <p class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-0">
+          For transparency reasons, all messages can be seen and replied to by everyone who has access to this innovation, including the innovator.
+        </p>
+      </div>
+    </ul>
+  </div>
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <div class="nhsuk-u-margin-bottom-8">
     <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2">
