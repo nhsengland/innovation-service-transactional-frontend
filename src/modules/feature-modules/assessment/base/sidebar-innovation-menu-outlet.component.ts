@@ -52,8 +52,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      const shouldShowSupportSummary: boolean = false;
-
       this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('assessment', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
