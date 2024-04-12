@@ -261,7 +261,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     toReturn.push({
       label: stepsLabels.q4.label,
       value: data.userTests?.map(item => item.kind).join('\n'),
-      editStepNumber: editStepNumber++
+      editStepNumber: editStepNumber++,
+      isNotMandatory: true
     });
 
     data.userTests?.forEach(item => {

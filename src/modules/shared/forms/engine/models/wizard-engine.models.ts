@@ -12,7 +12,7 @@ export type WizardSummaryType = {
   evidenceId?: string;
   allowHTML?: boolean;
   isFile?: boolean;
-  isOptional?: boolean;
+  isNotMandatory?: boolean;
 };
 
 export type StepsParentalRelationsType = {
