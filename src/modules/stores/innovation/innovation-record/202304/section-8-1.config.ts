@@ -211,7 +211,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       {
         label: stepsLabels.q3.label,
         value: data.stepDeploymentPlans?.map(item => item.name).join('\n'),
-        editStepNumber: editStepNumber++
+        editStepNumber: editStepNumber++,
+        isNotMandatory: true
       },
       {
         label: stepsLabels.q4.label,
