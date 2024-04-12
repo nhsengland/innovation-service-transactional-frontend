@@ -45,6 +45,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   isInnovatorType: boolean;
   isAccessorType: boolean;
 
+  isSuggestionsListEmpty: boolean = true;
+
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
@@ -112,6 +114,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}`
             : ''
         }));
+
+        this.isSuggestionsListEmpty = !this.sectionsList.some(s => s.unitsList.length > 0);
 
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
 
