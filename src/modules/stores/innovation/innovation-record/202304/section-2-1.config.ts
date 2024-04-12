@@ -311,7 +311,8 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       value: data.benefitsOrImpact
         ?.map(impact => benefitsOrImpactItems.find(item => item.value === impact)?.label)
         .join('\n'),
-      editStepNumber: editStepNumber++
+      editStepNumber: editStepNumber++,
+      isNotMandatory: true
     },
     {
       label: stepsLabels.q5.label,
