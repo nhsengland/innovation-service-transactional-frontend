@@ -61,13 +61,14 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         ...(innovation.status !== InnovationStatusEnum.CREATED
           ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }]
           : []),
-        ...([
-          InnovationStatusEnum.IN_PROGRESS,
-          InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT,
-          InnovationStatusEnum.ARCHIVED
-        ].includes(innovation.status)
-          ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]
-          : []),
+        ...((innovation.assessment?.finishedAt == null &&
+          innovation.reassessmentCount === 0 &&
+          innovation.status !== 'ARCHIVED') ||
+        (innovation.status === 'ARCHIVED' &&
+          innovation.archivedStatus !== 'IN_PROGRESS' &&
+          innovation.reassessmentCount === 0)
+          ? []
+          : [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]),
         { label: 'Data sharing preferences', url: `/assessment/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
       ];
