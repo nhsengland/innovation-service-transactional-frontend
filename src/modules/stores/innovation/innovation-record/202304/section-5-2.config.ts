@@ -5,7 +5,8 @@ import { InnovationSectionConfigType } from '../ir-versions.types';
 
 import { InnovationSections } from './catalog.types';
 import { DocumentType202304 } from './document.types';
-import { hasPatentsItems } from './forms.config';
+import { hasPatentsItems, yesNoItems } from './forms.config';
+import { hasOtherIntellectualItems } from '../202209/forms.config';
 
 // Labels.
 const stepsLabels = {
@@ -101,7 +102,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push({
     label: stepsLabels.q2.label,
-    value: data.otherIntellectual || 'No',
+    value: data.hasOtherIntellectual ? data.otherIntellectual ?? 'No' : null,
     editStepNumber: 2
   });
 
