@@ -120,7 +120,20 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   }
 
   onClickChange(editStepNumber: number): void {
-    this.router.navigateByUrl(`${this.baseUrl}/record/sections/${this.sectionInfo.id}/edit/${editStepNumber}`);
+    let currentStep = this.summaryList[editStepNumber - 1];
+    let nextStep = this.summaryList[editStepNumber];
+
+    console.log('currentStep: ', currentStep);
+    console.log('nextStep: ', nextStep);
+
+    console.log(editStepNumber === this.summaryList.length);
+
+    let changeMode = false;
+
+    // (item.value && summaryList[i + 1].value) || (item.isNotMandatory && summaryList[i + 1].value) ? { isChangeMode: true } : { isChangeMode: false }
+    this.redirectTo(`${this.baseUrl}/record/sections/${this.sectionInfo.id}/edit/${editStepNumber}`, {
+      ischangeMode: changeMode
+    });
   }
 
   onStartSection(sectionId: string): void {

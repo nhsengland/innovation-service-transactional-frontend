@@ -68,17 +68,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     combineLatest([
       this.activatedRoute.queryParams,
+      this.activatedRoute.params,
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
     ]).subscribe({
-      next: ([queryParams, sectionInfoResponse]) => {
+      next: ([queryParams, params, sectionInfoResponse]) => {
         this.wizard.setAnswers(this.wizard.runInboundParsing(sectionInfoResponse.data)).runRules();
 
-        queryParams.isChangeMode
-          ? // enables changing mode and redirects to step function
-
-            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
-          : // go to regular step
-            this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
+        if (queryParams.isChangeMode === 'true') {
+          this.wizard.gotoStep(params.questionId || 1, true);
+        } else {
+          this.wizard.gotoStep(params.questionId || 1);
+        }
 
         this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         this.setPageStatus('READY');
@@ -91,9 +91,23 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepNumber: number): void {
+    let currentStep = this.wizard.getSummary()[stepNumber - 1];
+    let nextStep = this.wizard.getSummary()[stepNumber];
+
+    let isChangeMode =
+      stepNumber !== this.wizard.getSummary().length &&
+      ((currentStep.value && nextStep.value) ||
+        (currentStep.value && nextStep.isNotMandatory) ||
+        (currentStep.isNotMandatory && nextStep.value))
+        ? true
+        : false;
+
     this.wizard.gotoStep(stepNumber, true);
+    this.redirectTo(`${this.baseUrl}/edit/${stepNumber}`, { isChangeMode: isChangeMode });
+
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+    this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
@@ -105,8 +119,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
 
-      if (
-        this.wizard.isSummaryStep() ||
+      if (this.wizard.isSummaryStep()) {
+        this.redirectTo(this.baseUrl);
+      } else if (
         (!this.wizard.isChangingMode && this.wizard.isFirstStep()) ||
         this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0]
       ) {
