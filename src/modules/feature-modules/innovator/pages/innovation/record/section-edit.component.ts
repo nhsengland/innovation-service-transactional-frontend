@@ -203,7 +203,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
               for (const [index, item] of this.wizard.getSummary().entries()) {
                 this.displayChangeButtonList.push(index);
-                if (!item.value && !item.isOptional) {
+                if (!item.value && !item.isNotMandatory) {
                   break;
                 }
               }
