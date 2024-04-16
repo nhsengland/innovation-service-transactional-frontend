@@ -69,6 +69,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   submitButton = { isActive: true, label: 'Confirm' };
 
+  // Move this variable to a new file when updating the referral criteria page
   organisationsInformation: OrganisationInformation[] = [
     {
       displayName: 'Department for Business and Trade (DBT)',
@@ -355,11 +356,11 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         } else {
           const chosenOrganisation = this.organisationsToSuggest.find(org => org.id === organisation?.value!)!;
 
-          this.chosenUnits.organisation = { name: chosenOrganisation.name, acronym: chosenOrganisation.acronym };
-
-          this.chosenUnits.organisation.information = this.organisationsInformation.find(
-            org => org.acronym === chosenOrganisation.acronym
-          );
+          this.chosenUnits.organisation = {
+            name: chosenOrganisation.name,
+            acronym: chosenOrganisation.acronym,
+            information: this.organisationsInformation.find(org => org.acronym === chosenOrganisation.acronym)
+          };
 
           // Count total number of units inside organisation
           const totalUnits = this.organisations.find(org => org.id === organisation?.value!)!.organisationUnits.length;
