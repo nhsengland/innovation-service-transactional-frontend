@@ -21,6 +21,7 @@ export type ContextPageLayoutType = {
     type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
     title?: string;
     message?: string;
+    listStyleType?: 'bullet' | '';
     itemsList?: { title: string; description?: string; fieldId?: string; callback?: string | ((...p: any) => void) }[];
     width?: 'full' | '2.thirds';
     setFocus?: boolean;

@@ -213,6 +213,7 @@ export class CoreComponent implements OnDestroy {
     title: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -221,6 +222,7 @@ export class CoreComponent implements OnDestroy {
       type: 'SUCCESS',
       title,
       message: options?.message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width,
       persistOneRedirect: true
@@ -230,6 +232,7 @@ export class CoreComponent implements OnDestroy {
     title: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -238,6 +241,7 @@ export class CoreComponent implements OnDestroy {
       type: 'INFORMATION',
       title,
       message: options?.message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width,
       persistOneRedirect: true
@@ -247,6 +251,7 @@ export class CoreComponent implements OnDestroy {
     message: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -255,6 +260,7 @@ export class CoreComponent implements OnDestroy {
       type: 'ERROR',
       title: 'There is a problem',
       message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width,
       persistOneRedirect: true
@@ -264,6 +270,7 @@ export class CoreComponent implements OnDestroy {
     title: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -272,6 +279,7 @@ export class CoreComponent implements OnDestroy {
       type: 'SUCCESS',
       title,
       message: options?.message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width
     });
@@ -280,6 +288,7 @@ export class CoreComponent implements OnDestroy {
     title: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -288,6 +297,7 @@ export class CoreComponent implements OnDestroy {
       type: 'WARNING',
       title,
       message: options?.message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width
     });
@@ -296,6 +306,7 @@ export class CoreComponent implements OnDestroy {
     message: string,
     options?: {
       message?: string;
+      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
       itemsList?: ContextPageLayoutType['alert']['itemsList'];
       width?: ContextPageLayoutType['alert']['width'];
     }
@@ -304,6 +315,7 @@ export class CoreComponent implements OnDestroy {
       type: 'ERROR',
       title: 'There is a problem',
       message,
+      listStyleType: options?.listStyleType,
       itemsList: options?.itemsList,
       width: options?.width
     });
