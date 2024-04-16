@@ -102,6 +102,16 @@
                 {{ item.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
 
+              <td *ngIf="innovationsList.getColumnLabel('suggestion.suggestedOn')" class="nhsuk-table__cell text-nowrap-only-desktop">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("suggestion.suggestedOn") }} </span>
+                {{ item.suggestion?.suggestedOn | date: ("app.date_formats.long_date" | translate) }}
+              </td>
+
+              <td *ngIf="innovationsList.getColumnLabel('suggestion.suggestedBy')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("suggestion.suggestedBy") }} </span>
+                {{ item.suggestion?.suggestedBy ?? [] | joinArray }}
+              </td>
+
               <td *ngIf="innovationsList.getColumnLabel('mainCategory')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("mainCategory") }}</span>
                 {{ item.mainCategory }}
