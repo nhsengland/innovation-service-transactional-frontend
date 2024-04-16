@@ -75,6 +75,8 @@ export type InnovationListSelectType =
   | 'engagingOrganisations'
   | 'engagingUnits'
   | 'suggestedOrganisations'
+  | 'suggestion.suggestedBy'
+  | 'suggestion.suggestedOn'
   | 'support.status'
   | 'support.updatedAt'
   | 'support.updatedBy'
@@ -121,6 +123,7 @@ export type InnovationListFullDTO = {
     updatedBy: string | null;
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
+  suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
