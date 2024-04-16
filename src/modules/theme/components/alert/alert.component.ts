@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
 export class AlertComponent implements OnChanges {
   @Input() type: null | '' | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = null;
   @Input() title?: string = '';
-  @Input() listStyleType?: 'bullet' | '' = '';
+  @Input() listStyleType?: 'bullet';
   @Input() itemsList?: {
     title: string;
     description?: string;
