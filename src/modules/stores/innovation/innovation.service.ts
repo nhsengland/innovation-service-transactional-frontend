@@ -150,7 +150,7 @@ export class InnovationService {
 
   getInnovationQASuggestions(innovationId: string): Observable<InnovationQASuggestionType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/qa-suggestions-info')
+      .addPath('v1/:innovationId/units-suggestions')
       .setPathParams({ innovationId });
     return this.http.get<InnovationQASuggestionType>(url.buildUrl()).pipe(
       take(1),
