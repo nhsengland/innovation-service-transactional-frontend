@@ -13,10 +13,14 @@ import { FormEngineParameterModel } from '../models/form-engine.models';
 import { CustomValidators } from '../../validators/custom-validators';
 
 export class FormEngineHelper {
-  static buildForm(parameters: FormEngineParameterModel[], values: { [key: string]: any } = {}): FormGroup {
+  static buildForm(
+    parameters: FormEngineParameterModel[],
+    values: { [key: string]: any } = {},
+    formValidations?: ValidatorFn[]
+  ): FormGroup {
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
 
-    const form = new FormGroup({}, { updateOn: 'blur' });
+    const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
 
     // Build form structure.
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
@@ -277,6 +281,9 @@ export class FormEngineHelper {
     if (error.uploadError) {
       return { message: 'shared.forms_module.validations.upload_error', params: {} };
     }
+    if (error.mustMatch) {
+      return { message: error.message, params: {} };
+    }
     if (error.customError) {
       return { message: error.message, params: {} };
     }
@@ -398,16 +405,6 @@ export class FormEngineHelper {
           : (parameter.validations.equalTo as [string, string]);
       if (validation[0]) {
         validators.push(CustomValidators.equalTo(validation[0] as string, validation[1] as string));
-      }
-    }
-
-    if (parameter.validations?.equalToField) {
-      validation =
-        typeof parameter.validations.equalToField === 'string'
-          ? [parameter.validations.equalToField, null]
-          : (parameter.validations.equalToField as [string, string]);
-      if (validation[0]) {
-        validators.push(CustomValidators.equalToField(validation[0] as string, validation[1] as string));
       }
     }
 
