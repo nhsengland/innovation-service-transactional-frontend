@@ -48,12 +48,14 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       comment: new FormControl<string>(
         '',
         CustomValidators.required(
-          'Describe why you think this innovation would benefit from support from this organisation and click continue'
+          'Describe why you think this innovation would benefit from support from this organisation and click confirm'
         )
       )
     },
     { updateOn: 'blur' }
   );
+
+  previousOrganisationsSuggestions: { [key: string]: string[] } = {};
 
   organisations: OrganisationsListDTO[] = [];
   organisationsToSuggest: (OrganisationsListDTO & { description: string | undefined })[] = [];
@@ -289,13 +291,13 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       next: ([organisations, innovationSupports]) => {
         this.organisations = organisations;
 
-        const previousUnitsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
+        this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
 
         const engagingUnitsIds = innovationSupports
           .filter(support => support.status === 'ENGAGING')
           .map(support => support.organisation.unit.id);
 
-        const userOrganisationUnit = this.authenticationStore.getUserContextInfo()?.organisationUnit;
+        const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id;
 
         this.organisationsToSuggest = this.organisations
           .map(org => {
@@ -303,9 +305,11 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
               ...org,
               organisationUnits: org.organisationUnits.filter(
                 unit =>
-                  ![...(previousUnitsSuggestions?.units || []), ...engagingUnitsIds, userOrganisationUnit].includes(
-                    unit.id
-                  )
+                  ![
+                    ...(this.previousOrganisationsSuggestions[this.innovation.id] || []),
+                    ...engagingUnitsIds,
+                    userUnitId
+                  ].includes(unit.id)
               )
             };
 
@@ -442,7 +446,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
         itemsList: [
           {
             title:
-              'Describe why you think this innovation would benefit from support from this organisation and click continue',
+              'Describe why you think this innovation would benefit from support from this organisation and click confirm',
             fieldId: 'comment'
           }
         ],
@@ -462,11 +466,15 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({
       next: () => {
-        const previousUnitsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
-
         sessionStorage.setItem(
           'organisationsSuggestions',
-          JSON.stringify({ units: [...(previousUnitsSuggestions?.units || []), ...body.organisationUnits] })
+          JSON.stringify({
+            ...this.previousOrganisationsSuggestions,
+            [this.innovation.id]: [
+              ...(this.previousOrganisationsSuggestions[this.innovation.id] || []),
+              ...body.organisationUnits
+            ]
+          })
         );
 
         switch (this.chosenUnits.unitsNames.length) {
