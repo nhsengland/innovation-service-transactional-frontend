@@ -66,12 +66,15 @@
             <ng-container *ngIf="chosenUnits.organisation.information" class="nhsuk-margin-bottom">
               <ng-container *ngFor="let supportInfo of chosenUnits.organisation.information.supportInformation; last as lastItem">
                 <p class="font-color-secondary nhsuk-u-margin-bottom-1">{{ supportInfo.title }}</p>
-                <ul class="nhsuk-list nhsuk-list--bullet font-color-secondary nhsuk-u-margin-left-3" [ngClass]="lastItem ? 'nhsuk-u-margin-bottom-0' : 'nhsuk-u-margin-bottom-4'">
+                <ul
+                  class="nhsuk-list nhsuk-list--bullet font-color-secondary nhsuk-u-margin-left-3"
+                  [ngClass]="lastItem || supportInfo.footnote ? 'nhsuk-u-margin-bottom-0' : 'nhsuk-u-margin-bottom-4'"
+                >
                   <li *ngFor="let supportInfoBulletPoint of supportInfo.bulletPoints">
                     {{ supportInfoBulletPoint }}
                   </li>
                 </ul>
-                <p *ngIf="supportInfo.footnote" class="font-color-secondary">{{ supportInfo.footnote }}</p>
+                <p *ngIf="supportInfo.footnote" class="font-color-secondary nhsuk-u-margin-top-4">{{ supportInfo.footnote }}</p>
               </ng-container>
             </ng-container>
           </div>
