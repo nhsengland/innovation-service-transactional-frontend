@@ -73,6 +73,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           label: string | null;
         };
       } | null;
+      suggestion: {
+        suggestedBy: string[];
+        suggestedOn: DateISOType;
+      } | null;
     },
     InnovationsListFiltersType
   >;
@@ -184,7 +188,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'assessment.id',
             'support.status',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'suggestion.suggestedOn',
+            'suggestion.suggestedBy'
           ],
           notifications: null
         },
@@ -346,6 +352,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                           ? 'Closed'
                           : null
                 }
+              },
+              suggestion: item.suggestion && {
+                suggestedBy: item.suggestion.suggestedBy,
+                suggestedOn: item.suggestion.suggestedOn
               }
             };
           }),
@@ -374,9 +384,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            submittedAt: { label: 'Submitted', orderable: true },
+            'suggestion.suggestedOn': { label: 'Suggested on', orderable: true },
+            'suggestion.suggestedBy': { label: 'Suggested by', orderable: false },
             mainCategory: { label: 'Main category', orderable: true },
-            countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('submittedAt', 'descending');
@@ -478,6 +488,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.form.reset();
     } else if (queryParams.assignedToMe) {
       this.form.get('assignedToMe')?.setValue(true);
+    }
+
+    if (this.currentTab.key === InnovationSupportStatusEnum.UNASSIGNED) {
+      this.form.get('suggestedOnly')?.setValue(true);
     }
 
     this.prepareInnovationsList(this.currentTab.key);

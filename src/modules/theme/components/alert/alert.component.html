@@ -5,7 +5,7 @@
       <div class="nhsuk-error-summary__body">
         <ng-content></ng-content>
 
-        <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list" [ngClass]="{ 'nhsuk-error-summary__list': type === 'ERROR' }">
+        <ul *ngIf="(itemsList || []).length > 0" class="nhsuk-list" [ngClass]="listCSS">
           <li [ngClass]="fontItemColorCSS" *ngFor="let item of itemsList">
             <a href="javascript:void(0)" *ngIf="item.fieldId !== undefined" (click)="onScrollToAnchor(item.fieldId)">
               {{ item.title }}

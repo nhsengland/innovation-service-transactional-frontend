@@ -171,8 +171,7 @@ export class AdminUsersService extends CoreService {
    * @param idOrEmail user id or email
    */
   getUserInfo(idOrEmail: string): Observable<UserInfo> {
-    const encodedIdOrEmail = encodeURIComponent(idOrEmail);
-    const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${encodedIdOrEmail}`);
+    const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/users/${idOrEmail}`);
     return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
   }
 

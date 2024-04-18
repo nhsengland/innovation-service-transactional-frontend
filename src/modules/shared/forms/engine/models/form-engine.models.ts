@@ -1,4 +1,4 @@
-import { AsyncValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
@@ -56,7 +56,6 @@ export class FormEngineParameterModel {
     postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string];
     equalTo?: string | [string, string];
-    equalToField?: string | [string, string];
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;

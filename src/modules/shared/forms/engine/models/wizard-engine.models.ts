@@ -1,6 +1,7 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
+import { ValidatorFn } from '@angular/forms';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -23,6 +24,7 @@ export class WizardEngineModel {
   isChangingMode: boolean = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepType[];
+  formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
@@ -37,6 +39,7 @@ export class WizardEngineModel {
 
   constructor(data: Partial<WizardEngineModel>) {
     this.steps = data.steps ?? [];
+    this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
@@ -104,6 +107,10 @@ export class WizardEngineModel {
   }
   currentStepParameters(): FormEngineParameterModel[] {
     return this.currentStep().parameters;
+  }
+
+  getFormValidations(): ValidatorFn[] {
+    return this.formValidations;
   }
 
   previousStep(): this {
