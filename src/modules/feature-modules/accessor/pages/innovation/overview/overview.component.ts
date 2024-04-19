@@ -75,9 +75,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ...(this.innovation.support?.id && {
         support: this.innovationsService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id)
       }),
-      qaSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
-    }).subscribe(({ support, statistics, collaborators, qaSuggestions }) => {
-      this.qaSuggestions = qaSuggestions;
+      unitsSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
+    }).subscribe(({ support, statistics, collaborators, unitsSuggestions }) => {
+      this.qaSuggestions = unitsSuggestions;
 
       const innovationInfo = this.innovation;
 
