@@ -139,8 +139,8 @@ export type OrganisationSuggestionModel = {
 };
 
 export type InnovationQASuggestionType = {
-  suggestion_id: string;
-  suggestor_unit: string;
+  suggestionId: string;
+  suggestorUnit: string;
   thread: {
     id: string;
     message: string;

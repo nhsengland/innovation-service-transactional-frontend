@@ -12,7 +12,7 @@ import {
   GetInnovationEvidenceDTO,
   INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
-  InnovationQASuggestionType,
+  InnovationQASuggestionType as InnovationUnitsSuggestionType,
   InnovationSectionInfoDTO,
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
@@ -148,11 +148,11 @@ export class InnovationService {
     );
   }
 
-  getInnovationQASuggestions(innovationId: string): Observable<InnovationQASuggestionType> {
+  getInnovationQASuggestions(innovationId: string): Observable<InnovationUnitsSuggestionType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/units-suggestions')
       .setPathParams({ innovationId });
-    return this.http.get<InnovationQASuggestionType>(url.buildUrl()).pipe(
+    return this.http.get<InnovationUnitsSuggestionType>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
