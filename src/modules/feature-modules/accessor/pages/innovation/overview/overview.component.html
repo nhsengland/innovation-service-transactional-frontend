@@ -6,6 +6,8 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
+  <app-suggestions-cards [innovationId]="innovation.id" [suggestions]="qaSuggestions" />
+
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <div class="nhsuk-u-margin-bottom-8">
     <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-2">

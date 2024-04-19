@@ -13,6 +13,8 @@ import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovat
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { InnovationService } from '@modules/stores';
+import { InnovationQASuggestionType } from '@modules/stores/innovation/innovation.models';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -22,6 +24,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: ContextInnovationType;
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+
+  qaSuggestions: InnovationQASuggestionType = [];
 
   isQualifyingAccessorRole = false;
   isAccessorRole = false;
@@ -43,6 +47,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
+    private innovationService: InnovationService,
     private statisticsService: StatisticsService
   ) {
     super();
@@ -69,8 +74,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       collaborators: this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
       ...(this.innovation.support?.id && {
         support: this.innovationsService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id)
-      })
-    }).subscribe(({ support, statistics, collaborators }) => {
+      }),
+      unitsSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
+    }).subscribe(({ support, statistics, collaborators, unitsSuggestions }) => {
+      this.qaSuggestions = unitsSuggestions;
+
       const innovationInfo = this.innovation;
 
       this.innovationSupport = {
