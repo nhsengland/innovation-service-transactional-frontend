@@ -57,7 +57,7 @@ export class UtilsHelper {
     previousOrganisationsSuggestions?: { [key: string]: string[] }
   ): (OrganisationsListDTO & { description: string | undefined })[] {
     const organisationsSuggestions =
-      previousOrganisationsSuggestions || JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
+      previousOrganisationsSuggestions || JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
 
     const organisationsToSuggest = organisationsList
       .map(org => {
