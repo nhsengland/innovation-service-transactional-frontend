@@ -10,10 +10,12 @@ import {
   SupportSummarySectionType
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { LocalStorageHelper } from '@app/base/helpers';
+import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum } from '@app/base/enums';
 import { ActivatedRoute } from '@angular/router';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ObservableInput, forkJoin } from 'rxjs';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -46,6 +48,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   isAccessorType: boolean;
 
   isSuggestionsListEmpty: boolean = true;
+  showSuggestOrganisationsToSupportLink: boolean = false;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
@@ -56,7 +59,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private organisationsService: OrganisationsService
   ) {
     super();
     this.setPageTitle('Support summary');
@@ -81,9 +85,20 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   }
 
   ngOnInit(): void {
-    this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id).subscribe({
-      next: response => {
-        this.sectionsList[0].unitsList = response.ENGAGING.map(item => ({
+    const subscriptions: {
+      supportSummaryOrganisationsList: ObservableInput<SupportSummaryOrganisationsListDTO>;
+      organisationsList?: ObservableInput<OrganisationsListDTO[]>;
+    } = {
+      supportSummaryOrganisationsList: this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id)
+    };
+
+    if (this.isQualifyingAccessorRole) {
+      subscriptions.organisationsList = this.organisationsService.getOrganisationsList({ unitsInformation: true });
+    }
+
+    forkJoin(subscriptions).subscribe({
+      next: results => {
+        this.sectionsList[0].unitsList = results.supportSummaryOrganisationsList.ENGAGING.map(item => ({
           ...item,
           historyList: [],
           isLoading: false,
@@ -93,7 +108,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             this.innovation.status !== InnovationStatusEnum.ARCHIVED,
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
-        this.sectionsList[1].unitsList = response.BEEN_ENGAGED.map(item => ({
+        this.sectionsList[1].unitsList = results.supportSummaryOrganisationsList.BEEN_ENGAGED.map(item => ({
           ...item,
           historyList: [],
           isLoading: false,
@@ -104,7 +119,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             'MMMM y'
           )} to ${this.datePipe.transform(item.support.end, 'MMMM y')}`
         }));
-        this.sectionsList[2].unitsList = response.SUGGESTED.map(item => ({
+        this.sectionsList[2].unitsList = results.supportSummaryOrganisationsList.SUGGESTED.map(item => ({
           ...item,
           historyList: [],
           isLoading: false,
@@ -142,6 +157,20 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         });
 
         LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
+
+        // Check if there are organisations to be suggested by the qualifying accessor
+        if (this.isQualifyingAccessorRole) {
+          const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+
+          const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
+
+          this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
+            this.innovation.id,
+            userUnitId,
+            results.organisationsList ?? [],
+            engagingUnitsIds
+          ).length;
+        }
 
         this.setPageStatus('READY');
       },
