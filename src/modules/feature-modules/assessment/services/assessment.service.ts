@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, map, take } from 'rxjs/operators';
+import { catchError, finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -37,14 +37,12 @@ export class AssessmentService extends CoreService {
   // }
 
   createInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
-    this.stores.context.clearInnovation();
-
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/assessments')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
-      map(response => response)
+      finalize(() => this.stores.context.clearInnovation())
     );
   }
 

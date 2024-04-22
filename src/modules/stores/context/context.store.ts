@@ -10,8 +10,8 @@ import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
 import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
 
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
 import { AuthenticationModel } from '../authentication/authentication.models';
+import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
 
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
