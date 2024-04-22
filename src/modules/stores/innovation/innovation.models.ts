@@ -138,7 +138,7 @@ export type OrganisationSuggestionModel = {
   accessors: AccessorSuggestionModel[];
 };
 
-export type InnovationQASuggestionType = {
+export type InnovationUnitSuggestionsType = {
   suggestionId: string;
   suggestorUnit: string;
   thread: {

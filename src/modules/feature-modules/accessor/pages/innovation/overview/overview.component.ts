@@ -14,7 +14,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationService } from '@modules/stores';
-import { InnovationQASuggestionType } from '@modules/stores/innovation/innovation.models';
+import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -25,7 +25,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: ContextInnovationType;
   innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
-  qaSuggestions: InnovationQASuggestionType = [];
+  qaSuggestions: InnovationUnitSuggestionsType = [];
 
   isQualifyingAccessorRole = false;
   isAccessorRole = false;

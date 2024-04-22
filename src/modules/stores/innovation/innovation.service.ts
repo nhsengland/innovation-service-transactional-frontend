@@ -12,7 +12,7 @@ import {
   GetInnovationEvidenceDTO,
   INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
-  InnovationQASuggestionType as InnovationUnitsSuggestionType,
+  InnovationUnitSuggestionsType as InnovationUnitsSuggestionType,
   InnovationSectionInfoDTO,
   InnovationSectionsListDTO,
   OrganisationSuggestionModel

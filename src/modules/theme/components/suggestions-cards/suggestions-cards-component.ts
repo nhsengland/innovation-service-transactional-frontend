@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { AuthenticationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { InnovationQASuggestionType as InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
+import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
 
 @Component({
   selector: 'app-suggestions-cards',
