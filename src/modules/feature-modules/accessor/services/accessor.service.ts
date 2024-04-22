@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -29,7 +29,7 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId });
       return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        map(response => response)
+        finalize(() => this.stores.context.clearInnovation())
       );
     } else {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
@@ -37,7 +37,7 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId, supportId });
       return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        map(response => response)
+        finalize(() => this.stores.context.clearInnovation())
       );
     }
   }
