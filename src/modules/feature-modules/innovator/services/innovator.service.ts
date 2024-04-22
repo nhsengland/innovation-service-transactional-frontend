@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { DateISOType } from '@app/base/types';
@@ -62,14 +62,12 @@ export class InnovatorService extends CoreService {
     innovationId: string,
     body: { updatedInnovationRecord: string; description: string }
   ): Observable<{ id: string }> {
-    this.stores.context.clearInnovation();
-
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/reassessments')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
-      map(response => response)
+      finalize(() => this.stores.context.clearInnovation())
     );
   }
 

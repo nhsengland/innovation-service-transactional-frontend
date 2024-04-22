@@ -14,7 +14,7 @@ import {
   PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -43,6 +43,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() action = '';
 
   @Input() parameters: FormEngineParameterModel[] = [];
+  @Input() formValidations?: ValidatorFn[];
   @Input() values?: { [key: string]: any } = {};
   @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
 
@@ -89,7 +90,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   buildForm(): void {
     this.form = new FormGroup({}); // This will ensure that previous information is cleared!
 
-    this.form = FormEngineHelper.buildForm(this.parameters, this.values);
+    this.form = FormEngineHelper.buildForm(this.parameters, this.values, this.formValidations);
 
     this.onlyOneField = this.parameters.length === 1;
 

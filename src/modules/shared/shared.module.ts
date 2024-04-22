@@ -76,6 +76,9 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 // Pipes.
 import { BytesPrettyPrintPipe } from './pipes/bytes-pretty-print.pipe';
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
+import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
+import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
+import { JoinArrayPipe } from './pipes/join-array.pipe';
 
 // Components
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
@@ -112,8 +115,6 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
 import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
-import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
-import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
 
 @NgModule({
   imports: [
@@ -208,6 +209,7 @@ import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-c
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
+    JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
 
@@ -245,7 +247,8 @@ import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-c
 
     // Pipes.
     BytesPrettyPrintPipe,
-    PluralTranslatePipe
+    PluralTranslatePipe,
+    JoinArrayPipe
   ]
 })
 export class SharedModule {}

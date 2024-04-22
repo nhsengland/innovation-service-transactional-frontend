@@ -138,6 +138,15 @@ export type OrganisationSuggestionModel = {
   accessors: AccessorSuggestionModel[];
 };
 
+export type InnovationUnitSuggestionsType = {
+  suggestionId: string;
+  suggestorUnit: string;
+  thread: {
+    id: string;
+    message: string;
+  };
+}[];
+
 // Constants.
 export const INNOVATION_STATUS = {
   '': null,

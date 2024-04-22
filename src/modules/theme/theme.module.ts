@@ -42,6 +42,7 @@ import { FormsModule } from '@angular/forms';
 import { HeaderArchivedBannerComponent } from './components/header/header-archived-banner.component';
 import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component';
 import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
+import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 
 @NgModule({
   imports: [
@@ -82,6 +83,7 @@ import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-l
     TagComponent,
     OnOffTagComponent,
     StatisticsCardsComponent,
+    SuggestionsCardsComponent,
 
     InnovationRecordExportComponent,
 
@@ -128,6 +130,7 @@ import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-l
     TagComponent,
     OnOffTagComponent,
     StatisticsCardsComponent,
+    SuggestionsCardsComponent,
 
     ChipsFilterComponent,
     CollapsibleFilterComponent,

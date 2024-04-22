@@ -12,6 +12,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSharesListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'shared-pages-innovation-data-sharing-and-support',
@@ -56,6 +57,8 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   isAssessmentType: boolean;
   isAccessorType: boolean;
   isArchived: boolean;
+
+  showSuggestOrganisationsToSupportLink: boolean = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -247,6 +250,22 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
             contextDetails: [NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS]
           });
         }
+      }
+
+      // Check if there are organisations to be suggested by the qualifying accessor
+      if (this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
+        const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+
+        const engagingUnitsIds = results.innovationSupports
+          .filter(support => support.status === InnovationSupportStatusEnum.ENGAGING)
+          .map(support => support.organisation.unit.id);
+
+        this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
+          this.innovation.id,
+          userUnitId,
+          results.organisationsList,
+          engagingUnitsIds
+        ).length;
       }
 
       this.setPageStatus('READY');

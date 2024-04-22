@@ -1,17 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
+import { ContextStore } from '../context/context.store';
 import {
   GetInnovationEvidenceDTO,
   INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
+  InnovationUnitSuggestionsType,
   InnovationSectionInfoDTO,
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
@@ -24,6 +26,7 @@ export class InnovationService {
   constructor(
     private http: HttpClient,
     private authenticationStore: AuthenticationStore,
+    private contextStore: ContextStore,
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
@@ -33,7 +36,7 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
-      map(response => response)
+      finalize(() => this.contextStore.clearInnovation())
     );
   }
 
@@ -142,6 +145,16 @@ export class InnovationService {
       .addPath('v1/:innovationId/suggestions')
       .setPathParams({ innovationId });
     return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  getInnovationQASuggestions(innovationId: string): Observable<InnovationUnitSuggestionsType> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/units-suggestions')
+      .setPathParams({ innovationId });
+    return this.http.get<InnovationUnitSuggestionsType>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );

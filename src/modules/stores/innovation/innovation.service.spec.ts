@@ -1,10 +1,10 @@
-import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationStore, AuthenticationService } from '@modules/stores';
+import { AuthenticationService, AuthenticationStore, ContextService, ContextStore } from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
 
@@ -14,6 +14,7 @@ describe('Stores/Innovation/InnovationService', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
+  let contextStore: ContextStore;
 
   let service: InnovationService;
 
@@ -23,6 +24,8 @@ describe('Stores/Innovation/InnovationService', () => {
       providers: [
         AuthenticationStore,
         AuthenticationService,
+        ContextStore,
+        ContextService,
         InnovationService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
@@ -31,11 +34,13 @@ describe('Stores/Innovation/InnovationService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
+    contextStore = TestBed.inject(ContextStore);
 
     service = TestBed.inject(InnovationService);
 
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.getUserId = () => 'user001';
+    contextStore.clearInnovation = () => {};
   });
 
   afterEach(() => {

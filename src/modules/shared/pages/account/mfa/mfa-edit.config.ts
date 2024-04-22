@@ -1,8 +1,9 @@
-import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
+import { CustomValidators, FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import { CurrentMFAModeType } from './mfa-edit.component';
 import { fullCountryCodeList } from './mfa-country-lists';
+import { CustomFormGroupValidators } from '@modules/shared/forms/validators/custom-validators';
 
 // Payloads definitions
 
@@ -50,6 +51,13 @@ const turnOffItems = [
   { value: 'YES', label: 'Yes' },
   { value: 'NO', label: 'No' }
 ];
+
+// Form validations
+const phoneConfirmationValidation = CustomFormGroupValidators.mustMatch(
+  'phoneNumber',
+  'confirmationPhoneNumber',
+  'Phone numbers do not match'
+);
 
 // Steps labels
 
@@ -120,8 +128,7 @@ function getPhoneStep(currentMFAMode: CurrentMFAModeType, selectedCountryCode?: 
         dataType: 'number',
         label: 'Confirm phone number',
         validations: {
-          isRequired: [true, 'Phone confirmation is required'],
-          equalToField: ['phoneNumber', 'Phone numbers do not match']
+          isRequired: [true, 'Phone confirmation is required']
         }
       }
     ]
@@ -149,6 +156,7 @@ function getEmailStep(userEmail: string, currentMFAMode: CurrentMFAModeType): Fo
 
 export const MFA_SET_UP: WizardEngineModel = new WizardEngineModel({
   steps: [selectMethodStep, new FormEngineModel({})],
+  formValidations: [phoneConfirmationValidation],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
@@ -178,6 +186,7 @@ export const MFA_EMAIL: WizardEngineModel = new WizardEngineModel({
 
 export const MFA_PHONE: WizardEngineModel = new WizardEngineModel({
   steps: [],
+  formValidations: [phoneConfirmationValidation],
   showSummary: false,
   runtimeRules: [
     (steps: FormEngineModel[], currentValues: StepPayloadType, currentStep: number | 'summary') =>

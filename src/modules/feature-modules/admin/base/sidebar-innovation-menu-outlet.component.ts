@@ -60,7 +60,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
           : []),
         ...(innovation.assessment?.finishedAt == null && innovation.reassessmentCount === 0
           ? []
-          : [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]),
+          : [{ label: 'Support summary', url: `/admin/innovations/${innovation.id}/support-summary` }]),
         { label: 'Data sharing preferences', url: `/admin/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/admin/innovations/${innovation.id}/activity-log` }
       ];

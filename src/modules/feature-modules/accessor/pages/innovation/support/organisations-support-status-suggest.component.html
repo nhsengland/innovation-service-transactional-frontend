@@ -1,23 +1,22 @@
 <theme-content-wrapper [status]="pageStatus">
   <form [formGroup]="form">
-    <ng-container *ngIf="currentStep === 1">
+    <ng-container *ngIf="stepNumber === 1">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
-          <p>Select the organisations you think would be most suitable to offer support to this innovation. These organisations will be notified.</p>
+          <p>You can only select 1 organisation at a time. If an organisation has units, you can select these on the next page.</p>
 
-          <ul class="nhsuk-list">
-            <li *ngIf="isQualifyingAccessorRole === true">
-              <a routerLink="/accessor/organisations/referral-criteria" aria-label="View organisation referral criteria" target="_blank">
-                Organisation referral criteria (opens in a new window).
+          <div class="nhsuk-inset-text nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+            <span class="nhsuk-u-visually-hidden">Information: </span>
+            <p>
+              Before you suggest an organisation,
+              <a routerLink="/accessor/organisations/referral-criteria" aria-label="View organisation referral criteria" target="_blank" rel="noopener noreferrer">
+                check their referral criteria (opens in a new window).
               </a>
-            </li>
-          </ul>
-          <theme-form-grouped-checkbox-array
-            arrayName="organisationUnits"
-            label="Organisation"
-            [groupedItems]="groupedItems"
-            [pageUniqueField]="false"
-          ></theme-form-grouped-checkbox-array>
+            </p>
+          </div>
+
+          <theme-form-radio-group id="organisation" controlName="organisation" [items]="organisationItems" [pageUniqueField]="false"></theme-form-radio-group>
+
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
           <div>
@@ -27,21 +26,66 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="currentStep === 2">
+    <ng-container *ngIf="stepNumber === 2">
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-two-thirds">
-          <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">You have selected:</p>
-          <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-bottom-5">
-            <li *ngFor="let organisation of chosenUnits.list">
-              {{ organisation.organisation }}
-              <ul *ngIf="organisation.units.length > 0" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
-                <li *ngFor="let unit of organisation.units" class="nhsuk-u-margin-0">{{ unit }}</li>
-              </ul>
-            </li>
-          </ul>
+          <p *ngIf="unitsItems.length > 2">You can select multiple units in this organisation.</p>
 
-          <theme-form-textarea controlName="comment" label="Describe briefly why you selected these organisations" [pageUniqueField]="false" lengthLimit="xl"></theme-form-textarea>
-          <theme-form-checkbox controlName="confirm" label="I confirm that I understand the support offers of the selected organisations" size="small"></theme-form-checkbox>
+          <theme-form-checkbox-array id="units" arrayName="units" [items]="unitsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
+
+          <div>
+            <a href="javascript:;" (click)="handleCancelOrSubmit()">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepNumber === 3">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+          <div class="bg-color-white nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-5">
+            <ng-container *ngIf="chosenUnits.unitsNames.length > 0; else noUnits">
+              <p class="nhsuk-u-font-weight-bold">You have suggested {{ chosenUnits.unitsNames.length > 1 ? "these units" : "this unit" }}:</p>
+              <ul
+                class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-3"
+                [ngClass]="chosenUnits.organisation.information ? 'nhsuk-u-margin-bottom-4' : 'nhsuk-u-margin-bottom-0'"
+              >
+                <li *ngFor="let name of chosenUnits.unitsNames">
+                  {{ name }}
+                </li>
+              </ul>
+            </ng-container>
+            <ng-template #noUnits>
+              <p class="nhsuk-u-font-weight-bold" [ngClass]="{ 'nhsuk-u-margin-bottom-0': !chosenUnits.organisation.information }">
+                You have selected {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})
+              </p>
+            </ng-template>
+
+            <ng-container *ngIf="chosenUnits.organisation.information" class="nhsuk-margin-bottom">
+              <ng-container *ngFor="let supportInfo of chosenUnits.organisation.information.supportInformation; last as lastItem">
+                <p class="font-color-secondary nhsuk-u-margin-bottom-1">{{ supportInfo.title }}</p>
+                <ul
+                  class="nhsuk-list nhsuk-list--bullet font-color-secondary nhsuk-u-margin-left-3"
+                  [ngClass]="lastItem || supportInfo.footnote ? 'nhsuk-u-margin-bottom-0' : 'nhsuk-u-margin-bottom-4'"
+                >
+                  <li *ngFor="let supportInfoBulletPoint of supportInfo.bulletPoints">
+                    {{ supportInfoBulletPoint }}
+                  </li>
+                </ul>
+                <p *ngIf="supportInfo.footnote" class="font-color-secondary nhsuk-u-margin-top-4">{{ supportInfo.footnote }}</p>
+              </ng-container>
+            </ng-container>
+          </div>
+
+          <theme-form-textarea
+            [id]="'comment'"
+            controlName="comment"
+            label="Describe why you think this innovation would benefit from support from {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})"
+            [pageUniqueField]="false"
+            lengthLimit="xl"
+          ></theme-form-textarea>
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
 

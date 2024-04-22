@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 export class AlertComponent implements OnChanges {
   @Input() type: null | '' | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = null;
   @Input() title?: string = '';
+  @Input() listStyleType?: 'bullet';
   @Input() itemsList?: {
     title: string;
     description?: string;
@@ -35,6 +36,7 @@ export class AlertComponent implements OnChanges {
   borderColorCSS = '';
   widthCSS = '';
   fontItemColorCSS = '';
+  listCSS = '';
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -82,6 +84,18 @@ export class AlertComponent implements OnChanges {
           break;
         default:
           this.widthCSS = 'nhsuk-grid-column-full';
+          break;
+      }
+
+      if (this.type === 'ERROR') {
+        this.listCSS = 'nhsuk-error-summary__list';
+      }
+
+      switch (this.listStyleType) {
+        case 'bullet':
+          this.listCSS = this.listCSS + ' nhsuk-list--bullet nhsuk-u-margin-left-3';
+          break;
+        default:
           break;
       }
 
