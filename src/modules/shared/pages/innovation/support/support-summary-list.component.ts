@@ -14,7 +14,6 @@ import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum } from '@app/base/enums';
 import { ActivatedRoute } from '@angular/router';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { AuthenticationStore } from '@modules/stores';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
@@ -61,7 +60,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private datePipe: DatePipe,
-    private authenticationStore: AuthenticationStore,
     private organisationsService: OrganisationsService
   ) {
     super();
@@ -162,7 +160,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         // Check if there are organisations to be suggested by the qualifying accessor
         if (this.isQualifyingAccessorRole) {
-          const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id || '';
+          const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
 
           const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
 

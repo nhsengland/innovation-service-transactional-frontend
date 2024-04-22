@@ -12,8 +12,8 @@ import { AccessorService } from '../../../services/accessor.service';
 
 import { ActivatedRoute } from '@angular/router';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
-import { AuthenticationStore } from '@modules/stores';
 import { UtilsHelper } from '@app/base/helpers';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 type OrganisationInformation = {
   displayName: string;
@@ -271,8 +271,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     private activatedRoute: ActivatedRoute,
     private accessorService: AccessorService,
     private innovationsService: InnovationsService,
-    private organisationsService: OrganisationsService,
-    private authenticationStore: AuthenticationStore
+    private organisationsService: OrganisationsService
   ) {
     super();
     this.innovation = this.stores.context.getInnovation();
@@ -292,12 +291,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       next: ([organisations, innovationSupports]) => {
         this.organisations = organisations;
 
-        const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id || '';
+        const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
 
-        this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
+        this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
 
         const engagingUnitsIds = innovationSupports
-          .filter(support => support.status === 'ENGAGING')
+          .filter(support => support.status === InnovationSupportStatusEnum.ENGAGING)
           .map(support => support.organisation.unit.id);
 
         this.organisationsToSuggest = UtilsHelper.getAvailableOrganisationsToSuggest(
