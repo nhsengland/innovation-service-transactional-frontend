@@ -226,7 +226,7 @@
         <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed at {{ innovation.assessment.finishedAt | date: "MMMM y" }}</div>
       </ng-container>
 
-      <div *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED'" class="nhsuk-action-link">
+      <div *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED' && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link">
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
         <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
           <theme-svg-icon type="arrow-right-circle" />

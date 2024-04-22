@@ -12,6 +12,8 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSharesListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { AuthenticationStore } from '@modules/stores';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'shared-pages-innovation-data-sharing-and-support',
@@ -57,11 +59,14 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   isAccessorType: boolean;
   isArchived: boolean;
 
+  showSuggestOrganisationsToSupportLink: boolean = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService,
-    private innovationService: InnovationService
+    private innovationService: InnovationService,
+    private authenticationStore: AuthenticationStore
   ) {
     super();
 
@@ -247,6 +252,22 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
             contextDetails: [NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS]
           });
         }
+      }
+
+      // Check if there are organisations to be suggested by the qualifying accessor
+      if (this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {
+        const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id || '';
+
+        const engagingUnitsIds = results.innovationSupports
+          .filter(support => support.status === 'ENGAGING')
+          .map(support => support.organisation.unit.id);
+
+        this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
+          this.innovation.id,
+          userUnitId,
+          results.organisationsList,
+          engagingUnitsIds
+        ).length;
       }
 
       this.setPageStatus('READY');

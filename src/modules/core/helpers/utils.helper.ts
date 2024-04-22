@@ -1,4 +1,5 @@
 import { locale } from '@app/config/translations/en';
+import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
@@ -46,5 +47,38 @@ export class UtilsHelper {
     }
 
     return value;
+  }
+
+  static getAvailableOrganisationsToSuggest(
+    innovationId: string,
+    userUnitId: string,
+    organisationsList: OrganisationsListDTO[],
+    engagingUnitsIds: string[],
+    previousOrganisationsSuggestions?: { [key: string]: string[] }
+  ): (OrganisationsListDTO & { description: string | undefined })[] {
+    const organisationsSuggestions =
+      previousOrganisationsSuggestions || JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
+
+    const organisationsToSuggest = organisationsList
+      .map(org => {
+        const newOrg = {
+          ...org,
+          organisationUnits: org.organisationUnits.filter(
+            unit =>
+              ![...(organisationsSuggestions[innovationId] || []), ...engagingUnitsIds, userUnitId].includes(unit.id)
+          )
+        };
+
+        let description = undefined;
+        if (org.organisationUnits.length > 1) {
+          const totalUnits = newOrg.organisationUnits.length;
+          description = `${totalUnits} ${totalUnits > 1 ? 'units' : 'unit'} in this organisation`;
+        }
+
+        return { ...newOrg, description };
+      })
+      .filter(org => org.organisationUnits.length > 0);
+
+    return organisationsToSuggest;
   }
 }

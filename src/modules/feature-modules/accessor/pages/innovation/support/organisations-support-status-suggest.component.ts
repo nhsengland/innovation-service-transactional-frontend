@@ -13,6 +13,7 @@ import { AccessorService } from '../../../services/accessor.service';
 import { ActivatedRoute } from '@angular/router';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { AuthenticationStore } from '@modules/stores';
+import { UtilsHelper } from '@app/base/helpers';
 
 type OrganisationInformation = {
   displayName: string;
@@ -291,37 +292,21 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       next: ([organisations, innovationSupports]) => {
         this.organisations = organisations;
 
+        const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id || '';
+
         this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') || '{}');
 
         const engagingUnitsIds = innovationSupports
           .filter(support => support.status === 'ENGAGING')
           .map(support => support.organisation.unit.id);
 
-        const userUnitId = this.authenticationStore.getUserContextInfo()?.organisationUnit?.id;
-
-        this.organisationsToSuggest = this.organisations
-          .map(org => {
-            const newOrg = {
-              ...org,
-              organisationUnits: org.organisationUnits.filter(
-                unit =>
-                  ![
-                    ...(this.previousOrganisationsSuggestions[this.innovation.id] || []),
-                    ...engagingUnitsIds,
-                    userUnitId
-                  ].includes(unit.id)
-              )
-            };
-
-            let description = undefined;
-            if (org.organisationUnits.length > 1) {
-              const totalUnits = newOrg.organisationUnits.length;
-              description = `${totalUnits} ${totalUnits > 1 ? 'units' : 'unit'} in this organisation`;
-            }
-
-            return { ...newOrg, description };
-          })
-          .filter(org => org.organisationUnits.length > 0);
+        this.organisationsToSuggest = UtilsHelper.getAvailableOrganisationsToSuggest(
+          this.innovation.id,
+          userUnitId,
+          organisations,
+          engagingUnitsIds,
+          this.previousOrganisationsSuggestions
+        );
 
         this.organisationItems = this.organisationsToSuggest.map(org => ({
           value: org.id,
