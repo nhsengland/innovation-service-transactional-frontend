@@ -14,7 +14,8 @@ export const TaskAdvancedSearchFiltersConfig: FiltersConfig = {
           key: 'createdByMe',
           title: 'Show only tasks assigned by me',
           defaultValue: false,
-          translation: 'Viewing tasks assigned to me'
+          translation: 'Viewing tasks assigned to me',
+          options: { updateOn: 'change' }
         }
       ]
     },
