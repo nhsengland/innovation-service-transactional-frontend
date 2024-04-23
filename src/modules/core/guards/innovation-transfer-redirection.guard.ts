@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { Response } from 'express';
-import { RESPONSE } from '@nguniversal/express-engine/tokens';
+import { RESPONSE } from '../../../express.tokens';
 
 import { LoggerService, Severity } from '../services/logger.service';
 import { InnovationService } from '../services/innovation.service';

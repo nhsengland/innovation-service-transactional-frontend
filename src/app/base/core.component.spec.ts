@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector, PLATFORM_ID } from '@angular/core';
-import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { REQUEST, RESPONSE } from '../../express.tokens';
 import { Router } from '@angular/router';
 
 import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
