@@ -15,7 +15,7 @@ export class NotificationTagComponent {
       // Includes 0!
       this.visibleLabel = '';
     } else if (Number.isInteger(Number(v))) {
-      this.visibleLabel = v < 99 ? v.toString() : '99+';
+      this.visibleLabel = Number(v) < 99 ? v.toString() : '99+';
     } else {
       this.visibleLabel = v.toString();
     }
