@@ -47,7 +47,7 @@
     "luxon": "^3.4.3",
     "multer": "^1.4.5-lts.1",
     "ng-dynamic-component": "~10.3.1",
-    "ngx-cookie-service": "^16.1.0",
+    "ngx-cookie-service": "^17.1.0",
     "ngx-dropzone": "^3.1.0",
     "ngx-logger": "^5.0.12",
     "nhsuk-frontend": "^7.1.0",
