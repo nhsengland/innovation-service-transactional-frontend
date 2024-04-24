@@ -41,7 +41,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.2",
     "express": "^4.19.2",
-    "express-session": "^1.17.3",
+    "express-session": "^1.18.0",
     "govuk-frontend": "^4.7.0",
     "helmet": "^6.2.0",
     "lodash": "^4.17.21",
