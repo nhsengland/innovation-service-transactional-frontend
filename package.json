@@ -39,7 +39,7 @@
     "applicationinsights": "^2.9.5",
     "axios": "^1.6.8",
     "cookie-parser": "^1.4.6",
-    "dotenv": "^16.3.2",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "govuk-frontend": "^4.8.0",
