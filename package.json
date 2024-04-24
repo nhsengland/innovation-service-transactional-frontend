@@ -45,7 +45,7 @@
     "govuk-frontend": "^4.8.0",
     "helmet": "^6.2.0",
     "lodash": "^4.17.21",
-    "luxon": "^3.4.3",
+    "luxon": "^3.4.4",
     "multer": "^1.4.5-lts.1",
     "ng-dynamic-component": "~10.3.1",
     "ngx-cookie-service": "^17.1.0",
