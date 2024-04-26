@@ -22,8 +22,8 @@ import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
-import { AppServerModule } from './src/main.server';
 import csvRouter from 'src/server/routes/csv-generator.routes';
+import { AppServerModule } from './src/main.server';
 
 import { REQUEST, RESPONSE } from './src/express.tokens';
 
@@ -111,12 +111,6 @@ export function app(): express.Express {
   server.post('/*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
-    console.log('POST');
-    console.log('indexHtml', indexHtml);
-    console.log('url', `${protocol}://${headers.host}${originalUrl}`);
-    console.log('publicPath', distFolder);
-    console.log('POST');
-
     commonEngine
       .render({
         bootstrap: AppServerModule,
@@ -157,12 +151,6 @@ export function app(): express.Express {
   // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
-
-    console.log('GET');
-    console.log('indexHtml', indexHtml);
-    console.log('url', `${protocol}://${headers.host}${originalUrl}`);
-    console.log('publicPath', distFolder);
-    console.log('GET');
 
     commonEngine
       .render({
