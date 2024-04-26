@@ -9,24 +9,9 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import {
-  NotificationPreferenceEnum,
-  NotificationCategoryTypeEnum,
-  NotificationsService
-} from '@modules/shared/services/notifications.service';
+import { NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
-
-const EmailNotificationsListMock = {
-  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO
-};
 
 describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsEditComponent', () => {
   let activatedRoute: ActivatedRoute;

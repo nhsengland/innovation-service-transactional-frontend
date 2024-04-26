@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 
-import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { REQUEST, RESPONSE } from '../../express.tokens';
 import { Request, Response } from 'express';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
