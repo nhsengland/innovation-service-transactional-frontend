@@ -10,16 +10,16 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { ObservedValueOf } from 'rxjs';
-import { OrganisationDataResolver } from '../../resolvers/organisation-data.resolver';
-import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
+import { organisationDataResolver } from '../../resolvers/organisation-data.resolver';
+import { organisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
 
 @Component({
   selector: 'app-admin-pages-organisations-other-teams-info',
   templateUrl: './teams-info.component.html'
 })
 export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
-  public unit: ObservedValueOf<ReturnType<OrganisationUnitDataResolver['resolve']>>;
-  public organisation: ObservedValueOf<ReturnType<OrganisationDataResolver['resolve']>>;
+  public unit: ObservedValueOf<ReturnType<typeof organisationUnitDataResolver>>;
+  public organisation: ObservedValueOf<ReturnType<typeof organisationDataResolver>>;
 
   isAssessmentTeamPage: boolean;
   isServiceAdministratorPage: boolean;

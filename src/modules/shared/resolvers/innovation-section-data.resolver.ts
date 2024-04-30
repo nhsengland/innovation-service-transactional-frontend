@@ -1,18 +1,16 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { InnovationStore } from '@modules/stores';
 
-@Injectable()
-export class InnovationSectionDataResolver {
-  constructor(private innovationStore: InnovationStore) {}
+export const innovationSectionDataResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+): Observable<{ id: null | string; name: string }> => {
+  const innovationStore: InnovationStore = inject(InnovationStore);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<{ id: null | string; name: string }> {
-    return of({
-      id: route.params['sectionId'],
-      name:
-        this.innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId'])?.section.title ?? ''
-    });
-  }
-}
+  return of({
+    id: route.params['sectionId'],
+    name: innovationStore.getInnovationRecordSectionIdentification(route.params['sectionId'])?.section.title ?? ''
+  });
+};

@@ -65,10 +65,11 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
-import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
-import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { innovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { innovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+import { innovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
@@ -126,7 +127,7 @@ const routes: Routes = [
           {
             path: ':innovationId',
             runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: { innovationData: innovationDataResolver },
             data: {
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
@@ -300,7 +301,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
+                    resolve: { document: innovationDocumentDataResolver },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string; name: string } }) => `${data.document.name}`
@@ -343,7 +344,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
+                    resolve: { innovationActionData: innovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -392,7 +393,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
+                    resolve: { innovationThreadData: innovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
@@ -426,7 +427,7 @@ const routes: Routes = [
               {
                 path: 'support',
                 data: { breadcrumb: 'Support status' },
-                resolve: { innovationData: mapToResolve(InnovationDataResolver) }, // Needed to repeat this resolver as support can be updated from this routes.
+                resolve: { innovationData: innovationDataResolver }, // Needed to repeat this resolver as support can be updated from this routes.
                 children: [
                   {
                     path: '',

@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -15,29 +15,25 @@ import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stor
  * Note: With the creation of the context store, this can be changed to a guard in the future,
  * as it is also assuming that responsibility now (verifying access to the innovation).
  */
-@Injectable()
-export class InnovationDataResolver {
-  constructor(
-    private router: Router,
-    private logger: NGXLogger,
-    private authenticationStore: AuthenticationStore,
-    private contextStore: ContextStore
-  ) {}
 
-  resolve(route: ActivatedRouteSnapshot): Observable<null | { id: string; name: string }> {
-    return this.contextStore
-      .getOrLoadInnovation(route.params.innovationId, this.authenticationStore.getUserContextInfo())
-      .pipe(
-        map(response => {
-          return { id: response.id, name: response.name };
-        }),
-        catchError(error => {
-          this.contextStore.clearInnovation();
-          this.router.navigateByUrl('error/forbidden-innovation');
+export const innovationDataResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+): Observable<null | { id: string; name: string }> => {
+  const router: Router = inject(Router);
+  const logger: NGXLogger = inject(NGXLogger);
+  const authenticationStore: AuthenticationStore = inject(AuthenticationStore);
+  const contextStore: ContextStore = inject(ContextStore);
 
-          this.logger.error('Error fetching data innovation data', error);
-          return of(null);
-        })
-      );
-  }
-}
+  return contextStore.getOrLoadInnovation(route.params.innovationId, authenticationStore.getUserContextInfo()).pipe(
+    map(response => {
+      return { id: response.id, name: response.name };
+    }),
+    catchError(error => {
+      contextStore.clearInnovation();
+      router.navigateByUrl('error/forbidden-innovation');
+
+      logger.error('Error fetching data innovation data', error);
+      return of(null);
+    })
+  );
+};

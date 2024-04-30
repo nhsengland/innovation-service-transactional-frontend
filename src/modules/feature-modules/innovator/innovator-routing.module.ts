@@ -77,20 +77,20 @@ import { InnovationCollaborationRedirectionGuard } from '@modules/core/guards/in
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
 import { ManageGuard } from './guards/manage.guard';
 import { ShareInnovationRecordGuard } from './guards/share-innovation-record.guard';
+import { checkStatusGuard } from './guards/check-status.guard';
 
 // Resolvers.
+import { innovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { innovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { innovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
+import { innovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
+import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
-import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
-import { InnovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
-import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
-import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
-import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
-import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
@@ -154,7 +154,7 @@ const routes: Routes = [
           },
           {
             path: ':innovationId',
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: { innovationData: innovationDataResolver },
             data: {
               module: 'innovator',
               layout: { type: '1.third-2.thirds' },
@@ -229,7 +229,7 @@ const routes: Routes = [
                       },
                       {
                         path: ':sectionId',
-                        resolve: { innovationSectionData: mapToResolve(InnovationSectionDataResolver) },
+                        resolve: { innovationSectionData: innovationSectionDataResolver },
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },
@@ -275,7 +275,7 @@ const routes: Routes = [
                               {
                                 path: ':evidenceId',
                                 resolve: {
-                                  innovationSectionEvidenceData: mapToResolve(InnovationSectionEvidenceDataResolver)
+                                  innovationSectionEvidenceData: innovationSectionEvidenceDataResolver
                                 },
                                 data: {
                                   breadcrumb: (data: RoutesDataType) => {
@@ -369,7 +369,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
+                    resolve: { document: innovationDocumentDataResolver },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string; name: string } }) => `${data.document.name}`
@@ -415,7 +415,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
+                    resolve: { innovationActionData: innovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -448,7 +448,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+                resolve: { innovationData: innovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -465,7 +465,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
+                    resolve: { innovationThreadData: innovationDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';

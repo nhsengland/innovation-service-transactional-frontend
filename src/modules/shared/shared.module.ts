@@ -83,14 +83,6 @@ import { JoinArrayPipe } from './pipes/join-array.pipe';
 // Components
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
 
-// Resolvers.
-import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
-import { InnovationDocumentDataResolver } from './resolvers/innovation-document-data.resolver';
-import { InnovationSectionDataResolver } from './resolvers/innovation-section-data.resolver';
-import { InnovationSectionEvidenceDataResolver } from './resolvers/innovation-section-evidence-data.resolver';
-import { InnovationTaskDataResolver } from './resolvers/innovation-task-data.resolver';
-import { InnovationThreadDataResolver } from './resolvers/innovation-thread-data.resolver';
-
 // Services.
 import { InnovationDocumentsService } from './services/innovation-documents.service';
 import { InnovationsService } from './services/innovations.service';
@@ -219,14 +211,6 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     FiltersSelectionWrapperComponent
   ],
   providers: [
-    // Resolvers.
-    InnovationTaskDataResolver,
-    InnovationDataResolver,
-    InnovationDocumentDataResolver,
-    InnovationSectionDataResolver,
-    InnovationSectionEvidenceDataResolver,
-    InnovationThreadDataResolver,
-
     // Services.
     InnovationDocumentsService,
     InnovationsService,

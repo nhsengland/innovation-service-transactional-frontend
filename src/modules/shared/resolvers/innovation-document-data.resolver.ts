@@ -1,26 +1,23 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Injectable, inject } from '@angular/core';
+import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { Observable, catchError, map, of } from 'rxjs';
 
 import { InnovationDocumentsService } from '../services/innovation-documents.service';
 
-@Injectable()
-export class InnovationDocumentDataResolver {
-  constructor(
-    private router: Router,
-    private innovationDocumentsService: InnovationDocumentsService
-  ) {}
+export const innovationDocumentDataResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+): Observable<null | { id: null | string; name: string }> => {
+  const router: Router = inject(Router);
+  const innovationDocumentsService: InnovationDocumentsService = inject(InnovationDocumentsService);
 
-  resolve(route: ActivatedRouteSnapshot): Observable<null | { id: null | string; name: string }> {
-    return this.innovationDocumentsService.getDocumentInfo(route.params.innovationId, route.params.documentId).pipe(
-      map(response => ({
-        id: response.id,
-        name: response.name
-      })),
-      catchError(() => {
-        this.router.navigateByUrl('error/generic');
-        return of(null);
-      })
-    );
-  }
-}
+  return innovationDocumentsService.getDocumentInfo(route.params.innovationId, route.params.documentId).pipe(
+    map(response => ({
+      id: response.id,
+      name: response.name
+    })),
+    catchError(() => {
+      router.navigateByUrl('error/generic');
+      return of(null);
+    })
+  );
+};

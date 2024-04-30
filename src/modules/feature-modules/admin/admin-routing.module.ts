@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { mapToResolve, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 // Layout.
 import { RoutesDataType, TransactionalLayoutComponent } from '@modules/theme/base/transactional-layout.component';
@@ -73,15 +73,15 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
+import { announcementDataResolver } from './resolvers/announcement-data.resolver';
+import { organisationDataResolver } from './resolvers/organisation-data.resolver';
+import { organisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
+import { serviceUserDataResolver } from './resolvers/service-user-data.resolver';
+import { innovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
-import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
-import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
-import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
-import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
-import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
-import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 
@@ -136,7 +136,7 @@ const routes: Routes = [
           {
             path: ':organisationId',
             runGuardsAndResolvers: 'pathParamsOrQueryParamsChange',
-            resolve: { organisation: mapToResolve(OrganisationDataResolver) },
+            resolve: { organisation: organisationDataResolver },
             data: {
               breadcrumb: (data: { organisation: { id: string; name: string; acronym: string } }) =>
                 `${data.organisation.name}`
@@ -166,7 +166,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':organisationUnitId',
-                    resolve: { organisationUnit: mapToResolve(OrganisationUnitDataResolver) },
+                    resolve: { organisationUnit: organisationUnitDataResolver },
                     runGuardsAndResolvers: 'always',
                     data: {
                       breadcrumb: (data: { organisationUnit: { id: string; name: string; acronym: string } }) =>
@@ -213,7 +213,7 @@ const routes: Routes = [
           {
             path: ':userId',
             runGuardsAndResolvers: 'always',
-            resolve: { user: mapToResolve(ServiceUserDataResolver) },
+            resolve: { user: serviceUserDataResolver },
             data: { breadcrumb: (data: { user: { id: string; name: string } }) => `${data.user.name}` },
             children: [
               { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
@@ -269,7 +269,7 @@ const routes: Routes = [
           { path: 'new', pathMatch: 'full', component: PageAnnouncementNewditComponent },
           {
             path: ':announcementId',
-            resolve: { announcement: mapToResolve(AnnouncementDataResolver) },
+            resolve: { announcement: announcementDataResolver },
             data: {
               breadcrumb: (data: { announcement: { id: string; title: string } }) => `${data.announcement.title}`
             },
@@ -399,7 +399,7 @@ const routes: Routes = [
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: { innovationData: innovationDataResolver },
             children: [
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
 
@@ -519,7 +519,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
+                    resolve: { innovationActionData: innovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -549,7 +549,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
+                    resolve: { innovationThreadData: innovationDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';

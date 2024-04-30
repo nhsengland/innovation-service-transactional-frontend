@@ -58,11 +58,6 @@ import { AnnouncementsService } from './services/announcements.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
 import { AdminUsersService } from './services/users.service';
 
-// Resolvers.
-import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
-import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
-import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
-import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 
 @NgModule({
@@ -122,13 +117,7 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     AdminOrganisationsService,
     AnnouncementsService,
     AdminUsersService,
-    UsersValidationRulesService,
-
-    // Resolvers.
-    AnnouncementDataResolver,
-    OrganisationDataResolver,
-    ServiceUserDataResolver,
-    OrganisationUnitDataResolver
+    UsersValidationRulesService
   ]
 })
 export class AdminModule {}

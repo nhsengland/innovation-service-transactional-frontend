@@ -68,10 +68,11 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
-import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
-import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
-import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
-import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { innovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { innovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+import { innovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
@@ -142,7 +143,7 @@ const routes: Routes = [
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: { innovationData: innovationDataResolver },
             children: [
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
 
@@ -233,7 +234,7 @@ const routes: Routes = [
 
                               {
                                 path: ':evidenceId',
-                                // resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },
+                                // resolve: { innovationSectionEvidenceData: innovationSectionEvidenceDataResolver },
                                 data: { breadcrumb: 'Evidence Info' },
                                 pathMatch: 'full',
                                 component: PageInnovationSectionEvidenceInfoComponent
@@ -271,7 +272,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':documentId',
-                    resolve: { document: mapToResolve(InnovationDocumentDataResolver) },
+                    resolve: { document: innovationDocumentDataResolver },
                     data: {
                       layout: { type: 'full' },
                       breadcrumb: (data: { document: { id: string; name: string } }) => `${data.document.name}`
@@ -314,7 +315,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':taskId',
-                    resolve: { innovationActionData: mapToResolve(InnovationTaskDataResolver) },
+                    resolve: { innovationActionData: innovationTaskDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationActionData?.name ?? '';
@@ -347,7 +348,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                // resolve: { innovationData: InnovationDataResolver },
+                // resolve: { innovationData: innovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -364,7 +365,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: mapToResolve(InnovationThreadDataResolver) },
+                    resolve: { innovationThreadData: innovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
