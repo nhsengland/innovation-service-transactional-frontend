@@ -449,7 +449,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: innovationThreadDataResolver },
+                resolve: { innovationData: innovationDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {
@@ -466,7 +466,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: innovationDataResolver },
+                    resolve: { innovationThreadData: innovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
