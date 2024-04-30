@@ -85,6 +85,7 @@ import { innovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { innovationSectionDataResolver } from '@modules/shared/resolvers/innovation-section-data.resolver';
 import { innovationSectionEvidenceDataResolver } from '@modules/shared/resolvers/innovation-section-evidence-data.resolver';
 import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+import { innovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
@@ -448,7 +449,7 @@ const routes: Routes = [
 
               {
                 path: 'threads',
-                resolve: { innovationData: innovationDataResolver },
+                resolve: { innovationData: innovationThreadDataResolver },
                 data: { breadcrumb: 'Messages' },
                 children: [
                   {

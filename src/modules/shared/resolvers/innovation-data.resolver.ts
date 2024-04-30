@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn, Router } from '@angular/router';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
@@ -6,10 +6,6 @@ import { catchError, map } from 'rxjs/operators';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { ContextStore } from '@modules/stores/context/context.store';
-import { InnovationsService } from '../services/innovations.service';
-
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 /**
  * Note: With the creation of the context store, this can be changed to a guard in the future,

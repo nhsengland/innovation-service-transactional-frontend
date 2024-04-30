@@ -79,6 +79,7 @@ import { organisationUnitDataResolver } from './resolvers/organisation-unit-data
 import { serviceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { innovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { innovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
+import { innovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
@@ -549,7 +550,7 @@ const routes: Routes = [
                   },
                   {
                     path: ':threadId',
-                    resolve: { innovationThreadData: innovationDataResolver },
+                    resolve: { innovationThreadData: innovationThreadDataResolver },
                     data: {
                       breadcrumb: (data: RoutesDataType) => {
                         const name = data.innovationThreadData?.name ?? '';
