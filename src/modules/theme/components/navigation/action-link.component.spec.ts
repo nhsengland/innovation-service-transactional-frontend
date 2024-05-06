@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ActionLinkComponent } from './action-link.component';
+import { RouterModule } from '@angular/router';
 
 describe(`'ActionLinkComponent suite'`, () => {
   let component: ActionLinkComponent;
@@ -9,7 +9,7 @@ describe(`'ActionLinkComponent suite'`, () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       declarations: [ActionLinkComponent]
     });
   }));

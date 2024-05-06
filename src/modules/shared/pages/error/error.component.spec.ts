@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
@@ -9,6 +8,7 @@ import { StoresModule } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
 
 import { PageErrorComponent } from './error.component';
+import { RouterModule } from '@angular/router';
 
 describe('Shared/Pages/Error/PageErrorComponent', () => {
   let component: PageErrorComponent;
@@ -16,7 +16,7 @@ describe('Shared/Pages/Error/PageErrorComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

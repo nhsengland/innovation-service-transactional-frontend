@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { AlertComponent } from './alert.component';
+import { RouterModule } from '@angular/router';
 
 describe('Theme/Components/Alert/AlertComponent', () => {
   let component: AlertComponent;
@@ -10,7 +10,7 @@ describe('Theme/Components/Alert/AlertComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [RouterModule, HttpClientTestingModule],
       declarations: [AlertComponent]
     });
   });

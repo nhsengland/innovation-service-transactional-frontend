@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
@@ -9,6 +8,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageAccountDeleteComponent } from './account-delete.component';
+import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', () => {
   let authenticationStore: AuthenticationStore;
@@ -18,7 +18,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', ()
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

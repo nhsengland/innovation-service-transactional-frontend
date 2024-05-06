@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
@@ -30,7 +29,14 @@ describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAnd
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule, SharedModule]
+      imports: [
+        HttpClientTestingModule,
+        RouterModule.forRoot([]),
+        CoreModule,
+        StoresModule,
+        InnovatorModule,
+        SharedModule
+      ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

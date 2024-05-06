@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { PLATFORM_ID } from '@angular/core';
 
 import { ActivityTimeoutComponent } from './activity-timeout.component';
+import { RouterModule } from '@angular/router';
 
 describe('Theme/Components/ActivityTimeout/ActivityTimeoutComponent', () => {
   let component: ActivityTimeoutComponent;
@@ -12,7 +12,7 @@ describe('Theme/Components/ActivityTimeout/ActivityTimeoutComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterModule],
       declarations: [ActivityTimeoutComponent],
       providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
