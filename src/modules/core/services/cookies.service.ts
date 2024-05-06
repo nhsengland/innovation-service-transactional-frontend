@@ -4,6 +4,8 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
+declare let gtag: any;
+
 type CookiesConsentType = {
   consented: boolean;
   necessary: boolean;
@@ -52,6 +54,17 @@ export class CookiesService {
       JSON.stringify({ consented: true, necessary: true, analytics }),
       this.cookiesOptions
     );
+
+    gtag &&
+      gtag('consent', 'update', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'denied',
+        analytics_storage: analytics ? 'granted' : 'denied'
+      });
 
     if (!analytics) {
       this.deleteAnalyticsCookies();

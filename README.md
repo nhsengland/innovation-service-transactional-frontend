@@ -22,6 +22,8 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 | STATIC_CONTENT_PATH             |   Yes    |         |                                           |                                      |
 | VIEWS_PATH                      |   Yes    |         |                                           | Path to browser directory            |
 | ENABLE_ANALYTICS                |   No     |  true   |                                           |                                      |
+| TAG_MEASUREMENT_ID              |   Yes    |         |                                           | GA4 Measurement Tag                  |
+| GTM_ID                          |   Yes    |         |                                           | GA4 Tag Manager ID                   |
 | APPINSIGHTS_INSTRUMENTATION_KEY |   Yes    |         |                                           |                                      |
 | OAUTH_TENANT_NAME               |   Yes    |         |                                           |                                      |
 | OAUTH_CLIENT_ID                 |   Yes    |         |                                           |                                      |
