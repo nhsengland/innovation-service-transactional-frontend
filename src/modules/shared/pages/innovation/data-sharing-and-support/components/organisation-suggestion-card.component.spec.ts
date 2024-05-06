@@ -1,6 +1,5 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Component, Injector, ViewChild } from '@angular/core';
 
@@ -14,6 +13,7 @@ import { OrganisationSuggestionsCardComponent } from './organisation-suggestion-
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { RouterModule } from '@angular/router';
 
 @Component({
   template: `<app-organisation-suggestions-card
@@ -36,7 +36,7 @@ describe('FeatureModules/Innovator/Innovation/DataSharingComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, ThemeModule, SharedModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule, ThemeModule, SharedModule],
       declarations: [HostComponent, OrganisationSuggestionsCardComponent]
     });
 

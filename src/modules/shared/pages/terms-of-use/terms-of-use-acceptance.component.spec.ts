@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
@@ -12,6 +11,7 @@ import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { TermsOfUseService } from '@modules/shared/services/terms-of-use.service';
 
 import { PageTermsOfUseAcceptanceComponent } from './terms-of-use-acceptance.component';
+import { RouterModule } from '@angular/router';
 
 describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
   let component: PageTermsOfUseAcceptanceComponent;
@@ -21,7 +21,7 @@ describe('Shared/Pages/TermsOfUse/PageTermsOfUseAcceptanceComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

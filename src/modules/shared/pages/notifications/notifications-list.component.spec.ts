@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 import { of } from 'rxjs';
@@ -14,6 +13,7 @@ import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@mo
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageNotificationsListComponent } from './notifications-list.component';
+import { RouterModule } from '@angular/router';
 
 describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
   let authenticationStore: AuthenticationStore;
@@ -25,7 +25,7 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { HeaderBreadcrumbsBarComponent } from './breadcrumbs-bar.component';
+import { RouterModule } from '@angular/router';
 
 describe('Theme/Components/Header/NavigationBarComponent', () => {
   let component: HeaderBreadcrumbsBarComponent;
@@ -10,7 +10,7 @@ describe('Theme/Components/Header/NavigationBarComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, HttpClientTestingModule],
+      imports: [RouterModule.forRoot([]), HttpClientTestingModule],
       declarations: [HeaderBreadcrumbsBarComponent]
     });
   });

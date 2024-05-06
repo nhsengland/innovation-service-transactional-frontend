@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
@@ -9,6 +8,7 @@ import { StoresModule } from '@modules/stores';
 import { AuthenticationModule } from '@modules/feature-modules/authentication/authentication.module';
 
 import { SignUpConfirmationComponent } from './sign-up-confirmation.component';
+import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Authentication/SignUpConfirmationComponent', () => {
   let component: SignUpConfirmationComponent;
@@ -16,7 +16,7 @@ describe('FeatureModules/Authentication/SignUpConfirmationComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AuthenticationModule]
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule, AuthenticationModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
