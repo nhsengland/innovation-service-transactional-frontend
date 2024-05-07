@@ -8,6 +8,8 @@ type envVariablesType = {
   BASE_PATH: string;
   LOG_LEVEL: NgxLoggerLevel;
   ENABLE_ANALYTICS: boolean;
+  TAG_MEASUREMENT_ID: string;
+  GTM_ID: string;
 };
 
 /**
@@ -22,7 +24,9 @@ export class EnvironmentVariablesStore {
     BASE_URL: '',
     BASE_PATH: '/',
     LOG_LEVEL: NgxLoggerLevel.ERROR,
-    ENABLE_ANALYTICS: true
+    ENABLE_ANALYTICS: true,
+    TAG_MEASUREMENT_ID: '',
+    GTM_ID: ''
   };
 
   get ENV(): envVariablesType {
@@ -72,7 +76,9 @@ export class EnvironmentVariablesStore {
           BASE_URL: appServerENV.BASE_URL,
           BASE_PATH: this.parseBasePath(appServerENV.BASE_PATH),
           LOG_LEVEL: NgxLoggerLevel[appServerENV.LOG_LEVEL],
-          ENABLE_ANALYTICS: appServerENV.ENABLE_ANALYTICS
+          ENABLE_ANALYTICS: appServerENV.ENABLE_ANALYTICS,
+          TAG_MEASUREMENT_ID: appServerENV.TAG_MEASUREMENT_ID,
+          GTM_ID: appServerENV.GTM_ID
         };
       } else {
         /* istanbul ignore next */
@@ -83,7 +89,9 @@ export class EnvironmentVariablesStore {
           BASE_URL: browserEnv.BASE_URL,
           BASE_PATH: this.parseBasePath(browserEnv.BASE_PATH),
           LOG_LEVEL: NgxLoggerLevel[browserEnv.LOG_LEVEL],
-          ENABLE_ANALYTICS: browserEnv.ENABLE_ANALYTICS
+          ENABLE_ANALYTICS: browserEnv.ENABLE_ANALYTICS,
+          TAG_MEASUREMENT_ID: browserEnv.TAG_MEASUREMENT_ID,
+          GTM_ID: browserEnv.GTM_ID
         };
       }
     } catch (error) {

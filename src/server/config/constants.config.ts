@@ -22,5 +22,7 @@ export const ENVIRONMENT = {
   LOG_LEVEL: process.env.LOG_LEVEL || 'ERROR',
   VIEWS_PATH: process.env.VIEWS_PATH || '',
   STATIC_CONTENT_PATH: process.env.STATIC_CONTENT_PATH || '',
-  ENABLE_ANALYTICS: process.env.ENABLE_ANALYTICS || true
+  ENABLE_ANALYTICS: process.env.ENABLE_ANALYTICS || true,
+  TAG_MEASUREMENT_ID: process.env.TAG_MEASUREMENT_ID || '',
+  GTM_ID: process.env.GTM_ID || ''
 };

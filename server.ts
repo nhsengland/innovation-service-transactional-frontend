@@ -125,7 +125,9 @@ export function app(): express.Express {
               BASE_URL: ENVIRONMENT.BASE_URL,
               BASE_PATH: ENVIRONMENT.BASE_PATH,
               LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
-              ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
+              ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS,
+              TAG_MEASUREMENT_ID: ENVIRONMENT.TAG_MEASUREMENT_ID,
+              GTM_ID: ENVIRONMENT.GTM_ID
             }
           },
           { provide: RESPONSE, useValue: res },
@@ -145,6 +147,8 @@ export function app(): express.Express {
       window.__env.BASE_PATH = '${ENVIRONMENT.BASE_PATH}';
       window.__env.LOG_LEVEL = '${ENVIRONMENT.LOG_LEVEL}';
       window.__env.ENABLE_ANALYTICS = '${ENVIRONMENT.ENABLE_ANALYTICS}';
+      window.__env.TAG_MEASUREMENT_ID = '${ENVIRONMENT.TAG_MEASUREMENT_ID}';
+      window.__env.GTM_ID = '${ENVIRONMENT.GTM_ID}';
     }(this));`);
   });
 
