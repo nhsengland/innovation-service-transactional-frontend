@@ -55,18 +55,18 @@ export class CookiesService {
       this.cookiesOptions
     );
 
-    gtag &&
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'denied',
-        personalization_storage: 'denied',
-        security_storage: 'denied',
-        analytics_storage: analytics ? 'granted' : 'denied'
-      });
-
-    if (!analytics) {
+    if (analytics) {
+      gtag &&
+        gtag('consent', 'update', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          functionality_storage: 'denied',
+          personalization_storage: 'denied',
+          security_storage: 'denied',
+          analytics_storage: 'granted'
+        });
+    } else {
       this.deleteAnalyticsCookies();
       this.removeAnalyticsScripts();
     }
