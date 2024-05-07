@@ -31,6 +31,8 @@ export class AppComponent {
     if (
       isPlatformBrowser(this.platformId) &&
       this.environmentStore.ENV.ENABLE_ANALYTICS &&
+      this.environmentStore.ENV.TAG_MEASUREMENT_ID &&
+      this.environmentStore.ENV.GTM_ID &&
       this.cookiesService.getConsentCookie().analytics
     ) {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
