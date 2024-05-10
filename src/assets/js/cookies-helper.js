@@ -34,6 +34,17 @@ function getConsentCookie() {
 
 function setConsentCookie(agreed) {
   setCookie("cookies-consent", JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
+
+  gtag &&
+    gtag('consent', 'default', {
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      functionality_storage: 'denied',
+      personalization_storage: 'denied',
+      security_storage: 'denied',
+      analytics_storage: agreed ? 'granted' : 'denied'
+    });
 }
 
 function deleteAnalyticsCookies() {
