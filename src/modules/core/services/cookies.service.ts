@@ -54,47 +54,16 @@ export class CookiesService {
       JSON.stringify({ consented: true, necessary: true, analytics }),
       this.cookiesOptions
     );
-
-    if (analytics) {
-      gtag &&
-        gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          functionality_storage: 'denied',
-          personalization_storage: 'denied',
-          security_storage: 'denied',
-          analytics_storage: 'granted'
-        });
-    } else {
-      this.deleteAnalyticsCookies();
-      this.removeAnalyticsScripts();
-    }
-  }
-
-  deleteAnalyticsCookies(): void {
-    const cookies = this.coockieService.getAll();
-
-    Object.entries(cookies).forEach(([key, value]) => {
-      if (key.startsWith('_hj') || key.startsWith('_ga')) {
-        this.coockieService.delete(key);
-      }
-    });
-  }
-
-  removeAnalyticsScripts(): void {
-    // Add analytics scripts to header.
-
-    if (isPlatformBrowser(this.platformId)) {
-      let element: HTMLElement | null;
-
-      element = document.getElementById('hj-analytics');
-      /* istanbul ignore next */
-      element?.parentNode?.removeChild(element);
-
-      element = document.getElementById('ga-analytics');
-      /* istanbul ignore next */
-      element?.parentNode?.removeChild(element);
-    }
+    
+    gtag &&
+      gtag('consent', 'update', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        functionality_storage: 'denied',
+        personalization_storage: 'denied',
+        security_storage: 'denied',
+        analytics_storage: analytics ? 'granted' : 'denied'
+      });
   }
 }

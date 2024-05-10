@@ -35,15 +35,3 @@ function getConsentCookie() {
 function setConsentCookie(agreed) {
   setCookie("cookies-consent", JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
 }
-
-function deleteAnalyticsCookies() {
-  const cookieArray = document.cookie.split(";");
-
-  for (let item of cookieArray) {
-    const equalIndex = item.indexOf("=");
-    const name = equalIndex > -1 ? item.substr(0, equalIndex) : item;
-    if (key.startsWith("_hj") || key.startsWith("_ga")) {
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    }
-  }
-}
