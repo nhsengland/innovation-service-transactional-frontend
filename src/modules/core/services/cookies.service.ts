@@ -91,10 +91,6 @@ export class CookiesService {
       element = document.getElementById('hj-analytics');
       /* istanbul ignore next */
       element?.parentNode?.removeChild(element);
-
-      element = document.getElementById('ga-analytics');
-      /* istanbul ignore next */
-      element?.parentNode?.removeChild(element);
     }
   }
 }
