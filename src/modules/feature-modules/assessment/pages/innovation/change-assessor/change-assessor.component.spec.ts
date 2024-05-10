@@ -1,8 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
@@ -23,7 +22,7 @@ describe('InnovationChangeAssessorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [InnovationChangeAssessorComponent],
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AssessmentModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, AssessmentModule]
     }).compileComponents();
 
     AppInjector.setInjector(TestBed.inject(Injector));

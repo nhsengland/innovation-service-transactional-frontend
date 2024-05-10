@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { BackLinkComponent } from './back-link.component';
+import { RouterModule } from '@angular/router';
 
 describe('BackLinkComponent suite', () => {
   let component: BackLinkComponent;
@@ -9,7 +9,7 @@ describe('BackLinkComponent suite', () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       declarations: [BackLinkComponent]
     });
   }));

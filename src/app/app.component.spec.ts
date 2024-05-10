@@ -1,9 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { ENV } from '@tests/app.mocks';
 
@@ -21,7 +20,7 @@ describe('AppComponent running SERVER side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
       providers: [{ provide: PLATFORM_ID, useValue: 'server' }]
     });
@@ -44,7 +43,7 @@ describe('AppComponent running CLIENT side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },

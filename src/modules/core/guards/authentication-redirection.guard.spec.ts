@@ -1,8 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
-import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot } from '@angular/router';
 
 import { EmptyMockComponent } from '@tests/app.mocks';
 
@@ -25,7 +24,7 @@ describe('Core/Guards/AuthenticationRedirectionGuard', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
+        RouterModule.forRoot([
           { path: 'dashboard', component: EmptyMockComponent },
           { path: 'assessment', component: EmptyMockComponent },
           { path: 'accessor', component: EmptyMockComponent },

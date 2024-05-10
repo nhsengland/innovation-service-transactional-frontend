@@ -1,15 +1,15 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { PLATFORM_ID } from '@angular/core';
-import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
+import { REQUEST, RESPONSE } from '../../../express.tokens';
 
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import { AuthenticationService, AuthenticationStore, StoresModule } from '@modules/stores';
+import { RouterModule } from '@angular/router';
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
   let httpMock: HttpTestingController;
@@ -19,7 +19,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       providers: [
         AuthenticationService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
@@ -67,7 +67,7 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       providers: [
         AuthenticationService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },

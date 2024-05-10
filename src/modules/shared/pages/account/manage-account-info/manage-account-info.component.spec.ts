@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
@@ -11,6 +10,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageSharedAccountManageAccountInfoComponent } from './manage-account-info.component';
+import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () => {
   let authenticationStore: AuthenticationStore;
@@ -20,7 +20,7 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountInfoComponent', () =
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, InnovatorModule]
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule, InnovatorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

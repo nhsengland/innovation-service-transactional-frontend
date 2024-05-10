@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ThemeModule } from '@modules/theme/theme.module';
 
 import { TagComponent } from './tag.component';
+import { RouterModule } from '@angular/router';
 
 describe('Theme/Components/Tag/TagComponent', () => {
   let component: TagComponent;
@@ -12,7 +12,7 @@ describe('Theme/Components/Tag/TagComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, ThemeModule],
+      imports: [HttpClientTestingModule, RouterModule, ThemeModule],
       declarations: []
     });
 

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { SvgIconComponent } from './svg-icon.component';
+import { RouterModule } from '@angular/router';
 
 describe(`'SvgIconComponent suite'`, () => {
   let component: SvgIconComponent;
@@ -8,7 +8,7 @@ describe(`'SvgIconComponent suite'`, () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule],
       declarations: [SvgIconComponent]
     });
   }));

@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { ThemeModule } from '@modules/theme/theme.module';
 
 import { SpinnerComponent } from './spinner.component';
+import { RouterModule } from '@angular/router';
 
 describe('Theme/Components/Spinner/SpinnerComponent', () => {
   let component: SpinnerComponent;
@@ -12,7 +12,7 @@ describe('Theme/Components/Spinner/SpinnerComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, ThemeModule],
+      imports: [HttpClientTestingModule, RouterModule, ThemeModule],
       declarations: []
     });
 

@@ -1,11 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { PLATFORM_ID } from '@angular/core';
-import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { REQUEST, RESPONSE } from '../../../express.tokens';
+import { ActivatedRouteSnapshot, RouterModule } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
@@ -29,7 +28,7 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER sid
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, LoggerTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, LoggerTestingModule, CoreModule, StoresModule],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
@@ -79,7 +78,7 @@ describe('Core/Guards/InnovationCollaborationRedirectionGuard running CLIENT sid
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, LoggerTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, LoggerTestingModule, CoreModule, StoresModule],
       providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
 

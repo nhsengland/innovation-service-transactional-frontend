@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
 
@@ -12,6 +11,7 @@ import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { DashboardComponent } from './dashboard.component';
+import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
   let authenticationStore: AuthenticationStore;
@@ -21,7 +21,7 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AccessorModule]
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule, AccessorModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

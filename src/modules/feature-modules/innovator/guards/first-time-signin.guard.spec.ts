@@ -1,9 +1,8 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterModule, RouterStateSnapshot } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
@@ -18,7 +17,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       providers: [FirstTimeSigninGuard]
     });
 

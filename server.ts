@@ -1,7 +1,7 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+import { CommonEngine } from '@angular/ssr';
 
 import * as coockieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
@@ -22,37 +22,42 @@ import authenticationRouter from 'src/server/routes/authentication.routes';
 import fileUploadRouter from 'src/server/routes/file-upload.routes';
 import pdfRouter from 'src/server/routes/pdf-generator.routes';
 
-import { AppServerModule } from './src/main.server';
 import csvRouter from 'src/server/routes/csv-generator.routes';
+import { AppServerModule } from './src/main.server';
+
+import { REQUEST, RESPONSE } from './src/express.tokens';
 
 dotenv.config();
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
-
   initAppInsights();
 
   const server = express();
   const staticContentPath = `${ENVIRONMENT.BASE_PATH}${ENVIRONMENT.STATIC_CONTENT_PATH}`;
   const distFolder = join(process.cwd(), ENVIRONMENT.VIEWS_PATH);
-  const indexHtml = fs.existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
+  const indexHtml = fs.existsSync(join(distFolder, 'index.original.html'))
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  server.engine('html', ngExpressEngine({ bootstrap: AppServerModule })); // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
+  const commonEngine = new CommonEngine();
   server.set('trust proxy', 1); // trust first proxy
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
   server.use(coockieParser());
-  server.use(session({
-    secret: process.env.SESSION_SECRET || 'secret',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: 'auto',
-      sameSite: 'lax'
-    }
-  }));
+  server.use(
+    session({
+      secret: process.env.SESSION_SECRET || 'secret',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: 'auto',
+        sameSite: 'lax'
+      }
+    })
+  );
 
   // Helmet configuration.
   server.use(
@@ -70,7 +75,7 @@ export function app(): express.Express {
   // CSRF protection.
   server.use((req, res, next) => {
     if (!(req.method === 'OPTIONS' || req.method === 'GET' || req.method === 'HEAD')) {
-      if(req.cookies['XSRF-TOKEN'] !== req.headers['x-xsrf-token']) {
+      if (req.cookies['XSRF-TOKEN'] !== req.headers['x-xsrf-token']) {
         res.send(403);
       }
     }
@@ -97,29 +102,40 @@ export function app(): express.Express {
     res.status(200).send(response);
   });
 
-
   // Angular routing.
   // // Serve static files.
   server.get('*.*', express.static(distFolder, { maxAge: '1y' }));
 
   // // "Data requests". For submited POST form informations.
   server.post(`${ENVIRONMENT.BASE_PATH}/insights`, handler);
-  server.post('/*', (req, res) => {
-    res.render(indexHtml, {
-      req, res,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        {
-          provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
-          useValue: {
-            BASE_URL: ENVIRONMENT.BASE_URL,
-            BASE_PATH: ENVIRONMENT.BASE_PATH,
-            LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
-            ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
-          }
-        }
-      ]
-    });
+  server.post('/*', (req, res, next) => {
+    const { protocol, originalUrl, baseUrl, headers } = req;
+
+    commonEngine
+      .render({
+        bootstrap: AppServerModule,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}${originalUrl}`,
+        publicPath: distFolder,
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          {
+            provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
+            useValue: {
+              BASE_URL: ENVIRONMENT.BASE_URL,
+              BASE_PATH: ENVIRONMENT.BASE_PATH,
+              LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
+              ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS,
+              TAG_MEASUREMENT_ID: ENVIRONMENT.TAG_MEASUREMENT_ID,
+              GTM_ID: ENVIRONMENT.GTM_ID
+            }
+          },
+          { provide: RESPONSE, useValue: res },
+          { provide: REQUEST, useValue: req }
+        ]
+      })
+      .then(html => res.send(html))
+      .catch(err => next(err));
   });
 
   // Serve environment variables file.
@@ -131,16 +147,23 @@ export function app(): express.Express {
       window.__env.BASE_PATH = '${ENVIRONMENT.BASE_PATH}';
       window.__env.LOG_LEVEL = '${ENVIRONMENT.LOG_LEVEL}';
       window.__env.ENABLE_ANALYTICS = '${ENVIRONMENT.ENABLE_ANALYTICS}';
+      window.__env.TAG_MEASUREMENT_ID = '${ENVIRONMENT.TAG_MEASUREMENT_ID}';
+      window.__env.GTM_ID = '${ENVIRONMENT.GTM_ID}';
     }(this));`);
   });
 
-  // // All regular routes using the Universal engine.
-  server.get('*',
-    (req, res) => {
-      res.render(indexHtml, {
-        req, res,
+  // All regular routes use the Angular engine
+  server.get('*', (req, res, next) => {
+    const { protocol, originalUrl, baseUrl, headers } = req;
+
+    commonEngine
+      .render({
+        bootstrap: AppServerModule,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}${originalUrl}`,
+        publicPath: distFolder,
         providers: [
-          { provide: APP_BASE_HREF, useValue: req.baseUrl },
+          { provide: APP_BASE_HREF, useValue: baseUrl },
           {
             provide: 'APP_SERVER_ENVIRONMENT_VARIABLES',
             useValue: {
@@ -149,22 +172,26 @@ export function app(): express.Express {
               LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
               ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS
             }
-          }
+          },
+          { provide: RESPONSE, useValue: res },
+          { provide: REQUEST, useValue: req }
         ]
-      });
-    });
+      })
+      .then(html => res.send(html))
+      .catch(err => next(err));
+  });
 
   return server;
 }
 
-
 function run(): void {
-
   const port = process.env['PORT'] || 4000;
 
   // Start up the Node server
   const server = app();
-  server.listen(port, () => { console.log(`Node Express server listening on http://localhost:${port}`); });
+  server.listen(port, () => {
+    console.log(`Node Express server listening on http://localhost:${port}`);
+  });
 }
 
 // Webpack will replace 'require' with '__webpack_require__'
@@ -172,7 +199,7 @@ function run(): void {
 // The below code is to ensure that the server is run only when not requiring the bundle.
 declare const __non_webpack_require__: NodeRequire;
 const mainModule = __non_webpack_require__.main;
-const moduleFilename = mainModule && mainModule.filename || '';
+const moduleFilename = (mainModule && mainModule.filename) || '';
 if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }

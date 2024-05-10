@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
@@ -13,6 +12,7 @@ import { WizardOrganisationUnitInactivateComponent } from './organisation-unit-i
 import { WizardOrganisationUnitInactivateUsersStepComponent } from './steps/users-step.component';
 import { WizardOrganisationUnitInactivateInnovationsStepComponent } from './steps/innovations-step.component';
 import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
+import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponent', () => {
   let component: WizardOrganisationUnitInactivateComponent;
@@ -20,7 +20,7 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitInactivateComponen
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, AdminModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, AdminModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

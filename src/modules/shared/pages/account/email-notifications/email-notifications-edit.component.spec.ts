@@ -1,32 +1,16 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
-import {
-  NotificationPreferenceEnum,
-  NotificationCategoryTypeEnum,
-  NotificationsService
-} from '@modules/shared/services/notifications.service';
+import { NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
-
-const EmailNotificationsListMock = {
-  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.DOCUMENTS]: NotificationPreferenceEnum.NO,
-  [NotificationCategoryTypeEnum.MESSAGES]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.SUPPORT]: NotificationPreferenceEnum.YES,
-  [NotificationCategoryTypeEnum.TASK]: NotificationPreferenceEnum.NO
-};
 
 describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsEditComponent', () => {
   let activatedRoute: ActivatedRoute;
@@ -41,7 +25,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, CoreModule, StoresModule, SharedModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, SharedModule]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

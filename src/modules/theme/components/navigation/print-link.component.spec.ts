@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { PrintLinkComponent } from './print-link.component';
+import { RouterModule } from '@angular/router';
 
 describe('PrintLinkComponent suite', () => {
   let component: PrintLinkComponent;
@@ -9,7 +9,7 @@ describe('PrintLinkComponent suite', () => {
 
   beforeEach(fakeAsync(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       declarations: [PrintLinkComponent]
     });
   }));

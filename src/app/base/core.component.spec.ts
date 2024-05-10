@@ -1,11 +1,10 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector, PLATFORM_ID } from '@angular/core';
-import { REQUEST, RESPONSE } from '@nguniversal/express-engine/tokens';
-import { Router } from '@angular/router';
+import { REQUEST, RESPONSE } from '../../express.tokens';
+import { Router, RouterModule } from '@angular/router';
 
 import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
@@ -20,7 +19,7 @@ describe('App/Base/CoreComponent running SERVER side', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule, LoggerTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, RouterModule, LoggerTestingModule, CoreModule, StoresModule],
       declarations: [CoreComponent],
       providers: [
         { provide: PLATFORM_ID, useValue: 'server' },
@@ -118,7 +117,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([{ path: 'test', component: EmptyMockComponent }]),
+        RouterModule.forRoot([{ path: 'test', component: EmptyMockComponent }]),
         LoggerTestingModule,
         CoreModule,
         StoresModule
