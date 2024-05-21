@@ -50,6 +50,12 @@ export class InnovationService {
     );
   }
 
+  // getInnovationSectionsV3(innovationId: string): Observable<InnovationSectionsListDTO> = {
+  //   return {
+
+  //   }
+  // }
+
   getSectionInfo(
     innovationId: string,
     sectionId: string,

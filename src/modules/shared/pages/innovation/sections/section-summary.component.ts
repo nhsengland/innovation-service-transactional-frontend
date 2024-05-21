@@ -79,6 +79,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   }
 
   ngOnInit(): void {
+    console.log(this.sectionData);
     this.isSectionDetailsPage = this.activatedRoute.snapshot.params.sectionId;
 
     this.sectionInfo = this.sectionData.sectionInfo;

@@ -18,6 +18,8 @@ import {
 } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -143,14 +145,14 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
-          wizard: new WizardEngineModel({}),
+          wizard: new WizardIRV3EngineModel({}),
           allStepsList: {},
           date: '',
           submittedBy: null,
           openTasksCount: 0
         };
 
-        const section = this.stores.innovation.getInnovationRecordSection(responseItem.section.section);
+        const section = getInnovationRecordSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
@@ -180,7 +182,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           responseItem.data.hasEvidence === 'YES'
         );
 
-        sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
+        // sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
 
         const validInformation = sectionInfo.wizard.validateData();
 

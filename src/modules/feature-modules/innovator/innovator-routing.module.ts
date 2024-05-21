@@ -95,6 +95,7 @@ import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { innovationSectionDataResolverV3 } from '@modules/shared/resolvers/innovation-section-data-v3.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -229,7 +230,7 @@ const routes: Routes = [
                       },
                       {
                         path: ':sectionId',
-                        resolve: { innovationSectionData: mapToResolve(InnovationSectionDataResolver) },
+                        resolve: { innovationSectionData: innovationSectionDataResolverV3 },
                         data: {
                           breadcrumb: (data: RoutesDataType) => data.innovationSectionData?.name ?? ''
                         },

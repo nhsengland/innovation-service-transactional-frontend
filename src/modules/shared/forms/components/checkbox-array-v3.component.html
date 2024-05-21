@@ -1,0 +1,93 @@
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
+    <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+      <ng-container *ngIf="pageUniqueField">
+        <h1 class="nhsuk-fieldset__heading">{{ label }}</h1>
+      </ng-container>
+      <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+    </legend>
+
+    <ng-container *ngIf="description">
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+    </ng-container>
+
+    <ng-container *ngIf="hasError">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
+    </ng-container>
+
+    <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-checkboxes nhsuk-checkboxes--conditional">
+      <ng-container *ngFor="let item of items; let i = index; let first = first">
+        <ng-container *ngIf="item.group && (first || item.group !== items![i - 1]?.group)">
+          <li class="nhsuk-checkboxes__divider form-items-group nhsuk-u-font-weight-bold" [ngClass]="{ 'nhsuk-u-padding-top-3': !first }" tabindex="0">
+            {{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span>
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="item.type === 'separator'; else switchOnLabel">
+          <li class="nhsuk-checkboxes__divider">or</li>
+        </ng-container>
+        <ng-template #switchOnLabel>
+          <ng-container #switchOnLabel [ngSwitch]="item.label">
+            <ng-container *ngSwitchCase="'HEADING'">
+              <li class="nhsuk-checkboxes__divider form-items-group nhsuk-u-font-weight-bold">{{ item.id }}</li>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <li class="nhsuk-checkboxes__item {{ cssClass }}" [ngClass]="{ 'nhsuk-u-margin-left-4': item.group }">
+                <ng-container *ngIf="isRunningOnBrowser">
+                  <input
+                    id="{{ id }}{{ i }}"
+                    type="checkbox"
+                    name="{{ arrayName }}[]"
+                    [value]="item.id"
+                    [checked]="isChecked(item.id ?? '')"
+                    (change)="onChanged($event)"
+                    class="nhsuk-checkboxes__input"
+                    [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
+                    [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null"
+                    [attr.aria-describedby]="item.label ? id! + i + '-hint' : null"
+                  />
+                </ng-container>
+                <ng-container *ngIf="isRunningOnServer">
+                  <input id="{{ id }}{{ i }}" type="checkbox" name="{{ arrayName }}[]" [value]="item.id" [checked]="isChecked(item.id ?? '')" class="nhsuk-checkboxes__input" />
+                </ng-container>
+                <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
+                <div *ngIf="item.description" id="{{ id }}{{ i }}-hint" class="nhsuk-hint nhsuk-checkboxes__hint" [innerHTML]="item.description"></div>
+              </li>
+
+              <ng-container *ngIf="item.conditional">
+                <li
+                  [ngSwitch]="item.conditional.dataType"
+                  id="conditional-{{ id }}{{ i }}"
+                  class="nhsuk-checkboxes__conditional"
+                  [ngClass]="{ 'nhsuk-checkboxes__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), error: isConditionalFieldError(item.conditional.id) }"
+                >
+                  <ng-container *ngSwitchCase="'radio-group'">
+                    <theme-form-radio-group-v3
+                      [formControl]="conditionalFormControl(item.conditional.id)"
+                      [label]="item.conditional.label"
+                      [description]="item.conditional.label"
+                      [items]="item.conditional.items"
+                      [pageUniqueField]="false"
+                    ></theme-form-radio-group-v3>
+                  </ng-container>
+
+                  <ng-container *ngSwitchDefault>
+                    <theme-form-input
+                      [formControl]="conditionalFormControl(item.conditional.id)"
+                      [label]="item.conditional.label"
+                      [description]="item.conditional.description"
+                      [pageUniqueField]="false"
+                      [placeholder]="item.conditional.placeholder"
+                      [cssOverride]="item.conditional.cssOverride"
+                    ></theme-form-input>
+                  </ng-container>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+    </ul>
+  </fieldset>
+</div>

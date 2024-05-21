@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
@@ -22,6 +22,11 @@ import {
   InnovationSectionInfoDTO,
   SectionsSummaryModel
 } from './innovation.models';
+import {
+  getInnovationRecordSectionV3,
+  getInnovationRecordSectionsList
+} from './innovation-record/202405/ir-v3.helpers';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
@@ -90,11 +95,16 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
-    return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
+    console.log('updated section info');
+    return of({});
+
+    // return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
   }
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
-    return this.innovationsService.submitSections(innovationId, sectionKey);
+    console.log('submitted section');
+    return of({});
+    // return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
   getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
@@ -140,8 +150,13 @@ export class InnovationStore extends Store<InnovationModel> {
     return section;
   }
 
-  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardEngineModel {
-    return this.getInnovationRecordSection(sectionId, version)?.wizard;
+  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
+    // return this.getInnovationRecordSection(sectionId, version)?.wizard;
+    return getInnovationRecordSectionV3(sectionId).wizard;
+  }
+
+  getInnovationRecordSectionWizardV3(sectionId: string, version?: string): WizardIRV3EngineModel {
+    return getInnovationRecordSectionV3(sectionId).wizard;
   }
 
   getInnovationRecordSectionIdentification(

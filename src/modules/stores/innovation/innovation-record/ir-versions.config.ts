@@ -1,7 +1,8 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { INNOVATION_SECTION_STATUS } from '../innovation.models';
-import { InnovationSectionsListType } from './ir-versions.types';
+import { InnovationSectionStepLabels, InnovationSectionsListType } from './ir-versions.types';
+import { FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
 
 import {
   categoriesItems as SECTIONS_202209_categoriesItems,
@@ -13,6 +14,7 @@ import {
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
+import { getInnovationRecordSectionsList } from './202405/ir-v3.helpers';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -46,6 +48,10 @@ export function getInnovationRecordConfig(version?: string): InnovationSectionsL
     default:
       return SECTIONS_202304;
   }
+}
+
+export function getInnovationRecordConfigV3() {
+  return getInnovationRecordSectionsList();
 }
 
 export function getAllSectionsSummary(

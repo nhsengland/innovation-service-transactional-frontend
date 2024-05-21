@@ -1,0 +1,56 @@
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
+    <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+      <ng-container *ngIf="pageUniqueField">
+        <h1 class="nhsuk-fieldset__heading">{{ label }}</h1>
+      </ng-container>
+      <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+    </legend>
+
+    <ng-container *ngIf="description">
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+    </ng-container>
+
+    <ng-container *ngIf="hasError">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
+    </ng-container>
+
+    <ul [formGroup]="fieldGroupControl" class="nhsuk-checkboxes nhsuk-checkboxes--conditional">
+      <ng-container *ngFor="let item of items; let i = index">
+        <ng-container [ngSwitch]="item.label">
+          <ng-container *ngSwitchCase="'SEPARATOR'">
+            <li class="nhsuk-radios__divider">or</li>
+          </ng-container>
+
+          <ng-container *ngSwitchDefault>
+            <li class="nhsuk-checkboxes__item">
+              <ng-container *ngIf="isRunningOnBrowser">
+                <input
+                  [formControlName]="item.id ?? ''"
+                  id="{{ id }}{{ i }}"
+                  type="checkbox"
+                  name="{{ groupName }}[{{ item.id }}] }"
+                  class="nhsuk-checkboxes__input"
+                  [attr.aria-describedby]="item.label ? '{{ id }}{{ i }}-hint' : null"
+                />
+              </ng-container>
+              <ng-container *ngIf="isRunningOnServer">
+                <input
+                  id="{{ id }}{{ i }}"
+                  type="checkbox"
+                  name="{{ groupName }}[{{ item.id }}] }"
+                  [value]="true"
+                  [checked]="isChecked(item.id ?? '')"
+                  class="nhsuk-checkboxes__input"
+                  [attr.aria-describedby]="item.label ? '{{ id }}{{ i }}-hint' : null"
+                />
+              </ng-container>
+              <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-checkboxes__label">{{ item.label }}</label>
+              <div *ngIf="item.description" id="{{ id }}{{ i }}-hint" class="nhsuk-hint nhsuk-checkboxes__hint" [innerHTML]="item.description"></div>
+            </li>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </fieldset>
+</div>
