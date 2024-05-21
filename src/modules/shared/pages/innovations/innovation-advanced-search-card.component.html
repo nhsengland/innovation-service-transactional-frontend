@@ -1,11 +1,11 @@
-<div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-4">
+<div class="nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
   <ul class="nhsuk-list nhsuk-u-margin-0 nhsuk-u-font-weight-normal nhsuk-u-font-size-16">
     <li class="nhsuk-u-font-weight-bold nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0">
       <ng-container *ngIf="innovationCardData.status === 'WITHDRAWN' || isAccessorTypeAndStoppedSharingInnovation; else innovationLink">
-        {{ innovationCardData.name }}
+        <span appHighlight [searchTerm]="searchTermsFound">{{ innovationCardData.name }}</span>
       </ng-container>
       <ng-template #innovationLink>
-        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}">
+        <a href="javascript:void(0);" routerLink="/{{ this.baseUrl }}/{{ innovationCardData.id }}" appHighlight [searchTerm]="searchTermsFound">
           {{ innovationCardData.name }}
         </a>
       </ng-template>
@@ -18,25 +18,42 @@
     <li *ngIf="isAccessorTypeAndStoppedSharingInnovation" class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">Innovation has stopped sharing their data with your organisation</li>
 
     <ng-container *ngIf="!isAccessorTypeAndStoppedSharingInnovation">
-      <li class="d-flex flex-direction-column nhsuk-u-margin-bottom-1" [ngClass]="{ 'nhsuk-u-margin-top-2': !isAccessorTypeAndArchivedInnovation }">
+      <li class="nhsuk-u-margin-bottom-0" [ngClass]="{ 'nhsuk-u-margin-top-2': !isAccessorTypeAndArchivedInnovation }" appHighlight [searchTerm]="searchTermsFound">
         {{ innovationCardData.owner }}.<ng-container *ngIf="innovationCardData.countryName">
           {{ innovationCardData.countryName }}<ng-container *ngIf="innovationCardData.postCode">, {{ innovationCardData.postCode }}</ng-container>
         </ng-container>
+      </li>
+      <li class="nhsuk-u-margin-bottom-1">
         <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
           Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.long_date" | translate) }}
         </span>
       </li>
 
-      <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Categories: </span>{{ categoriesList }}</li>
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Categories: </span>
+        <span appHighlight [searchTerm]="searchTermsFound">{{ categoriesList }}</span>
+      </li>
 
-      <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Care settings: </span>{{ careSettingsList }}</li>
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Care settings: </span>
+        <span appHighlight [searchTerm]="searchTermsFound">{{ careSettingsList }}</span>
+      </li>
 
-      <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>{{ diseasesAndConditionsList }}</li>
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
+        <span appHighlight [searchTerm]="searchTermsFound">{{ diseasesAndConditionsList }}</span>
+      </li>
 
       <ng-container *ngIf="isAdminType">
-        <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">Health inequalities: </span>{{ keyHealthInequalitiesList }}</li>
+        <li class="nhsuk-u-margin-bottom-1">
+          <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
+          <span appHighlight [searchTerm]="searchTermsFound">{{ keyHealthInequalitiesList }}</span>
+        </li>
 
-        <li class="nhsuk-u-margin-bottom-1"><span class="nhsuk-u-font-weight-bold">AAC involvement: </span>{{ involvedAACProgrammesList }}</li>
+        <li class="nhsuk-u-margin-bottom-1">
+          <span class="nhsuk-u-font-weight-bold">AAC involvement: </span>
+          <span appHighlight [searchTerm]="searchTermsFound">{{ involvedAACProgrammesList }}</span>
+        </li>
       </ng-container>
 
       <li class="nhsuk-u-margin-bottom-1">
@@ -62,7 +79,7 @@
       >
     </li>
 
-    <li *ngIf="isAdminType">
+    <li *ngIf="isAdminType || isAssessmentType">
       <span class="nhsuk-u-font-weight-bold"
         >Innovation status:
         <theme-tag
@@ -70,10 +87,23 @@
           label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.groupedStatus + '.name' | translate }}"
         />
       </span>
-      <span *ngIf="innovationCardData.updatedAt" class="font-color-secondary">
+      <span *ngIf="isAdminType && innovationCardData.updatedAt" class="font-color-secondary">
         Record last updated on {{ innovationCardData.updatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
+      <span *ngIf="isAssessmentType && innovationCardData.updatedAt" class="font-color-secondary">
+        Status updated on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</span
+      >
     </li>
+
+    <ng-container *ngIf="innovationCardData.highlights">
+      <li class="font-color-secondary nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-2">
+        Search terms found: <ng-container *ngFor="let entry of searchTermsCount | keyvalue">{{ entry.key }} ({{ entry.value }}) </ng-container>
+      </li>
+      <li class="nhsuk-u-margin-bottom-2" appHighlight [searchTerm]="searchTermsFound">...{{ snippet }}...</li>
+      <li>
+        <a [routerLink]="goToSectionLink.link" [queryParams]="goToSectionLink.queryParams">{{ goToSectionLink.text }}</a>
+      </li>
+    </ng-container>
 
     <ng-template #none>
       <span>None</span>
