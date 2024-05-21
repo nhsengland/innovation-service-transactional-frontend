@@ -74,6 +74,7 @@ import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/i
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -119,6 +120,13 @@ const routes: Routes = [
               breadcrumb: null,
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
+          },
+
+          {
+            path: 'advanced-search',
+            pathMatch: 'full',
+            component: PageInnovationsAdvancedReviewComponent,
+            data: { layout: { type: 'full', backgroundColor: 'bg-color-white' } }
           },
 
           { path: 'statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
