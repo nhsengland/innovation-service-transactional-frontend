@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
 
@@ -39,6 +39,13 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
   tabs: TabType[] = [];
   currentTab: TabType;
+
+  searchForm = new FormGroup(
+    {
+      search: new FormControl('', { validators: [Validators.maxLength(200)] })
+    },
+    { updateOn: 'blur' }
+  );
 
   form = new FormGroup(
     {
@@ -511,5 +518,17 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   onPageChange(event: { pageNumber: number }): void {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+  }
+
+  onSearchClick(): void {
+    this.searchForm.updateValueAndValidity({ onlySelf: true });
+
+    if (!this.searchForm.valid) {
+      return;
+    }
+
+    this.redirectTo(`/${this.userUrlBasePath()}/innovations/advanced-search`, {
+      search: this.searchForm.get('search')?.value
+    });
   }
 }
