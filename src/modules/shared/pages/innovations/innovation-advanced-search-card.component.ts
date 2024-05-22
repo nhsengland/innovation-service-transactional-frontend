@@ -58,7 +58,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     termsFound: string[];
     termsCount: Map<string, number>;
     snippet: string;
-    linkInfo: { text: string; link: string; queryParams: { search: string } };
+    linkInfo: { text: string; link: string; queryParams?: { search: string } };
   };
 
   constructor() {
@@ -87,12 +87,15 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     if (this.innovationCardData.highlights) {
       const searchTermsFoundWithDuplicates = this.getSearchTermsFound(this.innovationCardData.highlights);
       const [firstKey, firstValue] = Object.entries(this.innovationCardData.highlights)[0];
+
       this.highlightInfo = {
         termsFound: [...new Set(searchTermsFoundWithDuplicates)],
         termsCount: this.getSearchTermsCount(searchTermsFoundWithDuplicates),
         snippet: this.getSnippetFromHighlight(firstValue[0]),
         linkInfo: this.getLinkFromHighlight(firstKey)
       };
+
+      this.highlightInfo.linkInfo.queryParams = { search: this.highlightInfo?.termsFound.join(' ') };
     }
   }
 
@@ -142,17 +145,15 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   getLinkFromHighlight(firstKeyFromHighlight: string): {
     text: string;
     link: string;
-    queryParams: { search: string };
   } {
     let linkInfo = {
       text: '',
-      link: '',
-      queryParams: { search: this.highlightInfo?.termsFound.join(' ') ?? '' }
+      link: ''
     };
 
-    const keyParts = firstKeyFromHighlight.split('.');
-
     const innovationUrl = `/${this.baseUrl}${this.innovationCardData.id}`;
+
+    const keyParts = firstKeyFromHighlight.split('.');
 
     if (keyParts[0] === 'document') {
       // If the key starts with document, it has data from IR
