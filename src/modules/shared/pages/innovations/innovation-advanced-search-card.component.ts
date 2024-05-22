@@ -54,11 +54,12 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   keyHealthInequalitiesList: string = '';
   involvedAACProgrammesList: string = '';
 
-  searchTermsFound: string[] = [];
-  searchTermsCount = new Map<string, number>();
-  snippet: string = '';
-
-  goToSectionLink = { text: '', link: '', queryParams: { search: '' } };
+  highlightInfo?: {
+    termsFound: string[];
+    termsCount: Map<string, number>;
+    snippet: string;
+    linkInfo: { text: string; link: string; queryParams: { search: string } };
+  };
 
   constructor() {
     super();
@@ -83,33 +84,31 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.keyHealthInequalitiesList = this.getFormattedList(this.innovationCardData.keyHealthInequalities);
     this.involvedAACProgrammesList = this.getFormattedList(this.innovationCardData.involvedAACProgrammes);
 
-    const searchTermsFoundWithDuplicates = this.getSearchTermsFound();
-    this.searchTermsFound = [...new Set(searchTermsFoundWithDuplicates)];
-    this.searchTermsCount = this.getSearchTermsCount(searchTermsFoundWithDuplicates);
-    this.snippet = this.getHighlightSnippet();
-    this.goToSectionLink = this.getGoToSectionLink();
+    if (this.innovationCardData.highlights) {
+      const searchTermsFoundWithDuplicates = this.getSearchTermsFound(this.innovationCardData.highlights);
+      const [firstKey, firstValue] = Object.entries(this.innovationCardData.highlights)[0];
+      this.highlightInfo = {
+        termsFound: [...new Set(searchTermsFoundWithDuplicates)],
+        termsCount: this.getSearchTermsCount(searchTermsFoundWithDuplicates),
+        snippet: this.getSnippetFromHighlight(firstValue[0]),
+        linkInfo: this.getLinkFromHighlight(firstKey)
+      };
+    }
   }
 
   private getFormattedList(list: string[]): string {
     return list.length > 0 ? list.join('. ') : 'None';
   }
 
-  getSearchTermsFound() {
+  getSearchTermsFound(highlights: Record<string, string[]>) {
     const searchTermsFound: string[] = [];
 
-    const highlights = this.innovationCardData.highlights;
-
-    if (!highlights) {
-      return searchTermsFound;
-    }
-
+    const regex = /<em>(.*?)<\/em>/g;
     // Iterate over each value in the highlights object
     for (const value of Object.values(highlights)) {
       const text = value[0].toLowerCase();
       // Use a regular expression to find all occurrences of text within <em> tags
-      const regex = /<em>(.*?)<\/em>/g;
       let match;
-
       // Loop through matches
       while ((match = regex.exec(text)) !== null) {
         // Add the matched text to our result array
@@ -133,35 +132,25 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     return searchTermsCount;
   }
 
-  getHighlightSnippet(): string {
-    const highlights = this.innovationCardData.highlights;
-
-    if (!highlights) {
-      return '';
-    }
-
+  getSnippetFromHighlight(firstValueFromHighlight: string): string {
     // Remove <em> tags from the first highlight given by ES
-    const snippet = Object.values(highlights)[0][0].replace(/<em>(.*?)<\/em>/g, '$1');
+    const snippet = firstValueFromHighlight.replace(/<em>(.*?)<\/em>/g, '$1');
 
     return snippet;
   }
 
-  getGoToSectionLink(): { text: string; link: string; queryParams: { search: string } } {
-    let goToSectionLink = {
+  getLinkFromHighlight(firstKeyFromHighlight: string): {
+    text: string;
+    link: string;
+    queryParams: { search: string };
+  } {
+    let linkInfo = {
       text: '',
       link: '',
-      queryParams: { search: this.searchTermsFound.join(' ') }
+      queryParams: { search: this.highlightInfo?.termsFound.join(' ') ?? '' }
     };
 
-    const highlights = this.innovationCardData.highlights;
-
-    if (!highlights) {
-      return goToSectionLink;
-    }
-
-    // Get the first key from highlight given by ES
-    const firstKey = Object.keys(highlights)[0];
-    const keyParts = firstKey.split('.');
+    const keyParts = firstKeyFromHighlight.split('.');
 
     const innovationUrl = `/${this.baseUrl}${this.innovationCardData.id}`;
 
@@ -169,19 +158,19 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
       // If the key starts with document, it has data from IR
       const sectionId = keyParts[1];
       const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
-      goToSectionLink.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
+      linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
 
       if (this.isInnovationInArchivedStatus) {
-        goToSectionLink.link = `${innovationUrl}/record/sections/all`;
+        linkInfo.link = `${innovationUrl}/record/sections/all`;
       } else {
-        goToSectionLink.link = `${innovationUrl}/record/sections/${sectionId}`;
+        linkInfo.link = `${innovationUrl}/record/sections/${sectionId}`;
       }
     } else if (keyParts[0] === 'owner') {
       // If the key starts with 'owner', it has data from overview
-      goToSectionLink.text = 'Go to innovation overview';
-      goToSectionLink.link = `${innovationUrl}/overview`;
+      linkInfo.text = 'Go to innovation overview';
+      linkInfo.link = `${innovationUrl}/overview`;
     }
 
-    return goToSectionLink;
+    return linkInfo;
   }
 }
