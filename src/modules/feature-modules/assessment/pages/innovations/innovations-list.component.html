@@ -3,7 +3,7 @@
     <div class="nhsuk-grid-column-full">
       <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-1">Search all innovations</h2>
 
-      <form [formGroup]="searchForm">
+      <form [formGroup]="form">
         <theme-form-input [id]="'searchInnovation'" controlName="search" [pageUniqueField]="false" placeholder="Search" width="one-third">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">

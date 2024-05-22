@@ -44,19 +44,10 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   tabs: TabType[] = [];
   currentTab: TabType;
 
-  searchForm = new FormGroup(
-    {
-      search: new FormControl('', { validators: [Validators.maxLength(200)] })
-    },
-    { updateOn: 'blur' }
-  );
-
-  form = new FormGroup(
-    {
-      assignedToMe: new FormControl(false)
-    },
-    { updateOn: 'change' }
-  );
+  form = new FormGroup({
+    search: new FormControl('', { validators: [Validators.maxLength(200)], updateOn: 'blur' }),
+    assignedToMe: new FormControl(false, { updateOn: 'change' })
+  });
 
   innovationsList = new TableModel<
     {
@@ -188,7 +179,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams)),
-      this.form.valueChanges.subscribe(() => this.onFormChange())
+      this.form.controls.assignedToMe.valueChanges.subscribe(() => this.onAssignedToMeChange()),
+      this.form.controls.search.valueChanges.subscribe(() => this.onSearchChange())
     );
   }
 
@@ -304,9 +296,21 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.getInnovationsList();
   }
 
-  onFormChange(): void {
+  onAssignedToMeChange(): void {
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
+  }
+
+  onSearchChange(): void {
+    const searchControl = this.form.controls.search;
+    if (!searchControl.valid) {
+      searchControl.markAsTouched();
+      return;
+    }
+
+    this.redirectTo(`/${this.userUrlBasePath()}/innovations/advanced-search`, {
+      search: this.form.get('search')?.value
+    });
   }
 
   onTableOrder(column: string): void {
@@ -320,41 +324,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
   }
 
   onSearchClick(): void {
-    this.searchForm.updateValueAndValidity({ onlySelf: true });
-
-    if (!this.searchForm.valid) {
-      return;
-    }
-
-    this.redirectTo(`/${this.userUrlBasePath()}/innovations/advanced-search`, {
-      search: this.searchForm.get('search')?.value
-    });
+    this.form.controls.search.updateValueAndValidity({ onlySelf: true });
   }
-
-  // Daterange helpers
-  /*   getDaterangeFilterTitle(filter: FiltersType): string {
-    const afterDate = this.form.get(this.datasets[filter.key][0].formControl!)!.value;
-    const beforeDate = this.form.get(this.datasets[filter.key][1].formControl!)!.value;
-
-    if (afterDate !== null && (beforeDate === null || beforeDate === '')) return 'Submitted after';
-
-    if ((afterDate === null || afterDate === '') && beforeDate !== null) return 'Submitted before';
-
-    return 'Submitted between';
-  }
-
-  onRemoveDateRangeFilter(formControlName: string, value: string): void {
-    const formValue = this.getDateByControlName(formControlName);
-
-    if (formValue === value) {
-      this.form.patchValue({ [formControlName]: null });
-    }
-  }
-
-  getDateByControlName(formControlName: string) {
-    const value = this.form.get(formControlName)!.value;
-    return DatesHelper.parseIntoValidFormat(value);
-  } */
 
   getOverdueStatus(isExempted: boolean, submittedAt: string | null) {
     if (!submittedAt) {
