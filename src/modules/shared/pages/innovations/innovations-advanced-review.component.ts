@@ -114,18 +114,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       { key: 'countryName', text: this.sortByData.countryName.text }
     ];
 
+    this.orderBy = 'relevance';
     if (this.isAdminType) {
       this.setPageTitle('Innovations');
-      this.orderBy = 'updatedAt';
       this.sortByComponentInputList.splice(1, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
     } else if (this.isAccessorType) {
-      this.orderBy = 'support.updatedAt';
       this.sortByComponentInputList.splice(1, 0, {
         key: 'support.updatedAt',
         text: this.sortByData['support.updatedAt'].text
       });
     } else if (this.isAssessmentType) {
-      this.orderBy = 'statusUpdatedAt';
       this.sortByComponentInputList.splice(1, 0, {
         key: 'statusUpdatedAt',
         text: this.sortByData['statusUpdatedAt'].text
