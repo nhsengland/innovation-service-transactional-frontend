@@ -42,6 +42,9 @@ import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-i
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
 import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new.component';
 
+// // Elastic Search
+import { PageElasticSearchComponent } from './pages/elastic-search/elastic-search.component';
+
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
 import { WizardOrganisationUnitActivateUsersStepComponent } from './wizards/organisation-unit-activate/steps/users-step.component';
@@ -57,6 +60,7 @@ import { AdminOrganisationsService } from './services/admin-organisations.servic
 import { AnnouncementsService } from './services/announcements.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
 import { AdminUsersService } from './services/users.service';
+import { ElasticSearchService } from './services/elastic-search.service';
 
 // Resolvers.
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
@@ -106,6 +110,8 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     PageTermsOfUseInfoComponent,
     PageTermsOfUseListComponent,
     PageTermsOfUseNewComponent,
+    // // Elastic Search
+    PageElasticSearchComponent,
 
     // Wizards.
     WizardOrganisationUnitActivateComponent,
@@ -123,6 +129,7 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     AnnouncementsService,
     AdminUsersService,
     UsersValidationRulesService,
+    ElasticSearchService,
 
     // Resolvers.
     AnnouncementDataResolver,

@@ -1,5 +1,5 @@
 import { UserRoleEnum } from '@app/base/enums';
-import { Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
+import { CheckboxesFilter, Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import {
@@ -11,7 +11,7 @@ import {
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
-  search: { key: 'search', placeholder: 'Search innovation', maxLength: 200 },
+  search: { key: 'search', placeholder: 'Search', maxLength: 200 },
   filters: [
     {
       type: 'CHECKBOXES',
@@ -110,30 +110,54 @@ const InnovationListDatasets: Record<string, Dataset> = {
 export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
   if (!role) return { filters: InnovationsListFiltersConfig, datasets: InnovationListDatasets };
 
-  let filters = [
-    'engagingOrganisations',
-    'diseasesAndConditions',
-    'locations',
-    'supportStatuses',
-    'assignedToMe',
-    'suggestedOnly',
-    'submittedAt',
-    'categories',
-    'careSettings'
-  ];
+  let filters: string[] = [];
 
-  if (role === UserRoleEnum.ADMIN) {
-    filters = [
-      'locations',
-      'engagingOrganisations',
-      'diseasesAndConditions',
-      'groupedStatuses',
-      'submittedAt',
-      'categories',
-      'careSettings',
-      'keyHealthInequalities',
-      'involvedAACProgrammes'
-    ];
+  switch (role) {
+    case UserRoleEnum.QUALIFYING_ACCESSOR:
+    case UserRoleEnum.ACCESSOR:
+      filters = [
+        'engagingOrganisations',
+        'diseasesAndConditions',
+        'locations',
+        'supportStatuses',
+        'assignedToMe',
+        'suggestedOnly',
+        'submittedAt',
+        'categories',
+        'careSettings'
+      ];
+      break;
+    case UserRoleEnum.ASSESSMENT:
+      filters = [
+        'assignedToMe',
+        'locations',
+        'categories',
+        'careSettings',
+        'diseasesAndConditions',
+        'engagingOrganisations',
+        'groupedStatuses',
+        'submittedAt'
+      ];
+
+      const assignedToMeFilter = (InnovationsListFiltersConfig?.filters?.[0] as CheckboxesFilter).checkboxes?.[0];
+      assignedToMeFilter.title = 'Only show innovations assessed by me';
+      assignedToMeFilter.translation = 'Viewing innovations assessed by me';
+      break;
+    case UserRoleEnum.ADMIN:
+      filters = [
+        'locations',
+        'engagingOrganisations',
+        'diseasesAndConditions',
+        'groupedStatuses',
+        'submittedAt',
+        'categories',
+        'careSettings',
+        'keyHealthInequalities',
+        'involvedAACProgrammes'
+      ];
+      break;
+    default:
+      break;
   }
 
   const config: FiltersConfig = { search: InnovationsListFiltersConfig.search, filters: [] };

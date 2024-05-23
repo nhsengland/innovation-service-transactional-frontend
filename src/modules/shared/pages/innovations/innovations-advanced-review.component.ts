@@ -18,8 +18,16 @@ import {
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
+import { ActivatedRoute } from '@angular/router';
 
-type AdvancedReviewSortByKeys = 'support.updatedAt' | 'updatedAt' | 'submittedAt' | 'name' | 'countryName';
+type AdvancedReviewSortByKeys =
+  | 'support.updatedAt'
+  | 'updatedAt'
+  | 'submittedAt'
+  | 'name'
+  | 'countryName'
+  | 'statusUpdatedAt'
+  | 'relevance';
 
 type AdvancedReviewSortByKeysType = {
   [key in AdvancedReviewSortByKeys]: {
@@ -37,10 +45,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   isAdminType: boolean;
   isAccessorType: boolean;
+  isAssessmentType: boolean;
 
   pageSize: number = 20;
   pageNumber: number = 1;
-  orderBy: AdvancedReviewSortByKeys = 'updatedAt';
+  orderBy: AdvancedReviewSortByKeys = 'relevance';
   orderDir: 'ascending' | 'descending' = 'descending';
 
   paginationParams: {
@@ -64,14 +73,20 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
+  search?: string;
+
   constructor(
     private innovationsService: InnovationsService,
-    private organisationsService: OrganisationsService
+    private organisationsService: OrganisationsService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
 
+    this.search = this.activatedRoute.snapshot.queryParams.search;
+
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
 
     // Force reload if running on server because of SSR and session storage
     if (this.isRunningOnServer()) {
@@ -87,10 +102,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       updatedAt: { text: 'Last updated record', order: 'descending' },
       submittedAt: { text: 'Last submitted innovation', order: 'descending' },
       name: { text: 'Innovation name', order: 'ascending' },
-      countryName: { text: 'Location', order: 'ascending' }
+      countryName: { text: 'Location', order: 'ascending' },
+      statusUpdatedAt: { text: 'Last status update', order: 'descending' },
+      relevance: { text: 'Relevance', order: 'descending' }
     };
 
     this.sortByComponentInputList = [
+      { key: 'relevance', text: this.sortByData.relevance.text },
       { key: 'submittedAt', text: this.sortByData.submittedAt.text },
       { key: 'name', text: this.sortByData.name.text },
       { key: 'countryName', text: this.sortByData.countryName.text }
@@ -98,16 +116,19 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     if (this.isAdminType) {
       this.setPageTitle('Innovations');
-
       this.orderBy = 'updatedAt';
-      this.sortByComponentInputList.splice(0, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
-    }
-
-    if (this.isAccessorType) {
+      this.sortByComponentInputList.splice(1, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
+    } else if (this.isAccessorType) {
       this.orderBy = 'support.updatedAt';
-      this.sortByComponentInputList.splice(0, 0, {
+      this.sortByComponentInputList.splice(1, 0, {
         key: 'support.updatedAt',
         text: this.sortByData['support.updatedAt'].text
+      });
+    } else if (this.isAssessmentType) {
+      this.orderBy = 'statusUpdatedAt';
+      this.sortByComponentInputList.splice(1, 0, {
+        key: 'statusUpdatedAt',
+        text: this.sortByData['statusUpdatedAt'].text
       });
     }
   }
@@ -125,6 +146,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
             value: status
           }));
+        } else if (this.isAssessmentType) {
+          datasets.supportStatuses = [];
+          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
+            .filter(
+              status =>
+                status !== InnovationGroupedStatusEnum.RECORD_NOT_SHARED &&
+                status !== InnovationGroupedStatusEnum.WITHDRAWN
+            )
+            .map(status => ({
+              label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
+              value: status
+            }));
         }
 
         let previousFilters = sessionStorage.getItem('innovationListFilters');
@@ -134,6 +167,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
         this.form = this.filtersModel.form;
+
+        if (this.search !== undefined) {
+          this.form.get('search')?.setValue(this.search);
+        }
 
         this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
 
@@ -153,7 +190,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.filtersModel.handleStateChanges();
 
-    let queryFields: Parameters<InnovationsService['getInnovationsList']>[0] = [
+    let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
       'id',
       'name',
       'status',
@@ -184,14 +221,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       queryFields = queryFields.filter(
         item => !['support.status', 'support.updatedAt', 'support.closedReason'].includes(item)
       );
-    }
-    if (this.isAccessorType) {
+    } else if (this.isAccessorType) {
       // filter out unavailable fields for QA/A
       queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+    } else if (this.isAssessmentType) {
+      // filter out unavailable fields for Assessment
+      queryFields = queryFields.filter(
+        item =>
+          ![
+            'support.status',
+            'support.updatedAt',
+            'support.closedReason',
+            'involvedAACProgrammes',
+            'keyHealthInequalities'
+          ].includes(item)
+      );
     }
 
     this.innovationsService
-      .getInnovationsList(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
+      .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
       .subscribe(response => {
         this.innovationsCount = response.count;
         this.innovationCardsData = [];
@@ -229,7 +277,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
               status: result.support.status,
               updatedAt: result.support.updatedAt,
               closedReason: result.support.closedReason
-            }
+            },
+            highlights: result.highlights
           };
 
           this.innovationCardsData.push(innovationData);
@@ -245,6 +294,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     this.pageNumber = 1;
+
+    this.updateSearchQueryParams();
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
@@ -276,5 +327,23 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       return other ?? value;
     }
     return array.find(c => c.value === value)?.label ?? value;
+  }
+
+  private updateSearchQueryParams(): void {
+    const currentSearch = this.form.get('search')?.value;
+
+    if ((this.search === undefined && currentSearch) || this.search !== undefined) {
+      this.search = currentSearch;
+
+      const url = this.router
+        .createUrlTree([], {
+          relativeTo: this.activatedRoute,
+          queryParams: { search: this.search },
+          queryParamsHandling: 'merge'
+        })
+        .toString();
+
+      this.location.replaceState(url);
+    }
   }
 }

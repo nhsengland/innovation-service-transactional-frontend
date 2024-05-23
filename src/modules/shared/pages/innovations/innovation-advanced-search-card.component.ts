@@ -27,6 +27,7 @@ export type InnovationCardData = {
     updatedAt: DateISOType | null;
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
+  highlights?: Record<string, string[]>;
 };
 
 @Component({
@@ -34,23 +35,31 @@ export type InnovationCardData = {
   templateUrl: './innovation-advanced-search-card.component.html'
 })
 export class InnovationAdvancedSearchCardComponent extends CoreComponent implements OnInit {
+  @Input({ required: true }) innovationCardData!: InnovationCardData;
+
   baseUrl: string;
 
   isAdminType: boolean;
   isAccessorType: boolean;
+  isAssessmentType: boolean;
 
   isInnovationInArchivedStatus: boolean = false;
 
   isAccessorTypeAndArchivedInnovation: boolean = false;
   isAccessorTypeAndStoppedSharingInnovation: boolean = false;
 
-  @Input({ required: true }) innovationCardData!: InnovationCardData;
-
   categoriesList: string = '';
   careSettingsList: string = '';
   diseasesAndConditionsList: string = '';
   keyHealthInequalitiesList: string = '';
   involvedAACProgrammesList: string = '';
+
+  highlightInfo?: {
+    termsFound: string[];
+    termsCount: Map<string, number>;
+    snippet: string;
+    linkInfo: { text: string; link: string; queryParams?: { search: string } };
+  };
 
   constructor() {
     super();
@@ -59,7 +68,9 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();
+    this.isAssessmentType = this.stores.authentication.isAssessmentType();
   }
+
   ngOnInit(): void {
     this.isInnovationInArchivedStatus = this.innovationCardData.status === InnovationStatusEnum.ARCHIVED;
 
@@ -72,9 +83,95 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.diseasesAndConditionsList = this.getFormattedList(this.innovationCardData.diseasesAndConditions);
     this.keyHealthInequalitiesList = this.getFormattedList(this.innovationCardData.keyHealthInequalities);
     this.involvedAACProgrammesList = this.getFormattedList(this.innovationCardData.involvedAACProgrammes);
+
+    if (this.innovationCardData.highlights) {
+      const searchTermsFoundWithDuplicates = this.getSearchTermsFound(this.innovationCardData.highlights);
+      const [firstKey, firstValue] = Object.entries(this.innovationCardData.highlights)[0];
+
+      this.highlightInfo = {
+        termsFound: [...new Set(searchTermsFoundWithDuplicates)],
+        termsCount: this.getSearchTermsCount(searchTermsFoundWithDuplicates),
+        snippet: this.getSnippetFromHighlight(firstValue[0]),
+        linkInfo: this.getLinkFromHighlight(firstKey)
+      };
+
+      this.highlightInfo.linkInfo.queryParams = { search: this.highlightInfo?.termsFound.join(' ') };
+    }
   }
 
   private getFormattedList(list: string[]): string {
     return list.length > 0 ? list.join('. ') : 'None';
+  }
+
+  getSearchTermsFound(highlights: Record<string, string[]>) {
+    const searchTermsFound: string[] = [];
+
+    const regex = /<em>(.*?)<\/em>/g;
+    // Iterate over each value in the highlights object
+    for (const value of Object.values(highlights)) {
+      const text = value[0].toLowerCase();
+      // Use a regular expression to find all occurrences of text within <em> tags
+      let match;
+      // Loop through matches
+      while ((match = regex.exec(text)) !== null) {
+        // Add the matched text to our result array
+        searchTermsFound.push(match[1]);
+      }
+    }
+
+    return searchTermsFound;
+  }
+
+  getSearchTermsCount(searchTermsFoundWithDuplicates: string[]): Map<string, number> {
+    const searchTermsCount = new Map<string, number>();
+
+    // Count occurrences of each search term found
+    for (const word of searchTermsFoundWithDuplicates) {
+      const wordCapitalLetter = word.charAt(0).toUpperCase() + word.slice(1);
+      const currentCount = searchTermsCount.get(wordCapitalLetter) || 0;
+      searchTermsCount.set(wordCapitalLetter, currentCount + 1);
+    }
+
+    return searchTermsCount;
+  }
+
+  getSnippetFromHighlight(firstValueFromHighlight: string): string {
+    // Remove <em> tags from the first highlight given by ES
+    const snippet = firstValueFromHighlight.replace(/<em>(.*?)<\/em>/g, '$1');
+
+    return snippet;
+  }
+
+  getLinkFromHighlight(firstKeyFromHighlight: string): {
+    text: string;
+    link: string;
+  } {
+    let linkInfo = {
+      text: '',
+      link: ''
+    };
+
+    const innovationUrl = `/${this.baseUrl}${this.innovationCardData.id}`;
+
+    const keyParts = firstKeyFromHighlight.split('.');
+
+    if (keyParts[0] === 'document') {
+      // If the key starts with document, it has data from IR
+      const sectionId = keyParts[1];
+      const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
+      linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
+
+      if (this.isInnovationInArchivedStatus) {
+        linkInfo.link = `${innovationUrl}/record/sections/all`;
+      } else {
+        linkInfo.link = `${innovationUrl}/record/sections/${sectionId}`;
+      }
+    } else if (keyParts[0] === 'owner') {
+      // If the key starts with 'owner', it has data from overview
+      linkInfo.text = 'Go to innovation overview';
+      linkInfo.link = `${innovationUrl}/overview`;
+    }
+
+    return linkInfo;
   }
 }
