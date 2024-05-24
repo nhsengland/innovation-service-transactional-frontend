@@ -101,7 +101,9 @@
       </li>
       <li class="nhsuk-u-margin-bottom-2" appHighlight [searchTerm]="highlightInfo.termsFound">...{{ highlightInfo.snippet }}...</li>
       <li>
-        <a [routerLink]="highlightInfo.linkInfo.link" [queryParams]="highlightInfo.linkInfo.queryParams">{{ highlightInfo.linkInfo.text }}</a>
+        <a [routerLink]="highlightInfo.linkInfo.link" [queryParams]="highlightInfo.linkInfo.queryParams" [fragment]="highlightInfo.linkInfo.fragment">{{
+          highlightInfo.linkInfo.text
+        }}</a>
       </li>
     </ng-container>
 
