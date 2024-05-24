@@ -218,14 +218,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
       this.setPageStatus('READY');
 
-      setTimeout(() => {
-        if (this.sectionIdFragment && this.sectionIdFragment in InnovationSectionEnum) {
-          const section = document.getElementById(this.sectionIdFragment);
-          if (section) {
-            this.viewportScroller.scrollToAnchor(this.sectionIdFragment);
-          }
-        }
-      });
+      this.scrollToSectionWhenFragmentExists();
     });
   }
 
@@ -271,5 +264,16 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     );
 
     this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
+  }
+
+  scrollToSectionWhenFragmentExists() {
+    setTimeout(() => {
+      if (this.sectionIdFragment && this.sectionIdFragment in InnovationSectionEnum) {
+        const section = document.getElementById(this.sectionIdFragment);
+        if (section) {
+          this.viewportScroller.scrollToAnchor(this.sectionIdFragment);
+        }
+      }
+    });
   }
 }
