@@ -1173,7 +1173,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'textarea',
               label: 'Are you currently receiving any support for your innovation?',
               description:
-                'This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href={{URLS.ORGANISATIONS_BEHIND_THE_SERVICE}} target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.',
+                'This can include any UK funding to support the development of your innovation, or any support you are currently receiving from <a href={{urls.ORGANISATIONS_BEHIND_THE_SERVICE}} target="_blank" rel="noopener noreferrer">NHS Innovation Service organisations (opens in a new window)</a>.',
               lengthLimit: 'xl',
               validations: {
                 isRequired: 'A description is required'
@@ -1274,7 +1274,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'textarea',
               label: 'Give an overview of how your innovation works',
               description:
-                '<p>If this is or might be a medical device, include the <a href={{URLS.MEDICAL_DEVICES_INTENDED_PURPOSE_STATEMENT}} target="_blank" rel="noopener noreferrer">intended purpose statement (opens in a new window)</a>.</p><p>For example, GPs will identify patients with suspected atrial fibrillation from their history and reported symptoms. This innovation is a portable device that patients wear over a 7-day period. The device will monitor the patient’s heart rate continuously whilst they are wearing it. GPs will need to be trained in using the device and interpreting the results. GP practices will need to store the device and consumables.</p>',
+                '<p>If this is or might be a medical device, include the <a href={{urls.MEDICAL_DEVICES_INTENDED_PURPOSE_STATEMENT}} target="_blank" rel="noopener noreferrer">intended purpose statement (opens in a new window)</a>.</p><p>For example, GPs will identify patients with suspected atrial fibrillation from their history and reported symptoms. This innovation is a portable device that patients wear over a 7-day period. The device will monitor the patient’s heart rate continuously whilst they are wearing it. GPs will need to be trained in using the device and interpreting the results. GP practices will need to store the device and consumables.</p>',
               lengthLimit: 'l',
               validations: {
                 isRequired: 'A description is required'
@@ -2151,7 +2151,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Have you estimated the carbon reduction or savings that your innovation will bring?',
               description:
-                '<p>All NHS suppliers will be expected to provide the carbon footprint associated with the use of their innovation, as outlined in the <a href={{URLS.DELIVERING_A_NET_ZERO_NHS}} target="_blank" rel="noopener noreferrer">Delivering a Net Zero NHS report (opens in a new window)</a>.</p><p>If this is something you are unsure of, the NHS Innovation Service can support you with this.</p>',
+                '<p>All NHS suppliers will be expected to provide the carbon footprint associated with the use of their innovation, as outlined in the <a href={{urls.DELIVERING_A_NET_ZERO_NHS}} target="_blank" rel="noopener noreferrer">Delivering a Net Zero NHS report (opens in a new window)</a>.</p><p>If this is something you are unsure of, the NHS Innovation Service can support you with this.</p>',
               validations: {
                 isRequired: 'Choose one option'
               },
@@ -2195,7 +2195,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Do you have or are you working on a carbon reduction plan (CRP)?',
               description:
-                'All NHS suppliers will require a carbon reduction plan (CRP), as outlined in the <a href="{{URLS.SUPPLIERS}}" target="_blank" rel="noopener noreferrer">NHS Suppliers Roadmap plan (opens in a new window)</a>.',
+                'All NHS suppliers will require a carbon reduction plan (CRP), as outlined in the <a href="{{urls.SUPPLIERS}}" target="_blank" rel="noopener noreferrer">NHS Suppliers Roadmap plan (opens in a new window)</a>.',
               validations: {
                 isRequired: 'Choose one option'
               },
@@ -2219,7 +2219,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'checkbox-array',
               label: 'Which key health inequalities does your innovation impact?',
               description:
-                '<p>Core20PLUS5 is a national NHS England approach to support the reduction of health inequalities, defining target populations and clinical areas that require improvement.</p><p>More information is available on the <a href={{URLS.CORE20PLUS5}} target="_blank" rel="noopener noreferrer">Core20PLUS5 web page (opens in a new window)</a>.</p>',
+                '<p>Core20PLUS5 is a national NHS England approach to support the reduction of health inequalities, defining target populations and clinical areas that require improvement.</p><p>More information is available on the <a href={{urls.CORE20PLUS5}} target="_blank" rel="noopener noreferrer">Core20PLUS5 web page (opens in a new window)</a>.</p>',
               validations: {
                 isRequired: 'Choose at least one item'
               },
@@ -2259,7 +2259,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Have you completed a health inequalities impact assessment?',
               description:
-                '<p>By this, we mean a document or template which assesses the impact of your innovation on health inequalities and on those with protected characteristics. Health inequalities are the unfair and avoidable differences in health across the population, and between different groups within society.</p><p>An example of a completed health inequalities impact assessment can be found on <a href={{URLS.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA}} target="_blank" rel="noopener noreferrer">NHS England\'s web page (opens in a new window)</a>.</p>',
+                '<p>By this, we mean a document or template which assesses the impact of your innovation on health inequalities and on those with protected characteristics. Health inequalities are the unfair and avoidable differences in health across the population, and between different groups within society.</p><p>An example of a completed health inequalities impact assessment can be found on <a href={{urls.EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA}} target="_blank" rel="noopener noreferrer">NHS England\'s web page (opens in a new window)</a>.</p>',
               validations: {
                 isRequired: 'Choose one option'
               },
@@ -2323,7 +2323,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               label:
                 'Write a short summary of your ongoing or planned evidence gathering, including the IRAS number if known.',
               description:
-                'An IRAS ID is a unique identifier, which is generated by IRAS when you first create a project. It is the accepted common study identifier, allowing research to be traced across its study lifecycle. For more information visit the <a href={{URLS.MY_RESEARCH_PROJECT}} target="_blank" rel="noopener noreferrer">IRAS website (opens in a new window)</a>.',
+                'An IRAS ID is a unique identifier, which is generated by IRAS when you first create a project. It is the accepted common study identifier, allowing research to be traced across its study lifecycle. For more information visit the <a href={{urls.MY_RESEARCH_PROJECT}} target="_blank" rel="noopener noreferrer">IRAS website (opens in a new window)</a>.',
               lengthLimit: 'l',
               validations: {
                 isRequired: 'A description is required'
@@ -2643,7 +2643,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               addQuestion: {
                 id: 'feedback',
                 dataType: 'textarea',
-                label: 'Describe the testing and feedback for {{question}}',
+                label: 'Describe the testing and feedback for {{item.kind}}',
                 description:
                   'Provide a brief summary of the method and key findings. You can upload any documents that showcase your user testing next.',
                 validations: {
@@ -2669,7 +2669,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Do you know which regulations, standards and certifications apply to your innovation?',
               description:
-                'Find out more about <a href="{{URLS.INNOVATION_GUIDES_REGULATION}}" target="_blank" rel="noopener noreferrer">regulations (opens in a new window)</a>.',
+                'Find out more about <a href="{{urls.INNOVATION_GUIDES_REGULATION}}" target="_blank" rel="noopener noreferrer">regulations (opens in a new window)</a>.',
               validations: {
                 isRequired: 'Choose one option'
               },
@@ -2697,7 +2697,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'checkbox-array',
               label: 'Which regulations, standards and certifications apply to your innovation?',
               description:
-                'Find out more about <a href="{{URLS.UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES}}" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new window)</a>, <a href="{{URLS.UNDERSTANDING_CQC_REGULATIONS}}" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new window)</a>, or <a href={{URLS.NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA}} target="_blank" rel="noopener noreferrer">DTAC (opens in a new window)</a>.',
+                'Find out more about <a href="{{urls.UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES}}" target="_blank" rel="noopener noreferrer">UKCA / CE marking (opens in a new window)</a>, <a href="{{urls.UNDERSTANDING_CQC_REGULATIONS}}" target="_blank" rel="noopener noreferrer">CQC registration (opens in a new window)</a>, or <a href={{urls.NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA}} target="_blank" rel="noopener noreferrer">DTAC (opens in a new window)</a>.',
               validations: {
                 isRequired: 'Choose at least one option'
               },
@@ -2774,6 +2774,29 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   }
                 }
               ]
+            },
+            {
+              id: 'standardHasMet',
+              dataType: 'connected-radio-group',
+              label: 'Do you have a certification for {{item}}',
+              connectedQuestion: 'standardsType',
+              validations: { 
+                isRequired: 'Choose one option'
+              },
+              items: [
+                {
+                  id: 'yes',
+                  label: 'Yes'
+                },
+                {
+                  id: 'inProgress',
+                  label: 'I am actively working towards it'
+                },
+                {
+                  id: 'notYet',
+                  label: 'Not yet'
+                }
+              ]
             }
           ]
         },
@@ -2817,7 +2840,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Do you have any other intellectual property for your innovation?',
               description:
-                'Find out more about <a href={{URLS.INNOVATION_GUIDES_INTELLECTUAL_PROPERTY}} target="_blank" rel="noopener noreferrer">intellectual property (opens in a new window)</a>.',
+                'Find out more about <a href={{urls.INNOVATION_GUIDES_INTELLECTUAL_PROPERTY}} target="_blank" rel="noopener noreferrer">intellectual property (opens in a new window)</a>.',
               validations: {
                 isRequired: 'Choose one option'
               },
@@ -3137,7 +3160,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'radio-group',
               label: 'Is your innovation ready for wider adoption across the health and care system?',
               description:
-                'Find out more about <a href={{URLS.INNOVATION_GUIDES_COMISSIONING_AND_ADOPTION}} target="_blank" rel="noopener noreferrer">commissioning and adoption (opens in a new window)</a>.',
+                'Find out more about <a href={{urls.INNOVATION_GUIDES_COMISSIONING_AND_ADOPTION}} target="_blank" rel="noopener noreferrer">commissioning and adoption (opens in a new window)</a>.',
               validations: {
                 isRequired: 'Choose one option'
               },
