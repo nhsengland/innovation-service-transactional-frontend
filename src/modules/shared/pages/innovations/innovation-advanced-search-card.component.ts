@@ -58,7 +58,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     termsFound: string[];
     termsCount: Map<string, number>;
     snippet: string;
-    linkInfo: { text: string; link: string; queryParams?: { search: string } };
+    linkInfo: { text: string; link: string; queryParams?: { search: string }; fragment?: string };
   };
 
   constructor() {
@@ -115,7 +115,10 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
       // Loop through matches
       while ((match = regex.exec(text)) !== null) {
         // Add the matched text to our result array
-        searchTermsFound.push(match[1]);
+        const foundMatch = match[1].split(/\W/);
+        foundMatch.forEach(match => {
+          searchTermsFound.push(match);
+        });
       }
     }
 
@@ -145,8 +148,9 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   getLinkFromHighlight(firstKeyFromHighlight: string): {
     text: string;
     link: string;
+    fragment?: string;
   } {
-    let linkInfo = {
+    let linkInfo: { text: string; link: string; fragment?: string } = {
       text: '',
       link: ''
     };
@@ -163,6 +167,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
       if (this.isInnovationInArchivedStatus) {
         linkInfo.link = `${innovationUrl}/record/sections/all`;
+        linkInfo.fragment = sectionId;
       } else {
         linkInfo.link = `${innovationUrl}/record/sections/${sectionId}`;
       }
