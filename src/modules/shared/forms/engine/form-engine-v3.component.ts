@@ -115,10 +115,16 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
     }
 
     this.cdr.detectChanges();
+
+    console.log('this.parameters');
+    console.log(this.parameters);
   }
 
   addFieldGroupRow(parameter: FormEngineParameterModelV3, value?: { [key: string]: any }): void {
     (this.form.get(parameter.id) as FormArray).push(FormEngineHelperV3.addFieldGroupRow(parameter, value));
+    console.log('addFieldGroupRow');
+    console.log('parameter.id: ', parameter.id);
+    console.log(this.form.get(parameter.id)?.value);
   }
 
   removeFieldGroupRow(parameterId: string, index: number): void {

@@ -24,12 +24,15 @@ export class FormEngineHelperV3 {
 
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
 
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
+
     // TODO - add FormEngineParameterModelV3 for `conditonal` and `addQuestion`
-    inputParameters.forEach(p => {
-      if (p.addQuestion) {
-        parameters.push(new FormEngineParameterModelV3(p.addQuestion));
-      }
-    });
+    // inputParameters.forEach(p => {
+    //   if (p.addQuestion) {
+    //     parameters.push(new FormEngineParameterModelV3(p.addQuestion));
+    //   }
+    // });
 
     inputParameters.forEach(p =>
       p.items?.forEach(i => {
@@ -41,6 +44,9 @@ export class FormEngineHelperV3 {
 
     console.log('parameters');
     console.log(parameters);
+
+    /////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
 
@@ -136,14 +142,11 @@ export class FormEngineHelperV3 {
       conditionalFields.forEach(item => {
         if (item.conditional) {
           const itemValue = values[item.conditional.id] || null;
-          console.log('conditional item');
-          console.log(item);
+
           form.addControl(
             item.conditional.id,
             FormEngineHelperV3.createParameterFormControl(item.conditional, itemValue)
           );
-          console.log('form.controls');
-          console.log(form.controls);
         }
       });
 
@@ -169,17 +172,15 @@ export class FormEngineHelperV3 {
   static addFieldGroupRow(parameter: FormEngineParameterModelV3, value?: { [key: string]: any }): FormGroup {
     const formGroup = new FormGroup({});
 
-    // parameter.addQuestion.fields.forEach(field => {
-    if (parameter.addQuestion) {
+    if (parameter.field) {
       const newField = FormEngineHelperV3.createParameterFormControl(
-        parameter.addQuestion,
-        (value || {})[parameter.addQuestion.id]
+        parameter.field,
+        (value || {})[parameter.field.id]
       );
-      newField.setValidators(FormEngineHelperV3.getParameterValidators(parameter.addQuestion));
+      newField.setValidators(FormEngineHelperV3.getParameterValidators(parameter.field));
       newField.updateValueAndValidity();
-      formGroup.addControl(parameter.addQuestion.id, newField);
+      formGroup.addControl(parameter.field.id, newField);
     }
-    // });
 
     return formGroup;
   }

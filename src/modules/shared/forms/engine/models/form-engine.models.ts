@@ -3,6 +3,7 @@ import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import {
+  InnovationRecordFormComponentType,
   InnovationRecordItemsType,
   InnovationRecordMinMaxValidationType,
   InnovationRecordQuestionStepType,
@@ -152,7 +153,7 @@ export class FormEngineModelV3 {
 
 export class FormEngineParameterModelV3 {
   id: string;
-  dataType: 'text' | 'textarea' | 'autocomplete-array' | 'checkbox-array' | 'radio-group' | 'fields-group';
+  dataType: InnovationRecordFormComponentType;
   // | 'number'
   // | 'password'
   // | 'hidden'
@@ -207,6 +208,13 @@ export class FormEngineParameterModelV3 {
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
+  field?: {
+    id: string;
+    dataType: InnovationRecordFormComponentType;
+    label: string;
+    validations: InnovationRecordStepValidationsType;
+  };
+
   // fieldsGroupConfig?: {
   //   fields: FormEngineParameterModelV3[]; // Used in "fields-group" dataType.
   //   addNewLabel?: string;
@@ -235,6 +243,7 @@ export class FormEngineParameterModelV3 {
     this.cssOverride = data.cssOverride;
     this.addQuestion = data.addQuestion;
     this.addNewLabel = data.addNewLabel;
+    this.field = data.field;
 
     this.lengthLimit = data.lengthLimit;
     // this.additional = data.additional;

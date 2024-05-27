@@ -36,6 +36,7 @@ export type InnovationRecordQuestionStepType = {
   items?: InnovationRecordItemsType;
   condition?: string;
   cssOverride?: string;
+  isVisible?: boolean;
 };
 
 export type InnovationRecordFormComponentType =
@@ -61,6 +62,10 @@ export type InnovationRecordStepValidationsType = {
   validEmail?: string;
   equalTo?: string | [string, string];
 };
+
+export type InnovationRecordFieldGroupAnswerType = {
+  [id: string]: string;
+}[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 

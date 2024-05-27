@@ -64,6 +64,8 @@
                   [ngClass]="{ 'nhsuk-radios__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), error: isConditionalFieldError(item.conditional.id) }"
                 >
                   <theme-form-input
+                    [id]="item.conditional.id"
+                    [controlName]="item.conditional.id"
                     [formControl]="conditionalFormControl(item.conditional.id)"
                     [label]="item.conditional.label"
                     [description]="item.conditional.description"

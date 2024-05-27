@@ -93,9 +93,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           }
         });
 
-        console.log('irv3');
-        console.log(irv3);
-
         // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId === 'summary') {
           this.router.navigateByUrl(`${this.baseUrl}`);
@@ -175,9 +172,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     }
 
     if (action === 'next') {
-      if (currentStepIndex + 1 !== this.sectionQuestionsIdList.length) {
-        this.wizard.addAnswers(formData.data);
+      this.wizard.addAnswers(formData.data);
 
+      this.wizard.parseFieldGroupStep();
+
+      if (currentStepIndex + 1 !== this.wizard.steps.length) {
         currentStepIndex++;
 
         let nextStepId = this.sectionQuestionsIdList[currentStepIndex];

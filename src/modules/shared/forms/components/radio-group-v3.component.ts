@@ -21,6 +21,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 import { FormEngineParameterModel, FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
+import { InnovationRecordItemsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 @Component({
   selector: 'theme-form-radio-group-v3',
@@ -73,6 +74,13 @@ export class FormRadioGroupV3Component extends ControlValueAccessorComponent imp
   }
 
   isConditionalFieldVisible(conditionalFieldId: string): boolean {
+    if (
+      (this.items || []).filter(
+        item => item.id === this.fieldControl.value && item.conditional?.id === conditionalFieldId
+      ).length > 0
+    ) {
+      return true;
+    }
     return (
       (this.items || []).filter(
         item => item.id === this.fieldControl.value && item.conditional?.id === conditionalFieldId
@@ -101,6 +109,9 @@ export class FormRadioGroupV3Component extends ControlValueAccessorComponent imp
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-radios-small' : '';
     this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
+
+    console.log('this.fieldControl');
+    console.log(this.fieldControl);
   }
 
   ngDoCheck(): void {

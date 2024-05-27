@@ -7,8 +7,12 @@ import {
   getInnovationRecordSchemaTranslationsMap,
   getInnovationRecordSchemaSectionQuestionsLabels
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import { InnovationRecordQuestionStepType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  InnovationRecordFieldGroupAnswerType,
+  InnovationRecordQuestionStepType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';
+import { StringsHelper } from '@app/base/helpers';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -286,6 +290,7 @@ export class WizardIRV3EngineModel {
     const sectionIdLabels = getInnovationRecordSchemaSectionQuestionsLabels(sectionId);
     this.summary = [];
     console.log('parsing summary');
+
     for (const entry of sectionIdLabels.keys()) {
       const condition = getInnovationRecordSchemaQuestion(entry).condition;
       if (!(condition !== undefined && !this.checkIfStepConditionIsMet(condition))) {
@@ -298,6 +303,40 @@ export class WizardIRV3EngineModel {
     }
 
     return this.summary;
+  }
+
+  parseFieldGroupStep() {
+    const currentStepParameters = this.currentStepParameters()[0];
+    if (currentStepParameters.addQuestion && currentStepParameters.field) {
+      console.log('PARSED FIELDGROUP!');
+      console.log('this.currentStep()', this.currentStep());
+      console.log('this.currentStepId', this.currentStepId);
+      const currentStepParameters = this.currentStepParameters()[0];
+      const stepIndex: number = this.steps.findIndex(s => s === this.currentStep());
+      const toReturn = this.getAnswers()[this.currentStepId].map(
+        (answer: string) =>
+          new FormEngineModelV3({
+            parameters: [
+              {
+                id: typeof answer === 'object' ? `userTestFeedback_${answer[currentStepParameters.field!.id]}` : '',
+                dataType: currentStepParameters.addQuestion!.dataType,
+                label: currentStepParameters.addQuestion!.label,
+                description: currentStepParameters.addQuestion!.description,
+                validations: currentStepParameters.addQuestion!.validations,
+                lengthLimit: currentStepParameters.addQuestion!.lengthLimit ?? 's'
+              }
+            ]
+          })
+      );
+      console.log('answers:', this.getAnswers()[this.currentStepId]);
+      console.log(this.steps);
+      this.steps.splice(stepIndex + 1, 0, ...toReturn);
+      console.log(this.steps);
+    }
+  }
+
+  findStepById(stepId: string): WizardStepTypeV3 {
+    return this.steps.find(s => s.parameters[0].id === stepId) ?? { parameters: [], defaultData: {} };
   }
 
   getStepParameters(stepId: string): FormEngineParameterModelV3[] {
