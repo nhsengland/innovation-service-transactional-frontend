@@ -5,6 +5,7 @@ import { SelectComponentInputType } from '@modules/theme/components/search/selec
 import {
   InnovationRecordItemsType,
   InnovationRecordMinMaxValidationType,
+  InnovationRecordQuestionStepType,
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
@@ -21,20 +22,6 @@ export class FormEngineModel {
     this.defaultData = data.defaultData ?? {};
   }
 }
-export class FormEngineModelV3 {
-  label?: string;
-  description?: string;
-  parameters: FormEngineParameterModelV3[];
-  defaultData: Record<string, any>; // { [key: string]: any };
-
-  constructor(data: Partial<FormEngineModelV3>) {
-    this.label = data.label;
-    this.description = data.description;
-    this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModelV3(item));
-    this.defaultData = data.defaultData ?? {};
-  }
-}
-
 export class FormEngineParameterModel {
   id: string;
   dataType:
@@ -148,29 +135,38 @@ export class FormEngineParameterModel {
     this.fileUploadConfig = data.fileUploadConfig;
   }
 }
+
+export class FormEngineModelV3 {
+  label?: string;
+  description?: string;
+  parameters: FormEngineParameterModelV3[];
+  defaultData: Record<string, any>; // { [key: string]: any };
+
+  constructor(data: Partial<FormEngineModelV3>) {
+    this.label = data.label;
+    this.description = data.description;
+    this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModelV3(item));
+    this.defaultData = data.defaultData ?? {};
+  }
+}
+
 export class FormEngineParameterModelV3 {
   id: string;
-  dataType:
-    | 'text'
-    | 'textarea'
-    | 'number'
-    | 'password'
-    | 'hidden'
-    | 'date'
-    | 'autocomplete-array'
-    | 'checkbox-group'
-    | 'checkbox-array'
-    | 'grouped-checkbox-array'
-    | 'radio-group'
-    | 'fields-group'
-    | 'file-upload'
-    | 'file-upload-array'
-    | 'select-component';
+  dataType: 'text' | 'textarea' | 'autocomplete-array' | 'checkbox-array' | 'radio-group' | 'fields-group';
+  // | 'number'
+  // | 'password'
+  // | 'hidden'
+  // | 'date'
+  // | 'checkbox-group'
+  // | 'grouped-checkbox-array'
+  // | 'file-upload'
+  // | 'file-upload-array'
+  // | 'select-component';
   label?: string;
   description?: string;
   placeholder?: string;
   isVisible?: boolean;
-  isEditable?: boolean;
+  // isEditable?: boolean;
   rank?: number;
   validations?: {
     // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
@@ -208,21 +204,23 @@ export class FormEngineParameterModelV3 {
   }[];
 
   items?: InnovationRecordItemsType;
+  addQuestion?: InnovationRecordQuestionStepType;
+  addNewLabel?: string;
 
-  fieldsGroupConfig?: {
-    fields: FormEngineParameterModelV3[]; // Used in "fields-group" dataType.
-    addNewLabel?: string;
-  };
+  // fieldsGroupConfig?: {
+  //   fields: FormEngineParameterModelV3[]; // Used in "fields-group" dataType.
+  //   addNewLabel?: string;
+  // };
 
-  fileUploadConfig?: {
-    httpUploadUrl: string;
-    httpUploadBody?: Record<string, {}>;
-    acceptedFiles?: FileTypes[];
-    maxFileSize?: number; // In Mb.
-    previousUploadedFiles?: { id: string; name: string }[];
-  };
+  // fileUploadConfig?: {
+  //   httpUploadUrl: string;
+  //   httpUploadBody?: Record<string, {}>;
+  //   acceptedFiles?: FileTypes[];
+  //   maxFileSize?: number; // In Mb.
+  //   previousUploadedFiles?: { id: string; name: string }[];
+  // };
 
-  selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
+  // selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
 
   constructor(data: FormEngineParameterModelV3) {
     this.id = data.id;
@@ -231,26 +229,28 @@ export class FormEngineParameterModelV3 {
     this.description = data.description;
     this.placeholder = data.placeholder;
     this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
-    this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
+    // this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.cssOverride = data.cssOverride;
+    this.addQuestion = data.addQuestion;
+    this.addNewLabel = data.addNewLabel;
 
     this.lengthLimit = data.lengthLimit;
-    this.additional = data.additional;
+    // this.additional = data.additional;
 
-    this.groupedItems = data.groupedItems;
+    // this.groupedItems = data.groupedItems;
     this.items = data.items;
 
-    this.selectItems = data.selectItems;
+    // this.selectItems = data.selectItems;
 
-    if (data.fieldsGroupConfig) {
-      this.fieldsGroupConfig = {
-        fields: (data.fieldsGroupConfig.fields || []).map(f => new FormEngineParameterModelV3(f)),
-        addNewLabel: data.fieldsGroupConfig.addNewLabel
-      };
-    }
+    // if (data.fieldsGroupConfig) {
+    //   this.fieldsGroupConfig = {
+    //     fields: (data.fieldsGroupConfig.fields || []).map(f => new FormEngineParameterModelV3(f)),
+    //     addNewLabel: data.fieldsGroupConfig.addNewLabel
+    //   };
+    // }
 
-    this.fileUploadConfig = data.fileUploadConfig;
+    // this.fileUploadConfig = data.fileUploadConfig;
   }
 }

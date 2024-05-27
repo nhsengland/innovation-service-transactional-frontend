@@ -12,7 +12,7 @@ import { UtilsHelper } from '@modules/core/helpers/utils.helper';
 
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 
-import { FormEngineParameterModel, FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
+import { FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
 
 @Component({
   selector: 'theme-form-input-autocomplete-array-v3',
@@ -27,9 +27,9 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModelV3['items'] = [];
   @Input() pageUniqueField = true;
 
-  searchableItems: { value: string; label: string; isVisible: boolean }[] = [];
-  chosenItems: { value: string; label: string }[] = [];
-  filteredItems$: Observable<{ value: string; label: string }[]> = of([]);
+  searchableItems: { id: string; label: string; isVisible: boolean }[] = [];
+  chosenItems: { id: string; label: string }[] = [];
+  filteredItems$: Observable<{ id: string; label: string }[]> = of([]);
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
@@ -38,6 +38,7 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
   get parentFieldControl(): AbstractControl | null {
     return this.injector.get(ControlContainer).control;
   }
+
   get fieldArrayControl(): FormArray {
     return this.parentFieldControl?.get(this.arrayName) as FormArray;
   }
@@ -49,7 +50,7 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
     private cdr: ChangeDetectorRef
   ) {}
 
-  private _filter(value: null | string): { value: string; label: string }[] {
+  private _filter(value: null | string): { id: string; label: string }[] {
     value = value ?? '';
 
     if (value.length < 2) {
@@ -57,28 +58,26 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
     }
 
     const filteredValues = UtilsHelper.arrayFullTextSearch(
-      this.searchableItems.filter(item => item.isVisible).map(i => i.value),
+      this.searchableItems.filter(item => item.isVisible).map(i => i.id),
       value
     );
-
-    // return (this.items ?? []).filter(i => filteredValues.includes(i.label ?? ''));
-    return [];
+    return (this.items ?? [])
+      .filter(i => filteredValues.includes(i.id ?? ''))
+      .map(item => ({ id: item.id!, label: item.label! }));
   }
 
   ngOnInit(): void {
-    console.log('country items:');
-    console.log(this.items);
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
     this.searchableItems = (this.items || []).map(item => ({
-      value: item.id ?? '',
+      id: item.id ?? '',
       label: item.label ?? '',
       isVisible: !this.fieldArrayControl.value.includes(item.id)
     }));
 
     this.chosenItems = (this.fieldArrayControl.value as string[]).map(value => ({
-      value,
-      label: this.searchableItems.find(item => item.value === value)?.label || ''
+      id: value,
+      label: this.searchableItems.find(item => item.id === value)?.label || ''
     }));
 
     this.filteredItems$ = this.searchFieldControl.valueChanges.pipe(map(value => this._filter(value)));
@@ -97,9 +96,9 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
     const searchableItemsItem = this.searchableItems.find(item => item.label === eventValue);
 
     if (searchableItemsItem) {
-      this.fieldArrayControl.push(new FormControl(searchableItemsItem.value));
+      this.fieldArrayControl.push(new FormControl(searchableItemsItem.id));
       searchableItemsItem.isVisible = false;
-      this.chosenItems.push({ value: searchableItemsItem.value, label: searchableItemsItem.label });
+      this.chosenItems.push({ id: searchableItemsItem.id, label: searchableItemsItem.label });
       this.searchFieldControl.setValue('');
     }
 
@@ -113,12 +112,12 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
       this.fieldArrayControl.removeAt(fieldControlIndex);
     }
     // Handle chosen items array.
-    const chosenItemsIndex = this.chosenItems.findIndex(item => item.value === value);
+    const chosenItemsIndex = this.chosenItems.findIndex(item => item.id === value);
     if (chosenItemsIndex > -1) {
       this.chosenItems.splice(chosenItemsIndex, 1);
     }
     // Handle searchable items array.
-    const searchableItemsItem = this.searchableItems.find(item => item.value === value);
+    const searchableItemsItem = this.searchableItems.find(item => item.id === value);
     if (searchableItemsItem) {
       searchableItemsItem.isVisible = true;
     } else {

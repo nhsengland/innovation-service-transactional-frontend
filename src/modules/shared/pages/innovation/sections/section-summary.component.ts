@@ -9,11 +9,12 @@ import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovati
 import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 import { SectionInfoType } from './section-info.component';
+import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
-  summaryList: WizardSummaryType[];
-  evidencesList: WizardSummaryType[];
+  summaryList: WizardSummaryV3Type[];
+  evidencesList: WizardSummaryV3Type[];
   documentsList: InnovationDocumentsListOutDTO['data'];
 };
 
@@ -39,8 +40,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       label: string;
     };
   };
-  summaryList: WizardSummaryType[] = [];
-  evidencesList: WizardSummaryType[] = [];
+  summaryList: WizardSummaryV3Type[] = [];
+  evidencesList: WizardSummaryV3Type[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   allSteps: SectionStepsList = [];
@@ -79,7 +80,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   }
 
   ngOnInit(): void {
-    console.log(this.sectionData);
     this.isSectionDetailsPage = this.activatedRoute.snapshot.params.sectionId;
 
     this.sectionInfo = this.sectionData.sectionInfo;

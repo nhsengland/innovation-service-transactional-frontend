@@ -46,15 +46,16 @@
                   <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a
+                    <!-- <a
                       href="javascript:void(0);"
-                      routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
+                      routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.stepId }}"
                       [queryParams]="!item.value && !item.isNotMandatory ? {} : { isChangeMode: true }"
-                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
-                    >
+                      *ngIf="isInnovatorType"
+                    > -->
+                    <a href="javascript:void(0);" routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.stepId }}" *ngIf="isInnovatorType">
                       Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
                     </a>
                   </dd>

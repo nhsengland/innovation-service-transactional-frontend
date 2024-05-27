@@ -1,20 +1,28 @@
+import { transpile } from 'typescript';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import {
-  getSectionQuestionsIdList,
-  getSectionsIdsListV3
+  getInnovationRecordSchemaSectionQuestionsIdsList,
+  getIRSchemaSectionsIdsListV3,
+  getInnovationRecordSchemaQuestion,
+  translateSectionIdEnums
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
+import {
+  InnovationRecordQuestionStepType,
+  InnovationRecordSectionAnswersType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { Parser } from 'expr-eval';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -49,12 +57,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    // this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup =>
-    //   sectionsGroup.sections.map(section => section.id)
-    // );
-
-    this.sectionsIdsList = getSectionsIdsListV3();
-    this.sectionQuestionsIdList = getSectionQuestionsIdList(this.sectionId);
+    this.sectionsIdsList = getIRSchemaSectionsIdsListV3();
+    this.sectionQuestionsIdList = getInnovationRecordSchemaSectionQuestionsIdsList(this.sectionId);
 
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
 
@@ -63,15 +67,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
-  private getNextSectionId(): string | null {
+  private getNextSectionId(): string {
     const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionId);
-    return this.sectionsIdsList[currentSectionIndex + 1] || null;
+    return this.sectionsIdsList[currentSectionIndex + 1] ?? '';
   }
 
   ngOnInit(): void {
-    console.log('steps');
-    console.log(this.wizard.steps);
-
     const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
@@ -81,19 +82,25 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       : '';
 
     combineLatest([
-      this.activatedRoute.queryParams
-      // this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
+      this.activatedRoute.queryParams,
+      this.stores.innovation.getSectionInfo$(this.innovation.id, translateSectionIdEnums(this.sectionId))
     ]).subscribe({
-      next: ([
-        queryParams
-        // ,sectionInfoResponse
-      ]) => {
+      next: ([queryParams, sectionInfoResponse]) => {
+        const irv3: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
+          id: sectionInfoResponse.id,
+          document: {
+            [sectionInfoResponse.section]: sectionInfoResponse.data
+          }
+        });
+
+        console.log('irv3');
+        console.log(irv3);
+
         // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId === 'summary') {
           this.router.navigateByUrl(`${this.baseUrl}`);
         } else {
-          // this.wizard.setAnswers({});
-          this.wizard.setAnswers(dummy_innovation_data_V3_202405);
+          this.wizard.setAnswers(irv3);
 
           // queryParams.isChangeMode
           //   ? // enables changing mode and redirects to step function
@@ -127,14 +134,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     } else {
       this.wizard.gotoStep(stepId);
       this.redirectTo(`${this.baseUrl}/edit/${stepId}`);
-      this.setPageTitle('this.wizard.currentStepTitle()', { showPage: false });
-
-      console.log('this.wizard.getAnswers()');
-      console.log(this.wizard.getAnswers());
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     }
 
-    console.log('currentStepParameters');
-    console.log(this.wizard.currentStepParameters());
     this.setPageStatus('READY');
   }
 
@@ -143,22 +145,29 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
+    console.log('formData');
+    console.log(formData);
 
     //
-
-    const currentStepIndex = this.sectionQuestionsIdList.indexOf(this.wizard.currentStepId);
 
     if (action === 'next' && !formData?.valid) {
       // Apply validation only when moving forward.
       return;
     }
-    console.log('formData');
-    console.log(formData);
+
+    let currentStepIndex = this.sectionQuestionsIdList.indexOf(this.wizard.currentStepId);
 
     if (action === 'previous') {
-      const previousStepId = this.sectionQuestionsIdList[currentStepIndex - 1];
-
       if (currentStepIndex !== 0 && this.wizard.currentStepId !== 'summary') {
+        currentStepIndex--;
+
+        let previousStepId = this.sectionQuestionsIdList[currentStepIndex];
+
+        while (!this.wizard.checkIfStepConditionIsMet(getInnovationRecordSchemaQuestion(previousStepId).condition)) {
+          currentStepIndex--;
+          previousStepId = this.sectionQuestionsIdList[currentStepIndex];
+        }
+
         this.onGoToStep(previousStepId);
       } else {
         this.router.navigateByUrl(`${this.baseUrl}`);
@@ -168,9 +177,19 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (action === 'next') {
       if (currentStepIndex + 1 !== this.sectionQuestionsIdList.length) {
         this.wizard.addAnswers(formData.data);
-        const nextStepId = this.sectionQuestionsIdList[currentStepIndex + 1];
+
+        currentStepIndex++;
+
+        let nextStepId = this.sectionQuestionsIdList[currentStepIndex];
+
+        while (!this.wizard.checkIfStepConditionIsMet(getInnovationRecordSchemaQuestion(nextStepId).condition)) {
+          currentStepIndex++;
+          nextStepId = this.sectionQuestionsIdList[currentStepIndex];
+        }
+
         this.onGoToStep(nextStepId);
       } else {
+        this.wizard.parseSummary(this.sectionId);
         this.wizard.showSummary = true;
         this.onGoToStep('summary');
       }

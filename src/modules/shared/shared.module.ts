@@ -115,6 +115,7 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
 import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 @NgModule({
   imports: [
@@ -212,6 +213,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
+    IrV3TranslatePipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -248,6 +250,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
+    IrV3TranslatePipe,
     JoinArrayPipe
   ]
 })

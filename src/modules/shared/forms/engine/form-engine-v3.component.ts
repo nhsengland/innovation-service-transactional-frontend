@@ -90,8 +90,6 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
     this.form = new FormGroup({}); // This will ensure that previous information is cleared!
 
     this.form = FormEngineHelperV3.buildForm(this.parameters, this.values, this.formValidations);
-    console.log('this.form');
-    console.log(this.form);
 
     this.onlyOneField = this.parameters.length === 1;
 

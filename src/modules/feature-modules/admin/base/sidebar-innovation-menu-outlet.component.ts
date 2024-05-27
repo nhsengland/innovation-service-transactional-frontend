@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { getInnovationRecordSectionsTreeV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 import { Subscription, filter } from 'rxjs';
 
@@ -48,7 +49,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('admin', innovation.id);
+      this.sectionsSidebar = getInnovationRecordSectionsTreeV3('admin', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/admin/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },

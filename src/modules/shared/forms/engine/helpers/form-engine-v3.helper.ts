@@ -12,6 +12,7 @@ import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
 import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { input } from '@angular/core';
 
 export class FormEngineHelperV3 {
   static buildForm(
@@ -19,7 +20,27 @@ export class FormEngineHelperV3 {
     values: { [key: string]: any } = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
-    parameters = parameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
+    const inputParameters = parameters;
+
+    parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
+
+    // TODO - add FormEngineParameterModelV3 for `conditonal` and `addQuestion`
+    inputParameters.forEach(p => {
+      if (p.addQuestion) {
+        parameters.push(new FormEngineParameterModelV3(p.addQuestion));
+      }
+    });
+
+    inputParameters.forEach(p =>
+      p.items?.forEach(i => {
+        if (i.conditional) {
+          parameters.push(new FormEngineParameterModelV3(i.conditional));
+        }
+      })
+    );
+
+    console.log('parameters');
+    console.log(parameters);
 
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
 
@@ -28,29 +49,31 @@ export class FormEngineHelperV3 {
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
+      console.log('conditionalFields: ', parameter);
+      console.log(conditionalFields);
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
         // Creates an FormArray and pushes defaultValues into it.
         case 'autocomplete-array':
         case 'checkbox-array':
-        case 'grouped-checkbox-array':
+          // case 'grouped-checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           ((parameterValue as string[]) || []).forEach(v => {
             (form.get(parameter.id) as FormArray).push(new FormControl(v));
           });
           break;
 
-        case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
-          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
-          parameter.items?.forEach(item => {
-            const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.id ?? ''] : false;
-            (form.get(parameter.id) as FormGroup).addControl(
-              item.label ?? '',
-              FormEngineHelperV3.createParameterFormControl(parameter, itemValue)
-            );
-          });
-          break;
+        // case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
+        //   form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
+        //   parameter.items?.forEach(item => {
+        //     const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.id ?? ''] : false;
+        //     (form.get(parameter.id) as FormGroup).addControl(
+        //       item.label ?? '',
+        //       FormEngineHelperV3.createParameterFormControl(parameter, itemValue)
+        //     );
+        //   });
+        //   break;
 
         case 'fields-group':
           form.addControl(parameter.id, new FormArray([]));
@@ -78,28 +101,28 @@ export class FormEngineHelperV3 {
           );
           break;
 
-        case 'file-upload': // Creates a FormGroup and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
-          Object.entries(parameterValue ?? {}).forEach(([key, value]) => {
-            (form.get(parameter.id) as FormGroup).addControl(key, new FormControl(value));
-          });
-          break;
+        // case 'file-upload': // Creates a FormGroup and pushes defaultValues into it.
+        //   form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
+        //   Object.entries(parameterValue ?? {}).forEach(([key, value]) => {
+        //     (form.get(parameter.id) as FormGroup).addControl(key, new FormControl(value));
+        //   });
+        //   break;
 
-        case 'select-component':
-          form.addControl(
-            parameter.id,
-            FormEngineHelperV3.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' })
-          );
-          break;
+        // case 'select-component':
+        //   form.addControl(
+        //     parameter.id,
+        //     FormEngineHelperV3.createParameterFormControl(parameter, parameterValue, { updateOn: 'change' })
+        //   );
+        //   break;
 
-        case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
-          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
-            (form.get(parameter.id) as FormArray).push(
-              new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
-            );
-          });
-          break;
+        // case 'file-upload-array': // Creates an FormArray and pushes defaultValues into it.
+        //   form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
+        //   ((parameterValue as { id: string; name: string; url: string }[]) || []).forEach(v => {
+        //     (form.get(parameter.id) as FormArray).push(
+        //       new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
+        //     );
+        //   });
+        //   break;
 
         default: // Creates a standard FormControl.
           form.addControl(
@@ -113,10 +136,14 @@ export class FormEngineHelperV3 {
       conditionalFields.forEach(item => {
         if (item.conditional) {
           const itemValue = values[item.conditional.id] || null;
+          console.log('conditional item');
+          console.log(item);
           form.addControl(
             item.conditional.id,
             FormEngineHelperV3.createParameterFormControl(item.conditional, itemValue)
           );
+          console.log('form.controls');
+          console.log(form.controls);
         }
       });
 
@@ -142,19 +169,24 @@ export class FormEngineHelperV3 {
   static addFieldGroupRow(parameter: FormEngineParameterModelV3, value?: { [key: string]: any }): FormGroup {
     const formGroup = new FormGroup({});
 
-    parameter.fieldsGroupConfig?.fields.forEach(field => {
-      const newField = FormEngineHelperV3.createParameterFormControl(field, (value || {})[field.id]);
-      newField.setValidators(FormEngineHelperV3.getParameterValidators(field));
+    // parameter.addQuestion.fields.forEach(field => {
+    if (parameter.addQuestion) {
+      const newField = FormEngineHelperV3.createParameterFormControl(
+        parameter.addQuestion,
+        (value || {})[parameter.addQuestion.id]
+      );
+      newField.setValidators(FormEngineHelperV3.getParameterValidators(parameter.addQuestion));
       newField.updateValueAndValidity();
-      formGroup.addControl(field.id, newField);
-    });
+      formGroup.addControl(parameter.addQuestion.id, newField);
+    }
+    // });
 
     return formGroup;
   }
 
-  static isAnyVisibleField(parameters: FormEngineParameterModelV3[]): boolean {
-    return parameters.some(parameter => parameter.isVisible);
-  }
+  // static isAnyVisibleField(parameters: FormEngineParameterModelV3[]): boolean {
+  //   return parameters.some(parameter => parameter.isVisible);
+  // }
 
   static getFormValues(
     form: FormGroup,
@@ -299,7 +331,12 @@ export class FormEngineHelperV3 {
     options?: AbstractControlOptions
   ): FormControl {
     return new FormControl(
-      { value: typeof value !== 'boolean' && !value && value !== 0 ? null : value, disabled: !parameter.isEditable },
+      {
+        value: typeof value !== 'boolean' && !value && value !== 0 ? null : value,
+        disabled:
+          // !parameter.isEditable
+          false
+      },
       options
     );
   }
@@ -320,12 +357,12 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'fields-group':
-        case 'file-upload-array':
+          // case 'file-upload-array':
           validators.push(CustomValidators.requiredCheckboxArray(validation));
           break;
-        case 'checkbox-group':
-          validators.push(CustomValidators.requiredCheckboxGroup(validation));
-          break;
+        // case 'checkbox-group':
+        //   validators.push(CustomValidators.requiredCheckboxGroup(validation));
+        //   break;
         default:
           validators.push(CustomValidators.required(validation));
           break;
@@ -333,13 +370,9 @@ export class FormEngineHelperV3 {
     }
 
     if (parameter.validations?.pattern) {
-      validation =
-        typeof parameter.validations.pattern === 'string'
-          ? [parameter.validations.pattern, null]
-          : parameter.validations.pattern;
-      if (validation[0]) {
-        validators.push(CustomValidators.pattern(validation[0] as string, validation[1]));
-      }
+      validation = parameter.validations.pattern;
+
+      validators.push(CustomValidators.pattern(validation[0] as string, validation[1]));
     }
 
     if (parameter.validations?.minLength) {
@@ -363,7 +396,7 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'fields-group':
-        case 'file-upload-array':
+          // case 'file-upload-array':
           validators.push(CustomValidators.minCheckboxArray(validation.length, validation.errorMessage));
           break;
         default:
@@ -379,7 +412,7 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
         case 'fields-group':
-        case 'file-upload-array':
+          // case 'file-upload-array':
           validators.push(CustomValidators.maxCheckboxArray(validation.length, validation.errorMessage));
           break;
         default:
@@ -418,9 +451,9 @@ export class FormEngineHelperV3 {
     }
 
     // Specific types field validations.
-    if (parameter.dataType === 'date') {
-      validators.push(CustomValidators.parsedDateStringValidator());
-    }
+    // if (parameter.dataType === 'date') {
+    //   validators.push(CustomValidators.parsedDateStringValidator());
+    // }
 
     return validators;
   }

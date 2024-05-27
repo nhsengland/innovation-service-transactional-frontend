@@ -118,6 +118,8 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
     this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
 
     this.fieldChangeSubscription.add(this.fieldControl.statusChanges.subscribe(i => this.onStatusChange()));
+    console.log('input this.fieldControl');
+    console.log(this.fieldControl);
   }
 
   ngDoCheck(): void {

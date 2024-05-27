@@ -1,21 +1,16 @@
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
-import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import { InnovationSectionStepLabels } from '../ir-versions.types';
 import { SectionsSummaryModel } from '../../innovation.models';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { InnovationSectionEnum } from '../../innovation.enums';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import {
-  InnovationRecordSubSectionType,
-  InnovationSectionInfoDTOV3Type,
-  SectionsSummaryModelV3Type,
-  dummy_202405_sections
-} from './ir-v3-types';
+import { InnovationRecordQuestionStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
 
-export function getSectionQuestionsLabels(sectionId: string) {
+export function getInnovationRecordSchemaSectionQuestionsLabels(sectionId: string) {
   const toReturn = new Map();
 
-  getSubSectionsListV3()
+  dummy_schema_V3_202405.sections
+    .flatMap(section => section.subSections)
     .find(s => s.id === sectionId)
     ?.questions.forEach(sub => {
       toReturn.set(sub.id, sub.label);
@@ -24,20 +19,78 @@ export function getSectionQuestionsLabels(sectionId: string) {
   return toReturn;
 }
 
-export function getSectionsIdsListV3(): string[] {
+export function getIRSchemaSectionsIdsListV3(): string[] {
   return dummy_schema_V3_202405.sections.flatMap(section => section.subSections.flatMap(s => s.id));
 }
 
-export function getSectionQuestionsIdList(sectionId: string): string[] {
+export function getInnovationRecordSchemaSectionQuestionsIdsList(sectionId: string): string[] {
   return (
-    getSubSectionsListV3()
+    dummy_schema_V3_202405.sections
+      .flatMap(section => section.subSections)
       .find(s => s.id === sectionId)
       ?.questions.map(q => q.id) ?? []
   );
 }
 
-export function getSubSectionsListV3(): InnovationRecordSubSectionType[] {
-  return dummy_schema_V3_202405.sections.flatMap(section => section.subSections);
+export function getInnovationRecordSectionsTreeV3(
+  type: string,
+  innovationId: string
+): {
+  label: string;
+  url: string;
+  children: { label: string; id: string; url: string }[];
+}[] {
+  return dummy_schema_V3_202405.sections.map((section, i) => ({
+    label: `${i + 1}. ${section.title}`,
+    url: `/${type}/innovations/${innovationId}/record/sections/${section.subSections[0].id}`,
+    children: section.subSections.map((sub, k) => ({
+      label: `${i + 1}.${k + 1} ${sub.title}`,
+      id: `${sub.id}`,
+      url: `/${type}/innovations/${innovationId}/record/sections/${sub.id}`
+    }))
+  }));
+}
+
+export function getInnovationRecordSchemaQuestion(stepId: string): InnovationRecordQuestionStepType {
+  return (
+    dummy_schema_V3_202405.sections
+      .flatMap(section => section.subSections.flatMap(s => s.questions))
+      .find(q => q.id === stepId) ?? { id: '', dataType: 'text', label: '' }
+  );
+}
+
+// export function getInnovationRecordStepConditionsMap(): Map<string, string | undefined> {
+//   const flattenedQuestions = dummy_schema_V3_202405.sections.flatMap(s => s.subSections.flatMap(sub => sub.questions));
+
+//   console.log(flattenedQuestions);
+//   return new Map(flattenedQuestions.map(q => [q.id, q.condition]));
+// }
+// ``;
+
+export function getInnovationRecordSchemaTranslationsMap(): {
+  sections: Map<string, string>;
+  subsections: Map<string, string>;
+  questions: Map<string, string>;
+  items: Map<string, string>;
+} {
+  const flattenedSections = dummy_schema_V3_202405.sections.flatMap(s => ({ id: s.id, label: s.title }));
+
+  const flattenedSubSections = dummy_schema_V3_202405.sections.flatMap(s =>
+    s.subSections.flatMap(sub => ({ id: sub.id, label: sub.title }))
+  );
+  const flattenedQuestions = dummy_schema_V3_202405.sections.flatMap(s =>
+    s.subSections.flatMap(sub => sub.questions).flatMap(q => ({ id: q.id, label: q.label }))
+  );
+  const flattenedItems = dummy_schema_V3_202405.sections
+    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.items))
+    .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
+
+  return {
+    sections: new Map(flattenedSections.map(s => [s.id, s.label])),
+    subsections: new Map(flattenedSubSections.map(sub => [sub.id, sub.label])),
+    questions: new Map(flattenedQuestions.map(q => [q.id, q.label])),
+    items: new Map(flattenedItems.map(i => [i.id, i.label]))
+  };
 }
 
 export function getSectionsSummary(currentSummary: SectionsSummaryModel): SectionsSummaryModelV3Type {
@@ -71,77 +124,10 @@ export function getSectionsSummary(currentSummary: SectionsSummaryModel): Sectio
   }));
 }
 
-export function getSectionInfoV3(sectionId: string): InnovationSectionInfoDTOV3Type {
-  return {
-    id: '81C1E756-515C-EE11-9937-000D3A7F2739"',
-    section: sectionId,
-    status: 'SUBMITTED',
-    updatedAt: '2024-03-22T10:31:47.981Z',
-    data: {
-      name: 'Amazing Innovation',
-      description: 'Just a great innovation... with updated descriptionas',
-      countryName: 'Argentina',
-      categories: ['AI', 'PPE', 'OTHER'],
-      otherCategoryDescription: 'Random category',
-      mainCategory: 'OTHER',
-      careSettings: ['OTHER', 'PHARMACY', 'PRIMARY_CARE'],
-      otherCareSetting: 'custom care setting',
-      mainPurpose: 'MANAGE_CONDITION',
-      supportDescription: 'asd',
-      currentlyReceivingSupport: 'asdj',
-      involvedAACProgrammes: [
-        'Artificial Intelligence in Health and Care Award',
-        'Early Access to Medicines Scheme',
-        'Clinical Entrepreneur Programme',
-        'Innovation for Healthcare Inequalities Programme'
-      ]
-    },
-    submittedAt: '2024-02-22T10:31:47.981Z',
-    submittedBy: {
-      name: 'Pablo',
-      isOwner: true
-    },
-    tasksIds: []
-  };
-}
-
-export function getInnovationRecordSectionsList(): {
-  id: string;
-  title: string;
-  sections: { id: string; title: string; wizard: WizardEngineModel }[];
-}[] {
-  return dummy_schema_V3_202405.sections.map(section => ({
-    id: section.id,
-    title: section.title,
-    sections: section.subSections.map(subsection => ({
-      id: subsection.id,
-      title: subsection.title,
-      wizard: new WizardEngineModel({
-        steps: subsection.questions.map(
-          question =>
-            new FormEngineModel({
-              parameters: [
-                {
-                  id: question.id,
-                  dataType: question.dataType,
-                  label: question.label,
-                  description: question.description,
-                  ...(question.lengthLimit && { lengthLimit: question.lengthLimit }),
-                  ...(question.validations && { validations: {} })
-                }
-              ]
-            })
-        )
-      })
-    }))
-  }));
-}
-
 export function getInnovationRecordSectionV3(sectionId: string): {
   id: string;
   title: string;
   wizard: WizardIRV3EngineModel;
-  allStepsList?: InnovationSectionStepLabels;
   evidences?: WizardIRV3EngineModel;
 } {
   const subsection = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
@@ -161,7 +147,11 @@ export function getInnovationRecordSectionV3(sectionId: string): {
                 description: question.description,
                 ...(question.lengthLimit && { lengthLimit: question.lengthLimit }),
                 ...(question.validations && { validations: question.validations }),
-                ...(question.items && { items: question.items })
+                ...(question.items && { items: question.items }),
+                ...(question.addNewLabel && { addNewLabel: question.addNewLabel }),
+                ...(question.addQuestion && { addQuestion: question.addQuestion }),
+                ...(question.field && { field: question.field }),
+                ...(question.condition && { condition: question.condition })
               }
             ]
           })
@@ -173,11 +163,13 @@ export function getInnovationRecordSectionV3(sectionId: string): {
 export function getInnovationRecordSectionIdentificationV3(
   sectionId: string
 ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
-  const section_group = dummy_schema_V3_202405.sections.find(s => s.subSections.find(sub => sub.id === sectionId));
-  const section = section_group?.subSections.find(sub => sub.id === sectionId)?.title ?? '';
+  const section_group =
+    dummy_schema_V3_202405.sections.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
+  const section =
+    dummy_schema_V3_202405.sections[section_group].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
   return {
-    group: { number: 1, title: section_group?.title ?? '' },
-    section: { number: 1, title: section }
+    group: { number: section_group + 1, title: dummy_schema_V3_202405.sections[section_group].title },
+    section: { number: section + 1, title: dummy_schema_V3_202405.sections[section_group].subSections[section].title }
   };
 }
 
@@ -246,9 +238,4 @@ export function translateSectionIdEnums(newId: string): string {
     default:
       return '';
   }
-}
-
-export function runSectionSummaryParsingV3(): WizardSummaryType[] {
-  const summary = {};
-  return [{ label: 'asd', value: 'sadasd' }];
 }

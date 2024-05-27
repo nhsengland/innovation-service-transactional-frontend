@@ -6,6 +6,7 @@ import { filter } from 'rxjs/operators';
 import { ContextStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { ViewportScroller } from '@angular/common';
+import { getInnovationRecordSectionsTreeV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -52,7 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('assessment', innovation.id);
+      this.sectionsSidebar = getInnovationRecordSectionsTreeV3('assessment', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },

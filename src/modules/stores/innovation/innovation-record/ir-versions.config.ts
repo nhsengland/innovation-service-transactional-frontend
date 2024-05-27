@@ -14,7 +14,6 @@ import {
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
-import { getInnovationRecordSectionsList } from './202405/ir-v3.helpers';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -48,10 +47,6 @@ export function getInnovationRecordConfig(version?: string): InnovationSectionsL
     default:
       return SECTIONS_202304;
   }
-}
-
-export function getInnovationRecordConfigV3() {
-  return getInnovationRecordSectionsList();
 }
 
 export function getAllSectionsSummary(

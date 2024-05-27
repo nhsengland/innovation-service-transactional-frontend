@@ -24,9 +24,9 @@ import {
 } from './innovation.models';
 import {
   getInnovationRecordSectionV3,
-  getInnovationRecordSectionsList
+  
 } from './innovation-record/202405/ir-v3.helpers';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {

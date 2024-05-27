@@ -24,7 +24,7 @@
       <div *ngFor="let item of chosenItems" class="nhsuk-summary-list__row">
         <dt class="nhsuk-summary-list__value">{{ item.label }}</dt>
         <dd class="nhsuk-summary-list__actions">
-          <a href="javascript:void(0)" (click)="onRemoveItem(item.value)">
+          <a href="javascript:void(0)" (click)="onRemoveItem(item.id)">
             Delete <span class="nhsuk-u-visually-hidden"> {{ item.label }} </span></a
           >
         </dd>

@@ -30,38 +30,12 @@ export type InnovationRecordQuestionStepType = {
     validations: InnovationRecordStepValidationsType;
   };
   addNewLabel?: string;
-  addQuestion?: {
-    id: string;
-    dataType: 'textarea';
-    label: string;
-    description: string;
-    validations: {
-      isRequired: 'A description is required';
-    };
-    lengthLimit: TextareaLengthLimitType;
-  };
+  addQuestion?: InnovationRecordQuestionStepType;
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
-  // | Array<
-  //     | {
-  //         id: string;
-  //         label: string;
-  //         group?: string;
-  //         conditional?: {
-  //           id: string;
-  //           dataType: InnovationRecordFormComponentType;
-  //           label: string;
-  //           validations: InnovationRecordStepValidationsType;
-  //         };
-  //         exclusive?: boolean;
-  //       }
-  //     | { type: string }
-  //   >
-  // | string
-  // | { questionAnswers: string };
-  // | any;
-  condition?: string | boolean;
+  condition?: string;
+  cssOverride?: string;
 };
 
 export type InnovationRecordFormComponentType =

@@ -20,12 +20,17 @@ import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovati
 import {
   getInnovationRecordSectionIdentificationV3,
   getInnovationRecordSectionV3,
-  getSectionInfoV3,
-  runSectionSummaryParsingV3,
   translateSectionIdEnums
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import { InnovationSectionInfoDTOV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import {
+  InnovationRecordSectionAnswersType,
+  InnovationSectionInfoDTOV3Type
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 
 export type SectionInfoType = {
   id: string;
@@ -57,8 +62,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   sectionSummaryData: {
     sectionInfo: SectionInfoType;
-    summaryList: WizardSummaryType[];
-    evidencesList: WizardSummaryType[];
+    summaryList: WizardSummaryV3Type[];
+    evidencesList: WizardSummaryV3Type[];
     documentsList: InnovationDocumentsListOutDTO['data'];
   };
 
@@ -148,11 +153,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     const section = getInnovationRecordSectionV3(this.sectionId);
+    // const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
     this.sectionSummaryData.sectionInfo.id = section.id;
     this.sectionSummaryData.sectionInfo.title = section.title;
     this.sectionSummaryData.sectionInfo.wizard = section.wizard;
-    this.sectionSummaryData.sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
     // Status not created or archived as created or it's a section with files.
     this.shouldShowDocuments =
@@ -179,29 +184,33 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             }
           })
     ]).subscribe(([sectionInfo, documents]) => {
-      const sectionInfoV3: InnovationSectionInfoDTOV3Type = getSectionInfoV3(this.sectionSummaryData.sectionInfo.id);
       this.sectionSummaryData.sectionInfo.status = {
-        id: sectionInfoV3.status,
-        label: INNOVATION_SECTION_STATUS[sectionInfoV3.status]?.label || ''
+        id: sectionInfo.status,
+        label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || ''
       };
       this.sectionSummaryData.sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(
         this.sectionSummaryData.sectionInfo.status.id
       );
 
-      this.sectionSummaryData.sectionInfo.date = sectionInfoV3.submittedAt;
-      this.sectionSummaryData.sectionInfo.submittedBy = sectionInfoV3.submittedBy;
-      this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfoV3.tasksIds ? sectionInfoV3.tasksIds.length : 0;
+      this.sectionSummaryData.sectionInfo.date = sectionInfo.submittedAt;
+      this.sectionSummaryData.sectionInfo.submittedBy = sectionInfo.submittedBy;
+      this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
       // Special business rule around section 2.2.
       this.sectionSummaryData.sectionInfo.hasEvidences = !!(
         section.evidences &&
-        sectionInfoV3.data.hasEvidence &&
-        sectionInfoV3.data.hasEvidence === 'YES'
+        sectionInfo.data.hasEvidence &&
+        sectionInfo.data.hasEvidence === 'YES'
       );
 
-      // this.sectionSummaryData.sectionInfo.wizard
-      //   .setAnswers(this.sectionSummaryData.sectionInfo.wizard.runInboundParsing(sectionInfoV3.data))
-      //   .runRules();
+      const innovationV3Data: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
+        id: sectionInfo.id,
+        document: {
+          [sectionInfo.section]: sectionInfo.data
+        }
+      });
+
+      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data);
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
@@ -219,7 +228,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       // const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
 
-      const data = runSectionSummaryParsingV3();
+      const data = this.sectionSummaryData.sectionInfo.wizard.parseSummary(this.sectionId);
+      console.log('data');
+      console.log(data);
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 

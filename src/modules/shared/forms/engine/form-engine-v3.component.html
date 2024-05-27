@@ -59,7 +59,7 @@
           ></theme-form-textarea>
         </div>
 
-        <div *ngSwitchCase="'file-upload'">
+        <!-- <div *ngSwitchCase="'file-upload'">
           <theme-form-file-upload
             [groupName]="p.id"
             [label]="p.label"
@@ -77,7 +77,7 @@
             [config]="p.fileUploadConfig"
             [pageUniqueField]="onlyOneField"
           ></theme-form-file-upload-array>
-        </div>
+        </div> -->
 
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
           <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
@@ -92,7 +92,7 @@
               <div class="nhsuk-hint" id="{{ p.id }}-hint" [innerHTML]="p.description"></div>
             </ng-container>
 
-            <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy: trackFieldGroupRowsChanges" class="nhsuk-grid-row">
+            <!-- <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy: trackFieldGroupRowsChanges" class="nhsuk-grid-row">
               <div *ngFor="let f of p.fieldsGroupConfig?.fields" [formGroupName]="i" class="nhsuk-grid-column-full">
                 <ng-container *ngIf="f.isVisible">
                   <div [ngSwitch]="f.dataType">
@@ -106,13 +106,13 @@
                   </div>
                 </ng-container>
               </div>
-            </div>
+            </div> -->
 
-            <a href="javascript:void(0)" (click)="addFieldGroupRow(p)"> {{ p.fieldsGroupConfig?.addNewLabel || "Add new" }} </a>
+            <a href="javascript:void(0)" (click)="addFieldGroupRow(p)"> {{ p.addNewLabel || "Add new" }} </a>
           </fieldset>
         </div>
 
-        <div *ngSwitchCase="'select-component'">
+        <!-- <div *ngSwitchCase="'select-component'">
           <theme-form-select
             [controlName]="p.id"
             [id]="p.id"
@@ -121,7 +121,7 @@
             [pageUniqueField]="onlyOneField"
             [selectItems]="p.selectItems ?? { selectList: [] }"
           />
-        </div>
+        </div> -->
 
         <div *ngSwitchDefault>
           <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>

@@ -22,11 +22,11 @@
                   <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a href="javascript:void(0)" (click)="onChangeStep(item.stepId)">
-                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
                     </a>
                   </dd>
                 </div>

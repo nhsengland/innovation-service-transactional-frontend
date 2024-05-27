@@ -18,7 +18,10 @@ import {
 } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-ir-engine.model';
+import {
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -65,8 +68,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   allSectionsData: {
     [key in InnovationSectionEnum]?: {
       sectionInfo: SectionInfoType;
-      summaryList: WizardSummaryType[];
-      evidencesList: WizardSummaryType[];
+      summaryList: WizardSummaryV3Type[];
+      evidencesList: WizardSummaryV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
     };
   } = {};
@@ -157,7 +160,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
         sectionInfo.wizard = section.wizard;
-        sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
         sectionInfo.status = {
           id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS,
@@ -196,17 +198,19 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        const data = sectionInfo.wizard.runSummaryParsing();
-        summaryList = data.filter(item => !item.evidenceId);
-        evidencesList = data.filter(item => item.evidenceId);
+        // const data = sectionInfo.wizard.runSummaryParsing();
+        // summaryList = data.filter(item => !item.evidenceId);
+        // evidencesList = data.filter(item => item.evidenceId);
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });
 
         this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
-          evidencesList: evidencesList,
+          evidencesList: [],
+          // evidencesList: evidencesList,
           sectionInfo: sectionInfo,
-          summaryList: summaryList,
+          summaryList: [],
+          // summaryList: summaryList,
           documentsList: documentsList
         };
       }
