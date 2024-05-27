@@ -105,20 +105,22 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
   getSearchTermsFound(highlights: Record<string, string[]>) {
     const searchTermsFound: string[] = [];
-
     const regex = /<em>(.*?)<\/em>/g;
+
     // Iterate over each value in the highlights object
-    for (const value of Object.values(highlights)) {
-      const text = value[0].toLowerCase();
-      // Use a regular expression to find all occurrences of text within <em> tags
-      let match;
-      // Loop through matches
-      while ((match = regex.exec(text)) !== null) {
-        // Add the matched text to our result array
-        const foundMatch = match[1].split(/\W/);
-        foundMatch.forEach(match => {
-          searchTermsFound.push(match);
-        });
+    for (const values of Object.values(highlights)) {
+      for (const value of values) {
+        const text = value.toLowerCase();
+        // Use a regular expression to find all occurrences of text within <em> tags
+        let match;
+        // Loop through matches
+        while ((match = regex.exec(text)) !== null) {
+          // Add the matched text to our result array
+          const foundMatch = match[1].split(/\W/);
+          foundMatch.forEach(match => {
+            searchTermsFound.push(match);
+          });
+        }
       }
     }
 
