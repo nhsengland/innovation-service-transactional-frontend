@@ -16,7 +16,7 @@ export class HighlightDirective implements AfterViewInit {
     if (this.searchTerm) {
       const processedSearchTerm = Array.isArray(this.searchTerm)
         ? this.searchTerm
-        : this.searchTerm.split(/\W/).filter(word => word !== '');
+        : this.searchTerm.split(' ').filter(word => word !== ' ');
 
       if (processedSearchTerm?.length) {
         this.highlight(processedSearchTerm);
