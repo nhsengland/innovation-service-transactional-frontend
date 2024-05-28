@@ -3,7 +3,7 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation/innovation.enums';
 
 export type InnovationCardData = {
   id: string;
@@ -84,7 +84,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.keyHealthInequalitiesList = this.getFormattedList(this.innovationCardData.keyHealthInequalities);
     this.involvedAACProgrammesList = this.getFormattedList(this.innovationCardData.involvedAACProgrammes);
 
-    if (this.innovationCardData.highlights) {
+    if (this.innovationCardData.highlights && Object.keys(this.innovationCardData.highlights).length != 0) {
       const searchTermsFoundWithDuplicates = this.getSearchTermsFound(this.innovationCardData.highlights);
       const [firstKey, firstValue] = Object.entries(this.innovationCardData.highlights)[0];
 
@@ -116,7 +116,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
         // Loop through matches
         while ((match = regex.exec(text)) !== null) {
           // Add the matched text to our result array
-          const foundMatch = match[1].split(/\W/);
+          const foundMatch = match[1].split(' ');
           foundMatch.forEach(match => {
             searchTermsFound.push(match);
           });
@@ -163,7 +163,11 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
     if (keyParts[0] === 'document') {
       // If the key starts with document, it has data from IR
-      const sectionId = keyParts[1];
+      let sectionId = keyParts[1];
+      if (keyParts[1] === 'evidences') {
+        // Set
+        sectionId = InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS;
+      }
       const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
       linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
 
