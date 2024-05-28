@@ -2534,7 +2534,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               items: [
                 {
                   id: 'yes',
-                  label: 'Yes'
+                  label: 'A one-off innovation, or the first of its kind'
                 },
                 {
                   id: 'inProgress',

@@ -208,6 +208,7 @@ export class FormEngineParameterModelV3 {
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
+  condition?: string;
   field?: {
     id: string;
     dataType: InnovationRecordFormComponentType;
@@ -244,6 +245,7 @@ export class FormEngineParameterModelV3 {
     this.addQuestion = data.addQuestion;
     this.addNewLabel = data.addNewLabel;
     this.field = data.field;
+    this.condition = data.condition;
 
     this.lengthLimit = data.lengthLimit;
     // this.additional = data.additional;

@@ -210,7 +210,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         }
       });
 
-      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data);
+      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data).runRules(this.sectionId);
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
@@ -227,7 +227,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       }
 
       // const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-
+      this.sectionSummaryData.sectionInfo.wizard.parseSummary(this.sectionId);
       const data = this.sectionSummaryData.sectionInfo.wizard.parseSummary(this.sectionId);
       console.log('data');
       console.log(data);

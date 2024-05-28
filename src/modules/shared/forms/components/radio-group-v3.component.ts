@@ -109,9 +109,6 @@ export class FormRadioGroupV3Component extends ControlValueAccessorComponent imp
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-radios-small' : '';
     this.divCssOverride = this.cssOverride || 'nhsuk-u-padding-top-4';
-
-    console.log('this.fieldControl');
-    console.log(this.fieldControl);
   }
 
   ngDoCheck(): void {

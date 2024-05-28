@@ -9,24 +9,16 @@ import {
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import {
   InnovationRecordFieldGroupAnswerType,
-  InnovationRecordQuestionStepType
+  InnovationRecordQuestionStepType,
+  InnovationRecordSubSectionType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';
 import { StringsHelper } from '@app/base/helpers';
+import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
 
-export type WizardSummaryType = {
-  type?: 'keyValueLink' | 'button';
-  label: string;
-  value?: null | string;
-  editStepNumber?: number;
-  evidenceId?: string;
-  allowHTML?: boolean;
-  isFile?: boolean;
-  isNotMandatory?: boolean;
-};
 export type WizardSummaryV3Type = {
   stepId: string;
   label: string;
@@ -44,12 +36,14 @@ export type StepsParentalRelationsType = {
 };
 
 export class WizardIRV3EngineModel {
+  sectionId: string;
   isChangingMode: boolean = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: string;
+  currentStepIndex: number;
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
   translations: {
@@ -58,19 +52,16 @@ export class WizardIRV3EngineModel {
     questions: Map<string, string>;
     items: Map<string, string>;
   };
-  // runtimeRules: ((steps: FormEngineModelV3[], currentValues: any, currentStep: number | 'summary') => void)[];
-  // inboundParsing?: (data: any) => MappedObjectType;
-  // outboundParsing?: (data: any) => MappedObjectType;
-  // summaryParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
-  // summaryPDFParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
 
   private summary: WizardSummaryV3Type[] = [];
 
   constructor(data: Partial<WizardIRV3EngineModel>) {
+    this.sectionId = data.sectionId ?? '';
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = data.currentStepId ?? '';
+    this.currentStepIndex = data.currentStepIndex ?? 0;
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? false;
     this.translations = getInnovationRecordSchemaTranslationsMap();
@@ -108,17 +99,6 @@ export class WizardIRV3EngineModel {
   // return this.summary;
   //   return [];
   // }
-
-  parseStepItems(stepId: string) {
-    // Fetches and replaces string with items, in edge-cases such as "categories", where the radio-group items are answers from a previous question
-    const stepItems = getInnovationRecordSchemaQuestion(stepId).items?.find(i => i.itemsFromAnswer)?.itemsFromAnswer;
-    if (stepItems !== undefined) {
-      const itemsDependencyAnswer: string[] = this.currentAnswers[stepItems];
-      const updatedItemsList = itemsDependencyAnswer.map(i => ({ id: i, label: this.translations.items.get(i) }));
-
-      this.currentStep().parameters[0].items = updatedItemsList;
-    }
-  }
 
   // isFirstStep(): boolean {
   //   return Number(this.currentStepId) === 1;
@@ -165,14 +145,6 @@ export class WizardIRV3EngineModel {
     return this.formValidations;
   }
 
-  checkIfStepConditionIsMet(condition: string | undefined): boolean {
-    if (condition !== undefined) {
-      return !!Parser.evaluate(condition, { data: this.currentAnswers });
-    } else {
-      return true;
-    }
-  }
-
   // previousStep(): this {
   // if (this.showSummary && this.currentStepId === 'summary') {
   //   this.currentStepId = this.steps.length;
@@ -198,13 +170,7 @@ export class WizardIRV3EngineModel {
     this.visitedSteps.clear();
     this.currentStepId = stepId;
 
-    this.isChangingMode = isChangeMode;
-
-    this.parseStepItems(stepId);
-
-    // if (stepId === 'summary') {
-    //   this.runSummaryParsing();
-    // }
+    // this.isChangingMode = isChangeMode;
 
     // this.visitedSteps.add(this.getCurrentStepObjId());
 
@@ -260,11 +226,10 @@ export class WizardIRV3EngineModel {
   }
 
   addAnswers(data: { [key: string]: any }): this {
-    console.log('previous answers');
-    console.log(this.currentAnswers);
+    console.log('previous answers', this.currentAnswers);
     this.currentAnswers = { ...this.currentAnswers, ...data };
-    console.log('updated answers');
-    console.log(this.currentAnswers);
+    console.log('updated answers', this.currentAnswers);
+
     return this;
   }
 
@@ -273,13 +238,16 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  // setInboundParsedAnswers(data?: MappedObjectType): this {
-  // this.currentAnswers = (this.inboundParsing ? this.inboundParsing(data) : data) ?? {};
-  //   return this;
-  // }
-
   setCurrentStepId(stepId: string) {
     this.currentStepId = stepId;
+  }
+
+  checkIfStepConditionIsMet(condition: string | undefined): boolean {
+    if (condition !== undefined) {
+      return !!Parser.evaluate(condition, { data: this.currentAnswers });
+    } else {
+      return true;
+    }
   }
 
   getSummary(): WizardSummaryV3Type[] {
@@ -287,60 +255,112 @@ export class WizardIRV3EngineModel {
   }
 
   parseSummary(sectionId: string): WizardSummaryV3Type[] {
-    const sectionIdLabels = getInnovationRecordSchemaSectionQuestionsLabels(sectionId);
     this.summary = [];
     console.log('parsing summary');
 
-    for (const entry of sectionIdLabels.keys()) {
-      const condition = getInnovationRecordSchemaQuestion(entry).condition;
-      if (!(condition !== undefined && !this.checkIfStepConditionIsMet(condition))) {
+    // Parse condition step's answers
+    for (const step of this.steps) {
+      const stepId = step.parameters[0].id;
+      const label = this.translations.questions.get(step.parameters[0].id) ?? '';
+
+      // Parse if has `condition` and it's met
+      const condition = step.parameters[0].condition;
+      if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
         this.summary.push({
-          stepId: entry,
-          label: this.translations.questions.get(entry) ?? '',
-          value: this.currentAnswers[entry]
+          stepId: stepId,
+          label: label,
+          value: this.currentAnswers[step.parameters[0].id]
         });
+
+        // TODO Parse FieldGroup
+        // if (typeof this.currentAnswers[step.parameters[0].id] === 'object') {
+        //   this.summary.push({
+        //     stepId: stepId,
+        //     label: label,
+        //     value: Object.values(this.currentAnswers[step.parameters[0].id]).map(s => s)
+        //   });
+        // }
       }
     }
+    // // Parse condition step's answers
+    // for (const entry of sectionIdLabels.keys()) {
+    //   const condition = getInnovationRecordSchemaQuestion(entry).condition;
+    //   if (!(condition !== undefined && !this.checkIfStepConditionIsMet(condition))) {
+    //     this.summary.push({
+    //       stepId: entry,
+    //       label: this.translations.questions.get(entry) ?? '',
+    //       value: this.currentAnswers[entry]
+    //     });
+    //   }
+    // }
+
+    // Parse FieldGroup's answers
 
     return this.summary;
   }
 
-  parseFieldGroupStep() {
-    const currentStepParameters = this.currentStepParameters()[0];
-    if (currentStepParameters.addQuestion && currentStepParameters.field) {
-      console.log('PARSED FIELDGROUP!');
-      console.log('this.currentStep()', this.currentStep());
-      console.log('this.currentStepId', this.currentStepId);
-      const currentStepParameters = this.currentStepParameters()[0];
-      const stepIndex: number = this.steps.findIndex(s => s === this.currentStep());
-      const toReturn = this.getAnswers()[this.currentStepId].map(
-        (answer: string) =>
-          new FormEngineModelV3({
-            parameters: [
-              {
-                id: typeof answer === 'object' ? `userTestFeedback_${answer[currentStepParameters.field!.id]}` : '',
-                dataType: currentStepParameters.addQuestion!.dataType,
-                label: currentStepParameters.addQuestion!.label,
-                description: currentStepParameters.addQuestion!.description,
-                validations: currentStepParameters.addQuestion!.validations,
-                lengthLimit: currentStepParameters.addQuestion!.lengthLimit ?? 's'
-              }
-            ]
-          })
-      );
-      console.log('answers:', this.getAnswers()[this.currentStepId]);
-      console.log(this.steps);
-      this.steps.splice(stepIndex + 1, 0, ...toReturn);
-      console.log(this.steps);
-    }
-  }
+  runRules(sectionId: string): this {
+    console.log('running rules');
+    this.steps = [];
+    const subsection = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
 
-  findStepById(stepId: string): WizardStepTypeV3 {
-    return this.steps.find(s => s.parameters[0].id === stepId) ?? { parameters: [], defaultData: {} };
-  }
+    subsection?.questions.forEach(q => {
+      // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
+      if (this.checkIfStepConditionIsMet(q.condition)) {
+        const step = new FormEngineModelV3({
+          parameters: [
+            {
+              id: q.id,
+              dataType: q.dataType,
+              label: q.label,
+              description: q.description,
+              ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
+              ...(q.validations && { validations: q.validations }),
+              ...(q.items && { items: q.items }),
+              ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
+              ...(q.addQuestion && { addQuestion: q.addQuestion }),
+              ...(q.field && { field: q.field }),
+              ...(q.condition && { condition: q.condition })
+            }
+          ]
+        });
 
-  getStepParameters(stepId: string): FormEngineParameterModelV3[] {
-    return this.steps.find(s => s.parameters[0].id === stepId)?.parameters ?? [];
+        // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
+        const itemsFromAnswer = getInnovationRecordSchemaQuestion(q.id).items?.find(
+          i => i.itemsFromAnswer
+        )?.itemsFromAnswer;
+
+        if (itemsFromAnswer) {
+          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer] as string[];
+          const updatedItemsList = itemsDependencyAnswer.map(i => ({ id: i, label: this.translations.items.get(i) }));
+          step.parameters[0].items = updatedItemsList;
+        }
+
+        this.steps.push(step);
+      }
+
+      // runtimerules for `addQuestions`
+      if (q.addQuestion && q.field && this.getAnswers()[q.id]) {
+        (this.getAnswers()[q.id] as string[]).forEach(answer =>
+          this.steps.push(
+            new FormEngineModelV3({
+              parameters: [
+                {
+                  id: typeof answer === 'object' ? `userTestFeedback_${answer[q.field!.id]}` : '',
+                  dataType: q.addQuestion!.dataType,
+                  label: q.addQuestion!.label,
+                  description: q.addQuestion!.description,
+                  validations: q.addQuestion!.validations,
+                  lengthLimit: q.addQuestion!.lengthLimit ?? 's'
+                }
+              ]
+            })
+          )
+        );
+      }
+    });
+
+    return this;
   }
 
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {

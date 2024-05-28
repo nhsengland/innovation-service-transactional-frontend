@@ -42,9 +42,6 @@ export class FormEngineHelperV3 {
       })
     );
 
-    console.log('parameters');
-    console.log(parameters);
-
     /////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////
 
@@ -55,8 +52,7 @@ export class FormEngineHelperV3 {
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
-      console.log('conditionalFields: ', parameter);
-      console.log(conditionalFields);
+
       const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {

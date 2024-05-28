@@ -136,26 +136,8 @@ export function getInnovationRecordSectionV3(sectionId: string): {
     id: subsection?.id ?? '',
     title: subsection?.title ?? '',
     wizard: new WizardIRV3EngineModel({
-      steps: subsection!.questions.map(
-        question =>
-          new FormEngineModelV3({
-            parameters: [
-              {
-                id: question.id,
-                dataType: question.dataType,
-                label: question.label,
-                description: question.description,
-                ...(question.lengthLimit && { lengthLimit: question.lengthLimit }),
-                ...(question.validations && { validations: question.validations }),
-                ...(question.items && { items: question.items }),
-                ...(question.addNewLabel && { addNewLabel: question.addNewLabel }),
-                ...(question.addQuestion && { addQuestion: question.addQuestion }),
-                ...(question.field && { field: question.field }),
-                ...(question.condition && { condition: question.condition })
-              }
-            ]
-          })
-      )
+      sectionId: subsection?.id,
+      steps: []
     })
   };
 }

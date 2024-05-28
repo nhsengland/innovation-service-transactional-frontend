@@ -92,13 +92,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             [sectionInfoResponse.section]: sectionInfoResponse.data
           }
         });
+        this.wizard.setAnswers(irv3).runRules(this.sectionId);
 
         // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId === 'summary') {
           this.router.navigateByUrl(`${this.baseUrl}`);
         } else {
-          this.wizard.setAnswers(irv3);
-
           // queryParams.isChangeMode
           //   ? // enables changing mode and redirects to step function
 
@@ -142,8 +141,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
-    console.log('formData');
-    console.log(formData);
 
     //
 
@@ -153,6 +150,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     }
 
     let currentStepIndex = this.sectionQuestionsIdList.indexOf(this.wizard.currentStepId);
+
+    this.wizard.addAnswers(formData.data).runRules(this.sectionId);
 
     if (action === 'previous') {
       if (currentStepIndex !== 0 && this.wizard.currentStepId !== 'summary') {
@@ -172,10 +171,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     }
 
     if (action === 'next') {
-      this.wizard.addAnswers(formData.data);
-
-      this.wizard.parseFieldGroupStep();
-
       if (currentStepIndex + 1 !== this.wizard.steps.length) {
         currentStepIndex++;
 
