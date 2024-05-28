@@ -30,9 +30,12 @@ export class HighlightDirective implements AfterViewInit {
 
     if (text) {
       let newText = text;
-      processedSearchTerm.forEach(searchWord => {
-        // Check if a word from the search term exists in the htmlElement text
-        const regex = new RegExp('\\b' + searchWord + '\\b', 'gi');
+      processedSearchTerm.forEach(term => {
+        // Escape special characters from regular expressions
+        const escapedTerm = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        // Assert that what immediately precedes/follows the current position in the string is not a word character (\w). This helps in ensuring that the search term is not part of a larger word
+        const regex = new RegExp(`(?<![\\w])${escapedTerm}(?![\\w])`, 'gi');
+        // If a word from the search term exists in the htmlElement text, highlight it
         newText = newText.replace(regex, (match: string) => {
           return `<mark class="highlight">${match}</mark>`;
         });
