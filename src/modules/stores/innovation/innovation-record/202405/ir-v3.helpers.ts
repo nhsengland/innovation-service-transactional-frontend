@@ -179,15 +179,13 @@ export function getInnovationRecordSectionIdentificationV3(
 
 export function getSectionAllStepsList(sectionId: string): SectionStepsList {
   const section = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
-  const flattenedQuestions = section?.questions.map(q => [
-    { label: q.label, description: q.description, conditional: q.condition },
-    ...(q.addQuestion
-      ? [{ label: q.addQuestion.label, description: q.addQuestion.description, conditional: true }]
-      : [])
-  ]);
+  const flattenedQuestions =
+    section?.questions.flatMap(q => [
+      { label: q.label, conditional: !!q.condition },
+      ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
+    ]) ?? [];
 
-  console.log(flattenedQuestions);
-  return [];
+  return flattenedQuestions;
 }
 
 export function translateSectionIdEnums(newId: string): string {

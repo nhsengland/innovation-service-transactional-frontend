@@ -64,7 +64,7 @@ export class WizardIRV3EngineModel {
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
-    this.currentStepId = parseInt(data.currentStepId as string, 10);
+    this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? false;
     this.translations = getInnovationRecordSchemaTranslationsMap();
