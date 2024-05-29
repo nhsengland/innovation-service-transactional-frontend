@@ -5,6 +5,8 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { InnovationSectionEnum } from '../../innovation.enums';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { InnovationRecordQuestionStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
+import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 
 export function getInnovationRecordSchemaSectionQuestionsLabels(sectionId: string) {
   const toReturn = new Map();
@@ -73,23 +75,35 @@ export function getInnovationRecordSchemaTranslationsMap(): {
   questions: Map<string, string>;
   items: Map<string, string>;
 } {
+  // Sections & Subsections labels
   const flattenedSections = dummy_schema_V3_202405.sections.flatMap(s => ({ id: s.id, label: s.title }));
 
   const flattenedSubSections = dummy_schema_V3_202405.sections.flatMap(s =>
     s.subSections.flatMap(sub => ({ id: sub.id, label: sub.title }))
   );
-  const flattenedQuestions = dummy_schema_V3_202405.sections.flatMap(s =>
+
+  // Questions labels
+  const flattenedQuestionsLabels = dummy_schema_V3_202405.sections.flatMap(s =>
     s.subSections.flatMap(sub => sub.questions).flatMap(q => ({ id: q.id, label: q.label }))
   );
+  const flattenedAddQuestionsLabels = dummy_schema_V3_202405.sections
+    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion))
+    .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
+
+  // Items labels
   const flattenedItems = dummy_schema_V3_202405.sections
     .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.items))
+    .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
+
+  const flattenedAddQuestionItems = dummy_schema_V3_202405.sections
+    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion?.items))
     .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
 
   return {
     sections: new Map(flattenedSections.map(s => [s.id, s.label])),
     subsections: new Map(flattenedSubSections.map(sub => [sub.id, sub.label])),
-    questions: new Map(flattenedQuestions.map(q => [q.id, q.label])),
-    items: new Map(flattenedItems.map(i => [i.id, i.label]))
+    questions: new Map([...flattenedQuestionsLabels, ...flattenedAddQuestionsLabels].map(q => [q.id, q.label])),
+    items: new Map([...flattenedItems, ...flattenedAddQuestionItems].map(i => [i.id, i.label]))
   };
 }
 
@@ -135,10 +149,18 @@ export function getInnovationRecordSectionV3(sectionId: string): {
   return {
     id: subsection?.id ?? '',
     title: subsection?.title ?? '',
-    wizard: new WizardIRV3EngineModel({
-      sectionId: subsection?.id,
-      steps: []
-    })
+    wizard: new WizardIRV3EngineModel(
+      {
+        sectionId: subsection?.id,
+        steps: subsection!.questions.map(
+          question =>
+            new FormEngineModelV3({
+              parameters: []
+            })
+        )
+      },
+      new IrV3TranslatePipe()
+    )
   };
 }
 
@@ -153,6 +175,19 @@ export function getInnovationRecordSectionIdentificationV3(
     group: { number: section_group + 1, title: dummy_schema_V3_202405.sections[section_group].title },
     section: { number: section + 1, title: dummy_schema_V3_202405.sections[section_group].subSections[section].title }
   };
+}
+
+export function getSectionAllStepsList(sectionId: string): SectionStepsList {
+  const section = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
+  const flattenedQuestions = section?.questions.map(q => [
+    { label: q.label, description: q.description, conditional: q.condition },
+    ...(q.addQuestion
+      ? [{ label: q.addQuestion.label, description: q.addQuestion.description, conditional: true }]
+      : [])
+  ]);
+
+  console.log(flattenedQuestions);
+  return [];
 }
 
 export function translateSectionIdEnums(newId: string): string {

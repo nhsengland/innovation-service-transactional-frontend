@@ -23,6 +23,7 @@ import {
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -148,7 +149,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
-          wizard: new WizardIRV3EngineModel({}),
+          wizard: new WizardIRV3EngineModel({}, new IrV3TranslatePipe()),
           allStepsList: {},
           date: '',
           submittedBy: null,

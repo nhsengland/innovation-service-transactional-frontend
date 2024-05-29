@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, of } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
+import { FormEngineComponent, FormEngineParameterModelV3, WizardEngineModel } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
@@ -42,6 +42,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
   wizard: WizardIRV3EngineModel;
+  wizardCurrentStepParameters: FormEngineParameterModelV3[] | null = null;
+  wizardAnswers: { [key: string]: any } | null = null;
 
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
@@ -61,6 +63,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionQuestionsIdList = getInnovationRecordSchemaSectionQuestionsIdsList(this.sectionId);
 
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
+    this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.innovation.status === 'ARCHIVED';
 
@@ -92,7 +95,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             [sectionInfoResponse.section]: sectionInfoResponse.data
           }
         });
-        this.wizard.setAnswers(irv3).runRules(this.sectionId);
+        this.wizard.setAnswers(irv3).runRules();
+        this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
+        this.wizardAnswers = this.wizard.getAnswers();
 
         // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId === 'summary') {
@@ -100,7 +105,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         } else {
           // queryParams.isChangeMode
           //   ? // enables changing mode and redirects to step function
-
           //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
           //   : // go to regular step
           //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
@@ -116,12 +120,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepId: string): void {
-    this.wizard.gotoStep(stepId, true);
+    this.wizard.gotoStep(this.wizard.steps.findIndex(s => s.parameters[0].id === stepId) ?? 0, true);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
 
-  onGoToStep(stepId: string) {
+  onGoToStep(stepId: 'summary' | number) {
     if (stepId === 'summary') {
       this.wizard.parseSummary(this.sectionId);
       this.wizard.gotoSummary();
@@ -142,50 +146,57 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
-    //
-
     if (action === 'next' && !formData?.valid) {
       // Apply validation only when moving forward.
       return;
     }
 
-    let currentStepIndex = this.sectionQuestionsIdList.indexOf(this.wizard.currentStepId);
+    let currentStepIndex = this.wizard.currentStepId;
 
-    this.wizard.addAnswers(formData.data).runRules(this.sectionId);
+    this.wizard.addAnswers(formData.data).runRules();
 
-    if (action === 'previous') {
-      if (currentStepIndex !== 0 && this.wizard.currentStepId !== 'summary') {
-        currentStepIndex--;
-
-        let previousStepId = this.sectionQuestionsIdList[currentStepIndex];
-
-        while (!this.wizard.checkIfStepConditionIsMet(getInnovationRecordSchemaQuestion(previousStepId).condition)) {
+    if (typeof currentStepIndex === 'number') {
+      if (action === 'previous') {
+        if (currentStepIndex !== 0 && this.wizard.currentStepId !== 'summary') {
           currentStepIndex--;
-          previousStepId = this.sectionQuestionsIdList[currentStepIndex];
-        }
 
-        this.onGoToStep(previousStepId);
-      } else {
-        this.router.navigateByUrl(`${this.baseUrl}`);
+          while (
+            !this.wizard.checkIfStepConditionIsMet(
+              getInnovationRecordSchemaQuestion(this.wizard.steps[currentStepIndex].parameters[0].id).condition
+            )
+          ) {
+            currentStepIndex--;
+          }
+
+          this.onGoToStep(currentStepIndex);
+        } else {
+          this.router.navigateByUrl(`${this.baseUrl}`);
+        }
       }
-    }
 
-    if (action === 'next') {
-      if (currentStepIndex + 1 !== this.wizard.steps.length) {
-        currentStepIndex++;
-
-        let nextStepId = this.sectionQuestionsIdList[currentStepIndex];
-
-        while (!this.wizard.checkIfStepConditionIsMet(getInnovationRecordSchemaQuestion(nextStepId).condition)) {
+      if (action === 'next') {
+        if (currentStepIndex + 1 !== this.wizard.steps.length) {
           currentStepIndex++;
-          nextStepId = this.sectionQuestionsIdList[currentStepIndex];
-        }
 
-        this.onGoToStep(nextStepId);
-      } else {
-        this.wizard.parseSummary(this.sectionId);
-        this.wizard.showSummary = true;
-        this.onGoToStep('summary');
+          this.wizard.steps[currentStepIndex].parameters[0].id;
+          while (
+            !this.wizard.checkIfStepConditionIsMet(
+              getInnovationRecordSchemaQuestion(this.wizard.steps[currentStepIndex].parameters[0].id).condition
+            )
+          ) {
+            currentStepIndex++;
+          }
+
+          this.onGoToStep(currentStepIndex);
+        } else {
+          this.wizard.parseSummary(this.sectionId);
+          this.wizard.showSummary = true;
+          this.onGoToStep('summary');
+        }
+      }
+    } else {
+      if (action === 'previous') {
+        this.router.navigateByUrl(`${this.baseUrl}`);
       }
     }
 

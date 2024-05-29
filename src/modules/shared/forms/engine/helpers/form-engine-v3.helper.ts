@@ -24,27 +24,6 @@ export class FormEngineHelperV3 {
 
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
 
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-
-    // TODO - add FormEngineParameterModelV3 for `conditonal` and `addQuestion`
-    // inputParameters.forEach(p => {
-    //   if (p.addQuestion) {
-    //     parameters.push(new FormEngineParameterModelV3(p.addQuestion));
-    //   }
-    // });
-
-    inputParameters.forEach(p =>
-      p.items?.forEach(i => {
-        if (i.conditional) {
-          parameters.push(new FormEngineParameterModelV3(i.conditional));
-        }
-      })
-    );
-
-    /////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////
-
     const form = new FormGroup({}, { updateOn: 'blur', validators: formValidations });
 
     // Build form structure.
@@ -54,6 +33,7 @@ export class FormEngineHelperV3 {
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
 
       const additionalFields = parameter.additional || [];
+      // const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
         // Creates an FormArray and pushes defaultValues into it.

@@ -10,11 +10,13 @@ import {
 import {
   InnovationRecordFieldGroupAnswerType,
   InnovationRecordQuestionStepType,
+  InnovationRecordSectionAnswersType,
   InnovationRecordSubSectionType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';
 import { StringsHelper } from '@app/base/helpers';
 import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
+import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -42,8 +44,7 @@ export class WizardIRV3EngineModel {
   steps: WizardStepTypeV3[];
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
-  currentStepId: string;
-  currentStepIndex: number;
+  currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
   translations: {
@@ -55,60 +56,20 @@ export class WizardIRV3EngineModel {
 
   private summary: WizardSummaryV3Type[] = [];
 
-  constructor(data: Partial<WizardIRV3EngineModel>) {
+  constructor(
+    data: Partial<WizardIRV3EngineModel>,
+    private pipe: IrV3TranslatePipe
+  ) {
     this.sectionId = data.sectionId ?? '';
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
-    this.currentStepId = data.currentStepId ?? '';
-    this.currentStepIndex = data.currentStepIndex ?? 0;
+    this.currentStepId = parseInt(data.currentStepId as string, 10);
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? false;
     this.translations = getInnovationRecordSchemaTranslationsMap();
-
-    // this.runtimeRules = data.runtimeRules ?? [];
-    // this.inboundParsing = data.inboundParsing;
-    // this.outboundParsing = data.outboundParsing;
-    // this.summaryParsing = data.summaryParsing;
   }
 
-  // runRules(data?: MappedObjectType): this {
-  //   //   this.runtimeRules.forEach(rule => rule(this.steps, data ?? this.currentAnswers, this.currentStepId));
-  //   return this;
-  // }
-
-  // runInboundParsing(data: MappedObjectType): MappedObjectType {
-  //   return {};
-  //   // return this.inboundParsing ? this.inboundParsing(data) : data;
-  // }
-
-  // runOutboundParsing(data?: MappedObjectType): MappedObjectType {
-  //   return {};
-  //   // const v = data || this.currentAnswers;
-  //   // return this.outboundParsing ? this.outboundParsing(v) : v;
-  // }
-
-  // runSummaryParsing(data?: MappedObjectType): WizardSummaryType[] {
-  // if (!this.summaryParsing) {
-  //   return [];
-  // }
-
-  // // this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
-  // this.summary = [];
-
-  // return this.summary;
-  //   return [];
-  // }
-
-  // isFirstStep(): boolean {
-  //   return Number(this.currentStepId) === 1;
-  // }
-  // isLastStep(): boolean {
-  //   return Number(this.currentStepId) === this.steps.length;
-  // }
-  // isValidStep(step: number | 'summary'): boolean {
-  //   return (1 <= Number(step) && Number(step) <= this.steps.length) || step === 'summary';
-  // }
   isQuestionStep(): boolean {
     return this.currentStepId !== 'summary' ? true : false;
   }
@@ -116,28 +77,19 @@ export class WizardIRV3EngineModel {
     return this.showSummary && this.currentStepId === 'summary';
   }
 
-  currentStep(): FormEngineModelV3 & WizardStepTypeV3 {
-    return (
-      this.steps.find(step => step.parameters[0].id === this.currentStepId) ?? {
-        ...new FormEngineModelV3({ parameters: [] })
-      }
-    );
-
-    // if (typeof this.currentStepId === 'number') {
-    //   return this.steps[this.currentStepId - 1];
-    // } else {
-    //   return { ...new FormEngineModel({ parameters: [] }) };
-    // }
+  currentStep(): WizardStepTypeV3 & FormEngineModelV3 {
+    if (typeof this.currentStepId === 'number') {
+      return this.steps[this.currentStepId];
+    } else {
+      return { ...new FormEngineModelV3({ parameters: [] }) };
+    }
   }
 
   currentStepTitle(): string {
-    const step = this.currentStep();
-    return step.label ?? step.parameters[0]?.label ?? '';
+    return this.currentStep().label ?? this.currentStep().parameters[0]?.label ?? '';
   }
 
   currentStepParameters(): FormEngineParameterModelV3[] {
-    // console.log('this.currentStep()');
-    // console.log(this.currentStep());
     return this.currentStep().parameters;
   }
 
@@ -166,9 +118,10 @@ export class WizardIRV3EngineModel {
     this.currentStepId = 'summary';
   }
 
-  gotoStep(stepId: string, isChangeMode: boolean = false): this {
-    this.visitedSteps.clear();
-    this.currentStepId = stepId;
+  gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
+    // this.visitedSteps.clear();
+
+    this.currentStepId = parseInt(stepId as string, 10);
 
     // this.isChangingMode = isChangeMode;
 
@@ -177,20 +130,21 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  // nextStep(): this {
-  //   if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
-  //     this.gotoSummary();
-  //   } else if (typeof this.currentStepId === 'number') {
-  //     this.currentStepId++;
-  //     this.visitedSteps.add(this.getCurrentStepObjId());
+  nextStep(): this {
+    // if(this.currentStepId + 1>)
+    //   if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
+    //     this.gotoSummary();
+    //   } else if (typeof this.currentStepId === 'number') {
+    //     this.currentStepId++;
+    //     this.visitedSteps.add(this.getCurrentStepObjId());
 
-  //     if (this.isChangingMode) {
-  //       this.checkStepConditions();
-  //     }
-  //   }
+    //     if (this.isChangingMode) {
+    //       this.checkStepConditions();
+    //     }
+    //   }
 
-  //   return this;
-  // }
+    return this;
+  }
 
   // checkStepConditions(): this {
   //   if (typeof this.currentStepId === 'number') {
@@ -226,7 +180,6 @@ export class WizardIRV3EngineModel {
   }
 
   addAnswers(data: { [key: string]: any }): this {
-    console.log('previous answers', this.currentAnswers);
     this.currentAnswers = { ...this.currentAnswers, ...data };
     console.log('updated answers', this.currentAnswers);
 
@@ -236,10 +189,6 @@ export class WizardIRV3EngineModel {
   setAnswers(data: { [key: string]: any }): this {
     this.currentAnswers = data;
     return this;
-  }
-
-  setCurrentStepId(stepId: string) {
-    this.currentStepId = stepId;
   }
 
   checkIfStepConditionIsMet(condition: string | undefined): boolean {
@@ -256,21 +205,29 @@ export class WizardIRV3EngineModel {
 
   parseSummary(sectionId: string): WizardSummaryV3Type[] {
     this.summary = [];
-    console.log('parsing summary');
 
     // Parse condition step's answers
     for (const step of this.steps) {
       const stepId = step.parameters[0].id;
-      const label = this.translations.questions.get(step.parameters[0].id) ?? '';
+      const label = this.translations.questions.get(step.parameters[0].id.split('|')[0]) ?? '';
 
-      // Parse if has `condition` and it's met
       const condition = step.parameters[0].condition;
+
+      // Parse if has `condition` and it's met or has no condition
       if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
-        this.summary.push({
-          stepId: stepId,
-          label: label,
-          value: this.currentAnswers[step.parameters[0].id]
-        });
+        if (step.parameters[0].dataType === 'fields-group') {
+          this.summary.push({
+            stepId: stepId,
+            label: label,
+            value: (this.currentAnswers[step.parameters[0].id] as [{ kind: string }]).map(a => a.kind).join(', ')
+          });
+        } else {
+          this.summary.push({
+            stepId: stepId,
+            label: label,
+            value: this.currentAnswers[step.parameters[0].id]
+          });
+        }
 
         // TODO Parse FieldGroup
         // if (typeof this.currentAnswers[step.parameters[0].id] === 'object') {
@@ -299,10 +256,12 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
-  runRules(sectionId: string): this {
+  runRules(): this {
     console.log('running rules');
     this.steps = [];
-    const subsection = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
+    const subsection = dummy_schema_V3_202405.sections
+      .flatMap(s => s.subSections)
+      .find(sub => sub.id === this.sectionId);
 
     subsection?.questions.forEach(q => {
       // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
@@ -340,18 +299,26 @@ export class WizardIRV3EngineModel {
       }
 
       // runtimerules for `addQuestions`
-      if (q.addQuestion && q.field && this.getAnswers()[q.id]) {
+      if (q.addQuestion && this.getAnswers()[q.id]) {
         (this.getAnswers()[q.id] as string[]).forEach(answer =>
           this.steps.push(
             new FormEngineModelV3({
               parameters: [
                 {
-                  id: typeof answer === 'object' ? `userTestFeedback_${answer[q.field!.id]}` : '',
+                  id:
+                    typeof answer === 'object'
+                      ? `${q.addQuestion!.id}|${answer['kind']}`
+                      : `${q.addQuestion!.id}|${answer}`,
                   dataType: q.addQuestion!.dataType,
-                  label: q.addQuestion!.label,
+                  label: q.addQuestion?.label ?? '',
                   description: q.addQuestion!.description,
-                  validations: q.addQuestion!.validations,
-                  lengthLimit: q.addQuestion!.lengthLimit ?? 's'
+                  ...(q.addQuestion?.lengthLimit && { lengthLimit: q.addQuestion?.lengthLimit }),
+                  ...(q.addQuestion?.validations && { validations: q.addQuestion?.validations }),
+                  ...(q.addQuestion?.items && { items: q.addQuestion?.items }),
+                  ...(q.addQuestion?.addNewLabel && { addNewLabel: q.addQuestion?.addNewLabel }),
+                  ...(q.addQuestion?.addQuestion && { addQuestion: q.addQuestion?.addQuestion }),
+                  ...(q.addQuestion?.field && { field: q.addQuestion?.field }),
+                  ...(q.addQuestion?.condition && { condition: q.addQuestion?.condition })
                 }
               ]
             })
@@ -360,6 +327,7 @@ export class WizardIRV3EngineModel {
       }
     });
 
+    console.log('runrules steps:', this.steps);
     return this;
   }
 

@@ -31,6 +31,7 @@ import {
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
+import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 export type SectionInfoType = {
   id: string;
@@ -108,7 +109,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         submitButton: { show: false, label: 'Confirm section answers' },
         isNotStarted: false,
         hasEvidences: false,
-        wizard: new WizardIRV3EngineModel({}),
+        wizard: new WizardIRV3EngineModel({}, new IrV3TranslatePipe()),
         allStepsList: {},
         date: '',
         submittedBy: null,
@@ -210,7 +211,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         }
       });
 
-      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data).runRules(this.sectionId);
+      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data).runRules();
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 

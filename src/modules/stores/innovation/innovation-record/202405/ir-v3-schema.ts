@@ -2765,7 +2765,29 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                     }
                   }
                 }
-              ]
+              ],
+              addQuestion: {
+                id: 'standardHasMet',
+                dataType: 'radio-group',
+                label: 'Do you have a certification for {{item}}',
+                validations: {
+                  isRequired: 'A description is required'
+                },
+                items: [
+                  {
+                    id: 'yes',
+                    label: 'Yes'
+                  },
+                  {
+                    id: 'activelyWorkingTowardsIt',
+                    label: 'I am actively working towards it'
+                  },
+                  {
+                    id: 'notYet',
+                    label: 'Not yet'
+                  }
+                ]
+              }
             }
           ]
         },
