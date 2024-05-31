@@ -95,7 +95,7 @@
               </dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">
                 <p>
-                  <span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}
+                  <span>Evidence {{ i + 1 }}: </span><span appHighlight [searchTerm]="search">{{ evidence.value }}</span>
                 </p>
               </dd>
               <dd class="nhsuk-summary-list__actions">
