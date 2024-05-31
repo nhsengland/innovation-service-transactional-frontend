@@ -149,18 +149,15 @@ export function getInnovationRecordSectionV3(sectionId: string): {
   return {
     id: subsection?.id ?? '',
     title: subsection?.title ?? '',
-    wizard: new WizardIRV3EngineModel(
-      {
-        sectionId: subsection?.id,
-        steps: subsection!.questions.map(
-          question =>
-            new FormEngineModelV3({
-              parameters: []
-            })
-        )
-      },
-      new IrV3TranslatePipe()
-    )
+    wizard: new WizardIRV3EngineModel({
+      sectionId: subsection?.id,
+      steps: subsection!.questions.map(
+        question =>
+          new FormEngineModelV3({
+            parameters: []
+          })
+      )
+    })
   };
 }
 

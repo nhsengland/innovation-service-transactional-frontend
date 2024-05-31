@@ -48,6 +48,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
+  isChangeMode: boolean = false;
+
   sectionSubmittedText: string = '';
 
   displayChangeButtonList: number[] = [];
@@ -100,16 +102,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.wizardAnswers = this.wizard.getAnswers();
 
         // Get out if trying to load summary
-        if (this.activatedRoute.snapshot.params.questionId === 'summary') {
-          this.router.navigateByUrl(`${this.baseUrl}`);
-        } else {
+        if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
+          this.isChangeMode = queryParams.isChangeMode;
+          this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+
           // queryParams.isChangeMode
           //   ? // enables changing mode and redirects to step function
           //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
           //   : // go to regular step
           //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
-          this.onGoToStep(this.activatedRoute.snapshot.params.questionId);
+          // this.onGoToStep(this.activatedRoute.snapshot.params.questionId);
         }
       },
       error: () => {
@@ -119,21 +122,25 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     });
   }
 
-  onChangeStep(stepId: string): void {
-    this.wizard.gotoStep(this.wizard.steps.findIndex(s => s.parameters[0].id === stepId) ?? 0, true);
+  onChangeStep(stepId: number): void {
+    // this.wizard.gotoStep(this.wizard.steps.findIndex(s => s.parameters[0].id === stepId) ?? 0, true);
+    this.onGoToStep(stepId, true);
     this.resetAlert();
-    this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+    // this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
 
-  onGoToStep(stepId: 'summary' | number) {
+  onGoToStep(stepId: 'summary' | number, isChangeMode?: boolean) {
     if (stepId === 'summary') {
+      console.log('go to summary');
       this.wizard.parseSummary(this.sectionId);
+      this.wizard.showSummary = true;
       this.wizard.gotoSummary();
-      this.router.navigateByUrl(`${this.baseUrl}/edit/summary`);
+      // this.router.navigateByUrl(`${this.baseUrl}/edit/summary`);
+      this.redirectTo(`${this.baseUrl}/edit/summary`);
       this.setPageTitle('Check your answers', { size: 'l' });
     } else {
-      this.wizard.gotoStep(stepId);
-      this.redirectTo(`${this.baseUrl}/edit/${stepId}`);
+      this.wizard.gotoStep(stepId, isChangeMode);
+      this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: this.isChangeMode });
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     }
 
@@ -157,69 +164,45 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
-        if (currentStepIndex !== 0 && this.wizard.currentStepId !== 'summary') {
+        console.log('previous');
+        if (!this.wizard.isFirstStep()) {
           currentStepIndex--;
-
           while (
             !this.wizard.checkIfStepConditionIsMet(
-              getInnovationRecordSchemaQuestion(this.wizard.steps[currentStepIndex].parameters[0].id).condition
+              getInnovationRecordSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
             )
           ) {
             currentStepIndex--;
           }
-
           this.onGoToStep(currentStepIndex);
-        } else {
-          this.router.navigateByUrl(`${this.baseUrl}`);
         }
       }
 
       if (action === 'next') {
-        if (currentStepIndex + 1 !== this.wizard.steps.length) {
+        if (
+          this.wizard.isLastStep() // TODO: " || this.isChangeMode && {condition if step is not part of a child/parent flow}"
+        ) {
+          this.onGoToStep('summary');
+        } else {
           currentStepIndex++;
 
-          this.wizard.steps[currentStepIndex].parameters[0].id;
+          this.wizard.currentStepParameters()[0].id;
           while (
             !this.wizard.checkIfStepConditionIsMet(
-              getInnovationRecordSchemaQuestion(this.wizard.steps[currentStepIndex].parameters[0].id).condition
+              getInnovationRecordSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
             )
           ) {
             currentStepIndex++;
           }
-
           this.onGoToStep(currentStepIndex);
-        } else {
-          this.wizard.parseSummary(this.sectionId);
-          this.wizard.showSummary = true;
-          this.onGoToStep('summary');
         }
       }
     } else {
-      if (action === 'previous') {
-        this.router.navigateByUrl(`${this.baseUrl}`);
-      }
+      this.router.navigateByUrl(`${this.baseUrl}`);
     }
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
-
     //
-
-    //   if (action === 'previous') {
-    //     this.wizard.addAnswers(formData?.data || {}).runRules();
-
-    //     if (
-    //       this.wizard.isSummaryStep() ||
-    //       (!this.wizard.isChangingMode && this.wizard.isFirstStep()) ||
-    //       this.wizard.getCurrentStepObjId() === [...this.wizard.visitedSteps][0]
-    //     ) {
-    //       this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
-    //     } else {
-    //       this.wizard.previousStep();
-    //     }
-    //     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-    //     return;
-    //   }
-
     // const shouldUpdateInformation =
     //   Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
     //     // NOTE: This is a very shallow comparison, and will return false for objects and arrays.

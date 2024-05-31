@@ -49,13 +49,12 @@
                     <span *ngIf="!item.allowHTML">{{ item.value | irv3translate }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <!-- <a
+                    <a
                       href="javascript:void(0);"
-                      routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.stepId }}"
+                      routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
                       [queryParams]="!item.value && !item.isNotMandatory ? {} : { isChangeMode: true }"
                       *ngIf="isInnovatorType"
-                    > -->
-                    <a href="javascript:void(0);" routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ i }}" *ngIf="isInnovatorType">
+                    >
                       Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
                     </a>
                   </dd>
