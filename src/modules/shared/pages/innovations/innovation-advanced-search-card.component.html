@@ -95,7 +95,7 @@
       >
     </li>
 
-    <ng-container *ngIf="innovationCardData.highlights && highlightInfo && !(innovationCardData.status === 'WITHDRAWN' || isAccessorTypeAndStoppedSharingInnovation)">
+    <ng-container *ngIf="innovationCardData.highlights && highlightInfo && innovationCardData.status !== 'WITHDRAWN' && !isAccessorTypeAndStoppedSharingInnovation">
       <li class="font-color-secondary nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-2">
         Search terms found: <ng-container *ngFor="let entry of highlightInfo.termsCount | keyvalue">{{ entry.key }} ({{ entry.value }}) </ng-container>
       </li>
