@@ -64,6 +64,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isAssessmentType: boolean;
   shouldShowDocuments = false;
 
+  search?: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -71,6 +73,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     super();
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
+    this.search = this.activatedRoute.snapshot.queryParams.search;
+
     this.innovation = this.stores.context.getInnovation();
     this.isArchived = this.innovation.status === 'ARCHIVED';
 
