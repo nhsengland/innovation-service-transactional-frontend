@@ -7,6 +7,7 @@ import {
   getInnovationRecordSchemaTranslationsMap,
   getInnovationRecordSchemaSectionQuestionsLabels
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
 import {
   InnovationRecordFieldGroupAnswerType,
   InnovationRecordQuestionStepType,
@@ -15,8 +16,8 @@ import {
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';
 import { StringsHelper } from '@app/base/helpers';
-import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -203,6 +204,34 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
+  private parseFieldsGroupSummary(id: string): string | undefined {
+    for (const section of dummy_schema_V3_202405.sections) {
+      for (const subSection of section.subSections) {
+        for (const question of subSection.questions) {
+          if (question.id !== id) continue;
+
+          const re = new RegExp(`^${question.field!.id}|\d+$`);
+
+          return Object.keys(this.currentAnswers)
+            .filter(name => re.test(name))
+            .map(name => {
+              const params = name.split('|');
+              
+              return {
+                answer: this.currentAnswers[name],
+                index: parseInt(params[1])
+              };
+            })
+            .sort((a, b) => a.index - b.index)
+            .map(d => d.answer)
+            .join(', ');
+        }
+      }
+    }
+
+    return undefined;
+  }
+
   parseSummary(sectionId: string): WizardSummaryV3Type[] {
     this.summary = [];
 
@@ -216,10 +245,11 @@ export class WizardIRV3EngineModel {
       // Parse if has `condition` and it's met or has no condition
       if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
         if (step.parameters[0].dataType === 'fields-group') {
+          console.log(step.parameters[0])
           this.summary.push({
             stepId: stepId,
             label: label,
-            value: (this.currentAnswers[step.parameters[0].id] as [{ kind: string }]).map(a => a.kind).join(', ')
+            value: this.parseFieldsGroupSummary(step.parameters[0].id)
           });
         } else {
           this.summary.push({

@@ -204,14 +204,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         sectionInfo.data.hasEvidence === 'YES'
       );
 
-      const innovationV3Data: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
-        id: sectionInfo.id,
-        document: {
-          [sectionInfo.section]: sectionInfo.data
-        }
-      });
-
-      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data).runRules();
+      this.sectionSummaryData.sectionInfo.wizard.setAnswers(sectionInfo.data).runRules();
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 

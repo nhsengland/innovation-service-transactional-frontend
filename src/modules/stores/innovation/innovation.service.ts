@@ -18,6 +18,8 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
+import { InnovationSectionInfoDTOv3 } from './innovation-record/202405/ir-v3-types';
+import { IRV3Helper } from './innovation-record/202405/ir-v3-translator.helper';
 
 @Injectable()
 export class InnovationService {
@@ -60,7 +62,7 @@ export class InnovationService {
     innovationId: string,
     sectionId: string,
     filters: { fields?: 'tasks'[] }
-  ): Observable<InnovationSectionInfoDTO> {
+  ): Observable<InnovationSectionInfoDTOv3> {
     const qp = {
       ...(filters.fields ? { fields: filters.fields } : {})
     };
@@ -69,9 +71,9 @@ export class InnovationService {
       .addPath('v1/:innovationId/sections/:sectionId')
       .setPathParams({ innovationId, sectionId })
       .setQueryParams(qp);
-    return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(
+    return this.http.get<InnovationSectionInfoDTOv3>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => IRV3Helper.translateIR(response))
     );
   }
 

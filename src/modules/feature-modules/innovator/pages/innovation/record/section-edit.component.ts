@@ -20,7 +20,8 @@ import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import {
   InnovationRecordQuestionStepType,
-  InnovationRecordSectionAnswersType
+  InnovationRecordSectionAnswersType,
+  InnovationSectionInfoDTOv3
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';
 
@@ -89,20 +90,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.stores.innovation.getSectionInfo$(this.innovation.id, translateSectionIdEnums(this.sectionId))
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
-        const irv3: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
-          id: sectionInfoResponse.id,
-          document: {
-            [sectionInfoResponse.section]: sectionInfoResponse.data
-          }
-        });
-        this.wizard.setAnswers(irv3).runRules();
-        this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
-        this.wizardAnswers = this.wizard.getAnswers();
+        console.log('irv3');
+        console.log(sectionInfoResponse.data);
 
         // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId === 'summary') {
           this.router.navigateByUrl(`${this.baseUrl}`);
         } else {
+          this.wizard.setAnswers(sectionInfoResponse.data);
+
           // queryParams.isChangeMode
           //   ? // enables changing mode and redirects to step function
           //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)

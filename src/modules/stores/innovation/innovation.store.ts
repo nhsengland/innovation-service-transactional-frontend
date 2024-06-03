@@ -27,6 +27,7 @@ import {
   
 } from './innovation-record/202405/ir-v3.helpers';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { InnovationSectionInfoDTOv3 } from './innovation-record/202405/ir-v3-types';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
@@ -86,7 +87,7 @@ export class InnovationStore extends Store<InnovationModel> {
     );
   }
 
-  getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
+  getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTOv3> {
     return this.innovationsService.getSectionInfo(innovationId, section, { fields: ['tasks'] });
   }
 

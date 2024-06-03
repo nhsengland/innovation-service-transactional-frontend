@@ -94,6 +94,20 @@ export type InnovationRecordSectionAnswersType = {
   [s: string]: string | string[] | { response: string; conditional: string };
 };
 
+export type InnovationSectionInfoDTOv3 = {
+  id: null | string;
+  section: string;
+  status: keyof typeof INNOVATION_SECTION_STATUS;
+  updatedAt: string;
+  data: InnovationRecordSectionAnswersType;
+  submittedAt: string;
+  submittedBy: null | {
+    name: string;
+    isOwner?: boolean;
+  };
+  tasksIds?: string[];
+};
+
 export const dummy_202405_sections = dummy_schema_V3_202405.sections.map(section => ({
   id: section.id,
   title: section.title,
