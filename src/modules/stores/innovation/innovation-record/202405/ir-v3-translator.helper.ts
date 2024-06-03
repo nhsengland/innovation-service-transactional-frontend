@@ -2,6 +2,7 @@ import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { Parser } from 'expr-eval';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { InnovationRecordSectionAnswersType } from './ir-v3-types';
+import { InnovationSectionInfoDTO } from '../../innovation.models';
 
 const mapText = (
   answer: string,
@@ -158,27 +159,9 @@ export class IRV3Helper {
       });
   }
 
-  static translateIR(innovationRecord: MappedObjectType): InnovationRecordSectionAnswersType {
+  static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
     const v3Answers: MappedObjectType = {};
     const data: MappedObjectType = {};
-
-    const v2Answers = Object.keys(innovationRecord.document).reduce((acc, key) => {
-      if (['version', 'evidences'].includes(key)) return acc;
-
-      return Object.keys(innovationRecord.document[key]).reduce((acc, id) => {
-        if (id === 'files') return acc;
-        if (!innovationRecord.document[key][id]) return acc;
-
-        if (acc[id]) {
-          console.log(JSON.stringify(innovationRecord, null, 2));
-          throw new Error(`Repeated answers (${innovationRecord.id}): ${id}`);
-        }
-
-        acc[id] = innovationRecord.document[key][id];
-
-        return acc;
-      }, acc);
-    }, {} as MappedObjectType);
 
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
@@ -191,7 +174,7 @@ export class IRV3Helper {
             return;
           }
 
-          const answer = searchAnswer(v2Answers, question);
+          const answer = searchAnswer(innovationRecord.data, question);
 
           if (!answer) return;
 
@@ -200,11 +183,11 @@ export class IRV3Helper {
           } else if (question.dataType === 'textarea') {
             mapText(answer, question, v3Answers, data);
           } else if (question.dataType === 'radio-group') {
-            mapRadioGroup(answer, v2Answers, question, subSection, v3Answers, data);
+            mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers, data);
           } else if (question.dataType === 'autocomplete-array') {
-            mapArray(answer, v2Answers, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers, data);
           } else if (question.dataType === 'checkbox-array') {
-            mapArray(answer, v2Answers, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers, data);
           } else if (question.dataType === 'fields-group') {
             mapFieldsGroup(answer, question, v3Answers, data);
           } else {
@@ -216,6 +199,15 @@ export class IRV3Helper {
       });
     });
 
-    return v3Answers;
+    return {
+      id: innovationRecord.id,
+      section: innovationRecord.section,
+      status: innovationRecord.status,
+      updatedAt: innovationRecord.updatedAt,
+      submittedAt: innovationRecord.submittedAt,
+      submittedBy: innovationRecord.submittedBy,
+      tasksIds: innovationRecord.tasksIds,
+      data: v3Answers
+    };
   }
 }

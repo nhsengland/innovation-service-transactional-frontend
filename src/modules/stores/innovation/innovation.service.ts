@@ -18,6 +18,7 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
+import { IRV3Helper } from './innovation-record/202405/ir-v3-translator.helper';
 
 @Injectable()
 export class InnovationService {
@@ -71,7 +72,7 @@ export class InnovationService {
       .setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => IRV3Helper.translateIR(response))
     );
   }
 
