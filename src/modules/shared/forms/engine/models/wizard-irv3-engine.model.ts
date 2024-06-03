@@ -199,6 +199,34 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
+  private parseFieldsGroupSummary(id: string): string | undefined {
+    for (const section of dummy_schema_V3_202405.sections) {
+      for (const subSection of section.subSections) {
+        for (const question of subSection.questions) {
+          if (question.id !== id) continue;
+
+          const re = new RegExp(`^${question.field!.id}|\d+$`);
+
+          return Object.keys(this.currentAnswers)
+            .filter(name => re.test(name))
+            .map(name => {
+              const params = name.split('|');
+              
+              return {
+                answer: this.currentAnswers[name],
+                index: parseInt(params[1])
+              };
+            })
+            .sort((a, b) => a.index - b.index)
+            .map(d => d.answer)
+            .join(', ');
+        }
+      }
+    }
+
+    return undefined;
+  }
+
   parseSummary(sectionId: string): WizardSummaryV3Type[] {
     this.summary = [];
 
@@ -206,7 +234,7 @@ export class WizardIRV3EngineModel {
     for (const [i, step] of this.steps.entries()) {
       let stepId = step.parameters[0].id;
       let label = this.translations.questions.get(step.parameters[0].id.split('|')[0]) ?? '';
-      let value: string = '';
+      let value: string | undefined = '';
       let editStepNumber = i + 1;
       let isNotMandatory = !!step.parameters[0].validations?.isRequired;
 
@@ -215,7 +243,7 @@ export class WizardIRV3EngineModel {
       // Parse if has `condition` and it's met or has no condition
       if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
         if (step.parameters[0].dataType === 'fields-group') {
-          value = (this.currentAnswers[step.parameters[0].id] as [{ kind: string }]).map(a => a.kind).join(', ');
+          value = this.parseFieldsGroupSummary(step.parameters[0].id);
         } else {
           value = this.currentAnswers[step.parameters[0].id];
         }

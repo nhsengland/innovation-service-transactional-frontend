@@ -101,10 +101,9 @@ const mapFieldsGroup = (
   schemaAnswers: MappedObjectType,
   data: MappedObjectType
 ) => {
-  if (!answer.lenght) return;
+  if (!answer.length) return;
 
   answer.forEach((item: any, i: number) => {
-
     if (item[schemaQuestion.field.id]) {
       schemaAnswers[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
       data[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
