@@ -11,7 +11,7 @@ export type Dataset = { value: string; label: string; description?: string }[];
 export type Filter = BaseFilter & (CheckboxGroupFilter | CheckboxesFilter | DateRangeFilter);
 type BaseFilter = { key: string } & FilterOptions;
 
-type CheckboxesFilter = {
+export type CheckboxesFilter = {
   type: 'CHECKBOXES';
   checkboxes: ({ title: string; defaultValue?: boolean; translation: string } & BaseFilter)[];
   selected?: { key: string; value: boolean }[];

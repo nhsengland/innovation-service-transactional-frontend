@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { FormControl, FormGroup } from '@app/base/forms';
+import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
 
@@ -40,14 +40,17 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   tabs: TabType[] = [];
   currentTab: TabType;
 
-  form = new FormGroup(
-    {
-      assignedToMe: new FormControl(false),
-      suggestedOnly: new FormControl(true),
-      closedByMyOrganisation: new FormControl(false)
-    },
-    { updateOn: 'change' }
-  );
+  form = new FormGroup({
+    search: new FormControl('', { validators: [Validators.maxLength(200)], updateOn: 'blur' }),
+    tabsFilters: new FormGroup(
+      {
+        assignedToMe: new FormControl(false),
+        suggestedOnly: new FormControl(true),
+        closedByMyOrganisation: new FormControl(false)
+      },
+      { updateOn: 'change' }
+    )
+  });
 
   innovationsList: TableModel<
     {
@@ -306,7 +309,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   ngOnInit(): void {
     this.subscriptions.push(
       this.activatedRoute.queryParams.subscribe(queryParams => this.onRouteChange(queryParams)),
-      this.form.valueChanges.subscribe(() => this.onFormChange())
+      this.form.controls.search.valueChanges.subscribe(() => this.onSearchChange()),
+      this.form.controls.tabsFilters.valueChanges.subscribe(() => this.onTabsFiltersChange())
     );
   }
 
@@ -379,7 +383,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe: false,
-            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false,
+            suggestedOnly: this.form.get('tabsFilters')?.get('suggestedOnly')?.value ?? false,
             closedByMyOrganisation: false
           })
           .setVisibleColumns({
@@ -397,7 +401,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .clearData()
           .setFilters({
             supportStatuses: filteredArr,
-            assignedToMe: this.form.get('assignedToMe')?.value ?? false,
+            assignedToMe: this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false,
             suggestedOnly: false,
             closedByMyOrganisation: false
           })
@@ -438,7 +442,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             supportStatuses: filteredArr,
             assignedToMe: false,
             suggestedOnly: false,
-            closedByMyOrganisation: this.form.get('closedByMyOrganisation')?.value ?? false
+            closedByMyOrganisation: this.form.get('tabsFilters')?.get('closedByMyOrganisation')?.value ?? false
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
@@ -455,8 +459,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .clearData()
           .setFilters({
             supportStatuses: undefined,
-            assignedToMe: this.form.get('assignedToMe')?.value ?? false,
-            suggestedOnly: this.form.get('suggestedOnly')?.value ?? false,
+            assignedToMe: this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false,
+            suggestedOnly: this.form.get('tabsFilters')?.get('suggestedOnly')?.value ?? false,
             closedByMyOrganisation: false
           })
           .setVisibleColumns({
@@ -485,22 +489,34 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.currentTab = this.tabs[currentTabIndex];
 
     if (queryParams.assignedToMe === 'false' && queryParams.suggestedOnly === 'false') {
-      this.form.reset();
+      this.form.controls.tabsFilters.reset();
     } else if (queryParams.assignedToMe) {
-      this.form.get('assignedToMe')?.setValue(true);
+      this.form.get('tabsFilters')?.get('assignedToMe')?.setValue(true);
     }
 
     if (this.currentTab.key === InnovationSupportStatusEnum.UNASSIGNED) {
-      this.form.get('suggestedOnly')?.setValue(true);
+      this.form.get('tabsFilters')?.get('suggestedOnly')?.setValue(true);
     }
 
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
   }
 
-  onFormChange(): void {
+  onTabsFiltersChange(): void {
     this.prepareInnovationsList(this.currentTab.key);
     this.getInnovationsList();
+  }
+
+  onSearchChange(): void {
+    const searchControl = this.form.controls.search;
+    if (!searchControl.valid) {
+      searchControl.markAsTouched();
+      return;
+    }
+
+    this.redirectTo(`/${this.userUrlBasePath()}/innovations/advanced-search`, {
+      search: this.form.get('search')?.value
+    });
   }
 
   onTableOrder(column: string): void {
@@ -511,5 +527,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   onPageChange(event: { pageNumber: number }): void {
     this.innovationsList.setPage(event.pageNumber);
     this.getInnovationsList();
+  }
+
+  onSearchClick(): void {
+    this.form.controls.search.updateValueAndValidity({ onlySelf: true });
   }
 }

@@ -81,7 +81,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           title: 'Your innovations',
           label: `Innovations in needs assessment being assessed by you`,
           link: `/assessment/innovations`,
-          queryParams: { status: 'NEEDS_ASSESSMENT' },
+          queryParams: { status: 'NEEDS_ASSESSMENT', assignedToMe: true },
           count: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].count,
           total: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].total,
           overdue: this.getFooter(statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].overdue)

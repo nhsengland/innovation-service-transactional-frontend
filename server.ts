@@ -146,7 +146,7 @@ export function app(): express.Express {
       window.__env.BASE_URL = '${ENVIRONMENT.BASE_URL}';
       window.__env.BASE_PATH = '${ENVIRONMENT.BASE_PATH}';
       window.__env.LOG_LEVEL = '${ENVIRONMENT.LOG_LEVEL}';
-      window.__env.ENABLE_ANALYTICS = '${ENVIRONMENT.ENABLE_ANALYTICS}';
+      window.__env.ENABLE_ANALYTICS = ${ENVIRONMENT.ENABLE_ANALYTICS};
       window.__env.TAG_MEASUREMENT_ID = '${ENVIRONMENT.TAG_MEASUREMENT_ID}';
       window.__env.GTM_ID = '${ENVIRONMENT.GTM_ID}';
     }(this));`);

@@ -111,7 +111,7 @@
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovationSummary" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-      <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+      <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
     </div>
   </dl>
 

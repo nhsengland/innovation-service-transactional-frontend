@@ -37,6 +37,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   cardsList: StatisticsCardType[] = [];
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
+  search?: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -45,6 +47,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   ) {
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.search = this.activatedRoute.snapshot.queryParams.search;
   }
 
   ngOnInit(): void {

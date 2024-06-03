@@ -736,7 +736,8 @@ td {
 
   &.fixed-width-150,
   &.fixed-width-175,
-  &.fixed-width-200 {
+  &.fixed-width-200,
+  &.fixed-width-300 {
     max-width: 100%;
   }
 
@@ -749,6 +750,9 @@ td {
     }
     &.fixed-width-200 {
       max-width: 200px;
+    }
+    &.fixed-width-300 {
+      max-width: 300px;
     }
   }
 }
@@ -827,4 +831,8 @@ a.app-tag {
 
 .notification-tag .icon {
   display: inline;
+}
+
+.highlight {
+  background-color: var(--warning-color);
 }

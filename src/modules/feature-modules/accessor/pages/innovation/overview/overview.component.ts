@@ -44,6 +44,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
+  search?: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -53,6 +55,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.search = this.activatedRoute.snapshot.queryParams.search;
+
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
