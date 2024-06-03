@@ -242,7 +242,7 @@ export class WizardIRV3EngineModel {
     for (const [i, step] of this.steps.entries()) {
       let stepId = step.parameters[0].id;
       let label = this.translations.questions.get(step.parameters[0].id.split('|')[0]) ?? '';
-      let value: string = '';
+      let value: string | undefined = '';
       let editStepNumber = i + 1;
       let isNotMandatory = !!step.parameters[0].validations?.isRequired;
 
@@ -251,7 +251,6 @@ export class WizardIRV3EngineModel {
       // Parse if has `condition` and it's met or has no condition
       if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
         if (step.parameters[0].dataType === 'fields-group') {
-          console.log(step.parameters[0])
           value = this.parseFieldsGroupSummary(step.parameters[0].id);
         } else {
           value = this.currentAnswers[step.parameters[0].id];
