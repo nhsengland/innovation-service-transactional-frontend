@@ -284,12 +284,13 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     this.currentTab = this.tabs[currentTabIndex];
 
-    if (queryParams.assignedToMe) {
-      this.form.get('assignedToMe')?.setValue(true);
-    }
-
-    if (this.currentTab.key === InnovationAssessmentStatusEnum.ALL) {
+    if (
+      this.currentTab.key === InnovationAssessmentStatusEnum.ALL ||
+      this.currentTab.key === InnovationAssessmentStatusEnum.COMPLETED
+    ) {
       this.form.get('assignedToMe')?.setValue(false);
+    } else if (this.currentTab.key === InnovationAssessmentStatusEnum.NEEDS_ASSESSMENT) {
+      this.form.get('assignedToMe')?.setValue(true);
     }
 
     this.prepareInnovationsList(this.currentTab.key);
