@@ -1,11 +1,9 @@
-import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
 import {
   getInnovationRecordSchemaQuestion,
-  getInnovationRecordSchemaTranslationsMap,
-  getInnovationRecordSchemaSectionQuestionsLabels
+  getInnovationRecordSchemaTranslationsMap
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
 import {
@@ -26,7 +24,7 @@ export type WizardSummaryV3Type = {
   stepId: string;
   label: string;
   value?: string;
-  editStepNumber?: number;
+  editStepNumber: number;
   evidenceId?: string;
   type?: 'keyValueLink' | 'button';
   allowHTML?: boolean;
@@ -57,18 +55,23 @@ export class WizardIRV3EngineModel {
 
   private summary: WizardSummaryV3Type[] = [];
 
-  constructor(
-    data: Partial<WizardIRV3EngineModel>,
-    private pipe: IrV3TranslatePipe
-  ) {
+  constructor(data: Partial<WizardIRV3EngineModel>) {
     this.sectionId = data.sectionId ?? '';
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
-    this.currentStepId = parseInt(data.currentStepId as string, 10);
+    this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? false;
     this.translations = getInnovationRecordSchemaTranslationsMap();
+  }
+
+  isFirstStep(): boolean {
+    return Number(this.currentStepId) === 1;
+  }
+
+  isLastStep(): boolean {
+    return Number(this.currentStepId) === this.steps.length;
   }
 
   isQuestionStep(): boolean {
@@ -80,7 +83,7 @@ export class WizardIRV3EngineModel {
 
   currentStep(): WizardStepTypeV3 & FormEngineModelV3 {
     if (typeof this.currentStepId === 'number') {
-      return this.steps[this.currentStepId];
+      return this.steps[this.currentStepId - 1];
     } else {
       return { ...new FormEngineModelV3({ parameters: [] }) };
     }
@@ -124,7 +127,7 @@ export class WizardIRV3EngineModel {
 
     this.currentStepId = parseInt(stepId as string, 10);
 
-    // this.isChangingMode = isChangeMode;
+    this.isChangingMode = isChangeMode;
 
     // this.visitedSteps.add(this.getCurrentStepObjId());
 
@@ -236,9 +239,12 @@ export class WizardIRV3EngineModel {
     this.summary = [];
 
     // Parse condition step's answers
-    for (const step of this.steps) {
-      const stepId = step.parameters[0].id;
-      const label = this.translations.questions.get(step.parameters[0].id.split('|')[0]) ?? '';
+    for (const [i, step] of this.steps.entries()) {
+      let stepId = step.parameters[0].id;
+      let label = this.translations.questions.get(step.parameters[0].id.split('|')[0]) ?? '';
+      let value: string = '';
+      let editStepNumber = i + 1;
+      let isNotMandatory = !!step.parameters[0].validations?.isRequired;
 
       const condition = step.parameters[0].condition;
 
@@ -246,27 +252,18 @@ export class WizardIRV3EngineModel {
       if (!(condition && !this.checkIfStepConditionIsMet(condition))) {
         if (step.parameters[0].dataType === 'fields-group') {
           console.log(step.parameters[0])
-          this.summary.push({
-            stepId: stepId,
-            label: label,
-            value: this.parseFieldsGroupSummary(step.parameters[0].id)
-          });
+          value = this.parseFieldsGroupSummary(step.parameters[0].id);
         } else {
-          this.summary.push({
-            stepId: stepId,
-            label: label,
-            value: this.currentAnswers[step.parameters[0].id]
-          });
+          value = this.currentAnswers[step.parameters[0].id];
         }
 
-        // TODO Parse FieldGroup
-        // if (typeof this.currentAnswers[step.parameters[0].id] === 'object') {
-        //   this.summary.push({
-        //     stepId: stepId,
-        //     label: label,
-        //     value: Object.values(this.currentAnswers[step.parameters[0].id]).map(s => s)
-        //   });
-        // }
+        this.summary.push({
+          stepId: stepId,
+          label: label,
+          value: value,
+          editStepNumber: editStepNumber,
+          isNotMandatory: isNotMandatory
+        });
       }
     }
     // // Parse condition step's answers

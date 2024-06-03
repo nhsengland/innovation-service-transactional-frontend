@@ -310,9 +310,8 @@ export class FormEngineHelperV3 {
     return new FormControl(
       {
         value: typeof value !== 'boolean' && !value && value !== 0 ? null : value,
-        disabled:
-          // !parameter.isEditable
-          false
+        // disabled: !parameter.isEditable
+        disabled: false
       },
       options
     );

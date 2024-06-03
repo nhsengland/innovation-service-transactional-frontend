@@ -167,7 +167,7 @@ export class FormEngineParameterModelV3 {
   description?: string;
   placeholder?: string;
   isVisible?: boolean;
-  // isEditable?: boolean;
+  isEditable?: boolean;
   rank?: number;
   validations?: {
     // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
@@ -238,7 +238,7 @@ export class FormEngineParameterModelV3 {
     this.description = data.description;
     this.placeholder = data.placeholder;
     this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
-    // this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
+    this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.cssOverride = data.cssOverride;

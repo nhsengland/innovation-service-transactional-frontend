@@ -149,7 +149,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
-          wizard: new WizardIRV3EngineModel({}, new IrV3TranslatePipe()),
+          wizard: new WizardIRV3EngineModel({}),
           allStepsList: {},
           date: '',
           submittedBy: null,
