@@ -37,6 +37,8 @@ export type InnovationRecordQuestionStepType = {
   condition?: string;
   cssOverride?: string;
   isVisible?: boolean;
+  parentFieldId?: string;
+  parentAddQuestionId?: string;
 };
 
 export type InnovationRecordFormComponentType =

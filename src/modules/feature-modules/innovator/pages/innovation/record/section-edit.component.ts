@@ -182,6 +182,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         if (
           this.wizard.isLastStep() // TODO: " || this.isChangeMode && {condition if step is not part of a child/parent flow}"
         ) {
+          this.wizard.outboundParsing();
           this.onGoToStep('summary');
         } else {
           currentStepIndex++;

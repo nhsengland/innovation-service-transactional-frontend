@@ -2779,7 +2779,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                     label: 'Yes'
                   },
                   {
-                    id: 'activelyWorkingTowardsIt',
+                    id: 'inProgress',
                     label: 'I am actively working towards it'
                   },
                   {

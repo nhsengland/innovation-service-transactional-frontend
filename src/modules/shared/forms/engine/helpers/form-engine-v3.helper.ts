@@ -33,7 +33,6 @@ export class FormEngineHelperV3 {
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
 
       const additionalFields = parameter.additional || [];
-      // const additionalFields = parameter.additional || [];
 
       switch (parameter.dataType) {
         // Creates an FormArray and pushes defaultValues into it.

@@ -9,7 +9,6 @@ export const innovationSectionDataResolverV3: ResolveFn<any> = (
   route: ActivatedRouteSnapshot
 ): Observable<{ id: null | string; name: string }> => {
   const innovationStore: InnovationStore = inject(InnovationStore);
-  console.log(route.params['sectionId']);
   return of({
     id: route.params['sectionId'],
     name: getInnovationRecordSchemaTranslationsMap().subsections.get(route.params['sectionId']) ?? ''

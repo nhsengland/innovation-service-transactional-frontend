@@ -19,7 +19,7 @@ import { FormFileUploadPreviewComponent } from './components/file-upload-preview
 import { FormGroupedCheckboxArrayComponent } from './components/grouped-checkbox-array.component';
 import { FormInputComponent } from './components/input.component';
 import { FormInputAutocompleteArrayComponent } from './components/input-autocomplete-array.component';
-// import { FormInputAutocompleteValueComponent } from './components/input-autocomplete-value.component';
+import { FormInputAutocompleteValueComponent } from './components/input-autocomplete-value.component';
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
 import { FormFileUploadDescriptiveComponent } from './components/file-upload-descriptive.component';
@@ -59,7 +59,7 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
-    // FormInputAutocompleteValueComponent,
+    FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,
@@ -87,7 +87,7 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
     FormInputAutocompleteArrayV3Component,
-    // FormInputAutocompleteValueComponent,
+    FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
     FormRadioGroupV3Component,
     FormTextareaComponent,

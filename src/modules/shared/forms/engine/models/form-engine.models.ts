@@ -208,6 +208,9 @@ export class FormEngineParameterModelV3 {
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
+  parentAddQuestionId?: string;
+  parentFieldId?: string;
+
   condition?: string;
   field?: {
     id: string;
@@ -254,6 +257,9 @@ export class FormEngineParameterModelV3 {
     this.items = data.items;
 
     // this.selectItems = data.selectItems;
+
+    this.parentAddQuestionId = data.parentAddQuestionId;
+    this.parentFieldId = data.parentFieldId;
 
     // if (data.fieldsGroupConfig) {
     //   this.fieldsGroupConfig = {
