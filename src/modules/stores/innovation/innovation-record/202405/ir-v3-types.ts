@@ -31,6 +31,7 @@ export type InnovationRecordQuestionStepType = {
   };
   addNewLabel?: string;
   addQuestion?: InnovationRecordQuestionStepType;
+  connectedQuestion?: string;
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
@@ -45,7 +46,8 @@ export type InnovationRecordFormComponentType =
   | 'radio-group'
   | 'autocomplete-array'
   | 'checkbox-array'
-  | 'fields-group';
+  | 'fields-group'
+  | 'connected-radio-group';
 
 export type InnovationRecordStepValidationsType = {
   isRequired?: string;
