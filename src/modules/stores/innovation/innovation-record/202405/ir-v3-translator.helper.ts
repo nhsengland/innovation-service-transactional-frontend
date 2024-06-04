@@ -163,7 +163,6 @@ export class IRV3Helper {
 
         if (Object.keys(stepsChildParentRelations).length) {
           subSection.stepsChildParentRelations = stepsChildParentRelations;
-          console.log(subSection.id, stepsChildParentRelations)
         }
       });
     });
