@@ -1,5 +1,4 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
-import { Parser } from 'expr-eval';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { InnovationSectionInfoDTO } from '../../innovation.models';
 
@@ -170,13 +169,7 @@ export class IRV3Helper {
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
         subSection.questions.forEach(question => {
-          if (
-            'condition' in question &&
-            typeof question.condition === 'string' &&
-            !Parser.evaluate(question.condition, { data })
-          ) {
-            return;
-          }
+          if (!question.condition?.options.includes(data[question.condition.id])) return;
 
           const answer = searchAnswer(innovationRecord.data, question);
 
