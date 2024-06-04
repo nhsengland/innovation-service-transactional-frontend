@@ -17,7 +17,6 @@ import {
 import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
-import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import {
   InnovationRecordQuestionStepType,
   InnovationRecordSectionAnswersType
@@ -91,13 +90,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.stores.innovation.getSectionInfo$(this.innovation.id, translateSectionIdEnums(this.sectionId))
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
-        const irv3: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
-          id: sectionInfoResponse.id,
-          document: {
-            [sectionInfoResponse.section]: sectionInfoResponse.data
-          }
-        });
-        this.wizard.setAnswers(irv3).runRules();
+        this.wizard.setAnswers(sectionInfoResponse.data).runRules();
         this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
         this.wizardAnswers = this.wizard.getAnswers();
 

@@ -30,7 +30,6 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 export type SectionInfoType = {
@@ -204,14 +203,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         sectionInfo.data.hasEvidence === 'YES'
       );
 
-      const innovationV3Data: InnovationRecordSectionAnswersType = IRV3Helper.translateIR({
-        id: sectionInfo.id,
-        document: {
-          [sectionInfo.section]: sectionInfo.data
-        }
-      });
-
-      this.sectionSummaryData.sectionInfo.wizard.setAnswers(innovationV3Data).runRules();
+      this.sectionSummaryData.sectionInfo.wizard.setAnswers(sectionInfo.data).runRules();
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 

@@ -199,6 +199,34 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
+  private parseFieldsGroupSummary(id: string): string | undefined {
+    for (const section of dummy_schema_V3_202405.sections) {
+      for (const subSection of section.subSections) {
+        for (const question of subSection.questions) {
+          if (question.id !== id) continue;
+
+          const re = new RegExp(`^${question.field!.id}|\d+$`);
+
+          return Object.keys(this.currentAnswers)
+            .filter(name => re.test(name))
+            .map(name => {
+              const params = name.split('|');
+
+              return {
+                answer: this.currentAnswers[name],
+                index: parseInt(params[1])
+              };
+            })
+            .sort((a, b) => a.index - b.index)
+            .map(d => d.answer)
+            .join(', ');
+        }
+      }
+    }
+
+    return undefined;
+  }
+
   outboundParsing(): { [key: string]: string } {
     const toReturn: { [key: string]: string } = {};
     for (const [i, step] of this.steps.entries()) {
@@ -231,7 +259,7 @@ export class WizardIRV3EngineModel {
       let params = step.parameters[0];
       let stepId = params.id;
       let label = this.translations.questions.get(stepId.split('|')[0]) ?? '';
-      let value: string = this.currentAnswers[params.id];
+      let value: string | undefined = this.currentAnswers[params.id];
       let isNotMandatory = !!params.validations?.isRequired;
       editStepNumber++;
 
@@ -239,8 +267,7 @@ export class WizardIRV3EngineModel {
         case 'fields-group':
           {
             const currAnswers = this.currentAnswers[params.id] as [{ [key: string]: string }];
-            value =
-              this.currentAnswers[params.id] !== undefined ? currAnswers.map(a => a[params.field!.id]).join(', ') : '';
+            value = this.parseFieldsGroupSummary(step.parameters[0].id);
 
             // Push "parent"
             this.summary.push({

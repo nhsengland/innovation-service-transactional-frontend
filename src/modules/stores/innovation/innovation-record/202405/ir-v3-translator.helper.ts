@@ -1,7 +1,7 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { Parser } from 'expr-eval';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
-import { InnovationRecordSectionAnswersType } from './ir-v3-types';
+import { InnovationSectionInfoDTO } from '../../innovation.models';
 
 const mapText = (
   answer: string,
@@ -50,8 +50,8 @@ const mapRadioGroup = (
     }
     data[schemaQuestion.id] = item.id;
   } else {
-    schemaAnswers[schemaQuestion.id] = itemId;
-    data[schemaQuestion.id] = itemId;
+    /* schemaAnswers[schemaQuestion.id] = itemId;
+    data[schemaQuestion.id] = itemId; */
   }
 };
 
@@ -67,8 +67,8 @@ const mapArray = (
   schemaAnswers[schemaQuestion.id] = [];
   data[schemaQuestion.id] = [];
 
-  answer.forEach((value: string) => {
-    const itemId = IRV3Helper.camelize(value);
+  answer.forEach((value: any) => {
+    const itemId = IRV3Helper.camelize(value.id ? value.id : value);
     const item = schemaQuestion.items.find((item: any) => item.id === itemId);
 
     if (item) {
@@ -82,9 +82,15 @@ const mapArray = (
         schemaAnswers[schemaQuestion.id].push(item.id);
         data[schemaQuestion.id].push(item.id);
       }
+
+      if (schemaQuestion.addQuestion && (schemaQuestion.dataType === 'checkbox-array')) {
+        const item2 = schemaQuestion.addQuestion.items.find((item: any) => item.id === IRV3Helper.camelize(value.addQuestion));
+        schemaAnswers[`${schemaQuestion.addQuestion.id}|${itemId}`] = item2.id;
+        data[`${schemaQuestion.addQuestion.id}|${itemId}`] = item2.id;
+      }
     } else {
-      schemaAnswers[schemaQuestion.id].push(itemId);
-      data[schemaQuestion.id].push(itemId);
+      /* schemaAnswers[schemaQuestion.id].push(itemId);
+      data[schemaQuestion.id].push(itemId); */
     }
   });
 };
@@ -95,28 +101,20 @@ const mapFieldsGroup = (
   schemaAnswers: MappedObjectType,
   data: MappedObjectType
 ) => {
-  if (!answer.lenght) return;
+  if (!answer.length) return;
 
-  schemaAnswers[schemaQuestion.id] = [];
-
-  answer.forEach((item: any) => {
-    let newItem;
-
+  answer.forEach((item: any, i: number) => {
     if (item[schemaQuestion.field.id]) {
-      newItem = item[schemaQuestion.field.id];
+      schemaAnswers[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
+      data[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
     } else return;
 
     if (schemaQuestion.addQuestion) {
       if (item[schemaQuestion.addQuestion.id]) {
-        newItem = {
-          [schemaQuestion.field.id]: item[schemaQuestion.field.id],
-          [schemaQuestion.addQuestion.id]: item[schemaQuestion.addQuestion.id]
-        };
+        schemaAnswers[`${schemaQuestion.id}|${schemaQuestion.addQuestion.id}|${i}`] = item[schemaQuestion.addQuestion.id];
+        data[`${schemaQuestion.id}|${schemaQuestion.addQuestion.id}|${i}`] = item[schemaQuestion.addQuestion.id];
       }
     }
-
-    schemaAnswers.push(newItem);
-    data.push(newItem);
   });
 };
 
@@ -135,7 +133,12 @@ const searchAnswer = (v2Answers: MappedObjectType, question: MappedObjectType) =
     case 'hasWebsite':
       return v2Answers.website ? 'YES' : 'NO';
     case 'standardsType':
-      return v2Answers.standards?.map((item: any) => item.type);
+      return v2Answers.standards?.map((item: any) => {
+        return {
+          id: item.type,
+          addQuestion: item.hasMet
+        };
+      });
     case 'stepDeploymentPlans':
       return v2Answers.deploymentPlans?.map((item: any) => ({
         organizationDepartment: item
@@ -158,28 +161,12 @@ export class IRV3Helper {
       });
   }
 
-  static translateIR(innovationRecord: MappedObjectType): InnovationRecordSectionAnswersType {
+  static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
     const v3Answers: MappedObjectType = {};
     const data: MappedObjectType = {};
 
-    const v2Answers = Object.keys(innovationRecord.document).reduce((acc, key) => {
-      if (['version', 'evidences'].includes(key)) return acc;
-
-      return Object.keys(innovationRecord.document[key]).reduce((acc, id) => {
-        if (id === 'files') return acc;
-        if (!innovationRecord.document[key][id]) return acc;
-
-        if (acc[id]) {
-          console.log(JSON.stringify(innovationRecord, null, 2));
-          throw new Error(`Repeated answers (${innovationRecord.id}): ${id}`);
-        }
-
-        acc[id] = innovationRecord.document[key][id];
-
-        return acc;
-      }, acc);
-    }, {} as MappedObjectType);
-
+    console.log('V2')
+    console.log(innovationRecord.data)
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
         subSection.questions.forEach(question => {
@@ -191,7 +178,7 @@ export class IRV3Helper {
             return;
           }
 
-          const answer = searchAnswer(v2Answers, question);
+          const answer = searchAnswer(innovationRecord.data, question);
 
           if (!answer) return;
 
@@ -200,11 +187,11 @@ export class IRV3Helper {
           } else if (question.dataType === 'textarea') {
             mapText(answer, question, v3Answers, data);
           } else if (question.dataType === 'radio-group') {
-            mapRadioGroup(answer, v2Answers, question, subSection, v3Answers, data);
+            mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers, data);
           } else if (question.dataType === 'autocomplete-array') {
-            mapArray(answer, v2Answers, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers, data);
           } else if (question.dataType === 'checkbox-array') {
-            mapArray(answer, v2Answers, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers, data);
           } else if (question.dataType === 'fields-group') {
             mapFieldsGroup(answer, question, v3Answers, data);
           } else {
@@ -215,7 +202,18 @@ export class IRV3Helper {
         });
       });
     });
+    console.log('V3')
+    console.log(v3Answers)
 
-    return v3Answers;
+    return {
+      id: innovationRecord.id,
+      section: innovationRecord.section,
+      status: innovationRecord.status,
+      updatedAt: innovationRecord.updatedAt,
+      submittedAt: innovationRecord.submittedAt,
+      submittedBy: innovationRecord.submittedBy,
+      tasksIds: innovationRecord.tasksIds,
+      data: v3Answers
+    };
   }
 }
