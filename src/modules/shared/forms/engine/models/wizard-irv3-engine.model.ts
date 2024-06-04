@@ -264,8 +264,8 @@ export class WizardIRV3EngineModel {
       switch (params.dataType) {
         case 'fields-group':
           {
-            const currAnswers = this.currentAnswers[params.id] as [{ [key: string]: string }];
-            value = this.parseFieldsGroupSummary(step.parameters[0].id);
+            const currAnswer = this.currentAnswers[params.id] as [{ [key: string]: string }];
+            value = currAnswer.map(item => item[params.field!.id]).join(', ');
 
             // Push "parent"
             this.summary.push({
@@ -277,14 +277,14 @@ export class WizardIRV3EngineModel {
             });
 
             // Push "children" if any
-            if (params.addQuestion && currAnswers) {
-              currAnswers.forEach((item, i) => {
+            if (params.addQuestion && currAnswer) {
+              currAnswer.forEach((item, i) => {
                 editStepNumber++;
 
                 this.summary.push({
-                  stepId: `${params.id}|${params.addQuestion?.id}_${i}`,
-                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswers[i][params.field!.id])}`,
-                  value: this.currentAnswers[`${params.id}|${params.addQuestion?.id}_${i}`],
+                  stepId: `${params.id}|${params.addQuestion?.id}|${i}`,
+                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswer[i][params.field!.id])}`,
+                  value: currAnswer[i][params.addQuestion!.id],
                   editStepNumber: editStepNumber
                 });
               });
