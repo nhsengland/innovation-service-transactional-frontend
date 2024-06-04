@@ -1,14 +1,14 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
 import { Injector, PLATFORM_ID } from '@angular/core';
-import { REQUEST, RESPONSE } from '../../express.tokens';
 import { Router, RouterModule } from '@angular/router';
+import { REQUEST, RESPONSE } from '../../express.tokens';
 
 import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
-import { CoreModule, AppInjector } from '@modules/core';
+import { AppInjector, CoreModule } from '@modules/core';
 import { AuthenticationStore, StoresModule } from '@modules/stores';
 
 import { CoreComponent } from './core.component';
@@ -242,7 +242,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     component.redirectTo('/test');
-    expect(routerSpy).toHaveBeenCalledWith(['/test'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['/test'], { queryParams: {} });
   });
 
   it(`should run redirectTo() WITH QueryParams`, () => {
