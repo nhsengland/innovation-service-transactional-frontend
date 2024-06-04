@@ -75,7 +75,15 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                 maxLength: 8,
                 postcodeFormat: true
               },
-              condition: "data.officeLocation != 'basedOutsideUk'"
+              condition: {
+                id: 'officeLocation',
+                options: [
+                  'england',
+                  'scotland',
+                  'wales',
+                  'northernIreland'
+                ]
+              }
             },
             {
               id: 'countryLocation',
@@ -88,7 +96,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   errorMessage: 'Only 1 country is allowed'
                 }
               },
-              condition: "data.officeLocation == 'basedOutsideUk'",
+              condition: {
+                id: 'officeLocation',
+                options: [
+                  'basedOutsideUk'
+                ]
+              },
               items: [
                 {
                   id: 'afghanistan',
@@ -1482,7 +1495,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'You must choose at least one disease or condition'
               },
-              condition: "data.impactDiseaseCondition == 'yes'",
+              condition: {
+                id: 'impactDiseaseCondition',
+                options: [
+                  'yes'
+                ]
+              },
               items: [
                 {
                   id: 'bloodAndImmuneSystemConditions',
@@ -2178,7 +2196,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.estimatedCarbonReductionSavings == 'yes'"
+              condition: {
+                id: 'estimatedCarbonReductionSavings',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'estimatedCarbonReductionSavingsDescriptionB',
@@ -2188,7 +2211,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.estimatedCarbonReductionSavings == 'notYet'"
+              condition: {
+                id: 'estimatedCarbonReductionSavings',
+                options: [
+                  'notYet'
+                ]
+              }
             },
             {
               id: 'carbonReductionPlan',
@@ -2328,7 +2356,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.currentlyCollectingEvidence == 'yes'"
+              condition: {
+                id: 'currentlyCollectingEvidence',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'needsSupportAnyArea',
@@ -2415,7 +2448,13 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.hasMarketResearch != 'notYet'"
+              condition: {
+                id: 'hasMarketResearch',
+                options: [
+                  'yes',
+                  'inProgress'
+                ]
+              }
             },
             {
               id: 'optionBestDescribesInnovation',
@@ -2424,7 +2463,13 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'Choose one option'
               },
-              condition: "data.hasMarketResearch != 'notYet'",
+              condition: {
+                id: 'hasMarketResearch',
+                options: [
+                  'yes',
+                  'inProgress'
+                ]
+              },
               items: [
                 {
                   id: 'oneOffInnovation',
@@ -2457,7 +2502,13 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.hasMarketResearch != 'notYet'"
+              condition: {
+                id: 'hasMarketResearch',
+                options: [
+                  'yes',
+                  'inProgress'
+                ]
+              }
             }
           ]
         },
@@ -2507,8 +2558,14 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition:
-                "data.innovationPathwayKnowledge != 'dontKnow' and data.innovationPathwayKnowledge != 'notPartPathway'"
+              condition: {
+                id: 'hasMarketResearch',
+                options: [
+                  'pathwayExistsAndChanged',
+                  'pathwayExistsAndFits',
+                  'noPathway'
+                ]
+              }
             }
           ]
         }
@@ -2693,7 +2750,13 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'Choose at least one option'
               },
-              condition: "data.hasRegulationKnowledge != 'no' and data.hasRegulationKnowledge != 'notRelevant'",
+              condition: {
+                id: 'hasRegulationKnowledge',
+                options: [
+                  'yesAll',
+                  'yesSome'
+                ]
+              },
               items: [
                 {
                   id: 'ceUkcaNonMedical',
@@ -2896,7 +2959,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'Choose at least one revenue model'
               },
-              condition: "data.hasRevenueModel != 'no' and data.hasRevenueModel != 'dontKnow'",
+              condition: {
+                id: 'hasRevenueModel',
+                options: [
+                  'yes'
+                ]
+              },
               items: [
                 {
                   id: 'advertising',
@@ -2946,7 +3014,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.hasRevenueModel != 'no' and data.hasRevenueModel != 'dontKnow'"
+              condition: {
+                id: 'hasRevenueModel',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'benefittingOrganisations',
@@ -2957,7 +3030,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.hasRevenueModel != 'no' and data.hasRevenueModel != 'dontKnow'"
+              condition: {
+                id: 'hasRevenueModel',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'hasFunding',
@@ -2966,7 +3044,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'Choose one option'
               },
-              condition: "data.hasRevenueModel != 'no' and data.hasRevenueModel != 'dontKnow'",
+              condition: {
+                id: 'hasRevenueModel',
+                options: [
+                  'yes'
+                ]
+              },
               items: [
                 {
                   id: 'yes',
@@ -2992,8 +3075,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition:
-                "data.hasRevenueModel != 'no' and data.hasRevenueModel != 'dontKnow' and data.hasFunding != 'no' and data.hasFunding != 'notRelevant'"
+              condition: {
+                id: 'hasFunding',
+                options: [
+                  'yes'
+                ]
+              }
             }
           ]
         }
@@ -3041,7 +3128,13 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.hasCostKnowledge != 'no'"
+              condition: {
+                id: 'hasCostKnowledge',
+                options: [
+                  'detailedEstimate',
+                  'roughIdea'
+                ]
+              }
             },
             {
               id: 'patientsRange',
@@ -3083,7 +3176,14 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.patientsRange != 'notRelevant'"
+              condition: {
+                id: 'patientsRange',
+                options: [
+                  'upTo10000',
+                  'between10000And500000',
+                  'notSure'
+                ]
+              }
             },
             {
               id: 'sellExpectations',
@@ -3189,7 +3289,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               dataType: 'fields-group',
               label: 'Where have you deployed your innovation?',
               description: 'Provide the name of the organisation and the department, if possible.',
-              condition: "data.isDeployed != 'no'",
+              condition: {
+                id: 'isDeployed',
+                options: [
+                  'yes'
+                ]
+              },
               field: {
                 id: 'organizationDepartment',
                 dataType: 'text',
@@ -3211,7 +3316,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.isDeployed != 'no'"
+              condition: {
+                id: 'isDeployed',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'organisationDeploymentAffect',
@@ -3222,7 +3332,12 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'A description is required'
               },
-              condition: "data.isDeployed != 'no'"
+              condition: {
+                id: 'isDeployed',
+                options: [
+                  'yes'
+                ]
+              }
             },
             {
               id: 'hasResourcesToScale',

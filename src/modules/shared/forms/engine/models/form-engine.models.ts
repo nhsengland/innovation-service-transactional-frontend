@@ -208,7 +208,10 @@ export class FormEngineParameterModelV3 {
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
-  condition?: string;
+  condition?: {
+    id: string;
+    options: string[];
+  };
   field?: {
     id: string;
     dataType: InnovationRecordFormComponentType;
