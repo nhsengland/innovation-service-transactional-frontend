@@ -1,6 +1,7 @@
+import { IRV3Helper } from './ir-v3-translator.helper';
 import { InnovationRecordSchemaV3Type } from './ir-v3-types';
 
-export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
+const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
   sections: [
     {
       id: 'aboutYourInnovation',
@@ -2559,7 +2560,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                 isRequired: 'A description is required'
               },
               condition: {
-                id: 'hasMarketResearch',
+                id: 'innovationPathwayKnowledge',
                 options: [
                   'pathwayExistsAndChanged',
                   'pathwayExistsAndFits',
@@ -3368,3 +3369,7 @@ export const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
     }
   ]
 };
+
+IRV3Helper.stepChildParent();
+
+export { dummy_schema_V3_202405 };

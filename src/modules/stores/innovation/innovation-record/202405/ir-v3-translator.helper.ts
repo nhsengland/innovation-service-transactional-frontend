@@ -1,6 +1,7 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { InnovationSectionInfoDTO } from '../../innovation.models';
+import { subscribe } from 'diagnostics_channel';
 
 const mapText = (answer: string, schemaQuestion: MappedObjectType, schemaAnswers: MappedObjectType) => {
   schemaAnswers[schemaQuestion.id] = answer;
@@ -143,6 +144,29 @@ export class IRV3Helper {
 
         return index === 0 ? match.toLowerCase() : match.toUpperCase();
       });
+  }
+
+  static stepChildParent() {
+    dummy_schema_V3_202405.sections.forEach(section => {
+      section.subSections.forEach(subSection => {
+        const stepsChildParentRelations: MappedObjectType = {};
+
+        subSection.questions.forEach(question => {
+          if (question.condition) {
+            stepsChildParentRelations[question.id] = question.condition.id;
+          }
+
+          if (question.items && question.items[0].itemsFromAnswer) {
+            stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
+          }
+        });
+
+        if (Object.keys(stepsChildParentRelations).length) {
+          subSection.stepsChildParentRelations = stepsChildParentRelations;
+          console.log(subSection.id, stepsChildParentRelations)
+        }
+      });
+    });
   }
 
   static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
