@@ -37,7 +37,7 @@ export class AppComponent {
     ) {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         if (this.environmentStore.ENV.ENABLE_ANALYTICS) {
-          gtag &&
+          (typeof gtag === 'function') &&
             gtag('config', this.environmentStore.ENV.TAG_MEASUREMENT_ID, {
               page_path: e.urlAfterRedirects
             });
