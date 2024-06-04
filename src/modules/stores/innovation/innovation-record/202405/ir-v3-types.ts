@@ -16,6 +16,7 @@ export type InnovationRecordSubSectionType = {
   id: string;
   title: string;
   questions: InnovationRecordQuestionStepType[];
+  stepsChildParentRelations?: MappedObjectType;
 };
 
 export type InnovationRecordConditionType = {
