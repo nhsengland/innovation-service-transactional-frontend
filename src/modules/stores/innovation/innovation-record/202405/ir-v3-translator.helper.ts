@@ -2,11 +2,7 @@ import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { InnovationSectionInfoDTO } from '../../innovation.models';
 
-const mapText = (
-  answer: string,
-  schemaQuestion: MappedObjectType,
-  schemaAnswers: MappedObjectType
-) => {
+const mapText = (answer: string, schemaQuestion: MappedObjectType, schemaAnswers: MappedObjectType) => {
   schemaAnswers[schemaQuestion.id] = answer;
 };
 
@@ -89,18 +85,20 @@ const mapFieldsGroup = (
 ) => {
   if (!answer.length) return;
 
+  schemaAnswers[schemaQuestion.id] = [];
+
   answer.forEach((item: any, i: number) => {
+    const itemObj: MappedObjectType = {};
+
     if (item[schemaQuestion.field.id]) {
-      schemaAnswers[schemaQuestion.id] = {
-        [schemaQuestion.field.id]: item[schemaQuestion.field.id]
-      };
+      itemObj[schemaQuestion.field.id] = item[schemaQuestion.field.id];
     } else return;
 
     if (schemaQuestion.addQuestion) {
-      if (item[schemaQuestion.addQuestion.id]) {
-        schemaAnswers[schemaQuestion.id][schemaQuestion.addQuestion.id] = item[schemaQuestion.addQuestion.id];
-      }
+      itemObj[schemaQuestion.addQuestion.id] = item[schemaQuestion.addQuestion.id];
     }
+
+    schemaAnswers[schemaQuestion.id].push(itemObj);
   });
 };
 

@@ -188,7 +188,9 @@ export class WizardIRV3EngineModel {
   }
 
   checkIfStepConditionIsMet(condition: InnovationRecordConditionType | undefined): boolean {
-    return !!condition?.options.includes(this.currentAnswers[condition.id]);
+    if (!condition) return true;
+
+    return !!condition.options.includes(this.currentAnswers[condition.id]);
   }
 
   getSummary(): WizardSummaryV3Type[] {
