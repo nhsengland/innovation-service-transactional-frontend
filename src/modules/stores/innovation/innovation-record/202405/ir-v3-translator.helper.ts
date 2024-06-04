@@ -149,7 +149,6 @@ export class IRV3Helper {
 
   static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
     const v3Answers: MappedObjectType = {};
-    innovationRecord.data.website = 'treta'
 
     console.log('V2');
     console.log(innovationRecord.data);
