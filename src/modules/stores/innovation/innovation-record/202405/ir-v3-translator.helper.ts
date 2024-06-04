@@ -192,7 +192,7 @@ export class IRV3Helper {
       submittedAt: innovationRecord.submittedAt,
       submittedBy: innovationRecord.submittedBy,
       tasksIds: innovationRecord.tasksIds,
-      data: v3Answers
+      data: JSON.parse(JSON.stringify(v3Answers))
     };
   }
 }
