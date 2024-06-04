@@ -1,16 +1,13 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
-import { Parser } from 'expr-eval';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { InnovationSectionInfoDTO } from '../../innovation.models';
 
 const mapText = (
   answer: string,
   schemaQuestion: MappedObjectType,
-  schemaAnswers: MappedObjectType,
-  data: MappedObjectType
+  schemaAnswers: MappedObjectType
 ) => {
   schemaAnswers[schemaQuestion.id] = answer;
-  data[schemaQuestion.id] = answer;
 };
 
 const mapRadioGroup = (
@@ -18,8 +15,7 @@ const mapRadioGroup = (
   subSection: MappedObjectType,
   schemaQuestion: MappedObjectType,
   schemaSubSection: MappedObjectType,
-  schemaAnswers: MappedObjectType,
-  data: MappedObjectType
+  schemaAnswers: MappedObjectType
 ) => {
   let item: any;
   let itemList;
@@ -48,10 +44,6 @@ const mapRadioGroup = (
     } else {
       schemaAnswers[schemaQuestion.id] = item.id;
     }
-    data[schemaQuestion.id] = item.id;
-  } else {
-    /* schemaAnswers[schemaQuestion.id] = itemId;
-    data[schemaQuestion.id] = itemId; */
   }
 };
 
@@ -59,38 +51,33 @@ const mapArray = (
   answer: string[],
   subSection: MappedObjectType,
   schemaQuestion: MappedObjectType,
-  schemaAnswers: MappedObjectType,
-  data: MappedObjectType
+  schemaAnswers: MappedObjectType
 ) => {
   if (!answer.length) return;
 
   schemaAnswers[schemaQuestion.id] = [];
-  data[schemaQuestion.id] = [];
 
   answer.forEach((value: any) => {
     const itemId = IRV3Helper.camelize(value.id ? value.id : value);
     const item = schemaQuestion.items.find((item: any) => item.id === itemId);
 
     if (item) {
-      if (item.conditional) {
-        if (subSection[item.conditional.id]) {
-          schemaAnswers[schemaQuestion.id].push(item.id);
-          schemaAnswers[item.conditional.id] = subSection[item.conditional.id];
-        }
-        data[schemaQuestion.id].push(item.id);
+      if (schemaQuestion.addQuestion) {
+        const item2 = schemaQuestion.addQuestion.items.find(
+          (item: any) => item.id === IRV3Helper.camelize(value.addQuestion)
+        );
+        schemaAnswers[schemaQuestion.id].push({
+          [schemaQuestion.id]: item.id,
+          [schemaQuestion.addQuestion.id]: item2.id
+        });
       } else {
         schemaAnswers[schemaQuestion.id].push(item.id);
-        data[schemaQuestion.id].push(item.id);
       }
-
-      if (schemaQuestion.addQuestion && (schemaQuestion.dataType === 'checkbox-array')) {
-        const item2 = schemaQuestion.addQuestion.items.find((item: any) => item.id === IRV3Helper.camelize(value.addQuestion));
-        schemaAnswers[`${schemaQuestion.addQuestion.id}|${itemId}`] = item2.id;
-        data[`${schemaQuestion.addQuestion.id}|${itemId}`] = item2.id;
+      if (item.conditional) {
+        if (subSection[item.conditional.id]) {
+          schemaAnswers[item.conditional.id] = subSection[item.conditional.id];
+        }
       }
-    } else {
-      /* schemaAnswers[schemaQuestion.id].push(itemId);
-      data[schemaQuestion.id].push(itemId); */
     }
   });
 };
@@ -98,21 +85,20 @@ const mapArray = (
 const mapFieldsGroup = (
   answer: MappedObjectType,
   schemaQuestion: MappedObjectType,
-  schemaAnswers: MappedObjectType,
-  data: MappedObjectType
+  schemaAnswers: MappedObjectType
 ) => {
   if (!answer.length) return;
 
   answer.forEach((item: any, i: number) => {
     if (item[schemaQuestion.field.id]) {
-      schemaAnswers[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
-      data[`${schemaQuestion.id}|${schemaQuestion.field.id}|${i}`] = item[schemaQuestion.field.id];
+      schemaAnswers[schemaQuestion.id] = {
+        [schemaQuestion.field.id]: item[schemaQuestion.field.id]
+      };
     } else return;
 
     if (schemaQuestion.addQuestion) {
       if (item[schemaQuestion.addQuestion.id]) {
-        schemaAnswers[`${schemaQuestion.id}|${schemaQuestion.addQuestion.id}|${i}`] = item[schemaQuestion.addQuestion.id];
-        data[`${schemaQuestion.id}|${schemaQuestion.addQuestion.id}|${i}`] = item[schemaQuestion.addQuestion.id];
+        schemaAnswers[schemaQuestion.id][schemaQuestion.addQuestion.id] = item[schemaQuestion.addQuestion.id];
       }
     }
   });
@@ -163,37 +149,30 @@ export class IRV3Helper {
 
   static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
     const v3Answers: MappedObjectType = {};
-    const data: MappedObjectType = {};
 
-    console.log('V2')
-    console.log(innovationRecord.data)
+    console.log('V2');
+    console.log(innovationRecord.data);
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
         subSection.questions.forEach(question => {
-          if (
-            'condition' in question &&
-            typeof question.condition === 'string' &&
-            !Parser.evaluate(question.condition, { data })
-          ) {
-            return;
-          }
+          if (question.condition && !question.condition?.options.includes(v3Answers[question.condition.id])) return;
 
           const answer = searchAnswer(innovationRecord.data, question);
 
           if (!answer) return;
 
           if (question.dataType === 'text') {
-            mapText(answer, question, v3Answers, data);
+            mapText(answer, question, v3Answers);
           } else if (question.dataType === 'textarea') {
-            mapText(answer, question, v3Answers, data);
+            mapText(answer, question, v3Answers);
           } else if (question.dataType === 'radio-group') {
-            mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers, data);
+            mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers);
           } else if (question.dataType === 'autocomplete-array') {
-            mapArray(answer, innovationRecord.data, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers);
           } else if (question.dataType === 'checkbox-array') {
-            mapArray(answer, innovationRecord.data, question, v3Answers, data);
+            mapArray(answer, innovationRecord.data, question, v3Answers);
           } else if (question.dataType === 'fields-group') {
-            mapFieldsGroup(answer, question, v3Answers, data);
+            mapFieldsGroup(answer, question, v3Answers);
           } else {
             console.log(`==> NOT MAPPED ${question.id} (${question.dataType})`);
             console.log(JSON.stringify(subSection, null, 2));
@@ -202,8 +181,8 @@ export class IRV3Helper {
         });
       });
     });
-    console.log('V3')
-    console.log(v3Answers)
+    console.log('V3');
+    console.log(v3Answers);
 
     return {
       id: innovationRecord.id,

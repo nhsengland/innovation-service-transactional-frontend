@@ -211,7 +211,11 @@ export class FormEngineParameterModelV3 {
   parentAddQuestionId?: string;
   parentFieldId?: string;
 
-  condition?: string;
+  condition?: {
+    id: string;
+    options: string[];
+  };
+
   field?: {
     id: string;
     dataType: InnovationRecordFormComponentType;

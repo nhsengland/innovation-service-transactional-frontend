@@ -18,6 +18,11 @@ export type InnovationRecordSubSectionType = {
   questions: InnovationRecordQuestionStepType[];
 };
 
+export type InnovationRecordConditionType = {
+  id: string;
+  options: string[];
+};
+
 export type InnovationRecordQuestionStepType = {
   id: string;
   dataType: InnovationRecordFormComponentType;
@@ -34,7 +39,7 @@ export type InnovationRecordQuestionStepType = {
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
-  condition?: string;
+  condition?: InnovationRecordConditionType;
   cssOverride?: string;
   isVisible?: boolean;
   parentFieldId?: string;

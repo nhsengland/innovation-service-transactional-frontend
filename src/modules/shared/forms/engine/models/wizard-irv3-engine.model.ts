@@ -5,9 +5,9 @@ import {
   getInnovationRecordSchemaQuestion,
   getInnovationRecordSchemaTranslationsMap
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import { Parser } from 'expr-eval';
 import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -187,12 +187,8 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  checkIfStepConditionIsMet(condition: string | undefined): boolean {
-    if (condition !== undefined) {
-      return !!Parser.evaluate(condition, { data: this.currentAnswers });
-    } else {
-      return true;
-    }
+  checkIfStepConditionIsMet(condition: InnovationRecordConditionType | undefined): boolean {
+    return !!condition?.options.includes(this.currentAnswers[condition.id]);
   }
 
   getSummary(): WizardSummaryV3Type[] {
