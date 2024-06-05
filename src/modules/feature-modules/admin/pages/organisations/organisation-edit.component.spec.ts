@@ -167,7 +167,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture.detectChanges();
 
     component.onSubmitWizard();
-    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01/unit/Unit01'], {});
+    expect(routerSpy).toHaveBeenCalledWith(['admin/organisations/Org01/unit/Unit01'], { queryParams: {} });
   });
 
   it('should run onSubmitStep() and redirect because is the first step', () => {
@@ -182,6 +182,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     component.formEngineComponent.getFormValues = () => ({ valid: true, data: { value: 'some value' } });
 
     component.onSubmitStep('previous');
-    expect(routerSpy).toHaveBeenCalledWith([`organisations/${component.organisationId}`], {});
+    expect(routerSpy).toHaveBeenCalledWith([`organisations/${component.organisationId}`], { queryParams: {} });
   });
 });

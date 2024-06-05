@@ -35,7 +35,7 @@ function getConsentCookie() {
 function setConsentCookie(agreed) {
   setCookie("cookies-consent", JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
 
-  gtag &&
+  (typeof gtag === 'function') &&
     gtag('consent', 'default', {
       ad_storage: 'denied',
       ad_user_data: 'denied',
