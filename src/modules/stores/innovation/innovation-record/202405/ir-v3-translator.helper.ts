@@ -146,7 +146,9 @@ export class IRV3Helper {
       });
   }
 
-  static stepChildParent() {
+  static stepChildParent(sectionId: string): MappedObjectType {
+    const stepsChildParentRelationsMap = new Map();
+
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
         const stepsChildParentRelations: MappedObjectType = {};
@@ -159,14 +161,24 @@ export class IRV3Helper {
           if (question.items && question.items[0].itemsFromAnswer) {
             stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
           }
+
+          if (question.addQuestion && !question.field) {
+            stepsChildParentRelations[question.addQuestion.id] = question.id;
+          }
+
+          if (question.addQuestion && question.field) {
+            stepsChildParentRelations[question.addQuestion.id] = question.id;
+          }
         });
 
         if (Object.keys(stepsChildParentRelations).length) {
           subSection.stepsChildParentRelations = stepsChildParentRelations;
-          console.log(subSection.id, stepsChildParentRelations)
+          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
+          console.log(subSection.id, stepsChildParentRelations);
         }
       });
     });
+    return stepsChildParentRelationsMap.get(sectionId);
   }
 
   static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {

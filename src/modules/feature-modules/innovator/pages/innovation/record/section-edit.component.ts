@@ -128,7 +128,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.wizard.parseSummary(this.sectionId);
       this.wizard.showSummary = true;
       this.wizard.gotoSummary();
-      // this.router.navigateByUrl(`${this.baseUrl}/edit/summary`);
       this.redirectTo(`${this.baseUrl}/edit/summary`);
       this.setPageTitle('Check your answers', { size: 'l' });
     } else {

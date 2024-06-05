@@ -8,6 +8,7 @@ import {
 import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -265,7 +266,7 @@ export class WizardIRV3EngineModel {
         case 'fields-group':
           {
             const currAnswer = this.currentAnswers[params.id] as [{ [key: string]: string }];
-            value = currAnswer.map(item => item[params.field!.id]).join(', ');
+            value = currAnswer ? currAnswer.map(item => item[params.field!.id]).join(', ') : undefined;
 
             // Push "parent"
             this.summary.push({
@@ -294,7 +295,20 @@ export class WizardIRV3EngineModel {
         case 'autocomplete-array':
         case 'checkbox-array':
           {
-            const currAnswers = this.currentAnswers[params.id] as string[];
+            const stepAnswers = params.addQuestion
+              ? (this.currentAnswers[params.id] as [{ [key: string]: string }])
+              : (this.currentAnswers[params.id] as string[]);
+
+            // Set value of parent, depending on type of answer, and translate it
+            if (!params.addQuestion) {
+              value = (this.currentAnswers[params.id] as string[])
+                .map(item => this.translations.items.get(item))
+                .join(', ');
+            } else {
+              value = (this.currentAnswers[params.id] as [{ [key: string]: string }])
+                .map(item => this.translations.items.get(item[params.id]))
+                .join(', ');
+            }
 
             // Push "parent"
             this.summary.push({
@@ -306,13 +320,18 @@ export class WizardIRV3EngineModel {
             });
 
             // Push "children" if any
-            if (params.addQuestion && currAnswers) {
-              currAnswers.forEach((item, i) => {
+            if (params.addQuestion && stepAnswers) {
+              const stepAnswers = this.currentAnswers[params.id] as [{ [key: string]: string }];
+              stepAnswers.forEach((item, i) => {
                 editStepNumber++;
+
                 this.summary.push({
                   stepId: stepId,
-                  label: params.addQuestion!.label.replace('{{item}}', this.translations.items.get(item) ?? item),
-                  value: this.currentAnswers[`${stepId}|${params.addQuestion!.id}_${i}`],
+                  label: params.addQuestion!.label.replace(
+                    '{{item}}',
+                    this.translations.items.get(stepAnswers[i][params.id]) ?? stepAnswers[i][params.id]
+                  ),
+                  value: stepAnswers[i][params.addQuestion!.id],
                   editStepNumber: editStepNumber
                 });
               });
@@ -340,6 +359,8 @@ export class WizardIRV3EngineModel {
 
   runRules(): this {
     console.log('running rules');
+    this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
+    console.log('this.stepsChildParentRelations', this.stepsChildParentRelations);
     this.steps = [];
     const subsection = dummy_schema_V3_202405.sections
       .flatMap(s => s.subSections)
@@ -403,7 +424,7 @@ export class WizardIRV3EngineModel {
             new FormEngineModelV3({
               parameters: [
                 {
-                  id: `${q.id}|${q.addQuestion!.id}_${i}`,
+                  id: `${q.addQuestion!.id}_${i}`,
                   dataType: q.addQuestion!.dataType,
                   label: label,
                   description: q.addQuestion!.description,
