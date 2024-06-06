@@ -55,7 +55,7 @@ export class WizardIRV3EngineModel {
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
-    this.showSummary = data.showSummary ?? false;
+    this.showSummary = data.showSummary ?? true;
     this.translations = getInnovationRecordSchemaTranslationsMap();
   }
 
@@ -110,67 +110,79 @@ export class WizardIRV3EngineModel {
   //   return this;
   // }
 
-  gotoSummary(): void {
-    // this.runSummaryParsing();
+  gotoSummary(): this {
+    this.visitedSteps.clear();
+
+    this.parseSummary(this.sectionId);
+    this.showSummary = true;
     this.currentStepId = 'summary';
+
+    return this;
   }
 
   gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
-    // this.visitedSteps.clear();
-
     this.currentStepId = parseInt(stepId as string, 10);
+
+    if (stepId === 'summary') {
+      this.parseSummary(this.sectionId);
+    }
 
     this.isChangingMode = isChangeMode;
 
-    // this.visitedSteps.add(this.getCurrentStepObjId());
+    this.visitedSteps.add(this.getCurrentStepObjId());
 
     return this;
   }
 
-  nextStep(): this {
-    // if(this.currentStepId + 1>)
-    //   if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
-    //     this.gotoSummary();
-    //   } else if (typeof this.currentStepId === 'number') {
-    //     this.currentStepId++;
-    //     this.visitedSteps.add(this.getCurrentStepObjId());
+  nextStep(isChangeMode: boolean = false): number | 'summary' {
+    let nextStepId = this.currentStepId;
 
-    //     if (this.isChangingMode) {
-    //       this.checkStepConditions();
-    //     }
-    //   }
+    if (this.showSummary && typeof this.currentStepId === 'number' && this.isLastStep()) {
+      return 'summary';
+      // this.outboundParsing();
+      // this.gotoSummary();
+    } else if (typeof nextStepId === 'number') {
+      nextStepId++;
 
-    return this;
+      this.visitedSteps.add(this.getStepObjectId(nextStepId));
+
+      if (isChangeMode) {
+        let isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+          this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
+        );
+
+        while (!isCurrentStepChildOfAnyVisitedSteps) {
+          // go through all steps to see if there are any children at some point
+          isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+            this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
+          );
+
+          // if we reach the end and no other children have been found, return summary
+          if (nextStepId === this.steps.length) {
+            nextStepId = 'summary';
+            break;
+          }
+
+          if (!isCurrentStepChildOfAnyVisitedSteps) {
+            this.visitedSteps.delete(this.getStepObjectId(nextStepId));
+          }
+
+          nextStepId++;
+        }
+      }
+    }
+    console.log(`returning value: ${nextStepId}`);
+    return nextStepId;
   }
 
-  // checkStepConditions(): this {
-  //   if (typeof this.currentStepId === 'number') {
-  //     const isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
-  //       this.stepsChildParentRelations[this.getCurrentStepObjId()]
-  //     );
+  getStepObjectId(stepId: number) {
+    return this.steps[stepId - 1].parameters[0].id.split('_')[0] ?? '';
+  }
 
-  //     // Check if visitedSteps has no 'parent' steps in it, if so go to summary.
-  //     if (![...this.visitedSteps].some(step => Object.values(this.stepsChildParentRelations).includes(step))) {
-  //       this.gotoSummary();
-  //       return this;
-  //     }
-
-  //     if (isCurrentStepChildOfAnyVisitedSteps) {
-  //       return this;
-  //     } else {
-  //       this.visitedSteps.delete(this.getCurrentStepObjId());
-  //       this.nextStep();
-  //     }
-  //   }
-
-  //   return this;
-  // }
-
-  // getCurrentStepObjId(): string {
-  //   // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-
-  //   return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
-  // }
+  getCurrentStepObjId(): string {
+    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
+    return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
+  }
 
   getAnswers(): { [key: string]: any } {
     return this.currentAnswers;
@@ -259,7 +271,7 @@ export class WizardIRV3EngineModel {
       let stepId = params.id;
       let label = this.translations.questions.get(stepId.split('|')[0]) ?? '';
       let value: string | undefined = this.currentAnswers[params.id];
-      let isNotMandatory = !!params.validations?.isRequired;
+      let isNotMandatory = !!!params.validations?.isRequired;
       editStepNumber++;
 
       switch (params.dataType) {
@@ -295,19 +307,19 @@ export class WizardIRV3EngineModel {
         case 'autocomplete-array':
         case 'checkbox-array':
           {
-            const stepAnswers = params.addQuestion
-              ? (this.currentAnswers[params.id] as [{ [key: string]: string }])
-              : (this.currentAnswers[params.id] as string[]);
+            let stepAnswers: string[] | { [key: string]: string }[] | undefined = undefined;
 
             // Set value of parent, depending on type of answer, and translate it
             if (!params.addQuestion) {
-              value = (this.currentAnswers[params.id] as string[])
-                .map(item => this.translations.items.get(item))
-                .join(', ');
+              stepAnswers = this.currentAnswers[params.id] as string[];
+
+              value = stepAnswers ? stepAnswers.map(item => this.translations.items.get(item)).join(', ') : undefined;
             } else {
-              value = (this.currentAnswers[params.id] as [{ [key: string]: string }])
-                .map(item => this.translations.items.get(item[params.id]))
-                .join(', ');
+              stepAnswers = this.currentAnswers[params.id] as [{ [key: string]: string }];
+
+              value = stepAnswers
+                ? stepAnswers.map(item => this.translations.items.get(item[params.id])).join(', ')
+                : undefined;
             }
 
             // Push "parent"
@@ -360,7 +372,6 @@ export class WizardIRV3EngineModel {
   runRules(): this {
     console.log('running rules');
     this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
-    console.log('this.stepsChildParentRelations', this.stepsChildParentRelations);
     this.steps = [];
     const subsection = dummy_schema_V3_202405.sections
       .flatMap(s => s.subSections)
@@ -393,8 +404,11 @@ export class WizardIRV3EngineModel {
         )?.itemsFromAnswer;
 
         if (itemsFromAnswer) {
-          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer] as string[];
+          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
+            ? (this.currentAnswers[itemsFromAnswer] as string[])
+            : [];
           const updatedItemsList = itemsDependencyAnswer.map(i => ({ id: i, label: this.translations.items.get(i) }));
+
           step.parameters[0].items = updatedItemsList;
         }
 
@@ -416,7 +430,7 @@ export class WizardIRV3EngineModel {
           } else {
             label = q.addQuestion!.label.replace(
               '{{item}}',
-              this.translations.items.get(this.currentAnswers[q.id][i]) ?? label
+              this.translations.items.get(this.currentAnswers[q.id][i][q.id]) ?? label
             );
           }
 

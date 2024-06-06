@@ -94,18 +94,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
         this.wizardAnswers = this.wizard.getAnswers();
 
-        // Get out if trying to load summary
         if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
           this.isChangeMode = queryParams.isChangeMode;
           this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
-
-          // queryParams.isChangeMode
-          //   ? // enables changing mode and redirects to step function
-          //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1, true)
-          //   : // go to regular step
-          //     this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
-
-          // this.onGoToStep(this.activatedRoute.snapshot.params.questionId);
         }
       },
       error: () => {
@@ -116,17 +107,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepId: number): void {
-    // this.wizard.gotoStep(this.wizard.steps.findIndex(s => s.parameters[0].id === stepId) ?? 0, true);
     this.onGoToStep(stepId, true);
     this.resetAlert();
-    // this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
 
   onGoToStep(stepId: 'summary' | number, isChangeMode?: boolean) {
     if (stepId === 'summary') {
       console.log('go to summary');
-      this.wizard.parseSummary(this.sectionId);
-      this.wizard.showSummary = true;
       this.wizard.gotoSummary();
       this.redirectTo(`${this.baseUrl}/edit/summary`);
       this.setPageTitle('Check your answers', { size: 'l' });
@@ -166,29 +153,12 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           ) {
             currentStepIndex--;
           }
-          this.onGoToStep(currentStepIndex);
+          this.onGoToStep(currentStepIndex, this.isChangeMode);
         }
       }
 
       if (action === 'next') {
-        if (
-          this.wizard.isLastStep() // TODO: " || this.isChangeMode && {condition if step is not part of a child/parent flow}"
-        ) {
-          this.wizard.outboundParsing();
-          this.onGoToStep('summary');
-        } else {
-          currentStepIndex++;
-
-          this.wizard.currentStepParameters()[0].id;
-          while (
-            !this.wizard.checkIfStepConditionIsMet(
-              getInnovationRecordSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
-            )
-          ) {
-            currentStepIndex++;
-          }
-          this.onGoToStep(currentStepIndex);
-        }
+        this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
       }
     } else {
       this.router.navigateByUrl(`${this.baseUrl}`);

@@ -174,7 +174,6 @@ export class IRV3Helper {
         if (Object.keys(stepsChildParentRelations).length) {
           subSection.stepsChildParentRelations = stepsChildParentRelations;
           stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
-          console.log(subSection.id, stepsChildParentRelations);
         }
       });
     });
