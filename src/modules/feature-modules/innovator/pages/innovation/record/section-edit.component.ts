@@ -91,6 +91,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
         this.wizard.setAnswers(sectionInfoResponse.data).runRules();
+        console.log('set answers:', this.wizard.currentAnswers);
         this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
         this.wizardAnswers = this.wizard.getAnswers();
 

@@ -31,6 +31,7 @@ export class FormEngineHelperV3 {
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
+      console.log('conditionalFields', conditionalFields);
 
       const additionalFields = parameter.additional || [];
 
@@ -117,6 +118,7 @@ export class FormEngineHelperV3 {
       conditionalFields.forEach(item => {
         if (item.conditional) {
           const itemValue = values[item.conditional.id] || null;
+          console.log('itemValue', itemValue);
 
           form.addControl(
             item.conditional.id,
@@ -155,6 +157,14 @@ export class FormEngineHelperV3 {
       newField.setValidators(FormEngineHelperV3.getParameterValidators(parameter.field));
       newField.updateValueAndValidity();
       formGroup.addControl(parameter.field.id, newField);
+    }
+    if (parameter.field && parameter.addQuestion) {
+      const newField = FormEngineHelperV3.createParameterFormControl(
+        parameter.field,
+        (value || {})[parameter.field.id]
+      );
+      newField.updateValueAndValidity();
+      formGroup.addControl(parameter.addQuestion.id, newField);
     }
 
     return formGroup;

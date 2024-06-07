@@ -220,10 +220,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       }
 
       // const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-      this.sectionSummaryData.sectionInfo.wizard.parseSummary(this.sectionId);
-      const data = this.sectionSummaryData.sectionInfo.wizard.parseSummary(this.sectionId);
-      console.log('data');
-      console.log(data);
+      const data = this.sectionSummaryData.sectionInfo.wizard.parseSummary();
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 

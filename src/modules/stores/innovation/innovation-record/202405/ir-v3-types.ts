@@ -3,6 +3,7 @@ import { INNOVATION_SECTION_STATUS } from '../../innovation.models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
+import { FormEngineParameterModelV3 } from '@modules/shared/forms';
 
 export type InnovationRecordSchemaV3Type = {
   sections: {
@@ -45,6 +46,7 @@ export type InnovationRecordQuestionStepType = {
   isVisible?: boolean;
   parentFieldId?: string;
   parentAddQuestionId?: string;
+  parentStepId?: string;
 };
 
 export type InnovationRecordFormComponentType =
@@ -82,17 +84,18 @@ export type InnovationRecordItemsType = {
   label?: string;
   description?: string;
   exclusive?: boolean;
-  conditional?: {
-    id: string;
-    label: string;
-    description?: string;
-    dataType: any;
-    validations: InnovationRecordStepValidationsType;
-    isVisible?: boolean;
-    cssOverride?: string;
-    placeholder?: string;
-    items?: any;
-  };
+  conditional?: FormEngineParameterModelV3;
+  // {
+  //   id: string;
+  //   label: string;
+  //   description?: string;
+  //   dataType: any;
+  //   validations: InnovationRecordStepValidationsType;
+  //   isVisible?: boolean;
+  //   cssOverride?: string;
+  //   placeholder?: string;
+  //   items?: any;
+  // };
   group?: string;
   type?: string;
   itemsFromAnswer?: string;
