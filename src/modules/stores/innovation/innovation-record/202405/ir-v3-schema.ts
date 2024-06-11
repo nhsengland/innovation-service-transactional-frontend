@@ -78,12 +78,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'officeLocation',
-                options: [
-                  'england',
-                  'scotland',
-                  'wales',
-                  'northernIreland'
-                ]
+                options: ['england', 'scotland', 'wales', 'northernIreland']
               }
             },
             {
@@ -99,9 +94,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'officeLocation',
-                options: [
-                  'basedOutsideUk'
-                ]
+                options: ['basedOutsideUk']
               },
               items: [
                 {
@@ -1498,9 +1491,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'impactDiseaseCondition',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               },
               items: [
                 {
@@ -2199,9 +2190,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'estimatedCarbonReductionSavings',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -2214,9 +2203,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'estimatedCarbonReductionSavings',
-                options: [
-                  'notYet'
-                ]
+                options: ['notYet']
               }
             },
             {
@@ -2359,9 +2346,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'currentlyCollectingEvidence',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -2451,10 +2436,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasMarketResearch',
-                options: [
-                  'yes',
-                  'inProgress'
-                ]
+                options: ['yes', 'inProgress']
               }
             },
             {
@@ -2466,10 +2448,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasMarketResearch',
-                options: [
-                  'yes',
-                  'inProgress'
-                ]
+                options: ['yes', 'inProgress']
               },
               items: [
                 {
@@ -2505,10 +2484,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasMarketResearch',
-                options: [
-                  'yes',
-                  'inProgress'
-                ]
+                options: ['yes', 'inProgress']
               }
             }
           ]
@@ -2561,11 +2537,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'innovationPathwayKnowledge',
-                options: [
-                  'pathwayExistsAndChanged',
-                  'pathwayExistsAndFits',
-                  'noPathway'
-                ]
+                options: ['pathwayExistsAndChanged', 'pathwayExistsAndFits', 'noPathway']
               }
             }
           ]
@@ -2634,6 +2606,10 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               validations: {
                 isRequired: 'Choose at least one group'
               },
+              condition: {
+                id: 'testedWithIntendedUsers',
+                options: ['yes', 'inProgress']
+              },
               items: [
                 {
                   id: 'clinicalSocialCareWorkingInsideUk',
@@ -2680,6 +2656,10 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               label: 'What kind of testing with users have you done?',
               description:
                 'This can include any testing you have done with people who would use your innovation, for example patients, nurses or administrative staff.',
+              condition: {
+                id: 'testedWithIntendedUsers',
+                options: ['yes', 'inProgress']
+              },
               field: {
                 id: 'kind',
                 dataType: 'text',
@@ -2753,10 +2733,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasRegulationKnowledge',
-                options: [
-                  'yesAll',
-                  'yesSome'
-                ]
+                options: ['yesAll', 'yesSome']
               },
               items: [
                 {
@@ -2962,9 +2939,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasRevenueModel',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               },
               items: [
                 {
@@ -3017,9 +2992,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasRevenueModel',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -3033,9 +3006,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasRevenueModel',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -3047,9 +3018,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasRevenueModel',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               },
               items: [
                 {
@@ -3078,9 +3047,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasFunding',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             }
           ]
@@ -3131,10 +3098,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'hasCostKnowledge',
-                options: [
-                  'detailedEstimate',
-                  'roughIdea'
-                ]
+                options: ['detailedEstimate', 'roughIdea']
               }
             },
             {
@@ -3179,11 +3143,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'patientsRange',
-                options: [
-                  'upTo10000',
-                  'between10000And500000',
-                  'notSure'
-                ]
+                options: ['upTo10000', 'between10000And500000', 'notSure']
               }
             },
             {
@@ -3292,9 +3252,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               description: 'Provide the name of the organisation and the department, if possible.',
               condition: {
                 id: 'isDeployed',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               },
               field: {
                 id: 'organizationDepartment',
@@ -3319,9 +3277,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'isDeployed',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -3335,9 +3291,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               },
               condition: {
                 id: 'isDeployed',
-                options: [
-                  'yes'
-                ]
+                options: ['yes']
               }
             },
             {
@@ -3370,6 +3324,6 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
   ]
 };
 
-IRV3Helper.stepChildParent();
+// IRV3Helper.stepChildParent();
 
 export { dummy_schema_V3_202405 };

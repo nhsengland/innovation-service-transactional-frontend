@@ -210,6 +210,8 @@ export class FormEngineParameterModelV3 {
 
   parentAddQuestionId?: string;
   parentFieldId?: string;
+  parentStepId?: string;
+  isNestedField?: boolean;
 
   condition?: {
     id: string;
@@ -253,24 +255,18 @@ export class FormEngineParameterModelV3 {
     this.addNewLabel = data.addNewLabel;
     this.field = data.field;
     this.condition = data.condition;
-
     this.lengthLimit = data.lengthLimit;
+    this.items = data.items;
+    this.parentAddQuestionId = data.parentAddQuestionId;
+    this.parentFieldId = data.parentFieldId;
+    this.parentStepId = data.parentStepId;
+    this.isNestedField = data.isNestedField;
+
     // this.additional = data.additional;
 
     // this.groupedItems = data.groupedItems;
-    this.items = data.items;
 
     // this.selectItems = data.selectItems;
-
-    this.parentAddQuestionId = data.parentAddQuestionId;
-    this.parentFieldId = data.parentFieldId;
-
-    // if (data.fieldsGroupConfig) {
-    //   this.fieldsGroupConfig = {
-    //     fields: (data.fieldsGroupConfig.fields || []).map(f => new FormEngineParameterModelV3(f)),
-    //     addNewLabel: data.fieldsGroupConfig.addNewLabel
-    //   };
-    // }
 
     // this.fileUploadConfig = data.fileUploadConfig;
   }

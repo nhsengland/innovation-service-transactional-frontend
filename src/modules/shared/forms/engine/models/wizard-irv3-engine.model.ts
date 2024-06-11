@@ -7,7 +7,14 @@ import {
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
-import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  InnovationRecordConditionType,
+  InnovationRecordQuestionStepType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
+import { StringsHelper } from '@app/base/helpers';
+import { MappedObjectType } from '@app/base/types';
+import { Console } from 'console';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -54,7 +61,7 @@ export class WizardIRV3EngineModel {
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
-    this.showSummary = data.showSummary ?? false;
+    this.showSummary = data.showSummary ?? true;
     this.translations = getInnovationRecordSchemaTranslationsMap();
   }
 
@@ -109,67 +116,77 @@ export class WizardIRV3EngineModel {
   //   return this;
   // }
 
-  gotoSummary(): void {
-    // this.runSummaryParsing();
+  gotoSummary(): this {
+    this.visitedSteps.clear();
+
+    this.parseSummary();
+    this.showSummary = true;
     this.currentStepId = 'summary';
+
+    return this;
   }
 
   gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
-    // this.visitedSteps.clear();
-
     this.currentStepId = parseInt(stepId as string, 10);
+
+    // if (stepId === 'summary') {
+    //   this.parseSummary();
+    // }
 
     this.isChangingMode = isChangeMode;
 
-    // this.visitedSteps.add(this.getCurrentStepObjId());
+    this.visitedSteps.add(this.getCurrentStepObjId());
 
     return this;
   }
 
-  nextStep(): this {
-    // if(this.currentStepId + 1>)
-    //   if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
-    //     this.gotoSummary();
-    //   } else if (typeof this.currentStepId === 'number') {
-    //     this.currentStepId++;
-    //     this.visitedSteps.add(this.getCurrentStepObjId());
+  nextStep(isChangeMode: boolean = false): number | 'summary' {
+    let nextStepId = this.currentStepId;
 
-    //     if (this.isChangingMode) {
-    //       this.checkStepConditions();
-    //     }
-    //   }
+    if (this.showSummary && typeof this.currentStepId === 'number' && this.isLastStep()) {
+      return 'summary';
+    } else if (typeof nextStepId === 'number') {
+      nextStepId++;
 
-    return this;
+      this.visitedSteps.add(this.getStepObjectId(nextStepId));
+
+      if (isChangeMode) {
+        let isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+          this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
+        );
+
+        while (!isCurrentStepChildOfAnyVisitedSteps) {
+          // go through all steps to see if there are any children at some point
+          isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+            this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
+          );
+
+          // if we reach the end and no other children have been found, return summary
+          if (nextStepId === this.steps.length) {
+            nextStepId = 'summary';
+            break;
+          }
+
+          if (!isCurrentStepChildOfAnyVisitedSteps) {
+            this.visitedSteps.delete(this.getStepObjectId(nextStepId));
+          }
+
+          nextStepId++;
+        }
+      }
+    }
+    console.log(`returning value: ${nextStepId}`);
+    return nextStepId;
   }
 
-  // checkStepConditions(): this {
-  //   if (typeof this.currentStepId === 'number') {
-  //     const isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
-  //       this.stepsChildParentRelations[this.getCurrentStepObjId()]
-  //     );
+  getStepObjectId(stepId: number) {
+    return this.steps[stepId - 1].parameters[0].id.split('_')[0] ?? '';
+  }
 
-  //     // Check if visitedSteps has no 'parent' steps in it, if so go to summary.
-  //     if (![...this.visitedSteps].some(step => Object.values(this.stepsChildParentRelations).includes(step))) {
-  //       this.gotoSummary();
-  //       return this;
-  //     }
-
-  //     if (isCurrentStepChildOfAnyVisitedSteps) {
-  //       return this;
-  //     } else {
-  //       this.visitedSteps.delete(this.getCurrentStepObjId());
-  //       this.nextStep();
-  //     }
-  //   }
-
-  //   return this;
-  // }
-
-  // getCurrentStepObjId(): string {
-  //   // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-
-  //   return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
-  // }
+  getCurrentStepObjId(): string {
+    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
+    return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
+  }
 
   getAnswers(): { [key: string]: any } {
     return this.currentAnswers;
@@ -197,75 +214,185 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
-  private parseFieldsGroupSummary(id: string): string | undefined {
-    for (const section of dummy_schema_V3_202405.sections) {
-      for (const subSection of section.subSections) {
-        for (const question of subSection.questions) {
-          if (question.id !== id) continue;
+  // inboundParsing(data: MappedObjectType): { [key: string]: any } {
+  //   let toReturn: { [key: string]: any } = {};
+  //   for (const step of this.steps) {
+  //     const params = step.parameters[0];
+  //     console.log('params', params);
+  //     if (!params.isNestedField) {
+  //       toReturn[params.id] = data[params.id] ?? undefined;
+  //     }
 
-          const re = new RegExp(`^${question.field!.id}|\d+$`);
+  //     // assign nested values to all type of conditional steps (i.e: field-groups, addQuestions)
+  //     if (params.isNestedField && params.parentAddQuestionId && params.parentStepId) {
+  //       const index = Number(params.id.split('_')[1]);
+  //       toReturn[params.id] = data[params.parentStepId][index][params.parentAddQuestionId];
+  //     }
+  //   }
+  //   console.log('inbound parsing:', toReturn);
 
-          return Object.keys(this.currentAnswers)
-            .filter(name => re.test(name))
-            .map(name => {
-              const params = name.split('|');
+  //   return toReturn;
+  // }
 
-              return {
-                answer: this.currentAnswers[name],
-                index: parseInt(params[1])
-              };
-            })
-            .sort((a, b) => a.index - b.index)
-            .map(d => d.answer)
-            .join(', ');
-        }
-      }
-    }
+  runRules(): this {
+    this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
+    this.steps = [];
+    const subsection = dummy_schema_V3_202405.sections
+      .flatMap(s => s.subSections)
+      .find(sub => sub.id === this.sectionId);
 
-    return undefined;
-  }
+    subsection?.questions.forEach(q => {
+      // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
+      if (this.checkIfStepConditionIsMet(q.condition)) {
+        const step = new FormEngineModelV3({
+          parameters: [
+            {
+              id: q.id,
+              dataType: q.dataType,
+              label: q.label,
+              description: q.description,
+              ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
+              ...(q.validations && { validations: q.validations }),
+              ...(q.items && { items: q.items }),
+              ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
+              ...(q.addQuestion && { addQuestion: q.addQuestion }),
+              ...(q.field && { field: q.field }),
+              ...(q.condition && { condition: q.condition }),
 
-  outboundParsing(): { [key: string]: string } {
-    const toReturn: { [key: string]: string } = {};
-    for (const [i, step] of this.steps.entries()) {
-      const params = step.parameters[0];
-      // Ignore if it's child of fields-goup, as it will be parsed on its parent
-      if (!params.parentFieldId) {
-        if (params.dataType === 'fields-group' && params.field && this.currentAnswers[params.id]) {
-          (this.currentAnswers[params.id] as [{ [key: string]: string }]).forEach((item, i) => {
-            toReturn[`${params.id}|${params.field!.id}_${i}`] = item[params.field!.id];
-            if (params.addQuestion && this.currentAnswers[`${params.id}|${params.addQuestion.id}_${i}`]) {
-              toReturn[`${params.id}|${params.addQuestion.id}_${i}`] =
-                this.currentAnswers[`${params.id}|${params.addQuestion.id}_${i}`];
+              isNestedField: false
             }
-          });
-        } else {
-          toReturn[`${params.id}`] = this.currentAnswers[params.id];
+          ]
+        });
+
+        // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
+        const itemsFromAnswer = getInnovationRecordSchemaQuestion(q.id).items?.find(
+          i => i.itemsFromAnswer
+        )?.itemsFromAnswer;
+
+        if (itemsFromAnswer) {
+          const conditionalAnswerId =
+            subsection?.questions.find(q => q.id === itemsFromAnswer)?.items?.find(item => item.conditional)
+              ?.conditional?.id ?? '';
+
+          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
+            ? (this.currentAnswers[itemsFromAnswer] as string[])
+            : [];
+
+          const updatedItemsList = itemsDependencyAnswer.map(item => ({
+            id: item,
+            label: item === 'other' ? this.currentAnswers[conditionalAnswerId] : this.translations.items.get(item)
+          }));
+
+          step.parameters[0].items = updatedItemsList;
+        }
+
+        this.steps.push(step);
+      } else {
+        // Clear field if condition doesn't pass
+        this.currentAnswers[q.id] = undefined;
+      }
+
+      /*
+      Special rules for updating data on nested object fields (ex.: 'fields-group' and 'checkbox-group')
+      */
+
+      // For 'fields-group', delete any 'q.id' answer item without 'field.id' value. Can happen when user goes back!
+      if (q.dataType === 'fields-group' && this.currentAnswers[q.id]) {
+        this.currentAnswers[q.id] = (this.currentAnswers[q.id] as [{ [key: string]: string }]).filter(
+          item => item[q.field!.id]
+        );
+
+        // Updates nested values
+        if (q.addQuestion && q.field) {
+          Object.keys(this.currentAnswers)
+            .filter(key => (key as string).startsWith(q.addQuestion!.id))
+            .forEach(key => {
+              const index = Number(key.split('_')[1]);
+              if (index > -1) {
+                ((this.currentAnswers[q.id] as [{ [key: string]: string }]) ?? [])[index][q.addQuestion!.id] =
+                  this.currentAnswers[key as any];
+              }
+              delete this.currentAnswers[key as any];
+            });
         }
       }
-    }
-    console.log('outbound parsing:', toReturn);
-    return toReturn;
+
+      /* End of special rules */
+
+      // runtimerules for `addQuestions`
+      if (q.addQuestion && this.getAnswers()[q.id]) {
+        (this.getAnswers()[q.id] as string[]).forEach((answer, i) => {
+          let label = q.addQuestion!.label;
+          if (q.field) {
+            label = q.addQuestion!.label.replace(
+              `{{item.${q.field.id}}}`,
+              this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
+            );
+          } else {
+            label = q.addQuestion!.label.replace(
+              '{{item}}',
+              this.translations.items.get(this.currentAnswers[q.id][i][q.id]) ?? label
+            );
+          }
+
+          this.steps.push(
+            new FormEngineModelV3({
+              parameters: [
+                {
+                  id: `${q.addQuestion!.id}_${i}`,
+                  dataType: q.addQuestion!.dataType,
+                  label: label,
+                  description: q.addQuestion!.description,
+                  ...(q.addQuestion!.lengthLimit && { lengthLimit: q.addQuestion!.lengthLimit }),
+                  ...(q.addQuestion!.validations && { validations: q.addQuestion!.validations }),
+                  ...(q.addQuestion!.items && { items: q.addQuestion!.items }),
+                  ...(q.addQuestion!.addNewLabel && { addNewLabel: q.addQuestion!.addNewLabel }),
+                  ...(q.addQuestion!.addQuestion && { addQuestion: q.addQuestion!.addQuestion }),
+                  ...(q.addQuestion!.field && { field: q.addQuestion!.field }),
+                  ...(q.addQuestion!.condition && { condition: q.addQuestion!.condition }),
+                  ...(q.parentAddQuestionId && { parentAddQuestionId: q.parentAddQuestionId }),
+                  parentAddQuestionId: q.addQuestion!.id,
+                  parentStepId: q.id,
+                  ...(q.field && { parentFieldId: q.field.id }),
+                  isNestedField: !!(q.dataType === 'fields-group' || q.dataType === 'checkbox-array')
+                }
+              ]
+            })
+          );
+          if (q.dataType === 'fields-group' || q.dataType === 'checkbox-array') {
+            this.currentAnswers[`${q.addQuestion!.id}_${i}`] = this.currentAnswers[q.id][i][q.addQuestion!.id];
+          }
+        });
+      }
+    });
+
+    console.log('runrules steps:', this.steps);
+    return this;
   }
 
-  parseSummary(sectionId: string): WizardSummaryV3Type[] {
+  parseSummary(): WizardSummaryV3Type[] {
+    console.log('this.currentAnswers', this.currentAnswers);
+
     let editStepNumber = 0;
     this.summary = [];
+
+    // const currentAnswers = this.currentAnswers
+    const currentAnswers = this.outboundParsing();
 
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
       let params = step.parameters[0];
       let stepId = params.id;
       let label = this.translations.questions.get(stepId.split('|')[0]) ?? '';
-      let value: string | undefined = this.currentAnswers[params.id];
-      let isNotMandatory = !!params.validations?.isRequired;
+      let value: string | undefined = currentAnswers[params.id];
+      let isNotMandatory = !!!params.validations?.isRequired;
       editStepNumber++;
 
       switch (params.dataType) {
         case 'fields-group':
           {
-            const currAnswers = this.currentAnswers[params.id] as [{ [key: string]: string }];
-            value = this.parseFieldsGroupSummary(step.parameters[0].id);
+            const currAnswer = currentAnswers[params.id] as [{ [key: string]: string }];
+            value = currAnswer ? currAnswer.map(item => item[params.field!.id]).join(', ') : undefined;
 
             // Push "parent"
             this.summary.push({
@@ -277,14 +404,14 @@ export class WizardIRV3EngineModel {
             });
 
             // Push "children" if any
-            if (params.addQuestion && currAnswers) {
-              currAnswers.forEach((item, i) => {
+            if (params.addQuestion && currAnswer) {
+              currAnswer.forEach((item, i) => {
                 editStepNumber++;
 
                 this.summary.push({
-                  stepId: `${params.id}|${params.addQuestion?.id}_${i}`,
-                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswers[i][params.field!.id])}`,
-                  value: this.currentAnswers[`${params.id}|${params.addQuestion?.id}_${i}`],
+                  stepId: `${params.addQuestion?.id}_${i}`,
+                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswer[i][params.field!.id])}`,
+                  value: currAnswer[i][params.addQuestion!.id],
                   editStepNumber: editStepNumber
                 });
               });
@@ -294,7 +421,20 @@ export class WizardIRV3EngineModel {
         case 'autocomplete-array':
         case 'checkbox-array':
           {
-            const currAnswers = this.currentAnswers[params.id] as string[];
+            let stepAnswers: string[] | { [key: string]: string }[] | undefined = undefined;
+
+            // Set value of parent, depending on type of answer, and translate it
+            if (!params.addQuestion) {
+              stepAnswers = currentAnswers[params.id] as string[];
+
+              value = stepAnswers ? stepAnswers.map(item => this.translations.items.get(item)).join(', ') : undefined;
+            } else {
+              stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
+
+              value = stepAnswers
+                ? stepAnswers.map(item => this.translations.items.get(item[params.id])).join(', ')
+                : undefined;
+            }
 
             // Push "parent"
             this.summary.push({
@@ -306,13 +446,18 @@ export class WizardIRV3EngineModel {
             });
 
             // Push "children" if any
-            if (params.addQuestion && currAnswers) {
-              currAnswers.forEach((item, i) => {
+            if (params.addQuestion && stepAnswers) {
+              const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
+              stepAnswers.forEach((item, i) => {
                 editStepNumber++;
+
                 this.summary.push({
                   stepId: stepId,
-                  label: params.addQuestion!.label.replace('{{item}}', this.translations.items.get(item) ?? item),
-                  value: this.currentAnswers[`${stepId}|${params.addQuestion!.id}_${i}`],
+                  label: params.addQuestion!.label.replace(
+                    '{{item}}',
+                    this.translations.items.get(stepAnswers[i][params.id]) ?? stepAnswers[i][params.id]
+                  ),
+                  value: stepAnswers[i][params.addQuestion!.id],
                   editStepNumber: editStepNumber
                 });
               });
@@ -335,98 +480,26 @@ export class WizardIRV3EngineModel {
     }
 
     console.log('summary:', this.summary);
+    this.outboundParsing();
     return this.summary;
   }
 
-  runRules(): this {
-    console.log('running rules');
-    this.steps = [];
-    const subsection = dummy_schema_V3_202405.sections
-      .flatMap(s => s.subSections)
-      .find(sub => sub.id === this.sectionId);
+  outboundParsing(): { [key: string]: any } {
+    let toReturn: { [key: string]: string } = {};
+    for (const [i, step] of this.steps.entries()) {
+      const params = step.parameters[0];
 
-    subsection?.questions.forEach(q => {
-      // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
-      if (this.checkIfStepConditionIsMet(q.condition)) {
-        const step = new FormEngineModelV3({
-          parameters: [
-            {
-              id: q.id,
-              dataType: q.dataType,
-              label: q.label,
-              description: q.description,
-              ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
-              ...(q.validations && { validations: q.validations }),
-              ...(q.items && { items: q.items }),
-              ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
-              ...(q.addQuestion && { addQuestion: q.addQuestion }),
-              ...(q.field && { field: q.field }),
-              ...(q.condition && { condition: q.condition })
-            }
-          ]
-        });
-
-        // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
-        const itemsFromAnswer = getInnovationRecordSchemaQuestion(q.id).items?.find(
-          i => i.itemsFromAnswer
-        )?.itemsFromAnswer;
-
-        if (itemsFromAnswer) {
-          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer] as string[];
-          const updatedItemsList = itemsDependencyAnswer.map(i => ({ id: i, label: this.translations.items.get(i) }));
-          step.parameters[0].items = updatedItemsList;
-        }
-
-        this.steps.push(step);
-      } else {
-        // Clear field if condition doesn't pass
-        this.currentAnswers[q.id] = undefined;
+      // Ignore fields that are already inside nested objects
+      if (!params.isNestedField) {
+        toReturn = {
+          ...toReturn,
+          ...(this.currentAnswers[params.id] && { [params.id]: this.currentAnswers[params.id] })
+        };
       }
+    }
 
-      // runtimerules for `addQuestions`
-      if (q.addQuestion && this.getAnswers()[q.id]) {
-        (this.getAnswers()[q.id] as string[]).forEach((answer, i) => {
-          let label = q.addQuestion!.label;
-          if (q.field) {
-            label = q.addQuestion!.label.replace(
-              `{{item.${q.field.id}}}`,
-              this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
-            );
-          } else {
-            label = q.addQuestion!.label.replace(
-              '{{item}}',
-              this.translations.items.get(this.currentAnswers[q.id][i]) ?? label
-            );
-          }
-
-          this.steps.push(
-            new FormEngineModelV3({
-              parameters: [
-                {
-                  id: `${q.id}|${q.addQuestion!.id}_${i}`,
-                  dataType: q.addQuestion!.dataType,
-                  label: label,
-                  description: q.addQuestion!.description,
-                  ...(q.addQuestion!.lengthLimit && { lengthLimit: q.addQuestion!.lengthLimit }),
-                  ...(q.addQuestion!.validations && { validations: q.addQuestion!.validations }),
-                  ...(q.addQuestion!.items && { items: q.addQuestion!.items }),
-                  ...(q.addQuestion!.addNewLabel && { addNewLabel: q.addQuestion!.addNewLabel }),
-                  ...(q.addQuestion!.addQuestion && { addQuestion: q.addQuestion!.addQuestion }),
-                  ...(q.addQuestion!.field && { field: q.addQuestion!.field }),
-                  ...(q.addQuestion!.condition && { condition: q.addQuestion!.condition }),
-                  ...(q.parentAddQuestionId && { parentAddQuestionId: q.parentAddQuestionId }),
-                  parentAddQuestionId: q.addQuestion!.id,
-                  ...(q.field && { parentFieldId: q.field.id })
-                }
-              ]
-            })
-          );
-        });
-      }
-    });
-
-    console.log('runrules steps:', this.steps);
-    return this;
+    console.log('outbound parsing:', toReturn);
+    return toReturn;
   }
 
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {

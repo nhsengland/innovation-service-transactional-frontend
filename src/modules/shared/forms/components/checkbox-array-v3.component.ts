@@ -73,7 +73,7 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   isConditionalFieldVisible(conditionalFieldId: string): boolean {
     return (
       (this.items || []).filter(
-        item => this.fieldArrayValues.includes(item.id ?? '') && item.conditional?.id === conditionalFieldId
+        item => this.fieldArrayValues.includes(item.id!) && item.conditional?.id === conditionalFieldId
       ).length > 0
     );
   }
@@ -117,6 +117,11 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
       ?.filter(item => item.conditional)
       .forEach(item => {
         if (item.conditional) {
+          console.log('item.conditional.isVisible', item.conditional.isVisible);
+          console.log(
+            'this.isConditionalFieldVisible(item.conditional.id)',
+            this.isConditionalFieldVisible(item.conditional.id)
+          );
           if (item.conditional.isVisible && this.isConditionalFieldVisible(item.conditional.id)) {
             this.conditionalFormControl(item.conditional.id).setValidators(
               FormEngineHelperV3.getParameterValidators(item.conditional)
@@ -137,6 +142,7 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   }
 
   onChanged(e: Event): void {
+    console.log('this.fieldArrayControl', this.fieldArrayControl);
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
 
