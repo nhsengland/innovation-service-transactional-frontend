@@ -153,28 +153,31 @@ export class IRV3Helper {
       section.subSections.forEach(subSection => {
         const stepsChildParentRelations: MappedObjectType = {};
 
-        subSection.questions.forEach(question => {
-          if (question.condition) {
-            stepsChildParentRelations[question.id] = question.condition.id;
-          }
-
-          if (question.items && question.items[0].itemsFromAnswer) {
-            stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
-          }
-
-          if (question.addQuestion && !question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
-          }
-
-          if (question.addQuestion && question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
+        subSection.steps.forEach(step => {
+          step.questions.forEach(question => {
+            if (step.condition) {
+              stepsChildParentRelations[question.id] = step.condition.id;
+            }
+  
+            if (question.items && question.items[0].itemsFromAnswer) {
+              stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
+            }
+  
+            if (question.addQuestion && !question.field) {
+              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            }
+  
+            if (question.addQuestion && question.field) {
+              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            }
+          });
+  
+          if (Object.keys(stepsChildParentRelations).length) {
+            subSection.stepsChildParentRelations = stepsChildParentRelations;
+            stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
           }
         });
 
-        if (Object.keys(stepsChildParentRelations).length) {
-          subSection.stepsChildParentRelations = stepsChildParentRelations;
-          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
-        }
       });
     });
     return stepsChildParentRelationsMap.get(sectionId);
@@ -187,30 +190,32 @@ export class IRV3Helper {
     console.log(innovationRecord.data);
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
-        subSection.questions.forEach(question => {
-          if (question.condition && !question.condition?.options.includes(v3Answers[question.condition.id])) return;
+        subSection.steps.forEach(step => {
+          if (step.condition && !step.condition?.options.includes(v3Answers[step.condition.id])) return;
 
-          const answer = searchAnswer(innovationRecord.data, question);
-
-          if (!answer) return;
-
-          if (question.dataType === 'text') {
-            mapText(answer, question, v3Answers);
-          } else if (question.dataType === 'textarea') {
-            mapText(answer, question, v3Answers);
-          } else if (question.dataType === 'radio-group') {
-            mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers);
-          } else if (question.dataType === 'autocomplete-array') {
-            mapArray(answer, innovationRecord.data, question, v3Answers);
-          } else if (question.dataType === 'checkbox-array') {
-            mapArray(answer, innovationRecord.data, question, v3Answers);
-          } else if (question.dataType === 'fields-group') {
-            mapFieldsGroup(answer, question, v3Answers);
-          } else {
-            console.log(`==> NOT MAPPED ${question.id} (${question.dataType})`);
-            console.log(JSON.stringify(subSection, null, 2));
-            process.exit(1);
-          }
+          step.questions.forEach(question => {
+            const answer = searchAnswer(innovationRecord.data, question);
+  
+            if (!answer) return;
+  
+            if (question.dataType === 'text') {
+              mapText(answer, question, v3Answers);
+            } else if (question.dataType === 'textarea') {
+              mapText(answer, question, v3Answers);
+            } else if (question.dataType === 'radio-group') {
+              mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers);
+            } else if (question.dataType === 'autocomplete-array') {
+              mapArray(answer, innovationRecord.data, question, v3Answers);
+            } else if (question.dataType === 'checkbox-array') {
+              mapArray(answer, innovationRecord.data, question, v3Answers);
+            } else if (question.dataType === 'fields-group') {
+              mapFieldsGroup(answer, question, v3Answers);
+            } else {
+              console.log(`==> NOT MAPPED ${question.id} (${question.dataType})`);
+              console.log(JSON.stringify(subSection, null, 2));
+              process.exit(1);
+            }
+          });
         });
       });
     });

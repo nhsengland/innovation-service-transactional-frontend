@@ -12,7 +12,8 @@ import {
   getInnovationRecordSchemaSectionQuestionsIdsList,
   getIRSchemaSectionsIdsListV3,
   getInnovationRecordSchemaQuestion,
-  translateSectionIdEnums
+  translateSectionIdEnums,
+  getInnovationRecordSchemaStep
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
@@ -149,7 +150,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           currentStepIndex--;
           while (
             !this.wizard.checkIfStepConditionIsMet(
-              getInnovationRecordSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
+              getInnovationRecordSchemaStep(this.wizard.currentStepParameters()[0].id)?.condition
             )
           ) {
             currentStepIndex--;

@@ -4,7 +4,7 @@ import { SectionsSummaryModel } from '../../innovation.models';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { InnovationSectionEnum } from '../../innovation.enums';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import { InnovationRecordQuestionStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
+import { InnovationRecordConditionType, InnovationRecordQuestionStepType, InnovationRecordStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 
@@ -14,7 +14,8 @@ export function getInnovationRecordSchemaSectionQuestionsLabels(sectionId: strin
   dummy_schema_V3_202405.sections
     .flatMap(section => section.subSections)
     .find(s => s.id === sectionId)
-    ?.questions.forEach(sub => {
+    ?.steps.flatMap(st => st.questions)
+    .forEach(sub => {
       toReturn.set(sub.id, sub.label);
     });
 
@@ -30,7 +31,8 @@ export function getInnovationRecordSchemaSectionQuestionsIdsList(sectionId: stri
     dummy_schema_V3_202405.sections
       .flatMap(section => section.subSections)
       .find(s => s.id === sectionId)
-      ?.questions.map(q => q.id) ?? []
+      ?.steps.flatMap(st => st.questions)
+      .map(q => q.id) ?? []
   );
 }
 
@@ -56,8 +58,16 @@ export function getInnovationRecordSectionsTreeV3(
 export function getInnovationRecordSchemaQuestion(stepId: string): InnovationRecordQuestionStepType {
   return (
     dummy_schema_V3_202405.sections
-      .flatMap(section => section.subSections.flatMap(s => s.questions))
+      .flatMap(section => section.subSections.flatMap(s => s.steps.flatMap(st => st.questions)))
       .find(q => q.id === stepId) ?? { id: '', dataType: 'text', label: '' }
+  );
+}
+
+export function getInnovationRecordSchemaStep(questionId: string): InnovationRecordStepType | undefined {
+  return (
+    dummy_schema_V3_202405.sections
+      .flatMap(section => section.subSections.flatMap(s => s.steps))
+      .find(st => st.questions.find(q => q.id === questionId))
   );
 }
 
@@ -84,19 +94,19 @@ export function getInnovationRecordSchemaTranslationsMap(): {
 
   // Questions labels
   const flattenedQuestionsLabels = dummy_schema_V3_202405.sections.flatMap(s =>
-    s.subSections.flatMap(sub => sub.questions).flatMap(q => ({ id: q.id, label: q.label }))
+    s.subSections.flatMap(sub => sub.steps.flatMap(st => st.questions)).flatMap(q => ({ id: q.id, label: q.label }))
   );
   const flattenedAddQuestionsLabels = dummy_schema_V3_202405.sections
-    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion))
+    .flatMap(s => s.subSections.flatMap(sub => sub.steps.flatMap(st => st.questions)).flatMap(q => q.addQuestion))
     .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
 
   // Items labels
   const flattenedItems = dummy_schema_V3_202405.sections
-    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.items))
+    .flatMap(s => s.subSections.flatMap(sub => sub.steps.flatMap(st => st.questions)).flatMap(q => q.items))
     .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
 
   const flattenedAddQuestionItems = dummy_schema_V3_202405.sections
-    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion?.items))
+    .flatMap(s => s.subSections.flatMap(sub => sub.steps.flatMap(st => st.questions)).flatMap(q => q.addQuestion?.items))
     .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
 
   return {
@@ -151,12 +161,9 @@ export function getInnovationRecordSectionV3(sectionId: string): {
     title: subsection?.title ?? '',
     wizard: new WizardIRV3EngineModel({
       sectionId: subsection?.id,
-      steps: subsection!.questions.map(
-        question =>
-          new FormEngineModelV3({
-            parameters: []
-          })
-      )
+      steps: subsection!.steps.map(st => new FormEngineModelV3({
+        parameters: []
+      }))
     })
   };
 }
@@ -176,11 +183,11 @@ export function getInnovationRecordSectionIdentificationV3(
 
 export function getSectionAllStepsList(sectionId: string): SectionStepsList {
   const section = dummy_schema_V3_202405.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
-  const flattenedQuestions =
-    section?.questions.flatMap(q => [
-      { label: q.label, conditional: !!q.condition },
+  const flattenedQuestions = section
+    ?.steps.flatMap(st => st.questions.flatMap(q => [
+      { label: q.label, conditional: !!st.condition },
       ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
-    ]) ?? [];
+    ])) ?? [];
 
   return flattenedQuestions;
 }
