@@ -34,7 +34,7 @@
     "@angular/platform-server": "^17.3.6",
     "@angular/router": "^17.3.6",
     "@angular/ssr": "^17.3.6",
-    "@azure/msal-node": "^2.7.0",
+    "@azure/msal-node": "^2.9.2",
     "@ngx-translate/core": "^14.0.0",
     "applicationinsights": "^2.9.5",
     "axios": "^1.6.8",
