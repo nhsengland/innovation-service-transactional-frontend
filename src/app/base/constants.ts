@@ -24,8 +24,7 @@ export const URLS = {
   TRAINING_AND_RESOURCES_SUPPORT_ORGANISATION: `${PROD_DOMAIN}/training-and-resources/support-organisation`,
 
   // External links.
-  USER_RESEARCH_FORM:
-    'https://forms.office.com/Pages/ResponsePage.aspx?id=kp4VA8ZyI0umSq9Q55CtvztdgIut6i1ClsC8hAncvh9UN0E2UEVON09BNjNMS1daRjZVMFJHRkNaMCQlQCN0PWcu',
+  USER_RESEARCH_FORM: 'https://forms.office.com/e/ipfaESPS2u',
 
   // Organisations.
   HIN_NETWORK: 'https://thehealthinnovationnetwork.co.uk',
