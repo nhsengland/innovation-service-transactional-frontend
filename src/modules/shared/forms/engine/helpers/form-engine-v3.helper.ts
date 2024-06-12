@@ -134,7 +134,7 @@ export class FormEngineHelperV3 {
       });
 
       // Apply validators only if parameter is visible!
-      if (parameter.isVisible) {
+      if (!parameter.isHidden) {
         form.get(parameter.id)?.setValidators(FormEngineHelperV3.getParameterValidators(parameter));
         if (parameter.validations?.async) {
           form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async);
@@ -169,10 +169,6 @@ export class FormEngineHelperV3 {
 
     return formGroup;
   }
-
-  // static isAnyVisibleField(parameters: FormEngineParameterModelV3[]): boolean {
-  //   return parameters.some(parameter => parameter.isVisible);
-  // }
 
   static getFormValues(
     form: FormGroup,

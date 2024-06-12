@@ -47,7 +47,7 @@ export type InnovationRecordQuestionStepType = {
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
   cssOverride?: string;
-  isVisible?: boolean;
+  isHidden?: boolean;
   parentFieldId?: string;
   parentAddQuestionId?: string;
   parentStepId?: string;
@@ -89,17 +89,6 @@ export type InnovationRecordItemsType = {
   description?: string;
   exclusive?: boolean;
   conditional?: FormEngineParameterModelV3;
-  // {
-  //   id: string;
-  //   label: string;
-  //   description?: string;
-  //   dataType: any;
-  //   validations: InnovationRecordStepValidationsType;
-  //   isVisible?: boolean;
-  //   cssOverride?: string;
-  //   placeholder?: string;
-  //   items?: any;
-  // };
   group?: string;
   type?: string;
   itemsFromAnswer?: string;

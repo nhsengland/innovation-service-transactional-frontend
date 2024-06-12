@@ -166,7 +166,7 @@ export class FormEngineParameterModelV3 {
   label?: string;
   description?: string;
   placeholder?: string;
-  isVisible?: boolean;
+  isHidden?: boolean;
   isEditable?: boolean;
   rank?: number;
   validations?: {
@@ -246,7 +246,7 @@ export class FormEngineParameterModelV3 {
     this.label = data.label;
     this.description = data.description;
     this.placeholder = data.placeholder;
-    this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
+    this.isHidden = data.isHidden ?? false;
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
