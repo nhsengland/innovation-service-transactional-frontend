@@ -99,7 +99,8 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
-    return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
+    return of(data);
+    // return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
   }
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {

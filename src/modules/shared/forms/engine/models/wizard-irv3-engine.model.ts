@@ -101,22 +101,6 @@ export class WizardIRV3EngineModel {
     return this.formValidations;
   }
 
-  // previousStep(): this {
-  // if (this.showSummary && this.currentStepId === 'summary') {
-  //   this.currentStepId = this.steps.length;
-  // } else if (typeof this.currentStepId === 'number') {
-  //   this.currentStepId--;
-  //   if (this.isChangingMode) {
-  //     if (this.visitedSteps.has(this.getCurrentStepObjId())) {
-  //       return this;
-  //     } else {
-  //       this.previousStep();
-  //     }
-  //   }
-  // }
-  //   return this;
-  // }
-
   gotoSummary(): this {
     this.visitedSteps.clear();
 
@@ -130,10 +114,6 @@ export class WizardIRV3EngineModel {
   gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
     this.currentStepId = parseInt(stepId as string, 10);
 
-    // if (stepId === 'summary') {
-    //   this.parseSummary();
-    // }
-
     this.isChangingMode = isChangeMode;
 
     this.visitedSteps.add(this.getCurrentStepObjId());
@@ -141,7 +121,19 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  nextStep(isChangeMode: boolean = false): number | 'summary' {
+  getPreviousStep(isChangeMode: boolean = false): number | 'summary' {
+    let previousStepId = this.currentStepId;
+    if (typeof previousStepId === 'number') {
+      previousStepId--;
+      if (isChangeMode) {
+        return this.visitedSteps.has(this.getStepObjectId(previousStepId)) ? previousStepId : -1;
+      }
+      return previousStepId--;
+    }
+    return previousStepId;
+  }
+
+  getNextStep(isChangeMode: boolean = false): number | 'summary' {
     let nextStepId = this.currentStepId;
 
     if (this.showSummary && typeof this.currentStepId === 'number' && this.isLastStep()) {
@@ -215,26 +207,6 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
-  // inboundParsing(data: MappedObjectType): { [key: string]: any } {
-  //   let toReturn: { [key: string]: any } = {};
-  //   for (const step of this.steps) {
-  //     const params = step.parameters[0];
-  //     console.log('params', params);
-  //     if (!params.isNestedField) {
-  //       toReturn[params.id] = data[params.id] ?? undefined;
-  //     }
-
-  //     // assign nested values to all type of conditional steps (i.e: field-groups, addQuestions)
-  //     if (params.isNestedField && params.parentAddQuestionId && params.parentStepId) {
-  //       const index = Number(params.id.split('_')[1]);
-  //       toReturn[params.id] = data[params.parentStepId][index][params.parentAddQuestionId];
-  //     }
-  //   }
-  //   console.log('inbound parsing:', toReturn);
-
-  //   return toReturn;
-  // }
-
   runRules(): this {
     this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
     this.steps = [];
@@ -290,7 +262,7 @@ export class WizardIRV3EngineModel {
 
         this.steps.push(step);
       } else {
-        // Clear field if condition doesn't pass
+        // Clear field's values if condition doesn't pass
         this.currentAnswers[q.id] = undefined;
       }
 
@@ -500,9 +472,8 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    console.log('outbound parsing:', toReturn);
+    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
-      // version: 1,
       version: this.schema?.version ?? 0,
       data: toReturn
     };

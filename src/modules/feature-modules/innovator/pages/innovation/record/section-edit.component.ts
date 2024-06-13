@@ -139,22 +139,16 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
         console.log('previous');
-        if (!this.wizard.isFirstStep()) {
-          currentStepIndex--;
-          while (
-            !this.wizard.checkIfStepConditionIsMet(
-              this.irSchemaStore.getIrSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
-            )
-          ) {
-            currentStepIndex--;
-          }
-          this.onGoToStep(currentStepIndex, this.isChangeMode);
+
+        const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
+        if (this.wizard.isFirstStep() || previousStep === -1) {
+          this.redirectTo(this.baseUrl);
+        } else {
+          this.onGoToStep(previousStep, this.isChangeMode);
         }
       }
 
       if (action === 'next') {
-        // this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
-
         const shouldUpdateInformation = true;
         this.wizard.addAnswers(formData!.data).runRules();
 
@@ -176,7 +170,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           )
           .subscribe({
             next: response => {
-              this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
+              this.saveButton = { isActive: true, label: 'Save and continue' };
+              this.onGoToStep(this.wizard.getNextStep(this.isChangeMode), this.isChangeMode);
             },
             error: ({ error: err }: HttpErrorResponse) => {
               this.errorOnSubmitStep = true;
