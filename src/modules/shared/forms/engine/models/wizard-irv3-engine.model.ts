@@ -1,20 +1,14 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-import {
-  getInnovationRecordSchemaQuestion,
-  getInnovationRecordSchemaTranslationsMap
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+
 import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
-import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
-import {
-  InnovationRecordConditionType,
-  InnovationRecordQuestionStepType
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
-import { StringsHelper } from '@app/base/helpers';
-import { MappedObjectType } from '@app/base/types';
-import { Console } from 'console';
+import {
+  InnovationRecordSchemaInfoType,
+  InnovationRecordSectionUpdateType
+} from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -40,6 +34,7 @@ export class WizardIRV3EngineModel {
   isChangingMode: boolean = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
+  schema: InnovationRecordSchemaInfoType | null;
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
@@ -56,13 +51,19 @@ export class WizardIRV3EngineModel {
 
   constructor(data: Partial<WizardIRV3EngineModel>) {
     this.sectionId = data.sectionId ?? '';
+    this.schema = data.schema ?? { id: '', version: 0, schema: { sections: [] } };
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
     this.currentStepId = parseInt(data.currentStepId as string, 10) || 1;
     this.currentAnswers = data.currentAnswers ?? {};
     this.showSummary = data.showSummary ?? true;
-    this.translations = getInnovationRecordSchemaTranslationsMap();
+    this.translations = data.translations ?? {
+      sections: new Map([]),
+      subsections: new Map([]),
+      questions: new Map([]),
+      items: new Map([])
+    };
   }
 
   isFirstStep(): boolean {
@@ -253,21 +254,22 @@ export class WizardIRV3EngineModel {
               description: q.description,
               ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
               ...(q.validations && { validations: q.validations }),
-              ...(q.items && { items: q.items }),
+              ...(q.items && { items: q.items.map(i => i) }),
               ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
               ...(q.addQuestion && { addQuestion: q.addQuestion }),
               ...(q.field && { field: q.field }),
               ...(q.condition && { condition: q.condition }),
-
               isNestedField: false
             }
           ]
         });
 
         // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
-        const itemsFromAnswer = getInnovationRecordSchemaQuestion(q.id).items?.find(
-          i => i.itemsFromAnswer
-        )?.itemsFromAnswer;
+        const relatedQuestionItems = this.schema?.schema.sections
+          .flatMap(section => section.subSections.flatMap(s => s.questions))
+          .find(question => question.id === q.id)?.items;
+
+        const itemsFromAnswer = relatedQuestionItems?.find(i => i.itemsFromAnswer)?.itemsFromAnswer;
 
         if (itemsFromAnswer) {
           const conditionalAnswerId =
@@ -377,7 +379,7 @@ export class WizardIRV3EngineModel {
     this.summary = [];
 
     // const currentAnswers = this.currentAnswers
-    const currentAnswers = this.outboundParsing();
+    const currentAnswers = this.outboundParsing().data;
 
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
@@ -484,7 +486,7 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
-  outboundParsing(): { [key: string]: any } {
+  outboundParsing(): InnovationRecordSectionUpdateType {
     let toReturn: { [key: string]: string } = {};
     for (const [i, step] of this.steps.entries()) {
       const params = step.parameters[0];
@@ -499,7 +501,11 @@ export class WizardIRV3EngineModel {
     }
 
     console.log('outbound parsing:', toReturn);
-    return toReturn;
+    return {
+      // version: 1,
+      version: this.schema?.version ?? 0,
+      data: toReturn
+    };
   }
 
   validateData(): { valid: boolean; errors: { title: string; description: string }[] } {

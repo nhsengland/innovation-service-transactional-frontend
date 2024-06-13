@@ -6,7 +6,7 @@ import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationRecordSchemaStore } from '@modules/stores';
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
 import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
@@ -22,7 +22,7 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+// import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -77,7 +77,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     super();
 
@@ -156,7 +157,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           openTasksCount: 0
         };
 
-        const section = getInnovationRecordSectionV3(responseItem.section.section);
+        const section = this.irSchemaStore.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;

@@ -3,10 +3,9 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { AuthenticationStore, ContextStore, InnovationStore } from '@modules/stores';
+import { AuthenticationStore, ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { ViewportScroller } from '@angular/common';
-import { getInnovationRecordSectionsTreeV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -32,7 +31,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private contextStore: ContextStore,
     private innovationStore: InnovationStore,
     private scroller: ViewportScroller,
-    private authenticationStore: AuthenticationStore
+    private authenticationStore: AuthenticationStore,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     this.isQualifyingAccessorRole = this.authenticationStore.isQualifyingAccessorRole();
 
@@ -57,7 +57,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = getInnovationRecordSectionsTreeV3('accessor', innovation.id);
+      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('accessor', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },

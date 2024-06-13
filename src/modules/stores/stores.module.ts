@@ -8,6 +8,8 @@ import { ContextService } from './context/context.service';
 
 import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
+import { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
+import { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 
 @NgModule({
   providers: [
@@ -18,7 +20,10 @@ import { InnovationService } from './innovation/innovation.service';
     ContextService,
 
     InnovationStore,
-    InnovationService
+    InnovationService,
+
+    InnovationRecordSchemaStore,
+    InnovationRecordSchemaService
   ]
 })
 export class StoresModule {

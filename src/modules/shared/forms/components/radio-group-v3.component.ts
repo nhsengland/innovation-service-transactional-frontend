@@ -121,7 +121,7 @@ export class FormRadioGroupV3Component extends ControlValueAccessorComponent imp
       ?.filter(item => item.conditional)
       .forEach(item => {
         if (item.conditional) {
-          if (item.conditional.isVisible && this.isConditionalFieldVisible(item.conditional.id)) {
+          if (!item.conditional.isHidden && this.isConditionalFieldVisible(item.conditional.id)) {
             this.conditionalFormControl(item.conditional.id).setValidators(
               FormEngineHelperV3.getParameterValidators(item.conditional)
             );

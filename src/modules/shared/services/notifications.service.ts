@@ -187,8 +187,9 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR:
                   link = {
                     label: 'Click to go to needs assessment',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${item.params
-                      ?.assessmentId}`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/assessments/${
+                      item.params?.assessmentId
+                    }`
                   };
                   break;
                 case NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED:
@@ -226,8 +227,9 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED:
                   link = {
                     label: 'Click to go to request',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item
-                      .params?.exportRequestId}`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${
+                      item.params?.exportRequestId
+                    }`
                   };
                   break;
                 case NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED:
@@ -239,15 +241,17 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED:
                   link = {
                     label: 'Click to go to reason',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${item
-                      .params?.exportRequestId}`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/export-requests/${
+                      item.params?.exportRequestId
+                    }`
                   };
                   break;
                 case NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER:
                   link = {
                     label: 'Click to go to collaboration',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${item.params
-                      ?.collaboratorId}`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/collaborations/${
+                      item.params?.collaboratorId
+                    }`
                   };
                   break;
                 case NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE:

@@ -2,7 +2,7 @@
   <input type="hidden" name="_csrf" [value]="csrfToken" />
 
   <ng-container *ngFor="let p of parameters; let i = index">
-    <ng-container *ngIf="p.isVisible">
+    <ng-container *ngIf="!p.isHidden">
       <ng-container [ngSwitch]="p.dataType">
         <div *ngSwitchCase="'hidden'">
           <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>

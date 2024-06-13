@@ -18,8 +18,7 @@ import {
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
-  getInnovationRecordSectionIdentificationV3,
-  getInnovationRecordSectionV3,
+  // getInnovationRecordSectionV3,
   translateSectionIdEnums
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import {
@@ -31,6 +30,7 @@ import {
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { InnovationRecordSchemaService, InnovationRecordSchemaStore } from '@modules/stores';
 
 export type SectionInfoType = {
   id: string;
@@ -80,7 +80,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     super();
 
@@ -125,7 +126,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
-
+    console.log('schema:', this.stores.context.getIrSchema());
     this.subscriptions.push(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -139,7 +140,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
     // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
-    const sectionIdentification = getInnovationRecordSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.irSchemaStore.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
@@ -152,7 +153,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
-    const section = getInnovationRecordSectionV3(this.sectionId);
+    const section = this.irSchemaStore.getIrSchemaSectionV3(this.sectionId);
     // const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
 
     this.sectionSummaryData.sectionInfo.id = section.id;

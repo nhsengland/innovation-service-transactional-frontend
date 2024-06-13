@@ -11,6 +11,7 @@ import { UserRoleEnum } from '@modules/stores/authentication/authentication.enum
 import { ContextStore } from '@modules/stores/context/context.store';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { InnovationStore } from '@modules/stores/innovation/innovation.store';
+import { InnovationRecordSchemaStore } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 
 @Injectable()
 export class CoreService {
@@ -24,6 +25,7 @@ export class CoreService {
     authentication: AuthenticationStore;
     context: ContextStore;
     innovation: InnovationStore;
+    schema: InnovationRecordSchemaStore;
   };
 
   protected APP_URL: string;
@@ -43,7 +45,8 @@ export class CoreService {
     this.stores = {
       authentication: injector.get(AuthenticationStore),
       context: injector.get(ContextStore),
-      innovation: injector.get(InnovationStore)
+      innovation: injector.get(InnovationStore),
+      schema: injector.get(InnovationRecordSchemaStore)
     };
 
     this.APP_URL = this.envVariablesStore.APP_URL;

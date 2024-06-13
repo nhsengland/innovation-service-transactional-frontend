@@ -14,13 +14,11 @@ export class FormEngineModel {
   label?: string;
   description?: string;
   parameters: FormEngineParameterModel[];
-  defaultData: Record<string, any>; // { [key: string]: any };
 
   constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
-    this.defaultData = data.defaultData ?? {};
   }
 }
 export class FormEngineParameterModel {
@@ -141,13 +139,11 @@ export class FormEngineModelV3 {
   label?: string;
   description?: string;
   parameters: FormEngineParameterModelV3[];
-  defaultData: Record<string, any>; // { [key: string]: any };
 
-  constructor(data: Partial<FormEngineModelV3>) {
+  constructor(data: FormEngineModelV3) {
     this.label = data.label;
     this.description = data.description;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModelV3(item));
-    this.defaultData = data.defaultData ?? {};
   }
 }
 
@@ -166,11 +162,10 @@ export class FormEngineParameterModelV3 {
   label?: string;
   description?: string;
   placeholder?: string;
-  isVisible?: boolean;
+  isHidden?: boolean;
   isEditable?: boolean;
   rank?: number;
   validations?: {
-    // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
     isRequired?: string;
     pattern?: string | [string, string];
     min?: InnovationRecordMinMaxValidationType;
@@ -204,7 +199,16 @@ export class FormEngineParameterModelV3 {
     }[];
   }[];
 
-  items?: InnovationRecordItemsType;
+  items?: {
+    id?: string;
+    label?: string;
+    description?: string;
+    exclusive?: boolean;
+    conditional?: FormEngineParameterModelV3;
+    group?: string;
+    type?: string;
+    itemsFromAnswer?: string;
+  }[];
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
@@ -246,7 +250,7 @@ export class FormEngineParameterModelV3 {
     this.label = data.label;
     this.description = data.description;
     this.placeholder = data.placeholder;
-    this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
+    this.isHidden = data.isHidden ?? false;
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
     this.rank = data.rank || 0;
     this.validations = data.validations;

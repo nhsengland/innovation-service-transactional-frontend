@@ -11,8 +11,9 @@ import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.mode
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { getSectionsSummary } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+// import { getSectionsSummary } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { InnovationRecordSchemaStore } from '@modules/stores';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -56,7 +57,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     super();
 
@@ -99,7 +101,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     ]).subscribe({
       next: ([response, statistics]) => {
         // this.innovationSections = response;
-        this.innovationSections = getSectionsSummary(response);
+        this.innovationSections = this.irSchemaStore.getSectionsSummary(response);
+
+        console.log('Context Schema: ', this.stores.context.getIrSchema());
 
         this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 

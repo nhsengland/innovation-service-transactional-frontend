@@ -1,27 +1,18 @@
-import { transpile } from 'typescript';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
-import { FormEngineComponent, FormEngineParameterModelV3, WizardEngineModel } from '@app/base/forms';
+import { FormEngineParameterModelV3 } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import {
-  getInnovationRecordSchemaSectionQuestionsIdsList,
-  getIRSchemaSectionsIdsListV3,
-  getInnovationRecordSchemaQuestion,
-  translateSectionIdEnums
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-answers-dummy-data';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
-import {
-  InnovationRecordQuestionStepType,
-  InnovationRecordSectionAnswersType
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { Parser } from 'expr-eval';
+
+import { InnovationRecordSchemaStore } from '@modules/stores';
+import { HttpErrorResponse } from '@angular/common/http';
+import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -53,15 +44,18 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   displayChangeButtonList: number[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private irSchemaStore: InnovationRecordSchemaStore
+  ) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.sectionsIdsList = getIRSchemaSectionsIdsListV3();
-    this.sectionQuestionsIdList = getInnovationRecordSchemaSectionQuestionsIdsList(this.sectionId);
+    this.sectionsIdsList = this.irSchemaStore.getIrSchemaSectionsIdsListV3();
+    this.sectionQuestionsIdList = this.irSchemaStore.getIrSchemaSectionQuestionsIdsList(this.sectionId);
 
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
@@ -149,7 +143,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           currentStepIndex--;
           while (
             !this.wizard.checkIfStepConditionIsMet(
-              getInnovationRecordSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
+              this.irSchemaStore.getIrSchemaQuestion(this.wizard.currentStepParameters()[0].id).condition
             )
           ) {
             currentStepIndex--;
@@ -159,7 +153,49 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       if (action === 'next') {
-        this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
+        // this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
+
+        const shouldUpdateInformation = true;
+        this.wizard.addAnswers(formData!.data).runRules();
+
+        this.saveButton = { isActive: false, label: 'Saving...' };
+
+        of(true)
+          .pipe(
+            concatMap(() => {
+              if (shouldUpdateInformation || this.errorOnSubmitStep) {
+                return this.stores.innovation.updateSectionInfo$(
+                  this.innovation.id,
+                  this.sectionId,
+                  this.wizard.outboundParsing()
+                );
+              } else {
+                return of(true);
+              }
+            })
+          )
+          .subscribe({
+            next: response => {
+              this.onGoToStep(this.wizard.nextStep(this.isChangeMode), this.isChangeMode);
+            },
+            error: ({ error: err }: HttpErrorResponse) => {
+              this.errorOnSubmitStep = true;
+              this.saveButton = { isActive: true, label: 'Save and continue' };
+              this.alertErrorsList = [];
+              this.setAlertUnknownError();
+              if (err.error === IRSchemaErrors.INNOVATION_RECORD_SCHEMA_VERSION_MISMATCH) {
+                this.stores.context.clearIrSchema();
+                this.setAlertError('This section of the innovation record has been updated.', {
+                  itemsList: [
+                    {
+                      title: 'Go back to the section and start again',
+                      callback: `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`
+                    }
+                  ]
+                });
+              }
+            }
+          });
       }
     } else {
       this.router.navigateByUrl(`${this.baseUrl}`);

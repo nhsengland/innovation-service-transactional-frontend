@@ -12,13 +12,17 @@ import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } f
 
 import { AuthenticationModel } from '../authentication/authentication.models';
 import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
+import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaStore } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
+import { InnovationRecordSchemaService } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private logger: NGXLogger,
-    private contextService: ContextService
+    private contextService: ContextService,
+    private innovationRecordSchemaService: InnovationRecordSchemaService
   ) {
     super('STORE::Context', new ContextModel());
   }
@@ -139,6 +143,28 @@ export class ContextStore extends Store<ContextModel> {
     this.pageLayoutState.status = 'LOADING';
     this.pageLayoutState.title = { main: null };
     this.setPageLayoutState();
+  }
+
+  // Innovation Record Schema methods.
+  setIrSchema(data: InnovationRecordSchemaInfoType): void {
+    this.state.irSchema = data;
+    this.setState();
+  }
+
+  getIrSchema(): InnovationRecordSchemaInfoType | null {
+    return this.state.irSchema;
+  }
+
+  clearIrSchema(): void {
+    this.state.irSchema = null;
+    this.setState();
+  }
+
+  getOrLoadIrSchema(): Observable<InnovationRecordSchemaInfoType> {
+    if (this.state.irSchema) {
+      return of(this.state.irSchema);
+    }
+    return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
   }
 
   // Innovation methods.

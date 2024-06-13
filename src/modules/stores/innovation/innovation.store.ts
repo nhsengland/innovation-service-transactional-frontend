@@ -22,15 +22,19 @@ import {
   InnovationSectionInfoDTO,
   SectionsSummaryModel
 } from './innovation.models';
-import {
-  getInnovationRecordSectionV3,
-  
-} from './innovation-record/202405/ir-v3.helpers';
+// import {
+//   getInnovationRecordSectionV3,
+
+// } from './innovation-record/202405/ir-v3.helpers';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
-  constructor(private innovationsService: InnovationService) {
+  constructor(
+    private innovationsService: InnovationService,
+    private irSchemaStore: InnovationRecordSchemaStore
+  ) {
     super('store::innovations', new InnovationModel());
   }
 
@@ -95,10 +99,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
-    console.log('updated section info');
-    return of({});
-
-    // return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
+    return this.innovationsService.updateSectionInfo(innovationId, sectionKey, data);
   }
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
@@ -152,11 +153,11 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
     // return this.getInnovationRecordSection(sectionId, version)?.wizard;
-    return getInnovationRecordSectionV3(sectionId).wizard;
+    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
   }
 
   getInnovationRecordSectionWizardV3(sectionId: string, version?: string): WizardIRV3EngineModel {
-    return getInnovationRecordSectionV3(sectionId).wizard;
+    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
   }
 
   getInnovationRecordSectionIdentification(

@@ -31,7 +31,6 @@ export class FormEngineHelperV3 {
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
-      console.log('conditionalFields', conditionalFields);
 
       const additionalFields = parameter.additional || [];
 
@@ -118,7 +117,6 @@ export class FormEngineHelperV3 {
       conditionalFields.forEach(item => {
         if (item.conditional) {
           const itemValue = values[item.conditional.id] || null;
-          console.log('itemValue', itemValue);
 
           form.addControl(
             item.conditional.id,
@@ -134,7 +132,7 @@ export class FormEngineHelperV3 {
       });
 
       // Apply validators only if parameter is visible!
-      if (parameter.isVisible) {
+      if (!parameter.isHidden) {
         form.get(parameter.id)?.setValidators(FormEngineHelperV3.getParameterValidators(parameter));
         if (parameter.validations?.async) {
           form.get(parameter.id)?.setAsyncValidators(parameter.validations?.async);
