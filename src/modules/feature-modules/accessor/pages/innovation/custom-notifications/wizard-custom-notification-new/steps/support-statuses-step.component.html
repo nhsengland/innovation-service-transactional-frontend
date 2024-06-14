@@ -1,0 +1,46 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p class="font-color-secondary">Select 1 or more support statuses.</p>
+
+      <form [formGroup]="form" id="supportStatuses" (ngSubmit)="onNextStep()">
+        <div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': supportStatusesArrayHasError }">
+          <fieldset class="nhsuk-fieldset">
+            <ng-container *ngIf="supportStatusesArrayHasError">
+              <span id="support-statuses-error" class="nhsuk-error-message" role="alert">
+                <span class="nhsuk-u-visually-hidden">Error:</span> {{ supportStatusesArrayErrorMessage.message | translate }}
+              </span>
+            </ng-container>
+
+            <div class="nhsuk-checkboxes">
+              <div *ngFor="let status of supportStatusesItems; let i = index" class="nhsuk-checkboxes__item nhsuk-u-margin-bottom-4">
+                <input
+                  formArrayName="supportStatuses"
+                  id="status-{{ i }}"
+                  type="checkbox"
+                  [name]="status"
+                  [value]="status"
+                  [checked]="isChecked(status)"
+                  (change)="onChange($event)"
+                  class="nhsuk-checkboxes__input"
+                  attr.aria-describedby="status-{{ i }}-hint"
+                />
+                <label for="status-{{ i }}" class="nhsuk-label nhsuk-checkboxes__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
+                  <theme-tag
+                    type="{{ 'shared.catalog.innovation.support_status.' + status + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.support_status.' + status + '.name' | translate }}"
+                  ></theme-tag>
+                </label>
+                <div class="nhsuk-hint nhsuk-checkboxes__hint" id="status-{{ i }}-hint">
+                  {{ "shared.catalog.innovation.support_status." + status + ".description" | translate }}
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>
