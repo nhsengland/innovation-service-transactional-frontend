@@ -73,7 +73,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
           label: this.isQualifyingAccessorRole ? 'Suggest support' : 'Data sharing preferences',
           url: `/accessor/innovations/${innovation.id}/support`
         },
-        { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` }
+        { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` },
+        { label: 'Custom notifications', url: `/accessor/innovations/${innovation.id}/custom-notifications` }
       ];
     }
   }
