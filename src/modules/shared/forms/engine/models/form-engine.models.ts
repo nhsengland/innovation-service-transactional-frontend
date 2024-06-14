@@ -6,7 +6,7 @@ import {
   InnovationRecordFormComponentType,
   InnovationRecordItemsType,
   InnovationRecordMinMaxValidationType,
-  InnovationRecordQuestionStepType,
+  InnovationRecordQuestionType,
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
@@ -205,7 +205,7 @@ export class FormEngineParameterModelV3 {
   }[];
 
   items?: InnovationRecordItemsType;
-  addQuestion?: InnovationRecordQuestionStepType;
+  addQuestion?: InnovationRecordQuestionType;
   addNewLabel?: string;
 
   parentAddQuestionId?: string;

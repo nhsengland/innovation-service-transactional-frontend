@@ -1,7 +1,8 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
-import { InnovationSectionInfoDTO } from '../../innovation.models';
+import { InnovationAllSectionsInfoDTO, InnovationSectionInfoDTO, sectionType } from '../../innovation.models';
 import { subscribe } from 'diagnostics_channel';
+import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 const mapText = (answer: string, schemaQuestion: MappedObjectType, schemaAnswers: MappedObjectType) => {
   schemaAnswers[schemaQuestion.id] = answer;
@@ -183,18 +184,30 @@ export class IRV3Helper {
     return stepsChildParentRelationsMap.get(sectionId);
   }
 
-  static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
+  static translateSections(sections: { section: sectionType; data: MappedObjectType }[]): { section: sectionType; data: MappedObjectType }[] {
+    const translated = sections.map(s => {
+      return {
+        section: {
+          ...s.section,
+          section: IRV3Helper.camelize(s.section.section)
+        },
+        data: IRV3Helper.translateIRData(s.data)
+      };
+    });
+
+    return translated;
+  }
+
+  static translateIRData(data: MappedObjectType): MappedObjectType {
     const v3Answers: MappedObjectType = {};
 
-    console.log('V2');
-    console.log(innovationRecord.data);
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
         subSection.steps.forEach(step => {
           if (step.condition && !step.condition?.options.includes(v3Answers[step.condition.id])) return;
 
           step.questions.forEach(question => {
-            const answer = searchAnswer(innovationRecord.data, question);
+            const answer = searchAnswer(data, question);
   
             if (!answer) return;
   
@@ -203,11 +216,11 @@ export class IRV3Helper {
             } else if (question.dataType === 'textarea') {
               mapText(answer, question, v3Answers);
             } else if (question.dataType === 'radio-group') {
-              mapRadioGroup(answer, innovationRecord.data, question, subSection, v3Answers);
+              mapRadioGroup(answer, data, question, subSection, v3Answers);
             } else if (question.dataType === 'autocomplete-array') {
-              mapArray(answer, innovationRecord.data, question, v3Answers);
+              mapArray(answer, data, question, v3Answers);
             } else if (question.dataType === 'checkbox-array') {
-              mapArray(answer, innovationRecord.data, question, v3Answers);
+              mapArray(answer, data, question, v3Answers);
             } else if (question.dataType === 'fields-group') {
               mapFieldsGroup(answer, question, v3Answers);
             } else {
@@ -219,6 +232,15 @@ export class IRV3Helper {
         });
       });
     });
+
+    return v3Answers;
+  }
+
+  static translateIR(innovationRecord: InnovationSectionInfoDTO): InnovationSectionInfoDTO {
+    const v3Answers = IRV3Helper.translateIRData(innovationRecord.data);
+
+    console.log('V2');
+    console.log(innovationRecord.data);
     console.log('V3');
     console.log(v3Answers);
 

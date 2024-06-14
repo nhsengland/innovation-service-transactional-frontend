@@ -15,6 +15,7 @@ import {
   PDFGeneratorSectionsNotFoundError
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 
 export const getSections = async (
   innovationId: string,
@@ -26,7 +27,7 @@ export const getSections = async (
     ...config,
     ...(version && { params: { version } })
   });
-  return response.data;
+  return IRV3Helper.translateSections(response.data);
 };
 
 export const getInnovationInfo = async (innovationId: string, config: any): Promise<InnovationInfoDTO> => {

@@ -9,7 +9,7 @@ import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-re
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 import {
   InnovationRecordConditionType,
-  InnovationRecordQuestionStepType
+  InnovationRecordQuestionType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import { StringsHelper } from '@app/base/helpers';
@@ -269,18 +269,20 @@ export class WizardIRV3EngineModel {
 
           if (itemsFromAnswer) {
             const conditionalAnswerId =
-              subsection?.steps.flatMap(s => s.questions).find(q => q.id === itemsFromAnswer)?.items?.find(item => item.conditional)
-                ?.conditional?.id ?? '';
-  
+              subsection?.steps
+                .flatMap(s => s.questions)
+                .find(q => q.id === itemsFromAnswer)
+                ?.items?.find(item => item.conditional)?.conditional?.id ?? '';
+
             const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
               ? (this.currentAnswers[itemsFromAnswer] as string[])
               : [];
-  
+
             const updatedItemsList = itemsDependencyAnswer.map(item => ({
               id: item,
               label: item === 'other' ? this.currentAnswers[conditionalAnswerId] : this.translations.items.get(item)
             }));
-  
+
             param.items = updatedItemsList;
           }
 
@@ -300,6 +302,122 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
+  static processSummary(
+    currentAnswers: MappedObjectType,
+    steps: FormEngineParameterModelV3[][] | InnovationRecordQuestionType[][],
+    translations: {
+      sections: Map<string, string>;
+      subsections: Map<string, string>;
+      questions: Map<string, string>;
+      items: Map<string, string>;
+    }
+  ) {
+    let editStepNumber = 0;
+    const summary: WizardSummaryV3Type[]  = [];
+
+    steps.forEach(step =>
+      step.forEach(params => {
+        let stepId = params.id;
+        let label = translations.questions.get(stepId.split('|')[0]) ?? '';
+        let value: string | undefined = currentAnswers[params.id];
+        let isNotMandatory = !!!params.validations?.isRequired;
+        editStepNumber++;
+
+        switch (params.dataType) {
+          case 'fields-group':
+            {
+              const currAnswer = currentAnswers[params.id] as [{ [key: string]: string }];
+              value = currAnswer ? currAnswer.map(item => item[params.field!.id]).join(', ') : undefined;
+  
+              // Push "parent"
+              summary.push({
+                stepId: stepId,
+                label: label,
+                value: value,
+                editStepNumber: editStepNumber,
+                isNotMandatory: isNotMandatory
+              });
+  
+              // Push "children" if any
+              if (params.addQuestion && currAnswer) {
+                currAnswer.forEach((item, i) => {
+                  editStepNumber++;
+  
+                  summary.push({
+                    stepId: `${params.addQuestion?.id}_${i}`,
+                    label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswer[i][params.field!.id])}`,
+                    value: currAnswer[i][params.addQuestion!.id],
+                    editStepNumber: editStepNumber
+                  });
+                });
+              }
+            }
+            break;
+          case 'autocomplete-array':
+          case 'checkbox-array':
+            {
+              let stepAnswers: string[] | { [key: string]: string }[] | undefined = undefined;
+  
+              // Set value of parent, depending on type of answer, and translate it
+              if (!params.addQuestion) {
+                stepAnswers = currentAnswers[params.id] as string[];
+  
+                value = stepAnswers ? stepAnswers.map(item => translations.items.get(item)).join(', ') : undefined;
+              } else {
+                stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
+  
+                value = stepAnswers
+                  ? stepAnswers.map(item => translations.items.get(item[params.id])).join(', ')
+                  : undefined;
+              }
+  
+              // Push "parent"
+              summary.push({
+                stepId: stepId,
+                label: label,
+                value: value,
+                editStepNumber: editStepNumber,
+                isNotMandatory: isNotMandatory
+              });
+  
+              // Push "children" if any
+              if (params.addQuestion && stepAnswers) {
+                const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
+                stepAnswers.forEach((item, i) => {
+                  editStepNumber++;
+  
+                  summary.push({
+                    stepId: stepId,
+                    label: params.addQuestion!.label.replace(
+                      '{{item}}',
+                      translations.items.get(stepAnswers[i][params.id]) ?? stepAnswers[i][params.id]
+                    ),
+                    value: stepAnswers[i][params.addQuestion!.id],
+                    editStepNumber: editStepNumber
+                  });
+                });
+              }
+            }
+            break;
+          default: {
+            if (!params.parentFieldId && !params.parentAddQuestionId)
+              summary.push({
+                stepId: stepId,
+                label: label,
+                value: value,
+                editStepNumber: editStepNumber,
+                isNotMandatory: isNotMandatory
+              });
+  
+            break;
+          }
+        }
+      })
+    );
+
+    return summary;
+  }
+
   parseSummary(): WizardSummaryV3Type[] {
     console.log('this.currentAnswers', this.currentAnswers);
 
@@ -309,105 +427,8 @@ export class WizardIRV3EngineModel {
     // const currentAnswers = this.currentAnswers
     const currentAnswers = this.outboundParsing();
 
-    // Parse condition step's answers
-    for (const [i, step] of this.steps.entries()) {
-      let params = step.parameters[0];
-      let stepId = params.id;
-      let label = this.translations.questions.get(stepId.split('|')[0]) ?? '';
-      let value: string | undefined = currentAnswers[params.id];
-      let isNotMandatory = !!!params.validations?.isRequired;
-      editStepNumber++;
-
-      switch (params.dataType) {
-        case 'fields-group':
-          {
-            const currAnswer = currentAnswers[params.id] as [{ [key: string]: string }];
-            value = currAnswer ? currAnswer.map(item => item[params.field!.id]).join(', ') : undefined;
-
-            // Push "parent"
-            this.summary.push({
-              stepId: stepId,
-              label: label,
-              value: value,
-              editStepNumber: editStepNumber,
-              isNotMandatory: isNotMandatory
-            });
-
-            // Push "children" if any
-            if (params.addQuestion && currAnswer) {
-              currAnswer.forEach((item, i) => {
-                editStepNumber++;
-
-                this.summary.push({
-                  stepId: `${params.addQuestion?.id}_${i}`,
-                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswer[i][params.field!.id])}`,
-                  value: currAnswer[i][params.addQuestion!.id],
-                  editStepNumber: editStepNumber
-                });
-              });
-            }
-          }
-          break;
-        case 'autocomplete-array':
-        case 'checkbox-array':
-          {
-            let stepAnswers: string[] | { [key: string]: string }[] | undefined = undefined;
-
-            // Set value of parent, depending on type of answer, and translate it
-            if (!params.addQuestion) {
-              stepAnswers = currentAnswers[params.id] as string[];
-
-              value = stepAnswers ? stepAnswers.map(item => this.translations.items.get(item)).join(', ') : undefined;
-            } else {
-              stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
-
-              value = stepAnswers
-                ? stepAnswers.map(item => this.translations.items.get(item[params.id])).join(', ')
-                : undefined;
-            }
-
-            // Push "parent"
-            this.summary.push({
-              stepId: stepId,
-              label: label,
-              value: value,
-              editStepNumber: editStepNumber,
-              isNotMandatory: isNotMandatory
-            });
-
-            // Push "children" if any
-            if (params.addQuestion && stepAnswers) {
-              const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
-              stepAnswers.forEach((item, i) => {
-                editStepNumber++;
-
-                this.summary.push({
-                  stepId: stepId,
-                  label: params.addQuestion!.label.replace(
-                    '{{item}}',
-                    this.translations.items.get(stepAnswers[i][params.id]) ?? stepAnswers[i][params.id]
-                  ),
-                  value: stepAnswers[i][params.addQuestion!.id],
-                  editStepNumber: editStepNumber
-                });
-              });
-            }
-          }
-          break;
-        default: {
-          if (!params.parentFieldId && !params.parentAddQuestionId)
-            this.summary.push({
-              stepId: stepId,
-              label: label,
-              value: value,
-              editStepNumber: editStepNumber,
-              isNotMandatory: isNotMandatory
-            });
-
-          break;
-        }
-      }
-    }
+    const mappedSteps = this.steps.map(s => s.parameters);
+    this.summary = WizardIRV3EngineModel.processSummary(currentAnswers, mappedSteps, this.translations);
 
     console.log('summary:', this.summary);
     this.outboundParsing();

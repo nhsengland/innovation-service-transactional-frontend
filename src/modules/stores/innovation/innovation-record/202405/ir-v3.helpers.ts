@@ -4,7 +4,7 @@ import { SectionsSummaryModel } from '../../innovation.models';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { InnovationSectionEnum } from '../../innovation.enums';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import { InnovationRecordConditionType, InnovationRecordQuestionStepType, InnovationRecordStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
+import { InnovationRecordConditionType, InnovationRecordQuestionType, InnovationRecordStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 
@@ -55,7 +55,7 @@ export function getInnovationRecordSectionsTreeV3(
   }));
 }
 
-export function getInnovationRecordSchemaQuestion(stepId: string): InnovationRecordQuestionStepType {
+export function getInnovationRecordSchemaQuestion(stepId: string): InnovationRecordQuestionType {
   return (
     dummy_schema_V3_202405.sections
       .flatMap(section => section.subSections.flatMap(s => s.steps.flatMap(st => st.questions)))

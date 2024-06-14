@@ -19,7 +19,7 @@ import { dummy_innovation_data_V3_202405 } from '@modules/stores/innovation/inno
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 import {
-  InnovationRecordQuestionStepType,
+  InnovationRecordQuestionType,
   InnovationRecordSectionAnswersType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { Parser } from 'expr-eval';

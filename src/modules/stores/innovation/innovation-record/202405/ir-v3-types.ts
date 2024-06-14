@@ -21,7 +21,7 @@ export type InnovationRecordSubSectionType = {
 };
 
 export type InnovationRecordStepType = {
-  questions: InnovationRecordQuestionStepType[];
+  questions: InnovationRecordQuestionType[];
   condition?: InnovationRecordConditionType;
 };
 
@@ -30,7 +30,7 @@ export type InnovationRecordConditionType = {
   options: string[];
 };
 
-export type InnovationRecordQuestionStepType = {
+export type InnovationRecordQuestionType = {
   id: string;
   dataType: InnovationRecordFormComponentType;
   label: string;
@@ -42,7 +42,7 @@ export type InnovationRecordQuestionStepType = {
     validations: InnovationRecordStepValidationsType;
   };
   addNewLabel?: string;
-  addQuestion?: InnovationRecordQuestionStepType;
+  addQuestion?: InnovationRecordQuestionType;
   validations?: InnovationRecordStepValidationsType;
   lengthLimit?: TextareaLengthLimitType;
   items?: InnovationRecordItemsType;
