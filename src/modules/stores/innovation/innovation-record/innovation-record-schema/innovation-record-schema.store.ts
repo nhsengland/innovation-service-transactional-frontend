@@ -69,6 +69,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
       sections: section.subSections.map(s => ({
         id: s.id,
         title: s.title,
+        // TODO remove translator when BE updates sections IDs
         status: sectionsSummary[translateSectionIdEnums(s.id)].status,
         submittedAt: sectionsSummary[translateSectionIdEnums(s.id)].submittedAt,
         submittedBy: sectionsSummary[translateSectionIdEnums(s.id)].submittedBy,
@@ -124,11 +125,14 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
   }
 
   getIrSchemaSectionIdentificationV3(
-    sectionId: string
+    sectionId: string | null
   ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-
+    console.log('schema', schema);
+    console.log('sectionId', sectionId);
     const section_group = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
+    console.log('section_group', section_group);
+
     const section = schema[section_group].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
     return {
       group: { number: section_group + 1, title: schema[section_group].title },
@@ -160,6 +164,19 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         )
       })
     };
+  }
+
+  getIrSchemaAllSectionsList(): { value: string; label: string }[] {
+    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
+
+    return schema.reduce((sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
+      return [
+        ...sectionGroupAcc,
+        ...sectionGroup.subSections.reduce((sectionAcc: { value: string; label: string }[], section, j) => {
+          return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
+        }, [])
+      ];
+    }, []);
   }
 
   getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {

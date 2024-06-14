@@ -321,7 +321,7 @@ export type InnovationTaskData = {
   description: string;
   innovation: { id: string; name: string };
   status: InnovationTaskStatusEnum;
-  section: InnovationSectionEnum;
+  section: string;
   createdAt: DateISOType;
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
@@ -335,7 +335,7 @@ export type InnovationTaskInfoDTO = {
   displayId: string;
   status: InnovationTaskStatusEnum;
   descriptions: InnovationDescription[];
-  section: InnovationSectionEnum;
+  section: string;
   name: string;
   createdAt: DateISOType;
   updatedAt: DateISOType;

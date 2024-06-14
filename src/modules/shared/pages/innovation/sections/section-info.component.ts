@@ -170,6 +170,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     forkJoin([
       this.stores.innovation.getSectionInfo$(
         this.innovation.id,
+        // TODO remove translator when BE updates sections IDs
         translateSectionIdEnums(this.sectionSummaryData.sectionInfo.id)
       ),
       !this.shouldShowDocuments

@@ -7,6 +7,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -114,8 +115,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
       this.task = response;
       this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
-
-      const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
       this.sectionTitle = section
         ? `${section.group.number}.${section.section.number} ${section.section.title}`
         : 'Section no longer available';

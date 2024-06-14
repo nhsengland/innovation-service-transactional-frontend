@@ -81,7 +81,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     combineLatest([
       this.activatedRoute.queryParams,
-      this.stores.innovation.getSectionInfo$(this.innovation.id, translateSectionIdEnums(this.sectionId))
+      this.stores.innovation.getSectionInfo$(
+        this.innovation.id,
+        // TODO remove translator when BE updates sections IDs
+        translateSectionIdEnums(this.sectionId)
+      )
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
         this.wizard.setAnswers(sectionInfoResponse.data).runRules();

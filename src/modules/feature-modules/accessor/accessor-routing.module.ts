@@ -79,6 +79,7 @@ import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/i
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -136,13 +137,16 @@ const routes: Routes = [
 
           {
             path: ':innovationId',
+            resolve: {
+              innovationData: mapToResolve(InnovationDataResolver),
+              irSchemaData: innovationRecordSchemaResolver
+            },
             data: {
               module: 'accessor',
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             children: [
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
 

@@ -47,6 +47,7 @@ import {
   InnovationRulesDTO,
   InnovationValidationRules
 } from './innovations.dtos';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -474,7 +475,12 @@ export class InnovationsService extends CoreService {
       map(response => ({
         count: response.count,
         data: response.data.map(item => {
-          const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
+          // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
+
+          // TODO remove translator when BE updates sections IDs
+          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(
+            translateSectionIdEnums(item.section)
+          );
 
           return {
             ...item,
@@ -496,13 +502,19 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(
+          // TODO remove translator when BE updates sections IDs
+          translateSectionIdEnums(response.section)
+        );
+
+        // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
         return {
           id: response.id,
           displayId: response.displayId,
           status: response.status,
           descriptions: response.descriptions,
-          section: response.section,
+          // TODO remove translator when BE updates sections IDs
+          section: translateSectionIdEnums(response.section),
           name: sectionIdentification
             ? `Update'${sectionIdentification.section.title}'`
             : 'Section no longer available',
@@ -517,10 +529,7 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  createAction(
-    innovationId: string,
-    body: { section: InnovationSectionEnum; description: string }
-  ): Observable<{ id: string }> {
+  createAction(innovationId: string, body: { section: string; description: string }): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/tasks')
       .setPathParams({ innovationId });
