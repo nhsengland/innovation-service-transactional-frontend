@@ -7,7 +7,8 @@ import { InnovationRecordConditionType } from '@modules/stores/innovation/innova
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import {
   InnovationRecordSchemaInfoType,
-  InnovationRecordSectionUpdateType
+  InnovationRecordSectionUpdateType,
+  IrSchemaTranslatorMapType
 } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
@@ -16,7 +17,7 @@ export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWa
 export type WizardSummaryV3Type = {
   stepId: string;
   label: string;
-  value?: string;
+  value?: string | string[];
   editStepNumber: number;
   evidenceId?: string;
   type?: 'keyValueLink' | 'button';
@@ -40,12 +41,7 @@ export class WizardIRV3EngineModel {
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
-  translations: {
-    sections: Map<string, string>;
-    subsections: Map<string, string>;
-    questions: Map<string, string>;
-    items: Map<string, string>;
-  };
+  translations: IrSchemaTranslatorMapType;
 
   private summary: WizardSummaryV3Type[] = [];
 
@@ -61,8 +57,7 @@ export class WizardIRV3EngineModel {
     this.translations = data.translations ?? {
       sections: new Map([]),
       subsections: new Map([]),
-      questions: new Map([]),
-      items: new Map([])
+      questions: new Map([])
     };
   }
 
@@ -254,7 +249,10 @@ export class WizardIRV3EngineModel {
 
           const updatedItemsList = itemsDependencyAnswer.map(item => ({
             id: item,
-            label: item === 'other' ? this.currentAnswers[conditionalAnswerId] : this.translations.items.get(item)
+            label:
+              item === 'other'
+                ? this.currentAnswers[conditionalAnswerId]
+                : this.translations.questions.get(q.id)?.items.get(item)?.label
           }));
 
           step.parameters[0].items = updatedItemsList;
@@ -305,7 +303,7 @@ export class WizardIRV3EngineModel {
           } else {
             label = q.addQuestion!.label.replace(
               '{{item}}',
-              this.translations.items.get(this.currentAnswers[q.id][i][q.id]) ?? label
+              this.translations.questions.get(this.currentAnswers[q.id][i][q.id])?.label ?? label
             );
           }
 
@@ -357,8 +355,8 @@ export class WizardIRV3EngineModel {
     for (const [i, step] of this.steps.entries()) {
       let params = step.parameters[0];
       let stepId = params.id;
-      let label = this.translations.questions.get(stepId.split('|')[0]) ?? '';
-      let value: string | undefined = currentAnswers[params.id];
+      let label = stepId.split('|')[0];
+      let value: string | string[] | undefined = currentAnswers[params.id];
       let isNotMandatory = !!!params.validations?.isRequired;
       editStepNumber++;
 
@@ -401,13 +399,26 @@ export class WizardIRV3EngineModel {
             if (!params.addQuestion) {
               stepAnswers = currentAnswers[params.id] as string[];
 
-              value = stepAnswers ? stepAnswers.map(item => this.translations.items.get(item)).join(', ') : undefined;
+              // If present, replace 'other' with answer.
+              if (stepAnswers) {
+                const otherAnswerId = params.items?.find(i => i.id === 'other')?.conditional?.id;
+                if (stepAnswers.includes('other') && otherAnswerId) {
+                  const otherAnswer = currentAnswers['otherCareSetting'];
+
+                  // value = otherAnswer ? otherAnswer : value;
+
+                  stepAnswers.splice(
+                    stepAnswers.findIndex(i => i === 'other'),
+                    1,
+                    this.currentAnswers[otherAnswerId]
+                  );
+                }
+                value = stepAnswers;
+              }
             } else {
               stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
 
-              value = stepAnswers
-                ? stepAnswers.map(item => this.translations.items.get(item[params.id])).join(', ')
-                : undefined;
+              value = stepAnswers ? stepAnswers.map(item => item[params.id]) : undefined;
             }
 
             // Push "parent"
@@ -424,12 +435,13 @@ export class WizardIRV3EngineModel {
               const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
               stepAnswers.forEach((item, i) => {
                 editStepNumber++;
-
+                console.log('stepAnswers[i][params.id]', stepAnswers[i][params.id]);
                 this.summary.push({
                   stepId: stepId,
                   label: params.addQuestion!.label.replace(
                     '{{item}}',
-                    this.translations.items.get(stepAnswers[i][params.id]) ?? stepAnswers[i][params.id]
+                    this.translations.questions.get(params.id)?.items.get(stepAnswers[i][params.id])?.label ??
+                      stepAnswers[i][params.id]
                   ),
                   value: stepAnswers[i][params.addQuestion!.id],
                   editStepNumber: editStepNumber

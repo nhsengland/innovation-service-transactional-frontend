@@ -12,3 +12,9 @@ export type InnovationRecordSchemaInfoType = {
 };
 
 export type InnovationRecordSectionUpdateType = { version: number; data: { [key: string]: any } };
+
+export type IrSchemaTranslatorMapType = {
+  sections: Map<string, string>;
+  subsections: Map<string, string>;
+  questions: Map<string, { label: string; items: Map<string, { label: string; group: string }> }>;
+};

@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { InnovationRecordSchemaInfoType, InnovationRecordSchemaModel } from './innovation-record-schema.models';
+import {
+  InnovationRecordSchemaInfoType,
+  InnovationRecordSchemaModel,
+  IrSchemaTranslatorMapType
+} from './innovation-record-schema.models';
 import { InnovationRecordSchemaService } from './innovation-record-schema.service';
 import { Store } from '@modules/stores/store.class';
 import { Observable } from 'rxjs';
@@ -10,7 +14,6 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { SectionsSummaryModel } from '../../innovation.models';
 import { translateSectionIdEnums } from '../202405/ir-v3.helpers';
-// import { getInnovationRecordSchemaTranslationsMap } from '../202405/ir-v3.helpers';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -159,12 +162,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     };
   }
 
-  getIrSchemaTranslationsMap(): {
-    sections: Map<string, string>;
-    subsections: Map<string, string>;
-    questions: Map<string, string>;
-    items: Map<string, string>;
-  } {
+  getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
 
     // Sections & Subsections labels
@@ -172,13 +170,53 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
 
     const flattenedSubSections = schema.flatMap(s => s.subSections.flatMap(sub => ({ id: sub.id, label: sub.title })));
 
-    // Questions labels
-    const flattenedQuestionsLabels = schema.flatMap(s =>
-      s.subSections.flatMap(sub => sub.questions).flatMap(q => ({ id: q.id, label: q.label }))
+    // Questions labels and items
+
+    const allQuestionsFlattened = [
+      ...schema.flatMap(s =>
+        s.subSections.flatMap(sub =>
+          sub.questions.flatMap(q => ({
+            id: q.id,
+            label: q.label,
+            items: q?.items?.map(item => ({
+              id: item.id,
+              label: item.label,
+              group: item.group
+            }))
+          }))
+        )
+      ),
+      ...schema.flatMap(s =>
+        s.subSections.flatMap(sub =>
+          sub.questions
+            .flatMap(q => q.addQuestion)
+            .flatMap(addQuestion => ({
+              id: addQuestion?.id ?? '',
+              label: addQuestion?.label ?? '',
+              items: addQuestion?.items?.map(item => ({
+                id: item.id,
+                label: item.label,
+                group: item.group
+              }))
+            }))
+        )
+      )
+    ];
+
+    const flattenedQuestionsLabelsAndItems = new Map<
+      string,
+      { label: string; items: Map<string, { label: string; group: string }> }
+    >(
+      allQuestionsFlattened.map(q => [
+        q.id,
+        {
+          label: q.label,
+          items: new Map<string, { label: string; group: string }>(
+            q.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
+          )
+        }
+      ])
     );
-    const flattenedAddQuestionsLabels = schema
-      .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion))
-      .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
 
     // Items labels
     const flattenedItems = schema
@@ -192,8 +230,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     return {
       sections: new Map(flattenedSections.map(s => [s.id, s.label])),
       subsections: new Map(flattenedSubSections.map(sub => [sub.id, sub.label])),
-      questions: new Map([...flattenedQuestionsLabels, ...flattenedAddQuestionsLabels].map(q => [q.id, q.label])),
-      items: new Map([...flattenedItems, ...flattenedAddQuestionItems].map(i => [i.id, i.label]))
+      questions: flattenedQuestionsLabelsAndItems
     };
   }
 }

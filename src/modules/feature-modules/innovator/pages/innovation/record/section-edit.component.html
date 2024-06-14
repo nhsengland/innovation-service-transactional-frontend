@@ -19,10 +19,10 @@
               </ng-container>
               <ng-container *ngSwitchDefault>
                 <div class="nhsuk-summary-list__row">
-                  <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                  <dt class="nhsuk-summary-list__key">{{ item.label | irv3translate: "questions" }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate }}</span>
+                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate: "items" : item.stepId }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a href="javascript:void(0)" (click)="onChangeStep(item.editStepNumber)">
