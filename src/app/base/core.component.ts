@@ -342,10 +342,9 @@ export class CoreComponent implements OnDestroy {
     return this.stores.authentication.userUrlBasePath();
   }
 
-  redirectTo(url: string, queryParams?: MappedObjectType): void {
+  redirectTo(url: string, queryParams: MappedObjectType = {}): void {
     // fix url can include queryParams and we need to extract those into the queryParams object
     const [baseUrl, queryString] = url.split('?');
-    queryParams = queryParams ?? {};
     queryString?.split('&').forEach(qp => {
       const [key, value] = qp.split('=');
       queryParams[key] = value;

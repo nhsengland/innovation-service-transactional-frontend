@@ -12,6 +12,7 @@ import { SidebarInnovationMenuOutletComponent } from './base/sidebar-innovation-
 
 // Pages.
 // // Account.
+import { AccountManageCustomNotificationsComponent } from './pages/account/manage-custom-notifications/manage-custom-notifications.component';
 // // Tasks.
 import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
@@ -23,7 +24,13 @@ import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovatio
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
-
+import { InnovationCustomNotificationsComponent } from './pages/innovation/custom-notifications/custom-notifications.component';
+import { WizardInnovationCustomNotificationNewComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/custom-notification-new.component';
+import { WizardInnovationCustomNotificationNewNotificationStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/notification-step.component';
+import { WizardInnovationCustomNotificationNewOrganisationsStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/organisations-step.component';
+import { WizardInnovationCustomNotificationNewUnitsStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/units-step.component';
+import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/support-statuses-step.component';
+import { WizardInnovationCustomNotificationNewSummaryStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/summary-step.component';
 // Services.
 import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
@@ -37,6 +44,8 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     SidebarAccountMenuOutletComponent,
     SidebarInnovationMenuOutletComponent,
 
+    // // Account.
+    AccountManageCustomNotificationsComponent,
     // // Actions.
     TasksListComponent,
     // // Dashboard.
@@ -49,6 +58,13 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
+    InnovationCustomNotificationsComponent,
+    WizardInnovationCustomNotificationNewComponent,
+    WizardInnovationCustomNotificationNewNotificationStepComponent,
+    WizardInnovationCustomNotificationNewOrganisationsStepComponent,
+    WizardInnovationCustomNotificationNewUnitsStepComponent,
+    WizardInnovationCustomNotificationNewSupportStatusesStepComponent,
+    WizardInnovationCustomNotificationNewSummaryStepComponent,
     // // Training.
     TrainingAndResourcesComponent
   ],

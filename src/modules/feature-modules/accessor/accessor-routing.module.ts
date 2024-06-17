@@ -23,6 +23,7 @@ import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovatio
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationCustomNotificationsComponent } from './pages/innovation/custom-notifications/custom-notifications.component';
 
 // Shared module pages.
 // // Account.
@@ -30,6 +31,7 @@ import { PageAccountEmailNotificationsEditComponent } from '@modules/shared/page
 import { PageAccountEmailNotificationsListComponent } from '@modules/shared/pages/account/email-notifications/email-notifications-list.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
+import { AccountManageCustomNotificationsComponent } from './pages/account/manage-custom-notifications/manage-custom-notifications.component';
 // // Tasks.
 import { PageTasksAdvancedSearchComponent } from '@modules/shared/pages/tasks/tasks-advanced-search.component';
 // // Innovation.
@@ -60,6 +62,7 @@ import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innova
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
 import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
 import { PageInnovationTaskNewComponent } from '@modules/shared/pages/innovation/tasks/wizard-task-new/task-new.component';
+import { WizardInnovationCustomNotificationNewComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/custom-notification-new.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -482,6 +485,25 @@ const routes: Routes = [
                   breadcrumb: 'Activity Log',
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
+              },
+
+              {
+                path: 'custom-notifications',
+                data: { breadcrumb: 'Custom notifications' },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    component: InnovationCustomNotificationsComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'edit',
+                    pathMatch: 'full',
+                    component: WizardInnovationCustomNotificationNewComponent,
+                    data: { breadcrumb: null, layout: { type: 'full' } }
+                  }
+                ]
               }
             ]
           }
@@ -578,6 +600,18 @@ const routes: Routes = [
                   breadcrumb: 'Edit',
                   layout: { type: 'full', chosenMenu: 'yourAccount' }
                 }
+              }
+            ]
+          },
+          {
+            path: 'manage-custom-notifications',
+            data: { breadcrumb: 'Manage custom notifications' },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                component: AccountManageCustomNotificationsComponent,
+                data: { breadcrumb: null }
               }
             ]
           },
