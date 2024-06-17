@@ -205,9 +205,7 @@ export class WizardIRV3EngineModel {
   runRules(): this {
     this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
     this.steps = [];
-    const subsection = dummy_schema_V3_202405.sections
-      .flatMap(s => s.subSections)
-      .find(sub => sub.id === this.sectionId);
+    const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
 
     subsection?.questions.forEach(q => {
       // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.

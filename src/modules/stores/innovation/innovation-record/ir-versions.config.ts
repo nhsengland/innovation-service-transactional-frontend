@@ -14,6 +14,10 @@ import {
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
+import { dummy_schema_V3_202405 } from './202405/ir-v3-schema';
+import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
+import { ENVIRONMENT } from 'src/server/config/constants.config';
+import axios from 'axios';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -85,4 +89,20 @@ export function getAllSectionsList(): { value: string; label: string }[] {
       }, [])
     ];
   }, []);
+}
+
+// TODO Update extra level after implementing 'STEPS' on schema structure
+export function getAllSectionsListV3(
+  schema: InnovationRecordSchemaInfoType | null
+): { value: string; label: string }[] {
+  return !schema
+    ? []
+    : schema.schema.sections.reduce((sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
+        return [
+          ...sectionGroupAcc,
+          ...sectionGroup.subSections.reduce((sectionAcc: { value: string; label: string }[], section, j) => {
+            return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
+          }, [])
+        ];
+      }, []);
 }
