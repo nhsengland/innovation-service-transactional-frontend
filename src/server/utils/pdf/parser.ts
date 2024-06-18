@@ -3,7 +3,8 @@ import axios from 'axios';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
-  getAllSectionsSummary
+  getAllSectionsSummary,
+  getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
 
@@ -12,9 +13,24 @@ import { ENVIRONMENT } from '../../config/constants.config';
 import {
   DocumentGeneratorInnovationInfoError,
   PDFGeneratorParserError,
+  PDFGeneratorSchemaGetError,
   PDFGeneratorSectionsNotFoundError
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
+import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import {
+  irSchemaTranslationsMap,
+  translateSectionIdEnums
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+
+export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;
+  const response = await axios.get<InnovationRecordSchemaInfoType>(url, { ...config });
+  return response.data;
+};
 
 export const getSections = async (
   innovationId: string,
@@ -26,7 +42,7 @@ export const getSections = async (
     ...config,
     ...(version && { params: { version } })
   });
-  return response.data;
+  return IRV3Helper.translateSections(response.data);
 };
 
 export const getInnovationInfo = async (innovationId: string, config: any): Promise<InnovationInfoDTO> => {
@@ -94,6 +110,7 @@ export const getIRDocumentExportData = (
 };
 
 export const generatePDF = async (innovationId: string, config: any, version?: string) => {
+  let schema: InnovationRecordSchemaInfoType;
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType; data: MappedObjectType }[];
 
@@ -112,7 +129,13 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
   }
 
   try {
-    content = getAllSectionsSummary(sections, version);
+    schema = await getSchema(config);
+  } catch (error: any) {
+    throw new PDFGeneratorSchemaGetError(error);
+  }
+
+  try {
+    content = getAllSectionsSummaryV3(sections, schema);
   } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }

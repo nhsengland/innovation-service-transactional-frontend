@@ -23,7 +23,7 @@ export type InnovationSectionConfigType = {
 
 export type sectionType = {
   id: null | string;
-  section: InnovationSectionEnum;
+  section: InnovationSectionEnum | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };

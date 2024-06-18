@@ -4,9 +4,18 @@ import { SectionsSummaryModel } from '../../innovation.models';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { InnovationSectionEnum } from '../../innovation.enums';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import { InnovationRecordQuestionStepType, SectionsSummaryModelV3Type, dummy_202405_sections } from './ir-v3-types';
+import {
+  InnovationRecordQuestionStepType,
+  InnovationRecordSchemaV3Type,
+  SectionsSummaryModelV3Type,
+  dummy_202405_sections
+} from './ir-v3-types';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
+import {
+  InnovationRecordSchemaInfoType,
+  IrSchemaTranslatorMapType
+} from '../innovation-record-schema/innovation-record-schema.models';
 
 // export function getInnovationRecordSchemaSectionQuestionsLabels(sectionId: string) {
 //   const toReturn = new Map();
@@ -68,6 +77,80 @@ import { SectionStepsList } from '@modules/shared/pages/innovation/sections/sect
 //   return new Map(flattenedQuestions.map(q => [q.id, q.condition]));
 // }
 // ``;
+
+export function irSchemaTranslationsMap(schema?: InnovationRecordSchemaV3Type): IrSchemaTranslatorMapType {
+  const schemaSections = schema ? schema.sections : dummy_schema_V3_202405.sections;
+
+  // Sections & Subsections labels
+  const flattenedSections = schemaSections.flatMap(s => ({ id: s.id, label: s.title }));
+
+  const flattenedSubSections = schemaSections.flatMap(s =>
+    s.subSections.flatMap(sub => ({ id: sub.id, label: sub.title }))
+  );
+
+  // Questions labels and items
+
+  const allQuestionsFlattened = [
+    ...schemaSections.flatMap(s =>
+      s.subSections.flatMap(sub =>
+        sub.questions.flatMap(q => ({
+          id: q.id,
+          label: q.label,
+          items: q?.items?.map(item => ({
+            id: item.id,
+            label: item.label,
+            group: item.group
+          }))
+        }))
+      )
+    ),
+    ...schemaSections.flatMap(s =>
+      s.subSections.flatMap(sub =>
+        sub.questions
+          .flatMap(q => q.addQuestion)
+          .flatMap(addQuestion => ({
+            id: addQuestion?.id ?? '',
+            label: addQuestion?.label ?? '',
+            items: addQuestion?.items?.map(item => ({
+              id: item.id,
+              label: item.label,
+              group: item.group
+            }))
+          }))
+      )
+    )
+  ];
+
+  const flattenedQuestionsLabelsAndItems = new Map<
+    string,
+    { label: string; items: Map<string, { label: string; group: string }> }
+  >(
+    allQuestionsFlattened.map(q => [
+      q.id,
+      {
+        label: q.label,
+        items: new Map<string, { label: string; group: string }>(
+          q.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
+        )
+      }
+    ])
+  );
+
+  // Items labels
+  const flattenedItems = schemaSections
+    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.items))
+    .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
+
+  const flattenedAddQuestionItems = schemaSections
+    .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion?.items))
+    .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
+
+  return {
+    sections: new Map(flattenedSections.map(s => [s.id, s.label])),
+    subsections: new Map(flattenedSubSections.map(sub => [sub.id, sub.label])),
+    questions: flattenedQuestionsLabelsAndItems
+  };
+}
 
 // export function getInnovationRecordSchemaTranslationsMap(): {
 //   sections: Map<string, string>;

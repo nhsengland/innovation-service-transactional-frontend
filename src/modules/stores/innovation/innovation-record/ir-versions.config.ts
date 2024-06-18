@@ -1,6 +1,6 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionEnum } from '../innovation.enums';
-import { INNOVATION_SECTION_STATUS } from '../innovation.models';
+import { INNOVATION_SECTION_STATUS, sectionType } from '../innovation.models';
 import { InnovationSectionStepLabels, InnovationSectionsListType } from './ir-versions.types';
 import { FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
 
@@ -18,6 +18,8 @@ import { dummy_schema_V3_202405 } from './202405/ir-v3-schema';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
 import { ENVIRONMENT } from 'src/server/config/constants.config';
 import axios from 'axios';
+import { irSchemaTranslationsMap } from './202405/ir-v3.helpers';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -78,6 +80,36 @@ export function getAllSectionsSummary(
         .map(a => ({ label: a.label, value: a.value || '' }))
     }))
   }));
+}
+
+export function getAllSectionsSummaryV3(
+  sections: {
+    section: sectionType;
+    data: MappedObjectType;
+  }[],
+  schema: InnovationRecordSchemaInfoType
+): AllSectionsOutboundPayloadType {
+  const sectionMap = new Map(sections.map(d => [d.section.section, d]));
+
+  return schema.schema.sections.map(s => {
+    return {
+      title: s.title,
+      sections: s.subSections.map(sub => {
+        const wizard = new WizardIRV3EngineModel({
+          schema: schema,
+          translations: irSchemaTranslationsMap(),
+          sectionId: sub.id
+        });
+
+        wizard.setAnswers(sectionMap.get(sub.id)?.data ?? {}).runRules();
+        return {
+          section: sub.title,
+          status: sectionMap.get(sub.id as any)?.section.status ?? 'UNKNOWN',
+          answers: wizard.translateSummary().map(a => ({ label: a.label, value: a.value }))
+        };
+      })
+    };
+  });
 }
 
 export function getAllSectionsList(): { value: string; label: string }[] {

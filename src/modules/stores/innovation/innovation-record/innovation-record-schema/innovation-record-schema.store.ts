@@ -13,7 +13,7 @@ import { SectionStepsList } from '@modules/shared/pages/innovation/sections/sect
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { SectionsSummaryModel } from '../../innovation.models';
-import { translateSectionIdEnums } from '../202405/ir-v3.helpers';
+import { irSchemaTranslationsMap, translateSectionIdEnums } from '../202405/ir-v3.helpers';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -129,9 +129,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
   ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
     console.log('schema', schema);
-    console.log('sectionId', sectionId);
     const section_group = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
-    console.log('section_group', section_group);
 
     const section = schema[section_group].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
     return {
@@ -180,74 +178,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
   }
 
   getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {
-    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-
-    // Sections & Subsections labels
-    const flattenedSections = schema.flatMap(s => ({ id: s.id, label: s.title }));
-
-    const flattenedSubSections = schema.flatMap(s => s.subSections.flatMap(sub => ({ id: sub.id, label: sub.title })));
-
-    // Questions labels and items
-
-    const allQuestionsFlattened = [
-      ...schema.flatMap(s =>
-        s.subSections.flatMap(sub =>
-          sub.questions.flatMap(q => ({
-            id: q.id,
-            label: q.label,
-            items: q?.items?.map(item => ({
-              id: item.id,
-              label: item.label,
-              group: item.group
-            }))
-          }))
-        )
-      ),
-      ...schema.flatMap(s =>
-        s.subSections.flatMap(sub =>
-          sub.questions
-            .flatMap(q => q.addQuestion)
-            .flatMap(addQuestion => ({
-              id: addQuestion?.id ?? '',
-              label: addQuestion?.label ?? '',
-              items: addQuestion?.items?.map(item => ({
-                id: item.id,
-                label: item.label,
-                group: item.group
-              }))
-            }))
-        )
-      )
-    ];
-
-    const flattenedQuestionsLabelsAndItems = new Map<
-      string,
-      { label: string; items: Map<string, { label: string; group: string }> }
-    >(
-      allQuestionsFlattened.map(q => [
-        q.id,
-        {
-          label: q.label,
-          items: new Map<string, { label: string; group: string }>(
-            q.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
-          )
-        }
-      ])
-    );
-
-    // Items labels
-    const flattenedItems = schema
-      .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.items))
-      .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
-
-    const flattenedAddQuestionItems = schema
-      .flatMap(s => s.subSections.flatMap(sub => sub.questions).flatMap(q => q.addQuestion?.items))
-      .flatMap(i => ({ id: i?.id ?? '', label: i?.label ?? '' }));
-
-    return {
-      sections: new Map(flattenedSections.map(s => [s.id, s.label])),
-      subsections: new Map(flattenedSubSections.map(sub => [sub.id, sub.label])),
-      questions: flattenedQuestionsLabelsAndItems
-    };
+    const schema = this.contextStore.getIrSchema()?.schema;
+    return irSchemaTranslationsMap(schema);
   }
 }

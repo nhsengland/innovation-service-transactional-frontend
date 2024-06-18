@@ -1,8 +1,6 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-
-import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import {
@@ -17,7 +15,7 @@ export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWa
 export type WizardSummaryV3Type = {
   stepId: string;
   label: string;
-  value?: string | string[];
+  value: string | string[];
   editStepNumber: number;
   evidenceId?: string;
   type?: 'keyValueLink' | 'button';
@@ -336,17 +334,40 @@ export class WizardIRV3EngineModel {
       }
     });
 
-    console.log('runrules steps:', this.steps);
     return this;
   }
 
-  parseSummary(): WizardSummaryV3Type[] {
-    console.log('this.currentAnswers', this.currentAnswers);
+  translateSummary() {
+    const summary = this.parseSummary();
 
+    const translatedSummary = summary.map(item => {
+      // get label translation
+      const label = this.translations.questions.get(item.label.split('_')[0])?.label ?? item.label;
+      let value = '';
+
+      if (typeof item.value === 'string') {
+        // translate item
+        value = this.translations.questions.get(item.stepId.split('_')[0])?.items.get(item.value)?.label ?? item.value;
+      } else if (item.value instanceof Array) {
+        let translatedArr: string[] = [];
+
+        // translate each item of Array
+        item.value.forEach(v =>
+          translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
+        );
+        value = translatedArr.join(', ');
+      }
+
+      return { label: label, value: value };
+    });
+
+    return translatedSummary;
+  }
+
+  parseSummary(): WizardSummaryV3Type[] {
     let editStepNumber = 0;
     this.summary = [];
 
-    // const currentAnswers = this.currentAnswers
     const currentAnswers = this.outboundParsing().data;
 
     // Parse condition step's answers
@@ -368,7 +389,7 @@ export class WizardIRV3EngineModel {
             this.summary.push({
               stepId: stepId,
               label: label,
-              value: value,
+              value: value ?? '',
               editStepNumber: editStepNumber,
               isNotMandatory: isNotMandatory
             });
@@ -423,7 +444,7 @@ export class WizardIRV3EngineModel {
             this.summary.push({
               stepId: stepId,
               label: label,
-              value: value,
+              value: value ?? '',
               editStepNumber: editStepNumber,
               isNotMandatory: isNotMandatory
             });
@@ -433,9 +454,8 @@ export class WizardIRV3EngineModel {
               const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
               stepAnswers.forEach((item, i) => {
                 editStepNumber++;
-                console.log('stepAnswers[i][params.id]', stepAnswers[i][params.id]);
                 this.summary.push({
-                  stepId: stepId,
+                  stepId: `${params.addQuestion?.id}_${i}`,
                   label: params.addQuestion!.label.replace(
                     '{{item}}',
                     this.translations.questions.get(params.id)?.items.get(stepAnswers[i][params.id])?.label ??
@@ -453,7 +473,7 @@ export class WizardIRV3EngineModel {
             this.summary.push({
               stepId: stepId,
               label: label,
-              value: value,
+              value: value ?? '',
               editStepNumber: editStepNumber,
               isNotMandatory: isNotMandatory
             });
@@ -482,7 +502,7 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
+    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
       version: this.schema?.version ?? 0,
       data: toReturn

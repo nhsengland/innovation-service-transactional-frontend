@@ -5,6 +5,13 @@ export class PDFGeneratorParserError extends Error {
   }
 }
 
+export class PDFGeneratorSchemaGetError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'PDFGeneratorSchemaGetError';
+  }
+}
+
 export class PDFGeneratorSectionsNotFoundError extends Error {
   constructor(message: string) {
     super(message);
