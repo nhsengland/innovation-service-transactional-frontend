@@ -314,6 +314,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       case 'unitsStep':
         this.onUnitsStepIn();
         break;
+      case 'supportStatusesStep':
+        this.onSupportStatusesStepIn();
+        break;
       default:
         return;
     }
