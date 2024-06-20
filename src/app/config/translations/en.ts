@@ -146,6 +146,18 @@ export const locale = {
             singular: '1 user associated to this organisation unit'
           }
         }
+      },
+
+      accessor: {
+        custom_notifications: {
+          cards: {
+            organisations_selected: {
+              none: 'Organisations selected',
+              plural: 'Organisations selected',
+              singular: 'Organisation selected'
+            }
+          }
+        }
       }
     },
 
