@@ -126,7 +126,7 @@ export class AccessorService extends CoreService {
   }
 
   createNotifyMeSubscription(innovationId: string, config: NotifyMeConfig): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/notify-me');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me');
     return this.http.post<{ id: string }>(url.buildUrl(), { innovationId, config }).pipe(
       take(1),
       map(response => response)
@@ -135,7 +135,7 @@ export class AccessorService extends CoreService {
 
   getNotifyMeInnovationSubscriptionsList(innovationId: string): Observable<GetNotifyMeInnovationSubscriptions[]> {
     const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/me/notify-me/innovation/:innovationId')
+      .addPath('v1/notify-me/innovation/:innovationId')
       .setPathParams({ innovationId });
     return this.http.get<GetNotifyMeInnovationSubscriptions[]>(url.buildUrl()).pipe(
       take(1),
@@ -144,7 +144,7 @@ export class AccessorService extends CoreService {
   }
 
   getNotifyMeSubscriptionsList(): Observable<GetNotifyMeSubscriptionsList> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/notify-me');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me');
     return this.http.get<GetNotifyMeSubscriptionsList>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
