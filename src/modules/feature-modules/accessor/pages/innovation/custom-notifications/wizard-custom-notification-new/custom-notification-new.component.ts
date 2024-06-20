@@ -405,7 +405,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
     this.accessorService.createNotifyMeSubscription(this.innovation.id, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess(`You have set up a custom notification for ${this.innovation.name}.`);
+        this.setRedirectAlertSuccess(`You have set up a custom notification for ${this.innovation.name}`);
         this.redirectInnovationCustomNotifications();
       },
       error: () => {
