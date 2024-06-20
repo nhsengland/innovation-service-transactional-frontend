@@ -273,7 +273,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         notification.category === CategoryEnum.NOTIFIY_ME_WHEN
           ? 'When ' + notification.label
           : 'Remind me ' + notification.label,
-      selectedOrganisations: organisationsNames.sort(),
+      selectedOrganisations: organisationsNames.sort((a, b) => a.localeCompare(b)),
       selectedSupportStatuses: this.wizard.data.supportStatusesStep.supportStatuses.map(status =>
         this.translate('shared.catalog.innovation.support_status.' + status + '.name')
       )
