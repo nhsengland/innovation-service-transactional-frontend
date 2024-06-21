@@ -59,8 +59,12 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   isAccessorType: boolean;
   isAssessmentType: boolean;
 
+  search?: string;
+
   constructor(private activatedRoute: ActivatedRoute) {
     super();
+
+    this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.stores.context.getInnovation();
 

@@ -55,8 +55,8 @@ export class CookiesService {
       this.cookiesOptions
     );
 
-    if (analytics) {
-      gtag &&
+    if (this.environment.ENV.ENABLE_ANALYTICS && analytics) {
+      (typeof gtag === 'function') &&
         gtag('consent', 'update', {
           ad_storage: 'denied',
           ad_user_data: 'denied',

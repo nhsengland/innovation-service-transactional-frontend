@@ -18,6 +18,7 @@ import {
 } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
+import { ViewportScroller } from '@angular/common';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
@@ -68,6 +69,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   allSectionsSubmitted = false;
 
+  sectionIdFragment: string | null;
+
   allSectionsData: {
     [key: string]: {
       sectionInfo: SectionInfoType;
@@ -79,13 +82,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private viewportScroller: ViewportScroller
   ) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.sectionIdFragment = this.activatedRoute.snapshot.fragment;
 
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
@@ -224,6 +229,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       this.setSectionsStatistics(summary);
 
       this.setPageStatus('READY');
+
+      this.scrollToSectionWhenFragmentExists();
     });
   }
 
@@ -269,5 +276,16 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     );
 
     this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
+  }
+
+  scrollToSectionWhenFragmentExists() {
+    setTimeout(() => {
+      if (this.sectionIdFragment && this.sectionIdFragment in InnovationSectionEnum) {
+        const section = document.getElementById(this.sectionIdFragment);
+        if (section) {
+          this.viewportScroller.scrollToAnchor(this.sectionIdFragment);
+        }
+      }
+    });
   }
 }

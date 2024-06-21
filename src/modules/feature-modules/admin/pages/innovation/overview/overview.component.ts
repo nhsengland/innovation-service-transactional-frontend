@@ -48,6 +48,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     role?: string;
   }[] = [];
 
+  search?: string;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -56,6 +58,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.search = this.activatedRoute.snapshot.queryParams.search;
+
     this.innovation = this.stores.context.getInnovation();
     this.isArchived = this.innovation.status === 'ARCHIVED';
 

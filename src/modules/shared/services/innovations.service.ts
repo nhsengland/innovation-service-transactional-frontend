@@ -45,7 +45,9 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO,
   InnovationRulesDTO,
-  InnovationValidationRules
+  InnovationValidationRules,
+  InnovationSearchFullDTO,
+  InnovationSearchSelectType
 } from './innovations.dtos';
 import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
@@ -201,6 +203,26 @@ export class InnovationsService extends CoreService {
       ...pagination
     });
     return this.http.get<APIListResponse<InnovationListFullDTO, S>>(url.buildUrl()).pipe(take(1));
+  }
+
+  getInnovationsSearch<
+    F extends InnovationsListFiltersType,
+    S extends KeysUnion<InnovationSearchFullDTO> extends infer U
+      ? U extends InnovationSearchSelectType
+        ? U
+        : never
+      : never
+  >(
+    fields: S[] = ['id', 'name'] as S[],
+    filters: F = {} as F,
+    pagination: Paginated<S[]> = { take: 100, skip: 0 }
+  ): Observable<APIListResponse<InnovationSearchFullDTO, S>> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/search').setQueryParams({
+      fields,
+      ...filters,
+      ...pagination
+    });
+    return this.http.get<APIListResponse<InnovationSearchFullDTO, S>>(url.buildUrl()).pipe(take(1));
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {

@@ -36,10 +36,12 @@ export class AppComponent {
       this.cookiesService.getConsentCookie().analytics
     ) {
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-        gtag &&
-          gtag('config', this.environmentStore.ENV.TAG_MEASUREMENT_ID, {
-            page_path: e.urlAfterRedirects
-          });
+        if (this.environmentStore.ENV.ENABLE_ANALYTICS) {
+          (typeof gtag === 'function') &&
+            gtag('config', this.environmentStore.ENV.TAG_MEASUREMENT_ID, {
+              page_path: e.urlAfterRedirects
+            });
+        }
       });
     }
   }

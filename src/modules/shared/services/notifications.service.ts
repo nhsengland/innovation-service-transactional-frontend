@@ -338,6 +338,18 @@ export class NotificationsService extends CoreService {
                   break;
               }
               break;
+
+            // NOTIFY ME
+            case NotificationCategoryTypeEnum.NOTIFY_ME:
+              switch (item.contextDetail) {
+                case NotificationContextDetailEnum.SUPPORT_UPDATED:
+                  link = {
+                    label: 'Click to go to support summary.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
+                  };
+                  break;
+              }
+              break;
           }
 
           const section = item.params?.section

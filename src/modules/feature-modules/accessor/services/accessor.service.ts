@@ -7,6 +7,48 @@ import { UrlModel } from '@app/base/models';
 
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+
+export type NotifyMeSupportUpdateCreatedDTO = {
+  eventType: 'SUPPORT_UPDATED';
+  subscriptionType: 'INSTANTLY';
+  preConditions: {
+    units: string[];
+    status: InnovationSupportStatusEnum[];
+  };
+};
+
+export type NotifyMeConfig = NotifyMeSupportUpdateCreatedDTO;
+
+export type NotifyMeSupportUpdateDTO = {
+  id: string;
+  updatedAt: Date;
+  eventType: 'SUPPORT_UPDATED';
+  subscriptionType: 'INSTANTLY';
+  organisations: {
+    id: string;
+    name: string;
+    acronym: string;
+    units: {
+      id: string;
+      name: string;
+      acronym: string;
+    }[];
+  }[];
+  status: InnovationSupportStatusEnum[];
+};
+
+export type NotifyMeSupportUpdateTypes = {
+  SUPPORT_UPDATED: NotifyMeSupportUpdateDTO;
+};
+
+export type GetNotifyMeInnovationSubscriptions = NotifyMeSupportUpdateTypes[keyof NotifyMeSupportUpdateTypes];
+
+export type GetNotifyMeSubscriptionsList = {
+  innovationId: string;
+  name: string;
+  count: number;
+}[];
+
 @Injectable()
 export class AccessorService extends CoreService {
   constructor() {
@@ -78,6 +120,32 @@ export class AccessorService extends CoreService {
       .addPath('v1/:innovationId/supports/:supportId/accessors')
       .setPathParams({ innovationId, supportId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  createNotifyMeSubscription(innovationId: string, config: NotifyMeConfig): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me');
+    return this.http.post<{ id: string }>(url.buildUrl(), { innovationId, config }).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  getNotifyMeInnovationSubscriptionsList(innovationId: string): Observable<GetNotifyMeInnovationSubscriptions[]> {
+    const url = new UrlModel(this.API_USERS_URL)
+      .addPath('v1/notify-me/innovation/:innovationId')
+      .setPathParams({ innovationId });
+    return this.http.get<GetNotifyMeInnovationSubscriptions[]>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
+  getNotifyMeSubscriptionsList(): Observable<GetNotifyMeSubscriptionsList> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me');
+    return this.http.get<GetNotifyMeSubscriptionsList>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );

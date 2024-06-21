@@ -89,6 +89,8 @@ export type InnovationListSelectType =
   | 'statistics.tasks'
   | 'statistics.messages';
 
+export type InnovationSearchSelectType = InnovationListSelectType | 'highlights';
+
 export type InnovationListFullDTO = {
   id: string;
   name: string;
@@ -126,6 +128,10 @@ export type InnovationListFullDTO = {
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
   statistics: { notifications: number; tasks: number; messages: number };
+};
+
+export type InnovationSearchFullDTO = InnovationListFullDTO & {
+  highlights?: Record<string, string[]>;
 };
 
 export type InnovationInfoDTO = {

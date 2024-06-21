@@ -43,6 +43,7 @@ import { HeaderArchivedBannerComponent } from './components/header/header-archiv
 import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component';
 import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
+import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
 
 @NgModule({
   imports: [
@@ -97,7 +98,9 @@ import { SuggestionsCardsComponent } from './components/suggestions-cards/sugges
     SelectComponent,
 
     HeaderArchivedBannerComponent,
-    AccountMFAListComponent
+    AccountMFAListComponent,
+
+    HighlightDirective
   ],
   providers: [],
   exports: [
@@ -145,7 +148,9 @@ import { SuggestionsCardsComponent } from './components/suggestions-cards/sugges
 
     HeaderArchivedBannerComponent,
 
-    AccountMFAListComponent
+    AccountMFAListComponent,
+
+    HighlightDirective
   ]
 })
 export class ThemeModule {}

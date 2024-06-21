@@ -6,8 +6,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 
-import { REQUEST, RESPONSE } from '../../express.tokens';
 import { Request, Response } from 'express';
+import { REQUEST, RESPONSE } from '../../express.tokens';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
@@ -345,13 +345,20 @@ export class CoreComponent implements OnDestroy {
     return this.stores.authentication.userUrlBasePath();
   }
 
-  redirectTo(url: string, queryParams?: MappedObjectType): void {
+  redirectTo(url: string, queryParams: MappedObjectType = {}): void {
+    // fix url can include queryParams and we need to extract those into the queryParams object
+    const [baseUrl, queryString] = url.split('?');
+    queryString?.split('&').forEach(qp => {
+      const [key, value] = qp.split('=');
+      queryParams[key] = value;
+    });
+
     if (this.isRunningOnBrowser()) {
-      this.router.navigate([url], queryParams ? { queryParams } : {});
+      this.router.navigate([baseUrl], { queryParams });
       return;
     }
 
-    url = this.encodeUrlQueryParams(url, queryParams);
+    url = this.encodeUrlQueryParams(baseUrl, queryParams);
     /* istanbul ignore next */
     this.serverResponse?.status(303);
     /* istanbul ignore next */

@@ -1,5 +1,24 @@
 <theme-content-wrapper [status]="pageStatus">
-  <p>If you are looking for specific innovations, use the <a routerLink="advanced-search">innovations advanced search</a>.</p>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-1">Search all innovations</h2>
+
+      <form [formGroup]="form">
+        <theme-form-input [id]="'searchInnovation'" controlName="search" [pageUniqueField]="false" placeholder="Search" width="one-third">
+          <ng-container append>
+            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+              <theme-svg-icon type="search" />
+              <span class="nhsuk-u-visually-hidden">Search</span>
+            </button>
+          </ng-container>
+        </theme-form-input>
+      </form>
+
+      <a class="nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0" routerLink="advanced-search">More search options</a>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-3" />
+    </div>
+  </div>
 
   <div class="app-tabs nhsuk-u-margin-bottom-0">
     <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
@@ -29,19 +48,21 @@
         <p class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ currentTab.secondaryDescription }}</p>
       </div>
       <form [formGroup]="form" class="nhsuk-u-margin-bottom-1">
-        <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
-        <theme-form-checkbox
-          *ngIf="currentTab.showSuggestedOnlyFilter"
-          controlName="suggestedOnly"
-          label="Only show suggested innovations for my organisation"
-          size="small"
-        ></theme-form-checkbox>
-        <theme-form-checkbox
-          *ngIf="currentTab.showClosedByMyOrganisationFilter"
-          controlName="closedByMyOrganisation"
-          label="Only show innovations closed by my organisation"
-          size="small"
-        ></theme-form-checkbox>
+        <div formGroupName="tabsFilters">
+          <theme-form-checkbox *ngIf="currentTab.showAssignedToMeFilter" controlName="assignedToMe" label="Only show innovations assigned to me" size="small"></theme-form-checkbox>
+          <theme-form-checkbox
+            *ngIf="currentTab.showSuggestedOnlyFilter"
+            controlName="suggestedOnly"
+            label="Only show suggested innovations for my organisation"
+            size="small"
+          ></theme-form-checkbox>
+          <theme-form-checkbox
+            *ngIf="currentTab.showClosedByMyOrganisationFilter"
+            controlName="closedByMyOrganisation"
+            label="Only show innovations closed by my organisation"
+            size="small"
+          ></theme-form-checkbox>
+        </div>
       </form>
       <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" aria-live="polite">{{ innovationsList.getTotalRowsNumber() }} innovations</p>
 

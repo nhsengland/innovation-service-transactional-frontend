@@ -40,6 +40,8 @@ import { PageTeamsInfoComponent } from './pages/organisations/teams-info.compone
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
 import { PageTermsOfUseNewComponent } from './pages/terms-of-use/terms-of-use-new.component';
+// // Elastic Search
+import { PageElasticSearchComponent } from './pages/elastic-search/elastic-search.component';
 
 // Shared module pages.
 // // Account.
@@ -104,7 +106,8 @@ const header: RoutesDataType['header'] = {
             label: 'Terms of use',
             url: '/admin/terms-conditions',
             description: 'Create a new version and trigger acceptance by the users'
-          }
+          },
+          { label: 'Elastic Search', url: '/admin/elastic-search' }
         ]
       },
       { id: 'innovations', label: 'Innovations', url: '/admin/innovations' }
@@ -286,6 +289,13 @@ const routes: Routes = [
             ]
           }
         ]
+      },
+
+      {
+        path: 'elastic-search',
+        pathMatch: 'full',
+        component: PageElasticSearchComponent,
+        data: { breadcrumb: null }
       },
 
       {

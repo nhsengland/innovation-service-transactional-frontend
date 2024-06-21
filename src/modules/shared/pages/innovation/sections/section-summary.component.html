@@ -45,8 +45,8 @@
                 <div class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label | irv3translate: "questions" }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
-                    <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate: "items" : item.stepId }}</span>
+                    <span *ngIf="item.allowHTML" [innerHTML]="item.value" appHighlight [searchTerm]="search"></span>
+                    <span *ngIf="!item.allowHTML" appHighlight [searchTerm]="search">{{ item.value | irv3translate: "items" : item.stepId }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a
@@ -95,7 +95,7 @@
               </dt>
               <dd class="nhsuk-summary-list__value text-pre-wrap">
                 <p>
-                  <span>Evidence {{ i + 1 }}: </span>{{ evidence.value }}
+                  <span>Evidence {{ i + 1 }}: </span><span appHighlight [searchTerm]="search">{{ evidence.value }}</span>
                 </p>
               </dd>
               <dd class="nhsuk-summary-list__actions">

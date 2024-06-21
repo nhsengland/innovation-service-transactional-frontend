@@ -65,6 +65,11 @@ export const locale = {
         singular: 'document',
         plural: 'documents'
       },
+      notification: {
+        none: 'notification',
+        singular: 'notification',
+        plural: 'notifications'
+      },
       yes: 'yes'
     },
 
@@ -139,6 +144,18 @@ export const locale = {
             none: `0 users associated to this organisation unit`,
             plural: `{{ count }} users associated to this organisation unit`,
             singular: '1 user associated to this organisation unit'
+          }
+        }
+      },
+
+      accessor: {
+        custom_notifications: {
+          cards: {
+            organisations_selected: {
+              none: 'Organisations selected',
+              plural: 'Organisations selected',
+              singular: 'Organisation selected'
+            }
           }
         }
       }
@@ -519,6 +536,10 @@ export const locale = {
               QUALIFYING_ACCESSOR: { title: 'System reminders' },
               ACCESSOR: { title: 'System reminders' },
               ASSESSMENT: { title: 'System reminders' }
+            },
+            NOTIFY_ME: {
+              QUALIFYING_ACCESSOR: { title: 'Custom notifications' },
+              ACCESSOR: { title: 'Custom notifications' }
             }
           },
           notification_context_details: {
@@ -761,6 +782,11 @@ export const locale = {
             },
             AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
               title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
+            },
+            // NOTIFY ME
+            SUPPORT_UPDATED: {
+              title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
+              link: `View support summary.`
             }
           },
           section_status: {

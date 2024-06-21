@@ -77,7 +77,7 @@
         <dl *ngIf="sectionSummaryData.evidencesList.length > 0" class="nhsuk-summary-list">
           <div *ngFor="let item of sectionSummaryData.evidencesList" class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+            <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
             <dd class="nhsuk-summary-list__actions">
               <a routerLink="evidences/{{ item.evidenceId }}" attr.aria-label="View {{ item.value }} details">More details</a>
             </dd>
