@@ -5,12 +5,11 @@ import { WizardModel, WizardStepModel } from '@app/base/models';
 import { MappedObjectType, WizardStepEventType } from '@app/base/types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSectionEnum } from '@modules/stores/innovation';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { WizardTaskNewMessageStepComponent } from './steps/message-step.component';
 import { MessageStepInputType, MessageStepOutputType } from './steps/message-step.types';
 import { WizardTaskNewSectionStepComponent } from './steps/section-step.component';
 import { SectionStepInputType, SectionStepOutputType } from './steps/section-step.types';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 @Component({
   selector: 'shared-pages-innovation-task-new',
@@ -47,8 +46,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
 
     this.sectionUrl = `/${this.baseUrl}/innovations/${this.innovationId}/record/sections/${this.sectionId}`;
 
-    // this.sections = getAllSectionsList();
-    this.sections = this.stores.schema.getIrSchemaAllSectionsList();
+    this.sections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 
     this.wizard.data = {
       sectionStep: { section: null },
@@ -59,7 +57,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   ngOnInit() {
     if (this.sectionId) {
       // Check if is a valid sectionId
-      const section = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
       if (section) {
         this.wizard.data.sectionStep.section = this.sectionId as InnovationSectionEnum;

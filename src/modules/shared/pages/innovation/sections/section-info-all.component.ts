@@ -24,6 +24,8 @@ import {
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 // import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
+import { response } from 'express';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -32,9 +34,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './section-info-all.component.html'
 })
 export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit {
-  innovationsSectionsList: InnovationSectionsListType = INNOVATION_SECTIONS;
+  innovationsSectionsList = this.stores.schema.getIrSchemaSectionsListV3();
 
-  innovationsSubSectionsList: string[] = INNOVATION_SECTIONS.flatMap(el => el.sections.flatMap(section => section.id));
+  innovationsSubSectionsList: string[] = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
   innovationId: string;
 
@@ -67,7 +69,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   allSectionsSubmitted = false;
 
   allSectionsData: {
-    [key in InnovationSectionEnum]?: {
+    [key: string]: {
       sectionInfo: SectionInfoType;
       summaryList: WizardSummaryV3Type[];
       evidencesList: WizardSummaryV3Type[];
@@ -77,8 +79,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private innovationDocumentsService: InnovationDocumentsService
   ) {
     super();
 
@@ -118,8 +119,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   }
 
   getSectionsData() {
-    let summaryList: WizardSummaryType[];
-    let evidencesList: WizardSummaryType[];
+    let summaryList: WizardSummaryV3Type[];
+    let evidencesList: WizardSummaryV3Type[];
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
@@ -132,11 +133,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }),
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      const allSections = getAllSectionsList();
+      // const allSections = getAllSectionsList();
+      const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
-          s => s.section.section === curSection.value
+          // TODO remove translator when BE updates sections IDs
+          s => translateSectionIdEnums(s.section.section) === curSection.value
         ) ?? {
           data: {},
           section: { section: curSection.value, status: 'NOT_STARTED', openTasksCount: 0 }
@@ -156,8 +159,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submittedBy: null,
           openTasksCount: 0
         };
-
-        const section = this.irSchemaStore.getIrSchemaSectionV3(responseItem.section.section);
+        // TODO remove translator when BE updates sections IDs
+        const section = this.stores.schema.getIrSchemaSectionV3(translateSectionIdEnums(responseItem.section.section));
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
@@ -187,6 +190,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         );
 
         // sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
+        sectionInfo.wizard.setAnswers(responseItem.data).runRules();
 
         const validInformation = sectionInfo.wizard.validateData();
 
@@ -200,21 +204,21 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        // const data = sectionInfo.wizard.runSummaryParsing();
-        // summaryList = data.filter(item => !item.evidenceId);
-        // evidencesList = data.filter(item => item.evidenceId);
+        const data = sectionInfo.wizard.parseSummary();
+        summaryList = data.filter(item => !item.evidenceId);
+        evidencesList = data.filter(item => item.evidenceId);
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });
-
-        this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
-          evidencesList: [],
-          // evidencesList: evidencesList,
+        this.allSectionsData[sectionInfo.id] = {
+          // evidencesList: [],
+          evidencesList: evidencesList,
           sectionInfo: sectionInfo,
-          summaryList: [],
-          // summaryList: summaryList,
+          // summaryList: [],
+          summaryList: summaryList,
           documentsList: documentsList
         };
+        // console.log('sectionInfo', this.allSectionsData[sectionInfo.id]);
       }
 
       this.setSectionsStatistics(summary);

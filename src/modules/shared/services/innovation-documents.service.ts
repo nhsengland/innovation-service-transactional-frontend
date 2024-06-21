@@ -12,7 +12,7 @@ import {
   getAllSectionsList,
   getAllSectionsListV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 export type ContextTypeType =
   | 'INNOVATION'

@@ -1,7 +1,6 @@
 import { MappedObjectType } from '../../../../core/interfaces/base.interfaces';
 import { dummy_schema_V3_202405 } from './ir-v3-schema';
-import { InnovationSectionInfoDTO, sectionType } from '../../innovation.models';
-import { subscribe } from 'diagnostics_channel';
+import { InnovationAllSectionsInfoDTO, InnovationSectionInfoDTO, sectionType } from '../../innovation.models';
 
 const mapText = (answer: string, schemaQuestion: MappedObjectType, schemaAnswers: MappedObjectType) => {
   schemaAnswers[schemaQuestion.id] = answer;
@@ -146,40 +145,6 @@ export class IRV3Helper {
       });
   }
 
-  static stepChildParent(sectionId: string): MappedObjectType {
-    const stepsChildParentRelationsMap = new Map();
-
-    dummy_schema_V3_202405.sections.forEach(section => {
-      section.subSections.forEach(subSection => {
-        const stepsChildParentRelations: MappedObjectType = {};
-
-        subSection.questions.forEach(question => {
-          if (question.condition) {
-            stepsChildParentRelations[question.id] = question.condition.id;
-          }
-
-          if (question.items && question.items[0].itemsFromAnswer) {
-            stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
-          }
-
-          if (question.addQuestion && !question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
-          }
-
-          if (question.addQuestion && question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
-          }
-        });
-
-        if (Object.keys(stepsChildParentRelations).length) {
-          subSection.stepsChildParentRelations = stepsChildParentRelations;
-          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
-        }
-      });
-    });
-    return stepsChildParentRelationsMap.get(sectionId);
-  }
-
   static translateSections(
     sections: { section: sectionType; data: MappedObjectType }[]
   ): { section: sectionType; data: MappedObjectType }[] {
@@ -248,5 +213,18 @@ export class IRV3Helper {
       tasksIds: innovationRecord.tasksIds,
       data: v3Answers
     };
+  }
+
+  static translateIrAllSections(innovationRecord: InnovationAllSectionsInfoDTO): InnovationAllSectionsInfoDTO {
+    return innovationRecord.map(s => ({
+      section: {
+        section: s.section.section,
+        status: s.section.status,
+        submittedAt: s.section.submittedAt,
+        submittedBy: s.section.submittedBy,
+        openTasksCount: s.section.openTasksCount
+      },
+      data: IRV3Helper.translateIRData(s.data)
+    }));
   }
 }

@@ -8,6 +8,7 @@ import {
   InnovationRecordSectionUpdateType,
   IrSchemaTranslatorMapType
 } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { MappedObjectType } from '@app/base/types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -200,8 +201,42 @@ export class WizardIRV3EngineModel {
     return this.summary;
   }
 
+  getChildParentRelations(sectionId: string): MappedObjectType {
+    const stepsChildParentRelationsMap = new Map();
+
+    this.schema?.schema.sections.forEach(section => {
+      section.subSections.forEach(subSection => {
+        const stepsChildParentRelations: MappedObjectType = {};
+
+        subSection.questions.forEach(question => {
+          if (question.condition) {
+            stepsChildParentRelations[question.id] = question.condition.id;
+          }
+
+          if (question.items && question.items[0].itemsFromAnswer) {
+            stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
+          }
+
+          if (question.addQuestion && !question.field) {
+            stepsChildParentRelations[question.addQuestion.id] = question.id;
+          }
+
+          if (question.addQuestion && question.field) {
+            stepsChildParentRelations[question.addQuestion.id] = question.id;
+          }
+        });
+
+        if (Object.keys(stepsChildParentRelations).length) {
+          subSection.stepsChildParentRelations = stepsChildParentRelations;
+          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
+        }
+      });
+    });
+    return stepsChildParentRelationsMap.get(sectionId);
+  }
+
   runRules(): this {
-    this.stepsChildParentRelations = IRV3Helper.stepChildParent(this.sectionId);
+    this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
 
@@ -502,7 +537,7 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
+    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
       version: this.schema?.version ?? 0,
       data: toReturn

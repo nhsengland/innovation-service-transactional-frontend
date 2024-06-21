@@ -6,31 +6,21 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
-import {
-  getInnovationRecordConfig,
-  innovationSectionsWithFiles
-} from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   // getInnovationRecordSectionV3,
   translateSectionIdEnums
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import {
-  InnovationRecordSectionAnswersType,
-  InnovationSectionInfoDTOV3Type
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
-import { InnovationRecordSchemaService, InnovationRecordSchemaStore } from '@modules/stores';
 
 export type SectionInfoType = {
   id: string;
@@ -80,8 +70,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private innovationDocumentsService: InnovationDocumentsService
   ) {
     super();
 
@@ -89,9 +78,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.innovation = this.stores.context.getInnovation();
     this.isArchived = this.innovation.status === 'ARCHIVED';
 
-    this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup =>
-      sectionsGroup.sections.map(section => section.id)
-    );
+    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
@@ -139,8 +126,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
-    const sectionIdentification = this.irSchemaStore.getIrSchemaSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
@@ -153,8 +139,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
-    const section = this.irSchemaStore.getIrSchemaSectionV3(this.sectionId);
-    // const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
+    const section = this.stores.schema.getIrSchemaSectionV3(this.sectionId);
 
     this.sectionSummaryData.sectionInfo.id = section.id;
     this.sectionSummaryData.sectionInfo.title = section.title;
@@ -242,7 +227,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
 
     if (previousSectionId) {
-      const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
+      // const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
+      const previousSection = this.stores.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
       this.previousSection = {
         id: previousSectionId,
         title: previousSection
@@ -254,7 +240,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     }
 
     if (nextSectionId) {
-      const nextSection = this.stores.innovation.getInnovationRecordSectionIdentification(nextSectionId);
+      const nextSection = this.stores.schema.getIrSchemaSectionIdentificationV3(nextSectionId);
       this.nextSection = {
         id: nextSectionId,
         title: nextSection

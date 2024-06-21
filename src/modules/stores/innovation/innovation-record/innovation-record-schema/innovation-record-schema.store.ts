@@ -8,12 +8,10 @@ import { InnovationRecordSchemaService } from './innovation-record-schema.servic
 import { Store } from '@modules/stores/store.class';
 import { Observable } from 'rxjs';
 import { ContextStore } from '@modules/stores/context/context.store';
-import { InnovationRecordQuestionStepType, SectionsSummaryModelV3Type } from '../202405/ir-v3-types';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import { SectionsSummaryModel } from '../../innovation.models';
-import { irSchemaTranslationsMap, translateSectionIdEnums } from '../202405/ir-v3.helpers';
+import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -28,7 +26,17 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     return this.irSchemaService.getLatestSchema();
   }
 
-  getIrSchemaSectionsIdsListV3(): string[] {
+  getIrSchemaSectionsListV3(): { id: string; title: string; sections: { id: string; title: string }[] }[] {
+    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
+
+    return schema.map(s => ({
+      id: s.id,
+      title: s.title,
+      sections: s.subSections.map(ss => ({ id: ss.id, title: ss.title }))
+    }));
+  }
+
+  getIrSchemaSubSectionsIdsListV3(): string[] {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
 
     return schema.flatMap(section => section.subSections.flatMap(s => s.id)) ?? [];
@@ -43,40 +51,6 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         .find(s => s.id === sectionId)
         ?.questions.map(q => q.id) ?? []
     );
-  }
-
-  getSectionsSummary(currentSummary: SectionsSummaryModel): SectionsSummaryModelV3Type {
-    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-
-    const sectionsSummary = Object.fromEntries(
-      currentSummary
-        .flatMap(s => s.sections)
-        .map(sub => [
-          sub.id,
-          {
-            status: sub.status,
-            submittedAt: sub.submittedAt,
-            submittedBy: sub.submittedBy,
-            isCompleted: sub.isCompleted,
-            openTasksCount: sub.openTasksCount
-          }
-        ])
-    );
-
-    return schema.map(section => ({
-      id: section.id,
-      title: section.title,
-      sections: section.subSections.map(s => ({
-        id: s.id,
-        title: s.title,
-        // TODO remove translator when BE updates sections IDs
-        status: sectionsSummary[translateSectionIdEnums(s.id)].status,
-        submittedAt: sectionsSummary[translateSectionIdEnums(s.id)].submittedAt,
-        submittedBy: sectionsSummary[translateSectionIdEnums(s.id)].submittedBy,
-        isCompleted: sectionsSummary[translateSectionIdEnums(s.id)].isCompleted,
-        openTasksCount: sectionsSummary[translateSectionIdEnums(s.id)].openTasksCount
-      }))
-    }));
   }
 
   getIrSchemaSectionsTreeV3(
@@ -98,17 +72,6 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         url: `/${type}/innovations/${innovationId}/record/sections/${sub.id}`
       }))
     }));
-  }
-
-  getIrSchemaQuestion(stepId: string): InnovationRecordQuestionStepType {
-    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-    return (
-      schema.flatMap(section => section.subSections.flatMap(s => s.questions)).find(q => q.id === stepId) ?? {
-        id: '',
-        dataType: 'text',
-        label: ''
-      }
-    );
   }
 
   getIrSchemaSectionAllStepsList(sectionId: string): SectionStepsList {
@@ -164,7 +127,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     };
   }
 
-  getIrSchemaAllSectionsList(): { value: string; label: string }[] {
+  getIrSchemaNumberedSubSectionsList(): { value: string; label: string }[] {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
 
     return schema.reduce((sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
@@ -178,7 +141,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
   }
 
   getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {
-    const schema = this.contextStore.getIrSchema()?.schema;
+    const schema = this.contextStore.getIrSchema()?.schema ?? { sections: [] };
     return irSchemaTranslationsMap(schema);
   }
 }

@@ -6,7 +6,7 @@ import { FormEngineParameterModelV3 } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 
@@ -44,18 +44,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   displayChangeButtonList: number[] = [];
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private irSchemaStore: InnovationRecordSchemaStore
-  ) {
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.sectionsIdsList = this.irSchemaStore.getIrSchemaSectionsIdsListV3();
-    this.sectionQuestionsIdList = this.irSchemaStore.getIrSchemaSectionQuestionsIdsList(this.sectionId);
+    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
+    this.sectionQuestionsIdList = this.stores.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
 
     this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
@@ -71,7 +68,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+    // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 

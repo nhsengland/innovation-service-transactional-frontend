@@ -1,8 +1,7 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionEnum } from '../innovation.enums';
 import { INNOVATION_SECTION_STATUS, sectionType } from '../innovation.models';
-import { InnovationSectionStepLabels, InnovationSectionsListType } from './ir-versions.types';
-import { FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
+import { InnovationSectionsListType } from './ir-versions.types';
 
 import {
   categoriesItems as SECTIONS_202209_categoriesItems,
@@ -14,11 +13,9 @@ import {
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
-import { dummy_schema_V3_202405 } from './202405/ir-v3-schema';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
-import { ENVIRONMENT } from 'src/server/config/constants.config';
-import axios from 'axios';
-import { irSchemaTranslationsMap } from './202405/ir-v3.helpers';
+
+import { irSchemaTranslationsMap } from './202405/ir-v3.helper';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 
 export type AllSectionsOutboundPayloadType = {
@@ -97,7 +94,7 @@ export function getAllSectionsSummaryV3(
       sections: s.subSections.map(sub => {
         const wizard = new WizardIRV3EngineModel({
           schema: schema,
-          translations: irSchemaTranslationsMap(),
+          translations: irSchemaTranslationsMap(schema.schema),
           sectionId: sub.id
         });
 

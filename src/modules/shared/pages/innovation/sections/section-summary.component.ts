@@ -4,13 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 import { SectionInfoType } from './section-info.component';
 import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-import { InnovationRecordSchemaStore } from '@modules/stores';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
@@ -61,10 +59,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   isAccessorType: boolean;
   isAssessmentType: boolean;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private irSchemaStore: InnovationRecordSchemaStore
-  ) {
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -98,7 +93,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       }
     }
 
-    this.allSteps = this.irSchemaStore.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
+    this.allSteps = this.stores.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
 
     // add conditional questions regarding evidences for 2.2
     if (this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS') {

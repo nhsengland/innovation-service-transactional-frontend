@@ -10,7 +10,7 @@ import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 @Component({
   selector: 'shared-pages-innovation-task-action',

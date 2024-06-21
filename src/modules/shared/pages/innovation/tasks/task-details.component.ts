@@ -7,7 +7,6 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',

@@ -2,7 +2,6 @@ import { TextareaLengthLimitType } from '@modules/shared/forms/engine/config/for
 import { INNOVATION_SECTION_STATUS } from '../../innovation.models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
-import { dummy_schema_V3_202405 } from './ir-v3-schema';
 import { FormEngineParameterModelV3 } from '@modules/shared/forms';
 
 export type InnovationRecordSchemaV3Type = {
@@ -93,12 +92,6 @@ export type InnovationRecordItemsType = {
 export type InnovationRecordSectionAnswersType = {
   [s: string]: string | string[] | { response: string; conditional: string };
 };
-
-export const dummy_202405_sections = dummy_schema_V3_202405.sections.map(section => ({
-  id: section.id,
-  title: section.title,
-  subsections: section.subSections.map(subsection => ({ id: subsection.id, title: subsection.title }))
-}));
 
 export type SectionsSummaryModelV3Type = {
   id: string;

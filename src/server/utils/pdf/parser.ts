@@ -3,7 +3,6 @@ import axios from 'axios';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
-  getAllSectionsSummary,
   getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
@@ -18,13 +17,7 @@ import {
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { dummy_schema_V3_202405 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema';
 import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-import {
-  irSchemaTranslationsMap,
-  translateSectionIdEnums
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 
 export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;

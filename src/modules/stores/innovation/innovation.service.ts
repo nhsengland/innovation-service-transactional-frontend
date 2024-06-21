@@ -51,12 +51,6 @@ export class InnovationService {
     );
   }
 
-  // getInnovationSectionsV3(innovationId: string): Observable<InnovationSectionsListDTO> = {
-  //   return {
-
-  //   }
-  // }
-
   getSectionInfo(
     innovationId: string,
     sectionId: string,
@@ -82,7 +76,7 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.get<InnovationAllSectionsInfoDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => IRV3Helper.translateIrAllSections(response))
     );
   }
 

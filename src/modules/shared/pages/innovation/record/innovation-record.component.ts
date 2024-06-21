@@ -57,8 +57,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private statisticsService: StatisticsService
   ) {
     super();
 
@@ -100,11 +99,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         : [])
     ]).subscribe({
       next: ([response, statistics]) => {
-        // this.innovationSections = response;
-        this.innovationSections = this.irSchemaStore.getSectionsSummary(response);
-
-        console.log('Context Schema: ', this.stores.context.getIrSchema());
-
+        this.innovationSections = response;
         this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
         this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {

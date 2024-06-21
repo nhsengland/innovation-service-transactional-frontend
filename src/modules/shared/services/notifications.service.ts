@@ -13,6 +13,7 @@ import {
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',
@@ -340,7 +341,8 @@ export class NotificationsService extends CoreService {
           }
 
           const section = item.params?.section
-            ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section)
+            ? // TODO remove translator when BE updates sections IDs
+              this.stores.schema.getIrSchemaSectionIdentificationV3(translateSectionIdEnums(item.params.section))
             : undefined;
 
           return {

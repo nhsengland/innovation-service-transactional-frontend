@@ -35,12 +35,10 @@
           <div [ngClass]="lastItem ? 'nhsuk-u-margin-bottom-8' : 'nhsuk-u-margin-bottom-2'">
             <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7" [id]="section.id">
               <ng-container *ngIf="isInnovationInArchivedStatus && !isInnovatorType; else innovationLink">
-                {{ i + 1 }}.{{ j + 1 }} {{ "shared.catalog.innovation.innovation_sections." + section.id | translate }}
+                {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }}
               </ng-container>
               <ng-template #innovationLink>
-                <a routerLink="{{ baseUrl }}/record/sections/{{ section.id }}/">
-                  {{ i + 1 }}.{{ j + 1 }} {{ "shared.catalog.innovation.innovation_sections." + section.id | translate }}
-                </a>
+                <a routerLink="{{ baseUrl }}/record/sections/{{ section.id }}/"> {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }} </a>
               </ng-template>
             </h3>
             <ng-container *ngIf="pageStatus === 'READY'">

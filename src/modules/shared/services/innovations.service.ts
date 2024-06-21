@@ -47,7 +47,7 @@ import {
   InnovationRulesDTO,
   InnovationValidationRules
 } from './innovations.dtos';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -502,12 +502,12 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
+        // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
         const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(
           // TODO remove translator when BE updates sections IDs
           translateSectionIdEnums(response.section)
         );
 
-        // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
         return {
           id: response.id,
           displayId: response.displayId,
@@ -690,7 +690,8 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
           let link: null | { label: string; url: string } = null;
           const sectionIdentification = i.params.sectionId
-            ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId)
+            ? // TODO remove translator when BE updates sections IDs
+              this.stores.schema.getIrSchemaSectionIdentificationV3(translateSectionIdEnums(i.params.sectionId))
             : '';
 
           // Handle sections from previous innovation record versions
@@ -736,7 +737,8 @@ export class InnovationsService extends CoreService {
                 i.params.sectionId && sectionIdentification
                   ? {
                       label: 'View section',
-                      url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}`
+                      // TODO remove translator when BE updates sections IDs
+                      url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${translateSectionIdEnums(i.params.sectionId)}`
                     }
                   : null;
               break;
