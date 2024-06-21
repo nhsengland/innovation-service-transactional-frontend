@@ -32,7 +32,7 @@
                 <h2 class="nhsuk-card__heading nhsuk-heading-m nhsuk-u-padding-right-6">
                   Notify me when an organisation updates their support status to {{ subscription.displayStatuses }}
                 </h2>
-                <a routerLink="">Edit</a>
+                <a routerLink="edit/{{ subscription.id }}">Edit</a>
               </div>
               <span class="nhsuk-u-font-size-19">Organisations selected:</span>
               <ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">
@@ -45,7 +45,7 @@
           </ng-container>
         </div>
 
-        <button class="nhsuk-button" routerLink="edit" type="submit">Create custom notifications</button>
+        <button class="nhsuk-button" routerLink="new" type="submit">Create custom notifications</button>
 
         <div *ngIf="subscriptionsList.length > 0" class="nhsuk-u-font-size-19">
           <a routerLink="">Delete notifications</a>

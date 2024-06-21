@@ -13,6 +13,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
 {
   @Input() title = '';
   @Input() data: SummaryStepInputType = {
+    displayEditMode: false,
     selectedNotification: '',
     selectedOrganisations: [],
     selectedSupportStatuses: []
@@ -31,6 +32,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
   }
 
   ngOnInit() {
+    this.title = this.data.displayEditMode ? 'Edit your custom notification' : 'Review your custom notification';
     this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
     this.setPageStatus('READY');
   }

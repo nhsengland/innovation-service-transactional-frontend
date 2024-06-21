@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import {
   AccessorService,
-  GetNotifyMeInnovationSubscriptions
+  GetNotifyMeInnovationSubscription
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ContextInnovationType } from '@modules/stores';
 
@@ -13,7 +13,7 @@ import { ContextInnovationType } from '@modules/stores';
 export class InnovationCustomNotificationsComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
 
-  subscriptionsList: (GetNotifyMeInnovationSubscriptions & {
+  subscriptionsList: (GetNotifyMeInnovationSubscription & {
     displayOrganisations?: string[];
     displayStatuses?: string;
   })[] = [];
