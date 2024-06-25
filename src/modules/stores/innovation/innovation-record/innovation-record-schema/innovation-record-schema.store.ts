@@ -49,7 +49,8 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
       schema
         .flatMap(section => section.subSections)
         .find(s => s.id === sectionId)
-        ?.questions.map(q => q.id) ?? []
+        ?.steps.flatMap(st => st.questions)
+        .map(q => q.id) ?? []
     );
   }
 
@@ -79,11 +80,12 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
 
     const section = schema.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
     const flattenedQuestions =
-      section?.questions.flatMap(q => [
-        { label: q.label, conditional: !!q.condition },
-        ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
-      ]) ?? [];
-
+      section?.steps.flatMap(st =>
+        st.questions.flatMap(q => [
+          { label: q.label, conditional: !!st.condition },
+          ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
+        ])
+      ) ?? [];
     return flattenedQuestions;
   }
 
@@ -91,7 +93,6 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     sectionId: string | null
   ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-    console.log('schema', schema);
     const section_group = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
 
     const section = schema[section_group].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
@@ -117,12 +118,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         schema: irSchema,
         translations: this.getIrSchemaTranslationsMap(),
         sectionId: subsection?.id,
-        steps: subsection!.questions.map(
-          question =>
-            new FormEngineModelV3({
-              parameters: []
-            })
-        )
+        steps: subsection!.steps.map(st => new FormEngineModelV3({ parameters: [] }))
       })
     };
   }

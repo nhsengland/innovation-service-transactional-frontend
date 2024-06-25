@@ -15,8 +15,13 @@ export type InnovationRecordSchemaV3Type = {
 export type InnovationRecordSubSectionType = {
   id: string;
   title: string;
-  questions: InnovationRecordQuestionStepType[];
+  steps: InnovationRecordStepType[];
   stepsChildParentRelations?: MappedObjectType;
+};
+
+export type InnovationRecordStepType = {
+  questions: InnovationRecordQuestionStepType[];
+  condition?: InnovationRecordConditionType;
 };
 
 export type InnovationRecordConditionType = {

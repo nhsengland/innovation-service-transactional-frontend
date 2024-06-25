@@ -2,7 +2,6 @@ import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
 import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 import {
   InnovationRecordSchemaInfoType,
   InnovationRecordSectionUpdateType,
@@ -208,28 +207,30 @@ export class WizardIRV3EngineModel {
       section.subSections.forEach(subSection => {
         const stepsChildParentRelations: MappedObjectType = {};
 
-        subSection.questions.forEach(question => {
-          if (question.condition) {
-            stepsChildParentRelations[question.id] = question.condition.id;
-          }
+        subSection.steps.forEach(step => {
+          step.questions.forEach(question => {
+            if (step.condition) {
+              stepsChildParentRelations[question.id] = step.condition.id;
+            }
 
-          if (question.items && question.items[0].itemsFromAnswer) {
-            stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
-          }
+            if (question.items && question.items[0].itemsFromAnswer) {
+              stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
+            }
 
-          if (question.addQuestion && !question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
-          }
+            if (question.addQuestion && !question.field) {
+              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            }
 
-          if (question.addQuestion && question.field) {
-            stepsChildParentRelations[question.addQuestion.id] = question.id;
+            if (question.addQuestion && question.field) {
+              stepsChildParentRelations[question.addQuestion.id] = question.id;
+            }
+          });
+
+          if (Object.keys(stepsChildParentRelations).length) {
+            subSection.stepsChildParentRelations = stepsChildParentRelations;
+            stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
           }
         });
-
-        if (Object.keys(stepsChildParentRelations).length) {
-          subSection.stepsChildParentRelations = stepsChildParentRelations;
-          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
-        }
       });
     });
     return stepsChildParentRelationsMap.get(sectionId);
@@ -240,135 +241,138 @@ export class WizardIRV3EngineModel {
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
 
-    subsection?.questions.forEach(q => {
+    subsection?.steps.forEach(s => {
       // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
-      if (this.checkIfStepConditionIsMet(q.condition)) {
-        const step = new FormEngineModelV3({
-          parameters: [
-            {
-              id: q.id,
-              dataType: q.dataType,
-              label: q.label,
-              description: q.description,
-              ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
-              ...(q.validations && { validations: q.validations }),
-              ...(q.items && { items: q.items.map(i => i) }),
-              ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
-              ...(q.addQuestion && { addQuestion: q.addQuestion }),
-              ...(q.field && { field: q.field }),
-              ...(q.condition && { condition: q.condition }),
-              isNestedField: false
+      if (this.checkIfStepConditionIsMet(s.condition)) {
+        const step = new FormEngineModelV3({ parameters: [] });
+
+        s.questions.forEach(q => {
+          const param: FormEngineParameterModelV3 = {
+            id: q.id,
+            dataType: q.dataType,
+            label: q.label,
+            description: q.description,
+            ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
+            ...(q.validations && { validations: q.validations }),
+            ...(q.items && { items: q.items.map(i => i) }),
+            ...(q.addNewLabel && { addNewLabel: q.addNewLabel }),
+            ...(q.addQuestion && { addQuestion: q.addQuestion }),
+            ...(q.field && { field: q.field }),
+            ...(q.condition && { condition: q.condition }),
+            isNestedField: false
+          };
+
+          // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
+          const relatedQuestionItems = this.schema?.schema.sections
+            .flatMap(section => section.subSections.flatMap(s => s.steps.flatMap(st => st.questions)))
+            .find(question => question.id === q.id)?.items;
+
+          const itemsFromAnswer = relatedQuestionItems?.find(i => i.itemsFromAnswer)?.itemsFromAnswer;
+
+          if (itemsFromAnswer) {
+            const conditionalAnswerId =
+              subsection?.steps
+                .flatMap(st => st.questions)
+                .find(q => q.id === itemsFromAnswer)
+                ?.items?.find(item => item.conditional)?.conditional?.id ?? '';
+
+            const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
+              ? (this.currentAnswers[itemsFromAnswer] as string[])
+              : [];
+
+            const updatedItemsList = itemsDependencyAnswer.map(item => ({
+              id: item,
+              label:
+                item === 'other'
+                  ? this.currentAnswers[conditionalAnswerId]
+                  : this.translations.questions.get(q.id)?.items.get(item)?.label
+            }));
+
+            param.items = updatedItemsList;
+          }
+          step.parameters.push(param);
+          this.steps.push(step);
+
+          /*
+          Special rules for updating data on nested object fields (ex.: 'fields-group' and 'checkbox-group')
+          */
+
+          // For 'fields-group', delete any 'q.id' answer item without 'field.id' value. Can happen when user goes back!
+          if (q.dataType === 'fields-group' && this.currentAnswers[q.id]) {
+            this.currentAnswers[q.id] = (this.currentAnswers[q.id] as [{ [key: string]: string }]).filter(
+              item => item[q.field!.id]
+            );
+
+            // Updates nested values
+            if (q.addQuestion && q.field) {
+              Object.keys(this.currentAnswers)
+                .filter(key => (key as string).startsWith(q.addQuestion!.id))
+                .forEach(key => {
+                  const index = Number(key.split('_')[1]);
+                  if (index > -1) {
+                    ((this.currentAnswers[q.id] as [{ [key: string]: string }]) ?? [])[index][q.addQuestion!.id] =
+                      this.currentAnswers[key as any];
+                  }
+                  delete this.currentAnswers[key as any];
+                });
             }
-          ]
+          }
+
+          /* End of special rules */
+
+          // runtimerules for `addQuestions`
+          if (q.addQuestion && this.getAnswers()[q.id]) {
+            (this.getAnswers()[q.id] as string[]).forEach((answer, i) => {
+              let label = q.addQuestion!.label;
+              if (q.field) {
+                label = q.addQuestion!.label.replace(
+                  `{{item.${q.field.id}}}`,
+                  this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
+                );
+              } else {
+                label = q.addQuestion!.label.replace(
+                  '{{item}}',
+                  this.translations.questions.get(this.currentAnswers[q.id][i][q.id])?.label ?? label
+                );
+              }
+
+              this.steps.push(
+                new FormEngineModelV3({
+                  parameters: [
+                    {
+                      id: `${q.addQuestion!.id}_${i}`,
+                      dataType: q.addQuestion!.dataType,
+                      label: label,
+                      description: q.addQuestion!.description,
+                      ...(q.addQuestion!.lengthLimit && { lengthLimit: q.addQuestion!.lengthLimit }),
+                      ...(q.addQuestion!.validations && { validations: q.addQuestion!.validations }),
+                      ...(q.addQuestion!.items && { items: q.addQuestion!.items }),
+                      ...(q.addQuestion!.addNewLabel && { addNewLabel: q.addQuestion!.addNewLabel }),
+                      ...(q.addQuestion!.addQuestion && { addQuestion: q.addQuestion!.addQuestion }),
+                      ...(q.addQuestion!.field && { field: q.addQuestion!.field }),
+                      ...(q.addQuestion!.condition && { condition: q.addQuestion!.condition }),
+                      ...(q.parentAddQuestionId && { parentAddQuestionId: q.parentAddQuestionId }),
+                      parentAddQuestionId: q.addQuestion!.id,
+                      parentStepId: q.id,
+                      ...(q.field && { parentFieldId: q.field.id }),
+                      isNestedField: !!(q.dataType === 'fields-group' || q.dataType === 'checkbox-array')
+                    }
+                  ]
+                })
+              );
+              if (q.dataType === 'fields-group' || q.dataType === 'checkbox-array') {
+                this.currentAnswers[`${q.addQuestion!.id}_${i}`] = this.currentAnswers[q.id][i][q.addQuestion!.id];
+              }
+            });
+          }
         });
-
-        // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
-        const relatedQuestionItems = this.schema?.schema.sections
-          .flatMap(section => section.subSections.flatMap(s => s.questions))
-          .find(question => question.id === q.id)?.items;
-
-        const itemsFromAnswer = relatedQuestionItems?.find(i => i.itemsFromAnswer)?.itemsFromAnswer;
-
-        if (itemsFromAnswer) {
-          const conditionalAnswerId =
-            subsection?.questions.find(q => q.id === itemsFromAnswer)?.items?.find(item => item.conditional)
-              ?.conditional?.id ?? '';
-
-          const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
-            ? (this.currentAnswers[itemsFromAnswer] as string[])
-            : [];
-
-          const updatedItemsList = itemsDependencyAnswer.map(item => ({
-            id: item,
-            label:
-              item === 'other'
-                ? this.currentAnswers[conditionalAnswerId]
-                : this.translations.questions.get(q.id)?.items.get(item)?.label
-          }));
-
-          step.parameters[0].items = updatedItemsList;
-        }
-
-        this.steps.push(step);
       } else {
         // Clear field's values if condition doesn't pass
-        this.currentAnswers[q.id] = undefined;
-      }
-
-      /*
-      Special rules for updating data on nested object fields (ex.: 'fields-group' and 'checkbox-group')
-      */
-
-      // For 'fields-group', delete any 'q.id' answer item without 'field.id' value. Can happen when user goes back!
-      if (q.dataType === 'fields-group' && this.currentAnswers[q.id]) {
-        this.currentAnswers[q.id] = (this.currentAnswers[q.id] as [{ [key: string]: string }]).filter(
-          item => item[q.field!.id]
-        );
-
-        // Updates nested values
-        if (q.addQuestion && q.field) {
-          Object.keys(this.currentAnswers)
-            .filter(key => (key as string).startsWith(q.addQuestion!.id))
-            .forEach(key => {
-              const index = Number(key.split('_')[1]);
-              if (index > -1) {
-                ((this.currentAnswers[q.id] as [{ [key: string]: string }]) ?? [])[index][q.addQuestion!.id] =
-                  this.currentAnswers[key as any];
-              }
-              delete this.currentAnswers[key as any];
-            });
-        }
-      }
-
-      /* End of special rules */
-
-      // runtimerules for `addQuestions`
-      if (q.addQuestion && this.getAnswers()[q.id]) {
-        (this.getAnswers()[q.id] as string[]).forEach((answer, i) => {
-          let label = q.addQuestion!.label;
-          if (q.field) {
-            label = q.addQuestion!.label.replace(
-              `{{item.${q.field.id}}}`,
-              this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
-            );
-          } else {
-            label = q.addQuestion!.label.replace(
-              '{{item}}',
-              this.translations.questions.get(this.currentAnswers[q.id][i][q.id])?.label ?? label
-            );
-          }
-
-          this.steps.push(
-            new FormEngineModelV3({
-              parameters: [
-                {
-                  id: `${q.addQuestion!.id}_${i}`,
-                  dataType: q.addQuestion!.dataType,
-                  label: label,
-                  description: q.addQuestion!.description,
-                  ...(q.addQuestion!.lengthLimit && { lengthLimit: q.addQuestion!.lengthLimit }),
-                  ...(q.addQuestion!.validations && { validations: q.addQuestion!.validations }),
-                  ...(q.addQuestion!.items && { items: q.addQuestion!.items }),
-                  ...(q.addQuestion!.addNewLabel && { addNewLabel: q.addQuestion!.addNewLabel }),
-                  ...(q.addQuestion!.addQuestion && { addQuestion: q.addQuestion!.addQuestion }),
-                  ...(q.addQuestion!.field && { field: q.addQuestion!.field }),
-                  ...(q.addQuestion!.condition && { condition: q.addQuestion!.condition }),
-                  ...(q.parentAddQuestionId && { parentAddQuestionId: q.parentAddQuestionId }),
-                  parentAddQuestionId: q.addQuestion!.id,
-                  parentStepId: q.id,
-                  ...(q.field && { parentFieldId: q.field.id }),
-                  isNestedField: !!(q.dataType === 'fields-group' || q.dataType === 'checkbox-array')
-                }
-              ]
-            })
-          );
-          if (q.dataType === 'fields-group' || q.dataType === 'checkbox-array') {
-            this.currentAnswers[`${q.addQuestion!.id}_${i}`] = this.currentAnswers[q.id][i][q.addQuestion!.id];
-          }
+        s.questions.forEach(q => {
+          this.currentAnswers[q.id] = undefined;
         });
       }
     });
-
     return this;
   }
 

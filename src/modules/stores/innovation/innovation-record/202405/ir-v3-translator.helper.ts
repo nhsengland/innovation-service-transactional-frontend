@@ -166,28 +166,30 @@ export class IRV3Helper {
 
     dummy_schema_V3_202405.sections.forEach(section => {
       section.subSections.forEach(subSection => {
-        subSection.questions.forEach(question => {
-          if (question.condition && !question.condition?.options.includes(v3Answers[question.condition.id])) return;
+        subSection.steps.forEach(step => {
+          if (step.condition && !step.condition?.options.includes(v3Answers[step.condition.id])) return;
 
-          const answer = searchAnswer(data, question);
-          if (!answer) return;
-          if (question.dataType === 'text') {
-            mapText(answer, question, v3Answers);
-          } else if (question.dataType === 'textarea') {
-            mapText(answer, question, v3Answers);
-          } else if (question.dataType === 'radio-group') {
-            mapRadioGroup(answer, data, question, subSection, v3Answers);
-          } else if (question.dataType === 'autocomplete-array') {
-            mapArray(answer, data, question, v3Answers);
-          } else if (question.dataType === 'checkbox-array') {
-            mapArray(answer, data, question, v3Answers);
-          } else if (question.dataType === 'fields-group') {
-            mapFieldsGroup(answer, question, v3Answers);
-          } else {
-            console.log(`==> NOT MAPPED ${question.id} (${question.dataType})`);
-            console.log(JSON.stringify(subSection, null, 2));
-            process.exit(1);
-          }
+          step.questions.forEach(question => {
+            const answer = searchAnswer(data, question);
+            if (!answer) return;
+            if (question.dataType === 'text') {
+              mapText(answer, question, v3Answers);
+            } else if (question.dataType === 'textarea') {
+              mapText(answer, question, v3Answers);
+            } else if (question.dataType === 'radio-group') {
+              mapRadioGroup(answer, data, question, subSection, v3Answers);
+            } else if (question.dataType === 'autocomplete-array') {
+              mapArray(answer, data, question, v3Answers);
+            } else if (question.dataType === 'checkbox-array') {
+              mapArray(answer, data, question, v3Answers);
+            } else if (question.dataType === 'fields-group') {
+              mapFieldsGroup(answer, question, v3Answers);
+            } else {
+              console.log(`==> NOT MAPPED ${question.id} (${question.dataType})`);
+              console.log(JSON.stringify(subSection, null, 2));
+              process.exit(1);
+            }
+          });
         });
       });
     });

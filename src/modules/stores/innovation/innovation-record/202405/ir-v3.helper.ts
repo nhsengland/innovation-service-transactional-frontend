@@ -15,20 +15,23 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
   const allQuestionsFlattened = [
     ...schema.sections.flatMap(s =>
       s.subSections.flatMap(sub =>
-        sub.questions.flatMap(q => ({
-          id: q.id,
-          label: q.label,
-          items: q?.items?.map(item => ({
-            id: item.id,
-            label: item.label,
-            group: item.group
+        sub.steps
+          .flatMap(st => st.questions)
+          .flatMap(q => ({
+            id: q.id,
+            label: q.label,
+            items: q?.items?.map(item => ({
+              id: item.id,
+              label: item.label,
+              group: item.group
+            }))
           }))
-        }))
       )
     ),
     ...schema.sections.flatMap(s =>
       s.subSections.flatMap(sub =>
-        sub.questions
+        sub.steps
+          .flatMap(st => st.questions)
           .flatMap(q => q.addQuestion)
           .flatMap(addQuestion => ({
             id: addQuestion?.id ?? '',
