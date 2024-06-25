@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
@@ -11,7 +12,7 @@ import {
   Notification,
   CategoryEnum
 } from './steps/notification-step.types';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import {
   Organisation,
   OrganisationsStepInputType,
@@ -25,7 +26,12 @@ import { SummaryStepInputType } from './steps/summary-step.types';
 import { WizardInnovationCustomNotificationNewSummaryStepComponent } from './steps/summary-step.component';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } from './steps/support-statuses-step.component';
-import { AccessorService, NotifyMeConfig } from '@modules/feature-modules/accessor/services/accessor.service';
+import {
+  AccessorService,
+  GetNotifyMeInnovationSubscription,
+  NotifyMeConfig
+} from '@modules/feature-modules/accessor/services/accessor.service';
+import { ObservableInput, forkJoin } from 'rxjs';
 
 type WizardData = {
   notificationStep: {
@@ -55,11 +61,17 @@ const wizardEmptyState = {
 };
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notification-new-notification-step',
+  selector: 'app-accessor-innovation-custom-notification-new',
   templateUrl: './custom-notification-new.component.html'
 })
 export class WizardInnovationCustomNotificationNewComponent extends CoreComponent implements OnInit {
+  subscriptionId: string;
   innovation: ContextInnovationType;
+
+  subscription: GetNotifyMeInnovationSubscription;
+
+  isEditMode: boolean;
+  currentEditModeEntryStep: string = '';
 
   datasets: {
     organisations: Organisation[];
@@ -73,11 +85,24 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   constructor(
     private organisationsService: OrganisationsService,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
 
+    this.subscriptionId = this.activatedRoute.snapshot.params.subscriptionId;
     this.innovation = this.stores.context.getInnovation();
+
+    this.subscription = {
+      id: '',
+      updatedAt: new Date(),
+      eventType: 'SUPPORT_UPDATED',
+      subscriptionType: 'INSTANTLY',
+      organisations: [],
+      status: []
+    };
+
+    this.isEditMode = !!this.subscriptionId;
 
     this.datasets = {
       organisations: []
@@ -140,14 +165,18 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         outputs: {
           previousStepEvent: data =>
             this.onPreviousStep(data, this.onSupportStatusesStepOut, this.onOrganisationsStepIn, this.onUnitsStepIn),
-          nextStepEvent: data => this.onNextStep(data, this.onSupportStatusesStepOut, this.onSummaryStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onSupportStatusesStepOut);
+            this.onSummaryStepIn();
+          }
         }
       }),
       summaryStep: new WizardStepModel<SummaryStepInputType, null>({
         id: 'summaryStep',
-        title: `Review your custom notification`,
+        title: '',
         component: WizardInnovationCustomNotificationNewSummaryStepComponent,
         data: {
+          displayEditMode: false,
           selectedNotification: '',
           selectedOrganisations: [],
           selectedSupportStatuses: []
@@ -155,17 +184,33 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onSupportStatusesStepIn),
           submitEvent: data => this.onSubmit(data),
-          goToStepEvent: stepId => this.onGoToStep(stepId)
+          goToStepEvent: stepId => {
+            if (this.isEditMode) {
+              this.currentEditModeEntryStep = stepId;
+            }
+            this.onGoToStep(stepId);
+          }
         }
       })
     };
   }
 
   ngOnInit() {
-    // Get organisations information
-    this.organisationsService.getOrganisationsList({ unitsInformation: true }).subscribe({
+    const subscriptions: {
+      organisationsList: ObservableInput<OrganisationsListDTO[]>;
+      subscription?: ObservableInput<GetNotifyMeInnovationSubscription>;
+    } = {
+      organisationsList: this.organisationsService.getOrganisationsList({ unitsInformation: true })
+    };
+
+    if (this.isEditMode) {
+      subscriptions.subscription = this.accessorService.getNotifyMeSubscription(this.subscriptionId);
+    }
+
+    forkJoin(subscriptions).subscribe({
       next: response => {
-        this.datasets.organisations = response.map(o => {
+        // Get organisations information
+        this.datasets.organisations = response.organisationsList.map(o => {
           const org = {
             id: o.id,
             name: o.name,
@@ -180,15 +225,45 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
           return { ...org, description };
         });
+
+        // Get subscription information if editMode is true
+        if (response.subscription) {
+          this.subscription = response.subscription;
+
+          // Set wizard data with current subscription information
+          this.setWizardDataWithCurrentSubscriptionInfo();
+
+          this.manageWizardSteps(this.wizard.data.notificationStep.notification);
+          this.onGoToStep('summaryStep');
+        } else {
+          // Add notification step if editMode is false
+          this.wizard.addStep(this.stepsDefinition.notificationStep);
+        }
+
+        this.setPageStatus('READY');
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
+  }
 
-    // Add notification step
-    this.wizard.addStep(this.stepsDefinition.notificationStep);
+  setWizardDataWithCurrentSubscriptionInfo() {
+    this.wizard.data = {
+      notificationStep: {
+        notification: this.subscription.eventType
+      },
+      organisationsStep: {
+        organisations: this.subscription.organisations
+      },
+      unitsStep: {
+        units: this.subscription.organisations.filter(org => org.units.length > 1).flatMap(org => org.units)
+      },
+      supportStatusesStep: {
+        supportStatuses: this.subscription.status
+      }
+    };
   }
 
   // Steps mappings
@@ -249,7 +324,12 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     };
   }
 
-  onSummaryStepIn(): void {
+  onSummaryStepIn(displayEditMode: boolean = false): void {
+    // If user access summary in edit mode, display the current subscription information
+    if (displayEditMode) {
+      this.setWizardDataWithCurrentSubscriptionInfo();
+    }
+
     // Get chosen notification information
     const notification: Notification = NOTIFICATION_ITEMS.filter(
       notification => notification.type === this.wizard.data.notificationStep.notification
@@ -269,6 +349,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       .flat();
 
     this.wizard.setStepData<SummaryStepInputType>('summaryStep', {
+      displayEditMode,
       selectedNotification:
         notification.category === CategoryEnum.NOTIFIY_ME_WHEN
           ? 'When ' + notification.label
@@ -286,8 +367,22 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   ): void {
     this.resetAlert();
 
-    if (this.wizard.currentStepNumber() === 1) {
+    if (this.wizard.isFirstStep()) {
+      if (this.isEditMode) {
+        this.onGoToStep('summaryStep');
+      } else {
+        this.redirectInnovationCustomNotifications();
+      }
+      return;
+    }
+
+    if (this.wizard.isLastStep() && this.wizard.currentStep().data.displayEditMode) {
       this.redirectInnovationCustomNotifications();
+      return;
+    }
+
+    if (this.wizard.currentStep().id === this.currentEditModeEntryStep) {
+      this.onGoToStep('summaryStep');
       return;
     }
 
@@ -317,6 +412,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       case 'supportStatusesStep':
         this.onSupportStatusesStepIn();
         break;
+      case 'summaryStep':
+        this.onSummaryStepIn(this.isEditMode);
+        break;
       default:
         return;
     }
@@ -331,8 +429,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   }
 
   manageWizardSteps(notification: string): void {
-    this.clearWizardData();
-    this.clearWizardSteps();
+    if (!this.isEditMode) {
+      this.clearWizardData();
+      this.clearWizardSteps();
+    }
     switch (notification) {
       case NotificationEnum.SUPPORT_UPDATED:
         this.setWizardSteps([
@@ -370,7 +470,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     // If some selected organisation has more than one unit, add units step.
     // Otherwise, remove
     if (selectedOrganisationsHaveUnits) {
-      this.wizard.addStep(this.stepsDefinition.unitsStep, 2);
+      this.wizard.addStep(this.stepsDefinition.unitsStep, 2 - Number(this.isEditMode));
     } else {
       this.wizard.removeStep('unitsStep');
       this.wizard.data.unitsStep.units = [];
@@ -403,9 +503,30 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       }
     };
 
+    if (this.isEditMode) {
+      this.updateNotifyMeSubscription(body);
+    } else {
+      this.createNotifyMeSubscription(body);
+    }
+  }
+
+  createNotifyMeSubscription(body: NotifyMeConfig) {
     this.accessorService.createNotifyMeSubscription(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess(`You have set up a custom notification for ${this.innovation.name}`);
+        this.redirectInnovationCustomNotifications();
+      },
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('READY');
+      }
+    });
+  }
+
+  updateNotifyMeSubscription(body: NotifyMeConfig) {
+    this.accessorService.updateNotifyMeSubscription(this.subscriptionId, body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess(`The changes you have made to your custom notification have been saved`);
         this.redirectInnovationCustomNotifications();
       },
       error: () => {

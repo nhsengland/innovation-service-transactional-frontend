@@ -498,10 +498,16 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'edit',
+                    path: 'new',
                     pathMatch: 'full',
                     component: WizardInnovationCustomNotificationNewComponent,
-                    data: { breadcrumb: null, layout: { type: 'full' } }
+                    data: { layout: { type: 'full' } }
+                  },
+                  {
+                    path: 'edit/:subscriptionId',
+                    pathMatch: 'full',
+                    component: WizardInnovationCustomNotificationNewComponent,
+                    data: { layout: { type: 'full' } }
                   }
                 ]
               }
