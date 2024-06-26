@@ -2,6 +2,7 @@ import { DateISOType, LinkType } from '@app/base/types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
 import { NotificationCategoryTypeEnum } from './context.enums';
+import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export type ContextPageAlertType = {
   type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
@@ -67,5 +68,10 @@ export type ContextInnovationType = {
   collaboratorId?: string;
   createdAt?: DateISOType;
   reassessmentCount: number;
+  expiryAt: number;
+};
+
+export type ContextSchemaType = {
+  schema: InnovationRecordSchemaInfoType | null;
   expiryAt: number;
 };

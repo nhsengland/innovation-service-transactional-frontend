@@ -6,6 +6,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 import { map, take } from 'rxjs/operators';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema.models';
 import { Observable } from 'rxjs';
+import { ContextSchemaType } from '@modules/stores/context/context.types';
 
 @Injectable()
 export class InnovationRecordSchemaService {
@@ -16,11 +17,14 @@ export class InnovationRecordSchemaService {
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
-  getLatestSchema(): Observable<InnovationRecordSchemaInfoType> {
+  getLatestSchema(): Observable<ContextSchemaType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/ir-schema');
     return this.http.get<InnovationRecordSchemaInfoType>(url.buildUrl()).pipe(
       take(1),
-      map(response => response)
+      map(response => ({
+        schema: response,
+        expiryAt: Date.now() + 60000
+      }))
     );
   }
 }

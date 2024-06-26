@@ -12,6 +12,7 @@ import { SectionStepsList } from '@modules/shared/pages/innovation/sections/sect
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
+import { ContextSchemaType } from '@modules/stores/context/context.types';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -22,7 +23,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     super('irSchema::Context', new InnovationRecordSchemaModel());
   }
 
-  getLatestSchema$(): Observable<InnovationRecordSchemaInfoType> {
+  getLatestSchema$(): Observable<ContextSchemaType> {
     return this.irSchemaService.getLatestSchema();
   }
 

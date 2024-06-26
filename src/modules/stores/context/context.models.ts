@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ContextInnovationType, ContextPageLayoutType } from './context.types';
+import { ContextInnovationType, ContextPageLayoutType, ContextSchemaType } from './context.types';
 import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 // Store state model.
@@ -16,7 +16,7 @@ export class ContextModel {
   innovation: null | ContextInnovationType = null;
 
   // For Innovation Record Schema
-  irSchema: null | InnovationRecordSchemaInfoType = null;
+  irSchema: null | ContextSchemaType = null;
 
   // For back link navigation
   currentUrl: string | null = null;

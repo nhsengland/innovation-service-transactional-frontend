@@ -8,7 +8,12 @@ import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
-import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
+import {
+  ContextInnovationType,
+  ContextPageLayoutType,
+  ContextPageStatusType,
+  ContextSchemaType
+} from './context.types';
 
 import { AuthenticationModel } from '../authentication/authentication.models';
 import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
@@ -146,13 +151,17 @@ export class ContextStore extends Store<ContextModel> {
   }
 
   // Innovation Record Schema methods.
-  setIrSchema(data: InnovationRecordSchemaInfoType): void {
+  setIrSchema(data: ContextSchemaType): void {
     this.state.irSchema = data;
+    console.log('set expiryAt', this.state.irSchema?.expiryAt);
     this.setState();
   }
 
-  getIrSchema(): InnovationRecordSchemaInfoType | null {
-    return this.state.irSchema;
+  getIrSchema(): InnovationRecordSchemaInfoType {
+    if (!this.state.irSchema?.schema) {
+      return { id: '', version: 0, schema: { sections: [] } };
+    }
+    return this.state.irSchema?.schema;
   }
 
   clearIrSchema(): void {
@@ -160,8 +169,11 @@ export class ContextStore extends Store<ContextModel> {
     this.setState();
   }
 
-  getOrLoadIrSchema(): Observable<InnovationRecordSchemaInfoType> {
-    if (this.state.irSchema) {
+  getOrLoadIrSchema(): Observable<ContextSchemaType> {
+    if (this.state.irSchema?.schema && Date.now() < this.state.irSchema.expiryAt) {
+      console.log('expiryAt', this.state.irSchema.expiryAt);
+      console.log('Date.now', Date.now());
+      console.log('Diff', this.state.irSchema.expiryAt - Date.now());
       return of(this.state.irSchema);
     }
     return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
