@@ -1,7 +1,7 @@
 
 const tagMeasurementId = window.__env.TAG_MEASUREMENT_ID;
 const gtmId = window.__env.GTM_ID;
-const enableAnalytics = window.__env.ENABLE_ANALYTICS === "true";
+const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
 
 (function () {
 
