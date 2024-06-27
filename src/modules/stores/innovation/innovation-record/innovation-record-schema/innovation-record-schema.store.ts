@@ -13,6 +13,7 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
 import { ContextSchemaType } from '@modules/stores/context/context.types';
+import { InnovationRecordSchemaV3Type } from '../202405/ir-v3-types';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -137,8 +138,8 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     }, []);
   }
 
-  getIrSchemaTranslationsMap(): IrSchemaTranslatorMapType {
-    const schema = this.contextStore.getIrSchema()?.schema ?? { sections: [] };
+  getIrSchemaTranslationsMap(customSchema?: InnovationRecordSchemaV3Type): IrSchemaTranslatorMapType {
+    const schema = customSchema ?? this.contextStore.getIrSchema()?.schema ?? { sections: [] };
     return irSchemaTranslationsMap(schema);
   }
 }

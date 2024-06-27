@@ -85,6 +85,7 @@ const authenticationRouter: Router = Router();
 
 export async function getAccessTokenBySessionId(sessionId: string): Promise<string> {
   const sessionToken = userSessions.get(sessionId);
+  console.log(sessionToken);
   if (sessionToken) {
     try {
       return (

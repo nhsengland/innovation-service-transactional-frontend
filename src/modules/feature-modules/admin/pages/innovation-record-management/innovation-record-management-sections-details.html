@@ -1,0 +1,28 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <span
+        >Click view to review, edit or delete an existing question or answer. Some questions are locked and cannot be deleted or changed. You can also add a new question to this
+        section.</span
+      >
+      <div class="nhsuk-inset-text nhsuk-u-margin-top-4">
+        Before you make any changes to the innovation record, make sure you have the correct governance approvals in place. Read the <a>rules and guidance for more information</a>.
+      </div>
+      <a routerLink="new" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"> Add question </a>
+      <h2>Questions and answer type</h2>
+      <dl class="nhsuk-summary-list nhsuk-u-margin-bottom-0">
+        <ng-container *ngIf="sectionQuestions">
+          <ng-container *ngFor="let question of sectionQuestions; index as i" class="nhsuk-summary-list__row">
+            <div class="nhsuk-summary-list__row">
+              <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ question.label }}</dt>
+              <dd class="nhsuk-summary-list__value text-pre-wrap">{{ question.dataType }}</dd>
+              <dd class="nhsuk-summary-list__actions">
+                <a href="javascript:void(0);" routerLink=""> View <span class="nhsuk-u-visually-hidden"> {{ question.label }} </span> </a>
+              </dd>
+            </div>
+          </ng-container>
+        </ng-container>
+      </dl>
+    </div>
+  </div>
+</theme-content-wrapper>

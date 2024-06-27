@@ -69,6 +69,12 @@ import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 
+// IR Management
+import { SidebarAccountInnovationRecordManagementOutletComponent } from './base/sidebar-innovation-record-menu-outlet.component';
+import { PageIRManagementListComponent } from './pages/innovation-record-management/innovation-record-management-sections-list';
+import { PageIRManagementSectionDetailsComponent } from './pages/innovation-record-management/innovation-record-management-sections-details';
+import { PageIRManagementNewQuestionComponent } from './pages/innovation-record-management/innovation-record-management-new-question';
+
 @NgModule({
   imports: [ThemeModule, SharedModule, AdminRoutingModule],
   declarations: [
@@ -76,6 +82,7 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     ContextInnovationOutletComponent,
     SidebarInnovationMenuOutletComponent,
     SidebarAccountMenuOutletComponent,
+    SidebarAccountInnovationRecordManagementOutletComponent,
 
     // Pages.
 
@@ -112,6 +119,10 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     PageTermsOfUseNewComponent,
     // // Elastic Search
     PageElasticSearchComponent,
+    // // Innovation Record Management
+    PageIRManagementListComponent,
+    PageIRManagementSectionDetailsComponent,
+    PageIRManagementNewQuestionComponent,
 
     // Wizards.
     WizardOrganisationUnitActivateComponent,

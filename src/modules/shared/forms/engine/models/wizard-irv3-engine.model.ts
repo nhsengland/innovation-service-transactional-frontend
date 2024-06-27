@@ -1,7 +1,10 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  InnovationRecordConditionType,
+  InnovationRecordSchemaV3Type
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import {
   InnovationRecordSchemaInfoType,
   InnovationRecordSectionUpdateType,
@@ -33,7 +36,7 @@ export class WizardIRV3EngineModel {
   isChangingMode: boolean = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
-  schema: InnovationRecordSchemaInfoType | null;
+  schema: InnovationRecordSchemaInfoType;
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
@@ -234,6 +237,29 @@ export class WizardIRV3EngineModel {
       });
     });
     return stepsChildParentRelationsMap.get(sectionId);
+  }
+
+  parseIRManagementSteps(sectionId: string, irSchema: InnovationRecordSchemaInfoType): this {
+    if (this.schema?.schema) {
+      // Get list of questions for new question position step
+      this.schema.schema.sections[0].subSections[0].steps[0].questions[0].items = [];
+
+      const sectionQuestions = irSchema.schema.sections
+        .flatMap(s => s.subSections)
+        .find(ss => ss.id === sectionId)
+        ?.steps.flatMap(st => st.questions);
+
+      const questionPositioningList = sectionQuestions?.map(q => ({ id: q.id, label: `Before '${q.label}'` }));
+
+      questionPositioningList?.push({ id: 'atTheEnd', label: 'At the end of the subsection' });
+
+      this.schema.schema.sections[0].subSections[0].steps[0].questions[0].items = sectionQuestions;
+
+      // TODO Get list of dependable questions
+      const dependableQuestions = sectionQuestions?.filter(s => ['checkbox-array', 'radio-group'].includes(s.dataType));
+    }
+
+    return this;
   }
 
   runRules(): this {

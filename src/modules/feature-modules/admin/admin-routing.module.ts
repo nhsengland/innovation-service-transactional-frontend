@@ -87,6 +87,11 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
+import { PageIRManagementSectionDetailsComponent } from './pages/innovation-record-management/innovation-record-management-sections-details';
+import { PageIRManagementNewQuestionComponent } from './pages/innovation-record-management/innovation-record-management-new-question';
+import { PageIRManagementListComponent } from './pages/innovation-record-management/innovation-record-management-sections-list';
+import { innovationSectionDataResolverV3 } from '@modules/shared/resolvers/innovation-section-data-v3.resolver';
+import { SidebarAccountInnovationRecordManagementOutletComponent } from './base/sidebar-innovation-record-menu-outlet.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -97,15 +102,23 @@ const header: RoutesDataType['header'] = {
         label: 'Management',
         children: [
           { label: 'Announcements', url: '/admin/announcements', description: 'Manage and create announcements' },
+
+          {
+            label: 'Terms of use',
+            url: '/admin/terms-conditions',
+            description: 'Create a new version and trigger acceptance by the users'
+          },
+
           {
             label: 'Organisations',
             url: '/admin/organisations',
             description: 'Manage organisations and associated units'
           },
+
           {
-            label: 'Terms of use',
-            url: '/admin/terms-conditions',
-            description: 'Create a new version and trigger acceptance by the users'
+            label: 'Innovation Record',
+            url: '/admin/innovation-record/sections',
+            description: 'Manage and update the questions in the innovation record'
           },
           { label: 'Elastic Search', url: '/admin/elastic-search' }
         ]
@@ -386,6 +399,92 @@ const routes: Routes = [
             data: { module: 'Edit' }
           },
           { path: 'show-version/:id', pathMatch: 'full', component: PageTermsOfUseInfoComponent }
+        ]
+      },
+      {
+        path: 'innovation-record',
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        data: {
+          breadcrumb: 'Innovation Record Management',
+          layout: { type: '1.third-2.thirds' }
+        },
+        runGuardsAndResolvers: 'always',
+
+        children: [
+          {
+            path: '',
+            outlet: 'page-sidebar-outlet',
+            component: SidebarAccountInnovationRecordManagementOutletComponent
+          },
+          {
+            path: '',
+            outlet: 'page-sidebar-mobile-outlet',
+            component: SidebarAccountInnovationRecordManagementOutletComponent
+          },
+          { path: '', pathMatch: 'full', redirectTo: 'sections' },
+          {
+            path: 'sections',
+            data: { breadcrumb: null },
+            resolve: { innovationSectionData: innovationSectionDataResolverV3 },
+
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                component: PageIRManagementListComponent,
+                data: { breadcrumb: null }
+              },
+
+              {
+                path: ':sectionId',
+                data: { layout: { type: 'full' } },
+
+                children: [
+                  {
+                    path: 'new',
+                    pathMatch: 'full',
+                    redirectTo: 'new/1'
+                  },
+                  {
+                    path: 'new/:stepId',
+                    pathMatch: 'full',
+                    component: PageIRManagementNewQuestionComponent
+                  },
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageIRManagementSectionDetailsComponent,
+                    data: { breadcrumb: null }
+                  }
+                ]
+              }
+            ]
+          },
+
+          {
+            path: 'rules-and-guidance',
+            data: { breadcrumb: null },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'sections',
+                data: { breadcrumb: null }
+              }
+            ]
+          },
+          {
+            path: 'change-log',
+            data: { breadcrumb: null },
+            children: [
+              {
+                path: '',
+                pathMatch: 'full',
+                redirectTo: 'sections',
+                data: { breadcrumb: null }
+              }
+            ]
+          }
         ]
       },
 

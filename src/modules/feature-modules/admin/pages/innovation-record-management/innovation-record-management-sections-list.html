@@ -1,0 +1,23 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">All sections</h2>
+      <ng-container *ngIf="schema">
+        <ol class="app-task-list">
+          <li *ngFor="let section of irSections; let i = index">
+            <h2 class="app-task-list__section"><span class="app-task-list__section-number">{{ i + 1 }}. </span> {{ section.title }}</h2>
+
+            <ol class="app-task-list__items nhsuk-u-padding-left-0">
+              <li *ngFor="let subSection of section.sections; let j = index" class="app-task-list__item">
+                <span class="app-task-list__task-name">
+                  {{ i+ 1 + "." + (j+1) }}
+                  <a routerLink="{{ subSection.id }}"><span class="nhsuk-u-visually-hidden"> Go to </span> {{subSection.title}}</a>
+                </span>
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </ng-container>
+    </div>
+  </div>
+</theme-content-wrapper>

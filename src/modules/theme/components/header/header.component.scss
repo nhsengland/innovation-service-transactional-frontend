@@ -162,11 +162,11 @@
       @media (min-width: 48.0625em) {
         display: -ms-grid;
         display: grid;
-        grid-auto-flow: column;
+        // grid-auto-flow: column;
         -ms-grid-columns: 1fr 1fr;
         grid-template-columns: 1fr 1fr;
         -ms-grid-rows: 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
+        // grid-template-rows: 1fr 1fr;
       }
     }
   }
