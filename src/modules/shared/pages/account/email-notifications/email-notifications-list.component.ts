@@ -33,7 +33,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   ) {
     super();
 
-    this.setPageTitle('Email notifications preferences');
+    this.setPageTitle('Email preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 

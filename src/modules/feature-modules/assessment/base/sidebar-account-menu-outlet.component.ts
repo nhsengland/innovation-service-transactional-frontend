@@ -10,7 +10,7 @@ export class SidebarAccountMenuOutletComponent {
   constructor() {
     this.sidebarItems = [
       { label: 'Your details', url: `/assessment/account/manage-details` },
-      { label: 'Email notifications', url: `/assessment/account/email-notifications` },
+      { label: 'Email preferences', url: `/assessment/account/email-notifications` },
       { label: 'Manage account', url: `/assessment/account/manage-account` }
     ];
   }
