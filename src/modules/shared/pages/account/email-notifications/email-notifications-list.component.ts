@@ -94,7 +94,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.getEmailNotificationTypes();
       },
       complete: () => {
-        this.setAlertSuccess('Your email notification preferences have been updated');
+        this.setAlertSuccess('Your email preferences have been updated');
       },
       error: () => {
         this.setAlertError(
