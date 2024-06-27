@@ -347,6 +347,30 @@ export class NotificationsService extends CoreService {
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
                   };
                   break;
+                case NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED:
+                  link = {
+                    label: 'Click to go to support summary.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
+                  };
+                  break;
+                case NotificationContextDetailEnum.INNOVATION_RECORD_UPDATED:
+                  link = {
+                    label: 'Click to go to section.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/sections/${item.params?.section}`
+                  };
+                  break;
+                // case NotificationContextDetailEnum.DOCUMENT_UPLOADED:
+                //   link = {
+                //     label: 'Click to go to documents.',
+                //     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents`
+                //   };
+                //   break;
+                case NotificationContextDetailEnum.REMINDER:
+                  link = {
+                    label: 'Click to go to innovation.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}`
+                  };
+                  break;
               }
               break;
           }

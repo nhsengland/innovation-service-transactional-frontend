@@ -1,6 +1,9 @@
 <theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="emailNotificationPreferencesLink" class="text-align-right nhsuk-u-padding-bottom-3">
-    <a [routerLink]="emailNotificationPreferencesLink">Change your email notifications preferences</a>
+  <div *ngIf="emailNotificationPreferencesLink" class="text-align-right nhsuk-u-padding-bottom-2">
+    <a [routerLink]="emailNotificationPreferencesLink">Change your email preferences</a>
+  </div>
+  <div *ngIf="customNotificationPreferencesLink && isAccessorType" class="text-align-right nhsuk-u-padding-bottom-3">
+    <a [routerLink]="customNotificationPreferencesLink">Manage your custom notifications</a>
   </div>
 
   <div class="nhsuk-grid-row">
