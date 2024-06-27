@@ -260,7 +260,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         )
       },
       unitsStep: {
-        units: this.subscription.organisations.flatMap(org => org.units)
+        units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
       },
       supportStatusesStep: {
         supportStatuses: this.subscription.status
