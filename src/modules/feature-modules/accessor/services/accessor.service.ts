@@ -152,7 +152,7 @@ export class AccessorService extends CoreService {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
     return this.http.delete<void>(url.buildUrl()).pipe(take(1));
   }
-
+  
   getNotifyMeInnovationSubscriptionsList(innovationId: string): Observable<GetNotifyMeInnovationSubscription[]> {
     const url = new UrlModel(this.API_USERS_URL)
       .addPath('v1/notify-me/innovation/:innovationId')
@@ -168,5 +168,6 @@ export class AccessorService extends CoreService {
     };
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
     return this.http.get<GetNotifyMeInnovationsWithSubscriptions[]>(url.buildUrl()).pipe(take(1));
+
   }
 }
