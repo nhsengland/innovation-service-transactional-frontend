@@ -31,6 +31,10 @@ import { WizardInnovationCustomNotificationNewOrganisationsStepComponent } from 
 import { WizardInnovationCustomNotificationNewUnitsStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/units-step.component';
 import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/support-statuses-step.component';
 import { WizardInnovationCustomNotificationNewSummaryStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/summary-step.component';
+import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/custom-notification-delete.component';
+import { WizardInnovationCustomNotificationDeleteInnovationStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/steps/innovation-step.component';
+import { WizardInnovationCustomNotificationDeleteNotificationsStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/steps/notifications-step.component';
+import { WizardInnovationCustomNotificationDeleteSummaryStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/steps/summary-step.component';
 // Services.
 import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
@@ -65,6 +69,10 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     WizardInnovationCustomNotificationNewUnitsStepComponent,
     WizardInnovationCustomNotificationNewSupportStatusesStepComponent,
     WizardInnovationCustomNotificationNewSummaryStepComponent,
+    WizardInnovationCustomNotificationDeleteComponent,
+    WizardInnovationCustomNotificationDeleteInnovationStepComponent,
+    WizardInnovationCustomNotificationDeleteNotificationsStepComponent,
+    WizardInnovationCustomNotificationDeleteSummaryStepComponent,
     // // Training.
     TrainingAndResourcesComponent
   ],

@@ -1,0 +1,16 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-radio-group
+          id="innovation"
+          controlName="innovation"
+          description="If you select an innovation, you can select the specific notifications you want to delete on the next page."
+          [items]="innovationItems"
+        ></theme-form-radio-group>
+
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

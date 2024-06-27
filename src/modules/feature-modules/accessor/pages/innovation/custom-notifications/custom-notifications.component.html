@@ -30,9 +30,9 @@
             <div class="nhsuk-card__content">
               <div class="d-flex align-items-baseline justify-content-space-between">
                 <h2 class="nhsuk-card__heading nhsuk-heading-m nhsuk-u-padding-right-6">
-                  Notify me when an organisation updates their support status to {{ subscription.displayStatuses }}
+                  {{ subscription.displayTitle }}
                 </h2>
-                <a routerLink="edit/{{ subscription.id }}">Edit</a>
+                <a routerLink="{{ subscription.id }}/edit">Edit</a>
               </div>
               <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold"
                 >{{ "features.accessor.custom_notifications.cards.organisations_selected" | pluralTranslate: subscription.displayOrganisations?.length | translate }}:</span
@@ -50,7 +50,7 @@
         <button class="nhsuk-button" routerLink="new" type="submit">Create custom notifications</button>
 
         <div *ngIf="subscriptionsList.length > 0" class="nhsuk-u-font-size-19">
-          <a routerLink="">Delete notifications</a>
+          <a routerLink="delete">Delete notifications</a>
         </div>
       </div>
     </div>

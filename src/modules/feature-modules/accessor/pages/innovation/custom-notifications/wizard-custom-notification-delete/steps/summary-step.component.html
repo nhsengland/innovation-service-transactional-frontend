@@ -1,0 +1,33 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <dl class="nhsuk-summary-list">
+        <div *ngFor="let innovation of data.selectedNotificationsPerInnovation" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ innovation.name }}</dt>
+
+          <dd class="nhsuk-summary-list__value">
+            <ng-container *ngFor="let subscription of innovation.subscriptions; last as lastItem">
+              <div [ngClass]="{ 'nhsuk-u-margin-bottom-5': !lastItem }">
+                <ng-container *ngIf="subscription.eventType === 'SUPPORT_UPDATED'">
+                  <span class="d-block nhsuk-u-margin-bottom-3">
+                    {{ subscription.displayTitle }}
+                  </span>
+                  <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">
+                    {{ "features.accessor.custom_notifications.cards.organisations_selected" | pluralTranslate: subscription?.organisations?.length | translate }}:
+                  </span>
+                  <ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">
+                    <li *ngFor="let orgName of subscription.displayOrganisations" class="nhsuk-u-margin-0">
+                      {{ orgName }}
+                    </li>
+                  </ul>
+                </ng-container>
+              </div>
+            </ng-container>
+          </dd>
+        </div>
+      </dl>
+
+      <button type="button" class="nhsuk-button" (click)="onSubmit()">Delete notifications</button>
+    </div>
+  </div>
+</theme-content-wrapper>
