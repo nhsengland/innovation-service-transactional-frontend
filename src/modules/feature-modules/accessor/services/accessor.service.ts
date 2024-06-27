@@ -19,21 +19,24 @@ export type NotifyMeSupportUpdateCreatedDTO = {
 
 export type NotifyMeConfig = NotifyMeSupportUpdateCreatedDTO;
 
+export type OrganisationWithUnits = {
+  id: string;
+  name: string;
+  acronym: string;
+  units: {
+    id: string;
+    name: string;
+    acronym: string;
+    isShadow: boolean;
+  }[];
+};
+
 export type NotifyMeSupportUpdateDTO = {
   id: string;
   updatedAt: Date;
   eventType: 'SUPPORT_UPDATED';
   subscriptionType: 'INSTANTLY';
-  organisations: {
-    id: string;
-    name: string;
-    acronym: string;
-    units: {
-      id: string;
-      name: string;
-      acronym: string;
-    }[];
-  }[];
+  organisations: OrganisationWithUnits[];
   status: InnovationSupportStatusEnum[];
 };
 
@@ -152,7 +155,7 @@ export class AccessorService extends CoreService {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
     return this.http.delete<void>(url.buildUrl()).pipe(take(1));
   }
-  
+
   getNotifyMeInnovationSubscriptionsList(innovationId: string): Observable<GetNotifyMeInnovationSubscription[]> {
     const url = new UrlModel(this.API_USERS_URL)
       .addPath('v1/notify-me/innovation/:innovationId')
@@ -168,6 +171,5 @@ export class AccessorService extends CoreService {
     };
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
     return this.http.get<GetNotifyMeInnovationsWithSubscriptions[]>(url.buildUrl()).pipe(take(1));
-
   }
 }

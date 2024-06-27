@@ -83,11 +83,11 @@ export class UtilsHelper {
     return organisationsToSuggest;
   }
 
-  static getNotifyMeSubscriptionText(subscription: GetNotifyMeInnovationSubscription): string {
+  static getNotifyMeSubscriptionTitleText(subscription: GetNotifyMeInnovationSubscription): string {
     if (subscription.eventType === 'SUPPORT_UPDATED') {
       const translatedStatuses = subscription.status
         .map(status => locale.data.shared.catalog.innovation.support_status[status].name.toLowerCase())
-        .sort();
+        .sort((a, b) => a.localeCompare(b));
 
       return `Notify me when an organisation updates their support status to ${
         translatedStatuses.length === 1
@@ -96,5 +96,11 @@ export class UtilsHelper {
       }`;
     }
     return '';
+  }
+
+  static getNotifyMeSubscriptionOrganisationsText(subscription: GetNotifyMeInnovationSubscription) {
+    return subscription.organisations
+      .flatMap(org => org.units.map(unit => (unit.isShadow ? org.name : unit.name)))
+      .sort((a, b) => a.localeCompare(b));
   }
 }

@@ -51,7 +51,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
       ...this.data.selectedInnovation.subscriptions!.map(subscription => {
         return {
           value: subscription.id,
-          label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
+          label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
           description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
         };
       }),
@@ -136,9 +136,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
 
     outputInnerHtml += '<ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">';
 
-    const displayOrganisations = subscription.organisations
-      .flatMap(org => (org.units.length === 1 ? [org.name] : org.units.map(unit => unit.name)))
-      .sort();
+    const displayOrganisations = UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription);
 
     displayOrganisations.forEach(orgName => {
       outputInnerHtml += `<li class="nhsuk-u-margin-0">${orgName}</li>`;

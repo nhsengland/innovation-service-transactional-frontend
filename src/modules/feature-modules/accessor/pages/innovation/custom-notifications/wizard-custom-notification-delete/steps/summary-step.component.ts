@@ -37,10 +37,8 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
           if (subscription.eventType === 'SUPPORT_UPDATED') {
             return {
               ...subscription,
-              displayTitle: UtilsHelper.getNotifyMeSubscriptionText(subscription),
-              displayOrganisations: subscription.organisations
-                .flatMap(org => (org.units.length === 1 ? [org.name] : org.units.map(unit => unit.name)))
-                .sort()
+              displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
+              displayOrganisations: UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
             };
           } else {
             return subscription;
