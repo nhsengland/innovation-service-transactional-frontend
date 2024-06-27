@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import {
   AccessorService,
   GetNotifyMeInnovationSubscription
@@ -14,8 +15,8 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
   innovation: ContextInnovationType;
 
   subscriptionsList: (GetNotifyMeInnovationSubscription & {
+    displayTitle?: string;
     displayOrganisations?: string[];
-    displayStatuses?: string;
   })[] = [];
 
   constructor(private accessorService: AccessorService) {
@@ -31,18 +32,10 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
       next: response => {
         this.subscriptionsList = response.map(subscription => {
           if (subscription.eventType === 'SUPPORT_UPDATED') {
-            const translatedStatuses = subscription.status
-              .map(status => this.translate(`shared.catalog.innovation.support_status.${status}.name`).toLowerCase())
-              .sort();
             return {
               ...subscription,
-              displayOrganisations: subscription.organisations
-                .flatMap(org => (org.units.length === 1 ? [org.name] : org.units.map(unit => unit.name)))
-                .sort(),
-              displayStatuses:
-                translatedStatuses.length === 1
-                  ? translatedStatuses[0]
-                  : `${translatedStatuses.slice(0, -1).join(', ')} or ${translatedStatuses.at(-1)}`
+              displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
+              displayOrganisations: UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
             };
           } else {
             return subscription;

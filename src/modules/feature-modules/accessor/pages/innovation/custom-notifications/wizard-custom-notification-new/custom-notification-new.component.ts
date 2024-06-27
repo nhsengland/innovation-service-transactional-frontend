@@ -255,10 +255,12 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         notification: this.subscription.eventType
       },
       organisationsStep: {
-        organisations: this.subscription.organisations
+        organisations: this.datasets.organisations.filter(org =>
+          this.subscription.organisations.map(org => org.id).includes(org.id)
+        )
       },
       unitsStep: {
-        units: this.subscription.organisations.filter(org => org.units.length > 1).flatMap(org => org.units)
+        units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
       },
       supportStatusesStep: {
         supportStatuses: this.subscription.status

@@ -19,21 +19,24 @@ export type NotifyMeSupportUpdateCreatedDTO = {
 
 export type NotifyMeConfig = NotifyMeSupportUpdateCreatedDTO;
 
+export type OrganisationWithUnits = {
+  id: string;
+  name: string;
+  acronym: string;
+  units: {
+    id: string;
+    name: string;
+    acronym: string;
+    isShadow: boolean;
+  }[];
+};
+
 export type NotifyMeSupportUpdateDTO = {
   id: string;
   updatedAt: Date;
   eventType: 'SUPPORT_UPDATED';
   subscriptionType: 'INSTANTLY';
-  organisations: {
-    id: string;
-    name: string;
-    acronym: string;
-    units: {
-      id: string;
-      name: string;
-      acronym: string;
-    }[];
-  }[];
+  organisations: OrganisationWithUnits[];
   status: InnovationSupportStatusEnum[];
 };
 
@@ -43,11 +46,12 @@ export type NotifyMeSupportUpdateTypes = {
 
 export type GetNotifyMeInnovationSubscription = NotifyMeSupportUpdateTypes[keyof NotifyMeSupportUpdateTypes];
 
-export type GetNotifyMeSubscriptionsList = {
+export type GetNotifyMeInnovationsWithSubscriptions = {
   innovationId: string;
   name: string;
   count: number;
-}[];
+  subscriptions?: GetNotifyMeInnovationSubscription[];
+};
 
 @Injectable()
 export class AccessorService extends CoreService {
@@ -144,6 +148,14 @@ export class AccessorService extends CoreService {
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(take(1));
   }
 
+  deleteNotifyMeSubscription(queryParams?: { ids?: string[] }): Observable<void> {
+    const qp = {
+      ...(queryParams?.ids ? { ids: queryParams.ids } : {})
+    };
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1));
+  }
+
   getNotifyMeInnovationSubscriptionsList(innovationId: string): Observable<GetNotifyMeInnovationSubscription[]> {
     const url = new UrlModel(this.API_USERS_URL)
       .addPath('v1/notify-me/innovation/:innovationId')
@@ -151,8 +163,13 @@ export class AccessorService extends CoreService {
     return this.http.get<GetNotifyMeInnovationSubscription[]>(url.buildUrl()).pipe(take(1));
   }
 
-  getNotifyMeSubscriptionsList(): Observable<GetNotifyMeSubscriptionsList> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me');
-    return this.http.get<GetNotifyMeSubscriptionsList>(url.buildUrl()).pipe(take(1));
+  getNotifyMeInnovationsWithSubscriptionsList(queryParams?: {
+    withDetails?: boolean;
+  }): Observable<GetNotifyMeInnovationsWithSubscriptions[]> {
+    const qp = {
+      ...(queryParams?.withDetails ? { withDetails: queryParams.withDetails } : {})
+    };
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
+    return this.http.get<GetNotifyMeInnovationsWithSubscriptions[]>(url.buildUrl()).pipe(take(1));
   }
 }
