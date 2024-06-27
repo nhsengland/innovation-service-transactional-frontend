@@ -84,7 +84,7 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
 
     this.notificationsService.updateEmailNotificationsPreferences(body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your email notification preferences have been updated');
+        this.setRedirectAlertSuccess('Your email preferences have been updated');
         this.redirectTo(this.notificationListLink, { alert: 'editSuccess' });
       },
       error: () => {

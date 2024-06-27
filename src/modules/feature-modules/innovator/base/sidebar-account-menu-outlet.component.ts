@@ -10,7 +10,7 @@ export class SidebarAccountMenuOutletComponent {
   constructor() {
     this.sidebarItems = [
       { label: 'Your details', url: `/innovator/account/manage-details` },
-      { label: 'Email notifications', url: `/innovator/account/email-notifications` },
+      { label: 'Email preferences', url: `/innovator/account/email-notifications` },
       { label: 'Manage account', url: `/innovator/account/manage-account` }
     ];
   }

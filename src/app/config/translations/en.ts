@@ -460,6 +460,14 @@ export const locale = {
                 title: 'Tasks',
                 description: 'Get notified when an innovator completes or declines a task you have assigned to them.'
               }
+            },
+
+            NOTIFY_ME: {
+              SHARED: {
+                title: 'Custom notifications',
+                description:
+                  'You can create custom notifications to alert you about events or updates related to an innovation.'
+              }
             }
           },
 
