@@ -33,18 +33,31 @@ type FiltersType = {
 })
 export class PageNotificationsListComponent extends CoreComponent implements OnInit {
   emailNotificationPreferencesLink = '';
+  customNotificationPreferencesLink = '';
 
   notificationsList = new TableModel<NotificationsListOutDTO['data'][0], Record<string, any>>();
 
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
+  isAccessorType: boolean = false;
+
   constructor(private notificationsService: NotificationsService) {
     super();
     this.setPageTitle('Notifications');
 
-    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(this.stores.authentication.getUserType() ?? '')) {
+    this.isAccessorType = this.stores.authentication.isAccessorType();
+
+    if (
+      ['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(
+        this.stores.authentication.getUserType() ?? ''
+      )
+    ) {
       this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    }
+
+    if (this.isAccessorType) {
+      this.customNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/manage-custom-notifications`;
     }
 
     this.notificationsList

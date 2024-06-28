@@ -1,7 +1,7 @@
 export enum NotificationEnum {
   SUPPORT_UPDATED = 'SUPPORT_UPDATED',
   PROGRESS_UPDATE_CREATED = 'PROGRESS_UPDATE_CREATED',
-  RECORD_UPDATED = 'RECORD_UPDATED',
+  INNOVATION_RECORD_UPDATED = 'INNOVATION_RECORD_UPDATED',
   DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
   REMINDER = 'REMINDER'
 }
@@ -29,7 +29,7 @@ export const NOTIFICATION_ITEMS: Notification[] = [
     label: 'an organisation adds a progress update to the support summary'
   },
   {
-    type: NotificationEnum.RECORD_UPDATED,
+    type: NotificationEnum.INNOVATION_RECORD_UPDATED,
     category: CategoryEnum.NOTIFIY_ME_WHEN,
     label: 'the innovator updates their innovation record'
   },

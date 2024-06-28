@@ -499,8 +499,8 @@ export const locale = {
 
             INNOVATION_MANAGEMENT: {
               INNOVATOR: { title: 'Manage innovation' },
-              QUALIFYING_ACCESSOR: { title: 'Withdrawals and export requests' },
-              ACCESSOR: { title: 'Withdrawals and export requests' },
+              QUALIFYING_ACCESSOR: { title: 'Archived innovations and export requests' },
+              ACCESSOR: { title: 'Archived innovations and export requests' },
               ASSESSMENT: { title: 'Innovation withdrawals' }
             },
 
@@ -795,6 +795,22 @@ export const locale = {
             SUPPORT_UPDATED: {
               title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
               link: `View support summary.`
+            },
+            PROGRESS_UPDATE_CREATED: {
+              title: `{{ organisation }} has added a progress update to the support summary for innovation {{ innovation }}.`,
+              link: `View support summary.`
+            },
+            INNOVATION_RECORD_UPDATED: {
+              title: `Section "{{ sectionLabel }}" has been updated on innovation {{ innovation }}.`,
+              link: `View this section of the innovation record.`
+            },
+            DOCUMENT_UPLOADED: {
+              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}`,
+              link: `View documents.`
+            },
+            REMINDER: {
+              title: `Reminder to check innovation {{ innovation }} for this reason: {{ message }}`,
+              link: `View innovation.`
             }
           },
           section_status: {
