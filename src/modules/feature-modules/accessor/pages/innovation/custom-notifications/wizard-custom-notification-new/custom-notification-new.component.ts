@@ -4,14 +4,7 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { WizardInnovationCustomNotificationNewNotificationStepComponent } from './steps/notification-step.component';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
-import {
-  NotificationStepInputType,
-  NotificationStepOutputType,
-  NotificationEnum,
-  NOTIFICATION_ITEMS,
-  Notification,
-  CategoryEnum
-} from './steps/notification-step.types';
+import { NotificationStepInputType, NotificationStepOutputType } from './steps/notification-step.types';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import {
   Organisation,
@@ -29,6 +22,7 @@ import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } fro
 import {
   AccessorService,
   GetNotifyMeInnovationSubscription,
+  NotificationEnum,
   NotifyMeConfig
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ObservableInput, forkJoin } from 'rxjs';
@@ -48,7 +42,7 @@ type WizardData = {
   };
 };
 
-const wizardEmptyState = {
+export const wizardEmptyState = {
   organisationsStep: {
     organisations: []
   },
@@ -96,7 +90,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     this.subscription = {
       id: '',
       updatedAt: new Date(),
-      eventType: 'SUPPORT_UPDATED',
+      eventType: NotificationEnum.SUPPORT_UPDATED,
       subscriptionType: 'INSTANTLY',
       organisations: [],
       status: []
@@ -138,8 +132,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onOrganisationsStepOut, this.onNotificationStepIn),
-          nextStepEvent: data =>
-            this.onNextStep(data, this.onOrganisationsStepOut, this.onUnitsStepIn, this.onSupportStatusesStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onOrganisationsStepOut, this.onUnitsStepIn, this.onSupportStatusesStepIn);
+            this.onSummaryStepIn();
+          }
         }
       }),
       unitsStep: new WizardStepModel<UnitsStepInputType, UnitsStepOutputType>({
@@ -152,7 +148,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onUnitsStepOut, this.onOrganisationsStepIn),
-          nextStepEvent: data => this.onNextStep(data, this.onUnitsStepOut, this.onSupportStatusesStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onUnitsStepOut, this.onSupportStatusesStepIn);
+            this.onSummaryStepIn();
+          }
         }
       }),
       supportStatusesStep: new WizardStepModel<SupportStatusesStepInputType, SupportStatusesStepOutputType>({
@@ -177,12 +176,14 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         component: WizardInnovationCustomNotificationNewSummaryStepComponent,
         data: {
           displayEditMode: false,
-          selectedNotification: '',
-          selectedOrganisations: [],
-          selectedSupportStatuses: []
+          notificationStep: {
+            notification: ''
+          },
+          ...wizardEmptyState
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data, this.onSupportStatusesStepIn),
+          previousStepEvent: data =>
+            this.onPreviousStep(data, this.onOrganisationsStepIn, this.onUnitsStepIn, this.onSupportStatusesStepIn),
           submitEvent: data => this.onSubmit(data),
           goToStepEvent: stepId => {
             if (this.isEditMode) {
@@ -250,22 +251,34 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   }
 
   setWizardDataWithCurrentSubscriptionInfo() {
-    this.wizard.data = {
-      notificationStep: {
-        notification: this.subscription.eventType
-      },
-      organisationsStep: {
-        organisations: this.datasets.organisations.filter(org =>
-          this.subscription.organisations.map(org => org.id).includes(org.id)
-        )
-      },
-      unitsStep: {
-        units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
-      },
-      supportStatusesStep: {
-        supportStatuses: this.subscription.status
-      }
-    };
+    this.wizard.data.notificationStep.notification = this.subscription.eventType;
+
+    let subscriptionOrganisationsIds: string[] = [];
+
+    switch (this.subscription.eventType) {
+      case NotificationEnum.SUPPORT_UPDATED:
+        subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
+
+        this.wizard.data.organisationsStep = {
+          organisations: this.datasets.organisations.filter(org => subscriptionOrganisationsIds.includes(org.id))
+        };
+        this.wizard.data.unitsStep = {
+          units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
+        };
+        this.wizard.data.supportStatusesStep = {
+          supportStatuses: this.subscription.status
+        };
+        break;
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
+        this.wizard.data.organisationsStep = {
+          organisations: this.datasets.organisations.filter(org => subscriptionOrganisationsIds.includes(org.id))
+        };
+        this.wizard.data.unitsStep = {
+          units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
+        };
+        break;
+    }
   }
 
   // Steps mappings
@@ -294,8 +307,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onOrganisationsStepOut(stepData: WizardStepEventType<OrganisationsStepOutputType>): void {
     this.wizard.data.organisationsStep = {
-      organisations: stepData.data.selectedOrganisations
+      organisations: stepData.data.organisations
     };
+
     this.manageUnitsStep();
   }
 
@@ -310,7 +324,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onUnitsStepOut(stepData: WizardStepEventType<UnitsStepOutputType>): void {
     this.wizard.data.unitsStep = {
-      units: stepData.data.selectedUnits
+      units: stepData.data.units
     };
   }
 
@@ -322,7 +336,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onSupportStatusesStepOut(stepData: WizardStepEventType<SupportStatusesStepOutputType>): void {
     this.wizard.data.supportStatusesStep = {
-      supportStatuses: stepData.data.selectedSupportStatuses
+      supportStatuses: stepData.data.supportStatuses
     };
   }
 
@@ -332,34 +346,12 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       this.setWizardDataWithCurrentSubscriptionInfo();
     }
 
-    // Get chosen notification information
-    const notification: Notification = NOTIFICATION_ITEMS.filter(
-      notification => notification.type === this.wizard.data.notificationStep.notification
-    )?.[0];
-
-    // Get organisation information to display
-    const selectedUnitsIds = this.wizard.data.unitsStep.units.map(unit => unit.id);
-    const organisationsNames = this.wizard.data.organisationsStep.organisations
-      .map(org => {
-        if (org.units.length === 1) {
-          return org.name;
-        } else {
-          const unitName = org.units.filter(unit => selectedUnitsIds.includes(unit.id)).flatMap(unit => unit.name);
-          return unitName;
-        }
-      })
-      .flat();
-
     this.wizard.setStepData<SummaryStepInputType>('summaryStep', {
       displayEditMode,
-      selectedNotification:
-        notification.category === CategoryEnum.NOTIFIY_ME_WHEN
-          ? 'When ' + notification.label
-          : 'Remind me ' + notification.label,
-      selectedOrganisations: organisationsNames.sort((a, b) => a.localeCompare(b)),
-      selectedSupportStatuses: this.wizard.data.supportStatusesStep.supportStatuses.map(status =>
-        this.translate('shared.catalog.innovation.support_status.' + status + '.name')
-      )
+      notificationStep: this.wizard.data.notificationStep,
+      organisationsStep: this.wizard.data.organisationsStep,
+      unitsStep: this.wizard.data.unitsStep,
+      supportStatusesStep: this.wizard.data.supportStatusesStep
     });
   }
 
@@ -443,7 +435,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           this.stepsDefinition.summaryStep
         ]);
         break;
-      default:
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        this.setWizardSteps([this.stepsDefinition.organisationsStep, this.stepsDefinition.summaryStep]);
         break;
     }
   }
@@ -486,9 +479,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     this.onSubmitWizard();
   }
 
-  onSubmitWizard(): void {
-    this.setPageStatus('LOADING');
-
+  getChosenUnitsIds(): string[] {
     const unitsIds = [
       ...this.wizard.data.organisationsStep.organisations
         .filter(org => org.units.length === 1)
@@ -496,14 +487,42 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       ...this.wizard.data.unitsStep.units.map(unit => unit.id)
     ];
 
+    return unitsIds;
+  }
+
+  onSubmitWizard(): void {
+    this.setPageStatus('LOADING');
+
     let body: NotifyMeConfig = {
       eventType: NotificationEnum.SUPPORT_UPDATED,
       subscriptionType: 'INSTANTLY',
       preConditions: {
-        units: unitsIds,
-        status: this.wizard.data.supportStatusesStep.supportStatuses
+        units: [],
+        status: []
       }
     };
+
+    switch (this.wizard.data.notificationStep.notification) {
+      case NotificationEnum.SUPPORT_UPDATED:
+        body = {
+          eventType: NotificationEnum.SUPPORT_UPDATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            units: this.getChosenUnitsIds(),
+            status: this.wizard.data.supportStatusesStep.supportStatuses
+          }
+        };
+        break;
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        body = {
+          eventType: NotificationEnum.PROGRESS_UPDATE_CREATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            units: this.getChosenUnitsIds()
+          }
+        };
+        break;
+    }
 
     if (this.isEditMode) {
       this.updateNotifyMeSubscription(body);

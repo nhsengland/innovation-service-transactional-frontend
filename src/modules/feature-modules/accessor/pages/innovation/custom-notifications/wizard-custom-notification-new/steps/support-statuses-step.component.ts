@@ -7,7 +7,7 @@ import { SupportStatusesStepInputType, SupportStatusesStepOutputType } from './s
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-support-statuses-step',
+  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-support-statuses-step',
   templateUrl: './support-statuses-step.component.html'
 })
 export class WizardInnovationCustomNotificationNewSupportStatusesStepComponent
@@ -91,7 +91,7 @@ export class WizardInnovationCustomNotificationNewSupportStatusesStepComponent
 
   prepareOutputData(): SupportStatusesStepOutputType {
     return {
-      selectedSupportStatuses: this.form.value.supportStatuses ?? []
+      supportStatuses: this.form.value.supportStatuses ?? []
     };
   }
 

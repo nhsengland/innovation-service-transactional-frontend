@@ -6,7 +6,12 @@ import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 import { NotificationsStepInputType, NotificationsStepOutputType } from './notifications-step.types';
 import { DatePipe } from '@angular/common';
-import { GetNotifyMeInnovationSubscription } from '@modules/feature-modules/accessor/services/accessor.service';
+import {
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum,
+  ProgressUpdateCreatedResponseDTO,
+  SupportUpdatedResponseDTO
+} from '@modules/feature-modules/accessor/services/accessor.service';
 import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
@@ -49,11 +54,20 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
     // Add each notification as an option to select on the form
     this.notificationsItems.push(
       ...this.data.selectedInnovation.subscriptions!.map(subscription => {
-        return {
-          value: subscription.id,
-          label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
-          description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
-        };
+        switch (subscription.eventType) {
+          case NotificationEnum.SUPPORT_UPDATED:
+          case NotificationEnum.PROGRESS_UPDATE_CREATED:
+            return {
+              value: subscription.id,
+              label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
+              description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
+            };
+          default:
+            return {
+              value: '',
+              label: ''
+            };
+        }
       }),
       ...(this.data.selectedInnovation.subscriptions!.length > 1
         ? [
@@ -124,7 +138,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
     this.nextStepEvent.emit({ isComplete: true, data: this.prepareOutputData() });
   }
 
-  buildOrganisationsSelectedList(subscription: GetNotifyMeInnovationSubscription): string {
+  buildOrganisationsSelectedList(subscription: SupportUpdatedResponseDTO | ProgressUpdateCreatedResponseDTO): string {
     const organisationsSelectedString = this.translate(
       this.pluralTranslatePipe.transform(
         'features.accessor.custom_notifications.cards.organisations_selected',

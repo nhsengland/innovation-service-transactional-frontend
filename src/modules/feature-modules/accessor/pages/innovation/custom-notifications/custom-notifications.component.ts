@@ -3,7 +3,8 @@ import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
 import {
   AccessorService,
-  GetNotifyMeInnovationSubscription
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ContextInnovationType } from '@modules/stores';
 
@@ -31,15 +32,18 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
     this.accessorService.getNotifyMeInnovationSubscriptionsList(this.innovation.id).subscribe({
       next: response => {
         this.subscriptionsList = response.map(subscription => {
-          if (subscription.eventType === 'SUPPORT_UPDATED') {
-            return {
-              ...subscription,
-              displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
-              displayOrganisations: UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
-            };
-          } else {
-            return subscription;
-          }
+          // Determine whether to add displayOrganisations based on eventType
+          const displayOrganisations =
+            subscription.eventType === NotificationEnum.SUPPORT_UPDATED ||
+            subscription.eventType === NotificationEnum.PROGRESS_UPDATE_CREATED
+              ? UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
+              : undefined;
+
+          return {
+            ...subscription,
+            displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
+            displayOrganisations: displayOrganisations
+          };
         });
         this.setPageStatus('READY');
       },
