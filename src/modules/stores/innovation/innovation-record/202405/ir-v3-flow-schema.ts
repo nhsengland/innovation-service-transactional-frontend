@@ -1,5 +1,4 @@
 import { InnovationRecordSchemaInfoType } from '../innovation-record-schema/innovation-record-schema.models';
-import { InnovationRecordSchemaV3Type, InnovationRecordSubSectionType } from './ir-v3-types';
 
 export const dummy_schema_flow_demo: InnovationRecordSchemaInfoType = {
   id: '',
@@ -43,141 +42,141 @@ export const dummy_schema_flow_demo: InnovationRecordSchemaInfoType = {
                   }
                 ]
               },
-              {
-                questions: [
-                  {
-                    id: 'questionDescription',
-                    dataType: 'textarea',
-                    label: 'Write question',
-                    description:
-                      'You will be asked to add the answer types, as well as any hint text and dependancies on the next few pages. For tips on writing questions view rules and guidance (opens in new window).',
-                    validations: {
-                      isRequired: 'A description is required'
-                    },
-                    lengthLimit: 'xl'
-                  }
-                ]
-              },
-              {
-                questions: [
-                  {
-                    id: 'answerType',
-                    dataType: 'radio-group',
-                    label: 'Select answer type for the new question',
-                    description:
-                      'You will be asked to add the answer types, as well as any hint text and dependancies on the next few pages. For tips on writing questions view rules and guidance (opens in new window).',
-                    validations: {
-                      isRequired: 'Choose one option'
-                    },
-                    items: [
-                      {
-                        id: 'text',
-                        label: 'Text input or textarea',
-                        description: 'Use text input or textareas to let users enter 1 or more lines of text.'
-                      },
-                      {
-                        id: 'radio-group',
-                        label: 'Radio group',
-                        description: 'Use radios when you want users to select only 1 option from a list.'
-                      },
-                      {
-                        id: 'check-boxes',
-                        label: 'Checkboxes',
-                        description: 'Use checkboxes to let users select 1 or more options on a form.'
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                questions: [
-                  {
-                    id: 'textAnswerDescription',
-                    dataType: 'textarea',
-                    label: 'New question: {{questionDescription}}',
-                    description:
-                      'For more information on hint text and answer character limits, read the guidance on adding a new question (opens in new window). ',
-                    validations: {
-                      isRequired: 'A description is required'
-                    },
-                    lengthLimit: 'xl'
-                  },
-                  {
-                    id: 'textAnswerLength',
-                    dataType: 'radio-group',
-                    label: 'Answer character limit',
-                    description: "Select a suitable character limit for the innovator's answer.",
-                    validations: {
-                      isRequired: 'Choose one option'
-                    },
-                    items: [
-                      {
-                        id: 'xs',
-                        label: '200 characters (XS)'
-                      },
-                      {
-                        id: 's',
-                        label: '500 characters (S)'
-                      },
-                      {
-                        id: 'm',
-                        label: '1000 characters (M)'
-                      },
-                      {
-                        id: 'l',
-                        label: '1500 characters (L)'
-                      },
-                      {
-                        id: 'xl',
-                        label: '2000 characters (XL)'
-                      },
-                      {
-                        id: 'XXL',
-                        label: '4000 characters (XXL)'
-                      }
-                    ]
-                  }
-                ],
-                condition: {
-                  id: 'answerType',
-                  options: ['text']
-                }
-              },
-              {
-                questions: [
-                  {
-                    id: 'textAnswerDescription',
-                    dataType: 'textarea',
-                    label: 'New question: {{questionDescription}}',
-                    description:
-                      'For more information on hint text and answer character limits, read the guidance on adding a new question (opens in new window). ',
-                    validations: {
-                      isRequired: 'A description is required'
-                    },
-                    lengthLimit: 'xl'
-                  },
-                  {
-                    id: 'answer1',
-                    dataType: 'text',
-                    label: 'Answer 1',
-                    validations: {
-                      isRequired: 'Answer 1 is required'
-                    }
-                  },
-                  {
-                    id: 'answer2hint',
-                    dataType: 'text',
-                    label: 'Answer 2',
-                    validations: {
-                      isRequired: 'Answer 2 is required'
-                    }
-                  }
-                ],
-                condition: {
-                  id: 'answerType',
-                  options: ['radio-group', 'check-boxes']
-                }
-              },
+              // {
+              //   questions: [
+              //     {
+              //       id: 'questionDescription',
+              //       dataType: 'textarea',
+              //       label: 'Write question',
+              //       description:
+              //         'You will be asked to add the answer types, as well as any hint text and dependancies on the next few pages. For tips on writing questions view rules and guidance (opens in new window).',
+              //       validations: {
+              //         isRequired: 'A description is required'
+              //       },
+              //       lengthLimit: 'xl'
+              //     }
+              //   ]
+              // },
+              // {
+              //   questions: [
+              //     {
+              //       id: 'answerType',
+              //       dataType: 'radio-group',
+              //       label: 'Select answer type for the new question',
+              //       description:
+              //         'You will be asked to add the answer types, as well as any hint text and dependancies on the next few pages. For tips on writing questions view rules and guidance (opens in new window).',
+              //       validations: {
+              //         isRequired: 'Choose one option'
+              //       },
+              //       items: [
+              //         {
+              //           id: 'text',
+              //           label: 'Text input or textarea',
+              //           description: 'Use text input or textareas to let users enter 1 or more lines of text.'
+              //         },
+              //         {
+              //           id: 'radio-group',
+              //           label: 'Radio group',
+              //           description: 'Use radios when you want users to select only 1 option from a list.'
+              //         },
+              //         {
+              //           id: 'check-boxes',
+              //           label: 'Checkboxes',
+              //           description: 'Use checkboxes to let users select 1 or more options on a form.'
+              //         }
+              //       ]
+              //     }
+              //   ]
+              // },
+              // {
+              //   questions: [
+              //     {
+              //       id: 'textAnswerDescription',
+              //       dataType: 'textarea',
+              //       label: 'New question: {{questionDescription}}',
+              //       description:
+              //         'For more information on hint text and answer character limits, read the guidance on adding a new question (opens in new window). ',
+              //       validations: {
+              //         isRequired: 'A description is required'
+              //       },
+              //       lengthLimit: 'xl'
+              //     },
+              //     {
+              //       id: 'textAnswerLength',
+              //       dataType: 'radio-group',
+              //       label: 'Answer character limit',
+              //       description: "Select a suitable character limit for the innovator's answer.",
+              //       validations: {
+              //         isRequired: 'Choose one option'
+              //       },
+              //       items: [
+              //         {
+              //           id: 'xs',
+              //           label: '200 characters (XS)'
+              //         },
+              //         {
+              //           id: 's',
+              //           label: '500 characters (S)'
+              //         },
+              //         {
+              //           id: 'm',
+              //           label: '1000 characters (M)'
+              //         },
+              //         {
+              //           id: 'l',
+              //           label: '1500 characters (L)'
+              //         },
+              //         {
+              //           id: 'xl',
+              //           label: '2000 characters (XL)'
+              //         },
+              //         {
+              //           id: 'XXL',
+              //           label: '4000 characters (XXL)'
+              //         }
+              //       ]
+              //     }
+              //   ],
+              //   condition: {
+              //     id: 'answerType',
+              //     options: ['text']
+              //   }
+              // },
+              // {
+              //   questions: [
+              //     {
+              //       id: 'textAnswerDescription',
+              //       dataType: 'textarea',
+              //       label: 'New question: {{questionDescription}}',
+              //       description:
+              //         'For more information on hint text and answer character limits, read the guidance on adding a new question (opens in new window). ',
+              //       validations: {
+              //         isRequired: 'A description is required'
+              //       },
+              //       lengthLimit: 'xl'
+              //     },
+              //     {
+              //       id: 'answer1',
+              //       dataType: 'text',
+              //       label: 'Answer 1',
+              //       validations: {
+              //         isRequired: 'Answer 1 is required'
+              //       }
+              //     },
+              //     {
+              //       id: 'answer2hint',
+              //       dataType: 'text',
+              //       label: 'Answer 2',
+              //       validations: {
+              //         isRequired: 'Answer 2 is required'
+              //       }
+              //     }
+              //   ],
+              //   condition: {
+              //     id: 'answerType',
+              //     options: ['radio-group', 'check-boxes']
+              //   }
+              // },
               {
                 questions: [
                   {

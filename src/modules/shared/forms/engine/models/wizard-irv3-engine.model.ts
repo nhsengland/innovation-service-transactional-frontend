@@ -242,6 +242,7 @@ export class WizardIRV3EngineModel {
   parseIRManagementSteps(sectionId: string, irSchema: InnovationRecordSchemaInfoType): this {
     if (this.schema?.schema) {
       // Get list of questions for new question position step
+
       this.schema.schema.sections[0].subSections[0].steps[0].questions[0].items = [];
 
       const sectionQuestions = irSchema.schema.sections
@@ -255,8 +256,25 @@ export class WizardIRV3EngineModel {
 
       this.schema.schema.sections[0].subSections[0].steps[0].questions[0].items = sectionQuestions;
 
+      this.steps.find(s => s.parameters[0].id === 'questionPlacement')!.parameters[0].items = questionPositioningList;
+
       // TODO Get list of dependable questions
       const dependableQuestions = sectionQuestions?.filter(s => ['checkbox-array', 'radio-group'].includes(s.dataType));
+
+      const selectDependenciesStep = this.steps.find(s => s.parameters[0].id === 'selectDependencies');
+      console.log('selectDependenciesStep', selectDependenciesStep);
+
+      if (selectDependenciesStep) {
+        selectDependenciesStep.parameters[0].items = dependableQuestions?.map(q => ({
+          id: q.id,
+          label: q.label,
+          conditional: {
+            id: `${q.id}_items`,
+            dataType: 'checkbox-array',
+            items: q.items?.map(i => ({ id: i.id, label: i.label }))
+          }
+        }));
+      }
     }
 
     return this;
@@ -266,11 +284,13 @@ export class WizardIRV3EngineModel {
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
-
+    console.log('subsection?.steps', subsection?.steps);
     subsection?.steps.forEach(s => {
       // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
       if (this.checkIfStepConditionIsMet(s.condition)) {
+        const steps = { step: new FormEngineModelV3({ parameters: [] }) };
         const step = new FormEngineModelV3({ parameters: [] });
+        const addSteps: FormEngineModelV3[] = [];
 
         s.questions.forEach(q => {
           const param: FormEngineParameterModelV3 = {
@@ -316,8 +336,8 @@ export class WizardIRV3EngineModel {
 
             param.items = updatedItemsList;
           }
+          steps.step.parameters.push(param);
           step.parameters.push(param);
-          this.steps.push(step);
 
           /*
           Special rules for updating data on nested object fields (ex.: 'fields-group' and 'checkbox-group')
@@ -362,7 +382,7 @@ export class WizardIRV3EngineModel {
                 );
               }
 
-              this.steps.push(
+              addSteps.push(
                 new FormEngineModelV3({
                   parameters: [
                     {
@@ -386,12 +406,15 @@ export class WizardIRV3EngineModel {
                   ]
                 })
               );
+
               if (q.dataType === 'fields-group' || q.dataType === 'checkbox-array') {
                 this.currentAnswers[`${q.addQuestion!.id}_${i}`] = this.currentAnswers[q.id][i][q.addQuestion!.id];
               }
             });
           }
         });
+
+        this.steps.push(step, ...addSteps);
       } else {
         // Clear field's values if condition doesn't pass
         s.questions.forEach(q => {
@@ -399,6 +422,7 @@ export class WizardIRV3EngineModel {
         });
       }
     });
+    console.log('steps:', this.steps);
     return this;
   }
 

@@ -58,7 +58,7 @@ export class PageIRManagementNewQuestionComponent extends CoreComponent implemen
   }
 
   ngOnInit(): void {
-    this.wizard.setAnswers({}).parseIRManagementSteps(this.sectionId, this.stores.context.getIrSchema()).runRules();
+    this.wizard.setAnswers({}).runRules().parseIRManagementSteps(this.sectionId, this.stores.context.getIrSchema());
     this.setPageStatus('READY');
   }
 
@@ -90,7 +90,7 @@ export class PageIRManagementNewQuestionComponent extends CoreComponent implemen
 
     let currentStepIndex = this.wizard.currentStepId;
 
-    this.wizard.addAnswers(formData.data).runRules();
+    // this.wizard.addAnswers(formData.data).runRules();
 
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
@@ -106,7 +106,10 @@ export class PageIRManagementNewQuestionComponent extends CoreComponent implemen
 
       if (action === 'next') {
         const shouldUpdateInformation = true;
-        this.wizard.addAnswers(formData!.data).runRules();
+        this.wizard
+          .addAnswers(formData!.data)
+          .runRules()
+          .parseIRManagementSteps(this.sectionId, this.stores.context.getIrSchema());
 
         this.saveButton = { isActive: false, label: 'Saving...' };
 
