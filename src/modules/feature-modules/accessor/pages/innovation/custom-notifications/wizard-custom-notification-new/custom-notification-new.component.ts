@@ -253,30 +253,31 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   setWizardDataWithCurrentSubscriptionInfo() {
     this.wizard.data.notificationStep.notification = this.subscription.eventType;
 
-    let subscriptionOrganisationsIds: string[] = [];
-
     switch (this.subscription.eventType) {
       case NotificationEnum.SUPPORT_UPDATED:
-        subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        const subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
 
         this.wizard.data.organisationsStep = {
           organisations: this.datasets.organisations.filter(org => subscriptionOrganisationsIds.includes(org.id))
         };
         this.wizard.data.unitsStep = {
-          units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
+          units: this.subscription.organisations
+            .filter(
+              subscriptionOrg =>
+                (this.wizard.data.organisationsStep.organisations.find(
+                  selectedOrg => selectedOrg.id === subscriptionOrg.id
+                )?.units.length ?? 0) > 1
+            )
+            .flatMap(org => org.units)
         };
-        this.wizard.data.supportStatusesStep = {
-          supportStatuses: this.subscription.status
-        };
-        break;
-      case NotificationEnum.PROGRESS_UPDATE_CREATED:
-        subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
-        this.wizard.data.organisationsStep = {
-          organisations: this.datasets.organisations.filter(org => subscriptionOrganisationsIds.includes(org.id))
-        };
-        this.wizard.data.unitsStep = {
-          units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
-        };
+
+        if (this.subscription.eventType === NotificationEnum.SUPPORT_UPDATED) {
+          this.wizard.data.supportStatusesStep = {
+            supportStatuses: this.subscription.status
+          };
+        }
+
         break;
     }
   }
@@ -479,14 +480,13 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     this.onSubmitWizard();
   }
 
-  getChosenUnitsIds(): string[] {
+  getSelectedUnitsIds(): string[] {
     const unitsIds = [
       ...this.wizard.data.organisationsStep.organisations
         .filter(org => org.units.length === 1)
         .map(org => org.units[0].id),
       ...this.wizard.data.unitsStep.units.map(unit => unit.id)
     ];
-
     return unitsIds;
   }
 
@@ -508,7 +508,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           eventType: NotificationEnum.SUPPORT_UPDATED,
           subscriptionType: 'INSTANTLY',
           preConditions: {
-            units: this.getChosenUnitsIds(),
+            units: this.getSelectedUnitsIds(),
             status: this.wizard.data.supportStatusesStep.supportStatuses
           }
         };
@@ -518,7 +518,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           eventType: NotificationEnum.PROGRESS_UPDATE_CREATED,
           subscriptionType: 'INSTANTLY',
           preConditions: {
-            units: this.getChosenUnitsIds()
+            units: this.getSelectedUnitsIds()
           }
         };
         break;
