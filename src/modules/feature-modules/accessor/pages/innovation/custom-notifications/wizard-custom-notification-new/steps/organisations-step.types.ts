@@ -11,5 +11,5 @@ export type OrganisationsStepInputType = {
 };
 
 export type OrganisationsStepOutputType = {
-  selectedOrganisations: Organisation[];
+  organisations: Organisation[];
 };

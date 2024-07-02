@@ -5,5 +5,5 @@ export type SupportStatusesStepInputType = {
 };
 
 export type SupportStatusesStepOutputType = {
-  selectedSupportStatuses: InnovationSupportStatusEnum[];
+  supportStatuses: InnovationSupportStatusEnum[];
 };

@@ -4,13 +4,13 @@
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Notify me</dt>
-          <dd class="nhsuk-summary-list__value">{{ data.selectedNotification }}</dd>
+          <dd class="nhsuk-summary-list__value">{{ displayNotification }}</dd>
           <dd class="nhsuk-summary-list__actions"></dd>
         </div>
-        <div class="nhsuk-summary-list__row">
+        <div *ngIf="displayOrganisations?.length" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Organisation</dt>
           <dd class="nhsuk-summary-list__value">
-            <div *ngFor="let organisation of data.selectedOrganisations">
+            <div *ngFor="let organisation of displayOrganisations">
               <p class="nhsuk-u-margin-bottom-2">{{ organisation }}</p>
             </div>
           </dd>
@@ -18,10 +18,10 @@
             <a href="javascript:void(0)" (click)="onGotoStep('organisationsStep')">Change<span class="nhsuk-u-visually-hidden"> organisation </span></a>
           </dd>
         </div>
-        <div class="nhsuk-summary-list__row">
+        <div *ngIf="displaySupportStatuses?.length" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Support status</dt>
           <dd class="nhsuk-summary-list__value">
-            <div *ngFor="let supportStatus of data.selectedSupportStatuses">
+            <div *ngFor="let supportStatus of displaySupportStatuses">
               <p class="nhsuk-u-margin-bottom-2">{{ supportStatus }}</p>
             </div>
           </dd>

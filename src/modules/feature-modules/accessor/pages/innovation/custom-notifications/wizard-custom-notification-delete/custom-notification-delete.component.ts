@@ -370,7 +370,7 @@ export class WizardInnovationCustomNotificationDeleteComponent extends CoreCompo
       .deleteNotifyMeSubscription({ ...(notificationsIds.length ? { ids: notificationsIds } : {}) })
       .subscribe({
         next: () => {
-          this.setRedirectAlertSuccess(`You have deleted custom notification(s).`);
+          this.setRedirectAlertSuccess(`You have deleted custom notification(s)`);
 
           if (this.wizard.steps[0].id === 'innovationStep') {
             this.redirectToManageCustomNotifications();

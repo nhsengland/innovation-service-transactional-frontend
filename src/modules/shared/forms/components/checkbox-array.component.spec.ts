@@ -3,12 +3,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FormEngineParameterModel } from '@app/base/forms';
-
 import { FormInputComponent } from '../components/input.component';
 import { FormCheckboxArrayComponent } from './checkbox-array.component';
 
 import { CustomValidators } from '../validators/custom-validators';
+import { FormEngineParameterModel } from '@modules/shared/forms';
 
 @Component({
   template: ` <form [formGroup]="form">
