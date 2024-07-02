@@ -117,11 +117,6 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
       ?.filter(item => item.conditional)
       .forEach(item => {
         if (item.conditional) {
-          console.log('item.conditional.isHidden', item.conditional.isHidden);
-          console.log(
-            'this.isConditionalFieldVisible(item.conditional.id)',
-            this.isConditionalFieldVisible(item.conditional.id)
-          );
           if (!item.conditional.isHidden && this.isConditionalFieldVisible(item.conditional.id)) {
             this.conditionalFormControl(item.conditional.id).setValidators(
               FormEngineHelperV3.getParameterValidators(item.conditional)

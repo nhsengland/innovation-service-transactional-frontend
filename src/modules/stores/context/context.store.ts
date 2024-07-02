@@ -153,7 +153,6 @@ export class ContextStore extends Store<ContextModel> {
   // Innovation Record Schema methods.
   setIrSchema(data: ContextSchemaType): void {
     this.state.irSchema = data;
-    console.log('set expiryAt', this.state.irSchema?.expiryAt);
     this.setState();
   }
 
@@ -171,9 +170,6 @@ export class ContextStore extends Store<ContextModel> {
 
   getOrLoadIrSchema(): Observable<ContextSchemaType> {
     if (this.state.irSchema?.schema && Date.now() < this.state.irSchema.expiryAt) {
-      console.log('expiryAt', this.state.irSchema.expiryAt);
-      console.log('Date.now', Date.now());
-      console.log('Diff', this.state.irSchema.expiryAt - Date.now());
       return of(this.state.irSchema);
     }
     return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));

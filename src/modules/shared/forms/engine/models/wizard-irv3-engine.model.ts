@@ -161,7 +161,6 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-    console.log(`returning value: ${nextStepId}`);
     return nextStepId;
   }
 
@@ -245,6 +244,7 @@ export class WizardIRV3EngineModel {
       // Check if step has conditions. If it doesn't, push. If it does, check if met, and only then push accordingly.
       if (this.checkIfStepConditionIsMet(s.condition)) {
         const step = new FormEngineModelV3({ parameters: [] });
+        const addSteps: FormEngineModelV3[] = [];
 
         s.questions.forEach(q => {
           const param: FormEngineParameterModelV3 = {
@@ -285,13 +285,12 @@ export class WizardIRV3EngineModel {
               label:
                 item === 'other'
                   ? this.currentAnswers[conditionalAnswerId]
-                  : this.translations.questions.get(q.id)?.items.get(item)?.label
+                  : this.translations.questions.get(itemsFromAnswer)?.items.get(item)?.label
             }));
 
             param.items = updatedItemsList;
           }
           step.parameters.push(param);
-          this.steps.push(step);
 
           /*
           Special rules for updating data on nested object fields (ex.: 'fields-group' and 'checkbox-group')
@@ -336,7 +335,7 @@ export class WizardIRV3EngineModel {
                 );
               }
 
-              this.steps.push(
+              addSteps.push(
                 new FormEngineModelV3({
                   parameters: [
                     {
@@ -366,6 +365,7 @@ export class WizardIRV3EngineModel {
             });
           }
         });
+        this.steps.push(step, ...addSteps);
       } else {
         // Clear field's values if condition doesn't pass
         s.questions.forEach(q => {
@@ -373,6 +373,7 @@ export class WizardIRV3EngineModel {
         });
       }
     });
+
     return this;
   }
 
