@@ -8,6 +8,7 @@ import { NotificationsStepInputType, NotificationsStepOutputType } from './notif
 import { DatePipe } from '@angular/common';
 import {
   GetNotifyMeInnovationSubscription,
+  InnovationRecordUpdatedDTO,
   NotificationEnum,
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
@@ -60,6 +61,12 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
             return {
               value: subscription.id,
               label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
+              description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
+            };
+          case NotificationEnum.INNOVATION_RECORD_UPDATED:
+            return {
+              value: subscription.id,
+              label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildSectionsSelectedList(subscription)}`,
               description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
             };
           default:
@@ -158,6 +165,21 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
 
     outputInnerHtml += `</ul>`;
 
+    return outputInnerHtml;
+  }
+
+  buildSectionsSelectedList(subscription: InnovationRecordUpdatedDTO): string {
+    let outputInnerHtml = `<span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">Sections selected:</span>`;
+
+    outputInnerHtml += '<ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">';
+
+    const displaySections = UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation);
+
+    displaySections.forEach(section => {
+      outputInnerHtml += `<li class="nhsuk-u-margin-0">${section}</li>`;
+    });
+
+    outputInnerHtml += `</ul>`;
     return outputInnerHtml;
   }
 }

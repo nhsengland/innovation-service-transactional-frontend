@@ -42,10 +42,15 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
               ? UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
               : undefined;
 
+          const displaySections =
+            subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription,this.stores.innovation) : undefined
+
           return {
             ...subscription,
             displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
-            displayOrganisations: displayOrganisations
+            displayOrganisations: displayOrganisations,
+            displaySections: displaySections
           };
         })
       };

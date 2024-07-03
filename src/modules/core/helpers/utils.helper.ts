@@ -1,14 +1,19 @@
+import { inject } from '@angular/core';
 import { locale } from '@app/config/translations/en';
 import {
   GetNotifyMeInnovationSubscription,
+  InnovationRecordUpdatedDTO,
   NotificationEnum,
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
+import { InnovationStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
+  constructor(private innovationStore: InnovationStore) {}
+
   static isEmpty(value: any) {
     switch (typeof value) {
       case 'number':
@@ -102,6 +107,8 @@ export class UtilsHelper {
         }`;
       case NotificationEnum.PROGRESS_UPDATE_CREATED:
         return 'Notify me when an organisation adds a progress update to the support summary';
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        return 'Notify me when the innovator updates their innovation record';
       default:
         return '';
     }
@@ -113,5 +120,21 @@ export class UtilsHelper {
     return subscription.organisations
       .flatMap(org => org.units.map(unit => (unit.isShadow ? org.name : unit.name)))
       .sort((a, b) => a.localeCompare(b));
+  }
+
+  static getNotifyMeSubscriptionSectionsText(
+    subscription: InnovationRecordUpdatedDTO,
+    innovationStore: InnovationStore
+  ): string[] {
+    if (subscription.sections) {
+      return subscription.sections
+        .map(s => {
+          const sectionIdentification = innovationStore.getInnovationRecordSectionIdentification(s);
+          return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number}. ${sectionIdentification?.section.title}`;
+        })
+        .sort((a, b) => a.localeCompare(b));
+    } else {
+      return ['All sections'];
+    }
   }
 }

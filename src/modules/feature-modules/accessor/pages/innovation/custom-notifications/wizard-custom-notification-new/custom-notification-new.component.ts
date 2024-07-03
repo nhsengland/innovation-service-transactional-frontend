@@ -26,6 +26,13 @@ import {
   NotifyMeConfig
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ObservableInput, forkJoin } from 'rxjs';
+import {
+  InnovationRecordUpdateStepInputType,
+  InnovationRecordUpdateStepOutputType,
+  InnovationSectionGroupsType
+} from './steps/innovation-record-update-step.types';
+import { WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
+import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 type WizardData = {
   notificationStep: {
@@ -40,6 +47,9 @@ type WizardData = {
   supportStatusesStep: {
     supportStatuses: InnovationSupportStatusEnum[];
   };
+  innovationRecordUpdateStep: {
+    innovationRecordSections: InnovationSectionGroupsType[];
+  };
 };
 
 export const wizardEmptyState = {
@@ -51,6 +61,9 @@ export const wizardEmptyState = {
   },
   supportStatusesStep: {
     supportStatuses: []
+  },
+  innovationRecordUpdateStep: {
+    innovationRecordSections: []
   }
 };
 
@@ -69,6 +82,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   datasets: {
     organisations: Organisation[];
+    sections: InnovationSections[];
   };
 
   wizard = new WizardModel<WizardData>({});
@@ -99,7 +113,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     this.isEditMode = !!this.subscriptionId;
 
     this.datasets = {
-      organisations: []
+      organisations: [],
+      sections: []
     };
 
     this.wizard.data = {
@@ -119,7 +134,32 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data),
-          nextStepEvent: data => this.onNextStep(data, this.onNotificationStepOut, this.onOrganisationsStepIn)
+          nextStepEvent: data =>
+            this.onNextStep(
+              data,
+              this.onNotificationStepOut,
+              this.onOrganisationsStepIn,
+              this.onInnovationRecordUpdateStepIn
+            )
+        }
+      }),
+      innovationRecordUpdateStep: new WizardStepModel<
+        InnovationRecordUpdateStepInputType,
+        InnovationRecordUpdateStepOutputType
+      >({
+        id: 'innovationRecordUpdateStep',
+        title: 'Which section of the innovation record do you want to be notified about?',
+        component: WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent,
+        data: {
+          innovationRecordSections: [],
+          selectedInnovationRecordSections: []
+        },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data),
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onInnovationRecordUpdateStepOut);
+            this.onSummaryStepIn();
+          }
         }
       }),
       organisationsStep: new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
@@ -183,7 +223,13 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data =>
-            this.onPreviousStep(data, this.onOrganisationsStepIn, this.onUnitsStepIn, this.onSupportStatusesStepIn),
+            this.onPreviousStep(
+              data,
+              this.onOrganisationsStepIn,
+              this.onUnitsStepIn,
+              this.onSupportStatusesStepIn,
+              this.onInnovationRecordUpdateStepIn
+            ),
           submitEvent: data => this.onSubmit(data),
           goToStepEvent: stepId => {
             if (this.isEditMode) {
@@ -278,6 +324,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           units: this.subscription.organisations.flatMap(org => org.units.filter(unit => !unit.isShadow))
         };
         break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.wizard.data.innovationRecordUpdateStep = {
+          innovationRecordSections: this.subscription.sections ? this.subscription.sections : []
+        };
     }
   }
 
@@ -340,6 +390,19 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     };
   }
 
+  onInnovationRecordUpdateStepIn(): void {
+    this.wizard.setStepData<InnovationRecordUpdateStepInputType>('innovationRecordUpdateStep', {
+      innovationRecordSections: this.datasets.sections,
+      selectedInnovationRecordSections: this.wizard.data.innovationRecordUpdateStep.innovationRecordSections
+    });
+  }
+
+  onInnovationRecordUpdateStepOut(stepData: WizardStepEventType<InnovationRecordUpdateStepOutputType>): void {
+    this.wizard.data.innovationRecordUpdateStep = {
+      innovationRecordSections: stepData.data.innovationRecordSections
+    };
+  }
+
   onSummaryStepIn(displayEditMode: boolean = false): void {
     // If user access summary in edit mode, display the current subscription information
     if (displayEditMode) {
@@ -350,6 +413,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       displayEditMode,
       notificationStep: this.wizard.data.notificationStep,
       organisationsStep: this.wizard.data.organisationsStep,
+      innovationRecordUpdateStep: this.wizard.data.innovationRecordUpdateStep,
       unitsStep: this.wizard.data.unitsStep,
       supportStatusesStep: this.wizard.data.supportStatusesStep
     });
@@ -406,6 +470,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       case 'supportStatusesStep':
         this.onSupportStatusesStepIn();
         break;
+      case 'innovationRecordUpdateStep':
+        this.onInnovationRecordUpdateStepIn();
+        break;
       case 'summaryStep':
         this.onSummaryStepIn(this.isEditMode);
         break;
@@ -438,6 +505,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       case NotificationEnum.PROGRESS_UPDATE_CREATED:
         this.setWizardSteps([this.stepsDefinition.organisationsStep, this.stepsDefinition.summaryStep]);
         break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.setWizardSteps([this.stepsDefinition.innovationRecordUpdateStep, this.stepsDefinition.summaryStep]);
     }
   }
 
@@ -490,6 +559,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     return unitsIds;
   }
 
+  getSelectedSections(): string[] {
+    return this.wizard.data.innovationRecordUpdateStep.innovationRecordSections;
+  }
+
   onSubmitWizard(): void {
     this.setPageStatus('LOADING');
 
@@ -522,6 +595,15 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           }
         };
         break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        const selectedSections = this.getSelectedSections();
+        body = {
+          eventType: NotificationEnum.INNOVATION_RECORD_UPDATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() })
+          }
+        };
     }
 
     if (this.isEditMode) {

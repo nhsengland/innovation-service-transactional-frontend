@@ -8,6 +8,7 @@ import { UrlModel } from '@app/base/models';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { InnovationSectionGroupsType } from '../pages/innovation/custom-notifications/wizard-custom-notification-new/steps/innovation-record-update-step.types';
 
 // Notify me
 export enum NotificationEnum {
@@ -41,7 +42,7 @@ export type InnovationRecordUpdated = {
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
   preConditions: {
-    sections?: InnovationSections[];
+    sections?: InnovationSectionGroupsType[];
   };
 };
 
@@ -97,7 +98,7 @@ export type InnovationRecordUpdatedDTO = {
   updatedAt: Date;
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
-  sections?: InnovationSections[];
+  sections: InnovationSections[];
 };
 
 export type DefaultResponseDTO<T extends EventType, K extends PreconditionsOptions<T>> = {
@@ -116,7 +117,7 @@ export type DefaultResponseDTO<T extends EventType, K extends PreconditionsOptio
 export type NotifyMeResponseTypes = {
   SUPPORT_UPDATED: SupportUpdatedResponseDTO;
   PROGRESS_UPDATE_CREATED: ProgressUpdateCreatedResponseDTO;
-  INNOVATION_RECORD_UPDATED: DefaultResponseDTO<'INNOVATION_RECORD_UPDATED', 'sections'>;
+  INNOVATION_RECORD_UPDATED: InnovationRecordUpdatedDTO;
   REMINDER: DefaultResponseDTO<'REMINDER', never>;
 };
 
