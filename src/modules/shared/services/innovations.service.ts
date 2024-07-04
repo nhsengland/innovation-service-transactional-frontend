@@ -49,7 +49,6 @@ import {
   InnovationSearchFullDTO,
   InnovationSearchSelectType
 } from './innovations.dtos';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -499,10 +498,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(item => {
           // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
 
-          // TODO remove translator when BE updates sections IDs
-          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(
-            translateSectionIdEnums(item.section)
-          );
+          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(item.section);
 
           return {
             ...item,
@@ -525,18 +521,14 @@ export class InnovationsService extends CoreService {
       take(1),
       map(response => {
         // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
-        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(
-          // TODO remove translator when BE updates sections IDs
-          translateSectionIdEnums(response.section)
-        );
+        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
 
         return {
           id: response.id,
           displayId: response.displayId,
           status: response.status,
           descriptions: response.descriptions,
-          // TODO remove translator when BE updates sections IDs
-          section: translateSectionIdEnums(response.section),
+          section: response.section,
           name: sectionIdentification
             ? `Update'${sectionIdentification.section.title}'`
             : 'Section no longer available',
@@ -712,8 +704,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
           let link: null | { label: string; url: string } = null;
           const sectionIdentification = i.params.sectionId
-            ? // TODO remove translator when BE updates sections IDs
-              this.stores.schema.getIrSchemaSectionIdentificationV3(translateSectionIdEnums(i.params.sectionId))
+            ? this.stores.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
             : '';
 
           // Handle sections from previous innovation record versions
@@ -759,8 +750,7 @@ export class InnovationsService extends CoreService {
                 i.params.sectionId && sectionIdentification
                   ? {
                       label: 'View section',
-                      // TODO remove translator when BE updates sections IDs
-                      url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${translateSectionIdEnums(i.params.sectionId)}`
+                      url: `/${userUrlBasePath}/innovations/${response.innovation.id}/record/sections/${i.params.sectionId}`
                     }
                   : null;
               break;

@@ -14,10 +14,6 @@ import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores
 import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
-  // getInnovationRecordSectionV3,
-  translateSectionIdEnums
-} from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
-import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
@@ -158,11 +154,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       ) || innovationSectionsWithFiles.includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
-      this.stores.innovation.getSectionInfo$(
-        this.innovation.id,
-        // TODO remove translator when BE updates sections IDs
-        translateSectionIdEnums(this.sectionSummaryData.sectionInfo.id)
-      ),
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
       !this.shouldShowDocuments
         ? of(null)
         : this.innovationDocumentsService.getDocumentList(this.innovation.id, {

@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
-import { ContextInnovationType, InnovationRecordSchemaStore } from '@modules/stores';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSectionsListType } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   INNOVATION_SECTION_STATUS,
   InnovationAllSectionsInfoDTO,
@@ -23,10 +19,6 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
-// import { getInnovationRecordSectionV3 } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
-import { IrV3TranslatePipe } from '@modules/shared/pipes/ir-v3-translate.pipe';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
-import { response } from 'express';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -143,8 +135,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
-          // TODO remove translator when BE updates sections IDs
-          s => translateSectionIdEnums(s.section.section) === curSection.value
+          s => s.section.section === curSection.value
         ) ?? {
           data: {},
           section: { section: curSection.value, status: 'NOT_STARTED', openTasksCount: 0 }
@@ -164,8 +155,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submittedBy: null,
           openTasksCount: 0
         };
-        // TODO remove translator when BE updates sections IDs
-        const section = this.stores.schema.getIrSchemaSectionV3(translateSectionIdEnums(responseItem.section.section));
+        const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;

@@ -8,11 +8,7 @@ import { FileUploadType } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import {
-  getAllSectionsList,
-  getAllSectionsListV3
-} from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export type ContextTypeType =
   | 'INNOVATION'
@@ -106,11 +102,9 @@ export class InnovationDocumentsService extends CoreService {
           let description = '';
           switch (item.context.type) {
             case 'INNOVATION_SECTION':
-              // TODO remove translator when BE updates sections IDs
               description =
-                getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
-                  s => s.value === translateSectionIdEnums(item.context.id)
-                )?.label ?? '[archived section]';
+                getAllSectionsListV3(this.stores.context?.getIrSchema()).find(s => s.value === item.context.id)
+                  ?.label ?? '[archived section]';
               break;
             case 'INNOVATION_EVIDENCE':
               description = item.context.name ?? '';
@@ -160,21 +154,19 @@ export class InnovationDocumentsService extends CoreService {
           case 'INNOVATION_SECTION':
             // TODO remove translator when BE updates sections IDs
             const section = getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
-              s => s.value === translateSectionIdEnums(item.context.id)
+              s => s.value === item.context.id
             )?.label;
             description = section ?? '[archived section]';
             descriptionUrl =
               (section &&
-                `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${translateSectionIdEnums(
-                  item.context.id
-                )}`) ??
+                `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}`) ??
               null;
             break;
           case 'INNOVATION_EVIDENCE':
             description = item.context.name ?? '';
-            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${translateSectionIdEnums(
+            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${
               item.context.id
-            )}`;
+            }`;
             break;
           case 'INNOVATION_MESSAGE':
             description = item.context.name ?? '';

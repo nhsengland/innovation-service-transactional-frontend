@@ -9,11 +9,7 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
-import {
-  getAllSectionsList,
-  getAllSectionsListV3
-} from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-info',
@@ -54,10 +50,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
         this.documentInfo = {
           ...response,
           locationLink:
-            // TODO remove translator when BE updates sections IDs
             response.context.type === 'INNOVATION_SECTION'
               ? getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
-                  item => item.value === translateSectionIdEnums(response.context.id)
+                  item => item.value === response.context.id
                 )?.label ?? '[Archived section]'
               : null
         };

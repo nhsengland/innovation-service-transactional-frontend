@@ -10,7 +10,6 @@ import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 @Component({
   selector: 'shared-pages-innovation-task-action',
@@ -61,11 +60,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
           return forkJoin([
             of(task),
             this.status === InnovationTaskStatusEnum.DONE
-              ? this.stores.innovation.getSectionInfo$(
-                  this.innovationId,
-                  // TODO remove translator when BE updates sections IDs
-                  translateSectionIdEnums(task.section)
-                )
+              ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section)
               : of(null)
           ]);
         })

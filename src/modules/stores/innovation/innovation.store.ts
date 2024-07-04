@@ -24,7 +24,6 @@ import {
 
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
-import { translateSectionIdEnums } from './innovation-record/202405/ir-v3.helper';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
@@ -60,8 +59,7 @@ export class InnovationStore extends Store<InnovationModel> {
           id: item.id,
           title: item.title,
           sections: item.sections.map(ss => {
-            // TODO remove translator when BE updates sections IDs
-            const sectionState = response.find(a => translateSectionIdEnums(a.section) === ss.id) || {
+            const sectionState = response.find(a => a.section === ss.id) || {
               status: 'UNKNOWN',
               actionStatus: '',
               submittedAt: null,

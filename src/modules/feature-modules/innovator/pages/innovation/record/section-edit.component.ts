@@ -6,11 +6,9 @@ import { FormEngineParameterModelV3 } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 
-import { InnovationRecordSchemaStore } from '@modules/stores';
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
 
@@ -79,11 +77,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     combineLatest([
       this.activatedRoute.queryParams,
-      this.stores.innovation.getSectionInfo$(
-        this.innovation.id,
-        // TODO remove translator when BE updates sections IDs
-        translateSectionIdEnums(this.sectionId)
-      )
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
         this.wizard.setAnswers(sectionInfoResponse.data).runRules();

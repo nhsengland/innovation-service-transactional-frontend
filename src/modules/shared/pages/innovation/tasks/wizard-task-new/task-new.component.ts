@@ -9,7 +9,6 @@ import { WizardTaskNewMessageStepComponent } from './steps/message-step.componen
 import { MessageStepInputType, MessageStepOutputType } from './steps/message-step.types';
 import { WizardTaskNewSectionStepComponent } from './steps/section-step.component';
 import { SectionStepInputType, SectionStepOutputType } from './steps/section-step.types';
-import { translateSectionIdEnums } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helper';
 
 @Component({
   selector: 'shared-pages-innovation-task-new',
@@ -163,8 +162,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
 
   onSubmit(): void {
     const body = {
-      // TODO remove translator when BE updates sections IDs
-      section: translateSectionIdEnums(this.wizard.data.sectionStep.section!),
+      section: this.wizard.data.sectionStep.section!,
       description: this.wizard.data.messageStep.message
     };
 
