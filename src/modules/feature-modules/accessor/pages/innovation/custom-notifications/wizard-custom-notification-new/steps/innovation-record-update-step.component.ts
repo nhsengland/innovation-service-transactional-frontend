@@ -72,6 +72,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
           })
         : (this.form.get('innovationRecordSections') as FormArray).push(new FormControl<string>('ALL'));
 
+      this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
       this.setPageStatus('READY');
     });
   }

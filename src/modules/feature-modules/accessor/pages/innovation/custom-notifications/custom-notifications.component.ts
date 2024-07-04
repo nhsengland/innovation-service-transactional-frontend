@@ -60,4 +60,21 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
       }
     });
   }
+
+  getInnovationRecordUpdateSectionsCardLabel(
+    subscription: GetNotifyMeInnovationSubscription & {
+      displaySections?: string[];
+    }
+  ): string {
+    subscription.displaySections;
+    if (
+      subscription?.displaySections &&
+      subscription?.displaySections.length === 1 &&
+      subscription?.displaySections[0] !== 'All sections'
+    ) {
+      return 'Section selected';
+    } else {
+      return 'Sections selected';
+    }
+  }
 }

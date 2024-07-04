@@ -122,6 +122,18 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
       .sort((a, b) => a.localeCompare(b));
   }
 
+  getInnovationRecordSelectedSectionLabel(): string {
+    if (
+      this.displayInnovationRecordSections &&
+      this.displayInnovationRecordSections.length === 1 &&
+      this.displayInnovationRecordSections[0] !== 'All sections'
+    ) {
+      return 'Section of innovation record';
+    } else {
+      return 'Sections of innovation record';
+    }
+  }
+
   onPreviousStep(): void {
     this.previousStepEvent.emit();
   }

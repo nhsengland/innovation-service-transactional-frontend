@@ -47,19 +47,16 @@
                   {{ orgName }}
                 </li>
               </ul>
-              <p class="nhsuk-u-font-size-14 font-color-secondary">Last edited {{ subscription.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
             </ng-container>
             <ng-container *ngIf="subscription.displaySections?.length">
-              <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold"
-                >Sections selected:</span
-              >
+              <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">{{ getInnovationRecordUpdateSectionsCardLabel(subscription) }}:</span>
               <ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">
                 <li *ngFor="let section of subscription.displaySections" class="nhsuk-u-margin-0">
                   {{ section }}
                 </li>
               </ul>
-              <p class="nhsuk-u-font-size-14 font-color-secondary">Last edited {{ subscription.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
             </ng-container>
+            <p class="nhsuk-u-font-size-14 font-color-secondary">Last edited {{ subscription.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
           </div>
         </div>
 

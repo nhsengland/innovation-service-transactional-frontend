@@ -169,7 +169,14 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
   }
 
   buildSectionsSelectedList(subscription: InnovationRecordUpdatedDTO): string {
-    let outputInnerHtml = `<span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">Sections selected:</span>`;
+    const sectionsSelectedString = this.translate(
+      this.pluralTranslatePipe.transform(
+        'features.accessor.custom_notifications.cards.sections_selected',
+        subscription.sections?.length
+      )
+    );
+
+    let outputInnerHtml = `<span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">${sectionsSelectedString}:</span>`;
 
     outputInnerHtml += '<ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">';
 
