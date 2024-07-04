@@ -1,8 +1,7 @@
-import { inject } from '@angular/core';
 import { locale } from '@app/config/translations/en';
 import {
+  DefaultResponseDTO,
   GetNotifyMeInnovationSubscription,
-  InnovationRecordUpdatedDTO,
   NotificationEnum,
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
@@ -12,8 +11,6 @@ import { InnovationStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
-  constructor(private innovationStore: InnovationStore) {}
-
   static isEmpty(value: any) {
     switch (typeof value) {
       case 'number':
@@ -123,7 +120,7 @@ export class UtilsHelper {
   }
 
   static getNotifyMeSubscriptionSectionsText(
-    subscription: InnovationRecordUpdatedDTO,
+    subscription: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>,
     innovationStore: InnovationStore
   ): string[] {
     if (subscription.sections) {

@@ -116,7 +116,7 @@ export type DefaultResponseDTO<T extends EventType, K extends PreconditionsOptio
 export type NotifyMeResponseTypes = {
   SUPPORT_UPDATED: SupportUpdatedResponseDTO;
   PROGRESS_UPDATE_CREATED: ProgressUpdateCreatedResponseDTO;
-  INNOVATION_RECORD_UPDATED: InnovationRecordUpdatedDTO;
+  INNOVATION_RECORD_UPDATED: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>;
   REMINDER: DefaultResponseDTO<'REMINDER', never>;
 };
 
