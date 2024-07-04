@@ -7,9 +7,9 @@ import { CustomValidators, FormEngineParameterModel } from '@modules/shared/form
 import { NotificationsStepInputType, NotificationsStepOutputType } from './notifications-step.types';
 import { DatePipe } from '@angular/common';
 import {
-  DefaultResponseDTO,
   GetNotifyMeInnovationSubscription,
   NotificationEnum,
+  NotifyMeResponseTypes,
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
@@ -168,9 +168,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
     return outputInnerHtml;
   }
 
-  buildSectionsSelectedList(
-    subscription: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>
-  ): string {
+  buildSectionsSelectedList(subscription: NotifyMeResponseTypes['INNOVATION_RECORD_UPDATED']): string {
     const sectionsSelectedString = this.translate(
       this.pluralTranslatePipe.transform(
         'features.accessor.custom_notifications.cards.sections_selected',

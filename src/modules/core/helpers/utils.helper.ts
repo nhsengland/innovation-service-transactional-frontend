@@ -1,8 +1,8 @@
 import { locale } from '@app/config/translations/en';
 import {
-  DefaultResponseDTO,
   GetNotifyMeInnovationSubscription,
   NotificationEnum,
+  NotifyMeResponseTypes,
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
@@ -120,7 +120,7 @@ export class UtilsHelper {
   }
 
   static getNotifyMeSubscriptionSectionsText(
-    subscription: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>,
+    subscription: NotifyMeResponseTypes['INNOVATION_RECORD_UPDATED'],
     innovationStore: InnovationStore
   ): string[] {
     if (subscription.sections) {
