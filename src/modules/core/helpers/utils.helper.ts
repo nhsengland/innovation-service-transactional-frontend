@@ -115,7 +115,7 @@ export class UtilsHelper {
     subscription: SupportUpdatedResponseDTO | ProgressUpdateCreatedResponseDTO
   ): string[] {
     return subscription.organisations
-      .flatMap(org => org.units.map(unit => (unit.isShadow ? org.name : unit.name)))
+      .flatMap(org => org.units.map(unit => unit.name))
       .sort((a, b) => a.localeCompare(b));
   }
 
