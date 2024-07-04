@@ -3,12 +3,12 @@ import { CoreComponent } from '@app/base';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import {
   InnovationRecordUpdateStepInputType,
-  InnovationRecordUpdateStepOutputType,
-  InnovationSectionGroups
+  InnovationRecordUpdateStepOutputType
 } from './innovation-record-update-step.types';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
 import { ActivatedRoute } from '@angular/router';
+import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notifications-innovation-record-update-step',
@@ -77,10 +77,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
   }
 
   prepareOutputData(): InnovationRecordUpdateStepOutputType {
-    const selectedSectionsIds = this.form.value.innovationRecordSections;
-
-    // Check if 'ALL' option if present
-    const hasSelectedAllOption = selectedSectionsIds?.includes('ALL');
+    const selectedSectionsIds = this.form.value.innovationRecordSections as InnovationSections[];
 
     return {
       innovationRecordSections: selectedSectionsIds ?? []

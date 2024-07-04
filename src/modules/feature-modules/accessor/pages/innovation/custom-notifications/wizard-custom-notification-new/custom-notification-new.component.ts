@@ -28,8 +28,7 @@ import {
 import { ObservableInput, forkJoin } from 'rxjs';
 import {
   InnovationRecordUpdateStepInputType,
-  InnovationRecordUpdateStepOutputType,
-  InnovationSectionGroupsType
+  InnovationRecordUpdateStepOutputType
 } from './steps/innovation-record-update-step.types';
 import { WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
@@ -48,7 +47,7 @@ type WizardData = {
     supportStatuses: InnovationSupportStatusEnum[];
   };
   innovationRecordUpdateStep: {
-    innovationRecordSections: InnovationSectionGroupsType[];
+    innovationRecordSections: (InnovationSections | 'ALL')[];
   };
 };
 
@@ -326,7 +325,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         break;
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         this.wizard.data.innovationRecordUpdateStep = {
-          innovationRecordSections: this.subscription.sections ? this.subscription.sections : []
+          innovationRecordSections: this.subscription.sections ? this.subscription.sections : ['ALL']
         };
     }
   }
@@ -601,7 +600,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           eventType: NotificationEnum.INNOVATION_RECORD_UPDATED,
           subscriptionType: 'INSTANTLY',
           preConditions: {
-            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() })
+            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() as InnovationSections[] })
           }
         };
     }
