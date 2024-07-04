@@ -91,7 +91,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     const organisationsNames = this.data.organisationsStep.organisations
       .map(org => {
         if (org.units.length === 1) {
-          return org.name;
+          return org.units[0].name;
         } else {
           const unitName = org.units.filter(unit => selectedUnitsIds.includes(unit.id)).flatMap(unit => unit.name);
           return unitName;
