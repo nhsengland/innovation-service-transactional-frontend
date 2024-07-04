@@ -28,6 +28,9 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     },
     supportStatusesStep: {
       supportStatuses: []
+    },
+    innovationRecordUpdateStep: {
+      innovationRecordSections: []
     }
   };
 
@@ -41,6 +44,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
   displayNotification: string = '';
   displayOrganisations?: string[];
   displaySupportStatuses?: string[];
+  displayInnovationRecordSections?: string[];
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -62,6 +66,9 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
         break;
       case NotificationEnum.PROGRESS_UPDATE_CREATED:
         this.displayOrganisations = this.getOrganisationsText();
+        break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.displayInnovationRecordSections = this.getInnovationRecordUpdateText();
         break;
     }
 
@@ -99,6 +106,32 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     return this.data.supportStatusesStep.supportStatuses.map(status =>
       this.translate('shared.catalog.innovation.support_status.' + status + '.name')
     );
+  }
+
+  getInnovationRecordUpdateText(): string[] {
+    const innovationRecordStepSections = this.data.innovationRecordUpdateStep.innovationRecordSections;
+    return innovationRecordStepSections
+      .map(s => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
+        return s === 'ALL'
+          ? 'All sections'
+          : sectionIdentification
+            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number}. ${sectionIdentification.section.title}`
+            : s;
+      })
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  getInnovationRecordSelectedSectionLabel(): string {
+    if (
+      this.displayInnovationRecordSections &&
+      this.displayInnovationRecordSections.length === 1 &&
+      this.displayInnovationRecordSections[0] !== 'All sections'
+    ) {
+      return 'Section of innovation record';
+    } else {
+      return 'Sections of innovation record';
+    }
   }
 
   onPreviousStep(): void {

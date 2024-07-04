@@ -18,6 +18,19 @@
             <a href="javascript:void(0)" (click)="onGotoStep('organisationsStep')">Change<span class="nhsuk-u-visually-hidden"> organisation </span></a>
           </dd>
         </div>
+        <div *ngIf="displayInnovationRecordSections" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">
+            {{ getInnovationRecordSelectedSectionLabel() }}
+          </dt>
+          <dd class="nhsuk-summary-list__value">
+            <div *ngFor="let section of displayInnovationRecordSections">
+              <p class="nhsuk-u-margin-bottom-2">{{ section }}</p>
+            </div>
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('innovationRecordUpdateStep')">Change<span class="nhsuk-u-visually-hidden"> sections </span></a>
+          </dd>
+        </div>
         <div *ngIf="displaySupportStatuses?.length" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Support status</dt>
           <dd class="nhsuk-summary-list__value">

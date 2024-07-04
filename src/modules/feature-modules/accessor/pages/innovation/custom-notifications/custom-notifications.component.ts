@@ -18,6 +18,7 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
   subscriptionsList: (GetNotifyMeInnovationSubscription & {
     displayTitle?: string;
     displayOrganisations?: string[];
+    displaySections?: string[];
   })[] = [];
 
   constructor(private accessorService: AccessorService) {
@@ -39,10 +40,16 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
               ? UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
               : undefined;
 
+          const displaySections =
+            subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
+              : undefined;
+
           return {
             ...subscription,
             displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
-            displayOrganisations: displayOrganisations
+            displayOrganisations: displayOrganisations,
+            displaySections: displaySections
           };
         });
         this.setPageStatus('READY');
@@ -52,5 +59,22 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
         this.setPageStatus('ERROR');
       }
     });
+  }
+
+  getInnovationRecordUpdateSectionsCardLabel(
+    subscription: GetNotifyMeInnovationSubscription & {
+      displaySections?: string[];
+    }
+  ): string {
+    subscription.displaySections;
+    if (
+      subscription?.displaySections &&
+      subscription?.displaySections.length === 1 &&
+      subscription?.displaySections[0] !== 'All sections'
+    ) {
+      return 'Section selected';
+    } else {
+      return 'Sections selected';
+    }
   }
 }

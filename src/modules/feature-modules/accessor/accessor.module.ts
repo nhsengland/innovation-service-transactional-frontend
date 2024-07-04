@@ -39,6 +39,7 @@ import { WizardInnovationCustomNotificationDeleteSummaryStepComponent } from './
 import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
+import { WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/innovation-record-update-step.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AccessorRoutingModule],
@@ -73,6 +74,7 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     WizardInnovationCustomNotificationDeleteInnovationStepComponent,
     WizardInnovationCustomNotificationDeleteNotificationsStepComponent,
     WizardInnovationCustomNotificationDeleteSummaryStepComponent,
+    WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent,
     // // Training.
     TrainingAndResourcesComponent
   ],
