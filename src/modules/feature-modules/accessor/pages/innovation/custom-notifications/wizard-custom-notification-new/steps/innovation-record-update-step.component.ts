@@ -7,7 +7,6 @@ import {
 } from './innovation-record-update-step.types';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
-import { ActivatedRoute } from '@angular/router';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
@@ -41,7 +40,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
 
   sectionsItems: Required<FormEngineParameterModel>['items'] = [];
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor() {
     super();
 
     this.setBackLink('Go back', this.onPreviousStep.bind(this));

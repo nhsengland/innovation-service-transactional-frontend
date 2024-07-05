@@ -19,9 +19,7 @@
           </dd>
         </div>
         <div *ngIf="displayInnovationRecordSections" class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key">
-            {{ getInnovationRecordSelectedSectionLabel() }}
-          </dt>
+          <dt class="nhsuk-summary-list__key">Sections of innovation record</dt>
           <dd class="nhsuk-summary-list__value">
             <div *ngFor="let section of displayInnovationRecordSections">
               <p class="nhsuk-u-margin-bottom-2">{{ section }}</p>

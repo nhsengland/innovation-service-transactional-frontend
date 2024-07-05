@@ -72,9 +72,9 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
       subscription?.displaySections.length === 1 &&
       subscription?.displaySections[0] !== 'All sections'
     ) {
-      return 'Section selected';
+      return 'Section';
     } else {
-      return 'Sections selected';
+      return 'Sections';
     }
   }
 }
