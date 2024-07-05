@@ -91,7 +91,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
     this.resetAlert();
     if (!this.form.valid) {
       this.setAlertError('', {
-        itemsList: [{ title: this.errorMessage, fieldId: 'innovationRecordsections' }],
+        itemsList: [{ title: this.errorMessage, fieldId: 'innovationRecordSections' }],
         width: '2.thirds'
       });
 
