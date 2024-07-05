@@ -9,7 +9,8 @@ export enum NotificationCategoryTypeEnum {
   ORGANISATION_SUGGESTIONS = 'ORGANISATION_SUGGESTIONS', // QA, Innovator
   ADMIN = 'ADMIN', // QA, A, Innovator
   ACCOUNT = 'ACCOUNT', // Innovator
-  AUTOMATIC = 'AUTOMATIC' // QA , A, Innovator
+  AUTOMATIC = 'AUTOMATIC', // QA , A, Innovator
+  NOTIFY_ME = 'NOTIFY_ME' // QA, A
 }
 
 export const QANotificationCategories = [
@@ -19,7 +20,8 @@ export const QANotificationCategories = [
   NotificationCategoryTypeEnum.TASK,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.ADMIN,
-  NotificationCategoryTypeEnum.AUTOMATIC
+  NotificationCategoryTypeEnum.AUTOMATIC,
+  NotificationCategoryTypeEnum.NOTIFY_ME
 ];
 
 export const ANotificationCategories = [
@@ -28,7 +30,8 @@ export const ANotificationCategories = [
   NotificationCategoryTypeEnum.TASK,
   NotificationCategoryTypeEnum.INNOVATION_MANAGEMENT,
   NotificationCategoryTypeEnum.ADMIN,
-  NotificationCategoryTypeEnum.AUTOMATIC
+  NotificationCategoryTypeEnum.AUTOMATIC,
+  NotificationCategoryTypeEnum.NOTIFY_ME
 ];
 
 export const NANotificationCategories = [
@@ -121,5 +124,11 @@ export enum NotificationContextDetailEnum {
   AU06_ACCESSOR_IDLE_WAITING = 'AU06_ACCESSOR_IDLE_WAITING',
   AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER = 'AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER',
   AU09_TRANSFER_EXPIRED = 'AU09_TRANSFER_EXPIRED',
-  AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS = 'AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS'
+  AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS = 'AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS',
+  // NOTIFY ME
+  SUPPORT_UPDATED = 'SUPPORT_UPDATED',
+  PROGRESS_UPDATE_CREATED = 'PROGRESS_UPDATE_CREATED',
+  INNOVATION_RECORD_UPDATED = 'INNOVATION_RECORD_UPDATED',
+  DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
+  REMINDER = 'REMINDER'
 }

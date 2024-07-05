@@ -1,5 +1,13 @@
 import { locale } from '@app/config/translations/en';
+import {
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum,
+  NotifyMeResponseTypes,
+  ProgressUpdateCreatedResponseDTO,
+  SupportUpdatedResponseDTO
+} from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
+import { InnovationStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
@@ -80,5 +88,50 @@ export class UtilsHelper {
       .filter(org => org.organisationUnits.length > 0);
 
     return organisationsToSuggest;
+  }
+
+  static getNotifyMeSubscriptionTitleText(subscription: GetNotifyMeInnovationSubscription): string {
+    switch (subscription.eventType) {
+      case NotificationEnum.SUPPORT_UPDATED:
+        const translatedStatuses = subscription.status
+          .map(status => locale.data.shared.catalog.innovation.support_status[status].name.toLowerCase())
+          .sort((a, b) => a.localeCompare(b));
+
+        return `Notify me when an organisation updates their support status to ${
+          translatedStatuses.length === 1
+            ? translatedStatuses[0]
+            : `${translatedStatuses.slice(0, -1).join(', ')} or ${translatedStatuses.at(-1)}`
+        }`;
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        return 'Notify me when an organisation adds a progress update to the support summary';
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        return 'Notify me when the innovator updates their innovation record';
+      default:
+        return '';
+    }
+  }
+
+  static getNotifyMeSubscriptionOrganisationsText(
+    subscription: SupportUpdatedResponseDTO | ProgressUpdateCreatedResponseDTO
+  ): string[] {
+    return subscription.organisations
+      .flatMap(org => org.units.map(unit => unit.name))
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  static getNotifyMeSubscriptionSectionsText(
+    subscription: NotifyMeResponseTypes['INNOVATION_RECORD_UPDATED'],
+    innovationStore: InnovationStore
+  ): string[] {
+    if (subscription.sections) {
+      return subscription.sections
+        .map(s => {
+          const sectionIdentification = innovationStore.getInnovationRecordSectionIdentification(s);
+          return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
+        })
+        .sort((a, b) => a.localeCompare(b));
+    } else {
+      return ['All sections'];
+    }
   }
 }

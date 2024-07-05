@@ -171,7 +171,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER,
           NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE,
           NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
-          NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A
+          NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A,
+          NotificationContextDetailEnum.REMINDER
         ]
       });
 

@@ -172,6 +172,16 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           ).length;
         }
 
+        // Throw notification read dismiss.
+        if (this.isAccessorType) {
+          this.stores.context.dismissNotification(this.innovation.id, {
+            contextDetails: [
+              NotificationContextDetailEnum.SUPPORT_UPDATED,
+              NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED
+            ]
+          });
+        }
+
         this.setPageStatus('READY');
       },
       error: () => {

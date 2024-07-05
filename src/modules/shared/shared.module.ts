@@ -235,7 +235,10 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     TermsOfUseService,
     StatisticsService,
     UsersService,
-    FileUploadService
+    FileUploadService,
+
+    // Pipes.
+    PluralTranslatePipe
   ],
   exports: [
     CommonModule,

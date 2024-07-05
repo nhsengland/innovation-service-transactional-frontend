@@ -65,6 +65,11 @@ export const locale = {
         singular: 'document',
         plural: 'documents'
       },
+      notification: {
+        none: 'notification',
+        singular: 'notification',
+        plural: 'notifications'
+      },
       yes: 'yes'
     },
 
@@ -139,6 +144,23 @@ export const locale = {
             none: `0 users associated to this organisation unit`,
             plural: `{{ count }} users associated to this organisation unit`,
             singular: '1 user associated to this organisation unit'
+          }
+        }
+      },
+
+      accessor: {
+        custom_notifications: {
+          cards: {
+            organisations_selected: {
+              none: 'Organisations selected',
+              plural: 'Organisations selected',
+              singular: 'Organisation selected'
+            },
+            sections_selected: {
+              none: 'Sections',
+              plural: 'Sections',
+              singular: 'Section'
+            }
           }
         }
       }
@@ -443,6 +465,22 @@ export const locale = {
                 title: 'Tasks',
                 description: 'Get notified when an innovator completes or declines a task you have assigned to them.'
               }
+            },
+
+            NOTIFY_ME: {
+              SHARED: {
+                title: 'Custom notifications',
+                description:
+                  'You can create custom notifications to alert you about events or updates related to an innovation.'
+              }
+            },
+
+            USER_RESEARCH_SURVEYS: {
+              INNOVATOR: {
+                title: 'User research and surveys ',
+                description:
+                  'Receive invitations to take part in user research and surveys for the NHS Innovation Service.'
+              }
             }
           },
 
@@ -474,8 +512,8 @@ export const locale = {
 
             INNOVATION_MANAGEMENT: {
               INNOVATOR: { title: 'Manage innovation' },
-              QUALIFYING_ACCESSOR: { title: 'Withdrawals and export requests' },
-              ACCESSOR: { title: 'Withdrawals and export requests' },
+              QUALIFYING_ACCESSOR: { title: 'Archived innovations and export requests' },
+              ACCESSOR: { title: 'Archived innovations and export requests' },
               ASSESSMENT: { title: 'Innovation withdrawals' }
             },
 
@@ -519,6 +557,10 @@ export const locale = {
               QUALIFYING_ACCESSOR: { title: 'System reminders' },
               ACCESSOR: { title: 'System reminders' },
               ASSESSMENT: { title: 'System reminders' }
+            },
+            NOTIFY_ME: {
+              QUALIFYING_ACCESSOR: { title: 'Custom notifications' },
+              ACCESSOR: { title: 'Custom notifications' }
             }
           },
           notification_context_details: {
@@ -761,6 +803,27 @@ export const locale = {
             },
             AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
               title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
+            },
+            // NOTIFY ME
+            SUPPORT_UPDATED: {
+              title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
+              link: `View support summary.`
+            },
+            PROGRESS_UPDATE_CREATED: {
+              title: `{{ organisation }} has added a progress update to the support summary for innovation {{ innovation }}.`,
+              link: `View support summary.`
+            },
+            INNOVATION_RECORD_UPDATED: {
+              title: `Section "{{ sectionLabel }}" has been updated on innovation {{ innovation }}.`,
+              link: `View this section of the innovation record.`
+            },
+            DOCUMENT_UPLOADED: {
+              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}`,
+              link: `View documents.`
+            },
+            REMINDER: {
+              title: `Reminder to check innovation {{ innovation }} for this reason: {{ message }}`,
+              link: `View innovation.`
             }
           },
           section_status: {
