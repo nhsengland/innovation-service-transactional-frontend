@@ -7,8 +7,8 @@ import {
 } from './innovation-record-update-step.types';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
-import { ActivatedRoute } from '@angular/router';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notifications-innovation-record-update-step',
@@ -40,7 +40,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
 
   sectionsItems: Required<FormEngineParameterModel>['items'] = [];
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor() {
     super();
 
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
@@ -48,33 +48,31 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
 
   ngOnInit(): void {
     // Add each section as an option to select on the form
-    this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId).subscribe(response => {
-      const subSections = response.flatMap(section => section.sections);
+    const subSections = getInnovationRecordConfig().flatMap(section => section.sections.flatMap(ss => ss.id));
 
-      this.sectionsItems.push(
-        { value: 'Select 1 or more sections', label: 'HEADING' },
+    this.sectionsItems.push(
+      { value: 'Select 1 or more sections', label: 'HEADING' },
 
-        ...subSections.map(s => {
-          const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s.id);
-          return {
-            value: s.id,
-            label: `${sectionIdentification?.group.number}.${sectionIdentification?.section.number}. ${sectionIdentification?.section.title}`
-          };
-        }),
-        { value: 'SEPARATOR', label: 'SEPARATOR' },
-        { value: 'ALL', label: 'All sections', exclusive: true }
-      );
+      ...subSections.map(s => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
+        return {
+          value: s,
+          label: `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`
+        };
+      }),
+      { value: 'SEPARATOR', label: 'SEPARATOR' },
+      { value: 'ALL', label: 'All sections', exclusive: true }
+    );
 
-      // Select the sections previously selected by the user
-      this.data.selectedInnovationRecordSections
-        ? this.data.selectedInnovationRecordSections.forEach(section => {
-            (this.form.get('innovationRecordSections') as FormArray).push(new FormControl<string>(section));
-          })
-        : (this.form.get('innovationRecordSections') as FormArray).push(new FormControl<string>('ALL'));
+    // Select the sections previously selected by the user
+    this.data.selectedInnovationRecordSections
+      ? this.data.selectedInnovationRecordSections.forEach(section => {
+          (this.form.get('innovationRecordSections') as FormArray).push(new FormControl<string>(section));
+        })
+      : (this.form.get('innovationRecordSections') as FormArray).push(new FormControl<string>('ALL'));
 
-      this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
-      this.setPageStatus('READY');
-    });
+    this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
+    this.setPageStatus('READY');
   }
 
   prepareOutputData(): InnovationRecordUpdateStepOutputType {
@@ -93,7 +91,7 @@ export class WizardInnovationCustomNotificationInnovationRecordUpdateStepCompone
     this.resetAlert();
     if (!this.form.valid) {
       this.setAlertError('', {
-        itemsList: [{ title: this.errorMessage, fieldId: 'innovationRecordsections' }],
+        itemsList: [{ title: this.errorMessage, fieldId: 'innovationRecordSections' }],
         width: '2.thirds'
       });
 

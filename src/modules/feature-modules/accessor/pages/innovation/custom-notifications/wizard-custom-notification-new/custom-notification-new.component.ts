@@ -154,7 +154,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           selectedInnovationRecordSections: []
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data),
+          previousStepEvent: data => this.onPreviousStep(data, this.onNotificationStepIn),
           nextStepEvent: data => {
             this.onNextStep(data, this.onInnovationRecordUpdateStepOut);
             this.onSummaryStepIn();

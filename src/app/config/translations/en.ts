@@ -157,9 +157,9 @@ export const locale = {
               singular: 'Organisation selected'
             },
             sections_selected: {
-              none: 'Sections selected',
-              plural: 'Sections selected',
-              singular: 'Section selected'
+              none: 'Sections',
+              plural: 'Sections',
+              singular: 'Section'
             }
           }
         }

@@ -116,22 +116,10 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
         return s === 'ALL'
           ? 'All sections'
           : sectionIdentification
-            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number}. ${sectionIdentification.section.title}`
+            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number} ${sectionIdentification.section.title}`
             : s;
       })
       .sort((a, b) => a.localeCompare(b));
-  }
-
-  getInnovationRecordSelectedSectionLabel(): string {
-    if (
-      this.displayInnovationRecordSections &&
-      this.displayInnovationRecordSections.length === 1 &&
-      this.displayInnovationRecordSections[0] !== 'All sections'
-    ) {
-      return 'Section of innovation record';
-    } else {
-      return 'Sections of innovation record';
-    }
   }
 
   onPreviousStep(): void {

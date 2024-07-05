@@ -3,7 +3,11 @@ import { CoreComponent } from '@app/base';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { SummaryStepInputType } from './summary-step.types';
 import { UtilsHelper } from '@app/base/helpers';
-import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
+import {
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum,
+  NotifyMeResponseTypes
+} from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-delete-summary-step',
@@ -44,7 +48,8 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
 
           const displaySections =
             subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
-              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription,this.stores.innovation) : undefined
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
+              : undefined;
 
           return {
             ...subscription,
@@ -58,6 +63,20 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
 
     this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
     this.setPageStatus('READY');
+  }
+
+  getInnovationRecordSelectedSectionLabel(
+    subscription: GetNotifyMeInnovationSubscription & { displaySections?: string[] }
+  ): string {
+    if (
+      subscription.displaySections &&
+      subscription.displaySections.length === 1 &&
+      subscription.displaySections[0] !== 'All sections'
+    ) {
+      return 'Section';
+    } else {
+      return 'Sections';
+    }
   }
 
   onPreviousStep(): void {
