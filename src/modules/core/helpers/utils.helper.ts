@@ -127,7 +127,7 @@ export class UtilsHelper {
       return subscription.sections
         .map(s => {
           const sectionIdentification = innovationStore.getInnovationRecordSectionIdentification(s);
-          return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number}. ${sectionIdentification?.section.title}`;
+          return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
         })
         .sort((a, b) => a.localeCompare(b));
     } else {

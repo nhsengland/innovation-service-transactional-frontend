@@ -116,7 +116,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
         return s === 'ALL'
           ? 'All sections'
           : sectionIdentification
-            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number}. ${sectionIdentification.section.title}`
+            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number} ${sectionIdentification.section.title}`
             : s;
       })
       .sort((a, b) => a.localeCompare(b));
