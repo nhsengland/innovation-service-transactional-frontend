@@ -34,7 +34,7 @@ import {
   InnovationRecordUpdateStepInputType,
   InnovationRecordUpdateStepOutputType
 } from './steps/innovation-record-update-step.types';
-import { WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
+import { WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 type WizardData = {
@@ -211,7 +211,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       >({
         id: 'innovationRecordUpdateStep',
         title: 'Which section of the innovation record do you want to be notified about?',
-        component: WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent,
+        component: WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent,
         data: {
           innovationRecordSections: [],
           selectedInnovationRecordSections: []

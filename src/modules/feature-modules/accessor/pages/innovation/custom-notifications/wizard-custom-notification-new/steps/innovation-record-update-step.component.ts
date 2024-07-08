@@ -11,10 +11,10 @@ import { InnovationSections } from '@modules/stores/innovation/innovation-record
 import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notifications-innovation-record-update-step',
+  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-innovation-record-update-step',
   templateUrl: './innovation-record-update-step.component.html'
 })
-export class WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent
+export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent
   extends CoreComponent
   implements WizardStepComponentType<InnovationRecordUpdateStepInputType, InnovationRecordUpdateStepOutputType>, OnInit
 {
