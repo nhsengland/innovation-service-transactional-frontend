@@ -155,6 +155,11 @@ export const locale = {
               none: 'Organisations selected',
               plural: 'Organisations selected',
               singular: 'Organisation selected'
+            },
+            sections_selected: {
+              none: 'Sections',
+              plural: 'Sections',
+              singular: 'Section'
             }
           }
         }
@@ -467,6 +472,14 @@ export const locale = {
                 title: 'Custom notifications',
                 description:
                   'You can create custom notifications to alert you about events or updates related to an innovation.'
+              }
+            },
+
+            USER_RESEARCH_SURVEYS: {
+              INNOVATOR: {
+                title: 'User research and surveys ',
+                description:
+                  'Receive invitations to take part in user research and surveys for the NHS Innovation Service.'
               }
             }
           },

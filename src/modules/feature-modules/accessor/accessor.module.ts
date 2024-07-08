@@ -37,6 +37,7 @@ import { WizardInnovationCustomNotificationDeleteNotificationsStepComponent } fr
 import { WizardInnovationCustomNotificationDeleteSummaryStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/steps/summary-step.component';
 import { WizardInnovationCustomNotificationNewReminderStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/reminder-step.component';
 import { WizardInnovationCustomNotificationNewDateStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/date-step.component';
+import { WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/innovation-record-update-step.component';
 // Services.
 import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
@@ -70,13 +71,14 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
     WizardInnovationCustomNotificationNewOrganisationsStepComponent,
     WizardInnovationCustomNotificationNewUnitsStepComponent,
     WizardInnovationCustomNotificationNewSupportStatusesStepComponent,
+    WizardInnovationCustomNotificationInnovationRecordUpdateStepComponent,
+    WizardInnovationCustomNotificationNewReminderStepComponent,
+    WizardInnovationCustomNotificationNewDateStepComponent,
     WizardInnovationCustomNotificationNewSummaryStepComponent,
     WizardInnovationCustomNotificationDeleteComponent,
     WizardInnovationCustomNotificationDeleteInnovationStepComponent,
     WizardInnovationCustomNotificationDeleteNotificationsStepComponent,
     WizardInnovationCustomNotificationDeleteSummaryStepComponent,
-    WizardInnovationCustomNotificationNewReminderStepComponent,
-    WizardInnovationCustomNotificationNewDateStepComponent,
     // // Training.
     TrainingAndResourcesComponent
   ],

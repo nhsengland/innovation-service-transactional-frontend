@@ -30,6 +30,9 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     supportStatusesStep: {
       supportStatuses: []
     },
+    innovationRecordUpdateStep: {
+      innovationRecordSections: []
+    },
     reminderStep: {
       reminder: ''
     },
@@ -50,6 +53,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
   displayNotification: string = '';
   displayOrganisations?: string[];
   displaySupportStatuses?: string[];
+  displayInnovationRecordSections?: string[];
   displayDate?: string;
 
   constructor(private activatedRoute: ActivatedRoute) {
@@ -73,12 +77,16 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
       case NotificationEnum.PROGRESS_UPDATE_CREATED:
         this.displayOrganisations = this.getOrganisationsText();
         break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.displayInnovationRecordSections = this.getInnovationRecordUpdateText();
+        break;
       case NotificationEnum.REMINDER:
         this.displayDate = DatesHelper.getDateString(
           this.data.dateStep.year,
           this.data.dateStep.month,
           this.data.dateStep.day
         );
+        break;
     }
 
     this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
@@ -100,7 +108,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     const organisationsNames = this.data.organisationsStep.organisations
       .map(org => {
         if (org.units.length === 1) {
-          return org.name;
+          return org.units[0].name;
         } else {
           const unitName = org.units.filter(unit => selectedUnitsIds.includes(unit.id)).flatMap(unit => unit.name);
           return unitName;
@@ -115,6 +123,20 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     return this.data.supportStatusesStep.supportStatuses.map(status =>
       this.translate('shared.catalog.innovation.support_status.' + status + '.name')
     );
+  }
+
+  getInnovationRecordUpdateText(): string[] {
+    const innovationRecordStepSections = this.data.innovationRecordUpdateStep.innovationRecordSections;
+    return innovationRecordStepSections
+      .map(s => {
+        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
+        return s === 'ALL'
+          ? 'All sections'
+          : sectionIdentification
+            ? `${sectionIdentification.group.number}.${sectionIdentification.section.number} ${sectionIdentification.section.title}`
+            : s;
+      })
+      .sort((a, b) => a.localeCompare(b));
   }
 
   onPreviousStep(): void {

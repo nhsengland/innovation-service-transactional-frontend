@@ -4,7 +4,10 @@ import { CoreComponent } from '@app/base';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { SummaryStepInputType } from './summary-step.types';
 import { UtilsHelper } from '@app/base/helpers';
-import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
+import {
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum
+} from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-delete-summary-step',
@@ -43,6 +46,11 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
               ? UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
               : undefined;
 
+          const displaySections =
+            subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
+              : undefined;
+
           const displayReminder =
             subscription.eventType === NotificationEnum.REMINDER
               ? `${UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)} ${subscription.customMessage}`
@@ -52,6 +60,7 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
             ...subscription,
             displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
             displayOrganisations: displayOrganisations,
+            displaySections: displaySections,
             displayReminder: displayReminder
           };
         })
@@ -60,6 +69,20 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
 
     this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
     this.setPageStatus('READY');
+  }
+
+  getInnovationRecordSelectedSectionLabel(
+    subscription: GetNotifyMeInnovationSubscription & { displaySections?: string[] }
+  ): string {
+    if (
+      subscription.displaySections &&
+      subscription.displaySections.length === 1 &&
+      subscription.displaySections[0] !== 'All sections'
+    ) {
+      return 'Section';
+    } else {
+      return 'Sections';
+    }
   }
 
   onPreviousStep(): void {

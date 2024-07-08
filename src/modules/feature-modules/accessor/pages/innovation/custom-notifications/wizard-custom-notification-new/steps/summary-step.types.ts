@@ -1,4 +1,5 @@
 import { DateStepOutputType } from './date-step.types';
+import { InnovationRecordUpdateStepOutputType } from './innovation-record-update-step.types';
 import { NotificationStepOutputType } from './notification-step.types';
 import { OrganisationsStepOutputType } from './organisations-step.types';
 import { ReminderStepOutputType } from './reminder-step.types';
@@ -11,6 +12,7 @@ export type SummaryStepInputType = {
   organisationsStep: OrganisationsStepOutputType;
   unitsStep: UnitsStepOutputType;
   supportStatusesStep: SupportStatusesStepOutputType;
+  innovationRecordUpdateStep: InnovationRecordUpdateStepOutputType;
   reminderStep: ReminderStepOutputType;
   dateStep: DateStepOutputType;
 };

@@ -7,6 +7,7 @@ export type NotifyMeInnovationWithSubscriptions = {
   subscriptions?: (GetNotifyMeInnovationSubscription & {
     displayTitle?: string;
     displayOrganisations?: string[];
+    displaySections?: string[];
     displayReminder?: string;
   })[];
 };
