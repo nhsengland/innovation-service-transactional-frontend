@@ -36,6 +36,7 @@ import {
 } from './steps/innovation-record-update-step.types';
 import { WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { DatesHelper } from '@app/base/helpers';
 
 type WizardData = {
   notificationStep: {
@@ -714,7 +715,11 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         body = {
           eventType: NotificationEnum.REMINDER,
           subscriptionType: 'SCHEDULED',
-          date: `${this.wizard.data.dateStep.year}-${this.wizard.data.dateStep.month}-${this.wizard.data.dateStep.day}`,
+          date: DatesHelper.getDateString(
+            this.wizard.data.dateStep.year,
+            this.wizard.data.dateStep.month,
+            this.wizard.data.dateStep.day
+          ),
           customMessage: this.wizard.data.reminderStep.reminder
         };
         break;
