@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
@@ -5,8 +6,7 @@ import { SummaryStepInputType } from './summary-step.types';
 import { UtilsHelper } from '@app/base/helpers';
 import {
   GetNotifyMeInnovationSubscription,
-  NotificationEnum,
-  NotifyMeResponseTypes
+  NotificationEnum
 } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
   @Output() submitEvent = new EventEmitter<WizardStepEventType<null>>();
   @Output() goToStepEvent = new EventEmitter<string>();
 
-  constructor() {
+  constructor(private datePipe: DatePipe) {
     super();
 
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
@@ -51,11 +51,17 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
               ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
               : undefined;
 
+          const displayReminder =
+            subscription.eventType === NotificationEnum.REMINDER
+              ? `${UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)} ${subscription.customMessage}`
+              : undefined;
+
           return {
             ...subscription,
             displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
             displayOrganisations: displayOrganisations,
-            displaySections: displaySections
+            displaySections: displaySections,
+            displayReminder: displayReminder
           };
         })
       };

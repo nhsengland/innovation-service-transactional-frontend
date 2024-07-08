@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
@@ -19,9 +20,13 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
     displayTitle?: string;
     displayOrganisations?: string[];
     displaySections?: string[];
+    displayReminder?: string;
   })[] = [];
 
-  constructor(private accessorService: AccessorService) {
+  constructor(
+    private accessorService: AccessorService,
+    private datePipe: DatePipe
+  ) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -45,11 +50,17 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
               ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
               : undefined;
 
+          const displayReminder =
+            subscription.eventType === NotificationEnum.REMINDER
+              ? UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)
+              : undefined;
+
           return {
             ...subscription,
             displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
             displayOrganisations: displayOrganisations,
-            displaySections: displaySections
+            displaySections: displaySections,
+            displayReminder: displayReminder
           };
         });
         this.setPageStatus('READY');

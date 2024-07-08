@@ -40,6 +40,24 @@
             <a href="javascript:void(0)" (click)="onGotoStep('supportStatusesStep')">Change<span class="nhsuk-u-visually-hidden"> support status </span></a>
           </dd>
         </div>
+        <div *ngIf="data.reminderStep.reminder" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Notification</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.reminderStep.reminder }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('reminderStep')">Change<span class="nhsuk-u-visually-hidden"> notification </span></a>
+          </dd>
+        </div>
+        <div *ngIf="displayDate" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Date to be sent</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ displayDate | date: ("app.date_formats.long_date" | translate) }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date </span></a>
+          </dd>
+        </div>
       </dl>
 
       <button *ngIf="!data.displayEditMode" type="button" class="nhsuk-button" (click)="onSubmit()">Confirm and save notification</button>

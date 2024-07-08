@@ -8,7 +8,7 @@
           <dd class="nhsuk-summary-list__value">
             <ng-container *ngFor="let subscription of innovation.subscriptions; last as lastItem">
               <div [ngClass]="{ 'nhsuk-u-margin-bottom-5': !lastItem }">
-                <span class="d-block nhsuk-u-margin-bottom-3">
+                <span *ngIf="subscription.eventType !== 'REMINDER'" class="d-block nhsuk-u-margin-bottom-3">
                   {{ subscription.displayTitle }}
                 </span>
                 <ng-container *ngIf="subscription.displayOrganisations?.length">
@@ -28,6 +28,9 @@
                       {{ section }}
                     </li>
                   </ul>
+                </ng-container>
+                <ng-container *ngIf="subscription.displayReminder">
+                  <p>{{ subscription.displayReminder }}</p>
                 </ng-container>
               </div>
             </ng-container>

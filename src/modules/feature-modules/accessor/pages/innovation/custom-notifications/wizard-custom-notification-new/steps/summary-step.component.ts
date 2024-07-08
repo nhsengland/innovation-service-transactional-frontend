@@ -5,6 +5,7 @@ import { SummaryStepInputType } from './summary-step.types';
 import { ActivatedRoute } from '@angular/router';
 import { CategoryEnum, NOTIFICATION_ITEMS } from './notification-step.types';
 import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
+import { DatesHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-summary-step',
@@ -31,6 +32,14 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     },
     innovationRecordUpdateStep: {
       innovationRecordSections: []
+    },
+    reminderStep: {
+      reminder: ''
+    },
+    dateStep: {
+      day: '',
+      month: '',
+      year: ''
     }
   };
 
@@ -45,6 +54,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
   displayOrganisations?: string[];
   displaySupportStatuses?: string[];
   displayInnovationRecordSections?: string[];
+  displayDate?: string;
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -70,6 +80,13 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         this.displayInnovationRecordSections = this.getInnovationRecordUpdateText();
         break;
+      case NotificationEnum.REMINDER:
+        this.displayDate = DatesHelper.getDateString(
+          this.data.dateStep.year,
+          this.data.dateStep.month,
+          this.data.dateStep.day
+        );
+        break;
     }
 
     this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
@@ -83,7 +100,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
 
     return notification.category === CategoryEnum.NOTIFIY_ME_WHEN
       ? 'When ' + notification.label
-      : 'Remind me ' + notification.label;
+      : 'On a date in future';
   }
 
   getOrganisationsText(): string[] {

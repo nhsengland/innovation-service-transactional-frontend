@@ -47,9 +47,9 @@ export class WizardInnovationCustomNotificationNewNotificationStepComponent
     // Add each notification as an option to select on the form
     this.notificationItems = [
       { value: 'Notify me when:', label: 'HEADING' },
-      ...this.filterAndMapNotifications(CategoryEnum.NOTIFIY_ME_WHEN)
-      /*       { value: 'Remind me:', label: 'HEADING' },
-      ...this.filterAndMapNotifications(CategoryEnum.REMIND_ME) */
+      ...this.filterAndMapNotifications(CategoryEnum.NOTIFIY_ME_WHEN),
+      { value: 'Remind me:', label: 'HEADING' },
+      ...this.filterAndMapNotifications(CategoryEnum.REMIND_ME)
     ];
 
     // Select the notification previously selected by the user

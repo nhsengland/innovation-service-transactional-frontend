@@ -1,8 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <p>You can create custom notifications for this innovation to alert you about updates.</p>
-      <!-- <p>You can create custom notifications for this innovation to alert you about updates or remind you to review it on a date in future.</p> -->
+      <p>You can create custom notifications for this innovation to alert you about updates or remind you to review it on a date in future.</p>
 
       <details [attr.open]="subscriptionsList.length === 0 ? '' : null" class="nhsuk-details nhsuk-u-margin-bottom-7">
         <summary class="nhsuk-details__summary">
@@ -16,12 +15,10 @@
             <li>an innovator updates their innovation record</li>
             <!--  <li>a new document is uploaded</li> -->
           </ul>
-          <!--
           <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">Remind me:</p>
           <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-2">
             <li>about this innovation on a date in future. For example, when a new funding round is released</li>
           </ul>
-          -->
         </div>
       </details>
 
@@ -55,6 +52,10 @@
                   {{ section }}
                 </li>
               </ul>
+            </ng-container>
+            <ng-container *ngIf="subscription.eventType === 'REMINDER'">
+              <p class="nhsuk-u-margin-bottom-1">{{ subscription.displayReminder }}</p>
+              <p>{{ subscription.customMessage }}</p>
             </ng-container>
             <p class="nhsuk-u-font-size-14 font-color-secondary">Last edited {{ subscription.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
           </div>

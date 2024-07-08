@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { locale } from '@app/config/translations/en';
 import {
   GetNotifyMeInnovationSubscription,
@@ -106,6 +107,8 @@ export class UtilsHelper {
         return 'Notify me when an organisation adds a progress update to the support summary';
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         return 'Notify me when the innovator updates their innovation record';
+      case NotificationEnum.REMINDER:
+        return 'Notify me on a date in future';
       default:
         return '';
     }
@@ -120,7 +123,7 @@ export class UtilsHelper {
   }
 
   static getNotifyMeSubscriptionSectionsText(
-    subscription: NotifyMeResponseTypes['INNOVATION_RECORD_UPDATED'],
+    subscription: NotifyMeResponseTypes[NotificationEnum.INNOVATION_RECORD_UPDATED],
     innovationStore: InnovationStore
   ): string[] {
     if (subscription.sections) {
@@ -133,5 +136,12 @@ export class UtilsHelper {
     } else {
       return ['All sections'];
     }
+  }
+
+  static getNotifyMeSubscriptionReminderText(
+    subscription: NotifyMeResponseTypes[NotificationEnum.REMINDER],
+    datePipe: DatePipe
+  ): string {
+    return `Notify me on ${datePipe.transform(subscription.date, locale.data.app.date_formats.long_date)} for this reason:`;
   }
 }
