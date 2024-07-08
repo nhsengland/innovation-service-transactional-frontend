@@ -182,6 +182,48 @@ export class CustomValidators {
     };
   }
 
+  static requiredDateInputValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      if (control.value.day === '' && control.value.month === '' && control.value.year === '') {
+        return { requiredDateInput: message ? { message } : true };
+      }
+      return null;
+    };
+  }
+
+  static dateInputFormatValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      const inputDateString = DatesHelper.getDateString(control.value.year, control.value.month, control.value.day);
+      return DatesHelper.parseIntoValidFormat(inputDateString) !== null
+        ? null
+        : { dateInputFormat: message ? { message } : true };
+    };
+  }
+
+  static futureDateInputValidator(message?: string | null): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const inputDate = new Date(`${control.value.year}-${control.value.month}-${control.value.day}`);
+      inputDate.setHours(0, 0, 0, 0);
+
+      if (inputDate <= today) {
+        return { futureDateInput: message ? { message } : true };
+      }
+      return null;
+    };
+  }
+
   // May be used in the future.
   // static passwordFieldsMatchValidator(formGroup: FormGroup): ValidationErrors | null {
   //   return formGroup.controls.password.value === formGroup.controls.confirmPassword.value ? null : { passwordFieldsMatch: true };

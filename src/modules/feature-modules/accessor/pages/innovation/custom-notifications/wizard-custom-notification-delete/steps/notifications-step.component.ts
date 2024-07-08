@@ -62,6 +62,12 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
               label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildOrganisationsSelectedList(subscription)}`,
               description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
             };
+          case NotificationEnum.REMINDER:
+            return {
+              value: subscription.id,
+              label: `${UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)} ${subscription.customMessage}`,
+              description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
+            };
           default:
             return {
               value: '',

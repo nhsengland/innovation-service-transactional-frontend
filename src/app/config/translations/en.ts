@@ -809,7 +809,7 @@ export const locale = {
               link: `View documents.`
             },
             REMINDER: {
-              title: `Reminder to check innovation {{ innovation }} for this reason: {{ message }}`,
+              title: `Reminder to check innovation {{ innovation }} for this reason: {{ reason }}`,
               link: `View innovation.`
             }
           },
@@ -985,7 +985,8 @@ export const locale = {
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',
           wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF',
-          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us'
+          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us',
+          invalid_date_input_format: 'Enter a valid date'
         }
       }
     }

@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+import { NotifyMeResponseTypes } from './../../feature-modules/accessor/services/accessor.service';
 import { locale } from '@app/config/translations/en';
 import {
   GetNotifyMeInnovationSubscription,
@@ -102,6 +104,8 @@ export class UtilsHelper {
         }`;
       case NotificationEnum.PROGRESS_UPDATE_CREATED:
         return 'Notify me when an organisation adds a progress update to the support summary';
+      case NotificationEnum.REMINDER:
+        return 'Notify me on a date in future';
       default:
         return '';
     }
@@ -113,5 +117,12 @@ export class UtilsHelper {
     return subscription.organisations
       .flatMap(org => org.units.map(unit => (unit.isShadow ? org.name : unit.name)))
       .sort((a, b) => a.localeCompare(b));
+  }
+
+  static getNotifyMeSubscriptionReminderText(
+    subscription: NotifyMeResponseTypes['REMINDER'],
+    datePipe: DatePipe
+  ): string {
+    return `Notify me on ${datePipe.transform(subscription.date, locale.data.app.date_formats.long_date)} for this reason:`;
   }
 }
