@@ -155,7 +155,13 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data),
           nextStepEvent: data =>
-            this.onNextStep(data, this.onNotificationStepOut, this.onOrganisationsStepIn, this.onReminderStepIn)
+            this.onNextStep(
+              data,
+              this.onNotificationStepOut,
+              this.onOrganisationsStepIn,
+              this.onInnovationRecordUpdateStepIn,
+              this.onReminderStepIn
+            )
         }
       }),
       organisationsStep: new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
@@ -218,7 +224,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           selectedInnovationRecordSections: []
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data),
+          previousStepEvent: data =>
+            this.onPreviousStep(data, this.onInnovationRecordUpdateStepIn, this.onNotificationStepIn),
           nextStepEvent: data => {
             this.onNextStep(data, this.onInnovationRecordUpdateStepOut);
             this.onSummaryStepIn();
@@ -504,9 +511,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       displayEditMode,
       notificationStep: this.wizard.data.notificationStep,
       organisationsStep: this.wizard.data.organisationsStep,
-      innovationRecordUpdateStep: this.wizard.data.innovationRecordUpdateStep,
       unitsStep: this.wizard.data.unitsStep,
       supportStatusesStep: this.wizard.data.supportStatusesStep,
+      innovationRecordUpdateStep: this.wizard.data.innovationRecordUpdateStep,
       reminderStep: this.wizard.data.reminderStep,
       dateStep: this.wizard.data.dateStep
     });
