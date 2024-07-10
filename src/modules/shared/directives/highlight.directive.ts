@@ -32,7 +32,7 @@ export class HighlightDirective implements AfterViewInit {
       let newText = text;
       processedSearchTerm.forEach(searchWord => {
         // Check if a word from the search term exists in the htmlElement text
-        const regex = new RegExp('\\b' + searchWord + '\\b', 'gi');
+        const regex = new RegExp(`(?!<[^>]*)\\b${searchWord}\\b(?![^<]*>)`, 'gi');
         newText = newText.replace(regex, (match: string) => {
           return `<mark class="highlight">${match}</mark>`;
         });
