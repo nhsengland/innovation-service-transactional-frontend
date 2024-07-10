@@ -55,7 +55,7 @@
             </ng-container>
             <ng-container *ngIf="subscription.eventType === 'REMINDER'">
               <p class="nhsuk-u-margin-bottom-1">{{ subscription.displayReminder }}</p>
-              <p>{{ subscription.customMessage }}</p>
+              <p class="nhsuk-u-margin-bottom-1">{{ subscription.customMessage }}</p>
             </ng-container>
             <p class="nhsuk-u-font-size-14 font-color-secondary">Last edited {{ subscription.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
           </div>

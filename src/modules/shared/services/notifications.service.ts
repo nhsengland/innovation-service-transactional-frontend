@@ -344,13 +344,15 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.SUPPORT_UPDATED:
                   link = {
                     label: 'Click to go to support summary.',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`,
+                    queryParams: { unitId: item.params?.unitId ?? '' }
                   };
                   break;
                 case NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED:
                   link = {
                     label: 'Click to go to support summary.',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`,
+                    queryParams: { unitId: item.params?.unitId ?? '' }
                   };
                   break;
                 case NotificationContextDetailEnum.INNOVATION_RECORD_UPDATED:
@@ -369,6 +371,12 @@ export class NotificationsService extends CoreService {
                   link = {
                     label: 'Click to go to innovation.',
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}`
+                  };
+                  break;
+                case NotificationContextDetailEnum.SUGGESTED_SUPPORT_UPDATED:
+                  link = {
+                    label: 'Click to go to support summary.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/support-summary`
                   };
                   break;
               }

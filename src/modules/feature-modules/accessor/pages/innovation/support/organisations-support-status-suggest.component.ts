@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { forkJoin } from 'rxjs';
+import { forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormArray, FormControl, FormEngineParameterModel, FormGroup } from '@app/base/forms';
@@ -8,7 +8,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { AccessorService } from '../../../services/accessor.service';
+import { AccessorService, NotificationEnum, NotifyMeConfig } from '../../../services/accessor.service';
 
 import { ActivatedRoute } from '@angular/router';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
@@ -37,21 +37,22 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   stepNumber: number;
   innovation: ContextInnovationType;
 
+  organisationErrorMessage = 'Select an organisation and click continue';
+  unitsErrorMessage = 'Select 1 or more organisation units and click continue';
+  commentErrorMessage =
+    'Describe why you think this innovation would benefit from support from this organisation and click continue';
+  notifyErrorMessage = 'Select an option and click confirm';
+
   form: FormGroup<{
     organisation: FormControl<null | string>;
     units?: FormArray<FormControl<string>>;
     comment: FormControl<null | string>;
+    notify: FormControl<null | string>;
   }> = new FormGroup(
     {
-      organisation: new FormControl<null | string>(null, [
-        CustomValidators.required('Select an organisation and click continue')
-      ]),
-      comment: new FormControl<string>(
-        '',
-        CustomValidators.required(
-          'Describe why you think this innovation would benefit from support from this organisation and click confirm'
-        )
-      )
+      organisation: new FormControl<null | string>(null, CustomValidators.required(this.organisationErrorMessage)),
+      comment: new FormControl<string>('', CustomValidators.required(this.commentErrorMessage)),
+      notify: new FormControl<null | string>(null, CustomValidators.required(this.notifyErrorMessage))
     },
     { updateOn: 'blur' }
   );
@@ -63,6 +64,10 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   organisationItems: Required<FormEngineParameterModel>['items'] = [];
   unitsItems: Required<FormEngineParameterModel>['items'] = [];
+  notifyItems: Required<FormEngineParameterModel>['items'] = [
+    { value: 'YES', label: 'Yes' },
+    { value: 'NO', label: 'No' }
+  ];
 
   chosenUnits: {
     organisation: { name: string; acronym: string; information?: OrganisationInformation };
@@ -334,7 +339,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           this.setAlertError('You have not selected an organisation', {
             itemsList: [
               {
-                title: 'Select an organisation and click continue',
+                title: this.organisationErrorMessage,
                 fieldId: 'organisation1'
               }
             ],
@@ -358,10 +363,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             if (!units) {
               this.form.addControl(
                 'units',
-                new FormArray<FormControl<string>>(
-                  [],
-                  [CustomValidators.requiredCheckboxArray('Select 1 or more organisation units and click continue')]
-                )
+                new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray(this.unitsErrorMessage)])
               );
             }
 
@@ -396,7 +398,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           this.setAlertError('You have not selected an organisation unit', {
             itemsList: [
               {
-                title: 'Select 1 or more organisation units and click continue',
+                title: this.unitsErrorMessage,
                 fieldId: 'units1'
               }
             ],
@@ -416,6 +418,25 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
         break;
 
+      case 3:
+        const comment = this.form.get('comment');
+        if (!comment?.value) {
+          this.setAlertError('You have not added a description', {
+            itemsList: [
+              {
+                title: this.commentErrorMessage,
+                fieldId: 'comment'
+              }
+            ],
+            width: '2.thirds'
+          });
+          comment?.markAsTouched();
+        } else {
+          this.stepNumber++;
+        }
+
+        break;
+
       default:
         break;
     }
@@ -426,14 +447,8 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   onSubmit(): void {
     this.resetAlert();
     if (!this.form.valid) {
-      this.setAlertError('You have not added a description ', {
-        itemsList: [
-          {
-            title:
-              'Describe why you think this innovation would benefit from support from this organisation and click confirm',
-            fieldId: 'comment'
-          }
-        ],
+      this.setAlertError('', {
+        itemsList: [{ title: this.notifyErrorMessage, fieldId: 'notify0' }],
         width: '2.thirds'
       });
       this.form.markAllAsTouched();
@@ -442,60 +457,59 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    const body = {
+    const suggestNewOrganisationBody = {
       organisationUnits: this.chosenUnits.values,
       description: this.form.get('comment')?.value || '',
       type: SupportLogType.ACCESSOR_SUGGESTION
     };
 
-    this.accessorService.suggestNewOrganisations(this.innovation.id, body).subscribe({
-      next: () => {
-        sessionStorage.setItem(
-          'organisationsSuggestions',
-          JSON.stringify({
-            ...this.previousOrganisationsSuggestions,
-            [this.innovation.id]: [
-              ...(this.previousOrganisationsSuggestions[this.innovation.id] || []),
-              ...body.organisationUnits
-            ]
-          })
-        );
+    this.accessorService
+      .suggestNewOrganisations(this.innovation.id, suggestNewOrganisationBody)
+      .pipe(
+        switchMap(() => {
+          // Check if user has chosen to be notified
+          if (this.form.get('notify')?.value === 'YES') {
+            const createSubscriptionBody: NotifyMeConfig = {
+              eventType: NotificationEnum.SUPPORT_UPDATED,
+              subscriptionType: 'ONCE',
+              preConditions: {
+                units: suggestNewOrganisationBody.organisationUnits,
+                status: [
+                  InnovationSupportStatusEnum.ENGAGING,
+                  InnovationSupportStatusEnum.WAITING,
+                  InnovationSupportStatusEnum.UNSUITABLE,
+                  InnovationSupportStatusEnum.CLOSED
+                ]
+              },
+              notificationType: NotificationEnum.SUGGESTED_SUPPORT_UPDATED
+            };
+            return this.accessorService.createNotifyMeSubscription(this.innovation.id, createSubscriptionBody);
+          } else {
+            return of(true);
+          }
+        })
+      )
+      .subscribe({
+        next: () => {
+          sessionStorage.setItem(
+            'organisationsSuggestions',
+            JSON.stringify({
+              ...this.previousOrganisationsSuggestions,
+              [this.innovation.id]: [
+                ...(this.previousOrganisationsSuggestions[this.innovation.id] || []),
+                ...suggestNewOrganisationBody.organisationUnits
+              ]
+            })
+          );
 
-        switch (this.chosenUnits.unitsNames.length) {
-          case 0:
-            this.setRedirectAlertSuccess(
-              `You have suggested ${this.chosenUnits.organisation.name} (${this.chosenUnits.organisation.acronym}) to support this innovation`
-            );
-            break;
-          case 1:
-            this.setRedirectAlertSuccess(
-              `You have suggested ${this.chosenUnits.unitsNames[0]} to support this innovation`
-            );
-            break;
-          case 2:
-            this.setRedirectAlertSuccess(
-              `You have suggested ${this.chosenUnits.unitsNames[0]} and ${this.chosenUnits.unitsNames[1]} to support this innovation`
-            );
-            break;
-          default:
-            this.setRedirectAlertSuccess(`You have suggested these organisation units to support this innovation:`, {
-              listStyleType: 'bullet',
-              itemsList: this.chosenUnits.unitsNames.map(unitName => {
-                return {
-                  title: unitName
-                };
-              })
-            });
-            break;
+          this.handleRedirectAlertSuccess();
+          this.handleCancelOrSubmit();
+        },
+        error: () => {
+          this.submitButton = { isActive: true, label: 'Confirm' };
+          this.setAlertUnknownError();
         }
-
-        this.handleCancelOrSubmit();
-      },
-      error: () => {
-        this.submitButton = { isActive: true, label: 'Confirm' };
-        this.setAlertUnknownError();
-      }
-    });
+      });
   }
 
   handleGoBack() {
@@ -524,14 +538,47 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
   handlePageTitle() {
     if (this.stepNumber === 1) {
-      this.setPageTitle(`Suggest an organisation to support ${this.innovation.name}`, { width: '2.thirds' });
+      this.setPageTitle(`Suggest an organisation to support ${this.innovation.name}`, { width: '2.thirds', size: 'l' });
     } else if (this.stepNumber === 2) {
       this.setPageTitle(
         `You have selected ${this.chosenUnits.organisation.name} (${this.chosenUnits.organisation.acronym})`,
-        { width: '2.thirds' }
+        { width: '2.thirds', size: 'l' }
       );
+    } else if (this.stepNumber === 3) {
+      this.setPageTitle(`Why are you suggesting this organisation to support?`, { width: '2.thirds', size: 'l' });
     } else {
-      this.setPageTitle(`Why are you suggesting this organisation to support?`, { width: '2.thirds' });
+      this.setPageTitle(`Would you like to be notified when this organisation updates their support status?`, {
+        width: '2.thirds',
+        size: 'l'
+      });
+    }
+  }
+
+  handleRedirectAlertSuccess() {
+    switch (this.chosenUnits.unitsNames.length) {
+      case 0:
+        this.setRedirectAlertSuccess(
+          `You have suggested ${this.chosenUnits.organisation.name} (${this.chosenUnits.organisation.acronym}) to support this innovation`
+        );
+        break;
+      case 1:
+        this.setRedirectAlertSuccess(`You have suggested ${this.chosenUnits.unitsNames[0]} to support this innovation`);
+        break;
+      case 2:
+        this.setRedirectAlertSuccess(
+          `You have suggested ${this.chosenUnits.unitsNames[0]} and ${this.chosenUnits.unitsNames[1]} to support this innovation`
+        );
+        break;
+      default:
+        this.setRedirectAlertSuccess(`You have suggested these organisation units to support this innovation:`, {
+          listStyleType: 'bullet',
+          itemsList: this.chosenUnits.unitsNames.map(unitName => {
+            return {
+              title: unitName
+            };
+          })
+        });
+        break;
     }
   }
 }
