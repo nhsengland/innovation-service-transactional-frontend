@@ -818,12 +818,16 @@ export const locale = {
               link: `View this section of the innovation record.`
             },
             DOCUMENT_UPLOADED: {
-              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}`,
+              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}.`,
               link: `View documents.`
             },
             REMINDER: {
-              title: `Reminder to check innovation {{ innovation }} for this reason: {{ reason }}`,
+              title: `Reminder to check innovation {{ innovation }} for this reason: {{ reason }}.`,
               link: `View innovation.`
+            },
+            SUGGESTED_SUPPORT_UPDATED: {
+              title: `{{organisation}} has updated their support status for {{innovation}} to {{supportStatus}}.`,
+              link: `View support summary.`
             }
           },
           section_status: {

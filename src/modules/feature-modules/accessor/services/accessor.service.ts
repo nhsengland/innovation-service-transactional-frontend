@@ -16,18 +16,20 @@ export enum NotificationEnum {
   PROGRESS_UPDATE_CREATED = 'PROGRESS_UPDATE_CREATED',
   INNOVATION_RECORD_UPDATED = 'INNOVATION_RECORD_UPDATED',
   DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
-  REMINDER = 'REMINDER'
+  REMINDER = 'REMINDER',
+  SUGGESTED_SUPPORT_UPDATED = 'SUGGESTED_SUPPORT_UPDATED'
 }
 
 export type EventType = keyof typeof NotificationEnum;
 
 export type SupportUpdated = {
   eventType: NotificationEnum.SUPPORT_UPDATED;
-  subscriptionType: 'INSTANTLY';
+  subscriptionType: 'INSTANTLY' | 'ONCE';
   preConditions: {
     units: string[];
     status: InnovationSupportStatusEnum[];
   };
+  notificationType?: NotificationEnum.SUPPORT_UPDATED | NotificationEnum.SUGGESTED_SUPPORT_UPDATED;
 };
 
 export type ProgressUpdateCreated = {
@@ -90,9 +92,10 @@ export type SupportUpdatedResponseDTO = {
   id: string;
   updatedAt: DateISOType;
   eventType: NotificationEnum.SUPPORT_UPDATED;
-  subscriptionType: 'INSTANTLY';
+  subscriptionType: 'INSTANTLY' | 'ONCE';
   organisations: OrganisationWithUnits[];
   status: InnovationSupportStatusEnum[];
+  notificationType?: NotificationEnum.SUPPORT_UPDATED | NotificationEnum.SUGGESTED_SUPPORT_UPDATED;
 };
 
 export type ProgressUpdateCreatedResponseDTO = {
