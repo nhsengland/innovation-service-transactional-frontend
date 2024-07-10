@@ -140,7 +140,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
     const section = this.stores.schema.getIrSchemaSectionV3(this.sectionId);
-    console.log('-------section', section);
 
     this.sectionSummaryData.sectionInfo.id = section.id;
     this.sectionSummaryData.sectionInfo.title = section.title;
@@ -187,7 +186,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         sectionInfo.data.hasEvidence === 'YES'
       );
 
-      this.sectionSummaryData.sectionInfo.wizard.setAnswers(sectionInfo.data).runRules();
+      const wizard = this.sectionSummaryData.sectionInfo.wizard;
+      wizard.setAnswers(sectionInfo.data).runRules();
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 

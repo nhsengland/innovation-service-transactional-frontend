@@ -6,9 +6,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Injector,
-  PLATFORM_ID,
-  Output,
-  EventEmitter
+  PLATFORM_ID
 } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { AbstractControl, ControlContainer, FormArray, FormControl } from '@angular/forms';
@@ -137,7 +135,6 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   }
 
   onChanged(e: Event): void {
-    console.log('this.fieldArrayControl', this.fieldArrayControl);
     const event = e.target as HTMLInputElement;
     const valueIndex = (this.fieldArrayControl.value as string[]).indexOf(event.value);
 

@@ -25,7 +25,7 @@ export class IrV3TranslatePipe implements PipeTransform {
           value.forEach(v =>
             translatedArr.push(translations['questions'].get(questionId.split('_')[0])?.items?.get(v)?.label ?? v)
           );
-          return translatedArr.join(', ');
+          return translatedArr.join('\n');
         }
     }
 

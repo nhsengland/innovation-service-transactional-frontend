@@ -66,7 +66,7 @@ export class InnovationService {
       .setQueryParams(qp);
     return this.http.get<InnovationSectionInfoDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => IRV3Helper.translateIR(response))
+      map(response => response)
     );
   }
 
@@ -76,7 +76,7 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.get<InnovationAllSectionsInfoDTO>(url.buildUrl()).pipe(
       take(1),
-      map(response => IRV3Helper.translateIrAllSections(response))
+      map(response => response)
     );
   }
 

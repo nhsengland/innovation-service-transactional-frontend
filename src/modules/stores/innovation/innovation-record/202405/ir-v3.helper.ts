@@ -23,7 +23,8 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
             items: q?.items?.map(item => ({
               id: item.id,
               label: item.label,
-              group: item.group
+              group: item.group,
+              ...(item.itemsFromAnswer && { itemsFromAnswer: item.itemsFromAnswer })
             }))
           }))
       )
@@ -39,7 +40,8 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
             items: addQuestion?.items?.map(item => ({
               id: item.id,
               label: item.label,
-              group: item.group
+              group: item.group,
+              ...(item.itemsFromAnswer && { itemsFromAnswer: item.itemsFromAnswer })
             }))
           }))
       )
@@ -50,15 +52,32 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
     string,
     { label: string; items: Map<string, { label: string; group: string }> }
   >(
-    allQuestionsFlattened.map(q => [
-      q.id,
-      {
-        label: q.label,
-        items: new Map<string, { label: string; group: string }>(
-          q.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
-        )
+    allQuestionsFlattened.map(q => {
+      // replace items from questions with 'itemsFromAnswer'
+      if (q.items?.some(i => i.itemsFromAnswer)) {
+        const itesmFromAnswerId = q.items.find(i => i.itemsFromAnswer)?.itemsFromAnswer;
+        const correspondingAnswer = allQuestionsFlattened.find(q => q.id === itesmFromAnswerId);
+        return [
+          q.id,
+          {
+            label: q.label,
+            items: new Map<string, { label: string; group: string }>(
+              correspondingAnswer?.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
+            )
+          }
+        ];
+      } else {
+        return [
+          q.id,
+          {
+            label: q.label,
+            items: new Map<string, { label: string; group: string }>(
+              q.items?.map(i => [i?.id ?? '', { label: i?.label ?? '', group: i?.group ?? '' }])
+            )
+          }
+        ];
       }
-    ])
+    })
   );
 
   return {
@@ -67,4 +86,3 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
     questions: flattenedQuestionsLabelsAndItems
   };
 }
-

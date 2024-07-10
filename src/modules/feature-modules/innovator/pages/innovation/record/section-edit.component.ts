@@ -66,7 +66,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
     const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
@@ -81,7 +80,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
         this.wizard.setAnswers(sectionInfoResponse.data).runRules();
-        console.log('set answers:', this.wizard.currentAnswers);
         this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
         this.wizardAnswers = this.wizard.getAnswers();
 
@@ -107,7 +105,38 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       console.log('go to summary');
       this.wizard.gotoSummary();
       this.redirectTo(`${this.baseUrl}/edit/summary`);
-      this.setPageTitle('Check your answers', { size: 'l' });
+
+      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
+        const validInformation = this.wizard.validateData();
+
+        if (!validInformation.valid) {
+          this.alertErrorsList = validInformation.errors;
+          this.setAlertError(`Please verify what's missing with your answers`, {
+            itemsList: this.alertErrorsList,
+            width: '2.thirds'
+          });
+        }
+
+        if (sectionInfo.status === 'DRAFT') {
+          this.submitButton.isActive = validInformation.valid;
+          if (
+            this.innovation.status !== InnovationStatusEnum.CREATED &&
+            this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+          ) {
+            this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+          }
+        }
+
+        for (const [index, item] of this.wizard.getSummary().entries()) {
+          this.displayChangeButtonList.push(index);
+          if (!item.value && !item.isNotMandatory) {
+            break;
+          }
+        }
+
+        this.setPageTitle('Check your answers', { size: 'l' });
+        this.setPageStatus('READY');
+      });
     } else {
       this.wizard.gotoStep(stepId, isChangeMode);
       this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: this.isChangeMode });
@@ -130,7 +159,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     let currentStepIndex = this.wizard.currentStepId;
 
-    this.wizard.addAnswers(formData.data).runRules();
+    console.log('formData.data', formData.data);
 
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
@@ -145,7 +174,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       }
 
       if (action === 'next') {
-        const shouldUpdateInformation = true;
+        const shouldUpdateInformation =
+          Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
+            // NOTE: This is a very shallow comparison, and will return false for objects and arrays.
+            // Althought this can be improved in the future, for now it helps on some steps...
+            const currentAnswer = this.wizard.getAnswers()[key];
+            return currentAnswer !== updatedAnswer;
+          }).length > 0;
+
         this.wizard.addAnswers(formData!.data).runRules();
 
         this.saveButton = { isActive: false, label: 'Saving...' };
@@ -157,10 +193,27 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                 return this.stores.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
-                  this.wizard.outboundParsing()
+                  this.wizard.runOutboundParsing()
                 );
               } else {
                 return of(true);
+              }
+            }),
+            concatMap(() => {
+              // NOTE: This is a very specific operation that updates the context (store) innovation name.
+              // If more exceptions appears, a wizard configurations should be considered.
+              if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
+                this.stores.context.updateInnovation({ name: this.wizard.getAnswers().name });
+              }
+              return of(true);
+            }),
+            concatMap(() => {
+              const shouldRefreshInformation = this.wizard.currentStep().saveStrategy === 'updateAndWait';
+
+              if (shouldRefreshInformation) {
+                return this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId);
+              } else {
+                return of({ data: {} });
               }
             })
           )
@@ -193,108 +246,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     }
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
-    //
-    // const shouldUpdateInformation =
-    //   Object.entries(formData?.data || {}).filter(([key, updatedAnswer]) => {
-    //     // NOTE: This is a very shallow comparison, and will return false for objects and arrays.
-    //     // Althought this can be improved in the future, for now it helps on some steps...
-    //     const currentAnswer = this.wizard.getAnswers()[key];
-    //     return currentAnswer !== updatedAnswer;
-    //   }).length > 0;
-
-    // this.wizard.addAnswers(formData!.data).runRules();
-
-    //   this.saveButton = { isActive: false, label: 'Saving...' };
-
-    //   of(true)
-    //     .pipe(
-    //       concatMap(() => {
-    //         if (shouldUpdateInformation || this.errorOnSubmitStep) {
-    //           return this.stores.innovation.updateSectionInfo$(
-    //             this.innovation.id,
-    //             this.sectionId,
-    //             this.wizard.runOutboundParsing()
-    //           );
-    //         } else {
-    //           return of(true);
-    //         }
-    //       }),
-    //       concatMap(() => {
-    //         // NOTE: This is a very specific operation that updates the context (store) innovation name.
-    //         // If more exceptions appears, a wizard configurations should be considered.
-    //         if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
-    //           this.stores.context.updateInnovation({ name: this.wizard.getAnswers().name });
-    //         }
-    //         return of(true);
-    //       }),
-    //       concatMap(() => {
-    //         const shouldRefreshInformation = this.wizard.currentStep().saveStrategy === 'updateAndWait';
-
-    //         if (shouldRefreshInformation) {
-    //           return this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId);
-    //         } else {
-    //           return of({ data: {} });
-    //         }
-    //       })
-    //     )
-    //     .subscribe({
-    //       next: response => {
-    //         // Update only if GET call was made!
-    //         if (Object.keys(response.data).length > 0) {
-    //           this.wizard.setAnswers(this.wizard.runInboundParsing(response.data)).runRules();
-    //         }
-
-    //         this.wizard.nextStep();
-
-    //         if (this.wizard.isQuestionStep()) {
-    //           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-    //         } else {
-    //           this.setPageStatus('LOADING');
-
-    //           this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
-    //             const validInformation = this.wizard.validateData();
-
-    //             if (!validInformation.valid) {
-    //               this.alertErrorsList = validInformation.errors;
-    //               this.setAlertError(`Please verify what's missing with your answers`, {
-    //                 itemsList: this.alertErrorsList,
-    //                 width: '2.thirds'
-    //               });
-    //             }
-
-    //             if (sectionInfo.status === 'DRAFT') {
-    //               this.submitButton.isActive = validInformation.valid;
-    //               if (
-    //                 this.innovation.status !== InnovationStatusEnum.CREATED &&
-    //                 this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-    //               ) {
-    //                 this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
-    //               }
-    //             }
-
-    //             for (const [index, item] of this.wizard.getSummary().entries()) {
-    //               this.displayChangeButtonList.push(index);
-    //               if (!item.value && !item.isNotMandatory) {
-    //                 break;
-    //               }
-    //             }
-
-    //             this.setPageTitle('Check your answers', { size: 'l' });
-
-    //             this.setPageStatus('READY');
-    //           });
-    //         }
-
-    //         this.errorOnSubmitStep = false;
-    //         this.saveButton = { isActive: true, label: 'Save and continue' };
-    //       },
-    //       error: () => {
-    //         this.errorOnSubmitStep = true;
-    //         this.saveButton = { isActive: true, label: 'Save and continue' };
-    //         this.alertErrorsList = [];
-    //         this.setAlertUnknownError();
-    //       }
-    //     });
   }
 
   onSubmitSection(): void {

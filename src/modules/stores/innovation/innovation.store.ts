@@ -102,8 +102,8 @@ export class InnovationStore extends Store<InnovationModel> {
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
     console.log('submitted section');
-    return of({});
-    // return this.innovationsService.submitSections(innovationId, sectionKey);
+    // return of({});
+    return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 
   getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {

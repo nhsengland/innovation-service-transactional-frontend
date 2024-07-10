@@ -212,9 +212,6 @@ export class FormEngineParameterModelV3 {
   addQuestion?: InnovationRecordQuestionStepType;
   addNewLabel?: string;
 
-  parentAddQuestionId?: string;
-  parentFieldId?: string;
-  parentStepId?: string;
   isNestedField?: boolean;
 
   condition?: {
@@ -261,9 +258,6 @@ export class FormEngineParameterModelV3 {
     this.condition = data.condition;
     this.lengthLimit = data.lengthLimit;
     this.items = data.items;
-    this.parentAddQuestionId = data.parentAddQuestionId;
-    this.parentFieldId = data.parentFieldId;
-    this.parentStepId = data.parentStepId;
     this.isNestedField = data.isNestedField;
 
     // this.additional = data.additional;

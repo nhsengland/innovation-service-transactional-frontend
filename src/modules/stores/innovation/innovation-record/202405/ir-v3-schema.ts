@@ -8,7 +8,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'About your innovation (V3)',
       subSections: [
         {
-          id: 'innovationDescription',
+          id: 'INNOVATION_DESCRIPTION',
           title: 'Description of innovation (V3)',
           steps: [
             {
@@ -53,26 +53,26 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'england',
+                      id: 'England',
                       label: 'England'
                     },
                     {
-                      id: 'scotland',
+                      id: 'Scotland',
                       label: 'Scotland'
                     },
                     {
-                      id: 'wales',
+                      id: 'Wales',
                       label: 'Wales'
                     },
                     {
-                      id: 'northernIreland',
+                      id: 'Northern Ireland',
                       label: 'Northern Ireland'
                     },
                     {
                       type: 'separator'
                     },
                     {
-                      id: 'basedOutsideUk',
+                      id: 'Based outside UK',
                       label: "I'm based outside of the UK"
                     }
                   ]
@@ -94,7 +94,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'officeLocation',
-                options: ['england', 'scotland', 'wales', 'northernIreland']
+                options: ['England', 'Scotland', 'Wales', 'Northern Ireland']
               }
             },
             {
@@ -112,783 +112,783 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'afghanistan',
+                      id: 'Afghanistan',
                       label: 'Afghanistan'
                     },
                     {
-                      id: 'albania',
+                      id: 'Albania',
                       label: 'Albania'
                     },
                     {
-                      id: 'algeria',
+                      id: 'Algeria',
                       label: 'Algeria'
                     },
                     {
-                      id: 'andorra',
+                      id: 'Andorra',
                       label: 'Andorra'
                     },
                     {
-                      id: 'angola',
+                      id: 'Angola',
                       label: 'Angola'
                     },
                     {
-                      id: 'antiguaAndBarbuda',
+                      id: 'Antigua and Barbuda',
                       label: 'Antigua and Barbuda'
                     },
                     {
-                      id: 'argentina',
+                      id: 'Argentina',
                       label: 'Argentina'
                     },
                     {
-                      id: 'armenia',
+                      id: 'Armenia',
                       label: 'Armenia'
                     },
                     {
-                      id: 'australia',
+                      id: 'Australia',
                       label: 'Australia'
                     },
                     {
-                      id: 'austria',
+                      id: 'Austria',
                       label: 'Austria'
                     },
                     {
-                      id: 'azerbaijan',
+                      id: 'Azerbaijan',
                       label: 'Azerbaijan'
                     },
                     {
-                      id: 'bahamas',
+                      id: 'Bahamas',
                       label: 'Bahamas'
                     },
                     {
-                      id: 'bahrain',
+                      id: 'Bahrain',
                       label: 'Bahrain'
                     },
                     {
-                      id: 'bangladesh',
+                      id: 'Bangladesh',
                       label: 'Bangladesh'
                     },
                     {
-                      id: 'barbados',
+                      id: 'Barbados',
                       label: 'Barbados'
                     },
                     {
-                      id: 'belarus',
+                      id: 'Belarus',
                       label: 'Belarus'
                     },
                     {
-                      id: 'belgium',
+                      id: 'Belgium',
                       label: 'Belgium'
                     },
                     {
-                      id: 'belize',
+                      id: 'Belize',
                       label: 'Belize'
                     },
                     {
-                      id: 'benin',
+                      id: 'Benin',
                       label: 'Benin'
                     },
                     {
-                      id: 'bhutan',
+                      id: 'Bhutan',
                       label: 'Bhutan'
                     },
                     {
-                      id: 'bolivia',
+                      id: 'Bolivia',
                       label: 'Bolivia'
                     },
                     {
-                      id: 'bosniaAndHerzegovina',
+                      id: 'Bosnia and Herzegovina',
                       label: 'Bosnia and Herzegovina'
                     },
                     {
-                      id: 'botswana',
+                      id: 'Botswana',
                       label: 'Botswana'
                     },
                     {
-                      id: 'brazil',
+                      id: 'Brazil',
                       label: 'Brazil'
                     },
                     {
-                      id: 'brunei',
+                      id: 'Brunei',
                       label: 'Brunei'
                     },
                     {
-                      id: 'bulgaria',
+                      id: 'Bulgaria',
                       label: 'Bulgaria'
                     },
                     {
-                      id: 'burkinaFaso',
+                      id: 'Burkina Faso',
                       label: 'Burkina Faso'
                     },
                     {
-                      id: 'burundi',
+                      id: 'Burundi',
                       label: 'Burundi'
                     },
                     {
-                      id: 'coteDIvoire',
+                      id: "Côte d'Ivoire",
                       label: "Côte d'Ivoire"
                     },
                     {
-                      id: 'caboVerde',
+                      id: 'Cabo Verde',
                       label: 'Cabo Verde'
                     },
                     {
-                      id: 'cambodia',
+                      id: 'Cambodia',
                       label: 'Cambodia'
                     },
                     {
-                      id: 'cameroon',
+                      id: 'Cameroon',
                       label: 'Cameroon'
                     },
                     {
-                      id: 'canada',
+                      id: 'Canada',
                       label: 'Canada'
                     },
                     {
-                      id: 'centralAfricanRepublic',
+                      id: 'Central African Republic',
                       label: 'Central African Republic'
                     },
                     {
-                      id: 'chad',
+                      id: 'Chad',
                       label: 'Chad'
                     },
                     {
-                      id: 'chile',
+                      id: 'Chile',
                       label: 'Chile'
                     },
                     {
-                      id: 'china',
+                      id: 'China',
                       label: 'China'
                     },
                     {
-                      id: 'colombia',
+                      id: 'Colombia',
                       label: 'Colombia'
                     },
                     {
-                      id: 'comoros',
+                      id: 'Comoros',
                       label: 'Comoros'
                     },
                     {
-                      id: 'congo',
+                      id: 'Congo (Congo-Brazzaville)',
                       label: 'Congo (Congo-Brazzaville)'
                     },
                     {
-                      id: 'costaRica',
+                      id: 'Costa Rica',
                       label: 'Costa Rica'
                     },
                     {
-                      id: 'croatia',
+                      id: 'Croatia',
                       label: 'Croatia'
                     },
                     {
-                      id: 'cuba',
+                      id: 'Cuba',
                       label: 'Cuba'
                     },
                     {
-                      id: 'cyprus',
+                      id: 'Cyprus',
                       label: 'Cyprus'
                     },
                     {
-                      id: 'czechia',
+                      id: 'Czechia (Czech Republic)',
                       label: 'Czechia (Czech Republic)'
                     },
                     {
-                      id: 'democraticRepublicOfTheCongo',
+                      id: 'Democratic Republic of the Congo',
                       label: 'Democratic Republic of the Congo'
                     },
                     {
-                      id: 'denmark',
+                      id: 'Denmark',
                       label: 'Denmark'
                     },
                     {
-                      id: 'djibouti',
+                      id: 'Djibouti',
                       label: 'Djibouti'
                     },
                     {
-                      id: 'dominica',
+                      id: 'Dominica',
                       label: 'Dominica'
                     },
                     {
-                      id: 'dominicanRepublic',
+                      id: 'Dominican Republic',
                       label: 'Dominican Republic'
                     },
                     {
-                      id: 'ecuador',
+                      id: 'Ecuador',
                       label: 'Ecuador'
                     },
                     {
-                      id: 'egypt',
+                      id: 'Egypt',
                       label: 'Egypt'
                     },
                     {
-                      id: 'elSalvador',
+                      id: 'El Salvador',
                       label: 'El Salvador'
                     },
                     {
-                      id: 'equatorialGuinea',
+                      id: 'Equatorial Guinea',
                       label: 'Equatorial Guinea'
                     },
                     {
-                      id: 'eritrea',
+                      id: 'Eritrea',
                       label: 'Eritrea'
                     },
                     {
-                      id: 'estonia',
+                      id: 'Estonia',
                       label: 'Estonia'
                     },
                     {
-                      id: 'eswatini',
+                      id: 'Eswatini (fmr. "Swaziland")',
                       label: 'Eswatini (fmr. "Swaziland")'
                     },
                     {
-                      id: 'ethiopia',
+                      id: 'Ethiopia',
                       label: 'Ethiopia'
                     },
                     {
-                      id: 'fiji',
+                      id: 'Fiji',
                       label: 'Fiji'
                     },
                     {
-                      id: 'finland',
+                      id: 'Finland',
                       label: 'Finland'
                     },
                     {
-                      id: 'france',
+                      id: 'France',
                       label: 'France'
                     },
                     {
-                      id: 'gabon',
+                      id: 'Gabon',
                       label: 'Gabon'
                     },
                     {
-                      id: 'gambia',
+                      id: 'Gambia',
                       label: 'Gambia'
                     },
                     {
-                      id: 'georgia',
+                      id: 'Georgia',
                       label: 'Georgia'
                     },
                     {
-                      id: 'germany',
+                      id: 'Germany',
                       label: 'Germany'
                     },
                     {
-                      id: 'ghana',
+                      id: 'Ghana',
                       label: 'Ghana'
                     },
                     {
-                      id: 'greece',
+                      id: 'Greece',
                       label: 'Greece'
                     },
                     {
-                      id: 'grenada',
+                      id: 'Grenada',
                       label: 'Grenada'
                     },
                     {
-                      id: 'guatemala',
+                      id: 'Guatemala',
                       label: 'Guatemala'
                     },
                     {
-                      id: 'guinea',
+                      id: 'Guinea',
                       label: 'Guinea'
                     },
                     {
-                      id: 'guineaBissau',
+                      id: 'Guinea-Bissau',
                       label: 'Guinea-Bissau'
                     },
                     {
-                      id: 'guyana',
+                      id: 'Guyana',
                       label: 'Guyana'
                     },
                     {
-                      id: 'haiti',
+                      id: 'Haiti',
                       label: 'Haiti'
                     },
                     {
-                      id: 'holySee',
+                      id: 'Holy See',
                       label: 'Holy See'
                     },
                     {
-                      id: 'honduras',
+                      id: 'Honduras',
                       label: 'Honduras'
                     },
                     {
-                      id: 'hungary',
+                      id: 'Hungary',
                       label: 'Hungary'
                     },
                     {
-                      id: 'iceland',
+                      id: 'Iceland',
                       label: 'Iceland'
                     },
                     {
-                      id: 'india',
+                      id: 'India',
                       label: 'India'
                     },
                     {
-                      id: 'indonesia',
+                      id: 'Indonesia',
                       label: 'Indonesia'
                     },
                     {
-                      id: 'iran',
+                      id: 'Iran',
                       label: 'Iran'
                     },
                     {
-                      id: 'iraq',
+                      id: 'Iraq',
                       label: 'Iraq'
                     },
                     {
-                      id: 'ireland',
+                      id: 'Ireland',
                       label: 'Ireland'
                     },
                     {
-                      id: 'israel',
+                      id: 'Israel',
                       label: 'Israel'
                     },
                     {
-                      id: 'italy',
+                      id: 'Italy',
                       label: 'Italy'
                     },
                     {
-                      id: 'jamaica',
+                      id: 'Jamaica',
                       label: 'Jamaica'
                     },
                     {
-                      id: 'japan',
+                      id: 'Japan',
                       label: 'Japan'
                     },
                     {
-                      id: 'jordan',
+                      id: 'Jordan',
                       label: 'Jordan'
                     },
                     {
-                      id: 'kazakhstan',
+                      id: 'Kazakhstan',
                       label: 'Kazakhstan'
                     },
                     {
-                      id: 'kenya',
+                      id: 'Kenya',
                       label: 'Kenya'
                     },
                     {
-                      id: 'kiribati',
+                      id: 'Kiribati',
                       label: 'Kiribati'
                     },
                     {
-                      id: 'kuwait',
+                      id: 'Kuwait',
                       label: 'Kuwait'
                     },
                     {
-                      id: 'kyrgyzstan',
+                      id: 'Kyrgyzstan',
                       label: 'Kyrgyzstan'
                     },
                     {
-                      id: 'laos',
+                      id: 'Laos',
                       label: 'Laos'
                     },
                     {
-                      id: 'latvia',
+                      id: 'Latvia',
                       label: 'Latvia'
                     },
                     {
-                      id: 'lebanon',
+                      id: 'Lebanon',
                       label: 'Lebanon'
                     },
                     {
-                      id: 'lesotho',
+                      id: 'Lesotho',
                       label: 'Lesotho'
                     },
                     {
-                      id: 'liberia',
+                      id: 'Liberia',
                       label: 'Liberia'
                     },
                     {
-                      id: 'libya',
+                      id: 'Libya',
                       label: 'Libya'
                     },
                     {
-                      id: 'liechtenstein',
+                      id: 'Liechtenstein',
                       label: 'Liechtenstein'
                     },
                     {
-                      id: 'lithuania',
+                      id: 'Lithuania',
                       label: 'Lithuania'
                     },
                     {
-                      id: 'luxembourg',
+                      id: 'Luxembourg',
                       label: 'Luxembourg'
                     },
                     {
-                      id: 'madagascar',
+                      id: 'Madagascar',
                       label: 'Madagascar'
                     },
                     {
-                      id: 'malawi',
+                      id: 'Malawi',
                       label: 'Malawi'
                     },
                     {
-                      id: 'malaysia',
+                      id: 'Malaysia',
                       label: 'Malaysia'
                     },
                     {
-                      id: 'maldives',
+                      id: 'Maldives',
                       label: 'Maldives'
                     },
                     {
-                      id: 'mali',
+                      id: 'Mali',
                       label: 'Mali'
                     },
                     {
-                      id: 'malta',
+                      id: 'Malta',
                       label: 'Malta'
                     },
                     {
-                      id: 'marshallIslands',
+                      id: 'Marshall Islands',
                       label: 'Marshall Islands'
                     },
                     {
-                      id: 'mauritania',
+                      id: 'Mauritania',
                       label: 'Mauritania'
                     },
                     {
-                      id: 'mauritius',
+                      id: 'Mauritius',
                       label: 'Mauritius'
                     },
                     {
-                      id: 'mexico',
+                      id: 'Mexico',
                       label: 'Mexico'
                     },
                     {
-                      id: 'micronesia',
+                      id: 'Micronesia',
                       label: 'Micronesia'
                     },
                     {
-                      id: 'moldova',
+                      id: 'Moldova',
                       label: 'Moldova'
                     },
                     {
-                      id: 'monaco',
+                      id: 'Monaco',
                       label: 'Monaco'
                     },
                     {
-                      id: 'mongolia',
+                      id: 'Mongolia',
                       label: 'Mongolia'
                     },
                     {
-                      id: 'montenegro',
+                      id: 'Montenegro',
                       label: 'Montenegro'
                     },
                     {
-                      id: 'morocco',
+                      id: 'Morocco',
                       label: 'Morocco'
                     },
                     {
-                      id: 'mozambique',
+                      id: 'Mozambique',
                       label: 'Mozambique'
                     },
                     {
-                      id: 'myanmar',
+                      id: 'Myanmar (formerly Burma)',
                       label: 'Myanmar (formerly Burma)'
                     },
                     {
-                      id: 'namibia',
+                      id: 'Namibia',
                       label: 'Namibia'
                     },
                     {
-                      id: 'nauru',
+                      id: 'Nauru',
                       label: 'Nauru'
                     },
                     {
-                      id: 'nepal',
+                      id: 'Nepal',
                       label: 'Nepal'
                     },
                     {
-                      id: 'netherlands',
+                      id: 'Netherlands',
                       label: 'Netherlands'
                     },
                     {
-                      id: 'newZealand',
+                      id: 'New Zealand',
                       label: 'New Zealand'
                     },
                     {
-                      id: 'nicaragua',
+                      id: 'Nicaragua',
                       label: 'Nicaragua'
                     },
                     {
-                      id: 'niger',
+                      id: 'Niger',
                       label: 'Niger'
                     },
                     {
-                      id: 'nigeria',
+                      id: 'Nigeria',
                       label: 'Nigeria'
                     },
                     {
-                      id: 'northKorea',
+                      id: 'North Korea',
                       label: 'North Korea'
                     },
                     {
-                      id: 'northMacedonia',
+                      id: 'North Macedonia',
                       label: 'North Macedonia'
                     },
                     {
-                      id: 'norway',
+                      id: 'Norway',
                       label: 'Norway'
                     },
                     {
-                      id: 'oman',
+                      id: 'Oman',
                       label: 'Oman'
                     },
                     {
-                      id: 'pakistan',
+                      id: 'Pakistan',
                       label: 'Pakistan'
                     },
                     {
-                      id: 'palau',
+                      id: 'Palau',
                       label: 'Palau'
                     },
                     {
-                      id: 'palestineState',
+                      id: 'Palestine State',
                       label: 'Palestine State'
                     },
                     {
-                      id: 'panama',
+                      id: 'Panama',
                       label: 'Panama'
                     },
                     {
-                      id: 'papuaNewGuinea',
+                      id: 'Papua New Guinea',
                       label: 'Papua New Guinea'
                     },
                     {
-                      id: 'paraguay',
+                      id: 'Paraguay',
                       label: 'Paraguay'
                     },
                     {
-                      id: 'peru',
+                      id: 'Peru',
                       label: 'Peru'
                     },
                     {
-                      id: 'philippines',
+                      id: 'Philippines',
                       label: 'Philippines'
                     },
                     {
-                      id: 'poland',
+                      id: 'Poland',
                       label: 'Poland'
                     },
                     {
-                      id: 'portugal',
+                      id: 'Portugal',
                       label: 'Portugal'
                     },
                     {
-                      id: 'qatar',
+                      id: 'Qatar',
                       label: 'Qatar'
                     },
                     {
-                      id: 'romania',
+                      id: 'Romania',
                       label: 'Romania'
                     },
                     {
-                      id: 'russia',
+                      id: 'Russia',
                       label: 'Russia'
                     },
                     {
-                      id: 'rwanda',
+                      id: 'Rwanda',
                       label: 'Rwanda'
                     },
                     {
-                      id: 'saintKittsAndNevis',
+                      id: 'Saint Kitts and Nevis',
                       label: 'Saint Kitts and Nevis'
                     },
                     {
-                      id: 'saintLucia',
+                      id: 'Saint Lucia',
                       label: 'Saint Lucia'
                     },
                     {
-                      id: 'saintVincentAndTheGrenadines',
+                      id: 'Saint Vincent and the Grenadines',
                       label: 'Saint Vincent and the Grenadines'
                     },
                     {
-                      id: 'samoa',
+                      id: 'Samoa',
                       label: 'Samoa'
                     },
                     {
-                      id: 'sanMarino',
+                      id: 'San Marino',
                       label: 'San Marino'
                     },
                     {
-                      id: 'saoTomeAndPrincipe',
+                      id: 'Sao Tome and Principe',
                       label: 'Sao Tome and Principe'
                     },
                     {
-                      id: 'saudiArabia',
+                      id: 'Saudi Arabia',
                       label: 'Saudi Arabia'
                     },
                     {
-                      id: 'senegal',
+                      id: 'Senegal',
                       label: 'Senegal'
                     },
                     {
-                      id: 'serbia',
+                      id: 'Serbia',
                       label: 'Serbia'
                     },
                     {
-                      id: 'seychelles',
+                      id: 'Seychelles',
                       label: 'Seychelles'
                     },
                     {
-                      id: 'sierraLeone',
+                      id: 'Sierra Leone',
                       label: 'Sierra Leone'
                     },
                     {
-                      id: 'singapore',
+                      id: 'Singapore',
                       label: 'Singapore'
                     },
                     {
-                      id: 'slovakia',
+                      id: 'Slovakia',
                       label: 'Slovakia'
                     },
                     {
-                      id: 'slovenia',
+                      id: 'Slovenia',
                       label: 'Slovenia'
                     },
                     {
-                      id: 'solomonIslands',
+                      id: 'Solomon Islands',
                       label: 'Solomon Islands'
                     },
                     {
-                      id: 'somalia',
+                      id: 'Somalia',
                       label: 'Somalia'
                     },
                     {
-                      id: 'southAfrica',
+                      id: 'South Africa',
                       label: 'South Africa'
                     },
                     {
-                      id: 'southKorea',
+                      id: 'South Korea',
                       label: 'South Korea'
                     },
                     {
-                      id: 'southSudan',
+                      id: 'South Sudan',
                       label: 'South Sudan'
                     },
                     {
-                      id: 'spain',
+                      id: 'Spain',
                       label: 'Spain'
                     },
                     {
-                      id: 'sriLanka',
+                      id: 'Sri Lanka',
                       label: 'Sri Lanka'
                     },
                     {
-                      id: 'sudan',
+                      id: 'Sudan',
                       label: 'Sudan'
                     },
                     {
-                      id: 'suriname',
+                      id: 'Suriname',
                       label: 'Suriname'
                     },
                     {
-                      id: 'sweden',
+                      id: 'Sweden',
                       label: 'Sweden'
                     },
                     {
-                      id: 'switzerland',
+                      id: 'Switzerland',
                       label: 'Switzerland'
                     },
                     {
-                      id: 'syria',
+                      id: 'Syria',
                       label: 'Syria'
                     },
                     {
-                      id: 'tajikistan',
+                      id: 'Tajikistan',
                       label: 'Tajikistan'
                     },
                     {
-                      id: 'tanzania',
+                      id: 'Tanzania',
                       label: 'Tanzania'
                     },
                     {
-                      id: 'thailand',
+                      id: 'Thailand',
                       label: 'Thailand'
                     },
                     {
-                      id: 'timorLeste',
+                      id: 'Timor-Leste',
                       label: 'Timor-Leste'
                     },
                     {
-                      id: 'togo',
+                      id: 'Togo',
                       label: 'Togo'
                     },
                     {
-                      id: 'tonga',
+                      id: 'Tonga',
                       label: 'Tonga'
                     },
                     {
-                      id: 'trinidadAndTobago',
+                      id: 'Trinidad and Tobago',
                       label: 'Trinidad and Tobago'
                     },
                     {
-                      id: 'tunisia',
+                      id: 'Tunisia',
                       label: 'Tunisia'
                     },
                     {
-                      id: 'turkey',
+                      id: 'Turkey',
                       label: 'Turkey'
                     },
                     {
-                      id: 'turkmenistan',
+                      id: 'Turkmenistan',
                       label: 'Turkmenistan'
                     },
                     {
-                      id: 'tuvalu',
+                      id: 'Tuvalu',
                       label: 'Tuvalu'
                     },
                     {
-                      id: 'uganda',
+                      id: 'Uganda',
                       label: 'Uganda'
                     },
                     {
-                      id: 'ukraine',
+                      id: 'Ukraine',
                       label: 'Ukraine'
                     },
                     {
-                      id: 'unitedArabEmirates',
+                      id: 'United Arab Emirates',
                       label: 'United Arab Emirates'
                     },
                     {
-                      id: 'unitedKingdom',
+                      id: 'United Kingdom',
                       label: 'United Kingdom'
                     },
                     {
-                      id: 'unitedStatesOfAmerica',
+                      id: 'United States of America',
                       label: 'United States of America'
                     },
                     {
-                      id: 'uruguay',
+                      id: 'Uruguay',
                       label: 'Uruguay'
                     },
                     {
-                      id: 'uzbekistan',
+                      id: 'Uzbekistan',
                       label: 'Uzbekistan'
                     },
                     {
-                      id: 'vanuatu',
+                      id: 'Vanuatu',
                       label: 'Vanuatu'
                     },
                     {
-                      id: 'venezuela',
+                      id: 'Venezuela',
                       label: 'Venezuela'
                     },
                     {
-                      id: 'vietnam',
+                      id: 'Vietnam',
                       label: 'Vietnam'
                     },
                     {
-                      id: 'yemen',
+                      id: 'Yemen',
                       label: 'Yemen'
                     },
                     {
-                      id: 'zambia',
+                      id: 'Zambia',
                       label: 'Zambia'
                     },
                     {
-                      id: 'zimbabwe',
+                      id: 'Zimbabwe',
                       label: 'Zimbabwe'
                     }
                   ]
@@ -896,7 +896,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'officeLocation',
-                options: ['basedOutsideUk']
+                options: ['Based outside UK']
               }
             },
             {
@@ -910,7 +910,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes',
                       conditional: {
                         id: 'website',
@@ -924,7 +924,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                       }
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -942,55 +942,55 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'medicalDevice',
+                      id: 'MEDICAL_DEVICE',
                       label: 'Medical device'
                     },
                     {
-                      id: 'inVitroDiagnostic',
+                      id: 'IN_VITRO_DIAGNOSTIC',
                       label: 'In vitro diagnostic'
                     },
                     {
-                      id: 'pharmaceutical',
+                      id: 'PHARMACEUTICAL',
                       label: 'Pharmaceutical'
                     },
                     {
-                      id: 'digital',
+                      id: 'DIGITAL',
                       label: 'Digital (including apps, platforms, software)'
                     },
                     {
-                      id: 'ai',
+                      id: 'AI',
                       label: 'Artificial intelligence (AI)'
                     },
                     {
-                      id: 'education',
+                      id: 'EDUCATION',
                       label: 'Education or training of workforce'
                     },
                     {
-                      id: 'ppe',
+                      id: 'PPE',
                       label: 'Personal protective equipment (PPE)'
                     },
                     {
-                      id: 'modelsCare',
+                      id: 'MODELS_CARE',
                       label: 'Models of care and clinical pathways'
                     },
                     {
-                      id: 'estatesFacilities',
+                      id: 'ESTATES_FACILITIES',
                       label: 'Estates and facilities'
                     },
                     {
-                      id: 'travelTransport',
+                      id: 'TRAVEL_TRANSPORT',
                       label: 'Travel and transport'
                     },
                     {
-                      id: 'foodNutrition',
+                      id: 'FOOD_NUTRITION',
                       label: 'Food and nutrition'
                     },
                     {
-                      id: 'dataMonitoring',
+                      id: 'DATA_MONITORING',
                       label: 'Data and monitoring'
                     },
                     {
-                      id: 'other',
+                      id: 'OTHER',
                       label: 'Other',
                       conditional: {
                         id: 'otherCategoryDescription',
@@ -1033,43 +1033,43 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                     'We ask this to identify the organisations and people who are in the best position to support you.',
                   items: [
                     {
-                      id: 'covid19',
+                      id: 'COVID_19',
                       label: 'COVID-19'
                     },
                     {
-                      id: 'dataAnalyticsAndResearch',
+                      id: 'DATA_ANALYTICS_AND_RESEARCH',
                       label: 'Data, analytics and research'
                     },
                     {
-                      id: 'digitalisingSystem',
+                      id: 'DIGITALISING_SYSTEM',
                       label: 'Digitalising the system'
                     },
                     {
-                      id: 'improvingSystemFlow',
+                      id: 'IMPROVING_SYSTEM_FLOW',
                       label: 'Improving system flow'
                     },
                     {
-                      id: 'independenceAndPrevention',
+                      id: 'INDEPENDENCE_AND_PREVENTION',
                       label: 'Independence and prevention'
                     },
                     {
-                      id: 'operationalExcellence',
+                      id: 'OPERATIONAL_EXCELLENCE',
                       label: 'Operational excellence'
                     },
                     {
-                      id: 'patientActivationAndSelfCare',
+                      id: 'PATIENT_ACTIVATION_AND_SELF_CARE',
                       label: 'Patient activation and self-care'
                     },
                     {
-                      id: 'patientSafety',
+                      id: 'PATIENT_SAFETY',
                       label: 'Patient safety and quality improvement'
                     },
                     {
-                      id: 'workforceResourceOptimisation',
+                      id: 'WORKFORCE_RESOURCE_OPTIMISATION',
                       label: 'Workforce resource optimisation'
                     },
                     {
-                      id: 'netZeroGreenerInnovation',
+                      id: 'NET_ZERO_GREENER_INNOVATION',
                       label: 'Net zero NHS or greener innovation'
                     }
                   ]
@@ -1087,67 +1087,67 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'academia',
+                      id: 'ACADEMIA',
                       label: 'Academia'
                     },
                     {
-                      id: 'acuteTrustsInpatient',
+                      id: 'ACUTE_TRUSTS_INPATIENT',
                       label: 'Acute trust - inpatient'
                     },
                     {
-                      id: 'acuteTrustsOutpatient',
+                      id: 'ACUTE_TRUSTS_OUTPATIENT',
                       label: 'Acute trust - outpatient'
                     },
                     {
-                      id: 'ambulance',
+                      id: 'AMBULANCE',
                       label: 'Ambulance'
                     },
                     {
-                      id: 'careHomesCareSetting',
+                      id: 'CARE_HOMES_CARE_SETTING',
                       label: 'Care homes or care setting'
                     },
                     {
-                      id: 'endLifeCare',
+                      id: 'END_LIFE_CARE',
                       label: 'End of life care (EOLC)'
                     },
                     {
-                      id: 'ics',
+                      id: 'ICS',
                       label: 'ICS'
                     },
                     {
-                      id: 'industry',
+                      id: 'INDUSTRY',
                       label: 'Industry'
                     },
                     {
-                      id: 'localAuthorityEducation',
+                      id: 'LOCAL_AUTHORITY_EDUCATION',
                       label: 'Local authority - education'
                     },
                     {
-                      id: 'mentalHealth',
+                      id: 'MENTAL_HEALTH',
                       label: 'Mental health'
                     },
                     {
-                      id: 'pharmacy',
+                      id: 'PHARMACY',
                       label: 'Pharmacies'
                     },
                     {
-                      id: 'primaryCare',
+                      id: 'PRIMARY_CARE',
                       label: 'Primary care'
                     },
                     {
-                      id: 'socialCare',
+                      id: 'SOCIAL_CARE',
                       label: 'Social care'
                     },
                     {
-                      id: 'thirdSectorOrganisations',
+                      id: 'THIRD_SECTOR_ORGANISATIONS',
                       label: 'Third sector organisations'
                     },
                     {
-                      id: 'urgentAndEmergency',
+                      id: 'URGENT_AND_EMERGENCY',
                       label: 'Urgent and emergency'
                     },
                     {
-                      id: 'other',
+                      id: 'OTHER',
                       label: 'Other',
                       conditional: {
                         id: 'otherCareSetting',
@@ -1176,35 +1176,35 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'preventCondition',
+                      id: 'PREVENT_CONDITION',
                       label: 'Preventing a condition or symptom from happening or worsening'
                     },
                     {
-                      id: 'predictCondition',
+                      id: 'PREDICT_CONDITION',
                       label: 'Predicting the occurence of a condition or symptom'
                     },
                     {
-                      id: 'diagnoseCondition',
+                      id: 'DIAGNOSE_CONDITION',
                       label: 'Diagnosing a condition'
                     },
                     {
-                      id: 'monitorCondition',
+                      id: 'MONITOR_CONDITION',
                       label: 'Monitoring a condition, treatment or therapy'
                     },
                     {
-                      id: 'provideTreatment',
+                      id: 'PROVIDE_TREATMENT',
                       label: 'Providing treatment or therapy'
                     },
                     {
-                      id: 'manageCondition',
+                      id: 'MANAGE_CONDITION',
                       label: 'Managing a condition'
                     },
                     {
-                      id: 'enablingCare',
+                      id: 'ENABLING_CARE',
                       label: 'Enabling care, services or communication'
                     },
                     {
-                      id: 'risksClimateChange',
+                      id: 'RISKS_CLIMATE_CHANGE',
                       label:
                         'Supporting the NHS to mitigate the risks or effects of climate change and severe weather conditions'
                     }
@@ -1254,7 +1254,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'no',
+                      id: 'No',
                       label: 'No',
                       exclusive: true
                     },
@@ -1262,51 +1262,51 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                       type: 'separator'
                     },
                     {
-                      id: 'healthInnovationNetwork',
+                      id: 'Health Innovation Network',
                       label: 'Health Innovation Network'
                     },
                     {
-                      id: 'artificialIntelligenceInHealthAndCareAward',
+                      id: 'Artificial Intelligence in Health and Care Award',
                       label: 'Artificial Intelligence in Health and Care Award'
                     },
                     {
-                      id: 'clinicalEntrepreneurProgramme',
+                      id: 'Clinical Entrepreneur Programme',
                       label: 'Clinical Entrepreneur Programme'
                     },
                     {
-                      id: 'earlyAccessToMedicinesScheme',
+                      id: 'Early Access to Medicines Scheme',
                       label: 'Early Access to Medicines Scheme'
                     },
                     {
-                      id: 'innovationForHealthcareInequalitiesProgramme',
+                      id: 'Innovation for Healthcare Inequalities Programme',
                       label: 'Innovation for Healthcare Inequalities Programme'
                     },
                     {
-                      id: 'innovationAndTechnologyPaymentProgramme',
+                      id: 'Innovation and Technology Payment Programme',
                       label: 'Innovation and Technology Payment Programme'
                     },
                     {
-                      id: 'nhsInnovationAccelerator',
+                      id: 'NHS Innovation Accelerator',
                       label: 'NHS Innovation Accelerator'
                     },
                     {
-                      id: 'nhsInsightsPrioritisationProgramme',
+                      id: 'NHS Insights Prioritisation Programme',
                       label: 'NHS Insights Prioritisation Programme'
                     },
                     {
-                      id: 'pathwayTransformationFund',
+                      id: 'Pathway Transformation Fund',
                       label: 'Pathway Transformation Fund'
                     },
                     {
-                      id: 'rapidUptakeProductsProgramme',
+                      id: 'Rapid Uptake Products Programme',
                       label: 'Rapid Uptake Products Programme'
                     },
                     {
-                      id: 'smallBusinessResearchInitiativeForHealthcare',
+                      id: 'Small Business Research Initiative for Healthcare',
                       label: 'Small Business Research Initiative for Healthcare'
                     },
                     {
-                      id: 'testBeds',
+                      id: 'Test beds',
                       label: 'Test beds'
                     }
                   ]
@@ -1322,7 +1322,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Value proposition (V3)',
       subSections: [
         {
-          id: 'understandingOfNeeds',
+          id: 'UNDERSTANDING_OF_NEEDS',
           title: 'Detailed understanding of needs and benefits (V3)',
           steps: [
             {
@@ -1366,11 +1366,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -1385,153 +1385,153 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   label: 'What are the benefits or impact of your innovation?',
                   items: [
                     {
-                      id: 'reducesMortality',
+                      id: 'Reduces mortality',
                       label: 'Reduces mortality',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'reducesNeedForFurtherTreatment',
+                      id: 'Reduces need for further treatment',
                       label: 'Reduces need for further treatment',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'reducesAdverseEvents',
+                      id: 'Reduces adverse events',
                       label: 'Reduces adverse events',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'enablesEarlierOrMoreAccurateDiagnosis',
+                      id: 'Enables earlier or more accurate diagnosis',
                       label: 'Enables earlier or more accurate diagnosis',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'reducesRisksSideEffectsOrComplications',
+                      id: 'Reduces risks, side effects or complications',
                       label: 'Reduces risks, side effects or complications',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'preventsAConditionOccurringOrExacerbating',
+                      id: 'Prevents a condition occurring or exacerbating',
                       label: 'Prevents a condition occurring or exacerbating',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'avoidsATestProcedureOrUnnecessaryTreatment',
+                      id: 'Avoids a test, procedure or unnecessary treatment',
                       label: 'Avoids a test, procedure or unnecessary treatment',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'enablesATestProcedureOrTreatmentToBeDoneNonInvasively',
+                      id: 'Enables a test, procedure or treatment to be done non-invasively',
                       label: 'Enables a test, procedure or treatment to be done non-invasively',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'increasesSelfManagement',
+                      id: 'Increases self-management',
                       label: 'Increases self-management',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'increasesQualityOfLife',
+                      id: 'Increases quality of life',
                       label: 'Increases quality of life',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'enablesSharedCare',
+                      id: 'Enables shared care',
                       label: 'Enables shared care',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'alleviatesPain',
+                      id: 'Alleviates pain',
                       label: 'Alleviates pain',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'otherBenefitsForPatientsAndPeople',
+                      id: 'Other benefits for patients and people',
                       label: 'Other benefits for patients and people',
                       group: 'Benefits for patients and people'
                     },
                     {
-                      id: 'reducesTheLengthOfStayOrEnablesEarlierDischarge',
+                      id: 'Reduces the length of stay or enables earlier discharge',
                       label: 'Reduces the length of stay or enables earlier discharge',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'reducesNeedForAdultOrPaediatricCriticalCare',
+                      id: 'Reduces need for adult or paediatric critical care',
                       label: 'Reduces need for adult or paediatric critical care',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'reducesEmergencyAdmissions',
+                      id: 'Reduces emergency admissions',
                       label: 'Reduces emergency admissions',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'changesDeliveryOfCareFromSecondaryCareForExampleHospitalsToPrimaryCareForExampleGpOrCommunityServices',
+                      id: 'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)',
                       label:
                         'Changes delivery of care from secondary care(for example hospitals) to primary care(for example GP or community services)',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'changeInDeliveryOfCareFromInpatientToDayCase',
+                      id: 'Change in delivery of care from inpatient to day case',
                       label: 'Change in delivery of care from inpatient to day case',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'increasesCompliance',
+                      id: 'Increases compliance',
                       label: 'Increases compliance',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'improvesPatientManagementOrCoordinationOfCareOrServices',
+                      id: 'Improves patient management or coordination of care or services',
                       label: 'Improves patient management or coordination of care or services',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'reducesReferrals',
+                      id: 'Reduces referrals',
                       label: 'Reduces referrals',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'takesLessTime',
+                      id: 'Takes less time',
                       label: 'Takes less time',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'usesNoStaffOrALowerGradeOfStaff',
+                      id: 'Uses no staff or a lower grade of staff',
                       label: 'Uses no staff or a lower grade of staff',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'leadsToFewerAppointments',
+                      id: 'Leads to fewer appointments',
                       label: 'Leads to fewer appointments',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'isCostSaving',
+                      id: 'Is cost saving',
                       label: 'Is cost saving',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'increasesEfficiency',
+                      id: 'Increases efficiency',
                       label: 'Increases efficiency',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'improvesPerformance',
+                      id: 'Improves performance',
                       label: 'Improves performance',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'reducesCarbonEmissionsAndSupportsTheNhsToAchieveNetZero',
+                      id: 'Reduces carbon emissions and supports the NHS to achieve net zero',
                       label: 'Reduces carbon emissions and supports the NHS to achieve net zero',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'otherEnvironmentalBenefits',
+                      id: 'Other environmental benefits',
                       label: 'Other environmental benefits',
                       group: 'Benefits for the NHS and social care'
                     },
                     {
-                      id: 'otherBenefitsForTheNhsAndSocialCare',
+                      id: 'Other benefits for the NHS and social care',
                       label: 'Other benefits for the NHS and social care',
                       group: 'Benefits for the NHS and social care'
                     }
@@ -1550,11 +1550,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -1573,664 +1573,664 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'bloodAndImmuneSystemConditions',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS',
                       label: 'Blood and immune system conditions'
                     },
                     {
-                      id: 'bloodAndImmuneSystemConditionsAllergies',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ALLERGIES',
                       label: 'Blood and immune system conditions - Allergies'
                     },
                     {
-                      id: 'bloodAndImmuneSystemConditionsAnaphylaxis',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_ANAPHYLAXIS',
                       label: 'Blood and immune system conditions - Anaphylaxis'
                     },
                     {
-                      id: 'bloodAndImmuneSystemConditionsBloodConditions',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_BLOOD_CONDITIONS',
                       label: 'Blood and immune system conditions - Blood conditions'
                     },
                     {
-                      id: 'bloodAndImmuneSystemConditionsLymphoedema',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_LYMPHOEDEMA',
                       label: 'Blood and immune system conditions - Lymphoedema'
                     },
                     {
-                      id: 'bloodAndImmuneSystemConditionsSystemicLupusErythematosus',
+                      id: 'BLOOD_AND_IMMUNE_SYSTEM_CONDITIONS_SYSTEMIC_LUPUS_ERYTHEMATOSUS',
                       label: 'Blood and immune system conditions - Systemic lupus erythematosus'
                     },
                     {
-                      id: 'cancer',
+                      id: 'CANCER',
                       label: 'Cancer'
                     },
                     {
-                      id: 'cancerBladderCancer',
+                      id: 'CANCER_BLADDER_CANCER',
                       label: 'Cancer - Bladder cancer'
                     },
                     {
-                      id: 'cancerBloodAndBoneMarrowCancers',
+                      id: 'CANCER_BLOOD_AND_BONE_MARROW_CANCERS',
                       label: 'Cancer - Blood and bone marrow cancers'
                     },
                     {
-                      id: 'cancerBrainCancers',
+                      id: 'CANCER_BRAIN_CANCERS',
                       label: 'Cancer - Brain cancers'
                     },
                     {
-                      id: 'cancerBreastCancer',
+                      id: 'CANCER_BREAST_CANCER',
                       label: 'Cancer - Breast cancer'
                     },
                     {
-                      id: 'cancerCervicalCancer',
+                      id: 'CANCER_CERVICAL_CANCER',
                       label: 'Cancer - Cervical cancer'
                     },
                     {
-                      id: 'cancerColorectalCancer',
+                      id: 'CANCER_COLORECTAL_CANCER',
                       label: 'Cancer - Colorectal cancer'
                     },
                     {
-                      id: 'cancerComplicationsOfCancer',
+                      id: 'CANCER_COMPLICATIONS_OF_CANCER',
                       label: 'Cancer - Complications of cancer'
                     },
                     {
-                      id: 'cancerEndometrialCancers',
+                      id: 'CANCER_ENDOMETRIAL_CANCERS',
                       label: 'Cancer - Endometrial cancers'
                     },
                     {
-                      id: 'cancerHeadAndNeckCancers',
+                      id: 'CANCER_HEAD_AND_NECK_CANCERS',
                       label: 'Cancer - Head and neck cancers'
                     },
                     {
-                      id: 'cancerLiverCancers',
+                      id: 'CANCER_LIVER_CANCERS',
                       label: 'Cancer - Liver cancers'
                     },
                     {
-                      id: 'cancerLungCancer',
+                      id: 'CANCER_LUNG_CANCER',
                       label: 'Cancer - Lung cancer'
                     },
                     {
-                      id: 'cancerMetastases',
+                      id: 'CANCER_METASTASES',
                       label: 'Cancer - Metastases'
                     },
                     {
-                      id: 'cancerOesophagealCancer',
+                      id: 'CANCER_OESOPHAGEAL_CANCER',
                       label: 'Cancer - Oesophageal cancer'
                     },
                     {
-                      id: 'cancerOvarianCancer',
+                      id: 'CANCER_OVARIAN_CANCER',
                       label: 'Cancer - Ovarian cancer'
                     },
                     {
-                      id: 'cancerPancreaticCancer',
+                      id: 'CANCER_PANCREATIC_CANCER',
                       label: 'Cancer - Pancreatic cancer'
                     },
                     {
-                      id: 'cancerPenileAndTesticularCancer',
+                      id: 'CANCER_PENILE_AND_TESTICULAR_CANCER',
                       label: 'Cancer - Penile and testicular cancer'
                     },
                     {
-                      id: 'cancerPeritonealCancer',
+                      id: 'CANCER_PERITONEAL_CANCER',
                       label: 'Cancer - Peritoneal cancer'
                     },
                     {
-                      id: 'cancerProstateCancer',
+                      id: 'CANCER_PROSTATE_CANCER',
                       label: 'Cancer - Prostate cancer'
                     },
                     {
-                      id: 'cancerRenalCancer',
+                      id: 'CANCER_RENAL_CANCER',
                       label: 'Cancer - Renal cancer'
                     },
                     {
-                      id: 'cancerSarcoma',
+                      id: 'CANCER_SARCOMA',
                       label: 'Cancer - Sarcoma'
                     },
                     {
-                      id: 'cancerSkinCancer',
+                      id: 'CANCER_SKIN_CANCER',
                       label: 'Cancer - Skin cancer'
                     },
                     {
-                      id: 'cancerStomachCancer',
+                      id: 'CANCER_STOMACH_CANCER',
                       label: 'Cancer - Stomach cancer'
                     },
                     {
-                      id: 'cancerThyroidCancer',
+                      id: 'CANCER_THYROID_CANCER',
                       label: 'Cancer - Thyroid cancer'
                     },
                     {
-                      id: 'cancerUpperAirwaysTractCancers',
+                      id: 'CANCER_UPPER_AIRWAYS_TRACT_CANCERS',
                       label: 'Cancer - Upper airways tract cancers'
                     },
                     {
-                      id: 'cardiovascularConditions',
+                      id: 'CARDIOVASCULAR_CONDITIONS',
                       label: 'Cardiovascular conditions'
                     },
                     {
-                      id: 'cardiovascularConditionsAcuteCoronarySyndromes',
+                      id: 'CARDIOVASCULAR_CONDITIONS_ACUTE_CORONARY_SYNDROMES',
                       label: 'Cardiovascular conditions - Acute coronary syndromes'
                     },
                     {
-                      id: 'cardiovascularConditionsAorticAneurysms',
+                      id: 'CARDIOVASCULAR_CONDITIONS_AORTIC_ANEURYSMS',
                       label: 'Cardiovascular conditions - Aortic aneurysms'
                     },
                     {
-                      id: 'cardiovascularConditionsCranialAneurysms',
+                      id: 'CARDIOVASCULAR_CONDITIONS_CRANIAL_ANEURYSMS',
                       label: 'Cardiovascular conditions - Cranial aneurysms'
                     },
                     {
-                      id: 'cardiovascularConditionsEmbolismAndThrombosis',
+                      id: 'CARDIOVASCULAR_CONDITIONS_EMBOLISM_AND_THROMBOSIS',
                       label: 'Cardiovascular conditions - Embolism and thrombosis'
                     },
                     {
-                      id: 'cardiovascularConditionsHeartFailure',
+                      id: 'CARDIOVASCULAR_CONDITIONS_HEART_FAILURE',
                       label: 'Cardiovascular conditions - Heart failure'
                     },
                     {
-                      id: 'cardiovascularConditionsHeartRhythmConditions',
+                      id: 'CARDIOVASCULAR_CONDITIONS_HEART_RHYTHM_CONDITIONS',
                       label: 'Cardiovascular conditions - Heart rhythm conditions'
                     },
                     {
-                      id: 'cardiovascularConditionsHypertension',
+                      id: 'CARDIOVASCULAR_CONDITIONS_HYPERTENSION',
                       label: 'Cardiovascular conditions - Hypertension'
                     },
                     {
-                      id: 'cardiovascularConditionsPeripheralCirculatoryConditions',
+                      id: 'CARDIOVASCULAR_CONDITIONS_PERIPHERAL_CIRCULATORY_CONDITIONS',
                       label: 'Cardiovascular conditions - Peripheral circulatory conditions'
                     },
                     {
-                      id: 'cardiovascularConditionsStableAngina',
+                      id: 'CARDIOVASCULAR_CONDITIONS_STABLE_ANGINA',
                       label: 'Cardiovascular conditions - Stable angina'
                     },
                     {
-                      id: 'cardiovascularConditionsStrokeAndTransientIschaemicAttack',
+                      id: 'CARDIOVASCULAR_CONDITIONS_STROKE_AND_TRANSIENT_ISCHAEMIC_ATTACK',
                       label: 'Cardiovascular conditions - Stroke and transient ischaemic attack'
                     },
                     {
-                      id: 'cardiovascularConditionsStructuralHeartDefects',
+                      id: 'CARDIOVASCULAR_CONDITIONS_STRUCTURAL_HEART_DEFECTS',
                       label: 'Cardiovascular conditions - Structural heart defects'
                     },
                     {
-                      id: 'cardiovascularConditionsVaricoseVeins',
+                      id: 'CARDIOVASCULAR_CONDITIONS_VARICOSE_VEINS',
                       label: 'Cardiovascular conditions - Varicose veins'
                     },
                     {
-                      id: 'chronicAndNeuropathicPain',
+                      id: 'CHRONIC_AND_NEUROPATHIC_PAIN',
                       label: 'Chronic and neuropathic pain'
                     },
                     {
-                      id: 'chronicFatigueSyndrome',
+                      id: 'CHRONIC_FATIGUE_SYNDROME',
                       label: 'Chronic fatigue syndrome'
                     },
                     {
-                      id: 'cysticFibrosis',
+                      id: 'CYSTIC_FIBROSIS',
                       label: 'Cystic fibrosis'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditions',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsAdrenalDysfunction',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_ADRENAL_DYSFUNCTION',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Adrenal dysfunction'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsDiabetes',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_DIABETES',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Diabetes'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsFailureToThrive',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_FAILURE_TO_THRIVE',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Failure to thrive'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsLipidDisorders',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_LIPID_DISORDERS',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Lipid disorders'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsMalnutrition',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_MALNUTRITION',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Malnutrition'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsMetabolicConditions',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_METABOLIC_CONDITIONS',
                       label:
                         'Diabetes and other endocrinal, nutritional and metabolic conditions - Metabolic conditions'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsObesity',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_OBESITY',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Obesity'
                     },
                     {
-                      id: 'diabetesAndOtherEndocrinalNutritionalAndMetabolicConditionsThyroidDisorders',
+                      id: 'DIABETES_AND_OTHER_ENDOCRINAL_NUTRITIONAL_AND_METABOLIC_CONDITIONS_THYROID_DISORDERS',
                       label: 'Diabetes and other endocrinal, nutritional and metabolic conditions - Thyroid disorders'
                     },
                     {
-                      id: 'digestiveTractConditions',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS',
                       label: 'Digestive tract conditions'
                     },
                     {
-                      id: 'digestiveTractConditionsCholelithiasisAndCholecystitis',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_CHOLELITHIASIS_AND_CHOLECYSTITIS',
                       label: 'Digestive tract conditions - Cholelithiasis and cholecystitis'
                     },
                     {
-                      id: 'digestiveTractConditionsCoeliacDisease',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_COELIAC_DISEASE',
                       label: 'Digestive tract conditions - Coeliac disease'
                     },
                     {
-                      id: 'digestiveTractConditionsConstipation',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_CONSTIPATION',
                       label: 'Digestive tract conditions - Constipation'
                     },
                     {
-                      id: 'digestiveTractConditionsDiarrhoeaAndVomiting',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_DIARRHOEA_AND_VOMITING',
                       label: 'Digestive tract conditions - Diarrhoea and vomiting'
                     },
                     {
-                      id: 'digestiveTractConditionsDiverticularDisease',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_DIVERTICULAR_DISEASE',
                       label: 'Digestive tract conditions - Diverticular disease'
                     },
                     {
-                      id: 'digestiveTractConditionsFaecalIncontinence',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_FAECAL_INCONTINENCE',
                       label: 'Digestive tract conditions - Faecal incontinence'
                     },
                     {
-                      id: 'digestiveTractConditionsGastroOesophagealRefluxIncludingBarrettsOesophagus',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_GASTRO_OESOPHAGEAL_REFLUX_INCLUDING_BARRETTS_OESOPHAGUS',
                       label: "Digestive tract conditions - Gastro-oesophageal reflux, including Barrett's oesophagus"
                     },
                     {
-                      id: 'digestiveTractConditionsGastroparesis',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_GASTROPARESIS',
                       label: 'Digestive tract conditions - Gastroparesis'
                     },
                     {
-                      id: 'digestiveTractConditionsHaemorrhoidsAndOtherAnalConditions',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_HAEMORRHOIDS_AND_OTHER_ANAL_CONDITIONS',
                       label: 'Digestive tract conditions - Haemorrhoids and other anal conditions'
                     },
                     {
-                      id: 'digestiveTractConditionsHernia',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_HERNIA',
                       label: 'Digestive tract conditions - Hernia'
                     },
                     {
-                      id: 'digestiveTractConditionsInflammatoryBowelDisease',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_INFLAMMATORY_BOWEL_DISEASE',
                       label: 'Digestive tract conditions - Inflammatory bowel disease'
                     },
                     {
-                      id: 'digestiveTractConditionsIrritableBowelSyndrome',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_IRRITABLE_BOWEL_SYNDROME',
                       label: 'Digestive tract conditions - Irritable bowel syndrome'
                     },
                     {
-                      id: 'digestiveTractConditionsLowerGastrointestinalLesions',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_LOWER_GASTROINTESTINAL_LESIONS',
                       label: 'Digestive tract conditions - Lower gastrointestinal lesions'
                     },
                     {
-                      id: 'digestiveTractConditionsPancreatitis',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_PANCREATITIS',
                       label: 'Digestive tract conditions - Pancreatitis'
                     },
                     {
-                      id: 'digestiveTractConditionsUpperGastrointestinalBleeding',
+                      id: 'DIGESTIVE_TRACT_CONDITIONS_UPPER_GASTROINTESTINAL_BLEEDING',
                       label: 'Digestive tract conditions - Upper gastrointestinal bleeding'
                     },
                     {
-                      id: 'earNoseAndThroatConditions',
+                      id: 'EAR_NOSE_AND_THROAT_CONDITIONS',
                       label: 'Ear, nose and throat conditions'
                     },
                     {
-                      id: 'eyeConditions',
+                      id: 'EYE_CONDITIONS',
                       label: 'Eye conditions'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirth',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH',
                       label: 'Fertility, pregnancy and childbirth'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthContraception',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_CONTRACEPTION',
                       label: 'Fertility, pregnancy and childbirth - Contraception'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthFertility',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_FERTILITY',
                       label: 'Fertility, pregnancy and childbirth - Fertility'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthIntrapartumCare',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_INTRAPARTUM_CARE',
                       label: 'Fertility, pregnancy and childbirth - Intrapartum care'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthPostnatalCare',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_POSTNATAL_CARE',
                       label: 'Fertility, pregnancy and childbirth - Postnatal care'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthPregnancy',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_PREGNANCY',
                       label: 'Fertility, pregnancy and childbirth - Pregnancy'
                     },
                     {
-                      id: 'fertilityPregnancyAndChildbirthTerminationOfPregnancyServices',
+                      id: 'FERTILITY_PREGNANCY_AND_CHILDBIRTH_TERMINATION_OF_PREGNANCY_SERVICES',
                       label: 'Fertility, pregnancy and childbirth - Termination of pregnancy services'
                     },
                     {
-                      id: 'gynaecologicalConditions',
+                      id: 'GYNAECOLOGICAL_CONDITIONS',
                       label: 'Gynaecological conditions'
                     },
                     {
-                      id: 'gynaecologicalConditionsEndometriosisAndFibroids',
+                      id: 'GYNAECOLOGICAL_CONDITIONS_ENDOMETRIOSIS_AND_FIBROIDS',
                       label: 'Gynaecological conditions - Endometriosis and fibroids'
                     },
                     {
-                      id: 'gynaecologicalConditionsHeavyMenstrualBleeding',
+                      id: 'GYNAECOLOGICAL_CONDITIONS_HEAVY_MENSTRUAL_BLEEDING',
                       label: 'Gynaecological conditions - Heavy menstrual bleeding'
                     },
                     {
-                      id: 'gynaecologicalConditionsMenopause',
+                      id: 'GYNAECOLOGICAL_CONDITIONS_MENOPAUSE',
                       label: 'Gynaecological conditions - Menopause'
                     },
                     {
-                      id: 'gynaecologicalConditionsUterineProlapse',
+                      id: 'GYNAECOLOGICAL_CONDITIONS_UTERINE_PROLAPSE',
                       label: 'Gynaecological conditions - Uterine prolapse'
                     },
                     {
-                      id: 'gynaecologicalConditionsVaginalConditions',
+                      id: 'GYNAECOLOGICAL_CONDITIONS_VAGINAL_CONDITIONS',
                       label: 'Gynaecological conditions - Vaginal conditions'
                     },
                     {
-                      id: 'infections',
+                      id: 'INFECTIONS',
                       label: 'Infections'
                     },
                     {
-                      id: 'infectionsAntimicrobialStewardship',
+                      id: 'INFECTIONS_ANTIMICROBIAL_STEWARDSHIP',
                       label: 'Infections - Antimicrobial stewardship'
                     },
                     {
-                      id: 'infectionsBitesAndStings',
+                      id: 'INFECTIONS_BITES_AND_STINGS',
                       label: 'Infections - Bites and stings'
                     },
                     {
-                      id: 'infectionsCovid19',
+                      id: 'INFECTIONS_COVID_19',
                       label: 'Infections - COVID-19'
                     },
                     {
-                      id: 'infectionsFeverishIllness',
+                      id: 'INFECTIONS_FEVERISH_ILLNESS',
                       label: 'Infections - Feverish illness'
                     },
                     {
-                      id: 'infectionsHealthcareAssociatedInfections',
+                      id: 'INFECTIONS_HEALTHCARE_ASSOCIATED_INFECTIONS',
                       label: 'Infections - Healthcare-associated infections'
                     },
                     {
-                      id: 'infectionsHivAndAids',
+                      id: 'INFECTIONS_HIV_AND_AIDS',
                       label: 'Infections - HIV and AIDS'
                     },
                     {
-                      id: 'infectionsInfluenza',
+                      id: 'INFECTIONS_INFLUENZA',
                       label: 'Infections - Influenza'
                     },
                     {
-                      id: 'infectionsMeningitisAndMeningococcalSepticaemia',
+                      id: 'INFECTIONS_MENINGITIS_AND_MENINGOCOCCAL_SEPTICAEMIA',
                       label: 'Infections - Meningitis and meningococcal septicaemia'
                     },
                     {
-                      id: 'infectionsSepsis',
+                      id: 'INFECTIONS_SEPSIS',
                       label: 'Infections - Sepsis'
                     },
                     {
-                      id: 'infectionsSkinInfections',
+                      id: 'INFECTIONS_SKIN_INFECTIONS',
                       label: 'Infections - Skin infections'
                     },
                     {
-                      id: 'infectionsTuberculosis',
+                      id: 'INFECTIONS_TUBERCULOSIS',
                       label: 'Infections - Tuberculosis'
                     },
                     {
-                      id: 'injuriesAccidentsAndWounds',
+                      id: 'INJURIES_ACCIDENTS_AND_WOUNDS',
                       label: 'Injuries, accidents and wounds'
                     },
                     {
-                      id: 'kidneyConditions',
+                      id: 'KIDNEY_CONDITIONS',
                       label: 'Kidney conditions'
                     },
                     {
-                      id: 'kidneyConditionsAcuteKidneyInjury',
+                      id: 'KIDNEY_CONDITIONS_ACUTE_KIDNEY_INJURY',
                       label: 'Kidney conditions - Acute kidney injury'
                     },
                     {
-                      id: 'kidneyConditionsChronicKidneyDisease',
+                      id: 'KIDNEY_CONDITIONS_CHRONIC_KIDNEY_DISEASE',
                       label: 'Kidney conditions - Chronic kidney disease'
                     },
                     {
-                      id: 'kidneyConditionsRenalStones',
+                      id: 'KIDNEY_CONDITIONS_RENAL_STONES',
                       label: 'Kidney conditions - Renal stones'
                     },
                     {
-                      id: 'liverConditions',
+                      id: 'LIVER_CONDITIONS',
                       label: 'Liver conditions'
                     },
                     {
-                      id: 'liverConditionsChronicLiverDisease',
+                      id: 'LIVER_CONDITIONS_CHRONIC_LIVER_DISEASE',
                       label: 'Liver conditions - Chronic liver disease'
                     },
                     {
-                      id: 'liverConditionsHepatitis',
+                      id: 'LIVER_CONDITIONS_HEPATITIS',
                       label: 'Liver conditions - Hepatitis'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditions',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS',
                       label: 'Mental health and behavioural conditions'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsAddiction',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ADDICTION',
                       label: 'Mental health and behavioural conditions - Addiction'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsAlcoholUseDisorders',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ALCOHOL_USE_DISORDERS',
                       label: 'Mental health and behavioural conditions - Alcohol-use disorders'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsAnxiety',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ANXIETY',
                       label: 'Mental health and behavioural conditions - Anxiety'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsAttentionDeficitDisorder',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_ATTENTION_DEFICIT_DISORDER',
                       label: 'Mental health and behavioural conditions - Attention deficit disorder'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsAutism',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_AUTISM',
                       label: 'Mental health and behavioural conditions - Autism'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsBipolarDisorder',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_BIPOLAR_DISORDER',
                       label: 'Mental health and behavioural conditions - Bipolar disorder'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsDelirium',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DELIRIUM',
                       label: 'Mental health and behavioural conditions - Delirium'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsDementia',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEMENTIA',
                       label: 'Mental health and behavioural conditions - Dementia'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsDepression',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DEPRESSION',
                       label: 'Mental health and behavioural conditions - Depression'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsDrugMisuse',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_DRUG_MISUSE',
                       label: 'Mental health and behavioural conditions - Drug misuse'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsEatingDisorders',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_EATING_DISORDERS',
                       label: 'Mental health and behavioural conditions - Eating disorders'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsMentalHealthServices',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_MENTAL_HEALTH_SERVICES',
                       label: 'Mental health and behavioural conditions - Mental health services'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsPersonalityDisorders',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PERSONALITY_DISORDERS',
                       label: 'Mental health and behavioural conditions - Personality disorders'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsPsychosisAndSchizophrenia',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_PSYCHOSIS_AND_SCHIZOPHRENIA',
                       label: 'Mental health and behavioural conditions - Psychosis and schizophrenia'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsSelfHarm',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SELF_HARM',
                       label: 'Mental health and behavioural conditions - Self-harm'
                     },
                     {
-                      id: 'mentalHealthAndBehaviouralConditionsSuicidePrevention',
+                      id: 'MENTAL_HEALTH_AND_BEHAVIOURAL_CONDITIONS_SUICIDE_PREVENTION',
                       label: 'Mental health and behavioural conditions - Suicide prevention'
                     },
                     {
-                      id: 'multipleLongTermConditions',
+                      id: 'MULTIPLE_LONG_TERM_CONDITIONS',
                       label: 'Multiple long-term conditions'
                     },
                     {
-                      id: 'musculoskeletalConditions',
+                      id: 'MUSCULOSKELETAL_CONDITIONS',
                       label: 'Musculoskeletal conditions'
                     },
                     {
-                      id: 'musculoskeletalConditionsArthritis',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_ARTHRITIS',
                       label: 'Musculoskeletal conditions - Arthritis'
                     },
                     {
-                      id: 'musculoskeletalConditionsFractures',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_FRACTURES',
                       label: 'Musculoskeletal conditions - Fractures'
                     },
                     {
-                      id: 'musculoskeletalConditionsHipConditions',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_HIP_CONDITIONS',
                       label: 'Musculoskeletal conditions - Hip conditions'
                     },
                     {
-                      id: 'musculoskeletalConditionsJointReplacement',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_JOINT_REPLACEMENT',
                       label: 'Musculoskeletal conditions - Joint replacement'
                     },
                     {
-                      id: 'musculoskeletalConditionsKneeConditions',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_KNEE_CONDITIONS',
                       label: 'Musculoskeletal conditions - Knee conditions'
                     },
                     {
-                      id: 'musculoskeletalConditionsLowBackPain',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_LOW_BACK_PAIN',
                       label: 'Musculoskeletal conditions - Low back pain'
                     },
                     {
-                      id: 'musculoskeletalConditionsMaxillofacialConditions',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_MAXILLOFACIAL_CONDITIONS',
                       label: 'Musculoskeletal conditions - Maxillofacial conditions'
                     },
                     {
-                      id: 'musculoskeletalConditionsOsteoporosis',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_OSTEOPOROSIS',
                       label: 'Musculoskeletal conditions - Osteoporosis'
                     },
                     {
-                      id: 'musculoskeletalConditionsSpinalConditions',
+                      id: 'MUSCULOSKELETAL_CONDITIONS_SPINAL_CONDITIONS',
                       label: 'Musculoskeletal conditions - Spinal conditions'
                     },
                     {
-                      id: 'neurologicalConditions',
+                      id: 'NEUROLOGICAL_CONDITIONS',
                       label: 'Neurological conditions'
                     },
                     {
-                      id: 'neurologicalConditionsEpilepsy',
+                      id: 'NEUROLOGICAL_CONDITIONS_EPILEPSY',
                       label: 'Neurological conditions - Epilepsy'
                     },
                     {
-                      id: 'neurologicalConditionsHeadaches',
+                      id: 'NEUROLOGICAL_CONDITIONS_HEADACHES',
                       label: 'Neurological conditions - Headaches'
                     },
                     {
-                      id: 'neurologicalConditionsMetastaticSpinalCordCompression',
+                      id: 'NEUROLOGICAL_CONDITIONS_METASTATIC_SPINAL_CORD_COMPRESSION',
                       label: 'Neurological conditions - Metastatic spinal cord compression'
                     },
                     {
-                      id: 'neurologicalConditionsMotorNeuroneDisease',
+                      id: 'NEUROLOGICAL_CONDITIONS_MOTOR_NEURONE_DISEASE',
                       label: 'Neurological conditions - Motor neurone disease'
                     },
                     {
-                      id: 'neurologicalConditionsMultipleSclerosis',
+                      id: 'NEUROLOGICAL_CONDITIONS_MULTIPLE_SCLEROSIS',
                       label: 'Neurological conditions - Multiple sclerosis'
                     },
                     {
-                      id: 'neurologicalConditionsParkinsonsDiseaseTremorAndDystonia',
+                      id: 'NEUROLOGICAL_CONDITIONS_PARKINSONS_DISEASE_TREMOR_AND_DYSTONIA',
                       label: "Neurological conditions - Parkinson's disease, tremor and dystonia"
                     },
                     {
-                      id: 'neurologicalConditionsSpasticity',
+                      id: 'NEUROLOGICAL_CONDITIONS_SPASTICITY',
                       label: 'Neurological conditions - Spasticity'
                     },
                     {
-                      id: 'neurologicalConditionsTransientLossOfConsciousness',
+                      id: 'NEUROLOGICAL_CONDITIONS_TRANSIENT_LOSS_OF_CONSCIOUSNESS',
                       label: 'Neurological conditions - Transient loss of consciousness'
                     },
                     {
-                      id: 'oralAndDentalHealth',
+                      id: 'ORAL_AND_DENTAL_HEALTH',
                       label: 'Oral and dental health'
                     },
                     {
-                      id: 'respiratoryConditions',
+                      id: 'RESPIRATORY_CONDITIONS',
                       label: 'Respiratory conditions'
                     },
                     {
-                      id: 'respiratoryConditionsAsthma',
+                      id: 'RESPIRATORY_CONDITIONS_ASTHMA',
                       label: 'Respiratory conditions - Asthma'
                     },
                     {
-                      id: 'respiratoryConditionsChronicObstructivePulmonaryDisease',
+                      id: 'RESPIRATORY_CONDITIONS_CHRONIC_OBSTRUCTIVE_PULMONARY_DISEASE',
                       label: 'Respiratory conditions - Chronic obstructive pulmonary disease'
                     },
                     {
-                      id: 'respiratoryConditionsCysticFibrosis',
+                      id: 'RESPIRATORY_CONDITIONS_CYSTIC_FIBROSIS',
                       label: 'Respiratory conditions - Cystic fibrosis'
                     },
                     {
-                      id: 'respiratoryConditionsMesothelioma',
+                      id: 'RESPIRATORY_CONDITIONS_MESOTHELIOMA',
                       label: 'Respiratory conditions - Mesothelioma'
                     },
                     {
-                      id: 'respiratoryConditionsPneumonia',
+                      id: 'RESPIRATORY_CONDITIONS_PNEUMONIA',
                       label: 'Respiratory conditions - Pneumonia'
                     },
                     {
-                      id: 'respiratoryConditionsPulmonaryFibrosis',
+                      id: 'RESPIRATORY_CONDITIONS_PULMONARY_FIBROSIS',
                       label: 'Respiratory conditions - Pulmonary fibrosis'
                     },
                     {
-                      id: 'respiratoryConditionsRespiratoryInfections',
+                      id: 'RESPIRATORY_CONDITIONS_RESPIRATORY_INFECTIONS',
                       label: 'Respiratory conditions - Respiratory infections'
                     },
                     {
-                      id: 'skinConditions',
+                      id: 'SKIN_CONDITIONS',
                       label: 'Skin conditions'
                     },
                     {
-                      id: 'skinConditionsAcne',
+                      id: 'SKIN_CONDITIONS_ACNE',
                       label: 'Skin conditions - Acne'
                     },
                     {
-                      id: 'skinConditionsDiabeticFoot',
+                      id: 'SKIN_CONDITIONS_DIABETIC_FOOT',
                       label: 'Skin conditions - Diabetic foot'
                     },
                     {
-                      id: 'skinConditionsEczema',
+                      id: 'SKIN_CONDITIONS_ECZEMA',
                       label: 'Skin conditions - Eczema'
                     },
                     {
-                      id: 'skinConditionsPressureUlcers',
+                      id: 'SKIN_CONDITIONS_PRESSURE_ULCERS',
                       label: 'Skin conditions - Pressure ulcers'
                     },
                     {
-                      id: 'skinConditionsPsoriasis',
+                      id: 'SKIN_CONDITIONS_PSORIASIS',
                       label: 'Skin conditions - Psoriasis'
                     },
                     {
-                      id: 'skinConditionsWoundManagement',
+                      id: 'SKIN_CONDITIONS_WOUND_MANAGEMENT',
                       label: 'Skin conditions - Wound management'
                     },
                     {
-                      id: 'sleepAndSleepConditions',
+                      id: 'SLEEP_AND_SLEEP_CONDITIONS',
                       label: 'Sleep and sleep conditions'
                     },
                     {
-                      id: 'urologicalConditions',
+                      id: 'UROLOGICAL_CONDITIONS',
                       label: 'Urological conditions'
                     },
                     {
-                      id: 'urologicalConditionsLowerUrinaryTractSymptoms',
+                      id: 'UROLOGICAL_CONDITIONS_LOWER_URINARY_TRACT_SYMPTOMS',
                       label: 'Urological conditions - Lower urinary tract symptoms'
                     },
                     {
-                      id: 'urologicalConditionsUrinaryIncontinence',
+                      id: 'UROLOGICAL_CONDITIONS_URINARY_INCONTINENCE',
                       label: 'Urological conditions - Urinary incontinence'
                     },
                     {
-                      id: 'urologicalConditionsUrinaryTractInfection',
+                      id: 'UROLOGICAL_CONDITIONS_URINARY_TRACT_INFECTION',
                       label: 'Urological conditions - Urinary tract infection'
                     }
                   ]
@@ -2238,7 +2238,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'impactDiseaseCondition',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -2254,15 +2254,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'notYet',
+                      id: 'NOT_YET',
                       label: 'Not yet, but I have an idea'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -2283,7 +2283,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'estimatedCarbonReductionSavings',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -2300,7 +2300,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'estimatedCarbonReductionSavings',
-                options: ['notYet']
+                options: ['NOT_YET']
               }
             },
             {
@@ -2316,15 +2316,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes, I have one'
                     },
                     {
-                      id: 'workingOn',
+                      id: 'WORKING_ON',
                       label: 'I am working on one'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No, I do not have one'
                     }
                   ]
@@ -2344,30 +2344,30 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'maternity',
+                      id: 'MATERNITY',
                       label: 'Maternity'
                     },
                     {
-                      id: 'severMentalIllness',
+                      id: 'SEVER_MENTAL_ILLNESS',
                       label: 'Severe mental illness'
                     },
                     {
-                      id: 'chronicRespiratoryDisease',
+                      id: 'CHRONIC_RESPIRATORY_DISEASE',
                       label: 'Chronic respiratory disease'
                     },
                     {
-                      id: 'earlyCancerDiagnosis',
+                      id: 'EARLY_CANCER_DIAGNOSIS',
                       label: 'Early cancer diagnosis'
                     },
                     {
-                      id: 'hypertensionCaseFinding',
+                      id: 'HYPERTENSION_CASE_FINDING',
                       label: 'Hypertension case finding and optimal management and lipid optimal management'
                     },
                     {
                       type: 'separator'
                     },
                     {
-                      id: 'none',
+                      id: 'NONE',
                       label: 'None of those listed',
                       exclusive: true
                     }
@@ -2388,11 +2388,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -2402,7 +2402,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
           ]
         },
         {
-          id: 'evidenceOfEffectiveness',
+          id: 'EVIDENCE_OF_EFFECTIVENESS',
           title: 'Evidence of impact and benefit (V3)',
           steps: [
             {
@@ -2417,11 +2417,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'notYet',
+                      id: 'NOT_YET',
                       label: 'Not yet'
                     }
                   ]
@@ -2439,11 +2439,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -2467,7 +2467,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'currentlyCollectingEvidence',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -2481,30 +2481,30 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'researchGovernance',
+                      id: 'RESEARCH_GOVERNANCE',
                       label: 'Research governance, including research ethics approvals'
                     },
                     {
-                      id: 'dataSharing',
+                      id: 'DATA_SHARING',
                       label: 'Accessing and sharing health and care data'
                     },
                     {
-                      id: 'confidentialPatientData',
+                      id: 'CONFIDENTIAL_PATIENT_DATA',
                       label: 'Use of confidential patient data'
                     },
                     {
-                      id: 'approvalDataStudies',
+                      id: 'APPROVAL_DATA_STUDIES',
                       label: 'Approval of data studies'
                     },
                     {
-                      id: 'understandingLaws',
+                      id: 'UNDERSTANDING_LAWS',
                       label: 'Understanding the laws that regulate the use of health and care data'
                     },
                     {
                       type: 'separator'
                     },
                     {
-                      id: 'doNotNeedSupport',
+                      id: 'DO_NOT_NEED_SUPPORT',
                       label: 'No, I do not need support',
                       exclusive: true
                     }
@@ -2521,7 +2521,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Market research and current care pathway (V3)',
       subSections: [
         {
-          id: 'marketResearch',
+          id: 'MARKET_RESEARCH',
           title: 'Market research (V3)',
           steps: [
             {
@@ -2538,15 +2538,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'inProgress',
+                      id: 'IN_PROGRESS',
                       label: "I'm currently doing market research"
                     },
                     {
-                      id: 'notYet',
+                      id: 'NOT_YET',
                       label: 'Not yet'
                     }
                   ]
@@ -2569,7 +2569,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasMarketResearch',
-                options: ['yes', 'inProgress']
+                options: ['YES', 'IN_PROGRESS']
               }
             },
             {
@@ -2583,23 +2583,23 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'oneOffInnovation',
+                      id: 'ONE_OFF_INNOVATION',
                       label: 'A one-off innovation, or the first of its kind'
                     },
                     {
-                      id: 'betterAlternative',
+                      id: 'BETTER_ALTERNATIVE',
                       label: 'A better alternative to those that already exist'
                     },
                     {
-                      id: 'equivalentAlternative',
+                      id: 'EQUIVALENT_ALTERNATIVE',
                       label: 'An equivalent alternative to those that already exist'
                     },
                     {
-                      id: 'costEffectAlternative',
+                      id: 'COST_EFFECT_ALTERNATIVE',
                       label: 'A more cost-effect alternative to those that already exist'
                     },
                     {
-                      id: 'notSure',
+                      id: 'NOT_SURE',
                       label: 'I am not sure'
                     }
                   ]
@@ -2607,7 +2607,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasMarketResearch',
-                options: ['yes', 'inProgress']
+                options: ['YES', 'IN_PROGRESS']
               }
             },
             {
@@ -2625,13 +2625,13 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasMarketResearch',
-                options: ['yes', 'inProgress']
+                options: ['YES', 'IN_PROGRESS']
               }
             }
           ]
         },
         {
-          id: 'currentCarePathway',
+          id: 'CURRENT_CARE_PATHWAY',
           title: 'Current care pathway (V3)',
           steps: [
             {
@@ -2647,23 +2647,23 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'pathwayExistsAndChanged',
+                      id: 'PATHWAY_EXISTS_AND_CHANGED',
                       label: 'There is a pathway, and my innovation changes it'
                     },
                     {
-                      id: 'pathwayExistsAndFits',
+                      id: 'PATHWAY_EXISTS_AND_FITS',
                       label: 'There is a pathway, and my innovation fits in to it'
                     },
                     {
-                      id: 'noPathway',
+                      id: 'NO_PATHWAY',
                       label: 'There is no current care pathway'
                     },
                     {
-                      id: 'dontKnow',
+                      id: 'DONT_KNOW',
                       label: 'I do not know'
                     },
                     {
-                      id: 'notPartPathway',
+                      id: 'NOT_PART_PATHWAY',
                       label: 'Does not form part of a care pathway'
                     }
                   ]
@@ -2686,7 +2686,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'innovationPathwayKnowledge',
-                options: ['pathwayExistsAndChanged', 'pathwayExistsAndFits', 'noPathway']
+                options: ['PATHWAY_EXISTS_AND_CHANGED', 'PATHWAY_EXISTS_AND_FITS', 'NO_PATHWAY']
               }
             }
           ]
@@ -2698,7 +2698,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Testing with users (V3)',
       subSections: [
         {
-          id: 'testingWithUsers',
+          id: 'TESTING_WITH_USERS',
           title: 'Testing with users (V3)',
           steps: [
             {
@@ -2714,15 +2714,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'A one-off innovation, or the first of its kind'
                     },
                     {
-                      id: 'inProgress',
+                      id: 'IN_PROGRESS',
                       label: 'I am in the process of involving users in the design'
                     },
                     {
-                      id: 'notYet',
+                      id: 'NOT_YES',
                       label: 'Not yet'
                     }
                   ]
@@ -2741,15 +2741,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'inProgress',
+                      id: 'IN_PROGRESS',
                       label: 'I am in the process of testing with users'
                     },
                     {
-                      id: 'notYet',
+                      id: 'NOT_YET',
                       label: 'Not yet'
                     }
                   ]
@@ -2767,31 +2767,31 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'clinicalSocialCareWorkingInsideUk',
+                      id: 'CLINICAL_SOCIAL_CARE_WORKING_INSIDE_UK',
                       label: 'Clinical or social care professionals working in the UK health and social care system'
                     },
                     {
-                      id: 'clinicalSocialCareWorkingOutsideUk',
+                      id: 'CLINICAL_SOCIAL_CARE_WORKING_OUTSIDE_UK',
                       label: 'Clinical or social care professionals working outside the UK'
                     },
                     {
-                      id: 'nonClinicalHealthcare',
+                      id: 'NON_CLINICAL_HEALTHCARE',
                       label: 'Non-clinical healthcare staff'
                     },
                     {
-                      id: 'patients',
+                      id: 'PATIENTS',
                       label: 'Patients'
                     },
                     {
-                      id: 'serviceUsers',
+                      id: 'SERVICE_USERS',
                       label: 'Service users'
                     },
                     {
-                      id: 'carers',
+                      id: 'CARERS',
                       label: 'Carers'
                     },
                     {
-                      id: 'other',
+                      id: 'OTHER',
                       label: 'Other',
                       conditional: {
                         id: 'otherIntendedUserGroupsEngaged',
@@ -2808,7 +2808,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'testedWithIntendedUsers',
-                options: ['yes', 'inProgress']
+                options: ['YES', 'IN_PROGRESS']
               }
             },
             {
@@ -2844,7 +2844,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'testedWithIntendedUsers',
-                options: ['yes', 'inProgress']
+                options: ['YES', 'IN_PROGRESS']
               }
             }
           ]
@@ -2856,7 +2856,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Regulations, standards, certifications and intellectual property (V3)',
       subSections: [
         {
-          id: 'regulationsAndStandards',
+          id: 'REGULATIONS_AND_STANDARDS',
           title: 'Regulatory approvals, standards and certifications (V3)',
           steps: [
             {
@@ -2872,19 +2872,19 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yesAll',
+                      id: 'YES_ALL',
                       label: 'Yes, I know all of them'
                     },
                     {
-                      id: 'yesSome',
+                      id: 'YES_SOME',
                       label: 'Yes, I know some of them'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     },
                     {
-                      id: 'notRelevant',
+                      id: 'NOT_RELEVANT',
                       label: 'Not relevant'
                     }
                   ]
@@ -2908,15 +2908,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                     },
                     items: [
                       {
-                        id: 'yes',
+                        id: 'YES',
                         label: 'Yes'
                       },
                       {
-                        id: 'inProgress',
+                        id: 'IN_PROGRESS',
                         label: 'I am actively working towards it'
                       },
                       {
-                        id: 'notYet',
+                        id: 'NOT_YET',
                         label: 'Not yet'
                       }
                     ]
@@ -2926,64 +2926,64 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'ceUkcaNonMedical',
+                      id: 'CE_UKCA_NON_MEDICAL',
                       label: 'Non-medical device',
                       group: 'UKCA / CE'
                     },
                     {
-                      id: 'ceUkcaClassI',
+                      id: 'CE_UKCA_CLASS_I',
                       label: 'Class I medical device',
                       group: 'UKCA / CE'
                     },
                     {
-                      id: 'ceUkcaClassIiA',
+                      id: 'CE_UKCA_CLASS_II_A',
                       label: 'Class IIa medical device',
                       group: 'UKCA / CE'
                     },
                     {
-                      id: 'ceUkcaClassIiB',
+                      id: 'CE_UKCA_CLASS_II_B',
                       label: 'Class IIb medical device',
                       group: 'UKCA / CE'
                     },
                     {
-                      id: 'ceUkcaClassIii',
+                      id: 'CE_UKCA_CLASS_III',
                       label: 'Class III medical device',
                       group: 'UKCA / CE'
                     },
                     {
-                      id: 'ivdGeneral',
+                      id: 'IVD_GENERAL',
                       label: 'IVD general',
                       group: 'In-vitro diagnostics'
                     },
                     {
-                      id: 'ivdSelfTest',
+                      id: 'IVD_SELF_TEST',
                       label: 'IVD self-test',
                       group: 'In-vitro diagnostics'
                     },
                     {
-                      id: 'ivdAnnexListA',
+                      id: 'IVD_ANNEX_LIST_A',
                       label: 'IVD Annex II List A',
                       group: 'In-vitro diagnostics'
                     },
                     {
-                      id: 'ivdAnnexListB',
+                      id: 'IVD_ANNEX_LIST_B',
                       label: 'IVD Annex II List B',
                       group: 'In-vitro diagnostics'
                     },
                     {
-                      id: 'marketing',
+                      id: 'MARKETING',
                       label: 'Marketing authorisation for medicines'
                     },
                     {
-                      id: 'cqc',
+                      id: 'CQC',
                       label: 'Care Quality Commission (CQC) registration, as I am providing a regulated activity'
                     },
                     {
-                      id: 'dtac',
+                      id: 'DTAC',
                       label: 'Digital Technology Assessment Criteria (DTAC)'
                     },
                     {
-                      id: 'other',
+                      id: 'OTHER',
                       label: 'Other',
                       conditional: {
                         id: 'otherRegulationDescription',
@@ -3000,13 +3000,13 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasRegulationKnowledge',
-                options: ['yesAll', 'yesSome']
+                options: ['YES_ALL', 'YES_SOME']
               }
             }
           ]
         },
         {
-          id: 'intellectualProperty',
+          id: 'INTELLECTUAL_PROPERTY',
           title: 'Intellectual property (V3)',
           steps: [
             {
@@ -3020,7 +3020,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'hasAtLeastOne',
+                      id: 'HAS_AT_LEAST_ONE',
                       label: 'I have one or more patents',
                       conditional: {
                         id: 'patentNumbers',
@@ -3033,11 +3033,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                       }
                     },
                     {
-                      id: 'appliedAtLeastOne',
+                      id: 'APPLIED_AT_LEAST_ONE',
                       label: 'I have applied for one or more patents'
                     },
                     {
-                      id: 'hasNone',
+                      id: 'HAS_NONE',
                       label: 'I do not have any patents, but believe I have freedom to operate'
                     }
                   ]
@@ -3057,7 +3057,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes',
                       conditional: {
                         id: 'otherIntellectual',
@@ -3070,7 +3070,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                       }
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -3086,7 +3086,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Revenue model (V3)',
       subSections: [
         {
-          id: 'revenueModel',
+          id: 'REVENUE_MODEL',
           title: 'Revenue model (V3)',
           steps: [
             {
@@ -3100,15 +3100,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     },
                     {
-                      id: 'dontKnow',
+                      id: 'DONT_KNOW',
                       label: 'I do not know'
                     }
                   ]
@@ -3126,31 +3126,31 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'advertising',
+                      id: 'ADVERTISING',
                       label: 'Advertising'
                     },
                     {
-                      id: 'directProductSales',
+                      id: 'DIRECT_PRODUCT_SALES',
                       label: 'Direct product sales'
                     },
                     {
-                      id: 'feeForService',
+                      id: 'FEE_FOR_SERVICE',
                       label: 'Fee for service'
                     },
                     {
-                      id: 'lease',
+                      id: 'LEASE',
                       label: 'Lease'
                     },
                     {
-                      id: 'salesOfConsumablesOrAccessories',
+                      id: 'SALES_OF_CONSUMABLES_OR_ACCESSORIES',
                       label: 'Sales of consumables or accessories'
                     },
                     {
-                      id: 'subscription',
+                      id: 'SUBSCRIPTION',
                       label: 'Subscription'
                     },
                     {
-                      id: 'other',
+                      id: 'OTHER',
                       label: 'Other',
                       conditional: {
                         id: 'otherRevenueDescription',
@@ -3167,7 +3167,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasRevenueModel',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3186,7 +3186,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasRevenueModel',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3204,7 +3204,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasRevenueModel',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3218,15 +3218,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     },
                     {
-                      id: 'notRelevant',
+                      id: 'NOT_RELEVANT',
                       label: 'Not relevant'
                     }
                   ]
@@ -3234,7 +3234,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasRevenueModel',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3253,7 +3253,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasFunding',
-                options: ['yes']
+                options: ['YES']
               }
             }
           ]
@@ -3265,7 +3265,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Cost and savings (V3)',
       subSections: [
         {
-          id: 'costOfInnovation',
+          id: 'COST_OF_INNOVATION',
           title: 'Cost of your innovation (V3)',
           steps: [
             {
@@ -3281,15 +3281,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'detailedEstimate',
+                      id: 'DETAILED_ESTIMATE',
                       label: 'Yes, I have a detailed estimate'
                     },
                     {
-                      id: 'roughIdea',
+                      id: 'ROUGH_IDEA',
                       label: 'Yes, I have a rough idea'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -3312,7 +3312,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'hasCostKnowledge',
-                options: ['detailedEstimate', 'roughIdea']
+                options: ['DETAILED_ESTIMATE', 'ROUGH_IDEA']
               }
             },
             {
@@ -3326,23 +3326,23 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'upTo10000',
+                      id: 'UP_10000',
                       label: 'Up to 10,000 per year'
                     },
                     {
-                      id: 'between10000And500000',
+                      id: 'BETWEEN_10000_500000',
                       label: '10,000 to half a million per year'
                     },
                     {
-                      id: 'moreThan500000',
+                      id: 'MORE_THAN_500000',
                       label: 'More than half a million per year'
                     },
                     {
-                      id: 'notSure',
+                      id: 'NOT_SURE',
                       label: 'I am not sure'
                     },
                     {
-                      id: 'notRelevant',
+                      id: 'NOT_RELEVANT',
                       label: 'Not relevant to my innovation'
                     }
                   ]
@@ -3365,7 +3365,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'patientsRange',
-                options: ['upTo10000', 'between10000And500000', 'notSure']
+                options: ['UP_10000', 'BETWEEN_10000_500000', 'NOT_SURE']
               }
             },
             {
@@ -3408,21 +3408,21 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'cheaper',
+                      id: 'CHEAPER',
                       label: 'My innovation is cheaper to purchase'
                     },
                     {
-                      id: 'costsMoreWithSavings',
+                      id: 'COSTS_MORE_WITH_SAVINGS',
                       label:
                         'My innovation costs more to purchase, but has greater benefits that will lead to overall cost savings'
                     },
                     {
-                      id: 'costsMore',
+                      id: 'COSTS_MORE',
                       label:
                         'My innovation costs more to purchase and has greater benefits, but will lead to higher costs overall'
                     },
                     {
-                      id: 'notSure',
+                      id: 'NOT_SURE',
                       label: 'I am not sure'
                     }
                   ]
@@ -3438,7 +3438,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
       title: 'Deployment (V3)',
       subSections: [
         {
-          id: 'deployment',
+          id: 'DEPLOYMENT',
           title: 'Deployment (V3)',
           steps: [
             {
@@ -3454,11 +3454,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -3476,11 +3476,11 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     }
                   ]
@@ -3490,7 +3490,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
             {
               questions: [
                 {
-                  id: 'stepDeploymentPlans',
+                  id: 'deploymentPlans',
                   dataType: 'fields-group',
                   label: 'Where have you deployed your innovation?',
                   description: 'Provide the name of the organisation and the department, if possible.',
@@ -3508,7 +3508,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'isDeployed',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3527,7 +3527,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'isDeployed',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3545,7 +3545,7 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
               ],
               condition: {
                 id: 'isDeployed',
-                options: ['yes']
+                options: ['YES']
               }
             },
             {
@@ -3560,15 +3560,15 @@ const dummy_schema_V3_202405: InnovationRecordSchemaV3Type = {
                   },
                   items: [
                     {
-                      id: 'yes',
+                      id: 'YES',
                       label: 'Yes'
                     },
                     {
-                      id: 'no',
+                      id: 'NO',
                       label: 'No'
                     },
                     {
-                      id: 'notSure',
+                      id: 'NOT_SURE',
                       label: 'I am not sure'
                     }
                   ]

@@ -1,18 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  InnovationRecordSchemaInfoType,
-  InnovationRecordSchemaModel,
-  IrSchemaTranslatorMapType
-} from './innovation-record-schema.models';
+import { InnovationRecordSchemaModel, IrSchemaTranslatorMapType } from './innovation-record-schema.models';
 import { InnovationRecordSchemaService } from './innovation-record-schema.service';
 import { Store } from '@modules/stores/store.class';
-import { Observable } from 'rxjs';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
-import { ContextSchemaType } from '@modules/stores/context/context.types';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -21,10 +15,6 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     private contextStore: ContextStore
   ) {
     super('irSchema::Context', new InnovationRecordSchemaModel());
-  }
-
-  getLatestSchema$(): Observable<ContextSchemaType> {
-    return this.irSchemaService.getLatestSchema();
   }
 
   getIrSchemaSectionsListV3(): { id: string; title: string; sections: { id: string; title: string }[] }[] {

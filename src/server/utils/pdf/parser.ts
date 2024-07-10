@@ -35,7 +35,7 @@ export const getSections = async (
     ...config,
     ...(version && { params: { version } })
   });
-  return IRV3Helper.translateSections(response.data);
+  return response.data;
 };
 
 export const getInnovationInfo = async (innovationId: string, config: any): Promise<InnovationInfoDTO> => {

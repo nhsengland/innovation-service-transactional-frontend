@@ -102,7 +102,7 @@ export function getAllSectionsSummaryV3(
         return {
           section: sub.title,
           status: sectionMap.get(sub.id as any)?.section.status ?? 'UNKNOWN',
-          answers: wizard.translateSummary().map(a => ({ label: a.label, value: a.value }))
+          answers: wizard.translateSummaryForIRDocumentExport().map(a => ({ label: a.label, value: a.value }))
         };
       })
     };
