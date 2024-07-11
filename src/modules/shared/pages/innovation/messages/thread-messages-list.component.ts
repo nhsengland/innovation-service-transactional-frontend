@@ -343,8 +343,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         )
         .subscribe({
           next: () => {
-            this.form.reset();
-            this.form.markAsPristine();
+            this.resetForm();
 
             this.setAlertSuccess('You have successfully sent a message', {
               message: 'All participants in this conversation will be notified.'
@@ -365,8 +364,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   createThreadMessage(body: UploadThreadMessageDocumentType) {
     this.innovationsService.createThreadMessage(this.innovation.id, this.threadId, body).subscribe({
       next: () => {
-        this.form.reset();
-        this.form.markAsPristine();
+        this.resetForm();
 
         this.setAlertSuccess('You have successfully sent a message', {
           message: 'All participants in this conversation will be notified.'
@@ -378,6 +376,14 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.setPageStatus('READY');
         this.setAlertUnknownError();
       }
+    });
+  }
+
+  resetForm() {
+    this.form.reset({
+      message: '',
+      file: null,
+      fileName: ''
     });
   }
 }
