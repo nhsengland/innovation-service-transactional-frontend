@@ -79,14 +79,14 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
     ]).subscribe({
       next: ([queryParams, sectionInfoResponse]) => {
-        this.wizard.setAnswers(sectionInfoResponse.data).runRules();
+        this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
         this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
         this.wizardAnswers = this.wizard.getAnswers();
 
-        if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
-          this.isChangeMode = queryParams.isChangeMode;
-          this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
-        }
+        // if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
+        this.isChangeMode = queryParams.isChangeMode;
+        this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+        // }
       },
       error: () => {
         this.setPageStatus('ERROR');
@@ -104,7 +104,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (stepId === 'summary') {
       console.log('go to summary');
       this.wizard.gotoSummary();
-      this.redirectTo(`${this.baseUrl}/edit/summary`);
+      this.redirectTo(`${this.baseUrl}/edit/summary`, { isChangeMode: isChangeMode });
 
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
         const validInformation = this.wizard.validateData();
@@ -139,7 +139,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       });
     } else {
       this.wizard.gotoStep(stepId, isChangeMode);
-      this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: this.isChangeMode });
+      this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: isChangeMode });
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     }
 

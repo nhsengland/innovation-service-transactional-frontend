@@ -17,6 +17,7 @@ export type InnovationRecordSubSectionType = {
   title: string;
   steps: InnovationRecordStepType[];
   stepsChildParentRelations?: MappedObjectType;
+  hasFiles?: boolean;
 };
 
 export type InnovationRecordStepType = {
@@ -33,6 +34,8 @@ export type InnovationRecordQuestionStepType = {
   id: string;
   dataType: InnovationRecordFormComponentType;
   label: string;
+  checkboxAnswerId?: string;
+  parentId?: string;
   description?: string;
   field?: {
     id: string;
@@ -49,6 +52,10 @@ export type InnovationRecordQuestionStepType = {
   cssOverride?: string;
   isHidden?: boolean;
 };
+
+export type nestedObjectAnswer = [{ [key: string]: string }];
+
+export type arrStringAnswer = string[];
 
 export type InnovationRecordFormComponentType =
   | 'text'

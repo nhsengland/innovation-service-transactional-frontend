@@ -161,6 +161,8 @@ export class FormEngineParameterModelV3 {
   // | 'select-component';
   label?: string;
   description?: string;
+  checkboxAnswerId?: string;
+  parentId?: string;
   placeholder?: string;
   isHidden?: boolean;
   isEditable?: boolean;
@@ -259,6 +261,8 @@ export class FormEngineParameterModelV3 {
     this.lengthLimit = data.lengthLimit;
     this.items = data.items;
     this.isNestedField = data.isNestedField;
+    this.checkboxAnswerId = data.checkboxAnswerId;
+    this.parentId = data.parentId;
 
     // this.additional = data.additional;
 

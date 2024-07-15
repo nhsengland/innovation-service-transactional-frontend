@@ -2410,7 +2410,8 @@
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "hasFiles": true
                 },
                 {
                     "id": "EVIDENCE_OF_EFFECTIVENESS",
@@ -2523,7 +2524,8 @@
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "hasFiles": true
                 }
             ]
         },
@@ -2869,7 +2871,8 @@
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "hasFiles": true
                 }
             ]
         },
@@ -2915,12 +2918,13 @@
                         {
                             "questions": [
                                 {
-                                    "id": "standardsType",
+                                    "id": "standards",
                                     "dataType": "checkbox-array",
+                                    "checkboxAnswerId": "type",
                                     "label": "Which regulations, standards and certifications apply to your innovation?",
                                     "description": "Find out more about <a href=\"{{urls.UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES}}\" target=\"_blank\" rel=\"noopener noreferrer\">UKCA / CE marking (opens in a new window)</a>, <a href=\"{{urls.UNDERSTANDING_CQC_REGULATIONS}}\" target=\"_blank\" rel=\"noopener noreferrer\">CQC registration (opens in a new window)</a>, or <a href={{urls.NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA}} target=\"_blank\" rel=\"noopener noreferrer\">DTAC (opens in a new window)</a>.",
                                     "addQuestion": {
-                                        "id": "standardHasMet",
+                                        "id": "hasMet",
                                         "dataType": "radio-group",
                                         "label": "Do you have a certification for {{item}}",
                                         "validations": {
@@ -3026,7 +3030,8 @@
                                 ]
                             }
                         }
-                    ]
+                    ],
+                    "hasFiles": true
                 },
                 {
                     "id": "INTELLECTUAL_PROPERTY",
@@ -3609,7 +3614,8 @@
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "hasFiles": true
                 }
             ]
         }

@@ -30,6 +30,7 @@ export class FormEngineHelperV3 {
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
+
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
 
       const additionalFields = parameter.additional || [];
@@ -38,7 +39,6 @@ export class FormEngineHelperV3 {
         // Creates an FormArray and pushes defaultValues into it.
         case 'autocomplete-array':
         case 'checkbox-array':
-          // case 'grouped-checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
           ((parameterValue as string[]) || []).forEach(v => {
             (form.get(parameter.id) as FormArray).push(new FormControl(v));

@@ -1,7 +1,12 @@
 import { FormEngineHelperV3 } from '../helpers/form-engine-v3.helper';
 import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-import { InnovationRecordConditionType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import {
+  InnovationRecordConditionType,
+  InnovationRecordQuestionStepType,
+  arrStringAnswer,
+  nestedObjectAnswer
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 import {
   InnovationRecordSchemaInfoType,
   InnovationRecordSectionUpdateType,
@@ -10,6 +15,7 @@ import {
 import { MappedObjectType } from '@app/base/types';
 import { cond } from 'lodash';
 import e from 'express';
+import { Console } from 'console';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -98,6 +104,7 @@ export class WizardIRV3EngineModel {
 
   gotoSummary(): this {
     this.visitedSteps.clear();
+    // console.log('answers on summary', this.currentAnswers);
 
     this.parseSummary();
     this.showSummary = true;
@@ -171,7 +178,7 @@ export class WizardIRV3EngineModel {
   }
 
   getCurrentStepObjId(): string {
-    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
+    // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_x' => 'standardHasMet')
     return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
   }
 
@@ -237,7 +244,7 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
-    console.log('CURRENT SCHEMA:', this.schema);
+    // console.log('CURRENT SCHEMA:', this.schema);
 
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
@@ -261,7 +268,8 @@ export class WizardIRV3EngineModel {
             ...(q.addQuestion && { addQuestion: q.addQuestion }),
             ...(q.field && { field: q.field }),
             ...(q.condition && { condition: q.condition }),
-            isNestedField: false
+            isNestedField: false,
+            checkboxAnswerId: q.checkboxAnswerId
           };
 
           // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
@@ -278,7 +286,7 @@ export class WizardIRV3EngineModel {
                 ?.items?.find(item => item.conditional)?.conditional?.id ?? '';
 
             const itemsDependencyAnswer: string[] = this.currentAnswers[itemsFromAnswer]
-              ? (this.currentAnswers[itemsFromAnswer] as string[])
+              ? (this.currentAnswers[itemsFromAnswer] as arrStringAnswer)
               : [];
 
             const updatedItemsList = itemsDependencyAnswer.map(item => ({
@@ -294,44 +302,34 @@ export class WizardIRV3EngineModel {
 
           step.parameters.push(param);
 
-          // if (q.dataType === 'fields-group' && this.currentAnswers[q.id]) {
-          // this.currentAnswers[q.id] = (this.currentAnswers[q.id] as [{ [key: string]: string }]).filter(
-          //   item => item[q.field!.id]
-          // );
-
-          //   // Updates nested values
-          //   if (q.addQuestion && q.field) {
-          //     Object.keys(this.currentAnswers)
-          //       .filter(key => (key as string).startsWith(q.addQuestion!.id))
-          //       .forEach(key => {
-          //         const index = Number(key.split('_')[1]);
-          //         if (index > -1) {
-          //           ((this.currentAnswers[q.id] as [{ [key: string]: string }]) ?? [])[index][q.addQuestion!.id] =
-          //             this.currentAnswers[key as any];
-          //         }
-          //         delete this.currentAnswers[key as any];
-          //       });
-          //   }
-          // }
-
-          /* End of special rules */
-
           // runtimerules for `addQuestions`
+          const conditionalItem = q.items?.find(i => i.conditional);
+
           if (q.addQuestion && this.getAnswers()[q.id]) {
-            (this.getAnswers()[q.id] as string[]).forEach((answer, i) => {
+            (this.getAnswers()[q.id] as arrStringAnswer).forEach((answer, i) => {
               // replace variables on label's placeholders for fields-groups
               let label = q.addQuestion!.label;
+
               if (q.dataType === 'fields-group' && q.field) {
                 label = q.addQuestion!.label.replace(
-                  `{{item.${q.field.id}}}`,
+                  /{{*[^{}]*}*}/,
                   this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
                 );
-              } else if (q.dataType === 'checkbox-array') {
-                // replace variables on label's placeholders for checkbox-arrays with addQuestions
-                label = q.addQuestion!.label.replace(
-                  '{{item}}',
-                  this.translations.questions.get(this.currentAnswers[q.id][i][q.id])?.label ?? label
-                );
+              } else if (q.dataType === 'checkbox-array' && q.addQuestion) {
+                const itemAnswer: string =
+                  typeof this.currentAnswers[q.id][i] === 'object'
+                    ? this.currentAnswers[q.id][i][this.getCheckBoxAnswerId(q)]
+                    : this.currentAnswers[q.id][i];
+
+                label = this.translations.questions.get(q.id)?.items.get(itemAnswer)?.label ?? '';
+
+                // search for conditional on question items, then check if answer is from a conditional. If so, get conditional answer
+                if (conditionalItem?.conditional && conditionalItem.id === itemAnswer) {
+                  label = this.currentAnswers[conditionalItem.conditional.id];
+                }
+
+                // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
+                label = q.addQuestion.label.replace(/{{*[^{}]*}*}/, label);
               }
 
               addSteps.push(
@@ -352,14 +350,12 @@ export class WizardIRV3EngineModel {
                       isNestedField: !!(
                         (q.dataType === 'fields-group' && q.addQuestion) ||
                         q.dataType === 'checkbox-array'
-                      )
+                      ),
+                      parentId: q.id
                     }
                   ]
                 })
               );
-              if (q.dataType === 'fields-group' || q.dataType === 'checkbox-array') {
-                this.currentAnswers[`${q.addQuestion!.id}_${i}`] = this.currentAnswers[q.id][i][q.addQuestion!.id];
-              }
             });
           }
           // }
@@ -372,12 +368,284 @@ export class WizardIRV3EngineModel {
         });
       }
     });
-    console.log('this.steps:', this.steps);
-    this.runInboundParsing();
+    // console.log('this.steps:', this.steps);
+
     return this;
   }
 
+  parseSummary(): WizardSummaryV3Type[] {
+    console.log('parsingSummary with currenAnswers:', this.currentAnswers);
+    let editStepNumber = 0;
+    this.summary = [];
+
+    const currentAnswers = this.currentAnswers;
+
+    // Parse condition step's answers
+    for (const [i, step] of this.steps.entries()) {
+      let stepParams = step.parameters[0];
+      let stepId = stepParams.id;
+      let label = stepId.split('|')[0];
+      let value: string | string[] | undefined = currentAnswers[stepParams.id];
+      let isNotMandatory = !!!stepParams.validations?.isRequired;
+      editStepNumber++;
+
+      if (!stepParams.parentId) {
+        switch (stepParams.dataType) {
+          case 'fields-group':
+            {
+              const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
+              value = stepParams.addQuestion
+                ? stepAnswers.map(item => item[stepParams.field!.id])
+                : (currentAnswers[stepParams.id] as arrStringAnswer);
+
+              // Push "parent"
+              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+
+              if (stepParams.addQuestion && stepParams.field) {
+                // Push "children" if any
+                stepAnswers.forEach((question, i) => {
+                  editStepNumber++;
+
+                  stepId = `${stepParams.addQuestion!.id}_${i}`;
+                  // replace label item
+                  label = stepParams.addQuestion!.label.replace(
+                    /{{*[^{}]*}*}/,
+                    this.currentAnswers[stepParams.id][i][stepParams.field!.id]
+                  );
+                  value = stepAnswers[i][stepParams.addQuestion!.id];
+                  this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                });
+              }
+            }
+            break;
+
+          case 'radio-group':
+            let stepAnswers = currentAnswers[stepParams.id];
+            value = stepAnswers;
+
+            if (!stepParams.parentId) {
+            }
+
+            // add if conditional field and answer is present
+            const itemWithConditional = stepParams.items?.find(i => i.conditional);
+
+            if (itemWithConditional && currentAnswers[itemWithConditional!.conditional!.id]) {
+              value = [stepAnswers, currentAnswers[itemWithConditional!.conditional!.id]];
+            }
+            // Push "parent"
+            this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+
+            break;
+
+          case 'autocomplete-array':
+          case 'checkbox-array':
+            {
+              let stepAnswers: string[] = [];
+
+              stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
+
+              // Set value of parent, depending on type of answer
+              if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+                value = stepAnswers;
+
+                label = stepParams.label ?? '';
+              }
+
+              // If answer is filled out, and conditional are present, replace their fields' value (i.e. 'OTHER') with user's provided answer.
+              if (stepAnswers) {
+                const conditionalItem = stepParams.items?.find(i => i.conditional);
+                const conditionalItemId = conditionalItem?.id;
+
+                if (conditionalItem && conditionalItemId && stepAnswers.includes(conditionalItemId)) {
+                  const conditionalId = conditionalItem.conditional?.id ?? '';
+                  const conditonalAnswer = currentAnswers[conditionalId];
+
+                  value = conditonalAnswer ? conditonalAnswer : value;
+
+                  stepAnswers[stepAnswers.findIndex(i => i === conditionalItemId)] = currentAnswers[conditionalId];
+                }
+                value = stepAnswers;
+              }
+
+              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+
+              // Push "children" if any
+              if (stepParams.addQuestion && stepAnswers) {
+                stepAnswers.forEach((item, i) => {
+                  editStepNumber++;
+
+                  stepId = `${stepParams.addQuestion?.id}_${i}`;
+
+                  // Replace label variables
+                  label = stepParams.addQuestion!.label.replace(
+                    /{{*[^{}]*}*}/,
+                    this.translations.questions.get(stepParams.id)?.items.get(item)?.label ?? item
+                  );
+                  value = currentAnswers[stepId];
+
+                  this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                });
+              }
+            }
+
+            break;
+          default: {
+            this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+            break;
+          }
+        }
+      }
+    }
+
+    // console.log('summary:', this.summary);
+    return this.summary;
+  }
+
+  runInboundParsing(): this {
+    // console.log('running inbound parsing');
+    const toReturn: MappedObjectType = {};
+
+    this.steps.forEach(step => {
+      const stepParams = step.parameters[0];
+      if (this.currentAnswers[stepParams.id]) {
+        switch (stepParams.dataType) {
+          case 'fields-group':
+            if (!stepParams.addQuestion && stepParams.field) {
+              // Convert array to nested object, if dataType is 'fields-group' without 'addQuestion'
+              toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map(item => ({
+                [stepParams.field!.id]: item
+              }));
+            } else {
+              (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
+                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+              });
+            }
+
+            break;
+
+          case 'checkbox-array':
+            if (stepParams.addQuestion || (stepParams.checkboxAnswerId && this.currentAnswers)) {
+              // add parent question previous value
+              toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(
+                answer => answer[stepParams.checkboxAnswerId ?? stepParams.id]
+              );
+
+              // add all addQuestions previous values
+              (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach((answer, i) => {
+                toReturn[`${stepParams.addQuestion!.id}_${i}`] = answer[stepParams.addQuestion!.id];
+              });
+            }
+            break;
+          default:
+            break;
+        }
+      }
+    });
+    this.currentAnswers = { ...this.currentAnswers, ...toReturn };
+    // console.log('toReturn after inbound parsing:', toReturn);
+    // console.log('currentAnswers after inbound parsing:', this.currentAnswers);
+
+    return this;
+  }
+
+  runOutboundParsing(): InnovationRecordSectionUpdateType {
+    let toReturn: { [key: string]: any } = {};
+
+    for (const [i, step] of this.steps.entries()) {
+      const stepParams = step.parameters[0];
+
+      // Ignore fields that are already inside nested objects
+      if (!stepParams.isNestedField && this.currentAnswers[stepParams.id]) {
+        toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+      }
+
+      if (stepParams.dataType === 'checkbox-array') {
+        // create nested object if it has addQuestions
+        if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map((answer, i) => {
+            return {
+              [this.getCheckBoxAnswerId(stepParams)]: answer,
+              [stepParams.addQuestion!.id]: this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`]
+            };
+          });
+        }
+      }
+
+      if (stepParams.dataType === 'autocomplete-array') {
+        // autocomplete-array returns a string[], but if it's just 1 item, we need to extract it.
+        toReturn[stepParams.id] =
+          stepParams.validations?.max?.length === 1
+            ? this.currentAnswers[stepParams.id][0]
+            : this.currentAnswers[stepParams.id];
+      }
+
+      if (stepParams.dataType === 'fields-group' && this.currentAnswers[stepParams.id]) {
+        if (!stepParams.addQuestion) {
+          // flatten fields-group with no addQuestions
+          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(item => {
+            return item[stepParams.field!.id];
+          });
+        } else {
+          // add answers from all addQuestions steps to the fields-group object
+          (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach(
+            (item, i) => (item[stepParams.addQuestion!.id] = this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`])
+          );
+          toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+        }
+      }
+
+      // add conditionals
+      const conditionalItems = stepParams.items?.filter(i => i.conditional);
+      conditionalItems?.forEach(c => {
+        if (c.conditional && this.currentAnswers[c.conditional.id]) {
+          toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
+        }
+      });
+    }
+
+    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
+    return {
+      version: this.schema?.version ?? 0,
+      data: toReturn
+    };
+  }
+
+  validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
+    const parameters = this.steps.flatMap(step => step.parameters);
+    const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
+
+    return {
+      valid: form.valid,
+      errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
+        title: parameters.find(p => p.id === key)?.label || '',
+        description: value || ''
+      }))
+    };
+  }
+
+  getCheckBoxAnswerId(stepParams: FormEngineParameterModelV3): string {
+    return stepParams.checkboxAnswerId ?? stepParams.id;
+  }
+
+  addSummaryStep(
+    stepId: string,
+    value: string | string[] | undefined,
+    editStepNumber: number,
+    label?: string,
+    isNotMandatory?: boolean
+  ) {
+    this.summary.push({
+      stepId: stepId,
+      label: label ?? '',
+      value: value ?? '',
+      editStepNumber: editStepNumber,
+      isNotMandatory: isNotMandatory ?? false
+    });
+  }
+
   translateSummaryForIRDocumentExport() {
+    // special case for CSV and PDF export
+
     const summary = this.parseSummary();
 
     const translatedSummary = summary.map(item => {
@@ -402,237 +670,5 @@ export class WizardIRV3EngineModel {
     });
 
     return translatedSummary;
-  }
-
-  parseSummary(): WizardSummaryV3Type[] {
-    let editStepNumber = 0;
-    this.summary = [];
-
-    const currentAnswers = this.currentAnswers;
-
-    // Parse condition step's answers
-    for (const [i, step] of this.steps.entries()) {
-      let params = step.parameters[0];
-      let stepId = params.id;
-      let label = stepId.split('|')[0];
-      let value: string | string[] | undefined = currentAnswers[params.id];
-      let isNotMandatory = !!!params.validations?.isRequired;
-      editStepNumber++;
-
-      switch (params.dataType) {
-        case 'fields-group':
-          {
-            const currAnswer = currentAnswers[params.id] as [{ [key: string]: string }];
-
-            // Push "parent"
-            this.summary.push({
-              stepId: stepId,
-              label: label,
-              value: currAnswer ? currAnswer.map(item => item[params.field!.id]).join(', ') : '',
-              editStepNumber: editStepNumber,
-              isNotMandatory: isNotMandatory
-            });
-
-            if (params.addQuestion) {
-              // Push "children" if any
-              currAnswer.forEach((_, i) => {
-                editStepNumber++;
-
-                this.summary.push({
-                  stepId: `${params.addQuestion?.id}_${i}`,
-                  label: `${params.addQuestion?.label.replace(`{{item.${params.field!.id}}}`, currAnswer[i][params.field!.id])}`,
-                  value: currAnswer[i][params.addQuestion!.id],
-                  editStepNumber: editStepNumber
-                });
-              });
-            }
-          }
-          break;
-
-        case 'radio-group':
-          let stepAnswers: string;
-          stepAnswers = currentAnswers[params.id];
-
-          value = stepAnswers;
-
-          // add if conditional field and answer is present
-          const itemWithConditional = params.items?.find(i => i.conditional);
-
-          if (itemWithConditional && currentAnswers[itemWithConditional!.conditional!.id]) {
-            value = [stepAnswers, currentAnswers[itemWithConditional!.conditional!.id]];
-          }
-
-          // Push "parent"
-          this.summary.push({
-            stepId: stepId,
-            label: label,
-            value: value ?? '',
-            editStepNumber: editStepNumber,
-            isNotMandatory: isNotMandatory
-          });
-          break;
-
-        case 'autocomplete-array':
-        case 'checkbox-array':
-          {
-            let stepAnswers: string[] | { [key: string]: string }[] | undefined = undefined;
-
-            // Set value of parent, depending on type of answer
-            if (!params.addQuestion) {
-              stepAnswers = [...(currentAnswers[params.id] as string[])];
-
-              // If present, replace conditional fields' answers with typed answer.
-              if (stepAnswers) {
-                const conditionalItem = params.items?.find(i => i.conditional);
-                const conditionalItemId = conditionalItem?.id;
-
-                if (conditionalItem && conditionalItemId && stepAnswers.includes(conditionalItemId)) {
-                  const conditionalId = conditionalItem.conditional?.id ?? '';
-                  const conditonalAnswer = currentAnswers[conditionalId];
-
-                  value = conditonalAnswer ? conditonalAnswer : value;
-
-                  stepAnswers[stepAnswers.findIndex(i => i === conditionalItemId)] = currentAnswers[conditionalId];
-                }
-                value = stepAnswers;
-              }
-            } else {
-              stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
-
-              value = stepAnswers ? stepAnswers.map(item => item[params.id]) : undefined;
-            }
-
-            // Push "parent"
-            this.summary.push({
-              stepId: stepId,
-              label: label,
-              value: value ?? '',
-              editStepNumber: editStepNumber,
-              isNotMandatory: isNotMandatory
-            });
-
-            // Push "children" if any
-
-            if (params.addQuestion && stepAnswers) {
-              const stepAnswers = currentAnswers[params.id] as [{ [key: string]: string }];
-              stepAnswers.forEach((item, i) => {
-                editStepNumber++;
-                this.summary.push({
-                  stepId: `${params.addQuestion?.id}_${i}`,
-                  label: params.addQuestion!.label.replace(
-                    '{{item}}',
-                    this.translations.questions.get(params.id)?.items.get(stepAnswers[i][params.id])?.label ??
-                      stepAnswers[i][params.id]
-                  ),
-                  value: stepAnswers[i][params.addQuestion!.id],
-                  editStepNumber: editStepNumber
-                });
-              });
-            }
-          }
-          break;
-        default: {
-          this.summary.push({
-            stepId: stepId,
-            label: label,
-            value: value ?? '',
-            editStepNumber: editStepNumber,
-            isNotMandatory: isNotMandatory
-          });
-
-          break;
-        }
-      }
-    }
-
-    console.log('summary:', this.summary);
-    return this.summary;
-  }
-
-  runInboundParsing(): this {
-    this.steps.forEach(step => {
-      const stepParams = step.parameters[0];
-      if (this.currentAnswers[stepParams.id]) {
-        // Convert array to nested object, if dataType is 'fields-group' without 'addQuestion'
-        if (stepParams.dataType === 'fields-group' && stepParams.field) {
-          if (!stepParams.addQuestion) {
-            this.currentAnswers[stepParams.id] = (this.currentAnswers[stepParams.id] as string[]).map(item => ({
-              [stepParams.field!.id]: item
-            }));
-          }
-        }
-      }
-    });
-
-    return this;
-  }
-
-  runOutboundParsing(): InnovationRecordSectionUpdateType {
-    let toReturn: { [key: string]: any } = {};
-
-    for (const [i, step] of this.steps.entries()) {
-      const stepParams = step.parameters[0];
-
-      // Ignore fields that are already inside nested objects
-      if (!stepParams.isNestedField && this.currentAnswers[stepParams.id]) {
-        toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
-      }
-
-      if (stepParams.dataType === 'autocomplete-array') {
-        toReturn[stepParams.id] =
-          stepParams.validations?.max?.length === 1
-            ? this.currentAnswers[stepParams.id][0]
-            : this.currentAnswers[stepParams.id];
-      }
-
-      // flatten fields-group with no addQuestions
-      if (stepParams.dataType === 'fields-group' && !stepParams.addQuestion && this.currentAnswers[stepParams.id]) {
-        toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as [{ [key: string]: string }]).map(item => {
-          return item[stepParams.field!.id];
-        });
-      }
-
-      // add conditionals
-      const conditionalItems = stepParams.items?.filter(i => i.conditional);
-      conditionalItems?.forEach(c => {
-        if (c.conditional && this.currentAnswers[c.conditional.id]) {
-          toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
-        }
-      });
-    }
-
-    // parse Calculated Fields
-    const calculatedFields = this.schema?.schema.sections
-      .flatMap(s => s.subSections)
-      .find(sub => sub.id === this.sectionId)?.calculatedFields;
-    if (calculatedFields) {
-      for (const [field, conditions] of Object.entries(calculatedFields)) {
-        conditions.forEach(f => {
-          if (toReturn[f.id] && (f.options.includes(toReturn[f.id]) || !f.options.length)) {
-            toReturn[field] = toReturn[f.id];
-            return;
-          }
-        });
-      }
-    }
-
-    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
-    return {
-      version: this.schema?.version ?? 0,
-      data: toReturn
-    };
-  }
-
-  validateData(): { valid: boolean; errors: { title: string; description: string }[] } {
-    const parameters = this.steps.flatMap(step => step.parameters);
-    const form = FormEngineHelperV3.buildForm(parameters, this.currentAnswers);
-
-    return {
-      valid: form.valid,
-      errors: Object.entries(FormEngineHelperV3.getErrors(form)).map(([key, value]) => ({
-        title: parameters.find(p => p.id === key)?.label || '',
-        description: value || ''
-      }))
-    };
   }
 }

@@ -204,7 +204,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       }
 
       // const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-      const data = this.sectionSummaryData.sectionInfo.wizard.parseSummary();
+      const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
