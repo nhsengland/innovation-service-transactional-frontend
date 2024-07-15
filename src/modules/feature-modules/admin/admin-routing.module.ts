@@ -397,6 +397,7 @@ const routes: Routes = [
             pathMatch: 'full',
             component: PageInnovationsAdvancedReviewComponent,
             data: {
+              breadcrumb: null,
               layout: { type: 'full', backgroundColor: 'bg-color-white' }
             }
           },

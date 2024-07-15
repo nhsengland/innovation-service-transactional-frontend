@@ -69,6 +69,12 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
               label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildSectionsSelectedList(subscription)}`,
               description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
             };
+          case NotificationEnum.REMINDER:
+            return {
+              value: subscription.id,
+              label: `${UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)} ${subscription.customMessage}`,
+              description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
+            };
           default:
             return {
               value: '',
@@ -168,7 +174,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
     return outputInnerHtml;
   }
 
-  buildSectionsSelectedList(subscription: NotifyMeResponseTypes['INNOVATION_RECORD_UPDATED']): string {
+  buildSectionsSelectedList(subscription: NotifyMeResponseTypes[NotificationEnum.INNOVATION_RECORD_UPDATED]): string {
     const sectionsSelectedString = this.translate(
       this.pluralTranslatePipe.transform(
         'features.accessor.custom_notifications.cards.sections_selected',

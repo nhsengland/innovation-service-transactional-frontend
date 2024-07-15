@@ -8,6 +8,7 @@ import { UrlModel } from '@app/base/models';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { DateISOType } from '@app/base/types';
 
 // Notify me
 export enum NotificationEnum {
@@ -15,18 +16,20 @@ export enum NotificationEnum {
   PROGRESS_UPDATE_CREATED = 'PROGRESS_UPDATE_CREATED',
   INNOVATION_RECORD_UPDATED = 'INNOVATION_RECORD_UPDATED',
   DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
-  REMINDER = 'REMINDER'
+  REMINDER = 'REMINDER',
+  SUGGESTED_SUPPORT_UPDATED = 'SUGGESTED_SUPPORT_UPDATED'
 }
 
 export type EventType = keyof typeof NotificationEnum;
 
 export type SupportUpdated = {
   eventType: NotificationEnum.SUPPORT_UPDATED;
-  subscriptionType: 'INSTANTLY';
+  subscriptionType: 'INSTANTLY' | 'ONCE';
   preConditions: {
     units: string[];
     status: InnovationSupportStatusEnum[];
   };
+  notificationType?: NotificationEnum.SUPPORT_UPDATED | NotificationEnum.SUGGESTED_SUPPORT_UPDATED;
 };
 
 export type ProgressUpdateCreated = {
@@ -45,21 +48,31 @@ export type InnovationRecordUpdated = {
   };
 };
 
-export type NotifyMeConfig = SupportUpdated | ProgressUpdateCreated | InnovationRecordUpdated;
+export type Reminder = {
+  eventType: NotificationEnum.REMINDER;
+  subscriptionType: 'SCHEDULED';
+  date: DateISOType;
+  customMessage: string;
+};
+
+export type NotifyMeConfig = SupportUpdated | ProgressUpdateCreated | InnovationRecordUpdated | Reminder;
 
 export type SubscriptionConfigType<T extends EventType> = NotifyMeConfig & { eventType: T };
-export type PreconditionsOptions<T extends EventType> = 'preConditions' extends keyof (NotifyMeConfig & {
+type PreconditionsOptions<T extends EventType> = 'preConditions' extends keyof (NotifyMeConfig & {
   eventType: T;
 })
   ? keyof SubscriptionConfigType<T>['preConditions']
   : never;
+export type DefaultOptions<T extends EventType> =
+  | PreconditionsOptions<T>
+  | keyof Omit<SubscriptionConfigType<T>, 'id' | 'eventType' | 'subscriptionType' | 'preConditions'>;
 
 export type SubscriptionType = SubscriptionTypes['subscriptionType'];
 export type SubscriptionTypes = InstantSubscriptionType | ScheduledSubscriptionType; // | PeriodicSubscriptionType;
 export type InstantSubscriptionType = { subscriptionType: 'INSTANTLY' };
 export type ScheduledSubscriptionType = {
   subscriptionType: 'SCHEDULED';
-  date: Date;
+  date: DateISOType;
   customMessages?: { inApp?: string; email?: string };
 };
 
@@ -77,16 +90,17 @@ export type OrganisationWithUnits = {
 
 export type SupportUpdatedResponseDTO = {
   id: string;
-  updatedAt: Date;
+  updatedAt: DateISOType;
   eventType: NotificationEnum.SUPPORT_UPDATED;
-  subscriptionType: 'INSTANTLY';
+  subscriptionType: 'INSTANTLY' | 'ONCE';
   organisations: OrganisationWithUnits[];
   status: InnovationSupportStatusEnum[];
+  notificationType?: NotificationEnum.SUPPORT_UPDATED | NotificationEnum.SUGGESTED_SUPPORT_UPDATED;
 };
 
 export type ProgressUpdateCreatedResponseDTO = {
   id: string;
-  updatedAt: Date;
+  updatedAt: DateISOType;
   eventType: NotificationEnum.PROGRESS_UPDATE_CREATED;
   subscriptionType: 'INSTANTLY';
   organisations: OrganisationWithUnits[];
@@ -94,30 +108,34 @@ export type ProgressUpdateCreatedResponseDTO = {
 
 export type InnovationRecordUpdatedDTO = {
   id: string;
-  updatedAt: Date;
+  updatedAt: DateISOType;
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
   sections?: InnovationSections[];
 };
 
-export type DefaultResponseDTO<T extends EventType, K extends PreconditionsOptions<T>> = {
+export type DefaultResponseDTO<T extends EventType, K extends DefaultOptions<T>> = {
   id: string;
-  updatedAt: Date;
+  updatedAt: DateISOType;
   eventType: T;
   subscriptionType: SubscriptionType;
 } & {
   [k in K]: 'preConditions' extends keyof (NotifyMeConfig & { eventType: T })
     ? k extends keyof SubscriptionConfigType<T>['preConditions']
       ? SubscriptionConfigType<T>['preConditions'][k]
-      : never
-    : never;
+      : k extends keyof SubscriptionConfigType<T>
+        ? SubscriptionConfigType<T>[k]
+        : never
+    : k extends keyof SubscriptionConfigType<T>
+      ? SubscriptionConfigType<T>[k]
+      : never;
 };
 
 export type NotifyMeResponseTypes = {
   SUPPORT_UPDATED: SupportUpdatedResponseDTO;
   PROGRESS_UPDATE_CREATED: ProgressUpdateCreatedResponseDTO;
   INNOVATION_RECORD_UPDATED: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>;
-  REMINDER: DefaultResponseDTO<'REMINDER', never>;
+  REMINDER: DefaultResponseDTO<NotificationEnum.REMINDER, 'customMessage' | 'date'>;
 };
 
 export type GetNotifyMeInnovationSubscription = NotifyMeResponseTypes[keyof NotifyMeResponseTypes];

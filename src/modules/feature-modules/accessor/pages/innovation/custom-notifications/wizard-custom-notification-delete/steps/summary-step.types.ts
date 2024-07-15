@@ -8,6 +8,7 @@ export type NotifyMeInnovationWithSubscriptions = {
     displayTitle?: string;
     displayOrganisations?: string[];
     displaySections?: string[];
+    displayReminder?: string;
   })[];
 };
 

@@ -15,7 +15,7 @@
             </p>
           </div>
 
-          <theme-form-radio-group id="organisation" controlName="organisation" [items]="organisationItems" [pageUniqueField]="false"></theme-form-radio-group>
+          <theme-form-radio-group id="organisation" controlName="organisation" [items]="organisationItems"></theme-form-radio-group>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
@@ -31,7 +31,7 @@
         <div class="nhsuk-grid-column-two-thirds">
           <p *ngIf="unitsItems.length > 2">You can select multiple units in this organisation.</p>
 
-          <theme-form-checkbox-array id="units" arrayName="units" [items]="unitsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
+          <theme-form-checkbox-array id="units" arrayName="units" [items]="unitsItems"></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
 
@@ -86,6 +86,20 @@
             [pageUniqueField]="false"
             lengthLimit="xl"
           ></theme-form-textarea>
+
+          <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>
+
+          <div>
+            <a href="javascript:;" (click)="handleCancelOrSubmit()">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="stepNumber === 4">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+          <theme-form-radio-group id="notify" controlName="notify" [items]="notifyItems"></theme-form-radio-group>
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
 

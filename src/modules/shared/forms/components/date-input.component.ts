@@ -94,34 +94,12 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   onValueChange(): void {
-    if (!this.checkValidDate()) {
-      this.formGroup.setErrors({
-        ...this.formGroup.errors,
-        ...{ parsedDateString: { message: 'Enter a valid date' } }
-      });
-    } else {
-      if (this.formGroup.errors && 'parsedDateString' in this.formGroup.errors) {
-        const { parsedDateString, ...remainingErrors } = this.formGroup.errors;
-        this.formGroup.setErrors(remainingErrors);
-      }
-    }
-
     this.hasError = this.formGroup.invalid && (this.formGroup.touched || this.formGroup.dirty);
-
     this.error = this.hasError
       ? FormEngineHelper.getValidationMessage(this.formGroup.errors)
       : { message: '', params: {} };
 
     this.cdr.detectChanges();
-  }
-
-  checkValidDate(): boolean {
-    const currentDateString = DatesHelper.getDateString(
-      this.formGroup.controls.year.value,
-      this.formGroup.controls.month.value,
-      this.formGroup.controls.day.value
-    );
-    return DatesHelper.parseIntoValidFormat(currentDateString) !== null;
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,13 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p class="font-color-secondary">This notification will be sent on the selected date.</p>
+
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-date-input id="date" title="Enter date" [pageUniqueField]="false"></theme-form-date-input>
+
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>
