@@ -11,7 +11,6 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
-import { innovationSectionsWithFiles } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   WizardIRV3EngineModel,
@@ -150,7 +149,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       !(
         this.innovation.status === InnovationStatusEnum.CREATED ||
         this.innovation.archivedStatus === InnovationStatusEnum.CREATED
-      ) || innovationSectionsWithFiles.includes(this.sectionSummaryData.sectionInfo.id);
+      ) || this.stores.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),

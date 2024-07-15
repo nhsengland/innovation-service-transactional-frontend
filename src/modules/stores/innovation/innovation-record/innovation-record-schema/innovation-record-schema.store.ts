@@ -131,4 +131,9 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     const schema = this.contextStore.getIrSchema()?.schema ?? { sections: [] };
     return irSchemaTranslationsMap(schema);
   }
+
+  getInnovationSectionsWithFiles(): string[] {
+    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
+    return schema.flatMap(s => s.subSections.filter(ss => ss.hasFiles).map(s => s.id));
+  }
 }
