@@ -138,11 +138,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         this.setPageStatus('READY');
       });
     } else {
-      this.wizard.gotoStep(stepId, isChangeMode);
+      this.wizard.runRules().gotoStep(stepId, isChangeMode);
       this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: isChangeMode });
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     }
-
+    this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
     this.setPageStatus('READY');
   }
 

@@ -104,7 +104,7 @@ export class WizardIRV3EngineModel {
 
   gotoSummary(): this {
     this.visitedSteps.clear();
-    // console.log('answers on summary', this.currentAnswers);
+    console.log('answers on summary', this.currentAnswers);
 
     this.parseSummary();
     this.showSummary = true;
@@ -141,11 +141,9 @@ export class WizardIRV3EngineModel {
     if (this.showSummary && typeof this.currentStepId === 'number' && this.isLastStep()) {
       return 'summary';
     } else if (typeof nextStepId === 'number') {
-      nextStepId++;
-
-      this.visitedSteps.add(this.getStepObjectId(nextStepId));
-
       if (isChangeMode) {
+        nextStepId++;
+        this.visitedSteps.add(this.getStepObjectId(nextStepId));
         let isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
           this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
         );
@@ -168,8 +166,28 @@ export class WizardIRV3EngineModel {
 
           nextStepId++;
         }
+      } else {
+        // // Skip if step is hidden
+
+        console.log('nextStepId', nextStepId);
+        console.log(
+          'this.steps[nextStepId as number].parameters[0].id',
+          this.steps[nextStepId as number].parameters[0].id
+        );
+        console.log('this.steps[nextStepId as number].parameters[0]', this.steps[nextStepId as number].parameters[0]);
+        console.log(
+          'this.steps[nextStepId as number].parameters[0].isHidden',
+          this.steps[nextStepId as number].parameters[0].isHidden
+        );
+        if (this.steps[nextStepId as number].parameters[0].isHidden === true) {
+          console.log(`next step isHidden`);
+          nextStepId += 2;
+        } else {
+          nextStepId++;
+        }
       }
     }
+
     return nextStepId;
   }
 
@@ -220,7 +238,11 @@ export class WizardIRV3EngineModel {
               stepsChildParentRelations[question.id] = step.condition.id;
             }
 
-            if (question.items && question.items[0].itemsFromAnswer) {
+            if (
+              question.items &&
+              question.items[0].itemsFromAnswer &&
+              this.currentAnswers[question.items[0].itemsFromAnswer]?.length > 1
+            ) {
               stepsChildParentRelations[question.id] = question.items[0].itemsFromAnswer;
             }
 
@@ -244,7 +266,7 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
-    // console.log('CURRENT SCHEMA:', this.schema);
+    console.log('CURRENT SCHEMA:', this.schema);
 
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
@@ -269,7 +291,8 @@ export class WizardIRV3EngineModel {
             ...(q.field && { field: q.field }),
             ...(q.condition && { condition: q.condition }),
             isNestedField: false,
-            checkboxAnswerId: q.checkboxAnswerId
+            checkboxAnswerId: q.checkboxAnswerId,
+            isHidden: false
           };
 
           // Replace step's items list, when field `itemsFromAnswer` is present, with answers from the previously answered question with that id.
@@ -298,6 +321,11 @@ export class WizardIRV3EngineModel {
             }));
 
             param.items = updatedItemsList;
+
+            if (param.items?.length === 1) {
+              // Hide step, but keep it in 'this.steps' in order to properly add its value to outbound payload
+              param.isHidden = true;
+            }
           }
 
           step.parameters.push(param);
@@ -368,7 +396,7 @@ export class WizardIRV3EngineModel {
         });
       }
     });
-    // console.log('this.steps:', this.steps);
+    console.log('this.steps:', this.steps);
 
     return this;
   }
@@ -389,32 +417,37 @@ export class WizardIRV3EngineModel {
       let isNotMandatory = !!!stepParams.validations?.isRequired;
       editStepNumber++;
 
-      if (!stepParams.parentId) {
+      if (!stepParams.parentId && !stepParams.isHidden) {
         switch (stepParams.dataType) {
           case 'fields-group':
             {
+              console.log('parsing fields-group step ', stepParams.id);
               const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
-              value = stepParams.addQuestion
-                ? stepAnswers.map(item => item[stepParams.field!.id])
-                : (currentAnswers[stepParams.id] as arrStringAnswer);
+
+              if (stepAnswers) {
+                value = stepAnswers.map(item => item[stepParams.field!.id]);
+              }
 
               // Push "parent"
               this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
 
               if (stepParams.addQuestion && stepParams.field) {
+                value = undefined;
                 // Push "children" if any
-                stepAnswers.forEach((question, i) => {
-                  editStepNumber++;
+                if (stepAnswers) {
+                  stepAnswers.forEach((question, i) => {
+                    editStepNumber++;
 
-                  stepId = `${stepParams.addQuestion!.id}_${i}`;
-                  // replace label item
-                  label = stepParams.addQuestion!.label.replace(
-                    /{{*[^{}]*}*}/,
-                    this.currentAnswers[stepParams.id][i][stepParams.field!.id]
-                  );
-                  value = stepAnswers[i][stepParams.addQuestion!.id];
-                  this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
-                });
+                    stepId = `${stepParams.addQuestion!.id}_${i}`;
+                    // replace label item
+                    label = stepParams.addQuestion!.label.replace(
+                      /{{*[^{}]*}*}/,
+                      this.currentAnswers[stepParams.id][i][stepParams.field!.id]
+                    );
+                    value = stepAnswers[i][stepParams.addQuestion!.id];
+                    this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+                  });
+                }
               }
             }
             break;
@@ -438,33 +471,47 @@ export class WizardIRV3EngineModel {
             break;
 
           case 'autocomplete-array':
-          case 'checkbox-array':
             {
-              let stepAnswers: string[] = [];
-
-              stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
-
-              // Set value of parent, depending on type of answer
-              if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
-                value = stepAnswers;
-
-                label = stepParams.label ?? '';
+              value = [];
+              let stepAnswers = currentAnswers[stepParams.id];
+              if (stepAnswers) {
+                value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]).join('\n');
               }
 
-              // If answer is filled out, and conditional are present, replace their fields' value (i.e. 'OTHER') with user's provided answer.
-              if (stepAnswers) {
-                const conditionalItem = stepParams.items?.find(i => i.conditional);
-                const conditionalItemId = conditionalItem?.id;
+              this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+            }
 
-                if (conditionalItem && conditionalItemId && stepAnswers.includes(conditionalItemId)) {
-                  const conditionalId = conditionalItem.conditional?.id ?? '';
-                  const conditonalAnswer = currentAnswers[conditionalId];
+            break;
+          case 'checkbox-array':
+            {
+              value = undefined;
+              let stepAnswers: string[] = [];
 
-                  value = conditonalAnswer ? conditonalAnswer : value;
+              if (currentAnswers[stepParams.id]) {
+                stepAnswers = [...(currentAnswers[stepParams.id] as arrStringAnswer)];
 
-                  stepAnswers[stepAnswers.findIndex(i => i === conditionalItemId)] = currentAnswers[conditionalId];
+                // Set value of parent, depending on type of answer
+                if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+                  value = stepAnswers;
+
+                  label = stepParams.label ?? '';
                 }
-                value = stepAnswers;
+
+                // If answer is filled out, and conditional are present, replace their fields' value (i.e. 'OTHER') with user's provided answer.
+                if (stepAnswers) {
+                  const conditionalItem = stepParams.items?.find(i => i.conditional);
+                  const conditionalItemId = conditionalItem?.id;
+
+                  if (conditionalItem && conditionalItemId && stepAnswers.includes(conditionalItemId)) {
+                    const conditionalId = conditionalItem.conditional?.id ?? '';
+                    const conditonalAnswer = currentAnswers[conditionalId];
+
+                    value = conditonalAnswer ? conditonalAnswer : value;
+
+                    stepAnswers[stepAnswers.findIndex(i => i === conditionalItemId)] = currentAnswers[conditionalId];
+                  }
+                  value = stepAnswers;
+                }
               }
 
               this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
@@ -497,12 +544,12 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    // console.log('summary:', this.summary);
+    console.log('summary:', this.summary);
     return this.summary;
   }
 
   runInboundParsing(): this {
-    // console.log('running inbound parsing');
+    console.log('running inbound parsing');
     const toReturn: MappedObjectType = {};
 
     this.steps.forEach(step => {
@@ -561,11 +608,20 @@ export class WizardIRV3EngineModel {
 
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
-        if (stepParams.addQuestion || stepParams.checkboxAnswerId) {
+        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && this.currentAnswers[stepParams.id]) {
+          console.log(`this.currentAnswers[${stepParams.id}]`, this.currentAnswers[stepParams.id]);
+          console.log(`toReturn[${stepParams.id}]`, toReturn[stepParams.id]);
           toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map((answer, i) => {
+            const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
+            console.log('this.getCheckBoxAnswerId(stepParams)', this.getCheckBoxAnswerId(stepParams));
+            console.log('answer', answer);
+            console.log('stepParams.addQuestion!.id', stepParams.addQuestion!.id);
+            console.log('this.currentAnswers[addQuestionId]', this.currentAnswers[addQuestionId]);
             return {
               [this.getCheckBoxAnswerId(stepParams)]: answer,
-              [stepParams.addQuestion!.id]: this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`]
+              ...(this.currentAnswers[addQuestionId] && {
+                [stepParams.addQuestion!.id]: this.currentAnswers[addQuestionId]
+              })
             };
           });
         }
@@ -594,6 +650,10 @@ export class WizardIRV3EngineModel {
         }
       }
 
+      if (stepParams.dataType === 'radio-group' && stepParams.items?.length == 1 && stepParams.isHidden) {
+        toReturn[stepParams.id] = stepParams.items[0].id;
+      }
+
       // add conditionals
       const conditionalItems = stepParams.items?.filter(i => i.conditional);
       conditionalItems?.forEach(c => {
@@ -603,7 +663,7 @@ export class WizardIRV3EngineModel {
       });
     }
 
-    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
+    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
       version: this.schema?.version ?? 0,
       data: toReturn

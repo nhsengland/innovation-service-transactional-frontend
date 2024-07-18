@@ -56,7 +56,10 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       description: data.description,
       countryName: data.countryName,
       postcode: data.postcode,
-      website: data.website
+      website: data.website,
+      hasWebsite: data.hasWebsite,
+      countryLocation: data.countryLocation,
+      officeLocation: data.officeLocation
     };
 
     this.innovatorService

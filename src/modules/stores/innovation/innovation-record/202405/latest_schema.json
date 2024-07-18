@@ -1032,6 +1032,9 @@
                                     "dataType": "checkbox-array",
                                     "label": "Is your innovation relevant to any of the following areas?",
                                     "description": "We ask this to identify the organisations and people who are in the best position to support you.",
+                                    "validations": {
+                                        "isRequired": "Choose at least one option"
+                                    },
                                     "items": [
                                         {
                                             "id": "COVID_19",
@@ -1394,6 +1397,9 @@
                                     "id": "benefitsOrImpact",
                                     "dataType": "checkbox-array",
                                     "label": "What are the benefits or impact of your innovation?",
+                                    "validations": {
+                                        "isRequired": "Choose at least one option"
+                                    },
                                     "items": [
                                         {
                                             "id": "Reduces mortality",
@@ -2735,7 +2741,7 @@
                                     "items": [
                                         {
                                             "id": "YES",
-                                            "label": "A one-off innovation, or the first of its kind"
+                                            "label": "Yes"
                                         },
                                         {
                                             "id": "IN_PROGRESS",
