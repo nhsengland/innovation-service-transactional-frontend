@@ -39,9 +39,11 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
         case 'checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
-          ((parameterValue as string[]) || []).forEach(v => {
-            (form.get(parameter.id) as FormArray).push(new FormControl(v));
-          });
+
+          parameterValue &&
+            ((parameterValue as string[]) || []).forEach(v => {
+              (form.get(parameter.id) as FormArray).push(new FormControl(v));
+            });
           break;
 
         // case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
