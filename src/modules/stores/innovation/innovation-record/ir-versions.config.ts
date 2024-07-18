@@ -98,7 +98,10 @@ export function getAllSectionsSummaryV3(
           sectionId: sub.id
         });
 
-        wizard.setAnswers(sectionMap.get(sub.id)?.data ?? {}).runRules();
+        wizard
+          .setAnswers(sectionMap.get(sub.id)?.data ?? {})
+          .runRules()
+          .runInboundParsing();
         return {
           section: sub.title,
           status: sectionMap.get(sub.id as any)?.section.status ?? 'UNKNOWN',

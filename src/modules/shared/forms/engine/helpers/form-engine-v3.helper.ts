@@ -12,7 +12,6 @@ import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
 import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { input } from '@angular/core';
 
 export class FormEngineHelperV3 {
   static buildForm(

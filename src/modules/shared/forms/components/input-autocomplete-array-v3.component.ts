@@ -58,11 +58,11 @@ export class FormInputAutocompleteArrayV3Component implements OnInit, DoCheck {
     }
 
     const filteredValues = UtilsHelper.arrayFullTextSearch(
-      this.searchableItems.filter(item => item.isVisible).map(i => i.id),
+      this.searchableItems.filter(item => item.isVisible).map(i => i.label),
       value
     );
     return (this.items ?? [])
-      .filter(i => filteredValues.includes(i.id ?? ''))
+      .filter(i => filteredValues.includes(i.label ?? ''))
       .map(item => ({ id: item.id!, label: item.label! }));
   }
 

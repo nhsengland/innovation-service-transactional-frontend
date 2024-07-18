@@ -7,6 +7,7 @@ import { SectionStepsList } from '@modules/shared/pages/innovation/sections/sect
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
+import { stepsLabels } from '../202304/section-2-2-evidences.config';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -77,6 +78,27 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
           ...(q.addQuestion ? [{ label: q.addQuestion.label, conditional: true }] : [])
         ])
       ) ?? [];
+
+    // add conditional questions regarding evidences for 2.2
+    if (sectionId === 'EVIDENCE_OF_EFFECTIVENESS') {
+      flattenedQuestions.push(...Object.values(stepsLabels));
+    }
+    // add conditional questions special cases regarding 4.1
+    if (sectionId === 'TESTING_WITH_USERS') {
+      const questionToAdd = { label: 'Describe the testing and feedback for each testing', conditional: true };
+      flattenedQuestions.splice(4, 1, questionToAdd);
+    }
+    // add conditional questions special cases regarding 5.1
+    if (sectionId === 'REGULATIONS_AND_STANDARDS') {
+      const questionToAdd = { label: 'Do you have a certification for each standard?', conditional: true };
+      flattenedQuestions.splice(2, 1, questionToAdd);
+    }
+    // add conditional questions special cases regarding 5.2
+    if (sectionId === 'INTELLECTUAL_PROPERTY') {
+      const questionToAdd = { label: 'Patent number(s)', conditional: true };
+      flattenedQuestions.splice(1, 0, questionToAdd);
+    }
+
     return flattenedQuestions;
   }
 

@@ -104,7 +104,7 @@ export class WizardIRV3EngineModel {
 
   gotoSummary(): this {
     this.visitedSteps.clear();
-    console.log('answers on summary', this.currentAnswers);
+    // console.log('answers on summary', this.currentAnswers);
 
     this.parseSummary();
     this.showSummary = true;
@@ -167,20 +167,8 @@ export class WizardIRV3EngineModel {
           nextStepId++;
         }
       } else {
-        // // Skip if step is hidden
-
-        console.log('nextStepId', nextStepId);
-        console.log(
-          'this.steps[nextStepId as number].parameters[0].id',
-          this.steps[nextStepId as number].parameters[0].id
-        );
-        console.log('this.steps[nextStepId as number].parameters[0]', this.steps[nextStepId as number].parameters[0]);
-        console.log(
-          'this.steps[nextStepId as number].parameters[0].isHidden',
-          this.steps[nextStepId as number].parameters[0].isHidden
-        );
+        // Skip if step is hidden
         if (this.steps[nextStepId as number].parameters[0].isHidden === true) {
-          console.log(`next step isHidden`);
           nextStepId += 2;
         } else {
           nextStepId++;
@@ -266,7 +254,7 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
-    console.log('CURRENT SCHEMA:', this.schema);
+    // console.log('CURRENT SCHEMA:', this.schema);
 
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
@@ -396,13 +384,13 @@ export class WizardIRV3EngineModel {
         });
       }
     });
-    console.log('this.steps:', this.steps);
+    // console.log('this.steps:', this.steps);
 
     return this;
   }
 
   parseSummary(): WizardSummaryV3Type[] {
-    console.log('parsingSummary with currenAnswers:', this.currentAnswers);
+    // console.log('parsingSummary with currenAnswers:', this.currentAnswers);
     let editStepNumber = 0;
     this.summary = [];
 
@@ -421,7 +409,6 @@ export class WizardIRV3EngineModel {
         switch (stepParams.dataType) {
           case 'fields-group':
             {
-              console.log('parsing fields-group step ', stepParams.id);
               const stepAnswers = currentAnswers[stepParams.id] as nestedObjectAnswer;
 
               if (stepAnswers) {
@@ -475,7 +462,7 @@ export class WizardIRV3EngineModel {
               value = [];
               let stepAnswers = currentAnswers[stepParams.id];
               if (stepAnswers) {
-                value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]).join('\n');
+                value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]);
               }
 
               this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
@@ -544,12 +531,12 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    console.log('summary:', this.summary);
+    // console.log('summary:', this.summary);
     return this.summary;
   }
 
   runInboundParsing(): this {
-    console.log('running inbound parsing');
+    // console.log('running inbound parsing');
     const toReturn: MappedObjectType = {};
 
     this.steps.forEach(step => {
@@ -609,14 +596,9 @@ export class WizardIRV3EngineModel {
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
         if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && this.currentAnswers[stepParams.id]) {
-          console.log(`this.currentAnswers[${stepParams.id}]`, this.currentAnswers[stepParams.id]);
-          console.log(`toReturn[${stepParams.id}]`, toReturn[stepParams.id]);
           toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map((answer, i) => {
             const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
-            console.log('this.getCheckBoxAnswerId(stepParams)', this.getCheckBoxAnswerId(stepParams));
-            console.log('answer', answer);
-            console.log('stepParams.addQuestion!.id', stepParams.addQuestion!.id);
-            console.log('this.currentAnswers[addQuestionId]', this.currentAnswers[addQuestionId]);
+
             return {
               [this.getCheckBoxAnswerId(stepParams)]: answer,
               ...(this.currentAnswers[addQuestionId] && {
@@ -663,7 +645,7 @@ export class WizardIRV3EngineModel {
       });
     }
 
-    console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
+    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
       version: this.schema?.version ?? 0,
       data: toReturn

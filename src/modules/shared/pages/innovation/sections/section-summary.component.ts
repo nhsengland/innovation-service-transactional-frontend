@@ -99,27 +99,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.allSteps = this.stores.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
 
-    // add conditional questions regarding evidences for 2.2
-    if (this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS') {
-      const evidencesToAdd: SectionStepsList = [];
-      this.allSteps.push(...Object.values(stepsLabels));
-    }
-    // add conditional questions special cases regarding 4.1
-    if (this.sectionInfo.id === 'TESTING_WITH_USERS') {
-      const questionToAdd = { label: 'Describe the testing and feedback for each testing', conditional: true };
-      this.allSteps.splice(4, 0, questionToAdd);
-    }
-    // add conditional questions special cases regarding 5.1
-    if (this.sectionInfo.id === 'REGULATIONS_AND_STANDARDS') {
-      const questionToAdd = { label: 'Do you have a certification for each standard?', conditional: true };
-      this.allSteps.splice(2, 0, questionToAdd);
-    }
-    // add conditional questions special cases regarding 5.2
-    if (this.sectionInfo.id === 'INTELLECTUAL_PROPERTY') {
-      const questionToAdd = { label: 'Patent number(s)', conditional: true };
-      this.allSteps.splice(1, 0, questionToAdd);
-    }
-
     this.setPageStatus('READY');
   }
 

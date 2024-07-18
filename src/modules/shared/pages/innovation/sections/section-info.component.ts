@@ -188,6 +188,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       const wizard = this.sectionSummaryData.sectionInfo.wizard;
       wizard.setAnswers(sectionInfo.data).runRules();
 
+      const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
+
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
       if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
@@ -201,9 +203,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       } else {
         this.sectionSummaryData.sectionInfo.submitButton.show = false;
       }
-
-      // const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-      const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
