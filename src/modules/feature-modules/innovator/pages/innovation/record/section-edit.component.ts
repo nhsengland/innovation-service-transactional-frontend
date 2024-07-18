@@ -102,15 +102,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onChangeStep(stepId: number): void {
-    this.onGoToStep(stepId, true);
+    this.wizard.gotoStep(stepId, true);
     this.resetAlert();
   }
-
   onGoToStep(stepId: 'summary' | number, isChangeMode?: boolean) {
     if (stepId === 'summary') {
-      console.log('go to summary');
       this.wizard.gotoSummary();
-      this.redirectTo(`${this.baseUrl}/edit/summary`, { isChangeMode: isChangeMode });
+      this.redirectTo(`${this.baseUrl}/edit/summary`);
 
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
         const validInformation = this.wizard.validateData();
@@ -165,12 +163,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     let currentStepIndex = this.wizard.currentStepId;
 
-    console.log('formData.data', formData.data);
-
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
-        console.log('previous');
-
         const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
         if (this.wizard.isFirstStep() || previousStep === -1) {
           this.redirectTo(this.baseUrl);
