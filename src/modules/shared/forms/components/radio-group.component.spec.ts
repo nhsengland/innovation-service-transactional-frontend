@@ -3,11 +3,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { FormEngineParameterModel } from '@app/base/forms';
-
 import { FormInputComponent } from '../components/input.component';
 import { FormTextareaComponent } from '../components/textarea.component';
 import { FormRadioGroupComponent } from './radio-group.component';
+import { FormEngineParameterModel } from '@modules/shared/forms';
 
 @Component({
   template: ` <form [formGroup]="form">

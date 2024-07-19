@@ -284,6 +284,18 @@ export class FormEngineHelper {
     if (error.mustMatch) {
       return { message: error.message, params: {} };
     }
+    if (error.requiredDateInput) {
+      return { message: error.requiredDateInput.message, params: {} };
+    }
+    if (error.dateInputFormat) {
+      return {
+        message: error.dateInputFormat.message || 'shared.forms_module.validations.invalid_date_input_format',
+        params: {}
+      };
+    }
+    if (error.futureDateInput) {
+      return { message: error.futureDateInput.message, params: {} };
+    }
     if (error.customError) {
       return { message: error.message, params: {} };
     }

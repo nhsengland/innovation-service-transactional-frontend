@@ -103,7 +103,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                     id: 'description',
                     dataType: 'text',
                     label: 'Other evidence type',
-                    validations: { isRequired: [true, 'Other evidence type is required'] }
+                    validations: { isRequired: [true, 'Other evidence type is required'], maxLength: 50 }
                   })
                 }
               ]

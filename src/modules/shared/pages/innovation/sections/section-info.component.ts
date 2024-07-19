@@ -16,6 +16,7 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { NotificationContextDetailEnum } from '@app/base/enums';
 
 export type SectionInfoType = {
   id: string;
@@ -211,6 +212,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.getPreviousAndNextPagination();
 
       this.sectionSummaryData.documentsList = documents?.data ?? [];
+
+      // Throw notification read dismiss.
+      if (this.isAccessorType) {
+        this.stores.context.dismissNotification(this.innovation.id, {
+          contextDetails: [NotificationContextDetailEnum.INNOVATION_RECORD_UPDATED]
+        });
+      }
 
       this.setPageStatus('READY');
     });

@@ -83,7 +83,7 @@ export class WizardInnovationCustomNotificationNewUnitsStepComponent
       .filter(unit => selectedUnitsIds.includes(unit.id));
 
     return {
-      selectedUnits
+      units: selectedUnits
     };
   }
 

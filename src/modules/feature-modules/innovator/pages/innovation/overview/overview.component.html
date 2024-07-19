@@ -67,16 +67,22 @@
     <div class="nhsuk-card nhsuk-u-margin-top-2">
       <div class="nhsuk-card__content">
         <h2 class="nhsuk-heading-m">Your next steps</h2>
-        <ol class="nhsuk-list nhsuk-u-padding-0">
-          <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections }"></ng-container>
-            <div class="nhsuk-u-margin-left-2">Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a></div>
+        <ul class="nhsuk-list" [ngClass]="{ 'nhsuk-list--bullet': isArchived, 'nhsuk-u-margin-left-2': isArchived }">
+          <li [ngClass]="{ 'd-flex': !isArchived }">
+            <ng-container *ngIf="!isArchived">
+              <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections }"></ng-container>
+            </ng-container>
+            <div [ngClass]="{ 'nhsuk-u-margin-left-2': !isArchived }">
+              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
+            </div>
           </li>
-          <li class="d-flex">
-            <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
-            <div class="nhsuk-u-margin-left-2">Share the record for the needs assessment</div>
+          <li [ngClass]="{ 'd-flex': !isArchived }">
+            <ng-container *ngIf="!isArchived">
+              <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
+            </ng-container>
+            <div [ngClass]="{ 'nhsuk-u-margin-left-2': !isArchived }">Share the record for the needs assessment</div>
           </li>
-        </ol>
+        </ul>
       </div>
     </div>
   </ng-container>

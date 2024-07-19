@@ -82,6 +82,7 @@ import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/i
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/custom-notification-delete.component';
 import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 
 const header: RoutesDataType['header'] = {
@@ -502,10 +503,38 @@ const routes: Routes = [
                     data: { breadcrumb: null }
                   },
                   {
-                    path: 'edit',
+                    path: 'new',
                     pathMatch: 'full',
                     component: WizardInnovationCustomNotificationNewComponent,
-                    data: { breadcrumb: null, layout: { type: 'full' } }
+                    data: { layout: { type: 'full' } }
+                  },
+                  {
+                    path: 'delete',
+                    pathMatch: 'full',
+                    component: WizardInnovationCustomNotificationDeleteComponent,
+                    data: { layout: { type: 'full' } }
+                  },
+                  {
+                    path: ':subscriptionId',
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        redirectTo: '../custom-notifications'
+                      },
+                      {
+                        path: 'edit',
+                        pathMatch: 'full',
+                        component: WizardInnovationCustomNotificationNewComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'delete',
+                        pathMatch: 'full',
+                        component: WizardInnovationCustomNotificationDeleteComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
                   }
                 ]
               }
@@ -616,6 +645,12 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: AccountManageCustomNotificationsComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'delete',
+                pathMatch: 'full',
+                component: WizardInnovationCustomNotificationDeleteComponent,
+                data: { layout: { type: 'full' } }
               }
             ]
           },

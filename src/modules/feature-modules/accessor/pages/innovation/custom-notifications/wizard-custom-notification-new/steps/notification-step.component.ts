@@ -7,12 +7,12 @@ import {
   NotificationStepInputType,
   NotificationStepOutputType,
   NOTIFICATION_ITEMS,
-  CategoryEnum,
-  NotificationEnum
+  CategoryEnum
 } from './notification-step.types';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-notification-step',
+  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-notification-step',
   templateUrl: './notification-step.component.html'
 })
 export class WizardInnovationCustomNotificationNewNotificationStepComponent

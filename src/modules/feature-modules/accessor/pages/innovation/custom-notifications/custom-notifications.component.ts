@@ -1,8 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { UtilsHelper } from '@app/base/helpers';
 import {
   AccessorService,
-  GetNotifyMeInnovationSubscriptions
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { ContextInnovationType } from '@modules/stores';
 
@@ -13,12 +16,17 @@ import { ContextInnovationType } from '@modules/stores';
 export class InnovationCustomNotificationsComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
 
-  subscriptionsList: (GetNotifyMeInnovationSubscriptions & {
+  subscriptionsList: (GetNotifyMeInnovationSubscription & {
+    displayTitle?: string;
     displayOrganisations?: string[];
-    displayStatuses?: string;
+    displaySections?: string[];
+    displayReminder?: string;
   })[] = [];
 
-  constructor(private accessorService: AccessorService) {
+  constructor(
+    private accessorService: AccessorService,
+    private datePipe: DatePipe
+  ) {
     super();
 
     this.innovation = this.stores.context.getInnovation();
@@ -30,23 +38,30 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
     this.accessorService.getNotifyMeInnovationSubscriptionsList(this.innovation.id).subscribe({
       next: response => {
         this.subscriptionsList = response.map(subscription => {
-          if (subscription.eventType === 'SUPPORT_UPDATED') {
-            const translatedStatuses = subscription.status
-              .map(status => this.translate(`shared.catalog.innovation.support_status.${status}.name`).toLowerCase())
-              .sort();
-            return {
-              ...subscription,
-              displayOrganisations: subscription.organisations
-                .flatMap(org => (org.units.length === 1 ? [org.name] : org.units.map(unit => unit.name)))
-                .sort(),
-              displayStatuses:
-                translatedStatuses.length === 1
-                  ? translatedStatuses[0]
-                  : `${translatedStatuses.slice(0, -1).join(', ')} or ${translatedStatuses.at(-1)}`
-            };
-          } else {
-            return subscription;
-          }
+          // Determine whether to add displayOrganisations based on eventType
+          const displayOrganisations =
+            subscription.eventType === NotificationEnum.SUPPORT_UPDATED ||
+            subscription.eventType === NotificationEnum.PROGRESS_UPDATE_CREATED
+              ? UtilsHelper.getNotifyMeSubscriptionOrganisationsText(subscription)
+              : undefined;
+
+          const displaySections =
+            subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
+              : undefined;
+
+          const displayReminder =
+            subscription.eventType === NotificationEnum.REMINDER
+              ? UtilsHelper.getNotifyMeSubscriptionReminderText(subscription, this.datePipe)
+              : undefined;
+
+          return {
+            ...subscription,
+            displayTitle: UtilsHelper.getNotifyMeSubscriptionTitleText(subscription),
+            displayOrganisations: displayOrganisations,
+            displaySections: displaySections,
+            displayReminder: displayReminder
+          };
         });
         this.setPageStatus('READY');
       },
@@ -55,5 +70,22 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
         this.setPageStatus('ERROR');
       }
     });
+  }
+
+  getInnovationRecordUpdateSectionsCardLabel(
+    subscription: GetNotifyMeInnovationSubscription & {
+      displaySections?: string[];
+    }
+  ): string {
+    subscription.displaySections;
+    if (
+      subscription?.displaySections &&
+      subscription?.displaySections.length === 1 &&
+      subscription?.displaySections[0] !== 'All sections'
+    ) {
+      return 'Section';
+    } else {
+      return 'Sections';
+    }
   }
 }

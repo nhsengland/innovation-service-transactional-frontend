@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 
 import { CoreComponent } from '@app/base';
 import { GenericErrorsEnum } from '@app/base/enums';
-import { FileTypes, FormGroup } from '@app/base/forms';
+import { CustomValidators, FormGroup } from '@app/base/forms';
 import { ContextInnovationType, WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { InnovationValidationRules } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -38,11 +38,14 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
 
   form = new FormGroup(
     {
-      date: new FormGroup({
-        day: new FormControl<string>(''),
-        month: new FormControl<string>(''),
-        year: new FormControl<string>('')
-      })
+      date: new FormGroup(
+        {
+          day: new FormControl<string>(''),
+          month: new FormControl<string>(''),
+          year: new FormControl<string>('')
+        },
+        CustomValidators.dateInputFormatValidator()
+      )
     },
     { updateOn: 'blur' }
   );

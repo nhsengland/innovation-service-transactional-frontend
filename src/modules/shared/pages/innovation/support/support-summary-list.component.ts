@@ -175,7 +175,11 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         // Throw notification read dismiss.
         if (this.isAccessorType) {
           this.stores.context.dismissNotification(this.innovation.id, {
-            contextDetails: [NotificationContextDetailEnum.SUPPORT_UPDATED]
+            contextDetails: [
+              NotificationContextDetailEnum.SUPPORT_UPDATED,
+              NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED,
+              NotificationContextDetailEnum.SUGGESTED_SUPPORT_UPDATED
+            ]
           });
         }
 

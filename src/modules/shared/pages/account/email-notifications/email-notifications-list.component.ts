@@ -33,7 +33,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   ) {
     super();
 
-    this.setPageTitle('Email notifications preferences');
+    this.setPageTitle('Email preferences');
 
     this.displayName = this.authenticationStore.getUserInfo().displayName;
 
@@ -94,7 +94,7 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         this.getEmailNotificationTypes();
       },
       complete: () => {
-        this.setAlertSuccess('Your email notification preferences have been updated');
+        this.setAlertSuccess('Your email preferences have been updated');
       },
       error: () => {
         this.setAlertError(

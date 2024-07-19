@@ -155,6 +155,11 @@ export const locale = {
               none: 'Organisations selected',
               plural: 'Organisations selected',
               singular: 'Organisation selected'
+            },
+            sections_selected: {
+              none: 'Sections',
+              plural: 'Sections',
+              singular: 'Section'
             }
           }
         }
@@ -460,6 +465,22 @@ export const locale = {
                 title: 'Tasks',
                 description: 'Get notified when an innovator completes or declines a task you have assigned to them.'
               }
+            },
+
+            NOTIFY_ME: {
+              SHARED: {
+                title: 'Custom notifications',
+                description:
+                  'You can create custom notifications to alert you about events or updates related to an innovation.'
+              }
+            },
+
+            USER_RESEARCH_SURVEYS: {
+              INNOVATOR: {
+                title: 'User research and surveys ',
+                description:
+                  'Receive invitations to take part in user research and surveys for the NHS Innovation Service.'
+              }
             }
           },
 
@@ -491,8 +512,8 @@ export const locale = {
 
             INNOVATION_MANAGEMENT: {
               INNOVATOR: { title: 'Manage innovation' },
-              QUALIFYING_ACCESSOR: { title: 'Withdrawals and export requests' },
-              ACCESSOR: { title: 'Withdrawals and export requests' },
+              QUALIFYING_ACCESSOR: { title: 'Archived innovations and export requests' },
+              ACCESSOR: { title: 'Archived innovations and export requests' },
               ASSESSMENT: { title: 'Innovation withdrawals' }
             },
 
@@ -787,6 +808,26 @@ export const locale = {
             SUPPORT_UPDATED: {
               title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
               link: `View support summary.`
+            },
+            PROGRESS_UPDATE_CREATED: {
+              title: `{{ organisation }} has added a progress update to the support summary for innovation {{ innovation }}.`,
+              link: `View support summary.`
+            },
+            INNOVATION_RECORD_UPDATED: {
+              title: `Section "{{ sectionLabel }}" has been updated on innovation {{ innovation }}.`,
+              link: `View this section of the innovation record.`
+            },
+            DOCUMENT_UPLOADED: {
+              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}.`,
+              link: `View documents.`
+            },
+            REMINDER: {
+              title: `Reminder to check innovation {{ innovation }} for this reason: {{ reason }}.`,
+              link: `View innovation.`
+            },
+            SUGGESTED_SUPPORT_UPDATED: {
+              title: `{{organisation}} has updated their support status for {{innovation}} to {{supportStatus}}.`,
+              link: `View support summary.`
             }
           },
           section_status: {
@@ -956,12 +997,14 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           validEmail: 'Enter a valid email',
-          invalid_postcode_format: 'Postcode format is invalid',
+          invalid_postcode_format:
+            'The postcode format is invalid. Check the postcode format is correct and includes the space.',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',
           wrong_file_format: 'The file format is invalid. Files must be CSV, XLSX, DOCX or PDF',
-          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us'
+          upload_error: 'This file has failed to upload. Try again and if there is still a problem, contact us',
+          invalid_date_input_format: 'Enter a valid date'
         }
       }
     }

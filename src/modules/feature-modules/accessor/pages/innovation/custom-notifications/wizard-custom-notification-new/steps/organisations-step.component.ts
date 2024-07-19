@@ -6,7 +6,7 @@ import { CustomValidators, FormEngineParameterModel } from '@modules/shared/form
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organisations-step.types';
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-organisations-step',
+  selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-organisations-step',
   templateUrl: './organisations-step.component.html'
 })
 export class WizardInnovationCustomNotificationNewOrganisationsStepComponent
@@ -65,7 +65,7 @@ export class WizardInnovationCustomNotificationNewOrganisationsStepComponent
     const selectedOrganisations = this.data.organisations.filter(org => selectedOrganisationsIds?.includes(org.id));
 
     return {
-      selectedOrganisations
+      organisations: selectedOrganisations
     };
   }
 

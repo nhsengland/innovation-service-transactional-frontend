@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import {
   AccessorService,
-  GetNotifyMeSubscriptionsList
+  GetNotifyMeInnovationsWithSubscriptions
 } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
@@ -10,14 +10,14 @@ import {
   templateUrl: './manage-custom-notifications.component.html'
 })
 export class AccountManageCustomNotificationsComponent extends CoreComponent implements OnInit {
-  subscriptionsList: GetNotifyMeSubscriptionsList = [];
+  subscriptionsList: GetNotifyMeInnovationsWithSubscriptions[] = [];
   constructor(private accessorService: AccessorService) {
     super();
     this.setPageTitle('Manage custom notifications');
   }
 
   ngOnInit() {
-    this.accessorService.getNotifyMeSubscriptionsList().subscribe({
+    this.accessorService.getNotifyMeInnovationsWithSubscriptionsList().subscribe({
       next: response => {
         this.subscriptionsList = response;
         this.setPageStatus('READY');

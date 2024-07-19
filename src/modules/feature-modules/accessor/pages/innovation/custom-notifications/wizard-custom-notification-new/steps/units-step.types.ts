@@ -8,5 +8,5 @@ export type UnitsStepInputType = {
 };
 
 export type UnitsStepOutputType = {
-  selectedUnits: Unit[];
+  units: Unit[];
 };

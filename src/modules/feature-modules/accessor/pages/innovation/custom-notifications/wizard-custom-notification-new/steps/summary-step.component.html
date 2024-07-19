@@ -4,13 +4,13 @@
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Notify me</dt>
-          <dd class="nhsuk-summary-list__value">{{ data.selectedNotification }}</dd>
+          <dd class="nhsuk-summary-list__value">{{ displayNotification }}</dd>
           <dd class="nhsuk-summary-list__actions"></dd>
         </div>
-        <div class="nhsuk-summary-list__row">
+        <div *ngIf="displayOrganisations?.length" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Organisation</dt>
           <dd class="nhsuk-summary-list__value">
-            <div *ngFor="let organisation of data.selectedOrganisations">
+            <div *ngFor="let organisation of displayOrganisations">
               <p class="nhsuk-u-margin-bottom-2">{{ organisation }}</p>
             </div>
           </dd>
@@ -18,10 +18,21 @@
             <a href="javascript:void(0)" (click)="onGotoStep('organisationsStep')">Change<span class="nhsuk-u-visually-hidden"> organisation </span></a>
           </dd>
         </div>
-        <div class="nhsuk-summary-list__row">
+        <div *ngIf="displayInnovationRecordSections" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Sections of innovation record</dt>
+          <dd class="nhsuk-summary-list__value">
+            <div *ngFor="let section of displayInnovationRecordSections">
+              <p class="nhsuk-u-margin-bottom-2">{{ section }}</p>
+            </div>
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('innovationRecordUpdateStep')">Change<span class="nhsuk-u-visually-hidden"> sections </span></a>
+          </dd>
+        </div>
+        <div *ngIf="displaySupportStatuses?.length" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Support status</dt>
           <dd class="nhsuk-summary-list__value">
-            <div *ngFor="let supportStatus of data.selectedSupportStatuses">
+            <div *ngFor="let supportStatus of displaySupportStatuses">
               <p class="nhsuk-u-margin-bottom-2">{{ supportStatus }}</p>
             </div>
           </dd>
@@ -29,9 +40,31 @@
             <a href="javascript:void(0)" (click)="onGotoStep('supportStatusesStep')">Change<span class="nhsuk-u-visually-hidden"> support status </span></a>
           </dd>
         </div>
+        <div *ngIf="data.reminderStep.reminder" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Notification</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.reminderStep.reminder }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('reminderStep')">Change<span class="nhsuk-u-visually-hidden"> notification </span></a>
+          </dd>
+        </div>
+        <div *ngIf="displayDate" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Date to be sent</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ displayDate | date: ("app.date_formats.long_date" | translate) }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date </span></a>
+          </dd>
+        </div>
       </dl>
 
-      <button type="button" class="nhsuk-button" (click)="onSubmit()">Confirm and save notification</button>
+      <button *ngIf="!data.displayEditMode" type="button" class="nhsuk-button" (click)="onSubmit()">Confirm and save notification</button>
+
+      <div *ngIf="data.displayEditMode" class="nhsuk-u-font-size-19 nhsuk-u-margin-top-6">
+        <a routerLink="../delete">Delete this notification</a>
+      </div>
     </div>
   </div>
 </theme-content-wrapper>

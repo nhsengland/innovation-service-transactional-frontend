@@ -237,7 +237,10 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
     TermsOfUseService,
     StatisticsService,
     UsersService,
-    FileUploadService
+    FileUploadService,
+
+    // Pipes.
+    PluralTranslatePipe
   ],
   exports: [
     CommonModule,

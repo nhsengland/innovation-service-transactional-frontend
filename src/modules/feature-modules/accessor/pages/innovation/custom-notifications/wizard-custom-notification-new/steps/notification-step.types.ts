@@ -1,10 +1,4 @@
-export enum NotificationEnum {
-  SUPPORT_UPDATED = 'SUPPORT_UPDATED',
-  PROGRESS_UPDATE_CREATED = 'PROGRESS_UPDATE_CREATED',
-  RECORD_UPDATED = 'RECORD_UPDATED',
-  DOCUMENT_UPLOADED = 'DOCUMENT_UPLOADED',
-  REMINDER = 'REMINDER'
-}
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 export enum CategoryEnum {
   NOTIFIY_ME_WHEN = 'NOTIFIY_ME_WHEN',
@@ -29,15 +23,15 @@ export const NOTIFICATION_ITEMS: Notification[] = [
     label: 'an organisation adds a progress update to the support summary'
   },
   {
-    type: NotificationEnum.RECORD_UPDATED,
+    type: NotificationEnum.INNOVATION_RECORD_UPDATED,
     category: CategoryEnum.NOTIFIY_ME_WHEN,
     label: 'the innovator updates their innovation record'
   },
-  {
+  /*   {
     type: NotificationEnum.DOCUMENT_UPLOADED,
     category: CategoryEnum.NOTIFIY_ME_WHEN,
     label: 'a new document is uploaded'
-  },
+  }, */
   {
     type: NotificationEnum.REMINDER,
     category: CategoryEnum.REMIND_ME,

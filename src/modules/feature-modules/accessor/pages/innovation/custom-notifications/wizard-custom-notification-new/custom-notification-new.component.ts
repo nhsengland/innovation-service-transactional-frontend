@@ -1,17 +1,11 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { WizardInnovationCustomNotificationNewNotificationStepComponent } from './steps/notification-step.component';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
-import {
-  NotificationStepInputType,
-  NotificationStepOutputType,
-  NotificationEnum,
-  NOTIFICATION_ITEMS,
-  Notification,
-  CategoryEnum
-} from './steps/notification-step.types';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { NotificationStepInputType, NotificationStepOutputType } from './steps/notification-step.types';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import {
   Organisation,
   OrganisationsStepInputType,
@@ -25,7 +19,24 @@ import { SummaryStepInputType } from './steps/summary-step.types';
 import { WizardInnovationCustomNotificationNewSummaryStepComponent } from './steps/summary-step.component';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } from './steps/support-statuses-step.component';
-import { AccessorService, NotifyMeConfig } from '@modules/feature-modules/accessor/services/accessor.service';
+import {
+  AccessorService,
+  GetNotifyMeInnovationSubscription,
+  NotificationEnum,
+  NotifyMeConfig
+} from '@modules/feature-modules/accessor/services/accessor.service';
+import { ObservableInput, forkJoin } from 'rxjs';
+import { ReminderStepInputType, ReminderStepOutputType } from './steps/reminder-step.types';
+import { WizardInnovationCustomNotificationNewReminderStepComponent } from './steps/reminder-step.component';
+import { DateStepInputType, DateStepOutputType } from './steps/date-step.types';
+import { WizardInnovationCustomNotificationNewDateStepComponent } from './steps/date-step.component';
+import {
+  InnovationRecordUpdateStepInputType,
+  InnovationRecordUpdateStepOutputType
+} from './steps/innovation-record-update-step.types';
+import { WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
+import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
+import { DatesHelper } from '@app/base/helpers';
 
 type WizardData = {
   notificationStep: {
@@ -40,9 +51,20 @@ type WizardData = {
   supportStatusesStep: {
     supportStatuses: InnovationSupportStatusEnum[];
   };
+  innovationRecordUpdateStep: {
+    innovationRecordSections: (InnovationSections | 'ALL')[];
+  };
+  reminderStep: {
+    reminder: string;
+  };
+  dateStep: {
+    day: string;
+    month: string;
+    year: string;
+  };
 };
 
-const wizardEmptyState = {
+export const wizardEmptyState = {
   organisationsStep: {
     organisations: []
   },
@@ -51,18 +73,36 @@ const wizardEmptyState = {
   },
   supportStatusesStep: {
     supportStatuses: []
+  },
+  innovationRecordUpdateStep: {
+    innovationRecordSections: []
+  },
+  reminderStep: {
+    reminder: ''
+  },
+  dateStep: {
+    day: '',
+    month: '',
+    year: ''
   }
 };
 
 @Component({
-  selector: 'app-accessor-innovation-custom-notification-new-notification-step',
+  selector: 'app-accessor-innovation-custom-notification-new',
   templateUrl: './custom-notification-new.component.html'
 })
 export class WizardInnovationCustomNotificationNewComponent extends CoreComponent implements OnInit {
+  subscriptionId: string;
   innovation: ContextInnovationType;
+
+  subscription: GetNotifyMeInnovationSubscription;
+
+  isEditMode: boolean;
+  currentEditModeEntryStep: string = '';
 
   datasets: {
     organisations: Organisation[];
+    sections: InnovationSections[];
   };
 
   wizard = new WizardModel<WizardData>({});
@@ -73,14 +113,28 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   constructor(
     private organisationsService: OrganisationsService,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
 
+    this.subscriptionId = this.activatedRoute.snapshot.params.subscriptionId;
     this.innovation = this.stores.context.getInnovation();
 
+    this.subscription = {
+      id: '',
+      updatedAt: '',
+      eventType: NotificationEnum.SUPPORT_UPDATED,
+      subscriptionType: 'INSTANTLY',
+      organisations: [],
+      status: []
+    };
+
+    this.isEditMode = !!this.subscriptionId;
+
     this.datasets = {
-      organisations: []
+      organisations: [],
+      sections: []
     };
 
     this.wizard.data = {
@@ -100,7 +154,14 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data),
-          nextStepEvent: data => this.onNextStep(data, this.onNotificationStepOut, this.onOrganisationsStepIn)
+          nextStepEvent: data =>
+            this.onNextStep(
+              data,
+              this.onNotificationStepOut,
+              this.onOrganisationsStepIn,
+              this.onInnovationRecordUpdateStepIn,
+              this.onReminderStepIn
+            )
         }
       }),
       organisationsStep: new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
@@ -113,8 +174,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onOrganisationsStepOut, this.onNotificationStepIn),
-          nextStepEvent: data =>
-            this.onNextStep(data, this.onOrganisationsStepOut, this.onUnitsStepIn, this.onSupportStatusesStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onOrganisationsStepOut, this.onUnitsStepIn, this.onSupportStatusesStepIn);
+            this.onSummaryStepIn();
+          }
         }
       }),
       unitsStep: new WizardStepModel<UnitsStepInputType, UnitsStepOutputType>({
@@ -127,7 +190,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onUnitsStepOut, this.onOrganisationsStepIn),
-          nextStepEvent: data => this.onNextStep(data, this.onUnitsStepOut, this.onSupportStatusesStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onUnitsStepOut, this.onSupportStatusesStepIn);
+            this.onSummaryStepIn();
+          }
         }
       }),
       supportStatusesStep: new WizardStepModel<SupportStatusesStepInputType, SupportStatusesStepOutputType>({
@@ -140,32 +206,110 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         outputs: {
           previousStepEvent: data =>
             this.onPreviousStep(data, this.onSupportStatusesStepOut, this.onOrganisationsStepIn, this.onUnitsStepIn),
-          nextStepEvent: data => this.onNextStep(data, this.onSupportStatusesStepOut, this.onSummaryStepIn)
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onSupportStatusesStepOut);
+            this.onSummaryStepIn();
+          }
+        }
+      }),
+      innovationRecordUpdateStep: new WizardStepModel<
+        InnovationRecordUpdateStepInputType,
+        InnovationRecordUpdateStepOutputType
+      >({
+        id: 'innovationRecordUpdateStep',
+        title: 'Which section of the innovation record do you want to be notified about?',
+        component: WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent,
+        data: {
+          innovationRecordSections: [],
+          selectedInnovationRecordSections: []
+        },
+        outputs: {
+          previousStepEvent: data =>
+            this.onPreviousStep(data, this.onInnovationRecordUpdateStepIn, this.onNotificationStepIn),
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onInnovationRecordUpdateStepOut);
+            this.onSummaryStepIn();
+          }
+        }
+      }),
+      reminderStep: new WizardStepModel<ReminderStepInputType, ReminderStepOutputType>({
+        id: 'reminderStep',
+        title: `Write your notification`,
+        component: WizardInnovationCustomNotificationNewReminderStepComponent,
+        data: {
+          reminder: ''
+        },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data, this.onReminderStepOut, this.onNotificationStepIn),
+          nextStepEvent: data => this.onNextStep(data, this.onReminderStepOut, this.onDateStepIn)
+        }
+      }),
+      dateStep: new WizardStepModel<DateStepInputType, DateStepOutputType>({
+        id: 'dateStep',
+        title: `Select date to receive this notification`,
+        component: WizardInnovationCustomNotificationNewDateStepComponent,
+        data: {
+          day: '',
+          month: '',
+          year: ''
+        },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data, this.onDateStepOut, this.onReminderStepIn),
+          nextStepEvent: data => {
+            this.onNextStep(data, this.onDateStepOut);
+            this.onSummaryStepIn();
+          }
         }
       }),
       summaryStep: new WizardStepModel<SummaryStepInputType, null>({
         id: 'summaryStep',
-        title: `Review your custom notification`,
+        title: '',
         component: WizardInnovationCustomNotificationNewSummaryStepComponent,
         data: {
-          selectedNotification: '',
-          selectedOrganisations: [],
-          selectedSupportStatuses: []
+          displayEditMode: false,
+          notificationStep: {
+            notification: ''
+          },
+          ...wizardEmptyState
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data, this.onSupportStatusesStepIn),
+          previousStepEvent: data =>
+            this.onPreviousStep(
+              data,
+              this.onOrganisationsStepIn,
+              this.onUnitsStepIn,
+              this.onSupportStatusesStepIn,
+              this.onInnovationRecordUpdateStepIn,
+              this.onDateStepIn
+            ),
           submitEvent: data => this.onSubmit(data),
-          goToStepEvent: stepId => this.onGoToStep(stepId)
+          goToStepEvent: stepId => {
+            if (this.isEditMode) {
+              this.currentEditModeEntryStep = stepId;
+            }
+            this.onGoToStep(stepId);
+          }
         }
       })
     };
   }
 
   ngOnInit() {
-    // Get organisations information
-    this.organisationsService.getOrganisationsList({ unitsInformation: true }).subscribe({
+    const subscriptions: {
+      organisationsList: ObservableInput<OrganisationsListDTO[]>;
+      subscription?: ObservableInput<GetNotifyMeInnovationSubscription>;
+    } = {
+      organisationsList: this.organisationsService.getOrganisationsList({ unitsInformation: true })
+    };
+
+    if (this.isEditMode) {
+      subscriptions.subscription = this.accessorService.getNotifyMeSubscription(this.subscriptionId);
+    }
+
+    forkJoin(subscriptions).subscribe({
       next: response => {
-        this.datasets.organisations = response.map(o => {
+        // Get organisations information
+        this.datasets.organisations = response.organisationsList.map(o => {
           const org = {
             id: o.id,
             name: o.name,
@@ -180,15 +324,81 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
           return { ...org, description };
         });
+
+        // Get subscription information if editMode is true
+        if (response.subscription) {
+          this.subscription = response.subscription;
+
+          // Set wizard data with current subscription information
+          this.setWizardDataWithCurrentSubscriptionInfo();
+
+          this.manageWizardSteps(this.wizard.data.notificationStep.notification);
+          this.onGoToStep('summaryStep');
+        } else {
+          // Add notification step if editMode is false
+          this.wizard.addStep(this.stepsDefinition.notificationStep);
+        }
+
+        this.setPageStatus('READY');
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
+  }
 
-    // Add notification step
-    this.wizard.addStep(this.stepsDefinition.notificationStep);
+  setWizardDataWithCurrentSubscriptionInfo() {
+    this.wizard.data.notificationStep.notification = this.subscription.eventType;
+
+    switch (this.subscription.eventType) {
+      case NotificationEnum.SUPPORT_UPDATED:
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        const subscriptionOrganisationsIds = this.subscription.organisations.map(org => org.id);
+
+        this.wizard.data.organisationsStep = {
+          organisations: this.datasets.organisations.filter(org => subscriptionOrganisationsIds.includes(org.id))
+        };
+        this.wizard.data.unitsStep = {
+          units: this.subscription.organisations
+            .filter(
+              subscriptionOrg =>
+                (this.wizard.data.organisationsStep.organisations.find(
+                  selectedOrg => selectedOrg.id === subscriptionOrg.id
+                )?.units.length ?? 0) > 1
+            )
+            .flatMap(org => org.units)
+        };
+
+        if (this.subscription.eventType === NotificationEnum.SUPPORT_UPDATED) {
+          this.wizard.data.supportStatusesStep = {
+            supportStatuses: this.subscription.status
+          };
+        }
+
+        break;
+
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.wizard.data.innovationRecordUpdateStep = {
+          innovationRecordSections: this.subscription.sections ? this.subscription.sections : ['ALL']
+        };
+
+        break;
+
+      case NotificationEnum.REMINDER:
+        this.wizard.data.reminderStep = {
+          reminder: this.subscription.customMessage
+        };
+
+        const date = new Date(this.subscription.date);
+        this.wizard.data.dateStep = {
+          day: date.getDate().toString().padStart(2, '0'),
+          month: (date.getMonth() + 1).toString().padStart(2, '0'),
+          year: date.getFullYear().toString()
+        };
+
+        break;
+    }
   }
 
   // Steps mappings
@@ -217,8 +427,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onOrganisationsStepOut(stepData: WizardStepEventType<OrganisationsStepOutputType>): void {
     this.wizard.data.organisationsStep = {
-      organisations: stepData.data.selectedOrganisations
+      organisations: stepData.data.organisations
     };
+
     this.manageUnitsStep();
   }
 
@@ -233,7 +444,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onUnitsStepOut(stepData: WizardStepEventType<UnitsStepOutputType>): void {
     this.wizard.data.unitsStep = {
-      units: stepData.data.selectedUnits
+      units: stepData.data.units
     };
   }
 
@@ -245,38 +456,66 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   onSupportStatusesStepOut(stepData: WizardStepEventType<SupportStatusesStepOutputType>): void {
     this.wizard.data.supportStatusesStep = {
-      supportStatuses: stepData.data.selectedSupportStatuses
+      supportStatuses: stepData.data.supportStatuses
     };
   }
 
-  onSummaryStepIn(): void {
-    // Get chosen notification information
-    const notification: Notification = NOTIFICATION_ITEMS.filter(
-      notification => notification.type === this.wizard.data.notificationStep.notification
-    )?.[0];
+  onInnovationRecordUpdateStepIn(): void {
+    this.wizard.setStepData<InnovationRecordUpdateStepInputType>('innovationRecordUpdateStep', {
+      innovationRecordSections: this.datasets.sections,
+      selectedInnovationRecordSections: this.wizard.data.innovationRecordUpdateStep.innovationRecordSections
+    });
+  }
 
-    // Get organisation information to display
-    const selectedUnitsIds = this.wizard.data.unitsStep.units.map(unit => unit.id);
-    const organisationsNames = this.wizard.data.organisationsStep.organisations
-      .map(org => {
-        if (org.units.length === 1) {
-          return org.name;
-        } else {
-          const unitName = org.units.filter(unit => selectedUnitsIds.includes(unit.id)).flatMap(unit => unit.name);
-          return unitName;
-        }
-      })
-      .flat();
+  onInnovationRecordUpdateStepOut(stepData: WizardStepEventType<InnovationRecordUpdateStepOutputType>): void {
+    this.wizard.data.innovationRecordUpdateStep = {
+      innovationRecordSections: stepData.data.innovationRecordSections
+    };
+  }
+
+  onReminderStepIn(): void {
+    this.wizard.setStepData<ReminderStepInputType>('reminderStep', {
+      reminder: this.wizard.data.reminderStep.reminder
+    });
+  }
+
+  onReminderStepOut(stepData: WizardStepEventType<ReminderStepOutputType>): void {
+    this.wizard.data.reminderStep = {
+      reminder: stepData.data.reminder
+    };
+  }
+
+  onDateStepIn(): void {
+    this.wizard.setStepData<DateStepInputType>('dateStep', {
+      day: this.wizard.data.dateStep.day,
+      month: this.wizard.data.dateStep.month,
+      year: this.wizard.data.dateStep.year
+    });
+  }
+
+  onDateStepOut(stepData: WizardStepEventType<DateStepOutputType>): void {
+    this.wizard.data.dateStep = {
+      day: stepData.data.day,
+      month: stepData.data.month,
+      year: stepData.data.year
+    };
+  }
+
+  onSummaryStepIn(displayEditMode: boolean = false): void {
+    // If user access summary in edit mode, display the current subscription information
+    if (displayEditMode) {
+      this.setWizardDataWithCurrentSubscriptionInfo();
+    }
 
     this.wizard.setStepData<SummaryStepInputType>('summaryStep', {
-      selectedNotification:
-        notification.category === CategoryEnum.NOTIFIY_ME_WHEN
-          ? 'When ' + notification.label
-          : 'Remind me ' + notification.label,
-      selectedOrganisations: organisationsNames.sort((a, b) => a.localeCompare(b)),
-      selectedSupportStatuses: this.wizard.data.supportStatusesStep.supportStatuses.map(status =>
-        this.translate('shared.catalog.innovation.support_status.' + status + '.name')
-      )
+      displayEditMode,
+      notificationStep: this.wizard.data.notificationStep,
+      organisationsStep: this.wizard.data.organisationsStep,
+      unitsStep: this.wizard.data.unitsStep,
+      supportStatusesStep: this.wizard.data.supportStatusesStep,
+      innovationRecordUpdateStep: this.wizard.data.innovationRecordUpdateStep,
+      reminderStep: this.wizard.data.reminderStep,
+      dateStep: this.wizard.data.dateStep
     });
   }
 
@@ -286,8 +525,22 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   ): void {
     this.resetAlert();
 
-    if (this.wizard.currentStepNumber() === 1) {
+    if (this.wizard.isFirstStep()) {
+      if (this.isEditMode) {
+        this.onGoToStep('summaryStep');
+      } else {
+        this.redirectInnovationCustomNotifications();
+      }
+      return;
+    }
+
+    if (this.wizard.isLastStep() && this.wizard.currentStep().data.displayEditMode) {
       this.redirectInnovationCustomNotifications();
+      return;
+    }
+
+    if (this.wizard.currentStep().id === this.currentEditModeEntryStep) {
+      this.onGoToStep('summaryStep');
       return;
     }
 
@@ -317,6 +570,18 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
       case 'supportStatusesStep':
         this.onSupportStatusesStepIn();
         break;
+      case 'innovationRecordUpdateStep':
+        this.onInnovationRecordUpdateStepIn();
+        break;
+      case 'reminderStep':
+        this.onReminderStepIn();
+        break;
+      case 'dateStep':
+        this.onDateStepIn();
+        break;
+      case 'summaryStep':
+        this.onSummaryStepIn(this.isEditMode);
+        break;
       default:
         return;
     }
@@ -331,8 +596,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   }
 
   manageWizardSteps(notification: string): void {
-    this.clearWizardData();
-    this.clearWizardSteps();
+    if (!this.isEditMode) {
+      this.clearWizardData();
+      this.clearWizardSteps();
+    }
     switch (notification) {
       case NotificationEnum.SUPPORT_UPDATED:
         this.setWizardSteps([
@@ -341,7 +608,18 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           this.stepsDefinition.summaryStep
         ]);
         break;
-      default:
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        this.setWizardSteps([this.stepsDefinition.organisationsStep, this.stepsDefinition.summaryStep]);
+        break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.setWizardSteps([this.stepsDefinition.innovationRecordUpdateStep, this.stepsDefinition.summaryStep]);
+        break;
+      case NotificationEnum.REMINDER:
+        this.setWizardSteps([
+          this.stepsDefinition.reminderStep,
+          this.stepsDefinition.dateStep,
+          this.stepsDefinition.summaryStep
+        ]);
         break;
     }
   }
@@ -370,7 +648,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     // If some selected organisation has more than one unit, add units step.
     // Otherwise, remove
     if (selectedOrganisationsHaveUnits) {
-      this.wizard.addStep(this.stepsDefinition.unitsStep, 2);
+      this.wizard.addStep(this.stepsDefinition.unitsStep, 2 - Number(this.isEditMode));
     } else {
       this.wizard.removeStep('unitsStep');
       this.wizard.data.unitsStep.units = [];
@@ -384,28 +662,100 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     this.onSubmitWizard();
   }
 
-  onSubmitWizard(): void {
-    this.setPageStatus('LOADING');
-
+  getSelectedUnitsIds(): string[] {
     const unitsIds = [
       ...this.wizard.data.organisationsStep.organisations
         .filter(org => org.units.length === 1)
         .map(org => org.units[0].id),
       ...this.wizard.data.unitsStep.units.map(unit => unit.id)
     ];
+    return unitsIds;
+  }
+
+  getSelectedSections(): string[] {
+    return this.wizard.data.innovationRecordUpdateStep.innovationRecordSections;
+  }
+
+  onSubmitWizard(): void {
+    this.setPageStatus('LOADING');
 
     let body: NotifyMeConfig = {
       eventType: NotificationEnum.SUPPORT_UPDATED,
       subscriptionType: 'INSTANTLY',
       preConditions: {
-        units: unitsIds,
-        status: this.wizard.data.supportStatusesStep.supportStatuses
+        units: [],
+        status: []
       }
     };
 
+    switch (this.wizard.data.notificationStep.notification) {
+      case NotificationEnum.SUPPORT_UPDATED:
+        body = {
+          eventType: NotificationEnum.SUPPORT_UPDATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            units: this.getSelectedUnitsIds(),
+            status: this.wizard.data.supportStatusesStep.supportStatuses
+          }
+        };
+        break;
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        body = {
+          eventType: NotificationEnum.PROGRESS_UPDATE_CREATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            units: this.getSelectedUnitsIds()
+          }
+        };
+        break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        const selectedSections = this.getSelectedSections();
+        body = {
+          eventType: NotificationEnum.INNOVATION_RECORD_UPDATED,
+          subscriptionType: 'INSTANTLY',
+          preConditions: {
+            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() as InnovationSections[] })
+          }
+        };
+        break;
+      case NotificationEnum.REMINDER:
+        body = {
+          eventType: NotificationEnum.REMINDER,
+          subscriptionType: 'SCHEDULED',
+          date: DatesHelper.getDateString(
+            this.wizard.data.dateStep.year,
+            this.wizard.data.dateStep.month,
+            this.wizard.data.dateStep.day
+          ),
+          customMessage: this.wizard.data.reminderStep.reminder
+        };
+        break;
+    }
+
+    if (this.isEditMode) {
+      this.updateNotifyMeSubscription(body);
+    } else {
+      this.createNotifyMeSubscription(body);
+    }
+  }
+
+  createNotifyMeSubscription(body: NotifyMeConfig) {
     this.accessorService.createNotifyMeSubscription(this.innovation.id, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess(`You have set up a custom notification for ${this.innovation.name}`);
+        this.redirectInnovationCustomNotifications();
+      },
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('READY');
+      }
+    });
+  }
+
+  updateNotifyMeSubscription(body: NotifyMeConfig) {
+    this.accessorService.updateNotifyMeSubscription(this.subscriptionId, body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess(`The changes you have made to your custom notification have been saved`);
         this.redirectInnovationCustomNotifications();
       },
       error: () => {

@@ -35,6 +35,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     lastEndSupportAt: null | DateISOType;
   } = null;
 
+  isArchived: boolean = false;
+
   cardsList: StatisticsCardType[] = [];
 
   isSubmitted = {
@@ -86,6 +88,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
         lastEndSupportAt: innovationInfo.lastEndSupportAt
       };
+
+      this.isArchived = this.innovation.status === 'ARCHIVED';
 
       this.isSubmitted = {
         submittedAllSections: submit.submittedAllSections,
@@ -147,7 +151,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         });
       }
 
-      if (this.innovation.loggedUser.isOwner && this.innovation.status === 'ARCHIVED') {
+      if (this.innovation.loggedUser.isOwner && this.isArchived) {
         this.stores.context.dismissNotification(this.innovationId, {
           contextDetails: [
             NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER,
