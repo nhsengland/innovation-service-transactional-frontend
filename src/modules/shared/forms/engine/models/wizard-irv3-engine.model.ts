@@ -3,7 +3,6 @@ import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from '
 import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
-  InnovationRecordQuestionStepType,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -13,9 +12,6 @@ import {
   IrSchemaTranslatorMapType
 } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { MappedObjectType } from '@app/base/types';
-import { cond } from 'lodash';
-import e from 'express';
-import { Console } from 'console';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -104,7 +100,6 @@ export class WizardIRV3EngineModel {
 
   gotoSummary(): this {
     this.visitedSteps.clear();
-    // console.log('answers on summary', this.currentAnswers);
 
     this.parseSummary();
     this.showSummary = true;
@@ -254,8 +249,6 @@ export class WizardIRV3EngineModel {
   }
 
   runRules(): this {
-    // console.log('CURRENT SCHEMA:', this.schema);
-
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
     const subsection = this.schema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === this.sectionId);
@@ -384,13 +377,11 @@ export class WizardIRV3EngineModel {
         });
       }
     });
-    // console.log('this.steps:', this.steps);
 
     return this;
   }
 
   parseSummary(): WizardSummaryV3Type[] {
-    // console.log('parsingSummary with currenAnswers:', this.currentAnswers);
     let editStepNumber = 0;
     this.summary = [];
 
@@ -531,12 +522,10 @@ export class WizardIRV3EngineModel {
       }
     }
 
-    // console.log('summary:', this.summary);
     return this.summary;
   }
 
   runInboundParsing(): this {
-    // console.log('running inbound parsing');
     const toReturn: MappedObjectType = {};
 
     this.steps.forEach(step => {
@@ -576,8 +565,6 @@ export class WizardIRV3EngineModel {
       }
     });
     this.currentAnswers = { ...this.currentAnswers, ...toReturn };
-    // console.log('toReturn after inbound parsing:', toReturn);
-    // console.log('currentAnswers after inbound parsing:', this.currentAnswers);
 
     return this;
   }
@@ -585,11 +572,11 @@ export class WizardIRV3EngineModel {
   runOutboundParsing(): InnovationRecordSectionUpdateType {
     let toReturn: { [key: string]: any } = {};
 
-    for (const [i, step] of this.steps.entries()) {
+    // Filter out steps containing values from nested objects, as these will be already calculated by their parent
+    for (const [_, step] of this.steps.filter(s => !s.parameters[0].isNestedField).entries()) {
       const stepParams = step.parameters[0];
 
-      // Ignore fields that are already inside nested objects
-      if (!stepParams.isNestedField && this.currentAnswers[stepParams.id]) {
+      if (this.currentAnswers[stepParams.id]) {
         toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
       }
 
@@ -645,7 +632,6 @@ export class WizardIRV3EngineModel {
       });
     }
 
-    // console.log('outbound parsing:', { version: this.schema?.version ?? 0, data: toReturn });
     return {
       version: this.schema?.version ?? 0,
       data: toReturn
@@ -686,7 +672,7 @@ export class WizardIRV3EngineModel {
   }
 
   translateSummaryForIRDocumentExport() {
-    // special case for CSV and PDF export
+    // special translation for CSV and PDF export
 
     const summary = this.parseSummary();
 
