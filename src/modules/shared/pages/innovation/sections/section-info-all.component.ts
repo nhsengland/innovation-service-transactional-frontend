@@ -18,7 +18,7 @@ import { ViewportScroller } from '@angular/common';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
-} from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -184,7 +184,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           responseItem.data.hasEvidence === 'YES'
         );
 
-        // sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
         sectionInfo.wizard.setAnswers(responseItem.data).runRules();
 
         const validInformation = sectionInfo.wizard.validateData();
@@ -213,7 +212,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           summaryList: summaryList,
           documentsList: documentsList
         };
-        // console.log('sectionInfo', this.allSectionsData[sectionInfo.id]);
       }
 
       this.setSectionsStatistics(summary);

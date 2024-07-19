@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UrlModel } from '@app/base/models';
-import { MappedObjectType } from '@app/base/types';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { map, take } from 'rxjs/operators';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema.models';

@@ -6,9 +6,8 @@ import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
-import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 import { SectionInfoType } from './section-info.component';
-import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;

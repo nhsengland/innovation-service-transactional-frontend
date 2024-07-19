@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
@@ -22,7 +22,7 @@ import {
   SectionsSummaryModel
 } from './innovation.models';
 
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
 
 @Injectable()
@@ -100,8 +100,6 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
-    console.log('submitted section');
-    // return of({});
     return this.innovationsService.submitSections(innovationId, sectionKey);
   }
 

@@ -191,7 +191,6 @@ function wizardWithLocationRuntimeRules(
   // }
 
   steps.splice(1);
-  console.log('wizard schema passed:', schema);
   const innovationSectionsItems = schema ? getAllSectionsListV3(schema) : [];
   if (data.relatedWithSection === 'YES') {
     steps.push(
@@ -201,9 +200,8 @@ function wizardWithLocationRuntimeRules(
             id: 'section',
             dataType: 'radio-group',
             label: stepsLabels.l2.label,
-            description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/evidenceOfEffectiveness">this section of your innovation record</a>`,
+            description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
             validations: { isRequired: [true, 'Choose one option'] },
-            // items: innovationSectionsItems.map(item => ({
             items: innovationSectionsItems.map(item => ({
               ...item
               // ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {

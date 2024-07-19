@@ -6,7 +6,7 @@ import { FormEngineParameterModelV3 } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 
 import { HttpErrorResponse } from '@angular/common/http';

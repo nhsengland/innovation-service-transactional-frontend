@@ -1,10 +1,9 @@
-import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import {
   InnovationRecordFormComponentType,
-  InnovationRecordItemsType,
   InnovationRecordMinMaxValidationType,
   InnovationRecordQuestionStepType,
   InnovationRecordStepValidationsType

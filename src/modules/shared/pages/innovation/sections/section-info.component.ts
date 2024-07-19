@@ -15,7 +15,7 @@ import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovati
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
-} from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { NotificationContextDetailEnum } from '@app/base/enums';
 
 export type SectionInfoType = {
@@ -113,7 +113,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
-    console.log('schema:', this.stores.context.getIrSchema());
     this.subscriptions.push(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -230,7 +229,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
 
     if (previousSectionId) {
-      // const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
       const previousSection = this.stores.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
       this.previousSection = {
         id: previousSectionId,

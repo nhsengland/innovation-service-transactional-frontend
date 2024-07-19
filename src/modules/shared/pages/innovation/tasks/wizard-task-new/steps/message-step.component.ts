@@ -40,7 +40,6 @@ export class WizardTaskNewMessageStepComponent
 
     this.form.get('message')?.setValue(this.data.message);
 
-    // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(
     const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.data.selectedSection);
 
     this.title = sectionIdentification

@@ -17,7 +17,6 @@ import {
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { IRV3Helper } from '@modules/stores/innovation/innovation-record/202405/ir-v3-translator.helper';
 
 export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;

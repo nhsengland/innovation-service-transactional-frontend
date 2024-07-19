@@ -18,7 +18,6 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
-import { IRV3Helper } from './innovation-record/202405/ir-v3-translator.helper';
 
 @Injectable()
 export class InnovationService {

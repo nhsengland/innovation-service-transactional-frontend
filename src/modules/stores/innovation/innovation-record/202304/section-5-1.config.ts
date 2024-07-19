@@ -147,7 +147,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       new FormEngineModel({
         parameters: [
           {
-            id: `standardHasMet*-${StringsHelper.slugify(item.type)}`,
+            id: `standardHasMet_${StringsHelper.slugify(item.type)}`,
             dataType: 'radio-group',
             label: `Do you have a certification for ${
               item.type === 'OTHER'

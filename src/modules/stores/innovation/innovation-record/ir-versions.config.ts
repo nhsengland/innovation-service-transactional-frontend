@@ -15,8 +15,8 @@ import {
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
 
-import { irSchemaTranslationsMap } from './202405/ir-v3.helper';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { irSchemaTranslationsMap } from './202405/ir-v3-schema-translation.helper';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -123,7 +123,6 @@ export function getAllSectionsList(): { value: string; label: string }[] {
   }, []);
 }
 
-// TODO Update extra level after implementing 'STEPS' on schema structure
 export function getAllSectionsListV3(
   schema: InnovationRecordSchemaInfoType | null
 ): { value: string; label: string }[] {

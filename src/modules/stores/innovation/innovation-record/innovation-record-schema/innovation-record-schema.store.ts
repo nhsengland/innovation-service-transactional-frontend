@@ -4,9 +4,9 @@ import { InnovationRecordSchemaService } from './innovation-record-schema.servic
 import { Store } from '@modules/stores/store.class';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-irv3-engine.model';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
-import { irSchemaTranslationsMap } from '../202405/ir-v3.helper';
+import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
 import { stepsLabels } from '../202304/section-2-2-evidences.config';
 
 @Injectable()

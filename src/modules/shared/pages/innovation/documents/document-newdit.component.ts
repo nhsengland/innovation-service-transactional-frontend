@@ -70,7 +70,6 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
             context: { type: 'INNOVATION_EVIDENCE', id: this.pageData.queryParams.evidenceId }
           });
         } else {
-          console.log(this.stores.context.getIrSchema());
           this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({
             innovationId: this.innovationId,
             schema: this.stores.context.getIrSchema()

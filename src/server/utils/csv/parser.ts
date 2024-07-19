@@ -3,7 +3,6 @@ import axios from 'axios';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
-  getAllSectionsSummary,
   getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
@@ -11,7 +10,6 @@ import { sectionType } from '@modules/stores/innovation/innovation.models';
 import { ENVIRONMENT } from '../../config/constants.config';
 
 import {
-  CSVGeneratorParserError,
   CSVGeneratorSectionsNotFoundError,
   DocumentGeneratorInnovationInfoError,
   PDFGeneratorParserError,
@@ -44,7 +42,6 @@ export const generateCSV = async (innovationId: string, config: any, version?: s
 
   try {
     sections = await getSections(innovationId, config, version);
-    console.log('sections', sections);
   } catch (error: any) {
     throw new CSVGeneratorSectionsNotFoundError(error);
   }

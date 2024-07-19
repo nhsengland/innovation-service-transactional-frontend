@@ -17,11 +17,8 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
-import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
-
-import { FormEngineParameterModel, FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
+import { FormEngineParameterModelV3 } from '../engine/models/form-engine.models';
 import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
-import { InnovationRecordItemsType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 @Component({
   selector: 'theme-form-radio-group-v3',

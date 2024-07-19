@@ -496,8 +496,6 @@ export class InnovationsService extends CoreService {
       map(response => ({
         count: response.count,
         data: response.data.map(item => {
-          // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
-
           const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(item.section);
 
           return {
@@ -520,7 +518,6 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        // const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
         const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
 
         return {

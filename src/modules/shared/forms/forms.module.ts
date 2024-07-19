@@ -25,7 +25,6 @@ import { FormTextareaComponent } from './components/textarea.component';
 import { FormFileUploadDescriptiveComponent } from './components/file-upload-descriptive.component';
 import { FormDateInputComponent } from './components/date-input.component';
 import { FormSelectComponent } from './components/select.component';
-import { SelectComponent } from '@modules/theme/components/search/select.component';
 import { FormRadioGroupV3Component } from './components/radio-group-v3.component';
 import { FormCheckboxArrayV3Component } from './components/checkbox-array-v3.component';
 import { FormEngineV3Component } from './engine/form-engine-v3.component';

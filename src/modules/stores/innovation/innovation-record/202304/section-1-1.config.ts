@@ -20,7 +20,6 @@ import {
   locationItems,
   mainPurposeItems
 } from './forms.config';
-import { MappedObjectType } from '@app/base/types';
 
 // Labels.
 const stepsLabels = {
