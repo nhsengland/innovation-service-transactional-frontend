@@ -8,8 +8,12 @@
         </div>
       </div>
 
+      <div *ngIf="assessment?.reassessment" class="full-width-section nhsuk-u-margin-top-5">
+        <shared-innovation-reassessment-details [assessment]="assessment" />
+      </div>
+
       <ng-container *ngFor="let section of form.sections; let i = index">
-        <div class="full-width-section nhsuk-u-padding-top-5" [ngClass]="{ 'bg-color-white': i % 2 }">
+        <div class="full-width-section" [ngClass]="{ 'bg-color-white': i % 2, 'nhsuk-u-margin-top-5': !assessment?.reassessment }">
           <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
           <theme-form-engine formId="assessmentForm" [parameters]="section.parameters" [values]="form.data" (formChanges)="onFormChange()"></theme-form-engine>
         </div>
@@ -29,7 +33,7 @@
 
         <ng-container *ngIf="stepId > 1">
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">
-            {{ assessmentHasBeenSubmitted ? "Update" : "Submit" }} needs assessment
+            {{ assessmentHasBeenSubmitted ? "Update" : "Submit" }} needs {{ assessmentHasReassessment ? "reassessment" : "assessment" }}
           </button>
           <button
             *ngIf="!assessmentHasBeenSubmitted"

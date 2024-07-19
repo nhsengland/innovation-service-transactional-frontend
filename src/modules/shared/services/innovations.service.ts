@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -864,5 +864,18 @@ export class InnovationsService extends CoreService {
       .addPath('v1/:innovationId/supports/available-status')
       .setPathParams({ innovationId });
     return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
+  }
+
+  createNeedsReassessment(
+    innovationId: string,
+    body: { updatedInnovationRecord?: string; description: string }
+  ): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/reassessments')
+      .setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      finalize(() => this.stores.context.clearInnovation())
+    );
   }
 }

@@ -75,6 +75,7 @@ import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/in
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
+import { PageInnovationReassessmentNewComponent } from './pages/innovation/assessment/reassessment-new.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -202,6 +203,22 @@ const routes: Routes = [
                         pathMatch: 'full',
                         component: InnovationAssessmentExemptionUpsertComponent,
                         data: { layout: { type: 'full' } }
+                      },
+                      {
+                        path: 'reassessments',
+                        data: {
+                          data: { breadcrumb: 'Needs reassessment' },
+                          layout: { type: 'full' }
+                        },
+                        children: [
+                          { path: '', pathMatch: 'full', redirectTo: 'new' },
+                          {
+                            path: 'new',
+                            pathMatch: 'full',
+                            component: PageInnovationReassessmentNewComponent,
+                            data: { breadcrumb: null }
+                          }
+                        ]
                       }
                     ]
                   }

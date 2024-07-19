@@ -115,6 +115,7 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
 import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { InnovationReassessmentDetailsComponent } from './pages/innovation/assessment/reassessment-details.component';
 
 @NgModule({
   imports: [
@@ -152,6 +153,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     WizardTaskNewMessageStepComponent,
     PageInnovationActivityLogComponent,
     PageInnovationAssessmentOverviewComponent,
+    InnovationReassessmentDetailsComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationDocumentsNewditComponent,
     PageInnovationDocumentInfoComponent,
@@ -251,7 +253,10 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
-    JoinArrayPipe
+    JoinArrayPipe,
+
+    // Components.
+    InnovationReassessmentDetailsComponent
   ]
 })
 export class SharedModule {}

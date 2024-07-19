@@ -15,8 +15,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   data: {
     innovation: null | { id: string; name: string; status: InnovationStatusEnum; assessmentId?: string };
-    link: null | { label: string; url: string };
-  } = { innovation: null, link: null };
+    links: { label: string; url: string; queryParams?: { [key: string]: undefined | string } }[];
+  } = { innovation: null, links: [] };
 
   constructor(
     private router: Router,
@@ -48,44 +48,77 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     };
 
     // Do not show link, if ON any assessments/* route.
-    if (
-      url.endsWith(`/assessments/new`) ||
-      url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
-      url.includes(`/assessments/${innovation.assessment?.id}/edit`)
-    ) {
-      this.data.link = null;
+    if (url.endsWith(`/assessments/new`)) {
+      this.data.links = [];
+    } else if (url.includes(`/assessments/${innovation.assessment?.id}`)) {
+      const urlIncludesReassessmentsNew = url.includes(`/assessments/${innovation.assessment?.id}/reassessments/new`);
+      const urlIncludesEdit = url.includes(`/assessments/${innovation.assessment?.id}/edit`);
+      const editPageQueryParam = urlIncludesEdit ? (url.endsWith('edit/2') ? '2' : '1') : undefined;
+      const assessmentQueryParam = urlIncludesReassessmentsNew
+        ? 'newReassessment'
+        : urlIncludesEdit
+          ? 'edit'
+          : 'overview';
+
+      this.data.links = [
+        {
+          label: 'View innovation record',
+          url: `/assessment/innovations/${innovation.id}/record/sections/all`,
+          queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+        }
+      ];
+
+      if (urlIncludesReassessmentsNew || urlIncludesEdit) {
+        // TO DO: Get the assessment id from previous assessment if reassessmentCount > 0
+        const previousAssessmentId = '';
+        const assessmentId = innovation.reassessmentCount ? previousAssessmentId : innovation.assessment?.id;
+
+        this.data.links.push({
+          label: 'View previous needs (re)assessment',
+          url: `/assessment/innovations/${innovation.id}/assessments/${assessmentId}`,
+          queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+        });
+      }
     } else {
       switch (innovation.status) {
         case InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT:
           if (!innovation.assessment?.id) {
-            this.data.link = {
-              label: 'Start needs assessment',
-              url: `/assessment/innovations/${innovation.id}/assessments/new`
-            };
+            this.data.links = [
+              {
+                label: 'Start needs assessment',
+                url: `/assessment/innovations/${innovation.id}/assessments/new`
+              }
+            ];
           } else {
-            this.data.link = {
-              label: 'Continue needs assessment',
-              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit`
-            };
+            this.data.links = [
+              {
+                label: 'Continue needs assessment',
+                url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit`
+              }
+            ];
           }
           break;
         case InnovationStatusEnum.NEEDS_ASSESSMENT:
-          this.data.link = {
-            label: 'Continue needs assessment',
-            url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit`
-          };
+          this.data.links = [
+            {
+              label: 'Continue needs assessment',
+              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit`
+            }
+          ];
           break;
 
         case InnovationStatusEnum.IN_PROGRESS:
         case InnovationStatusEnum.ARCHIVED:
-          this.data.link = {
-            label: 'View needs assessment',
-            url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
-          };
+          this.data.links = [
+            {
+              label: 'View needs assessment',
+              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
+            }
+          ];
           break;
 
         default:
-          this.data.link = null;
+          this.data.links = [];
           break;
       }
     }
