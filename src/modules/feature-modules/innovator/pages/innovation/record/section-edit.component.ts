@@ -92,7 +92,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         // if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
         this.isChangeMode = queryParams.isChangeMode;
         this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
-        // }
+        // }`
       },
       error: () => {
         this.setPageStatus('ERROR');
@@ -103,14 +103,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   onChangeStep(stepId: number): void {
     this.wizard.gotoStep(stepId, true);
+    this.isChangeMode = true;
     this.resetAlert();
   }
+
   onGoToStep(stepId: 'summary' | number, isChangeMode?: boolean) {
     if (stepId === 'summary') {
-      this.wizard.gotoSummary();
-      this.redirectTo(`${this.baseUrl}/edit/summary`);
+      console.log('going to summary');
 
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
+        this.wizard.setAnswers(sectionInfo.data).runRules().runInboundParsing();
+        console.log('sectionInfo', sectionInfo);
         const validInformation = this.wizard.validateData();
 
         if (!validInformation.valid) {
@@ -138,6 +141,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           }
         }
 
+        this.redirectTo(`${this.baseUrl}/edit/summary`);
+        this.wizard.gotoSummary();
         this.setPageTitle('Check your answers', { size: 'l' });
         this.setPageStatus('READY');
       });
