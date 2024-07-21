@@ -133,7 +133,7 @@ export class WizardIRV3EngineModel {
   getNextStep(isChangeMode: boolean = false): number | 'summary' {
     let nextStepId = this.currentStepId;
 
-    if (this.showSummary && typeof this.currentStepId === 'number' && this.isLastStep()) {
+    if ((this.showSummary && typeof this.currentStepId === 'number') || this.isLastStep()) {
       return 'summary';
     } else if (typeof nextStepId === 'number') {
       if (isChangeMode) {
@@ -144,16 +144,16 @@ export class WizardIRV3EngineModel {
         );
 
         while (!isCurrentStepChildOfAnyVisitedSteps) {
-          // go through all steps to see if there are any children at some point
-          isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
-            this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
-          );
-
           // if we reach the end and no other children have been found, return summary
           if (nextStepId === this.steps.length) {
             nextStepId = 'summary';
             break;
           }
+
+          // go through all steps to see if there are any children at some point
+          isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+            this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
+          );
 
           if (!isCurrentStepChildOfAnyVisitedSteps) {
             this.visitedSteps.delete(this.getStepObjectId(nextStepId));
@@ -170,7 +170,6 @@ export class WizardIRV3EngineModel {
         }
       }
     }
-
     return nextStepId;
   }
 

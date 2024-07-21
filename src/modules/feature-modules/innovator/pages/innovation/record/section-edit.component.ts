@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, concatMap, of } from 'rxjs';
+import { concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
-import { FormEngineParameterModelV3 } from '@app/base/forms';
 import { ContextInnovationType } from '@app/base/types';
 
-import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 
@@ -30,9 +29,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
   wizard: WizardIRV3EngineModel;
-  wizardCurrentStepParameters: FormEngineParameterModelV3[] | null = null;
-  wizardAnswers: { [key: string]: any } | null = null;
-
+  sectionStatus: keyof typeof INNOVATION_SECTION_STATUS = 'UNKNOWN';
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
@@ -80,77 +77,74 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
-    combineLatest([
-      this.activatedRoute.queryParams,
-      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId)
-    ]).subscribe({
-      next: ([queryParams, sectionInfoResponse]) => {
-        this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
-        this.wizardCurrentStepParameters = this.wizard.currentStepParameters();
-        this.wizardAnswers = this.wizard.getAnswers();
-
-        // if (this.activatedRoute.snapshot.params.questionId !== 'summary') {
-        this.isChangeMode = queryParams.isChangeMode;
-        this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
-        // }`
+    this.activatedRoute.queryParams.subscribe({
+      next: queryParams => {
+        this.isChangeMode = queryParams.isChangeMode ?? false;
       },
       error: () => {
         this.setPageStatus('ERROR');
         this.logger.error('Error fetching data');
       }
     });
+
+    this.activatedRoute.params.subscribe({
+      next: () => {
+        this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfoResponse => {
+          console.log('init infoResponse:', sectionInfoResponse);
+          this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
+          this.sectionStatus = sectionInfoResponse.status;
+
+          this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+        });
+      }
+    });
   }
 
   onChangeStep(stepId: number): void {
-    this.wizard.gotoStep(stepId, true);
     this.isChangeMode = true;
+    this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: true });
     this.resetAlert();
   }
 
   onGoToStep(stepId: 'summary' | number, isChangeMode?: boolean) {
     if (stepId === 'summary') {
-      console.log('going to summary');
+      this.wizard.parseSummary();
 
-      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfo => {
-        this.wizard.setAnswers(sectionInfo.data).runRules().runInboundParsing();
-        console.log('sectionInfo', sectionInfo);
-        const validInformation = this.wizard.validateData();
+      const validInformation = this.wizard.validateData();
 
-        if (!validInformation.valid) {
-          this.alertErrorsList = validInformation.errors;
-          this.setAlertError(`Please verify what's missing with your answers`, {
-            itemsList: this.alertErrorsList,
-            width: '2.thirds'
-          });
+      if (!validInformation.valid) {
+        this.alertErrorsList = validInformation.errors;
+        this.setAlertError(`Please verify what's missing with your answers`, {
+          itemsList: this.alertErrorsList,
+          width: '2.thirds'
+        });
+      }
+
+      if (this.sectionStatus === 'DRAFT') {
+        this.submitButton.isActive = validInformation.valid;
+        if (
+          this.innovation.status !== InnovationStatusEnum.CREATED &&
+          this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+        ) {
+          this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
         }
+      }
 
-        if (sectionInfo.status === 'DRAFT') {
-          this.submitButton.isActive = validInformation.valid;
-          if (
-            this.innovation.status !== InnovationStatusEnum.CREATED &&
-            this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-          ) {
-            this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
-          }
+      for (const [index, item] of this.wizard.getSummary().entries()) {
+        this.displayChangeButtonList.push(index);
+        if (!item.value && !item.isNotMandatory) {
+          break;
         }
+      }
 
-        for (const [index, item] of this.wizard.getSummary().entries()) {
-          this.displayChangeButtonList.push(index);
-          if (!item.value && !item.isNotMandatory) {
-            break;
-          }
-        }
-
-        this.redirectTo(`${this.baseUrl}/edit/summary`);
-        this.wizard.gotoSummary();
-        this.setPageTitle('Check your answers', { size: 'l' });
-        this.setPageStatus('READY');
-      });
+      this.wizard.gotoSummary();
+      this.setPageTitle('Check your answers', { size: 'l' });
     } else {
-      this.wizard.runRules().gotoStep(stepId, isChangeMode);
-      this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: isChangeMode });
+      this.wizard.showSummary = false;
+      this.wizard.gotoStep(stepId, isChangeMode);
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     }
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
     this.setPageStatus('READY');
   }
@@ -211,21 +205,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
                 this.stores.context.updateInnovation({ name: this.wizard.getAnswers().name });
               }
               return of(true);
-            }),
-            concatMap(() => {
-              const shouldRefreshInformation = this.wizard.currentStep().saveStrategy === 'updateAndWait';
-
-              if (shouldRefreshInformation) {
-                return this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId);
-              } else {
-                return of({ data: {} });
-              }
             })
           )
           .subscribe({
-            next: response => {
+            next: () => {
               this.saveButton = { isActive: true, label: 'Save and continue' };
-              this.onGoToStep(this.wizard.getNextStep(this.isChangeMode), this.isChangeMode);
+
+              const nextStep = this.wizard.getNextStep(this.isChangeMode);
+              this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+              this.redirectTo(`${this.baseUrl}/edit/${nextStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
             },
             error: ({ error: err }: HttpErrorResponse) => {
               this.errorOnSubmitStep = true;
