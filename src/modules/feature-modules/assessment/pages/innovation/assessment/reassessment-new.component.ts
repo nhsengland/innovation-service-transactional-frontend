@@ -55,12 +55,11 @@ export class PageInnovationReassessmentNewComponent extends CoreComponent implem
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    // TO DO: Check if flow is working as expected (it creates an assessment with reassessment and redirects to the assessment edit page)
     this.innovationsService
       .createNeedsReassessment(this.innovationId, { description: this.form.value.reason! })
       .subscribe({
-        next: newAssessmentId => {
-          this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessmentId}/edit`);
+        next: newAssessment => {
+          this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessment.id}/edit`);
         },
         error: () => {
           this.submitButton = { isActive: true, label: 'Continue' };
