@@ -21,6 +21,7 @@ import { InnovationAssessmentExemptionInfoComponent } from './pages/innovation/a
 import { InnovationAssessmentExemptionUpsertComponent } from './pages/innovation/assessment/exemption-upsert.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationReassessmentNewComponent } from './pages/innovation/assessment/reassessment-new.component';
 // // Innovations.
 import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
@@ -46,6 +47,7 @@ import { AssessmentService } from './services/assessment.service';
     InnovationAssessmentExemptionUpsertComponent,
     InnovationOverviewComponent,
     InnovationChangeAssessorComponent,
+    PageInnovationReassessmentNewComponent,
     // // Innovations.
     InnovationsListComponent
   ],

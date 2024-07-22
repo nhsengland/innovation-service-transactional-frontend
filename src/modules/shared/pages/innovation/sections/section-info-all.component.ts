@@ -36,6 +36,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   baseUrl: string;
   documentUrl: string;
   pdfDocumentUrl: string;
+  assessmentUrl: string;
 
   innovation: ContextInnovationType;
   innovationSections: SectionsSummaryModel = [];
@@ -63,6 +64,9 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   sectionIdFragment: string | null;
 
+  assessmentQueryParam?: string;
+  editPageQueryParam?: string;
+
   allSectionsData: {
     [key in InnovationSectionEnum]?: {
       sectionInfo: SectionInfoType;
@@ -83,12 +87,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionIdFragment = this.activatedRoute.snapshot.fragment;
+    this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
+    this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
     }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    this.assessmentUrl = `${this.baseUrl}/assessments/${this.innovation.assessment?.id}`;
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -106,10 +113,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
-      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
-    }
-
+    this.setGoBackLink();
     this.setPageTitle('All sections questions and answers', { hint: 'Innovation record' });
 
     this.getSectionsData();
@@ -275,5 +279,28 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         }
       }
     });
+  }
+
+  setGoBackLink(): void {
+    if (this.isAssessmentType && this.assessmentQueryParam) {
+      let goBackUrl = undefined;
+      switch (this.assessmentQueryParam) {
+        case 'newReassessment':
+          goBackUrl = `${this.assessmentUrl}/reassessments/new`;
+          break;
+        case 'edit':
+          goBackUrl = `${this.assessmentUrl}/edit${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
+          break;
+        case 'overview':
+          goBackUrl = `${this.assessmentUrl}`;
+          break;
+      }
+
+      if (goBackUrl) {
+        this.setBackLink('Back to needs (re)assessment', goBackUrl);
+      }
+    } else if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
+      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+    }
   }
 }
