@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { concatMap, of } from 'rxjs';
+import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
@@ -63,9 +63,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
-  private getNextSectionId(): string {
+  private getNextSectionId(): string | null {
     const currentSectionIndex = this.sectionsIdsList.indexOf(this.sectionId);
-    return this.sectionsIdsList[currentSectionIndex + 1] ?? '';
+    return this.sectionsIdsList[currentSectionIndex + 1] ?? null;
   }
 
   ngOnInit(): void {
@@ -77,24 +77,21 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
-    this.activatedRoute.queryParams.subscribe({
-      next: queryParams => {
+    combineLatest([this.activatedRoute.queryParams, this.activatedRoute.params]).subscribe({
+      next: ([queryParams, params]) => {
         this.isChangeMode = queryParams.isChangeMode ?? false;
-      },
-      error: () => {
-        this.setPageStatus('ERROR');
-        this.logger.error('Error fetching data');
-      }
-    });
 
-    this.activatedRoute.params.subscribe({
-      next: () => {
-        this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe(sectionInfoResponse => {
-          console.log('init infoResponse:', sectionInfoResponse);
-          this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
-          this.sectionStatus = sectionInfoResponse.status;
+        this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
+          next: sectionInfoResponse => {
+            this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
+            this.sectionStatus = sectionInfoResponse.status;
 
-          this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+            this.onGoToStep(this.activatedRoute.snapshot.params.questionId, this.isChangeMode);
+          },
+          error: () => {
+            this.setPageStatus('ERROR');
+            this.logger.error('Error fetching data');
+          }
         });
       }
     });

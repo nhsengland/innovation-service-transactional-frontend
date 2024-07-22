@@ -152,7 +152,6 @@ export class InnovationDocumentsService extends CoreService {
         let descriptionUrl: null | string = null;
         switch (item.context.type) {
           case 'INNOVATION_SECTION':
-            // TODO remove translator when BE updates sections IDs
             const section = getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
               s => s.value === item.context.id
             )?.label;

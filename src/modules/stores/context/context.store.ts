@@ -158,9 +158,10 @@ export class ContextStore extends Store<ContextModel> {
 
   getIrSchema(): InnovationRecordSchemaInfoType {
     if (!this.state.irSchema?.schema) {
+      console.error('Context has NO schema');
       return { id: '', version: 0, schema: { sections: [] } };
     }
-    return this.state.irSchema?.schema;
+    return this.state.irSchema.schema;
   }
 
   clearIrSchema(): void {

@@ -79,24 +79,20 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         ])
       ) ?? [];
 
-    // add conditional questions regarding evidences for 2.2
+    // add conditional questions regarding 'EVIDENCE_OF_EFFECTIVENESS' (evidences still uses previous wizard and its config file)
     if (sectionId === 'EVIDENCE_OF_EFFECTIVENESS') {
       flattenedQuestions.push(...Object.values(stepsLabels));
     }
-    // add conditional questions special cases regarding 4.1
+
+    // add conditional questions special cases regarding 'TESTING_WITH_USERS' and 'REGULATIONS_AND_STANDARDS', specifically questions with template tags (i.e.: {{item}} )
     if (sectionId === 'TESTING_WITH_USERS') {
-      const questionToAdd = { label: 'Describe the testing and feedback for each testing', conditional: true };
+      const questionToAdd = { label: 'Describe the testing and feedback for each testing type', conditional: true };
       flattenedQuestions.splice(4, 1, questionToAdd);
     }
-    // add conditional questions special cases regarding 5.1
+
     if (sectionId === 'REGULATIONS_AND_STANDARDS') {
       const questionToAdd = { label: 'Do you have a certification for each standard?', conditional: true };
       flattenedQuestions.splice(2, 1, questionToAdd);
-    }
-    // add conditional questions special cases regarding 5.2
-    if (sectionId === 'INTELLECTUAL_PROPERTY') {
-      const questionToAdd = { label: 'Patent number(s)', conditional: true };
-      flattenedQuestions.splice(1, 0, questionToAdd);
     }
 
     return flattenedQuestions;
@@ -106,12 +102,12 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     sectionId: string | null
   ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-    const section_group = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
+    const sectionGroup = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
 
-    const section = schema[section_group].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
+    const section = schema[sectionGroup].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
     return {
-      group: { number: section_group + 1, title: schema[section_group].title },
-      section: { number: section + 1, title: schema[section_group].subSections[section].title }
+      group: { number: sectionGroup + 1, title: schema[sectionGroup].title },
+      section: { number: section + 1, title: schema[sectionGroup].subSections[section].title }
     };
   }
 

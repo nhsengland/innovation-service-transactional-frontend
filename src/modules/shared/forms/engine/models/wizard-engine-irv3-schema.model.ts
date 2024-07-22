@@ -139,9 +139,9 @@ export class WizardIRV3EngineModel {
       if (isChangeMode) {
         nextStepId++;
         this.visitedSteps.add(this.getStepObjectId(nextStepId));
-        let isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
-          this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]
-        );
+
+        let isCurrentStepChildOfAnyVisitedSteps =
+          this.visitedSteps.has(this.stepsChildParentRelations[this.getStepObjectId(nextStepId)]) ?? false;
 
         while (!isCurrentStepChildOfAnyVisitedSteps) {
           // if we reach the end and no other children have been found, return summary
@@ -237,10 +237,8 @@ export class WizardIRV3EngineModel {
             }
           });
 
-          if (Object.keys(stepsChildParentRelations).length) {
-            subSection.stepsChildParentRelations = stepsChildParentRelations;
-            stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
-          }
+          subSection.stepsChildParentRelations = stepsChildParentRelations;
+          stepsChildParentRelationsMap.set(subSection.id, stepsChildParentRelations);
         });
       });
     });
@@ -320,7 +318,7 @@ export class WizardIRV3EngineModel {
 
               if (q.dataType === 'fields-group' && q.field) {
                 label = q.addQuestion!.label.replace(
-                  /{{*[^{}]*}*}/,
+                  /{{[^{}]*}}/,
                   this.currentAnswers[q.id][i][q.field.id] ?? q.addQuestion!.label
                 );
               } else if (q.dataType === 'checkbox-array' && q.addQuestion) {
@@ -337,33 +335,36 @@ export class WizardIRV3EngineModel {
                 }
 
                 // replace variable (i.e. '{{item}}') on label's placeholders for checkbox-arrays with addQuestions
-                label = q.addQuestion.label.replace(/{{*[^{}]*}*}/, label);
+                label = q.addQuestion.label.replace(/{{[^{}]*}}/, label);
               }
 
-              addSteps.push(
-                new FormEngineModelV3({
-                  parameters: [
-                    {
-                      id: `${q.addQuestion!.id}_${i}`,
-                      dataType: q.addQuestion!.dataType,
-                      label: label,
-                      description: q.addQuestion!.description,
-                      ...(q.addQuestion!.lengthLimit && { lengthLimit: q.addQuestion!.lengthLimit }),
-                      ...(q.addQuestion!.validations && { validations: q.addQuestion!.validations }),
-                      ...(q.addQuestion!.items && { items: q.addQuestion!.items }),
-                      ...(q.addQuestion!.addNewLabel && { addNewLabel: q.addQuestion!.addNewLabel }),
-                      ...(q.addQuestion!.addQuestion && { addQuestion: q.addQuestion!.addQuestion }),
-                      ...(q.addQuestion!.field && { field: q.addQuestion!.field }),
-                      ...(q.addQuestion!.condition && { condition: q.addQuestion!.condition }),
-                      isNestedField: !!(
-                        (q.dataType === 'fields-group' && q.addQuestion) ||
-                        q.dataType === 'checkbox-array'
-                      ),
-                      parentId: q.id
-                    }
-                  ]
-                })
-              );
+              // push addQuestions (checking again for addQuestions for failsafe, we do on outer if, but is not recognized inside forEach)
+              if (q.addQuestion) {
+                addSteps.push(
+                  new FormEngineModelV3({
+                    parameters: [
+                      {
+                        id: `${q.addQuestion.id}_${i}`,
+                        dataType: q.addQuestion.dataType,
+                        label: label,
+                        description: q.addQuestion.description,
+                        ...(q.addQuestion.lengthLimit && { lengthLimit: q.addQuestion.lengthLimit }),
+                        ...(q.addQuestion.validations && { validations: q.addQuestion.validations }),
+                        ...(q.addQuestion.items && { items: q.addQuestion.items }),
+                        ...(q.addQuestion.addNewLabel && { addNewLabel: q.addQuestion.addNewLabel }),
+                        ...(q.addQuestion.addQuestion && { addQuestion: q.addQuestion.addQuestion }),
+                        ...(q.addQuestion.field && { field: q.addQuestion.field }),
+                        ...(q.addQuestion.condition && { condition: q.addQuestion.condition }),
+                        isNestedField: !!(
+                          (q.dataType === 'fields-group' && q.addQuestion) ||
+                          q.dataType === 'checkbox-array'
+                        ),
+                        parentId: q.id
+                      }
+                    ]
+                  })
+                );
+              }
             });
           }
           // }
@@ -392,7 +393,7 @@ export class WizardIRV3EngineModel {
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
       let value: string | string[] | undefined = currentAnswers[stepParams.id];
-      let isNotMandatory = !!!stepParams.validations?.isRequired;
+      let isNotMandatory = !stepParams.validations?.isRequired;
       editStepNumber++;
 
       if (!stepParams.parentId && !stepParams.isHidden) {
@@ -418,7 +419,7 @@ export class WizardIRV3EngineModel {
                     stepId = `${stepParams.addQuestion!.id}_${i}`;
                     // replace label item
                     label = stepParams.addQuestion!.label.replace(
-                      /{{*[^{}]*}*}/,
+                      /{{[^{}]*}}/,
                       this.currentAnswers[stepParams.id][i][stepParams.field!.id]
                     );
                     value = stepAnswers[i][stepParams.addQuestion!.id];
@@ -439,8 +440,8 @@ export class WizardIRV3EngineModel {
             // add if conditional field and answer is present
             const itemWithConditional = stepParams.items?.find(i => i.conditional);
 
-            if (itemWithConditional && currentAnswers[itemWithConditional!.conditional!.id]) {
-              value = [stepAnswers, currentAnswers[itemWithConditional!.conditional!.id]];
+            if (itemWithConditional && currentAnswers[itemWithConditional.conditional!.id]) {
+              value = [stepAnswers, currentAnswers[itemWithConditional.conditional!.id]];
             }
             // Push "parent"
             this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
@@ -502,7 +503,7 @@ export class WizardIRV3EngineModel {
 
                   // Replace label variables
                   label = stepParams.addQuestion!.label.replace(
-                    /{{*[^{}]*}*}/,
+                    /{{[^{}]*}}/,
                     this.translations.questions.get(stepParams.id)?.items.get(item)?.label ?? item
                   );
                   value = currentAnswers[stepId];
@@ -572,7 +573,7 @@ export class WizardIRV3EngineModel {
     let toReturn: { [key: string]: any } = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
-    for (const [_, step] of this.steps.filter(s => !s.parameters[0].isNestedField).entries()) {
+    for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
 
       if (this.currentAnswers[stepParams.id]) {

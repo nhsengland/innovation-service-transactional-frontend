@@ -47,7 +47,6 @@ export class InnovatorService extends CoreService {
   createInnovation(body: {
     name: string;
     description: string;
-    countryName: string;
     postcode?: string;
     website?: string;
   }): Observable<{ id: string }> {

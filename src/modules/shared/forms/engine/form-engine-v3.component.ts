@@ -71,8 +71,6 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
 
     this.buildForm();
 
-    // this.logger.debug(this.loggerContext + 'ngOnInit', this.form.valid);
-
     this.contentReady = true;
     this.cdr.detectChanges();
   }
@@ -80,8 +78,6 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(changes: SimpleChanges): void {
     // When any of the input change (after component initialization), form gets updated!
     if (!changes.parameters?.isFirstChange() && !changes.values?.isFirstChange()) {
-      // this.logger.debug(this.loggerContext + 'OnChanges: Parameters', this.parameters);
-      // this.logger.debug(this.loggerContext + 'OnChanges: Values', this.values);
       this.buildForm();
     }
   }

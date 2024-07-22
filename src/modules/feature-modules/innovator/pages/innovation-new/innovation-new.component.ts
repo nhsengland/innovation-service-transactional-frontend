@@ -54,7 +54,6 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     const body = {
       name: data.name,
       description: data.description,
-      countryName: data.countryName,
       postcode: data.postcode,
       website: data.website,
       hasWebsite: data.hasWebsite,
