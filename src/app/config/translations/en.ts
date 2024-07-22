@@ -890,9 +890,9 @@ export const locale = {
                 'The innovation has been submitted for needs assessment. The needs assessment team must start the assessment process within 2 working days.'
             },
             NEEDS_ASSESSMENT: {
-              name: 'Needs assessment in progress',
+              name: 'Needs (re)assessment in progress',
               cssColorClass: 'nhsuk-tag--blue',
-              description: 'A needs assessor has started the needs assessment process.'
+              description: 'A needs assessor has started the needs (re)assessment process.'
             },
             AWAITING_SUPPORT: {
               name: 'Awaiting support',

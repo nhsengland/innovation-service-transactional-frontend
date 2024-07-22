@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 @Component({
   selector: 'app-innovator-pages-innovation-reassessment-innovation-reassessment-send',
@@ -28,7 +28,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovationsService: InnovationsService
   ) {
     super();
 
@@ -96,7 +96,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    this.innovatorService.createNeedsReassessment(this.innovationId, body).subscribe({
+    this.innovationsService.createNeedsReassessment(this.innovationId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your innovation has been reshared for a needs reassessment', {
           message:

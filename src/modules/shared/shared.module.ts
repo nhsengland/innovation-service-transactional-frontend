@@ -115,6 +115,7 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
 import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { InnovationReassessmentDetailsComponent } from './pages/innovation/assessment/reassessment-details.component';
 import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 @NgModule({
@@ -153,6 +154,7 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
     WizardTaskNewMessageStepComponent,
     PageInnovationActivityLogComponent,
     PageInnovationAssessmentOverviewComponent,
+    InnovationReassessmentDetailsComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationDocumentsNewditComponent,
     PageInnovationDocumentInfoComponent,
@@ -254,7 +256,10 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
     IrV3TranslatePipe,
-    JoinArrayPipe
+    JoinArrayPipe,
+
+    // Components.
+    InnovationReassessmentDetailsComponent
   ]
 })
 export class SharedModule {}

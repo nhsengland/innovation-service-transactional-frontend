@@ -24,12 +24,13 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 export class PageInnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   assessmentId: string;
+  assessmentQueryParam?: string;
+  editPageQueryParam?: string;
   innovation: ContextInnovationType;
 
   assessment?: InnovationNeedsAssessmentInfoDTO;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
-  innovationReassessment: { label?: string; value: null | string }[] = [];
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
@@ -44,6 +45,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
   assessmentHasBeenSubmitted = false;
   shouldShowUpdatedAt = false;
+  assessmentHasReassessment = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,6 +55,9 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
+    this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
+    this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
+
     this.innovation = this.stores.context.getInnovation();
 
     this.isAdminType = this.stores.authentication.isAdminRole();
@@ -71,20 +76,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       this.assessmentHasBeenSubmitted = !!response.finishedAt;
       this.shouldShowUpdatedAt =
         DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
-
-      if (this.assessment.reassessment) {
-        this.innovationReassessment = [
-          {
-            label:
-              'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
-            value: yesNoItems.find(item => item.value === response.reassessment?.updatedInnovationRecord)?.label || ''
-          },
-          {
-            label: 'What has changed with the innovation and what support does the innovator need next?',
-            value: response.reassessment?.description || ''
-          }
-        ];
-      }
+      this.assessmentHasReassessment = !!this.assessment.reassessment;
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {
@@ -136,10 +128,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
-      this.setPageTitle(!this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment', {
-        hint: `Innovation ${this.innovation.name}`
-      });
-
       // Throw notification read dismiss.
       if (this.isInnovatorType) {
         this.stores.context.dismissNotification(this.innovationId, {
@@ -147,7 +135,49 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         });
       }
 
+      this.setGoBackLink();
+      this.updatePageTitle();
       this.setPageStatus('READY');
     });
+  }
+
+  updatePageTitle(): void {
+    const baseHint = `Innovation ${this.innovation.name}`;
+
+    if (this.isAssessmentType && !this.assessment?.isLatest) {
+      const previousAssessmentTitle =
+        this.innovation.reassessmentCount === 1 ? 'Previous needs assessment' : 'Previous needs reassessment';
+      this.setPageTitle(`${previousAssessmentTitle}`, { hint: baseHint });
+      return;
+    }
+
+    const assessmentCompleteTitle = this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment';
+    const assessmentInProgressTitle = this.assessmentHasReassessment
+      ? 'In draft needs reassessment'
+      : 'In draft needs assessment';
+
+    if (this.assessmentHasBeenSubmitted) {
+      this.setPageTitle(`${assessmentCompleteTitle}`, { hint: baseHint });
+    } else {
+      this.setPageTitle(assessmentInProgressTitle, { hint: baseHint });
+    }
+  }
+
+  setGoBackLink(): void {
+    if (this.isAssessmentType) {
+      let goBackUrl = undefined;
+      const assessmentUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}`;
+      switch (this.assessmentQueryParam) {
+        case 'newReassessment':
+          goBackUrl = `${assessmentUrl}/reassessments/new`;
+          break;
+        case 'edit':
+          goBackUrl = `${assessmentUrl}/edit${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
+          break;
+      }
+      if (goBackUrl) {
+        this.setBackLink('Go back', goBackUrl);
+      }
+    }
   }
 }
