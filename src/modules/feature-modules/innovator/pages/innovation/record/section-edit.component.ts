@@ -165,7 +165,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
         const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
-        if (this.wizard.isFirstStep() || previousStep === -1) {
+        if (previousStep === -1) {
           this.redirectTo(this.baseUrl);
         } else {
           this.onGoToStep(previousStep, this.isChangeMode);

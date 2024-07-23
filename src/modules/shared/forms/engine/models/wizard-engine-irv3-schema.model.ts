@@ -126,6 +126,9 @@ export class WizardIRV3EngineModel {
 
   getPreviousStep(isChangeMode: boolean = false): number | 'summary' {
     let previousStepId = this.currentStepId;
+    if (this.isFirstStep() || (!isChangeMode && this.visitedSteps.size === 1)) {
+      return -1;
+    }
     if (typeof previousStepId === 'number') {
       previousStepId--;
       if (isChangeMode) {
