@@ -48,7 +48,9 @@ export class InnovationReassessmentDetailsComponent extends CoreComponent implem
         },
         {
           label: 'Sections updated since previous needs assessment',
-          value: null
+          value: this.stores.schema.getGroupSectionsFromSubsections(
+            this.assessment.reassessment.sectionsUpdatedSinceLastAssessment
+          )
         }
       ];
     }
