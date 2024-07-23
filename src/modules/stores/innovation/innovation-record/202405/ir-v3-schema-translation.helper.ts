@@ -21,12 +21,10 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
   }[] = [];
 
   for (const section of schema.sections) {
-    flattenedSections.set('id', section.id);
-    flattenedSections.set('label', section.title);
+    flattenedSections.set(section.id, section.title);
 
     for (const sub of section.subSections) {
-      flattenedSubSections.set('id', sub.id);
-      flattenedSubSections.set('label', sub.title);
+      flattenedSubSections.set(sub.id, sub.title);
 
       for (const q of sub.steps.flatMap(s => s.questions)) {
         // push main question

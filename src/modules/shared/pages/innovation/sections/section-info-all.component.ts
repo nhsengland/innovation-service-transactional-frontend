@@ -210,7 +210,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        const data = sectionInfo.wizard.parseSummary();
+        const data = sectionInfo.wizard.runInboundParsing().parseSummary();
         summaryList = data.filter(item => !item.evidenceId);
         evidencesList = sectionEvidenceData;
         documentsList = documentsResponse.data.filter(document => {
