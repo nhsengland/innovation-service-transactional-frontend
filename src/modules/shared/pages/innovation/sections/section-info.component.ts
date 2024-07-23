@@ -167,7 +167,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             }
           })
     ]).subscribe(([sectionInfo, documents]) => {
-      console.log('sectinoInfo', sectionInfo);
       this.sectionSummaryData.sectionInfo.status = {
         id: sectionInfo.status,
         label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || ''
@@ -182,9 +181,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       // Special business rule around section 2.2.
 
-      console.log('section.evidences', section.evidences);
-      console.log('sectionInfo.data.hasEvidence', sectionInfo.data.hasEvidence);
-      console.log(`sectionInfo.data.hasEvidence === 'YES'`, sectionInfo.data.hasEvidence === 'YES');
       this.sectionSummaryData.sectionInfo.hasEvidences = !!(
         section.evidences &&
         sectionInfo.data.hasEvidence &&
