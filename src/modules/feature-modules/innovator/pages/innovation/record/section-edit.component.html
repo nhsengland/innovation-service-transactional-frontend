@@ -13,7 +13,7 @@
               <ng-container *ngSwitchCase="'button'">
                 <div class="width-max-content">
                   <dt class="nhsuk-u-margin-top-5">
-                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onChangeStep(item.editStepNumber)">{{ item.label }}</button>
+                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onChangeStep(item.editStepNumber, item)">{{ item.label }}</button>
                   </dt>
                 </div>
               </ng-container>
@@ -25,7 +25,11 @@
                     <span *ngIf="!item.allowHTML">{{ item.value | irv3translate: "items" : item.stepId }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)" href="javascript:void(0)" (click)="onChangeStep(item.editStepNumber)">
+                    <a
+                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
+                      href="javascript:void(0)"
+                      (click)="onChangeStep(item.editStepNumber, item)"
+                    >
                       Change<span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
                     </a>
                   </dd>
