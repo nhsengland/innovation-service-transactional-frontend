@@ -12,7 +12,6 @@ import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
 import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { isArray } from 'lodash';
 
 export class FormEngineHelperV3 {
   static buildForm(
