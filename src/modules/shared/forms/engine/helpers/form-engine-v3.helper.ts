@@ -39,14 +39,11 @@ export class FormEngineHelperV3 {
         case 'autocomplete-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
 
-          if (typeof parameterValue === 'string') {
-            (form.get(parameter.id) as FormArray).push(new FormControl(parameterValue));
-          }
-          if (Array.isArray(parameterValue)) {
-            (parameterValue as string[]).forEach(v => {
-              (form.get(parameter.id) as FormArray).push(new FormControl(v));
-            });
-          }
+          const values: string[] = Array.isArray(parameterValue) ? parameterValue : [parameterValue];
+          values.forEach(v => {
+            (form.get(parameter.id) as FormArray).push(new FormControl(v));
+          });
+
           break;
         case 'checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
