@@ -23,7 +23,7 @@ export type InnovationSectionConfigType = {
 
 export type sectionType = {
   id: null | string;
-  section: InnovationSectionEnum;
+  section: InnovationSectionEnum | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };
@@ -65,7 +65,7 @@ export type getInnovationInfoResponse = {
 
 export type InnovationSectionsListDTO = {
   id: null | string;
-  section: InnovationSectionsVersions;
+  section: InnovationSectionsVersions | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   submittedAt: null | DateISOType;
   submittedBy: null | {
@@ -92,9 +92,10 @@ export type GetInnovationEvidenceDTO = {
 };
 
 export type SectionsSummaryModel = {
+  id: string;
   title: string;
   sections: {
-    id: InnovationSectionsVersions;
+    id: InnovationSectionsVersions | string;
     title: string;
     status: keyof typeof INNOVATION_SECTION_STATUS;
     submittedAt: null | DateISOType;

@@ -230,8 +230,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues.mainCategory = currentValues.categories[0];
   } else {
     // Set chosen categories adding OTHER if also chosen.
-    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(
-      item => currentValues.categories?.some(e => e === item.value)
+    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(item =>
+      currentValues.categories?.some(e => e === item.value)
     );
     if (currentValues.categories?.includes('OTHER') && currentValues.otherCategoryDescription) {
       selectedCategories.push({ value: 'OTHER', label: currentValues.otherCategoryDescription });

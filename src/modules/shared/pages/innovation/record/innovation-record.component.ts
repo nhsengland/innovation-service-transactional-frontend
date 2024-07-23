@@ -6,11 +6,12 @@ import { CoreComponent } from '@app/base';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+// import { getSectionsSummary } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
+import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -27,7 +28,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   innovation: ContextInnovationType;
   pendingExportRequests = 0;
-  innovationSections: SectionsSummaryModel = [];
+  innovationSections: SectionsSummaryModelV3Type = [];
   sections: {
     progressBar: ProgressBarType[];
     submitted: number;

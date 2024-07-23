@@ -76,6 +76,7 @@ import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/m
 import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
 import { PageInnovationReassessmentNewComponent } from './pages/innovation/assessment/reassessment-new.component';
+import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -135,7 +136,10 @@ const routes: Routes = [
           {
             path: ':innovationId',
             runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: {
+              innovationData: mapToResolve(InnovationDataResolver),
+              irSchemaData: innovationRecordSchemaResolver
+            },
             data: {
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name

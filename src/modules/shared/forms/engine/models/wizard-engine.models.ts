@@ -2,6 +2,7 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -21,6 +22,7 @@ export type StepsParentalRelationsType = {
 };
 
 export class WizardEngineModel {
+  schema: InnovationRecordSchemaInfoType | undefined;
   isChangingMode: boolean = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepType[];
@@ -29,15 +31,25 @@ export class WizardEngineModel {
   currentStepId: number | 'summary';
   currentAnswers: { [key: string]: any };
   showSummary: boolean;
-  runtimeRules: ((steps: FormEngineModel[], currentValues: any, currentStep: number | 'summary') => void)[];
+  runtimeRules: ((
+    steps: FormEngineModel[],
+    currentValues: any,
+    currentStep: number | 'summary',
+    schema?: InnovationRecordSchemaInfoType
+  ) => void)[];
   inboundParsing?: (data: any) => MappedObjectType;
   outboundParsing?: (data: any) => MappedObjectType;
-  summaryParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
+  summaryParsing?: (
+    data: any,
+    steps?: FormEngineModel[],
+    schema?: InnovationRecordSchemaInfoType
+  ) => WizardSummaryType[];
   summaryPDFParsing?: (data: any, steps?: FormEngineModel[]) => WizardSummaryType[];
 
   private summary: WizardSummaryType[] = [];
 
   constructor(data: Partial<WizardEngineModel>) {
+    this.schema = data.schema ?? undefined;
     this.steps = data.steps ?? [];
     this.formValidations = data.formValidations ?? [];
     this.stepsChildParentRelations = data.stepsChildParentRelations ?? {};
@@ -51,7 +63,7 @@ export class WizardEngineModel {
   }
 
   runRules(data?: MappedObjectType): this {
-    this.runtimeRules.forEach(rule => rule(this.steps, data ?? this.currentAnswers, this.currentStepId));
+    this.runtimeRules.forEach(rule => rule(this.steps, data ?? this.currentAnswers, this.currentStepId, this.schema));
     return this;
   }
 
@@ -183,6 +195,8 @@ export class WizardEngineModel {
         this.visitedSteps.delete(this.getCurrentStepObjId());
         this.nextStep();
       }
+    } else {
+      this.gotoSummary();
     }
 
     return this;
@@ -206,6 +220,7 @@ export class WizardEngineModel {
   }
   setInboundParsedAnswers(data?: MappedObjectType): this {
     this.currentAnswers = (this.inboundParsing ? this.inboundParsing(data) : data) ?? {};
+    this.schema = data?.schema;
     return this;
   }
 

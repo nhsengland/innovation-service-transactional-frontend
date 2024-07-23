@@ -1,7 +1,7 @@
 import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 export type MessageStepInputType = {
-  selectedSection: null | InnovationSectionEnum;
+  selectedSection: null | string;
   message: string;
 };
 

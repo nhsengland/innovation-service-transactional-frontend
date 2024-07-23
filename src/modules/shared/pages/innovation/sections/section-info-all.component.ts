@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSectionsListType } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   INNOVATION_SECTION_STATUS,
   InnovationAllSectionsInfoDTO,
@@ -19,6 +15,10 @@ import {
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';
+import {
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -27,9 +27,9 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './section-info-all.component.html'
 })
 export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit {
-  innovationsSectionsList: InnovationSectionsListType = INNOVATION_SECTIONS;
+  innovationsSectionsList = this.stores.schema.getIrSchemaSectionsListV3();
 
-  innovationsSubSectionsList: string[] = INNOVATION_SECTIONS.flatMap(el => el.sections.flatMap(section => section.id));
+  innovationsSubSectionsList: string[] = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
   innovationId: string;
 
@@ -68,10 +68,10 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   editPageQueryParam?: string;
 
   allSectionsData: {
-    [key in InnovationSectionEnum]?: {
+    [key: string]: {
       sectionInfo: SectionInfoType;
-      summaryList: WizardSummaryType[];
-      evidencesList: WizardSummaryType[];
+      summaryList: WizardSummaryV3Type[];
+      evidencesList: WizardSummaryV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
     };
   } = {};
@@ -120,8 +120,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   }
 
   getSectionsData() {
-    let summaryList: WizardSummaryType[];
-    let evidencesList: WizardSummaryType[];
+    let summaryList: WizardSummaryV3Type[];
+    let evidencesList: WizardSummaryV3Type[];
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
@@ -134,7 +134,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }),
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      const allSections = getAllSectionsList();
+      // const allSections = getAllSectionsList();
+      const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
@@ -152,19 +153,17 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
-          wizard: new WizardEngineModel({}),
+          wizard: new WizardIRV3EngineModel({}),
           allStepsList: {},
           date: '',
           submittedBy: null,
           openTasksCount: 0
         };
-
-        const section = this.stores.innovation.getInnovationRecordSection(responseItem.section.section);
+        const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
         sectionInfo.wizard = section.wizard;
-        sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
         sectionInfo.status = {
           id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS,
@@ -189,7 +188,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           responseItem.data.hasEvidence === 'YES'
         );
 
-        sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
+        sectionInfo.wizard.setAnswers(responseItem.data).runRules();
 
         const validInformation = sectionInfo.wizard.validateData();
 
@@ -203,14 +202,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        const data = sectionInfo.wizard.runSummaryParsing();
+        const data = sectionInfo.wizard.parseSummary();
         summaryList = data.filter(item => !item.evidenceId);
         evidencesList = data.filter(item => item.evidenceId);
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });
-
-        this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
+        this.allSectionsData[sectionInfo.id] = {
           evidencesList: evidencesList,
           sectionInfo: sectionInfo,
           summaryList: summaryList,

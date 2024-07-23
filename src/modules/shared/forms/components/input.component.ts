@@ -18,8 +18,8 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
-import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { InputLengthLimitType, INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
+import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
 
 @Component({
   selector: 'theme-form-input',
@@ -131,7 +131,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
 
     this.hasError = this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty);
     this.error = this.hasError
-      ? FormEngineHelper.getValidationMessage(this.fieldControl.errors)
+      ? FormEngineHelperV3.getValidationMessage(this.fieldControl.errors)
       : { message: '', params: {} };
     this.cdr.detectChanges();
   }

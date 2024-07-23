@@ -8,17 +8,26 @@ import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
-import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
+import {
+  ContextInnovationType,
+  ContextPageLayoutType,
+  ContextPageStatusType,
+  ContextSchemaType
+} from './context.types';
 
 import { AuthenticationModel } from '../authentication/authentication.models';
 import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
+import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaStore } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
+import { InnovationRecordSchemaService } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private logger: NGXLogger,
-    private contextService: ContextService
+    private contextService: ContextService,
+    private innovationRecordSchemaService: InnovationRecordSchemaService
   ) {
     super('STORE::Context', new ContextModel());
   }
@@ -139,6 +148,32 @@ export class ContextStore extends Store<ContextModel> {
     this.pageLayoutState.status = 'LOADING';
     this.pageLayoutState.title = { main: null };
     this.setPageLayoutState();
+  }
+
+  // Innovation Record Schema methods.
+  setIrSchema(data: ContextSchemaType): void {
+    this.state.irSchema = data;
+    this.setState();
+  }
+
+  getIrSchema(): InnovationRecordSchemaInfoType {
+    if (!this.state.irSchema?.schema) {
+      console.error('Context has NO schema');
+      return { id: '', version: 0, schema: { sections: [] } };
+    }
+    return this.state.irSchema.schema;
+  }
+
+  clearIrSchema(): void {
+    this.state.irSchema = null;
+    this.setState();
+  }
+
+  getOrLoadIrSchema(): Observable<ContextSchemaType> {
+    if (this.state.irSchema?.schema && Date.now() < this.state.irSchema.expiryAt) {
+      return of(this.state.irSchema);
+    }
+    return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
   }
 
   // Innovation methods.

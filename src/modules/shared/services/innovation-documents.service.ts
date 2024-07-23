@@ -8,7 +8,7 @@ import { FileUploadType } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export type ContextTypeType =
   | 'INNOVATION'
@@ -102,7 +102,9 @@ export class InnovationDocumentsService extends CoreService {
           let description = '';
           switch (item.context.type) {
             case 'INNOVATION_SECTION':
-              description = getAllSectionsList().find(s => s.value === item.context.id)?.label ?? '[archived section]';
+              description =
+                getAllSectionsListV3(this.stores.context?.getIrSchema()).find(s => s.value === item.context.id)
+                  ?.label ?? '[archived section]';
               break;
             case 'INNOVATION_EVIDENCE':
               description = item.context.name ?? '';
@@ -150,13 +152,13 @@ export class InnovationDocumentsService extends CoreService {
         let descriptionUrl: null | string = null;
         switch (item.context.type) {
           case 'INNOVATION_SECTION':
-            const section = getAllSectionsList().find(s => s.value === item.context.id)?.label;
+            const section = getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
+              s => s.value === item.context.id
+            )?.label;
             description = section ?? '[archived section]';
             descriptionUrl =
               (section &&
-                `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${
-                  item.context.id
-                }`) ??
+                `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}`) ??
               null;
             break;
           case 'INNOVATION_EVIDENCE':

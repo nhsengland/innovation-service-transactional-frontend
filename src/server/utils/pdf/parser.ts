@@ -3,7 +3,7 @@ import axios from 'axios';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import {
   AllSectionsOutboundPayloadType,
-  getAllSectionsSummary
+  getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { sectionType } from '@modules/stores/innovation/innovation.models';
 
@@ -12,9 +12,17 @@ import { ENVIRONMENT } from '../../config/constants.config';
 import {
   DocumentGeneratorInnovationInfoError,
   PDFGeneratorParserError,
+  PDFGeneratorSchemaGetError,
   PDFGeneratorSectionsNotFoundError
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+
+export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
+  const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;
+  const response = await axios.get<InnovationRecordSchemaInfoType>(url, { ...config });
+  return response.data;
+};
 
 export const getSections = async (
   innovationId: string,
@@ -94,6 +102,7 @@ export const getIRDocumentExportData = (
 };
 
 export const generatePDF = async (innovationId: string, config: any, version?: string) => {
+  let schema: InnovationRecordSchemaInfoType;
   let content: AllSectionsOutboundPayloadType;
   let sections: { section: sectionType; data: MappedObjectType }[];
 
@@ -112,7 +121,13 @@ export const generatePDF = async (innovationId: string, config: any, version?: s
   }
 
   try {
-    content = getAllSectionsSummary(sections, version);
+    schema = await getSchema(config);
+  } catch (error: any) {
+    throw new PDFGeneratorSchemaGetError(error);
+  }
+
+  try {
+    content = getAllSectionsSummaryV3(sections, schema);
   } catch (error: any) {
     throw new PDFGeneratorParserError(error);
   }

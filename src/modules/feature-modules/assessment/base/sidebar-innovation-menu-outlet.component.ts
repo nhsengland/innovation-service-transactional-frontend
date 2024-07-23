@@ -1,9 +1,9 @@
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore, InnovationStore } from '@modules/stores';
+import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { ViewportScroller } from '@angular/common';
 
@@ -29,7 +29,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private router: Router,
     private contextStore: ContextStore,
     private innovationStore: InnovationStore,
-    private scroller: ViewportScroller
+    private scroller: ViewportScroller,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -52,7 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('assessment', innovation.id);
+      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('assessment', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/assessment/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/assessment/innovations/${innovation.id}/record` },

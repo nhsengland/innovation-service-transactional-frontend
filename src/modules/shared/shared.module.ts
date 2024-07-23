@@ -116,6 +116,7 @@ import { PageProgressCategoriesWrapperComponent } from './pages/progress-categor
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
 import { InnovationReassessmentDetailsComponent } from './pages/innovation/assessment/reassessment-details.component';
+import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 @NgModule({
   imports: [
@@ -214,6 +215,7 @@ import { InnovationReassessmentDetailsComponent } from './pages/innovation/asses
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
+    IrV3TranslatePipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -253,6 +255,7 @@ import { InnovationReassessmentDetailsComponent } from './pages/innovation/asses
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
+    IrV3TranslatePipe,
     JoinArrayPipe,
 
     // Components.

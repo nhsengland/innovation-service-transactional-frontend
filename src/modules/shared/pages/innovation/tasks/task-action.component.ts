@@ -106,7 +106,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
               break;
           }
 
-          const sectionInfo = this.stores.innovation.getInnovationRecordSectionIdentification(task.section);
+          const sectionInfo = this.stores.schema.getIrSchemaSectionIdentificationV3(task.section);
           this.pageInformation.title += ` for section ${sectionInfo?.group.number}.${sectionInfo?.section.number} '${sectionInfo?.section.title}'`;
 
           if (section?.status === 'DRAFT') {
