@@ -20,8 +20,6 @@ export class FormEngineHelperV3 {
     values: { [key: string]: any } = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
-    console.log('parameters', parameters);
-    console.log('values', values);
     const inputParameters = parameters;
 
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
@@ -32,8 +30,6 @@ export class FormEngineHelperV3 {
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
-      console.log(`parameterValue for ${parameter.id} (of type ${parameter.dataType})`, parameterValue);
-      console.log('(form.get(parameter.id) as FormArray)', form.get(parameter.id) as FormArray);
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
 
       const additionalFields = parameter.additional || [];
