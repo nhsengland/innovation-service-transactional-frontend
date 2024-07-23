@@ -45,9 +45,9 @@ import { PageElasticSearchComponent } from './pages/elastic-search/elastic-searc
 
 // Shared module pages.
 // // Account.
+import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 import { PageAccountManageDetailsEditComponent } from '@modules/shared/pages/account/manage-details/manage-details-edit.component';
 import { PageAccountManageDetailsInfoComponent } from '@modules/shared/pages/account/manage-details/manage-details-info.component';
-import { PageSharedAccountManageAccountInfoComponent } from '@modules/shared/pages/account/manage-account-info/manage-account-info.component';
 
 // // Innovation.
 import { PageInnovationActivityLogComponent } from '@modules/shared/pages/innovation/activity-log/innovation-activity-log.component';
@@ -75,8 +75,12 @@ import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-
 import { WizardOrganisationUnitInactivateComponent } from './wizards/organisation-unit-inactivate/organisation-unit-inactivate.component';
 
 // Resolvers.
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
 import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { InnovationAssessmentDataResolver } from '@modules/shared/resolvers/innovation-assessment-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
+import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
@@ -84,9 +88,6 @@ import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
-import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
-import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -434,6 +435,9 @@ const routes: Routes = [
                 children: [
                   {
                     path: ':assessmentId',
+                    resolve: {
+                      innovationAssessmentData: mapToResolve(InnovationAssessmentDataResolver)
+                    },
                     data: { breadcrumb: null },
                     children: [
                       {

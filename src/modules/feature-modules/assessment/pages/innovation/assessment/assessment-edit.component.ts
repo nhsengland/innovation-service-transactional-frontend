@@ -10,9 +10,9 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
+import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AssessmentService } from '../../../services/assessment.service';
-import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 @Component({
   selector: 'app-assessment-pages-innovation-assessment-edit',
@@ -79,7 +79,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
-      this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
+      this.stores.context.getOrLoadAssessment(this.innovationId, this.assessmentId)
     ]).subscribe(([organisationUnits, needsAssessment]) => {
       // Update last step with the organisations list with description and pre-select all checkboxes.
       NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.CONSTANTS.URLS.WHO_WE_ARE}" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
