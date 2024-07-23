@@ -169,6 +169,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.redirectTo(this.baseUrl);
         } else {
           this.onGoToStep(previousStep, this.isChangeMode);
+          this.redirectTo(`${this.baseUrl}/edit/${previousStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
         }
       }
 
