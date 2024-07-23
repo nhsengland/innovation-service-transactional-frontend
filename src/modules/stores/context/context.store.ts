@@ -9,6 +9,7 @@ import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
 import {
+  ContextAssessmentType,
   ContextInnovationType,
   ContextPageLayoutType,
   ContextPageStatusType,
@@ -16,10 +17,9 @@ import {
 } from './context.types';
 
 import { AuthenticationModel } from '../authentication/authentication.models';
-import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
 import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { InnovationRecordSchemaStore } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { InnovationRecordSchemaService } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
+import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
 
 @Injectable()
 export class ContextStore extends Store<ContextModel> {
@@ -239,6 +239,42 @@ export class ContextStore extends Store<ContextModel> {
     return this.contextService.getInnovationContextInfo(innovationId, context).pipe(
       tap(innovation => {
         this.setInnovation(innovation);
+      })
+    );
+  }
+
+  // Assessment methods
+  getAssessment(): ContextAssessmentType {
+    if (!this.state.assessment) {
+      console.error('Context has NO assessment');
+      return {
+        id: '',
+        description: '',
+        expiryAt: 0
+      } as any;
+    }
+    return this.state.assessment;
+  }
+  setAssessment(data: ContextAssessmentType): void {
+    this.state.assessment = data;
+    this.setState();
+  }
+  clearAssessment(): void {
+    this.state.assessment = null;
+    this.setState();
+  }
+
+  getOrLoadAssessment(innovationId: string, assessmentId: string): Observable<ContextAssessmentType> {
+    if (
+      this.state.assessment &&
+      this.state.assessment.id === assessmentId &&
+      Date.now() < this.state.assessment.expiryAt
+    ) {
+      return of(this.state.assessment);
+    }
+    return this.contextService.getAssessmentContextInfo(innovationId, assessmentId).pipe(
+      tap(assessment => {
+        this.setAssessment(assessment);
       })
     );
   }
