@@ -28,6 +28,12 @@ export type WizardSummaryV3Type = {
   isNotMandatory?: boolean;
 };
 
+export type EvidenceV3Type = {
+  evidenceId: string;
+  label: string;
+  value: string;
+};
+
 export type StepsParentalRelationsType = {
   [child: string]: string;
 };

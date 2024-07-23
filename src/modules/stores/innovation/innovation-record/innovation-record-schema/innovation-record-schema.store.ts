@@ -7,7 +7,8 @@ import { SectionStepsList } from '@modules/shared/pages/innovation/sections/sect
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
 import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
-import { stepsLabels } from '../202304/section-2-2-evidences.config';
+import { SECTION_2_EVIDENCES, stepsLabels } from '../202304/section-2-2-evidences.config';
+import { WizardEngineModel } from '@modules/shared/forms';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -115,7 +116,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     id: string;
     title: string;
     wizard: WizardIRV3EngineModel;
-    evidences?: WizardIRV3EngineModel;
+    evidences?: boolean;
   } {
     const irSchema = this.contextStore.getIrSchema();
     const subsection = irSchema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
@@ -128,7 +129,8 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         translations: this.getIrSchemaTranslationsMap(),
         sectionId: subsection?.id,
         steps: subsection!.steps.map(st => new FormEngineModelV3({ parameters: [] }))
-      })
+      }),
+      ...(sectionId === 'EVIDENCE_OF_EFFECTIVENESS' && { evidences: true })
     };
   }
 

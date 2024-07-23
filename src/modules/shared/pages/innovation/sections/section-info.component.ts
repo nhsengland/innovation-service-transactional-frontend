@@ -13,6 +13,7 @@ import {
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
+  EvidenceV3Type,
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
@@ -49,7 +50,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   sectionSummaryData: {
     sectionInfo: SectionInfoType;
     summaryList: WizardSummaryV3Type[];
-    evidencesList: WizardSummaryV3Type[];
+    evidencesList: EvidenceV3Type[];
     documentsList: InnovationDocumentsListOutDTO['data'];
   };
 
@@ -166,6 +167,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
             }
           })
     ]).subscribe(([sectionInfo, documents]) => {
+      console.log('sectinoInfo', sectionInfo);
       this.sectionSummaryData.sectionInfo.status = {
         id: sectionInfo.status,
         label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || ''
@@ -179,6 +181,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
       // Special business rule around section 2.2.
+
+      console.log('section.evidences', section.evidences);
+      console.log('sectionInfo.data.hasEvidence', sectionInfo.data.hasEvidence);
+      console.log(`sectionInfo.data.hasEvidence === 'YES'`, sectionInfo.data.hasEvidence === 'YES');
       this.sectionSummaryData.sectionInfo.hasEvidences = !!(
         section.evidences &&
         sectionInfo.data.hasEvidence &&
@@ -189,6 +195,14 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       wizard.setAnswers(sectionInfo.data).runRules();
 
       const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
+
+      const evidenceData = sectionInfo.data.evidences
+        ? (sectionInfo.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
+            evidenceId: item.id,
+            label: item.name,
+            value: item.summary
+          }))
+        : [];
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
@@ -206,7 +220,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
-      this.sectionSummaryData.evidencesList = data.filter(item => item.evidenceId);
+      this.sectionSummaryData.evidencesList = evidenceData;
 
       this.getPreviousAndNextPagination();
 
