@@ -12,6 +12,7 @@ import { FormEngineParameterModelV3 } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
 import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { isArray } from 'lodash';
 
 export class FormEngineHelperV3 {
   static buildForm(
@@ -19,6 +20,8 @@ export class FormEngineHelperV3 {
     values: { [key: string]: any } = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
+    console.log('parameters', parameters);
+    console.log('values', values);
     const inputParameters = parameters;
 
     parameters = inputParameters.map(p => new FormEngineParameterModelV3(p)); // Making sure all defaults are present.
@@ -29,7 +32,8 @@ export class FormEngineHelperV3 {
     // parameters = sortBy(parameters, ['rank', 'label']); // TODO: Order fields by rank!
     parameters.forEach(parameter => {
       const parameterValue = values[parameter.id];
-
+      console.log(`parameterValue for ${parameter.id} (of type ${parameter.dataType})`, parameterValue);
+      console.log('(form.get(parameter.id) as FormArray)', form.get(parameter.id) as FormArray);
       const conditionalFields = parameter.items?.filter(item => item.conditional?.id) || [];
 
       const additionalFields = parameter.additional || [];
@@ -37,6 +41,17 @@ export class FormEngineHelperV3 {
       switch (parameter.dataType) {
         // Creates an FormArray and pushes defaultValues into it.
         case 'autocomplete-array':
+          form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
+
+          if (typeof parameterValue === 'string') {
+            (form.get(parameter.id) as FormArray).push(new FormControl(parameterValue));
+          }
+          if (Array.isArray(parameterValue)) {
+            (parameterValue as string[]).forEach(v => {
+              (form.get(parameter.id) as FormArray).push(new FormControl(v));
+            });
+          }
+          break;
         case 'checkbox-array':
           form.addControl(parameter.id, new FormArray([], { updateOn: 'change' }));
 
