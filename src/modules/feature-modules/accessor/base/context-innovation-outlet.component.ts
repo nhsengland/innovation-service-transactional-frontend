@@ -52,7 +52,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       this.data.link = null;
     } else {
       this.data.link = {
-        label: 'View needs assessment',
+        label: 'View needs (re)assessment',
         url: `/accessor/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
       };
     }
