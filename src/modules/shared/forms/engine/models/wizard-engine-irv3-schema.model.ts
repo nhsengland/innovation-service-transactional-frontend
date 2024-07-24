@@ -618,10 +618,11 @@ export class WizardIRV3EngineModel {
 
       if (stepParams.dataType === 'autocomplete-array') {
         // autocomplete-array returns a string[], but if it's just 1 item, we need to extract it.
-        toReturn[stepParams.id] =
-          stepParams.validations?.max?.length === 1
+        toReturn[stepParams.id] = toReturn[stepParams.id]
+          ? stepParams.validations?.max?.length === 1
             ? this.currentAnswers[stepParams.id][0]
-            : this.currentAnswers[stepParams.id];
+            : this.currentAnswers[stepParams.id]
+          : [];
       }
 
       if (stepParams.dataType === 'fields-group' && this.currentAnswers[stepParams.id]) {
