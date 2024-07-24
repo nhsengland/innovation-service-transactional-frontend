@@ -712,7 +712,7 @@ export class WizardIRV3EngineModel {
         item.value.forEach(v =>
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
-        value = translatedArr.join(', ');
+        value = translatedArr.join('\n');
       }
 
       return { label: label, value: value };
