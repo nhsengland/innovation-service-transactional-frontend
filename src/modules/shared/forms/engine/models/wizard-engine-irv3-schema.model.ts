@@ -253,7 +253,6 @@ export class WizardIRV3EngineModel {
   }
 
   translateDescriptionUrls(description: string) {
-    1;
     const regex = new RegExp(/href=\"{{urls\.([^{}]*)}}\"/, 'g');
     const matches = description.matchAll(regex);
 

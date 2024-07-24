@@ -6,12 +6,7 @@ import { ContextStore } from '@modules/stores/context/context.store';
 import { Store } from '@modules/stores/store.class';
 import { stepsLabels } from '../202304/section-2-2-evidences.config';
 import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
-import {
-  SECTION_2_EVIDENCES,
-  InnovationRecordSchemaModel,
-  IrSchemaTranslatorMapType
-} from './innovation-record-schema.models';
-import { WizardEngineModel } from '@modules/shared/forms';
+import { InnovationRecordSchemaModel, IrSchemaTranslatorMapType } from './innovation-record-schema.models';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
