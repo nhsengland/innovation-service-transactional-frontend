@@ -306,8 +306,6 @@ const routes: Routes = [
               {
                 path: 'tasks',
                 data: { breadcrumb: 'Tasks' },
-                resolve: { irSchemaData: innovationRecordSchemaResolver },
-                runGuardsAndResolvers: 'always',
                 children: [
                   {
                     path: '',
@@ -562,6 +560,8 @@ const routes: Routes = [
           breadcrumb: 'Tasks',
           layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
