@@ -5,7 +5,10 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import {
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 
 import { HttpErrorResponse } from '@angular/common/http';
@@ -97,9 +100,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     });
   }
 
-  onChangeStep(stepId: number): void {
+  onChangeStep(stepId: number, item: WizardSummaryV3Type): void {
     this.isChangeMode = true;
-    this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { isChangeMode: true });
+    this.redirectTo(`${this.baseUrl}/edit/${stepId}`, { ...(item.value && { isChangeMode: true }) });
     this.resetAlert();
   }
 
@@ -162,10 +165,11 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
         const previousStep = this.wizard.getPreviousStep(this.isChangeMode);
-        if (this.wizard.isFirstStep() || previousStep === -1) {
+        if (previousStep === -1) {
           this.redirectTo(this.baseUrl);
         } else {
           this.onGoToStep(previousStep, this.isChangeMode);
+          this.redirectTo(`${this.baseUrl}/edit/${previousStep}`, { ...(this.isChangeMode && { isChangeMode: true }) });
         }
       }
 

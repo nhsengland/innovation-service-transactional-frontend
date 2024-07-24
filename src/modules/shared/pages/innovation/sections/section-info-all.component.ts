@@ -16,6 +16,7 @@ import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';
 import {
+  EvidenceV3Type,
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
@@ -71,7 +72,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     [key: string]: {
       sectionInfo: SectionInfoType;
       summaryList: WizardSummaryV3Type[];
-      evidencesList: WizardSummaryV3Type[];
+      evidencesList: EvidenceV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
     };
   } = {};
@@ -121,7 +122,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   getSectionsData() {
     let summaryList: WizardSummaryV3Type[];
-    let evidencesList: WizardSummaryV3Type[];
+    let evidencesList: EvidenceV3Type[];
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
@@ -159,6 +160,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submittedBy: null,
           openTasksCount: 0
         };
+        const sectionEvidenceData = responseItem.data.evidences
+          ? (responseItem.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
+              evidenceId: item.id,
+              label: item.name,
+              value: item.summary
+            }))
+          : [];
         const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
@@ -202,9 +210,9 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        const data = sectionInfo.wizard.parseSummary();
+        const data = sectionInfo.wizard.runInboundParsing().parseSummary();
         summaryList = data.filter(item => !item.evidenceId);
-        evidencesList = data.filter(item => item.evidenceId);
+        evidencesList = sectionEvidenceData;
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });

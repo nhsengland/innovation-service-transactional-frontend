@@ -12,6 +12,7 @@ import {
   IrSchemaTranslatorMapType
 } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { MappedObjectType } from '@app/base/types';
+import { URLS } from '@app/base/constants';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -26,6 +27,12 @@ export type WizardSummaryV3Type = {
   allowHTML?: boolean;
   isFile?: boolean;
   isNotMandatory?: boolean;
+};
+
+export type EvidenceV3Type = {
+  evidenceId: string;
+  label: string;
+  value: string;
 };
 
 export type StepsParentalRelationsType = {
@@ -120,12 +127,12 @@ export class WizardIRV3EngineModel {
 
   getPreviousStep(isChangeMode: boolean = false): number | 'summary' {
     let previousStepId = this.currentStepId;
+    if (this.isFirstStep() || (!isChangeMode && this.visitedSteps.size === 1)) {
+      return -1;
+    }
     if (typeof previousStepId === 'number') {
       previousStepId--;
-      if (isChangeMode) {
-        return this.visitedSteps.has(this.getStepObjectId(previousStepId)) ? previousStepId : -1;
-      }
-      return previousStepId--;
+      return this.visitedSteps.has(this.getStepObjectId(previousStepId)) ? previousStepId : -1;
     }
     return previousStepId;
   }
@@ -245,6 +252,17 @@ export class WizardIRV3EngineModel {
     return stepsChildParentRelationsMap.get(sectionId);
   }
 
+  translateDescriptionUrls(description: string) {
+    const regex = new RegExp(/href=\"{{urls\.([^{}]*)}}\"/, 'g');
+    const matches = description.matchAll(regex);
+
+    for (const match of matches) {
+      description = description.replace(`{{urls.${match[1]}}}`, `${URLS[match[1] as keyof typeof URLS]}`);
+    }
+
+    return description;
+  }
+
   runRules(): this {
     this.stepsChildParentRelations = this.getChildParentRelations(this.sectionId);
     this.steps = [];
@@ -260,7 +278,7 @@ export class WizardIRV3EngineModel {
             id: q.id,
             dataType: q.dataType,
             label: q.label,
-            description: q.description,
+            ...(q.description && { description: this.translateDescriptionUrls(q.description) }),
             ...(q.lengthLimit && { lengthLimit: q.lengthLimit }),
             ...(q.validations && { validations: q.validations }),
             ...(q.items && { items: q.items.map(i => i) }),
@@ -347,7 +365,9 @@ export class WizardIRV3EngineModel {
                         id: `${q.addQuestion.id}_${i}`,
                         dataType: q.addQuestion.dataType,
                         label: label,
-                        description: q.addQuestion.description,
+                        ...(q.addQuestion.description && {
+                          description: this.translateDescriptionUrls(q.addQuestion.description)
+                        }),
                         ...(q.addQuestion.lengthLimit && { lengthLimit: q.addQuestion.lengthLimit }),
                         ...(q.addQuestion.validations && { validations: q.addQuestion.validations }),
                         ...(q.addQuestion.items && { items: q.addQuestion.items }),

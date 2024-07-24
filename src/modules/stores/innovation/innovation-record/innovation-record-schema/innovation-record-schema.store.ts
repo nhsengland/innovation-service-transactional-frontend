@@ -111,7 +111,7 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     id: string;
     title: string;
     wizard: WizardIRV3EngineModel;
-    evidences?: WizardIRV3EngineModel;
+    evidences?: boolean;
   } {
     const irSchema = this.contextStore.getIrSchema();
     const subsection = irSchema?.schema.sections.flatMap(s => s.subSections).find(sub => sub.id === sectionId);
@@ -124,7 +124,8 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         translations: this.getIrSchemaTranslationsMap(),
         sectionId: subsection?.id,
         steps: subsection!.steps.map(st => new FormEngineModelV3({ parameters: [] }))
-      })
+      }),
+      ...(sectionId === 'EVIDENCE_OF_EFFECTIVENESS' && { evidences: true })
     };
   }
 

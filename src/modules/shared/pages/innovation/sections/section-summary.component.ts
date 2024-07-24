@@ -7,12 +7,15 @@ import { ContextInnovationType } from '@app/base/types';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
 import { SectionInfoType } from './section-info.component';
-import { WizardSummaryV3Type } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import {
+  EvidenceV3Type,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
   summaryList: WizardSummaryV3Type[];
-  evidencesList: WizardSummaryV3Type[];
+  evidencesList: EvidenceV3Type[];
   documentsList: InnovationDocumentsListOutDTO['data'];
 };
 
@@ -39,7 +42,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     };
   };
   summaryList: WizardSummaryV3Type[] = [];
-  evidencesList: WizardSummaryV3Type[] = [];
+  evidencesList: EvidenceV3Type[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   allSteps: SectionStepsList = [];
