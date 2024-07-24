@@ -116,7 +116,6 @@ export class WizardIRV3EngineModel {
   }
 
   gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
-    console.log('visited steps', this.visitedSteps);
     this.currentStepId = parseInt(stepId as string, 10);
 
     this.isChangingMode = isChangeMode;
