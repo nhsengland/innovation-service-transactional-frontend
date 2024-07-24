@@ -84,6 +84,7 @@ import { JoinArrayPipe } from './pipes/join-array.pipe';
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
 
 // Resolvers.
+import { InnovationAssessmentDataResolver } from './resolvers/innovation-assessment-data.resolver';
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from './resolvers/innovation-document-data.resolver';
 import { InnovationSectionDataResolver } from './resolvers/innovation-section-data.resolver';
@@ -224,6 +225,7 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
   ],
   providers: [
     // Resolvers.
+    InnovationAssessmentDataResolver,
     InnovationTaskDataResolver,
     InnovationDataResolver,
     InnovationDocumentDataResolver,

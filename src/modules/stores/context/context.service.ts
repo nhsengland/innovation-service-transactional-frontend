@@ -6,13 +6,13 @@ import { map, take } from 'rxjs/operators';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from './context.enums';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { AuthenticationModel } from '../authentication/authentication.models';
-import { ContextInnovationType } from './context.types';
+import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
+import { ContextAssessmentType, ContextInnovationType } from './context.types';
 
 type InnovationNotificationsDTO = {
   count: number;
@@ -161,5 +161,14 @@ export class ContextService {
         };
       })
     );
+  }
+
+  getAssessmentContextInfo(innovationId: string, assessmentId: string): Observable<ContextAssessmentType> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/:assessmentId')
+      .setPathParams({ innovationId, assessmentId });
+    return this.http
+      .get<Omit<ContextAssessmentType, 'expiriyAt'>>(url.buildUrl())
+      .pipe(map(r => ({ ...r, expiryAt: Date.now() + 5000 })));
   }
 }

@@ -281,7 +281,10 @@ export enum SupportLogType {
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
-  reassessment?: { updatedInnovationRecord?: string; description: string } & { previousAssessmentId: string };
+  reassessment?: { updatedInnovationRecord?: string; description: string } & {
+    previousAssessmentId: string;
+    sectionsUpdatedSinceLastAssessment: string[];
+  };
   summary: null | string;
   description: null | string;
   finishedAt: null | DateISOType;

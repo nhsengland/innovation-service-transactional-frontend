@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
-import { InnovationRecordSchemaModel, IrSchemaTranslatorMapType } from './innovation-record-schema.models';
-import { InnovationRecordSchemaService } from './innovation-record-schema.service';
-import { Store } from '@modules/stores/store.class';
-import { ContextStore } from '@modules/stores/context/context.store';
-import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
-import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { FormEngineModelV3 } from '@modules/shared/forms/engine/models/form-engine.models';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
+import { ContextStore } from '@modules/stores/context/context.store';
+import { Store } from '@modules/stores/store.class';
+import { stepsLabels } from '../202304/section-2-2-evidences.config';
 import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
-import { SECTION_2_EVIDENCES, stepsLabels } from '../202304/section-2-2-evidences.config';
+import {
+  SECTION_2_EVIDENCES,
+  InnovationRecordSchemaModel,
+  IrSchemaTranslatorMapType
+} from './innovation-record-schema.models';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
-  constructor(
-    private irSchemaService: InnovationRecordSchemaService,
-    private contextStore: ContextStore
-  ) {
+  constructor(private contextStore: ContextStore) {
     super('irSchema::Context', new InnovationRecordSchemaModel());
   }
 
@@ -155,5 +155,22 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
   getInnovationSectionsWithFiles(): string[] {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
     return schema.flatMap(s => s.subSections.filter(ss => ss.hasFiles).map(s => s.id));
+  }
+
+  /**
+   * Helper method to get the sections labels (group number and title) from a list of sections.
+   */
+  getGroupSectionsFromSubsections(subsections: string[], joinSeparator = '\n'): string {
+    // Only interested in the main groups so removing duplicates for subsections
+    return [
+      ...new Set(
+        subsections.map(s => {
+          const section = this.getIrSchemaSectionIdentificationV3(s);
+          return section ? `${section.group.number}. ${section.group.title}` : s;
+        })
+      )
+    ]
+      .sort()
+      .join(joinSeparator);
   }
 }
