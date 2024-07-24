@@ -35,19 +35,19 @@ import {
   InnovationListFullDTO,
   InnovationListSelectType,
   InnovationNeedsAssessmentInfoDTO,
+  InnovationRulesDTO,
+  InnovationSearchFullDTO,
+  InnovationSearchSelectType,
   InnovationSharesListDTO,
   InnovationSupportInfoDTO,
   InnovationSupportsListDTO,
   InnovationTaskInfoDTO,
   InnovationTasksListDTO,
+  InnovationValidationRules,
   InnovationsListFiltersType,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
-  getInnovationCollaboratorInfoDTO,
-  InnovationRulesDTO,
-  InnovationValidationRules,
-  InnovationSearchFullDTO,
-  InnovationSearchSelectType
+  getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
 
 export type InnovationsTasksListFilterType = {
@@ -465,13 +465,18 @@ export class InnovationsService extends CoreService {
     innovationId: string,
     assessmentId: string
   ): Observable<InnovationNeedsAssessmentInfoDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/assessments/:assessmentId')
-      .setPathParams({ innovationId, assessmentId });
-    return this.http.get<InnovationNeedsAssessmentInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    // Leverage the store if possible
+    if (this.stores.context.getAssessment().id === assessmentId) {
+      return this.stores.context.getOrLoadAssessment(innovationId, assessmentId);
+    } else {
+      const url = new UrlModel(this.API_INNOVATIONS_URL)
+        .addPath('v1/:innovationId/assessments/:assessmentId')
+        .setPathParams({ innovationId, assessmentId });
+      return this.http.get<InnovationNeedsAssessmentInfoDTO>(url.buildUrl()).pipe(
+        take(1),
+        map(response => response)
+      );
+    }
   }
 
   // Tasks methods.

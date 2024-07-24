@@ -69,8 +69,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       ];
 
       if (urlIncludesReassessmentsNew || urlIncludesEdit) {
-        // TO DO: Get the assessment id from previous assessment if reassessmentCount > 0
-        const previousAssessmentId = '';
+        const previousAssessmentId = this.contextStore.getAssessment().reassessment?.previousAssessmentId;
         const assessmentId = innovation.reassessmentCount ? previousAssessmentId : innovation.assessment?.id;
 
         this.data.links.push({
