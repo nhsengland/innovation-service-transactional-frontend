@@ -718,6 +718,13 @@ export class WizardIRV3EngineModel {
       return { label: label, value: value };
     });
 
+    // Add evidences when available
+    if (this.currentAnswers['evidences']) {
+      (this.currentAnswers['evidences'] as { id: string; name: string; summary: string }[]).forEach((evidence, i) =>
+        translatedSummary.push({ label: `Evidence ${i + 1}`, value: evidence.name })
+      );
+    }
+
     return translatedSummary;
   }
 }
