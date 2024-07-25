@@ -9,13 +9,10 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import {
-  maturityLevelItems,
-  yesNoItems,
-  yesPartiallyNoItems
-} from '@modules/stores/innovation/config/innovation-catalog.config';
+import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
@@ -151,15 +148,15 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       return;
     }
 
-    const assessmentCompleteTitle = this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment';
+    const assessmentTitle = this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment';
     const assessmentInProgressTitle = this.assessmentHasReassessment
       ? 'In draft needs reassessment'
       : 'In draft needs assessment';
 
-    if (this.assessmentHasBeenSubmitted) {
-      this.setPageTitle(`${assessmentCompleteTitle}`, { hint: baseHint });
-    } else {
+    if (this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT) {
       this.setPageTitle(assessmentInProgressTitle, { hint: baseHint });
+    } else {
+      this.setPageTitle(`${assessmentTitle}`, { hint: baseHint });
     }
   }
 
