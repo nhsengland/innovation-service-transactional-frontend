@@ -114,6 +114,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
@@ -509,6 +511,8 @@ const routes: Routes = [
           breadcrumb: 'Tasks',
           layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           { path: '', pathMatch: 'full', component: PageTasksAdvancedSearchComponent, data: { breadcrumb: null } },
           {
@@ -526,6 +530,8 @@ const routes: Routes = [
         path: 'notifications',
         pathMatch: 'full',
         component: PageNotificationsListComponent,
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         data: {
           breadcrumb: 'Notifications',
           layout: { type: 'full', backgroundColor: 'bg-color-white' }

@@ -3,6 +3,7 @@ import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from '
 import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
+  InnovationRecordSchemaV3Type,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -45,6 +46,7 @@ export class WizardIRV3EngineModel {
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
   schema: InnovationRecordSchemaInfoType | null;
+  itemsWithItemsFromAnswer: Map<string, string>;
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
@@ -68,6 +70,18 @@ export class WizardIRV3EngineModel {
       subsections: new Map([]),
       questions: new Map([])
     };
+    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap(this.schema.schema);
+  }
+
+  getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
+    return new Map(
+      this.schema?.schema.sections
+        .flatMap(s => s.subSections)
+        .find(s => s.id === this.sectionId)
+        ?.steps.flatMap(st => st.questions)
+        .filter(q => q.items?.some(i => i.itemsFromAnswer))
+        .map(i => [i.id, i.items?.find(item => item.itemsFromAnswer)!.itemsFromAnswer!])
+    );
   }
 
   isFirstStep(): boolean {
@@ -595,15 +609,16 @@ export class WizardIRV3EngineModel {
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
+      const currentAnswer = this.currentAnswers[stepParams.id];
 
-      if (this.currentAnswers[stepParams.id]) {
-        toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+      if (currentAnswer) {
+        toReturn[stepParams.id] = currentAnswer;
       }
 
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
-        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && this.currentAnswers[stepParams.id]) {
-          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map((answer, i) => {
+        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && currentAnswer) {
+          toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
             const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
 
             return {
@@ -616,26 +631,26 @@ export class WizardIRV3EngineModel {
         }
       }
 
-      if (stepParams.dataType === 'autocomplete-array') {
-        // autocomplete-array returns a string[], but if it's just 1 item, we need to extract it.
-        toReturn[stepParams.id] =
-          stepParams.validations?.max?.length === 1
-            ? this.currentAnswers[stepParams.id][0]
-            : this.currentAnswers[stepParams.id];
+      if (stepParams.dataType === 'autocomplete-array' && currentAnswer) {
+        if (Array.isArray(currentAnswer)) {
+          toReturn[stepParams.id] = stepParams.validations?.max?.length === 1 ? currentAnswer[0] : currentAnswer;
+        } else {
+          toReturn[stepParams.id] = currentAnswer;
+        }
       }
 
-      if (stepParams.dataType === 'fields-group' && this.currentAnswers[stepParams.id]) {
+      if (stepParams.dataType === 'fields-group' && currentAnswer) {
         if (!stepParams.addQuestion) {
           // flatten fields-group with no addQuestions
-          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(item => {
+          toReturn[stepParams.id] = (currentAnswer as nestedObjectAnswer).map(item => {
             return item[stepParams.field!.id];
           });
         } else {
           // add answers from all addQuestions steps to the fields-group object
-          (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach(
+          (currentAnswer as nestedObjectAnswer).forEach(
             (item, i) => (item[stepParams.addQuestion!.id] = this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`])
           );
-          toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+          toReturn[stepParams.id] = currentAnswer;
         }
       }
 
@@ -650,6 +665,14 @@ export class WizardIRV3EngineModel {
           toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
         }
       });
+
+      // check if itemsFromAnswer answer is still valid, if not, clear
+      const itemsFromAnswerItem = this.itemsWithItemsFromAnswer.get(stepParams.id);
+      if (itemsFromAnswerItem) {
+        toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem].includes(currentAnswer)
+          ? this.currentAnswers[stepParams.id]
+          : undefined;
+      }
     }
 
     return {
@@ -711,11 +734,18 @@ export class WizardIRV3EngineModel {
         item.value.forEach(v =>
           translatedArr.push(this.translations.questions.get(item.stepId)?.items?.get(v)?.label ?? v)
         );
-        value = translatedArr.join(', ');
+        value = translatedArr.join('\n');
       }
 
       return { label: label, value: value };
     });
+
+    // Add evidences when available
+    if (this.currentAnswers['evidences']) {
+      (this.currentAnswers['evidences'] as { id: string; name: string; summary: string }[]).forEach((evidence, i) =>
+        translatedSummary.push({ label: `Evidence ${i + 1}`, value: evidence.name })
+      );
+    }
 
     return translatedSummary;
   }
