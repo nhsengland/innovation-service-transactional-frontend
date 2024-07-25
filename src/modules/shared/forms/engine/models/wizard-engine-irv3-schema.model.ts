@@ -3,6 +3,7 @@ import { FormEngineModel, FormEngineModelV3, FormEngineParameterModelV3 } from '
 import { ValidatorFn } from '@angular/forms';
 import {
   InnovationRecordConditionType,
+  InnovationRecordSchemaV3Type,
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
@@ -45,6 +46,7 @@ export class WizardIRV3EngineModel {
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
   schema: InnovationRecordSchemaInfoType | null;
+  itemsWithItemsFromAnswer: Map<string, string>;
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
@@ -68,6 +70,19 @@ export class WizardIRV3EngineModel {
       subsections: new Map([]),
       questions: new Map([])
     };
+    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap(this.schema.schema);
+    console.log(this.itemsWithItemsFromAnswer);
+  }
+
+  getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
+    return new Map(
+      this.schema?.schema.sections
+        .flatMap(s => s.subSections)
+        .find(s => s.id === this.sectionId)
+        ?.steps.flatMap(st => st.questions)
+        .filter(q => q.items?.some(i => i.itemsFromAnswer))
+        .map(i => [i.id, i.items?.find(item => item.itemsFromAnswer)!.itemsFromAnswer!])
+    );
   }
 
   isFirstStep(): boolean {
@@ -651,6 +666,14 @@ export class WizardIRV3EngineModel {
           toReturn[c.conditional.id] = this.currentAnswers[c.conditional.id];
         }
       });
+
+      // check if itemsFromAnswer answer is still valid, if not, clear
+      const itemsFromAnswerItem = this.itemsWithItemsFromAnswer.get(stepParams.id);
+      if (itemsFromAnswerItem) {
+        toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem].includes(currentAnswer)
+          ? this.currentAnswers[stepParams.id]
+          : undefined;
+      }
     }
 
     return {
