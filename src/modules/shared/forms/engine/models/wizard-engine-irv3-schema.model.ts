@@ -595,15 +595,16 @@ export class WizardIRV3EngineModel {
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
       const stepParams = step.parameters[0];
+      const currentAnswer = this.currentAnswers[stepParams.id];
 
-      if (this.currentAnswers[stepParams.id]) {
-        toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+      if (currentAnswer) {
+        toReturn[stepParams.id] = currentAnswer;
       }
 
       if (stepParams.dataType === 'checkbox-array') {
         // create nested object if it has addQuestions
-        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && this.currentAnswers[stepParams.id]) {
-          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as arrStringAnswer).map((answer, i) => {
+        if ((stepParams.addQuestion || stepParams.checkboxAnswerId) && currentAnswer) {
+          toReturn[stepParams.id] = (currentAnswer as arrStringAnswer).map((answer, i) => {
             const addQuestionId = `${stepParams.addQuestion!.id}_${i}`;
 
             return {
@@ -618,25 +619,25 @@ export class WizardIRV3EngineModel {
 
       if (stepParams.dataType === 'autocomplete-array') {
         // autocomplete-array returns a string[], but if it's just 1 item, we need to extract it.
-        toReturn[stepParams.id] = toReturn[stepParams.id]
-          ? stepParams.validations?.max?.length === 1
-            ? this.currentAnswers[stepParams.id][0]
-            : this.currentAnswers[stepParams.id]
-          : [];
+        if (currentAnswer) {
+          toReturn[stepParams.id] = Array.isArray(currentAnswer)
+            ? stepParams.validations?.max?.length === 1 && currentAnswer[0]
+            : currentAnswer;
+        }
       }
 
-      if (stepParams.dataType === 'fields-group' && this.currentAnswers[stepParams.id]) {
+      if (stepParams.dataType === 'fields-group' && currentAnswer) {
         if (!stepParams.addQuestion) {
           // flatten fields-group with no addQuestions
-          toReturn[stepParams.id] = (this.currentAnswers[stepParams.id] as nestedObjectAnswer).map(item => {
+          toReturn[stepParams.id] = (currentAnswer as nestedObjectAnswer).map(item => {
             return item[stepParams.field!.id];
           });
         } else {
           // add answers from all addQuestions steps to the fields-group object
-          (this.currentAnswers[stepParams.id] as nestedObjectAnswer).forEach(
+          (currentAnswer as nestedObjectAnswer).forEach(
             (item, i) => (item[stepParams.addQuestion!.id] = this.currentAnswers[`${stepParams.addQuestion!.id}_${i}`])
           );
-          toReturn[stepParams.id] = this.currentAnswers[stepParams.id];
+          toReturn[stepParams.id] = currentAnswer;
         }
       }
 
