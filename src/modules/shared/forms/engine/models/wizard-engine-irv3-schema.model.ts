@@ -617,12 +617,11 @@ export class WizardIRV3EngineModel {
         }
       }
 
-      if (stepParams.dataType === 'autocomplete-array') {
-        // autocomplete-array returns a string[], but if it's just 1 item, we need to extract it.
-        if (currentAnswer) {
-          toReturn[stepParams.id] = Array.isArray(currentAnswer)
-            ? stepParams.validations?.max?.length === 1 && currentAnswer[0]
-            : currentAnswer;
+      if (stepParams.dataType === 'autocomplete-array' && currentAnswer) {
+        if (Array.isArray(currentAnswer)) {
+          toReturn[stepParams.id] = stepParams.validations?.max?.length === 1 ? currentAnswer[0] : currentAnswer;
+        } else {
+          toReturn[stepParams.id] = currentAnswer;
         }
       }
 
