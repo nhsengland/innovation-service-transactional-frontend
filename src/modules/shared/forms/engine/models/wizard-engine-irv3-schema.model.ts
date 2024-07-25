@@ -71,7 +71,6 @@ export class WizardIRV3EngineModel {
       questions: new Map([])
     };
     this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap(this.schema.schema);
-    console.log(this.itemsWithItemsFromAnswer);
   }
 
   getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
