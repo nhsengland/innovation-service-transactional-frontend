@@ -1,8 +1,10 @@
 # NHS Service Transaccional Frontend
 NHS Service Transactional Frontend is a visual gateway to the NHS Innovation Service, in the transactional component. It will be used by the following user profiles:
-Unregistered Innovators
-Registered innovators
-Accessors
+- Unregistered Innovators
+- Registered innovators
+- Accessors
+- Needs Assessors
+- Admins
 
 This project is build in JavaScript + TypeScript, with the **Angular framework** ([angular.io]()), configured as **Server Side Rendering** ([angular.io/guide/universal](Angular Universal)).
 
