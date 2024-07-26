@@ -94,7 +94,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     for (const [index, item] of this.summaryList.entries()) {
       this.displayChangeButtonList.push(index);
-      if (!item.value && !item.isNotMandatory) {
+      if (!this.checkItemHasValue(item) && !item.isNotMandatory) {
         break;
       }
     }
@@ -110,5 +110,12 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   onStartSection(sectionId: string): void {
     this.router.navigateByUrl(`${this.baseUrl}/record/sections/${sectionId}/edit`);
+  }
+
+  checkItemHasValue(item: WizardSummaryV3Type): boolean {
+    if (item.value) {
+      return Array.isArray(item.value) && item.value.length === 0 ? false : true;
+    }
+    return false;
   }
 }

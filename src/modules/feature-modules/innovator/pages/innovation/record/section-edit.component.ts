@@ -132,7 +132,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       for (const [index, item] of this.wizard.getSummary().entries()) {
         this.displayChangeButtonList.push(index);
-        if (!item.value && !item.isNotMandatory) {
+        if (!this.checkItemHasValue(item) && !item.isNotMandatory) {
           break;
         }
       }
@@ -147,6 +147,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
     this.setPageStatus('READY');
+  }
+
+  checkItemHasValue(item: WizardSummaryV3Type): boolean {
+    if (item.value) {
+      return Array.isArray(item.value) && item.value.length === 0 ? false : true;
+    }
+    return false;
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
