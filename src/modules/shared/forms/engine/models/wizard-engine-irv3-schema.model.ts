@@ -655,8 +655,6 @@ export class WizardIRV3EngineModel {
       }
 
       if (stepParams.dataType === 'radio-group') {
-        if (!stepParams.isHidden) {
-        }
         if (stepParams.items?.length == 1 && stepParams.isHidden) {
           toReturn[stepParams.id] = stepParams.items[0].id;
         }
