@@ -654,8 +654,10 @@ export class WizardIRV3EngineModel {
         }
       }
 
-      if (stepParams.dataType === 'radio-group' && stepParams.items?.length == 1 && stepParams.isHidden) {
-        toReturn[stepParams.id] = stepParams.items[0].id;
+      if (stepParams.dataType === 'radio-group') {
+        if (stepParams.items?.length == 1 && stepParams.isHidden) {
+          toReturn[stepParams.id] = stepParams.items[0].id;
+        }
       }
 
       // add conditionals
@@ -666,12 +668,21 @@ export class WizardIRV3EngineModel {
         }
       });
 
-      // check if itemsFromAnswer answer is still valid, if not, clear
+      /* Special logic for questions with itemsFromAnswer */
+
       const itemsFromAnswerItem = this.itemsWithItemsFromAnswer.get(stepParams.id);
-      if (itemsFromAnswerItem) {
-        toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem].includes(currentAnswer)
+      const answersFromParentAnswer = itemsFromAnswerItem ? this.currentAnswers[itemsFromAnswerItem] : undefined;
+
+      // check if itemsFromAnswer answer is still valid, if not, clear
+      if (itemsFromAnswerItem && answersFromParentAnswer) {
+        toReturn[stepParams.id] = answersFromParentAnswer.includes(currentAnswer)
           ? this.currentAnswers[stepParams.id]
           : undefined;
+
+        // if 'related' question has 1 value only, set it also as current one's.
+        if (this.currentAnswers[itemsFromAnswerItem].length === 1) {
+          toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem][0];
+        }
       }
     }
 
