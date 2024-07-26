@@ -666,12 +666,19 @@ export class WizardIRV3EngineModel {
         }
       });
 
+      /* Special logic for questions with itemsFromAnswer */
+
       // check if itemsFromAnswer answer is still valid, if not, clear
       const itemsFromAnswerItem = this.itemsWithItemsFromAnswer.get(stepParams.id);
       if (itemsFromAnswerItem) {
         toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem].includes(currentAnswer)
           ? this.currentAnswers[stepParams.id]
           : undefined;
+
+        // if 'related' question has 1 value only, set it also as current one's.
+        if (this.currentAnswers[itemsFromAnswerItem].length === 1) {
+          toReturn[stepParams.id] = this.currentAnswers[itemsFromAnswerItem][0];
+        }
       }
     }
 
