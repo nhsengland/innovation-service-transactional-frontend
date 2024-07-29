@@ -29,8 +29,8 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     items: [
       {
         value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
-        label: `Find out if you qualify for a needs reassessment`,
-        description: `If you have significantly progressed your innovation or introduced major changes since your first needs assessment, you can submit your innovation for a needs reassessment. You may be offered a different type of support following the reassessment.`
+        label: `Submit for needs reassessment`,
+        description: `Update your innovation record before you submit for needs reassessment to get access to the right support.`
       },
       {
         value: FormFieldActionsEnum.NO_ACTION,
