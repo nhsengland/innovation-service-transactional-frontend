@@ -98,13 +98,18 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
     sectionId: string | null
   ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
     const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
-    const sectionGroup = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId)) ?? 0;
-
-    const section = schema[sectionGroup].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
-    return {
-      group: { number: sectionGroup + 1, title: schema[sectionGroup].title },
-      section: { number: section + 1, title: schema[sectionGroup].subSections[section].title }
-    };
+    const sectionGroup = schema.findIndex(s => s.subSections.find(sub => sub.id === sectionId));
+    if (sectionGroup !== -1) {
+      const section = schema[sectionGroup].subSections.findIndex(sub => sub.id === sectionId) ?? 0;
+      return section === -1
+        ? null
+        : {
+            group: { number: sectionGroup + 1, title: schema[sectionGroup].title },
+            section: { number: section + 1, title: schema[sectionGroup].subSections[section].title }
+          };
+    } else {
+      return null;
+    }
   }
 
   getIrSchemaSectionV3(sectionId: string): {
