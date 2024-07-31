@@ -25,7 +25,7 @@
                     <span *ngIf="!item.allowHTML">{{ item.value }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">
+                    <a *ngIf="item.editStepNumber" href="javascript:void(0)" (click)="onGotoStep(item.editStepNumber || 1)">
                       Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
                     </a>
                   </dd>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -49,6 +49,7 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -871,7 +872,9 @@ export class InnovationsService extends CoreService {
 
   createNeedsReassessment(
     innovationId: string,
-    body: { updatedInnovationRecord?: string; description: string }
+    body:
+      | { description: string } // TO DO: Remove type after this is removed from NA side
+      | ReassessmentSendType
   ): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/reassessments')
