@@ -141,7 +141,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     reassessmentReason:
-      data.status === InnovationStatusEnum.ARCHIVED ? ['previouslyArchived'] : data.reassessmentReason,
+      data.status === InnovationStatusEnum.ARCHIVED ? ['PREVIOUSLY_ARCHIVED'] : data.reassessmentReason,
     ...(data.otherReassessmentReason && { otherReassessmentReason: data.otherReassessmentReason }),
     description: data.description,
     whatSupportDoYouNeed: data.whatSupportDoYouNeed
