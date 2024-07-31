@@ -1,6 +1,13 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
+export type ReassessmentSendType = {
+  reassessmentReason: string[];
+  otherReassessmentReason?: string;
+  description: string;
+  whatSupportDoYouNeed: string;
+};
+
 // Labels.
 const stepsLabels = {
   l1: 'Have you updated your Innovation record since submitting it to the last needs assessment?',

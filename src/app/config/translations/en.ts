@@ -932,6 +932,14 @@ export const locale = {
             APPROVED: { name: 'Approved' },
             REJECTED: { name: 'Rejected' },
             CANCELLED: { name: 'Cancelled' }
+          },
+          reassessment: {
+            reassessmentReason: {
+              NO_SUPPORT: 'There is no active support for my innovation',
+              PREVIOUSLY_ARCHIVED:
+                'My innovation was previously archived or I stopped working on it for a period of time',
+              HAS_PROGRESSED_SIGNIFICANTLY: 'My innovation has progressed significantly since my last needs assessment'
+            }
           }
         },
         user: {

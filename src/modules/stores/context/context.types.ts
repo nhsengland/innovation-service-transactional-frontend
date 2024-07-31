@@ -3,6 +3,7 @@ import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation
 
 import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { NotificationCategoryTypeEnum } from './context.enums';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 export type ContextPageAlertType = {
   type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
@@ -79,9 +80,10 @@ export type ContextSchemaType = {
 // InnovationNeedsAssessmentInfoDTO + expiryAt
 export type ContextAssessmentType = {
   id: string;
-  reassessment?: { updatedInnovationRecord?: string; description: string } & {
+  reassessment?: ReassessmentSendType & {
     previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
+    createdAt: DateISOType;
   };
   summary: null | string;
   description: null | string;

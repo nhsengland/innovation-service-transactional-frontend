@@ -1,5 +1,7 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
+import { locale } from '@app/config/translations/en';
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { yesNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
@@ -12,7 +14,7 @@ export class InnovationReassessmentDetailsComponent extends CoreComponent implem
 
   reassessmentDetails: { label?: string; value: null | string }[] = [];
 
-  constructor() {
+  constructor(private datePipe: DatePipe) {
     super();
   }
 
@@ -22,13 +24,8 @@ export class InnovationReassessmentDetailsComponent extends CoreComponent implem
     if (this.assessment?.reassessment) {
       this.reassessmentDetails = [
         {
-          label: 'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
-          value:
-            yesNoItems.find(item => item.value === this.assessment?.reassessment?.updatedInnovationRecord)?.label || ''
-        },
-        {
           label: 'Needs reassessment submitted',
-          value: null
+          value: this.datePipe.transform(this.assessment.reassessment.createdAt, locale.data.app.date_formats.long_date)
         },
         {
           label: 'Previous needs reassessment',
@@ -36,15 +33,23 @@ export class InnovationReassessmentDetailsComponent extends CoreComponent implem
         },
         {
           label: 'Reason for reassessment',
-          value: this.assessment.reassessment.description
+          value: this.assessment.reassessment.reassessmentReason
+            .map(i =>
+              this.translate(
+                i === 'OTHER' && this.assessment?.reassessment?.otherReassessmentReason
+                  ? this.assessment.reassessment.otherReassessmentReason
+                  : `shared.catalog.innovation.reassessment.reassessmentReason.${i}`
+              )
+            )
+            .join('\n')
         },
         {
           label: 'Significant changes since last assessment',
-          value: null
+          value: this.assessment.reassessment.description
         },
         {
           label: 'Support required',
-          value: null
+          value: this.assessment.reassessment.whatSupportDoYouNeed
         },
         {
           label: 'Sections updated since previous needs assessment',

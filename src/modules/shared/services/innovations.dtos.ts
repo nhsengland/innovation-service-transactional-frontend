@@ -1,5 +1,6 @@
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 import {
@@ -281,9 +282,10 @@ export enum SupportLogType {
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
-  reassessment?: { updatedInnovationRecord?: string; description: string } & {
+  reassessment?: ReassessmentSendType & {
     previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
+    createdAt: DateISOType;
   };
   summary: null | string;
   description: null | string;
