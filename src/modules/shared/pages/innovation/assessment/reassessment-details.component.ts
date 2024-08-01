@@ -21,11 +21,11 @@ export class InnovationReassessmentDetailsComponent extends CoreComponent implem
     // and remove the ones not used anymore
     if (this.assessment?.reassessment) {
       this.reassessmentDetails = [
-        {
-          label: 'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
-          value:
-            yesNoItems.find(item => item.value === this.assessment?.reassessment?.updatedInnovationRecord)?.label || ''
-        },
+        // {
+        //   label: 'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
+        //   value:
+        //     yesNoItems.find(item => item.value === this.assessment?.reassessment?.updatedInnovationRecord)?.label || ''
+        // },
         {
           label: 'Needs reassessment submitted',
           value: null
