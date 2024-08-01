@@ -92,7 +92,7 @@
               </p>
             </div>
 
-            <p class="nhsuk-u-margin-bottom-2 word-break">
+            <p class="nhsuk-u-margin-bottom-2 text-pre-line text-word-break">
               {{ message.message }}
               <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"
                 >(last edited at {{ message.updatedAt | date: ("app.date_formats.long_date_time" | translate) }})</span
