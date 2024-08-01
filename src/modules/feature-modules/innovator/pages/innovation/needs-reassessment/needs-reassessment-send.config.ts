@@ -75,7 +75,7 @@ export const REASSESSMENT_REASON_ITEMS = [
       id: 'otherReassessmentReason',
       dataType: 'text',
       placeholder: 'Explain',
-      validations: { isRequired: [true, 'Explain'], maxLength: 100 } // TO DO: Confirm message copy
+      validations: { isRequired: [true, 'Add explanation'], maxLength: 100 }
     })
   }
 ];
@@ -92,7 +92,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             dataType: 'checkbox-array',
             label: stepsLabels.q1.label,
             ...(stepsLabels.q1.description && { description: stepsLabels.q1.description }),
-            validations: { isRequired: [true, 'Choose one option'] }, // TO DO: Confirm message copy
+            validations: { isRequired: [true, 'Choose at least one option'] },
             items: REASSESSMENT_REASON_ITEMS
           }
         ]
@@ -107,7 +107,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'textarea',
           label: stepsLabels.q2.label,
           ...(stepsLabels.q2.description && { description: stepsLabels.q2.description }),
-          validations: { isRequired: [true, 'An explanation is required'] }, // TO DO: Confirm message copy
+          validations: { isRequired: [true, 'Add explanation'] },
           lengthLimit: 'l'
         }
       ]
@@ -120,7 +120,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
           dataType: 'textarea',
           label: stepsLabels.q3.label,
           ...(stepsLabels.q3.description && { description: stepsLabels.q3.description }),
-          validations: { isRequired: [true, 'Support description is required'] }, // TO DO: Confirm message copy
+          validations: { isRequired: [true, 'Add explanation'] },
           lengthLimit: 'l'
         }
       ]
