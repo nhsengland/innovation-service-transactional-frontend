@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -870,12 +870,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
   }
 
-  createNeedsReassessment(
-    innovationId: string,
-    body:
-      | { description: string } // TO DO: Remove type after this is removed from NA side
-      | ReassessmentSendType
-  ): Observable<{ id: string }> {
+  createNeedsReassessment(innovationId: string, body: ReassessmentSendType): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/reassessments')
       .setPathParams({ innovationId });

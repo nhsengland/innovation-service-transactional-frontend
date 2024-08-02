@@ -130,10 +130,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    reassessmentReason: data.reassessmentReason,
-    otherReassessmentReason: data.otherReassessmentReason,
-    description: data.description,
-    whatSupportDoYouNeed: data.whatSupportDoYouNeed,
+    reassessmentReason: [],
+    otherReassessmentReason: '',
+    description: '',
+    whatSupportDoYouNeed: '',
     status: data.status
   };
 }
