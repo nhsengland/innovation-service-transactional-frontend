@@ -8,11 +8,13 @@ import {
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 export type ReassessmentSendType = {
-  reassessmentReason: string[];
+  reassessmentReason: ReassessmentReasonsType[];
   otherReassessmentReason?: string;
   description: string;
   whatSupportDoYouNeed: string;
 };
+
+export type ReassessmentReasonsType = 'NO_SUPPORT' | 'PREVIOUSLY_ARCHIVED' | 'HAS_PROGRESSED_SIGNIFICANTLY' | 'OTHER';
 
 // Labels.
 const stepsLabels = {
@@ -150,32 +152,31 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
-  let editStepNumber = 1;
 
-  toReturn.push({
-    label: stepsLabels.q1.label,
-    value:
-      data.status === InnovationStatusEnum.ARCHIVED
-        ? REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? ''
-        : data.reassessmentReason
-            .map(v =>
-              v === 'OTHER' ? data.otherReassessmentReason : REASSESSMENT_REASON_ITEMS.find(i => i.value)?.label
-            )
-            .join('\n'),
-    editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : editStepNumber++
-  });
-
-  toReturn.push({
-    label: stepsLabels.q2.label,
-    value: data.description,
-    editStepNumber: editStepNumber++
-  });
-
-  toReturn.push({
-    label: stepsLabels.q3.label,
-    value: data.whatSupportDoYouNeed,
-    editStepNumber: editStepNumber++
-  });
+  toReturn.push(
+    {
+      label: stepsLabels.q1.label,
+      value:
+        data.status === InnovationStatusEnum.ARCHIVED
+          ? REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? ''
+          : data.reassessmentReason
+              .map(v =>
+                v === 'OTHER' ? data.otherReassessmentReason : REASSESSMENT_REASON_ITEMS.find(i => i.value)?.label
+              )
+              .join('\n'),
+      editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : 1
+    },
+    {
+      label: stepsLabels.q2.label,
+      value: data.description,
+      editStepNumber: 2
+    },
+    {
+      label: stepsLabels.q3.label,
+      value: data.whatSupportDoYouNeed,
+      editStepNumber: 3
+    }
+  );
 
   return toReturn;
 }

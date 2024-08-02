@@ -284,6 +284,7 @@ export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
   majorVersion: number;
   minorVersion: number;
+  editReason: string;
   reassessment?: ReassessmentSendType & {
     previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
