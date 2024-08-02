@@ -34,7 +34,7 @@
         <h3>Your custom notifications</h3>
 
         <div class="d-flex nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator" *ngFor="let subscription of subscriptionsList">
-          <div class="width-45 word-break nhsuk-u-padding-right-7">{{ subscription.name }}</div>
+          <div class="width-45 text-word-break nhsuk-u-padding-right-7">{{ subscription.name }}</div>
           <div class="width-40 font-color-secondary">{{ subscription.count }} active {{ "dictionary.notification" | pluralTranslate: subscription.count | translate }}</div>
           <div class="width-15 text-align-right">
             <a routerLink="/accessor/innovations/{{ subscription.innovationId }}/custom-notifications"> View<span class="nhsuk-u-visually-hidden"> notification</span> </a>
