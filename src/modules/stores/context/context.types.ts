@@ -80,10 +80,14 @@ export type ContextSchemaType = {
 // InnovationNeedsAssessmentInfoDTO + expiryAt
 export type ContextAssessmentType = {
   id: string;
+  majorVersion: number;
+  minorVersion: number;
+  editReason: string;
   reassessment?: ReassessmentSendType & {
     previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
     createdAt: DateISOType;
+    previousCreatedAt: DateISOType;
   };
   summary: null | string;
   description: null | string;
