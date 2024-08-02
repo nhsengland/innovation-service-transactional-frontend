@@ -55,16 +55,18 @@ export class PageInnovationReassessmentNewComponent extends CoreComponent implem
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    this.innovationsService
-      .createNeedsReassessment(this.innovationId, { description: this.form.value.reason! })
-      .subscribe({
-        next: newAssessment => {
-          this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessment.id}/edit`);
-        },
-        error: () => {
-          this.submitButton = { isActive: true, label: 'Continue' };
-          this.setAlertUnknownError();
-        }
-      });
+    // TO DO: Replace with new 'edit' endpoint
+
+    // this.innovationsService
+    //   .createNeedsReassessment(this.innovationId, { description: this.form.value.reason! })
+    //   .subscribe({
+    //     next: newAssessment => {
+    //       this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessment.id}/edit`);
+    //     },
+    //     error: () => {
+    //       this.submitButton = { isActive: true, label: 'Continue' };
+    //       this.setAlertUnknownError();
+    //     }
+    //   });
   }
 }
