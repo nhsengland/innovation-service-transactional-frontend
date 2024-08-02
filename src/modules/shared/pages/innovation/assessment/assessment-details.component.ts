@@ -21,8 +21,6 @@ export class InnovationAssessmentDetailsComponent extends CoreComponent implemen
   }
 
   ngOnInit() {
-    // TO DO: Set corresponding values coming from new questions in reassessment flow
-    // and remove the ones not used anymore
     if (this.assessment) {
       this.isReassessment = this.assessment.majorVersion > 1;
 
