@@ -9,7 +9,7 @@
       </div>
 
       <div *ngIf="assessment?.reassessment" class="full-width-section nhsuk-u-margin-top-5">
-        <shared-innovation-reassessment-details [assessment]="assessment" />
+        <shared-innovation-assessment-details [assessment]="assessment" />
       </div>
 
       <ng-container *ngFor="let section of form.sections; let i = index">

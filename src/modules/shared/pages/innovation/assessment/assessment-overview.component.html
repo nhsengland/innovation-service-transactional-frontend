@@ -47,7 +47,7 @@
 <ng-template #assessmentOverview>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <shared-innovation-reassessment-details *ngIf="assessment?.reassessment" [assessment]="assessment" />
+      <shared-innovation-assessment-details *ngIf="assessment?.reassessment" [assessment]="assessment" />
 
       <div *ngIf="isAdminType">
         <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
