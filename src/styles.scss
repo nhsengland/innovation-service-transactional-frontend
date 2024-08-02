@@ -105,8 +105,14 @@ $service-manual-container-size: 1100px; // Container width variable.
     text-align: end;
   }
 }
+.text-pre-line {
+  white-space: pre-line;
+}
 .text-pre-wrap {
   white-space: pre-wrap;
+}
+.text-word-break {
+  word-break: break-word;
 }
 .text-nowrap-only-desktop {
   @media (min-width: 48.0625em) {
@@ -180,10 +186,6 @@ $service-manual-container-size: 1100px; // Container width variable.
   @media (max-width: 767px) {
     overflow-x: scroll;
   }
-}
-
-.word-break {
-  word-break: break-word;
 }
 
 .bg-color-white {

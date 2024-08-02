@@ -87,7 +87,7 @@
 
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let innovation of innovationsList.getRecords()" class="nhsuk-table__row" role="row">
-              <td class="nhsuk-table__cell fixed-width-300 word-break">
+              <td class="nhsuk-table__cell fixed-width-300 text-word-break">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }}</span>
                 <a *ngIf="!innovation.assessment?.id" routerLink="/assessment/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation">
                   {{ innovation.name }}</a
@@ -118,7 +118,7 @@
                   label="{{ 'shared.catalog.assessment_exemptions.status.' + innovation.assessment?.overdueStatus + '.label' | translate }}"
                 ></theme-tag>
               </td>
-              <td class="nhsuk-table__cell fixed-width-200 word-break">
+              <td class="nhsuk-table__cell fixed-width-200 text-word-break">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("assessedBy") }}</span>
                 {{ innovation.assessment?.assignedTo ?? "Unassigned" }}
               </td>
