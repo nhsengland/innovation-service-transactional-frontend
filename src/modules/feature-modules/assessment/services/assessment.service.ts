@@ -46,6 +46,19 @@ export class AssessmentService extends CoreService {
     );
   }
 
+  editInnovationNeedsAssessment(innovationId: string, data: MappedObjectType): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments/edit')
+      .setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
+      take(1),
+      finalize(() => {
+        this.stores.context.clearInnovation();
+        this.stores.context.clearAssessment();
+      })
+    );
+  }
+
   updateInnovationNeedsAssessment(
     innovationId: string,
     assessmentId: string,

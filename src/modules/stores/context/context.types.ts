@@ -62,7 +62,13 @@ export type ContextInnovationType = {
     organisation?: { name: string; size: null | string; registrationNumber: null | string };
   };
   loggedUser: { isOwner: boolean };
-  assessment?: { id: string; createdAt: DateISOType; finishedAt: null | DateISOType };
+  assessment?: {
+    id: string;
+    majorVersion: number;
+    minorVersion: number;
+    createdAt: DateISOType;
+    finishedAt: null | DateISOType;
+  };
   assignedTo?: { id: string; userRoleId: string; name: string };
   support?: { id: string; status: InnovationSupportStatusEnum };
   notifications?: { [key in NotificationCategoryTypeEnum]?: number };
@@ -82,9 +88,9 @@ export type ContextAssessmentType = {
   id: string;
   majorVersion: number;
   minorVersion: number;
-  editReason: string;
+  editReason: null | string;
+  previousAssessment?: { id: string; majorVersion: number; minorVersion: number };
   reassessment?: ReassessmentSendType & {
-    previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
     createdAt: DateISOType;
     previousCreatedAt: DateISOType;

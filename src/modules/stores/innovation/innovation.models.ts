@@ -225,6 +225,7 @@ export const ACTIVITY_LOG_ITEMS: {
   SECTION_SUBMISSION_DEPRECATED: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: 'SECTION' },
   INNOVATION_SUBMISSION: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: null },
   NEEDS_ASSESSMENT_START: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: 'COMMENT', link: null },
+  NEEDS_ASSESSMENT_START_EDIT: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: null },
   NEEDS_ASSESSMENT_COMPLETED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
   NEEDS_ASSESSMENT_EDITED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
   NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {

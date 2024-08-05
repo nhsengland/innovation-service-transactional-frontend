@@ -40,7 +40,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   assessmentHasBeenSubmitted: null | boolean;
 
-  assessmentHasReassessment = false;
+  isReassessment = false;
+  showAssessmentDetails = false;
 
   currentAnswers: { [key: string]: any };
 
@@ -103,7 +104,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       this.assessmentHasBeenSubmitted = !!this.assessment.finishedAt;
 
-      this.assessmentHasReassessment = !!this.assessment.reassessment;
+      this.isReassessment = this.assessment.majorVersion > 1;
+      this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
 
       // Only autosave if the assessment has not been submitted.
       if (!this.assessmentHasBeenSubmitted) {
@@ -158,14 +160,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             });
           }
 
-          this.setPageTitle(this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment', {
-            hint: `${this.stepId} of 2`
-          });
+          this.updatePageTitle();
 
           this.setPageStatus('READY');
         })
       );
     });
+  }
+
+  updatePageTitle(): void {
+    let assessmentTitle = this.isReassessment ? 'Needs reassessment' : 'Needs assessment';
+    if (this.assessment?.minorVersion) {
+      assessmentTitle = this.isReassessment ? 'Edit needs reassessment' : 'Edit needs assessment';
+    }
+
+    const pageTitle = `${assessmentTitle} ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
+    const hint = `${this.stepId} of 2`;
+    this.setPageTitle(pageTitle, { hint });
   }
 
   onSubmit(

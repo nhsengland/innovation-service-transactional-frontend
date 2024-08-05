@@ -19,6 +19,7 @@ import {
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextAssessmentType } from '@modules/stores/context/context.types';
 
 @Component({
   selector: 'app-assessment-pages-innovation-overview',
@@ -30,6 +31,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   isArchived: boolean = false;
   showCards: boolean = true;
+  showAssessmentExemptionLink: boolean = false;
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string }[] = [];
@@ -142,6 +144,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .subscribe(([assessmentExemption, statistics]) => {
         if (assessmentExemption?.isExempted && assessmentExemption?.exemption) {
           this.assessmentExemption = assessmentExemption.exemption;
+          this.showAssessmentExemptionLink = !assessmentExemption && this.innovation?.assessment?.minorVersion === 0;
         }
 
         this.cardsList = [

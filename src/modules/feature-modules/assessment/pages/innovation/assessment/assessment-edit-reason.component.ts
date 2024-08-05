@@ -2,22 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
+import { AssessmentService } from '@modules/feature-modules/assessment/services/assessment.service';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 @Component({
-  selector: 'app-pages-innovation-assessment-reassessment-new',
-  templateUrl: './reassessment-new.component.html'
+  selector: 'app-pages-innovation-assessment-edit-reason',
+  templateUrl: './assessment-edit-reason.component.html'
 })
-export class PageInnovationReassessmentNewComponent extends CoreComponent implements OnInit {
+export class PageInnovationAssessmentEditReasonComponent extends CoreComponent implements OnInit {
   innovationId: string;
   assessmentId: string;
 
   goBackUrl: string;
 
   submitButton = { isActive: true, label: 'Continue' };
-
-  errorMessage: string = 'You must add a reason for the needs reassessment';
+  isReassessment = false;
+  assessmentType = '';
+  errorMessage = '';
 
   form = new FormGroup({
     reason: new FormControl<string>('', CustomValidators.required(this.errorMessage))
@@ -25,7 +26,7 @@ export class PageInnovationReassessmentNewComponent extends CoreComponent implem
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService
+    private assessmentService: AssessmentService
   ) {
     super();
 
@@ -36,7 +37,15 @@ export class PageInnovationReassessmentNewComponent extends CoreComponent implem
   }
 
   ngOnInit() {
-    this.setPageTitle('Needs reassessment');
+    const assessment = this.stores.context.getAssessment();
+
+    this.isReassessment = assessment.majorVersion > 1;
+
+    this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
+    this.errorMessage = `You must add a reason to edit the needs ${this.assessmentType}`;
+    const pageTitle = `Edit needs ${this.assessmentType}`;
+
+    this.setPageTitle(pageTitle);
     this.setBackLink('Go back', this.goBackUrl);
     this.setPageStatus('READY');
   }
@@ -55,18 +64,16 @@ export class PageInnovationReassessmentNewComponent extends CoreComponent implem
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    // TO DO: Replace with new 'edit' endpoint
-
-    // this.innovationsService
-    //   .createNeedsReassessment(this.innovationId, { description: this.form.value.reason! })
-    //   .subscribe({
-    //     next: newAssessment => {
-    //       this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessment.id}/edit`);
-    //     },
-    //     error: () => {
-    //       this.submitButton = { isActive: true, label: 'Continue' };
-    //       this.setAlertUnknownError();
-    //     }
-    //   });
+    this.assessmentService
+      .editInnovationNeedsAssessment(this.innovationId, { reason: this.form.value.reason! })
+      .subscribe({
+        next: newAssessment => {
+          this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${newAssessment.id}/edit`);
+        },
+        error: () => {
+          this.submitButton = { isActive: true, label: 'Continue' };
+          this.setAlertUnknownError();
+        }
+      });
   }
 }

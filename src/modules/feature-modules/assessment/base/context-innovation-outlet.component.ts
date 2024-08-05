@@ -5,6 +5,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -51,14 +52,24 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     if (url.endsWith(`/assessments/new`)) {
       this.data.links = [];
     } else if (url.includes(`/assessments/${innovation.assessment?.id}`)) {
-      const urlIncludesReassessmentsNew = url.includes(`/assessments/${innovation.assessment?.id}/reassessments/new`);
-      const urlIncludesEdit = url.includes(`/assessments/${innovation.assessment?.id}/edit`);
-      const editPageQueryParam = urlIncludesEdit ? (url.endsWith('edit/2') ? '2' : '1') : undefined;
-      const assessmentQueryParam = urlIncludesReassessmentsNew
-        ? 'newReassessment'
-        : urlIncludesEdit
-          ? 'edit'
-          : 'overview';
+      const assessmentEditUrl = `/assessments/${innovation.assessment?.id}/edit`;
+
+      const isAssessmentEditPage =
+        url.endsWith(assessmentEditUrl) ||
+        url.endsWith(`${assessmentEditUrl}/1`) ||
+        url.endsWith(`${assessmentEditUrl}/2`);
+      const isAssessmentEditReasonPage = url.endsWith(`${assessmentEditUrl}/reason`);
+
+      let assessmentQueryParam = undefined;
+      let editPageQueryParam = undefined;
+      if (isAssessmentEditPage) {
+        assessmentQueryParam = 'edit';
+        editPageQueryParam = url.endsWith('edit/2') ? '2' : '1';
+      } else if (isAssessmentEditReasonPage) {
+        assessmentQueryParam = 'editReason';
+      } else {
+        assessmentQueryParam = 'overview';
+      }
 
       this.data.links = [
         {
@@ -68,17 +79,20 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         }
       ];
 
-      if (urlIncludesReassessmentsNew || urlIncludesEdit) {
-        const previousAssessmentId = this.contextStore.getAssessment().reassessment?.previousAssessmentId;
-        const assessmentId = innovation.reassessmentCount ? previousAssessmentId : innovation.assessment?.id;
-
-        this.data.links.push({
-          label: 'View previous needs (re)assessment',
-          url: `/assessment/innovations/${innovation.id}/assessments/${assessmentId}`,
-          queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
-        });
+      if (isAssessmentEditReasonPage || isAssessmentEditPage) {
+        const assessment = this.contextStore.getAssessment();
+        if (assessment.previousAssessment && (assessment.majorVersion > 1 || assessment.minorVersion)) {
+          const previousAssessmentType = assessment.previousAssessment.majorVersion > 1 ? 'reassessment' : 'assessment';
+          this.data.links.push({
+            label: `View needs ${previousAssessmentType} ${UtilsHelper.getAssessmentVersion(assessment.previousAssessment.majorVersion, assessment.previousAssessment.minorVersion)} `,
+            url: `/assessment/innovations/${innovation.id}/assessments/${assessment.previousAssessment.id}`,
+            queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+          });
+        }
       }
     } else {
+      const assessmentType =
+        innovation.assessment && innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
       switch (innovation.status) {
         case InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT:
           if (!innovation.assessment?.id) {
@@ -91,7 +105,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
           } else {
             this.data.links = [
               {
-                label: 'Continue needs assessment',
+                label: `Continue needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment.majorVersion, innovation.assessment.minorVersion)}`,
                 url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit`
               }
             ];
@@ -100,7 +114,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         case InnovationStatusEnum.NEEDS_ASSESSMENT:
           this.data.links = [
             {
-              label: 'Continue needs assessment',
+              label: `Continue needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment?.majorVersion, innovation.assessment?.minorVersion)}`,
               url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit`
             }
           ];
@@ -110,7 +124,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
         case InnovationStatusEnum.ARCHIVED:
           this.data.links = [
             {
-              label: 'View needs assessment',
+              label: `View needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment?.majorVersion, innovation.assessment?.minorVersion)}`,
               url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
             }
           ];
