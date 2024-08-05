@@ -251,7 +251,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               break;
             case 'submit':
               if (isValid) {
-                this.setRedirectAlertSuccess('Needs assessment successfully completed');
+                this.setRedirectAlertSuccess(
+                  `Needs ${this.isReassessment ? 'reassessment' : 'assessment'} successfully completed`
+                );
                 this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
               } else {
                 if (isFirstStepValid) {
