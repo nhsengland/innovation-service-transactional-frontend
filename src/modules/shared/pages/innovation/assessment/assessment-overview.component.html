@@ -122,7 +122,7 @@
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">Go to innovation</a>
         </ng-container>
 
-        <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
+        <ng-container *ngSwitchCase="'AWAITING_NEEDS_REASSESSMENT'">
           <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
             Start reassessment
           </a>
