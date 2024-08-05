@@ -12,7 +12,7 @@
         While you are editing a needs {{ isReassessment ? "reassessment" : "assessment" }}, organisations will not be able to support this innovation or send messages or tasks.
       </p>
 
-      <div *ngIf="assessment?.reassessment" class="full-width-section margin-bottom-5">
+      <div *ngIf="showAssessmentDetails" class="full-width-section margin-bottom-5">
         <shared-innovation-assessment-details [assessment]="assessment" />
       </div>
 

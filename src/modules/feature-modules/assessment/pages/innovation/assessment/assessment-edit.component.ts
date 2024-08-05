@@ -135,7 +135,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               ];
               this.setBackLink(
                 'Go back',
-                this.entrypointUrl.endsWith('/new')
+                this.entrypointUrl.endsWith(`/assessments/${this.assessment?.id}/edit/reason`)
                   ? `/assessment/innovations/${this.innovationId}/overview`
                   : this.entrypointUrl
               );
