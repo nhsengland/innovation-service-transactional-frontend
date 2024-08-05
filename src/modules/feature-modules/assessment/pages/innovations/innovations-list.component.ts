@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { debounceTime, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
@@ -60,8 +60,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         id: string;
         assignedTo: string | null;
         updatedAt: DateISOType;
-        daysFromSubmittedAtToToday: number | null;
-        overdueStatus: 'EXEMPT' | 'OVERDUE' | 'ALMOST_DUE' | null;
+        daysFromSubmittedAtToToday?: number | null;
+        overdueStatus?: 'EXEMPT' | 'OVERDUE' | 'ALMOST_DUE' | null;
       } | null;
     },
     InnovationsListFiltersType
@@ -111,6 +111,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -132,6 +134,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -200,11 +204,13 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
                   id: innovation.assessment.id,
                   assignedTo: innovation.assessment.assignedTo,
                   updatedAt: innovation.assessment.updatedAt,
-                  daysFromSubmittedAtToToday: this.getOverdueDays(innovation.lastAssessmentRequestAt),
-                  overdueStatus: this.getOverdueStatus(
-                    innovation.assessment.isExempt,
-                    innovation.lastAssessmentRequestAt
-                  )
+                  ...(innovation.assessment.minorVersion === 0 && {
+                    daysFromSubmittedAtToToday: this.getOverdueDays(innovation.lastAssessmentRequestAt),
+                    overdueStatus: this.getOverdueStatus(
+                      innovation.assessment.isExempt,
+                      innovation.lastAssessmentRequestAt
+                    )
+                  })
                 }
               : null
           })),

@@ -1,5 +1,6 @@
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 import {
@@ -82,6 +83,8 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closedReason'
   | 'assessment.id'
+  | 'assessment.majorVersion'
+  | 'assessment.minorVersion'
   | 'assessment.assignedTo'
   | 'assessment.isExempt'
   | 'assessment.updatedAt'
@@ -126,7 +129,14 @@ export type InnovationListFullDTO = {
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
-  assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
+  assessment: {
+    id: string;
+    majorVersion: number;
+    minorVersion: number;
+    assignedTo: string | null;
+    updatedAt: DateISOType;
+    isExempt: boolean;
+  } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
@@ -281,9 +291,14 @@ export enum SupportLogType {
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
-  reassessment?: { updatedInnovationRecord?: string; description: string } & {
+  majorVersion: number;
+  minorVersion: number;
+  editReason: string;
+  reassessment?: ReassessmentSendType & {
     previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
+    createdAt: DateISOType;
+    previousCreatedAt: DateISOType;
   };
   summary: null | string;
   description: null | string;

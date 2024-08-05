@@ -98,9 +98,9 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
     this.innovationsService.createNeedsReassessment(this.innovationId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your innovation has been reshared for a needs reassessment', {
+        this.setRedirectAlertSuccess('Your innovation has been submitted for a needs reassessment', {
           message:
-            'Our team will be in touch within a week to let you know if further support is available for your innovation.'
+            'The needs assessment team will be in touch within a week to let you know what support is available for your innovation.'
         });
         this.redirectTo(`${this.baseUrl}`);
       },

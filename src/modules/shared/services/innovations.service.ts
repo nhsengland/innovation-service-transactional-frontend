@@ -49,6 +49,7 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -869,10 +870,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
   }
 
-  createNeedsReassessment(
-    innovationId: string,
-    body: { updatedInnovationRecord?: string; description: string }
-  ): Observable<{ id: string }> {
+  createNeedsReassessment(innovationId: string, body: ReassessmentSendType): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/reassessments')
       .setPathParams({ innovationId });
