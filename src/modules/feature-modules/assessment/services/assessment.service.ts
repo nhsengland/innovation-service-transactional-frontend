@@ -76,7 +76,10 @@ export class AssessmentService extends CoreService {
       .setPathParams({ innovationId, assessmentId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
-      finalize(() => this.stores.context.clearAssessment())
+      finalize(() => {
+        this.stores.context.clearInnovation();
+        this.stores.context.clearAssessment();
+      })
     );
   }
 
