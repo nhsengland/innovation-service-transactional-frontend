@@ -83,6 +83,8 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closedReason'
   | 'assessment.id'
+  | 'assessment.majorVersion'
+  | 'assessment.minorVersion'
   | 'assessment.assignedTo'
   | 'assessment.isExempt'
   | 'assessment.updatedAt'
@@ -127,7 +129,14 @@ export type InnovationListFullDTO = {
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
-  assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
+  assessment: {
+    id: string;
+    majorVersion: number;
+    minorVersion: number;
+    assignedTo: string | null;
+    updatedAt: DateISOType;
+    isExempt: boolean;
+  } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
