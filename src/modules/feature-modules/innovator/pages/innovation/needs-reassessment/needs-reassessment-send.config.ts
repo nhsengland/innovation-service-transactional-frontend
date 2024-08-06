@@ -161,8 +161,10 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
         data.status === InnovationStatusEnum.ARCHIVED
           ? REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? ''
           : data.reassessmentReason
-              .map(v =>
-                v === 'OTHER' ? data.otherReassessmentReason : REASSESSMENT_REASON_ITEMS.find(i => i.value)?.label
+              .map(chosenReason =>
+                chosenReason === 'OTHER'
+                  ? data.otherReassessmentReason
+                  : REASSESSMENT_REASON_ITEMS.find(i => i.value === chosenReason)?.label
               )
               .join('\n'),
       editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : editStepNumber++
