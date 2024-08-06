@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -37,6 +38,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   private onRouteChange(event?: NavigationEnd): void {
     const innovation = this.contextStore.getInnovation();
+
     this.data.innovation = {
       id: innovation.id,
       name: innovation.name,
@@ -51,10 +53,14 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     ) {
       this.data.link = null;
     } else {
-      this.data.link = {
-        label: 'View needs (re)assessment',
-        url: `/accessor/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
-      };
+      if (innovation.assessment) {
+        const assessmentType = innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
+
+        this.data.link = {
+          label: `View needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment.majorVersion, innovation.assessment.minorVersion)}`,
+          url: `/accessor/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
+        };
+      }
     }
   }
 }

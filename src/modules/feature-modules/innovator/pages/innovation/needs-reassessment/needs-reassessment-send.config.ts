@@ -152,6 +152,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
+  let editStepNumber = 1;
 
   toReturn.push(
     {
@@ -164,17 +165,17 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
                 v === 'OTHER' ? data.otherReassessmentReason : REASSESSMENT_REASON_ITEMS.find(i => i.value)?.label
               )
               .join('\n'),
-      editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : 1
+      editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : editStepNumber++
     },
     {
       label: stepsLabels.q2.label,
       value: data.description,
-      editStepNumber: 2
+      editStepNumber: editStepNumber++
     },
     {
       label: stepsLabels.q3.label,
       value: data.whatSupportDoYouNeed,
-      editStepNumber: 3
+      editStepNumber: editStepNumber++
     }
   );
 

@@ -3,7 +3,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { locale } from '@app/config/translations/en';
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { yesNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 @Component({
   selector: 'shared-innovation-assessment-details',

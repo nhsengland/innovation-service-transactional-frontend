@@ -172,6 +172,8 @@ export type InnovationInfoDTO = {
   lastEndSupportAt: null | DateISOType;
   assessment?: null | {
     id: string;
+    majorVersion: number;
+    minorVersion: number;
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
@@ -293,9 +295,9 @@ export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
   majorVersion: number;
   minorVersion: number;
-  editReason: string;
+  editReason: null | string;
+  previousAssessment?: { id: string; majorVersion: number; minorVersion: number };
   reassessment?: ReassessmentSendType & {
-    previousAssessmentId: string;
     sectionsUpdatedSinceLastAssessment: string[];
     createdAt: DateISOType;
     previousCreatedAt: DateISOType;

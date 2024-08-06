@@ -77,7 +77,7 @@ import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innova
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { PageInnovationReassessmentNewComponent } from './pages/innovation/assessment/reassessment-new.component';
+import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -189,12 +189,27 @@ const routes: Routes = [
                         component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       },
-                      { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                       {
-                        path: 'edit/:stepId',
-                        pathMatch: 'full',
-                        component: InnovationAssessmentEditComponent,
-                        data: { breadcrumb: null, layout: { type: 'full' } }
+                        path: 'edit',
+                        data: {
+                          data: { breadcrumb: null },
+                          layout: { type: 'full' }
+                        },
+                        children: [
+                          { path: '', pathMatch: 'full', redirectTo: '1' },
+                          {
+                            path: 'reason',
+                            pathMatch: 'full',
+                            component: PageInnovationAssessmentEditReasonComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: ':stepId',
+                            pathMatch: 'full',
+                            component: InnovationAssessmentEditComponent,
+                            data: { breadcrumb: null }
+                          }
+                        ]
                       },
                       {
                         path: 'change-assessor',
@@ -213,22 +228,6 @@ const routes: Routes = [
                         pathMatch: 'full',
                         component: InnovationAssessmentExemptionUpsertComponent,
                         data: { layout: { type: 'full' } }
-                      },
-                      {
-                        path: 'reassessments',
-                        data: {
-                          data: { breadcrumb: 'Needs reassessment' },
-                          layout: { type: 'full' }
-                        },
-                        children: [
-                          { path: '', pathMatch: 'full', redirectTo: 'new' },
-                          {
-                            path: 'new',
-                            pathMatch: 'full',
-                            component: PageInnovationReassessmentNewComponent,
-                            data: { breadcrumb: null }
-                          }
-                        ]
                       }
                     ]
                   }

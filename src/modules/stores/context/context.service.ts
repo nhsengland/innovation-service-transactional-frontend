@@ -134,6 +134,8 @@ export class ContextService {
             ? {
                 assessment: {
                   id: response.assessment.id,
+                  majorVersion: response.assessment.majorVersion,
+                  minorVersion: response.assessment.minorVersion,
                   createdAt: response.assessment.createdAt,
                   finishedAt: response.assessment.finishedAt
                 }

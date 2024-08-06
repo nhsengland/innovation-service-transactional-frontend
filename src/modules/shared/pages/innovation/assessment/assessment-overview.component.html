@@ -47,7 +47,7 @@
 <ng-template #assessmentOverview>
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <shared-innovation-assessment-details *ngIf="assessment?.reassessment" [assessment]="assessment" />
+      <shared-innovation-assessment-details *ngIf="showAssessmentDetails" [assessment]="assessment" />
 
       <div *ngIf="isAdminType">
         <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
@@ -114,24 +114,16 @@
         </li>
       </ul>
 
-      <ng-container *ngIf="isAssessmentType && assessment?.isLatest" [ngSwitch]="innovation.status">
+      <ng-container *ngIf="isAssessmentType && assessment && assessment.isLatest" [ngSwitch]="innovation.status">
         <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">
-          <a
-            *ngIf="!isArchived"
-            routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit"
-            class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"
-          >
-            Continue {{ assessmentHasReassessment ? "reassessment" : "assessment" }}
+          <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
+            {{ assessment.minorVersion ? "Continue editing" : "Continue " + (isReassessment ? "reassessment" : "assessment") }}
           </a>
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">Go to innovation</a>
         </ng-container>
 
         <ng-container *ngSwitchCase="'AWAITING_NEEDS_REASSESSMENT'">
-          <a
-            *ngIf="!isArchived"
-            routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit"
-            class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"
-          >
+          <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
             Start reassessment
           </a>
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">Go to innovation</a>
@@ -139,12 +131,8 @@
 
         <ng-container *ngSwitchCase="'IN_PROGRESS'">
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Go to innovation</a>
-          <a
-            *ngIf="!isArchived"
-            routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/reassessments/new"
-            class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
-          >
-            Start reassessment
+          <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit/reason" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
+            Edit {{ isReassessment ? "reassessment" : "assessment" }}
           </a>
         </ng-container>
 
