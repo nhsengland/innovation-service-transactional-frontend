@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import {
+  InnovationAssessmentListDTO,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
   SupportSummarySectionType
@@ -40,6 +41,7 @@ const lsCacheId = 'page-innovations-support-summary-list::open-units';
 export class PageInnovationSupportSummaryListComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
   lsCache: Set<string>;
+  innovationAssessmentsList: InnovationAssessmentListDTO[] = [];
 
   // Flags
   isQualifyingAccessorRole: boolean;
@@ -95,6 +97,18 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     if (this.isQualifyingAccessorRole) {
       subscriptions.organisationsList = this.organisationsService.getOrganisationsList({ unitsInformation: true });
     }
+
+    const innovationAssessmentsObservable: ObservableInput<InnovationAssessmentListDTO[]> =
+      this.innovationsService.getInnovationAssessmentsList(this.innovation.id);
+
+    innovationAssessmentsObservable.subscribe({
+      next: (data: InnovationAssessmentListDTO[]) => {
+        this.innovationAssessmentsList = data;
+      },
+      error: error => {
+        console.error('Error fetching innovation assessments list', error);
+      }
+    });
 
     forkJoin(subscriptions).subscribe({
       next: results => {

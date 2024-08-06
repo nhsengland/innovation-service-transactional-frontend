@@ -218,12 +218,15 @@
         <p>This support summary is blank as the innovation has not received any support yet.</p>
       </ng-template>
 
-      <ng-container *ngIf="innovation.assessment && innovation.assessment.finishedAt !== null">
+      <ng-container *ngIf="innovationAssessmentsList && innovationAssessmentsList.length > 0">
         <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
-        <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">
-          {{ innovation.reassessmentCount > 0 ? "Needs reassessment complete" : "Needs assessment complete" }}
-        </a>
-        <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed at {{ innovation.assessment.finishedAt | date: "MMMM y" }}</div>
+        <ng-container *ngFor="let assessment of innovationAssessmentsList">
+          <a routerLink="../assessments/{{ assessment.id }}" class="nhsuk-u-font-size-22">
+            {{ assessment.majorVersion > 1 ? "Needs reassessment complete" : "Needs assessment complete" }}{{ " " + assessment.majorVersion
+            }}{{ assessment.minorVersion > 0 ? "." + assessment.minorVersion : "" }}
+          </a>
+          <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed: {{ assessment.finishedAt | date: "MMMM y" }}</div>
+        </ng-container>
       </ng-container>
 
       <div *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED' && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link">

@@ -440,3 +440,11 @@ export type InnovationExportRequestInfoDTO = {
   updatedAt: DateISOType;
   updatedBy: { name: string };
 };
+
+export type InnovationAssessmentListDTO = {
+  id: string;
+  majorVersion: number;
+  minorVersion: number;
+  startedAt: Date;
+  finishedAt: Date;
+};
