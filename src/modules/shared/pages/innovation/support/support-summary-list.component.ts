@@ -32,6 +32,10 @@ type unitsListType = SupportSummaryOrganisationsListDTO[SupportSummarySectionTyp
   canDoProgressUpdates: boolean;
 };
 
+type innovationAssessmentListType = InnovationAssessmentListDTO & {
+  linkText: string;
+};
+
 const lsCacheId = 'page-innovations-support-summary-list::open-units';
 
 @Component({
@@ -41,7 +45,7 @@ const lsCacheId = 'page-innovations-support-summary-list::open-units';
 export class PageInnovationSupportSummaryListComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
   lsCache: Set<string>;
-  innovationAssessmentsList: InnovationAssessmentListDTO[] = [];
+  innovationAssessmentsList: innovationAssessmentListType[] = [];
 
   // Flags
   isQualifyingAccessorRole: boolean;
@@ -90,25 +94,15 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const subscriptions: {
       supportSummaryOrganisationsList: ObservableInput<SupportSummaryOrganisationsListDTO>;
       organisationsList?: ObservableInput<OrganisationsListDTO[]>;
+      innovationAssessmentsObservable: ObservableInput<InnovationAssessmentListDTO[]>;
     } = {
-      supportSummaryOrganisationsList: this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id)
+      supportSummaryOrganisationsList: this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id),
+      innovationAssessmentsObservable: this.innovationsService.getInnovationAssessmentsList(this.innovation.id)
     };
 
     if (this.isQualifyingAccessorRole) {
       subscriptions.organisationsList = this.organisationsService.getOrganisationsList({ unitsInformation: true });
     }
-
-    const innovationAssessmentsObservable: ObservableInput<InnovationAssessmentListDTO[]> =
-      this.innovationsService.getInnovationAssessmentsList(this.innovation.id);
-
-    innovationAssessmentsObservable.subscribe({
-      next: (data: InnovationAssessmentListDTO[]) => {
-        this.innovationAssessmentsList = data;
-      },
-      error: error => {
-        console.error('Error fetching innovation assessments list', error);
-      }
-    });
 
     forkJoin(subscriptions).subscribe({
       next: results => {
@@ -142,6 +136,11 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           temporalDescription: item.support.start
             ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}`
             : ''
+        }));
+
+        this.innovationAssessmentsList = results.innovationAssessmentsObservable.map(item => ({
+          ...item,
+          linkText: `${item.majorVersion > 1 ? 'Needs reassessment complete' : 'Needs assessment complete'} ${UtilsHelper.getAssessmentVersion(item.majorVersion, item.minorVersion)}`
         }));
 
         this.isSuggestionsListEmpty = !this.sectionsList.some(s => s.unitsList.length > 0);

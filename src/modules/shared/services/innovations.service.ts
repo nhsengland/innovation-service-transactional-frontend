@@ -885,17 +885,6 @@ export class InnovationsService extends CoreService {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/assessments')
       .setPathParams({ innovationId });
-    return this.http.get<InnovationAssessmentListDTO[]>(url.buildUrl()).pipe(
-      take(1),
-      map(response =>
-        response.map(item => ({
-          id: item.id,
-          majorVersion: item.majorVersion,
-          minorVersion: item.minorVersion,
-          startedAt: item.startedAt,
-          finishedAt: item.finishedAt
-        }))
-      )
-    );
+    return this.http.get<InnovationAssessmentListDTO[]>(url.buildUrl()).pipe(take(1));
   }
 }
