@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum } from '@app/base/enums';
-import { DatesHelper } from '@app/base/helpers';
+import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
@@ -42,7 +42,8 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
   assessmentHasBeenSubmitted = false;
   shouldShowUpdatedAt = false;
-  assessmentHasReassessment = false;
+  isReassessment = false;
+  showAssessmentDetails = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -73,7 +74,8 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       this.assessmentHasBeenSubmitted = !!response.finishedAt;
       this.shouldShowUpdatedAt =
         DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
-      this.assessmentHasReassessment = !!this.assessment.reassessment;
+      this.isReassessment = this.assessment.majorVersion > 1;
+      this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {
@@ -139,37 +141,26 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   }
 
   updatePageTitle(): void {
+    let assessmentTitle = this.isReassessment ? 'Needs reassessment' : 'Needs assessment';
+    if (this.assessment?.isLatest && this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT) {
+      assessmentTitle = this.isReassessment ? 'In draft needs reassessment' : 'In draft needs assessment';
+    }
+
+    const pageTitle = `${assessmentTitle} ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
     const baseHint = `Innovation ${this.innovation.name}`;
-
-    if (this.isAssessmentType && !this.assessment?.isLatest) {
-      const previousAssessmentTitle =
-        this.innovation.reassessmentCount === 1 ? 'Previous needs assessment' : 'Previous needs reassessment';
-      this.setPageTitle(`${previousAssessmentTitle}`, { hint: baseHint });
-      return;
-    }
-
-    const assessmentTitle = this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment';
-    const assessmentInProgressTitle = this.assessmentHasReassessment
-      ? 'In draft needs reassessment'
-      : 'In draft needs assessment';
-
-    if (this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT) {
-      this.setPageTitle(assessmentInProgressTitle, { hint: baseHint });
-    } else {
-      this.setPageTitle(`${assessmentTitle}`, { hint: baseHint });
-    }
+    this.setPageTitle(pageTitle, { hint: baseHint });
   }
 
   setGoBackLink(): void {
     if (this.isAssessmentType) {
       let goBackUrl = undefined;
-      const assessmentUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}`;
+      const assessmentEditUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}/edit`;
       switch (this.assessmentQueryParam) {
-        case 'newReassessment':
-          goBackUrl = `${assessmentUrl}/reassessments/new`;
+        case 'editReason':
+          goBackUrl = `${assessmentEditUrl}/reason`;
           break;
         case 'edit':
-          goBackUrl = `${assessmentUrl}/edit${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
+          goBackUrl = `${assessmentEditUrl}${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
           break;
       }
       if (goBackUrl) {

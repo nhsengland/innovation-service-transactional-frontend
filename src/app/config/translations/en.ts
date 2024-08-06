@@ -294,6 +294,10 @@ export const locale = {
               title: 'Needs assessment start',
               message: `{{ actionUserName }} started needs assessment`
             },
+            NEEDS_ASSESSMENT_START_EDIT: {
+              title: 'Needs assessment started editing',
+              message: `{{ actionUserName }} started editing needs assessment`
+            },
             NEEDS_ASSESSMENT_COMPLETED: {
               title: 'Needs assessment completed',
               message: `{{ actionUserName }} completed needs assessment`

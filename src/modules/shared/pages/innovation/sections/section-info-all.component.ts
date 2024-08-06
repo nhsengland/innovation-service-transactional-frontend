@@ -291,8 +291,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     if (this.isAssessmentType && this.assessmentQueryParam) {
       let goBackUrl = undefined;
       switch (this.assessmentQueryParam) {
-        case 'newReassessment':
-          goBackUrl = `${this.assessmentUrl}/reassessments/new`;
+        case 'editReason':
+          goBackUrl = `${this.assessmentUrl}/edit/reason`;
           break;
         case 'edit':
           goBackUrl = `${this.assessmentUrl}/edit${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;

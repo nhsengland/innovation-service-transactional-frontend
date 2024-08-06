@@ -40,7 +40,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   assessmentHasBeenSubmitted: null | boolean;
 
-  assessmentHasReassessment = false;
+  isReassessment = false;
+  showAssessmentDetails = false;
 
   currentAnswers: { [key: string]: any };
 
@@ -103,7 +104,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
       this.assessmentHasBeenSubmitted = !!this.assessment.finishedAt;
 
-      this.assessmentHasReassessment = !!this.assessment.reassessment;
+      this.isReassessment = this.assessment.majorVersion > 1;
+      this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
 
       // Only autosave if the assessment has not been submitted.
       if (!this.assessmentHasBeenSubmitted) {
@@ -133,7 +135,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               ];
               this.setBackLink(
                 'Go back',
-                this.entrypointUrl.endsWith('/new')
+                this.entrypointUrl.endsWith(`/assessments/${this.assessment?.previousAssessment?.id}/edit/reason`)
                   ? `/assessment/innovations/${this.innovationId}/overview`
                   : this.entrypointUrl
               );
@@ -158,14 +160,23 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
             });
           }
 
-          this.setPageTitle(this.assessmentHasReassessment ? 'Needs reassessment' : 'Needs assessment', {
-            hint: `${this.stepId} of 2`
-          });
+          this.updatePageTitle();
 
           this.setPageStatus('READY');
         })
       );
     });
+  }
+
+  updatePageTitle(): void {
+    let assessmentTitle = this.isReassessment ? 'Needs reassessment' : 'Needs assessment';
+    if (this.assessment?.minorVersion) {
+      assessmentTitle = this.isReassessment ? 'Edit needs reassessment' : 'Edit needs assessment';
+    }
+
+    const pageTitle = `${assessmentTitle} ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
+    const hint = `${this.stepId} of 2`;
+    this.setPageTitle(pageTitle, { hint });
   }
 
   onSubmit(
@@ -240,7 +251,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               break;
             case 'submit':
               if (isValid) {
-                this.setRedirectAlertSuccess('Needs assessment successfully completed');
+                this.setRedirectAlertSuccess(
+                  `Needs ${this.isReassessment ? 'reassessment' : 'assessment'} successfully completed`
+                );
                 this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
               } else {
                 if (isFirstStepValid) {
