@@ -45,10 +45,29 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
+    this.resetAlert();
+
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
       // Don't move forward if step is NOT valid.
+
+      // To display alert error when parameter is required.
+      const parameterRequiredValidation = this.wizard.currentStep().parameters[0].validations?.isRequired;
+      if (parameterRequiredValidation && Array.isArray(parameterRequiredValidation)) {
+        this.setAlertError('', {
+          itemsList: [
+            {
+              title: parameterRequiredValidation[1],
+              fieldId:
+                this.wizard.currentStep().parameters[0].dataType === 'checkbox-array'
+                  ? this.wizard.currentStep().parameters[0].id + '0'
+                  : this.wizard.currentStep().parameters[0].id
+            }
+          ]
+        });
+      }
+
       return;
     }
 

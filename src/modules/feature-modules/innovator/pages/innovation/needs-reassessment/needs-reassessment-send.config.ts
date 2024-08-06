@@ -94,7 +94,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             dataType: 'checkbox-array',
             label: stepsLabels.q1.label,
             ...(stepsLabels.q1.description && { description: stepsLabels.q1.description }),
-            validations: { isRequired: [true, 'Choose at least one option'] },
+            validations: { isRequired: [true, 'Add explanation'] },
             items: REASSESSMENT_REASON_ITEMS
           }
         ]
