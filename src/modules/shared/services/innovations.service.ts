@@ -28,6 +28,7 @@ import {
   InnovationActionsListInDTO,
   InnovationActivityLogListDTO,
   InnovationActivityLogListInDTO,
+  InnovationAssessmentListDTO,
   InnovationCollaboratorsListDTO,
   InnovationExportRequestInfoDTO,
   InnovationExportRequestsListDTO,
@@ -878,5 +879,12 @@ export class InnovationsService extends CoreService {
       take(1),
       finalize(() => this.stores.context.clearInnovation())
     );
+  }
+
+  getInnovationAssessmentsList(innovationId: string): Observable<InnovationAssessmentListDTO[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments')
+      .setPathParams({ innovationId });
+    return this.http.get<InnovationAssessmentListDTO[]>(url.buildUrl()).pipe(take(1));
   }
 }
