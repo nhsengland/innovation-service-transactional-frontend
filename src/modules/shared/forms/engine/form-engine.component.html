@@ -49,6 +49,7 @@
 
         <div *ngSwitchCase="'checkbox-array'">
           <theme-form-checkbox-array
+            [id]="p.id"
             [arrayName]="p.id"
             [label]="p.label"
             [description]="p.description"
@@ -69,6 +70,7 @@
 
         <div *ngSwitchCase="'textarea'">
           <theme-form-textarea
+            [id]="p.id"
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
