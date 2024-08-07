@@ -3,7 +3,12 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionsVersions } from './innovation-record/ir-versions.types';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
+import {
+  ActivityLogItemsEnum,
+  ActivityLogTypesEnum,
+  InnovationGroupedStatusEnum,
+  InnovationSectionEnum
+} from './innovation.enums';
 
 // Store state model.
 export class InnovationModel {
@@ -249,3 +254,10 @@ export const ACTIVITY_LOG_ITEMS: {
   TASK_STATUS_OPEN_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
   TASK_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' }
 };
+
+export const ASSESSMENT_COMPLETED_STATUSES = [
+  InnovationGroupedStatusEnum.AWAITING_SUPPORT,
+  InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
+  InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
+  InnovationGroupedStatusEnum.ARCHIVED
+];
