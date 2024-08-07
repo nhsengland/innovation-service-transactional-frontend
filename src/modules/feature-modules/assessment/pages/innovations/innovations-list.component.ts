@@ -4,7 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { DatesHelper, UtilsHelper } from '@app/base/helpers';
+import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
@@ -55,7 +55,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       id: string;
       name: string;
       groupedStatus: InnovationGroupedStatusEnum;
-      assessementCompleted: boolean;
+      assessementsCompleted: boolean;
       lastAssessmentRequestAt: DateISOType | null;
       statusUpdatedAt: DateISOType;
       assessment: {
@@ -203,7 +203,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         map(response => ({
           data: response.data.map(innovation => ({
             ...innovation,
-            assessementCompleted: UtilsHelper.isAssessmentCompleted(innovation.groupedStatus),
+            assessementsCompleted: ASSESSMENT_COMPLETED_STATUSES.includes(innovation.groupedStatus),
             assessment: innovation.assessment
               ? {
                   id: innovation.assessment.id,
