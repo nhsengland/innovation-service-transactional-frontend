@@ -12,6 +12,7 @@ import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovati
 import { DateISOType, NotificationValueType } from '@app/base/types';
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/innovation/innovation.models';
 
 export enum InnovationAssessmentStatusEnum {
   WAITING_NEEDS_ASSESSMENT = 'WAITING_NEEDS_ASSESSMENT',
@@ -54,6 +55,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       id: string;
       name: string;
       groupedStatus: InnovationGroupedStatusEnum;
+      assessementsCompleted: boolean;
       lastAssessmentRequestAt: DateISOType | null;
       statusUpdatedAt: DateISOType;
       assessment: {
@@ -90,6 +92,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -199,6 +203,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         map(response => ({
           data: response.data.map(innovation => ({
             ...innovation,
+            assessementsCompleted: ASSESSMENT_COMPLETED_STATUSES.includes(innovation.groupedStatus),
             assessment: innovation.assessment
               ? {
                   id: innovation.assessment.id,
@@ -265,12 +270,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
       case InnovationAssessmentStatusEnum.COMPLETED:
         this.innovationsList.setFilters({
-          groupedStatuses: [
-            InnovationGroupedStatusEnum.AWAITING_SUPPORT,
-            InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
-            InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
-            InnovationGroupedStatusEnum.ARCHIVED
-          ],
+          groupedStatuses: ASSESSMENT_COMPLETED_STATUSES,
           assignedToMe: this.form.get('assignedToMe')?.value ?? false
         });
         break;

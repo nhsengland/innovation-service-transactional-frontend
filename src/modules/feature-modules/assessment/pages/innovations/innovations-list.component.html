@@ -102,7 +102,10 @@
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("lastAssessmentRequestAt") }}</span>
                 <span>{{ innovation.lastAssessmentRequestAt | date: ("app.date_formats.medium_date" | translate) }}</span>
-                <span *ngIf="innovation.assessment?.daysFromSubmittedAtToToday && currentTab.key !== 'COMPLETED'" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
+                <span
+                  *ngIf="innovation.assessment?.daysFromSubmittedAtToToday && !innovation.assessementsCompleted"
+                  class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0"
+                >
                   <span class="nhsuk-u-visually-hidden">Innovation was last submitted: </span>
                   {{
                     innovation.assessment?.daysFromSubmittedAtToToday +

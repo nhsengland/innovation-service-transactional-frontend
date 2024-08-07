@@ -7,11 +7,9 @@ import {
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
-import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { InnovationStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import { ContextAssessmentType } from '@modules/stores/context/context.types';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
