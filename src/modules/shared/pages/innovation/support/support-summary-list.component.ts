@@ -140,7 +140,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
         this.innovationAssessmentsList = results.innovationAssessmentsObservable.map(item => ({
           ...item,
-          linkText: `${item.majorVersion > 1 ? 'Needs reassessment complete' : 'Needs assessment complete'} ${UtilsHelper.getAssessmentVersion(item.majorVersion, item.minorVersion)}`
+          linkText: `${item.majorVersion > 1 ? 'Needs reassessment' : 'Needs assessment'} ${UtilsHelper.getAssessmentVersion(item.majorVersion, item.minorVersion)}`
         }));
 
         this.isSuggestionsListEmpty = !this.sectionsList.some(s => s.unitsList.length > 0);
