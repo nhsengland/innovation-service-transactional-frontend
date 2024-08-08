@@ -144,8 +144,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       .subscribe(([assessmentExemption, statistics]) => {
         if (assessmentExemption?.isExempted && assessmentExemption?.exemption) {
           this.assessmentExemption = assessmentExemption.exemption;
-          this.showAssessmentExemptionLink = !assessmentExemption && this.innovation?.assessment?.minorVersion === 0;
         }
+
+        this.showAssessmentExemptionLink = !this.assessmentExemption && this.innovation?.assessment?.minorVersion === 0;
 
         this.cardsList = [
           {
