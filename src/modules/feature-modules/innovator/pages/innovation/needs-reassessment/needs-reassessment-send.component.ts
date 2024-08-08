@@ -9,6 +9,7 @@ import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { FormFieldActionsEnum } from '../how-to-proceed/how-to-proceed.component';
 
 @Component({
   selector: 'app-innovator-pages-innovation-reassessment-innovation-reassessment-send',
@@ -20,6 +21,8 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   innovationId: string;
   baseUrl: string;
   innovation: ContextInnovationType;
+
+  action: FormFieldActionsEnum;
 
   wizard = new WizardEngineModel(NEEDS_REASSESSMENT_CONFIG);
 
@@ -33,6 +36,8 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.action = this.activatedRoute.snapshot.queryParams.action;
+
     this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
   }
@@ -76,10 +81,21 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
-          if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
-            this.redirectTo(`${this.baseUrl}/record`);
+          const previousUrl = this.stores.context.getPreviousUrl();
+          if (previousUrl) {
+            if (previousUrl.includes('how-to-proceed')) {
+              const howToProceedUrl = previousUrl.split('?')[0];
+              this.redirectTo(
+                howToProceedUrl,
+                this.action && {
+                  action: this.action
+                }
+              );
+            } else {
+              this.redirectTo(previousUrl);
+            }
           } else {
-            this.redirectTo(`${this.baseUrl}/how-to-proceed`);
+            this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
           }
         } else {
           this.wizard.previousStep();
