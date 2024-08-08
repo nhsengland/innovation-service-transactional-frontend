@@ -32,9 +32,11 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 | OAUTH_CLIENT_SECRET             |   Yes    |         |                                           |                                      |
 | OAUTH_SIGNUP_POLICY             |   Yes    |         |                                           |                                      |
 | OAUTH_SIGNIN_POLICY             |   Yes    |         |                                           |                                      |
+| OAUTH_CHANGE_PW_POLICY          |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNUP       |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNIN       |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNOUT      |   Yes    |         |                                           |                                      |
+| OAUTH_REDIRECT_URL_CHANGE_PW    |   Yes    |         |                                           |                                      |
 | OAUTH_SCOPE                     |   Yes    |         |                                           |                                      |
 | OAUTH_ALLOW_HTTP_REDIRECT       |   Yes    |         |                                           |                                      |
 | SESSION_SECRET                  |   Yes    |         |                                           |                                      |
