@@ -65,9 +65,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                              </span>
                             </span>
                           </p>
                           <theme-tag
@@ -76,7 +76,7 @@
                           ></theme-tag>
                           <ng-container *ngIf="historyItem.params.message">
                             <p class="nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">Message</p>
-                            <p class="nhsuk-body-s nhsuk-u-margin-bottom-2">{{ historyItem.params.message }}</p>
+                            <p class="nhsuk-body-s nhsuk-u-margin-bottom-2 text-pre-line">{{ historyItem.params.message }}</p>
                           </ng-container>
                         </ng-container>
 
@@ -86,9 +86,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                </span>
                             </span>
                           </p>
                           <p *ngIf="historyItem.params.message" class="nhsuk-body-s">{{ historyItem.params.message }}</p>
@@ -103,9 +103,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                </span>
                             </span>
                           </p>
 
@@ -144,7 +144,7 @@
                           </p>
                           <p>
                             <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Comment</span>
-                            <span>{{ historyItem.params.message }}</span>
+                            <span class="nhsuk-body-s text-pre-line">{{ historyItem.params.message }}</span>
                           </p>
                           <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file">
                             <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Document</span>
