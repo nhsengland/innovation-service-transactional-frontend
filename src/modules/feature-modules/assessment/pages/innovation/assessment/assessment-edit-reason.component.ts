@@ -21,7 +21,7 @@ export class PageInnovationAssessmentEditReasonComponent extends CoreComponent i
   errorMessage = '';
 
   form = new FormGroup({
-    reason: new FormControl<string>('', CustomValidators.required(this.errorMessage))
+    reason: new FormControl<string>('')
   });
 
   constructor(
@@ -40,10 +40,12 @@ export class PageInnovationAssessmentEditReasonComponent extends CoreComponent i
     const assessment = this.stores.context.getAssessment();
 
     this.isReassessment = assessment.majorVersion > 1;
-
     this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
-    this.errorMessage = `You must add a reason to edit the needs ${this.assessmentType}`;
+
     const pageTitle = `Edit needs ${this.assessmentType}`;
+
+    this.errorMessage = `You must add a reason to edit the needs ${this.assessmentType}`;
+    this.form.controls['reason'].setValidators([CustomValidators.requiredCheckboxArray(this.errorMessage)]);
 
     this.setPageTitle(pageTitle);
     this.setBackLink('Go back', this.goBackUrl);
