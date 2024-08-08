@@ -46,8 +46,6 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
 
     this.action = this.activatedRoute.snapshot.queryParams.action;
 
-    console.log('action', this.action);
-
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
     const email = this.stores.authentication.getUserInfo().email;
