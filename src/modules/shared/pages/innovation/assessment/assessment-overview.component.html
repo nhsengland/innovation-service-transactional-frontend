@@ -13,24 +13,24 @@
 
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Created: {{ assessment?.finishedAt | date: ("app.date_formats.long_date" | translate) }}</p>
               <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
-              <p class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
+              <p *ngIf="assessment?.assignTo" class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
             </div>
 
             <ng-container *ngIf="isAccessorType">
               <p class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ("app.date_formats.long_date" | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
-              <p class="nhsuk-hint">Needs assessment team</p>
+              <p *ngIf="assessment?.assignTo" class="nhsuk-hint">Needs assessment team</p>
             </ng-container>
 
             <ng-container *ngIf="isInnovatorType">
               <p class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
-              <p class="nhsuk-hint">Needs assessment team</p>
+              <p *ngIf="assessment?.assignTo" class="nhsuk-hint">Needs assessment team</p>
 
               <div class="nhsuk-u-padding-top-8">
                 <p class="nhsuk-heading-xs">Created: {{ assessment?.finishedAt | date: ("app.date_formats.long_date" | translate) }}</p>
                 <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
-                <p class="nhsuk-hint">Needs assessment team</p>
+                <p *ngIf="assessment?.assignTo" class="nhsuk-hint">Needs assessment team</p>
               </div>
             </ng-container>
           </div>
