@@ -182,6 +182,7 @@ const routes: Routes = [
                     resolve: {
                       innovationAssessmentData: mapToResolve(InnovationAssessmentDataResolver)
                     },
+                    runGuardsAndResolvers: 'always',
                     children: [
                       {
                         path: '',
