@@ -192,12 +192,14 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
   updatePageTitle(): void {
-    let assessmentTitle = this.isReassessment ? 'Needs reassessment' : 'Needs assessment';
+    let assessmentTitle =
+      (this.isReassessment ? 'Needs reassessment' : 'Needs assessment') +
+      ` ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
     if (this.assessment?.minorVersion) {
       assessmentTitle = this.isReassessment ? 'Edit needs reassessment' : 'Edit needs assessment';
     }
 
-    const pageTitle = `${assessmentTitle} ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
+    const pageTitle = `${assessmentTitle}`;
     const hint = `${this.stepId} of 2`;
     this.setPageTitle(pageTitle, { hint });
   }
