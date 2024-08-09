@@ -212,6 +212,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
                     assignedTo: innovation.assessment.assignedTo,
                     updatedAt: innovation.assessment.updatedAt,
                     daysFromSubmittedAtToToday: this.getOverdueDays(
+                      innovation.assessment.isExempt,
                       innovation.lastAssessmentRequestAt,
                       needsKPIVerification
                     ),
@@ -350,7 +351,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
     // Only the reassessments requests from the innovator counts for KPIs.
     if (needsKPIVerification) {
-      const daysFromSubmittedAtToToday = this.getOverdueDays(submittedAt, needsKPIVerification) ?? 0;
+      const daysFromSubmittedAtToToday = this.getOverdueDays(isExempted, submittedAt, needsKPIVerification) ?? 0;
       return daysFromSubmittedAtToToday >= 15
         ? ('OVERDUE' as const)
         : daysFromSubmittedAtToToday >= 10
@@ -361,7 +362,9 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     return null;
   }
 
-  getOverdueDays(submittedAt: string | null, needsKPIVerification: boolean) {
-    return submittedAt && needsKPIVerification ? DatesHelper.dateDiff(submittedAt, new Date().toISOString()) : null;
+  getOverdueDays(isExempted: boolean, submittedAt: string | null, needsKPIVerification: boolean) {
+    return submittedAt && needsKPIVerification && !isExempted
+      ? DatesHelper.dateDiff(submittedAt, new Date().toISOString())
+      : null;
   }
 }
