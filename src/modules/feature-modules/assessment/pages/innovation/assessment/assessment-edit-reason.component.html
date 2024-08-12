@@ -6,7 +6,7 @@
       </p>
 
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <theme-form-textarea id="reason" controlName="reason" label="Explain reason" lengthLimit="xl" [pageUniqueField]="false"></theme-form-textarea>
+        <theme-form-textarea [id]="'reason'" controlName="reason" label="Explain reason" lengthLimit="xl" [pageUniqueField]="false"></theme-form-textarea>
 
         <button [disabled]="!submitButton.isActive" type="submit" class="nhsuk-button nhsuk-u-margin-top-3">{{ submitButton.label }}</button>
       </form>
