@@ -42,12 +42,12 @@ export class PageInnovationAssessmentEditReasonComponent extends CoreComponent i
     this.isReassessment = assessment.majorVersion > 1;
     this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
 
-    const pageTitle = `Edit needs ${this.assessmentType}`;
+    const pageTitle = `Why are you editing this needs ${this.assessmentType}?`;
 
-    this.errorMessage = `You must add a reason to edit the needs ${this.assessmentType}`;
+    this.errorMessage = `Add the reason why you are editing this ${this.assessmentType}`;
     this.form.controls['reason'].setValidators([CustomValidators.requiredCheckboxArray(this.errorMessage)]);
 
-    this.setPageTitle(pageTitle);
+    this.setPageTitle(pageTitle, { width: '2.thirds' });
     this.setBackLink('Go back', this.goBackUrl);
     this.setPageStatus('READY');
   }
