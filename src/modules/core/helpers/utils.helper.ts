@@ -146,6 +146,6 @@ export class UtilsHelper {
   }
 
   static getAssessmentVersion(majorVersion: number = 1, minorVersion: number = 0): string {
-    return minorVersion ? `V.${majorVersion}.${minorVersion}` : `V.${majorVersion}`;
+    return `${majorVersion}.${minorVersion}`;
   }
 }
