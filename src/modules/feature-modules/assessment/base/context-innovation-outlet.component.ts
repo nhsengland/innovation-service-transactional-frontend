@@ -48,47 +48,49 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       assessmentId: innovation.assessment?.id
     };
 
-    // Do not show link, if ON any assessments/* route.
-    if (url.endsWith(`/assessments/new`)) {
-      this.data.links = [];
-    } else if (url.includes(`/assessments/${innovation.assessment?.id}`)) {
-      const assessmentEditUrl = `/assessments/${innovation.assessment?.id}/edit`;
+    if (url.includes(`/assessments/`)) {
+      if (url.includes(`/${innovation.assessment?.id}`)) {
+        const assessmentEditUrl = `/assessments/${innovation.assessment?.id}/edit`;
 
-      const isAssessmentEditPage =
-        url.endsWith(assessmentEditUrl) ||
-        url.endsWith(`${assessmentEditUrl}/1`) ||
-        url.endsWith(`${assessmentEditUrl}/2`);
-      const isAssessmentEditReasonPage = url.endsWith(`${assessmentEditUrl}/reason`);
+        const isAssessmentEditPage =
+          url.endsWith(assessmentEditUrl) ||
+          url.endsWith(`${assessmentEditUrl}/1`) ||
+          url.endsWith(`${assessmentEditUrl}/2`);
+        const isAssessmentEditReasonPage = url.endsWith(`${assessmentEditUrl}/reason`);
 
-      let assessmentQueryParam = undefined;
-      let editPageQueryParam = undefined;
-      if (isAssessmentEditPage) {
-        assessmentQueryParam = 'edit';
-        editPageQueryParam = url.endsWith('edit/2') ? '2' : '1';
-      } else if (isAssessmentEditReasonPage) {
-        assessmentQueryParam = 'editReason';
-      } else {
-        assessmentQueryParam = 'overview';
-      }
-
-      this.data.links = [
-        {
-          label: 'View innovation record',
-          url: `/assessment/innovations/${innovation.id}/record/sections/all`,
-          queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+        let assessmentQueryParam = undefined;
+        let editPageQueryParam = undefined;
+        if (isAssessmentEditPage) {
+          assessmentQueryParam = 'edit';
+          editPageQueryParam = url.endsWith('edit/2') ? '2' : '1';
+        } else if (isAssessmentEditReasonPage) {
+          assessmentQueryParam = 'editReason';
+        } else {
+          assessmentQueryParam = 'overview';
         }
-      ];
 
-      const assessment = this.contextStore.getAssessment();
-      if (isAssessmentEditPage && assessment.minorVersion === 0) {
-        if (assessment.previousAssessment && (assessment.majorVersion > 1 || assessment.minorVersion)) {
-          const previousAssessmentType = assessment.previousAssessment.majorVersion > 1 ? 'reassessment' : 'assessment';
-          this.data.links.push({
-            label: `View needs ${previousAssessmentType} ${UtilsHelper.getAssessmentVersion(assessment.previousAssessment.majorVersion, assessment.previousAssessment.minorVersion)} `,
-            url: `/assessment/innovations/${innovation.id}/assessments/${assessment.previousAssessment.id}`,
+        this.data.links = [
+          {
+            label: 'View innovation record',
+            url: `/assessment/innovations/${innovation.id}/record/sections/all`,
             queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
-          });
+          }
+        ];
+
+        const assessment = this.contextStore.getAssessment();
+        if (isAssessmentEditPage && assessment.minorVersion === 0) {
+          if (assessment.previousAssessment && (assessment.majorVersion > 1 || assessment.minorVersion)) {
+            const previousAssessmentType =
+              assessment.previousAssessment.majorVersion > 1 ? 'reassessment' : 'assessment';
+            this.data.links.push({
+              label: `View needs ${previousAssessmentType} ${UtilsHelper.getAssessmentVersion(assessment.previousAssessment.majorVersion, assessment.previousAssessment.minorVersion)} `,
+              url: `/assessment/innovations/${innovation.id}/assessments/${assessment.previousAssessment.id}`,
+              queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+            });
+          }
         }
+      } else {
+        this.data.links = [];
       }
     } else {
       const assessmentType =
