@@ -11,7 +11,7 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -80,6 +80,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         suggestedBy: string[];
         suggestedOn: DateISOType;
       } | null;
+      groupedStatus?: InnovationGroupedStatusEnum;
     },
     InnovationsListFiltersType
   >;
@@ -167,7 +168,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'mainCategory',
             'assessment.id',
             'support.status',
-            'statistics.notifications'
+            'statistics.notifications',
+            'groupedStatus'
           ],
           notifications: null
         },
@@ -360,7 +362,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               suggestion: item.suggestion && {
                 suggestedBy: item.suggestion.suggestedBy,
                 suggestedOn: item.suggestion.suggestedOn
-              }
+              },
+              groupedStatus: item.groupedStatus
             };
           }),
           response.count
