@@ -236,7 +236,7 @@ export const ACTIVITY_LOG_ITEMS: {
   NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
-    link: 'NEEDS_REASSESSMENT'
+    link: null
   },
   ORGANISATION_SUGGESTION: {
     type: ActivityLogTypesEnum.SUPPORT,

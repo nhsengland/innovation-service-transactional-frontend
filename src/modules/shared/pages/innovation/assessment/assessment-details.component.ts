@@ -14,6 +14,7 @@ export class InnovationAssessmentDetailsComponent extends CoreComponent implemen
   assessmentDetails: { label?: string; value: null | string }[] = [];
 
   isReassessment = false;
+  assessmentType = '';
 
   constructor(private datePipe: DatePipe) {
     super();
@@ -22,12 +23,13 @@ export class InnovationAssessmentDetailsComponent extends CoreComponent implemen
   ngOnInit() {
     if (this.assessment) {
       this.isReassessment = this.assessment.majorVersion > 1;
+      this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
 
       if (this.assessment.minorVersion) {
         this.assessmentDetails = [
           // Assessment details: info displayed when an assessment/reassessment is edited
           {
-            label: 'Reason to edit',
+            label: `Why are you editing this needs ${this.assessmentType}?`,
             value: this.assessment.editReason
           }
         ];
