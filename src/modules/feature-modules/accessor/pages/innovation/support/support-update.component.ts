@@ -299,6 +299,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return status ? this.messageStatusLabels[status] : `Let the innovator know what's changed`;
   }
 
+  getTextAreaMaxLength() {
+    const status = this.form.get('status')?.value;
+    return status === InnovationSupportStatusEnum.ENGAGING ? 'xxl' : 'xl';
+  }
+
   getMessageDescription() {
     const status = this.form.get('status')?.value;
     return status ? this.messageStatusDescriptions[status] : '';

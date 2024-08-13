@@ -69,7 +69,7 @@
             [label]="getMessageLabel()"
             [description]="getMessageDescription()"
             [pageUniqueField]="false"
-            lengthLimit="xl"
+            [lengthLimit]="getTextAreaMaxLength()"
           ></theme-form-textarea>
 
           <div *ngIf="chosenStatus !== 'ENGAGING'" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
