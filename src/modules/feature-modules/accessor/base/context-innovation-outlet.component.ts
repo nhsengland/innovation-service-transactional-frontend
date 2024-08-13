@@ -47,10 +47,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     };
 
     // Do not show link, ON assessments route.
-    if (
-      (event && event.url.endsWith(`/assessments/${innovation.assessment?.id}`)) ||
-      innovation.status === 'ARCHIVED'
-    ) {
+    if ((event && event.url.includes(`/assessments/`)) || innovation.status === 'ARCHIVED') {
       this.data.link = null;
     } else {
       if (innovation.assessment) {
