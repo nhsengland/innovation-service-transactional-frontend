@@ -18,6 +18,7 @@ import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
@@ -102,6 +103,7 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     PageTeamsInfoComponent,
     // // Service Users.
     PageUsersRoleChangeComponent,
+    PageUserDeleteComponent,
     PageUserLockComponent,
     PageUserUnlockComponent,
     PageUsersRoleInactivateComponent,

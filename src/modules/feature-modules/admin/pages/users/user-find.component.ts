@@ -26,8 +26,8 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
     this.setPageTitle('Find or add a user');
 
     switch (this.activatedRoute.snapshot.queryParams.alert) {
-      case 'adminDeletedSuccess':
-        this.setAlertSuccess('Admin deleted successfully');
+      case 'deleteSuccess':
+        this.setAlertSuccess('User deleted successfully');
         break;
       default:
         break;
