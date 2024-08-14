@@ -95,6 +95,14 @@ export class AdminUsersService extends CoreService {
     );
   }
 
+  deleteUser(userId: string): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
+    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(

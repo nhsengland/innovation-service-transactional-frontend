@@ -970,6 +970,15 @@ export const locale = {
               plural: '{{ supports.innovations.length }} innovations being supported'
             }
           },
+          UserHasAnyAssessmentRole: {
+            label: 'The user has assessment role'
+          },
+          UserHasAnyAccessorRole: {
+            label: 'The user has accessor role'
+          },
+          UserHasAdminAnyAdminRole: {
+            label: 'The user has admin role'
+          },
           contact_user_preferences: {
             MORNING: {
               label: 'Morning, 9am to 12pm',

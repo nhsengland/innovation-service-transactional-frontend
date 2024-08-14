@@ -41,8 +41,8 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should show "adminDeletedSuccess" alert', () => {
-    activatedRoute.snapshot.queryParams = { alert: 'adminDeletedSuccess' };
+  it('should show "deleteSuccess" alert', () => {
+    activatedRoute.snapshot.queryParams = { alert: 'deleteSuccess' };
 
     fixture = TestBed.createComponent(PageUserFindComponent);
     component = fixture.componentInstance;

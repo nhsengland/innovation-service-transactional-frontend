@@ -8,13 +8,13 @@ import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../s
 import { AdminUsersService } from '../../services/users.service';
 
 @Component({
-  selector: 'app-admin-pages-users-user-lock',
-  templateUrl: './user-lock.component.html'
+  selector: 'app-admin-pages-users-user-delete',
+  templateUrl: './user-delete.component.html'
 })
-export class PageUserLockComponent extends CoreComponent implements OnInit {
+export class PageUserDeleteComponent extends CoreComponent implements OnInit {
   user: { id: string; name: string };
 
-  pageStep: 'RULES' | 'LOCK_USER' = 'RULES';
+  pageStep: 'RULES' | 'DELETE_USER' = 'RULES';
 
   rulesList: AdminValidationResponseDTO['validations'] = [];
 
@@ -30,16 +30,16 @@ export class PageUserLockComponent extends CoreComponent implements OnInit {
       name: RoutingHelper.getRouteData<any>(this.activatedRoute).user.displayName
     };
 
-    this.setPageTitle('Lock user', { hint: this.user.name });
+    this.setPageTitle('Delete user', { hint: this.user.name });
   }
 
   ngOnInit(): void {
-    this.usersValidationRulesService.getAdminOperationUserRules(this.user.id, 'LOCK_USER').subscribe({
+    this.usersValidationRulesService.getAdminOperationUserRules(this.user.id, 'DELETE_USER').subscribe({
       next: response => {
         this.rulesList = response.validations;
 
         if (this.rulesList.length === 0) {
-          this.pageStep = 'LOCK_USER';
+          this.pageStep = 'DELETE_USER';
         } else {
           this.pageStep = 'RULES';
         }
@@ -54,12 +54,12 @@ export class PageUserLockComponent extends CoreComponent implements OnInit {
   }
 
   nextStep(): void {
-    this.pageStep = 'LOCK_USER';
+    this.pageStep = 'DELETE_USER';
   }
 
   onSubmit(): void {
-    this.usersService.lockUser(this.user.id).subscribe({
-      next: () => this.redirectTo(`/admin/users/${this.user.id}`, { alert: 'lockSuccess' }),
+    this.usersService.deleteUser(this.user.id).subscribe({
+      next: () => this.redirectTo(`/admin/users`, { alert: 'deleteSuccess' }),
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
