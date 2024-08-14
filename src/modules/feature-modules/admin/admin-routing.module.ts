@@ -93,23 +93,46 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
-      { id: 'adminUsers', label: 'Users', url: '/admin/users' },
       {
         id: 'management',
         label: 'Management',
         children: [
-          { label: 'Announcements', url: '/admin/announcements', description: 'Manage and create announcements' },
+          {
+            label: 'Users',
+            url: '/admin/users',
+            description: 'Find or add a new user'
+          },
+          /*           {
+            label: 'Innovation record',
+            url: '#',
+            description: 'Manage and update the questions in the innovation record'
+          }, */
           {
             label: 'Organisations',
             url: '/admin/organisations',
             description: 'Manage organisations and associated units'
           },
           {
+            label: 'Elastic Search',
+            url: '/admin/elastic-search',
+            description: 'Reindex elastic search - for developer use only'
+          }
+        ]
+      },
+      {
+        id: 'communications',
+        label: 'Communications',
+        children: [
+          {
+            label: 'Announcement',
+            url: '/admin/announcements',
+            description: 'Manage and create announcements'
+          },
+          {
             label: 'Terms of use',
             url: '/admin/terms-conditions',
-            description: 'Create a new version and trigger acceptance by the users'
-          },
-          { label: 'Elastic Search', url: '/admin/elastic-search' }
+            description: 'Update the terms of use and send it to users to accept'
+          }
         ]
       },
       { id: 'innovations', label: 'Innovations', url: '/admin/innovations' }
