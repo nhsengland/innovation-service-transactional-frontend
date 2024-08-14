@@ -43,6 +43,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isArchived: boolean;
   sectionId: string;
 
+  assessmentType = '';
   sectionSubmittedText: string = '';
 
   sectionsIdsList: string[];
@@ -78,6 +79,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.innovation = this.stores.context.getInnovation();
     this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.assessmentType =
+      this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
     this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 

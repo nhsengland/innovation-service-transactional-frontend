@@ -32,6 +32,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   isArchived: boolean = false;
   showCards: boolean = true;
   showAssessmentExemptionLink: boolean = false;
+  assessmentType = '';
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string }[] = [];
@@ -73,6 +74,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           this.innovation = innovationInfo;
 
           this.isArchived = this.innovation.status === 'ARCHIVED';
+
+          this.assessmentType =
+            this.innovation?.assessment && this.innovation?.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
           this.showCards = ![InnovationStatusEnum.ARCHIVED, InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT].includes(
             this.innovation.status

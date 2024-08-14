@@ -43,6 +43,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   assessmentHasBeenSubmitted = false;
   shouldShowUpdatedAt = false;
   isReassessment = false;
+  assessmentType = '';
   showAssessmentDetails = false;
 
   constructor(
@@ -75,6 +76,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       this.shouldShowUpdatedAt =
         DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
       this.isReassessment = this.assessment.majorVersion > 1;
+      this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
       this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.maturityLevel) || 0) + 1;
