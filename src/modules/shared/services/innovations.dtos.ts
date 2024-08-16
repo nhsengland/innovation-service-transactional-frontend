@@ -153,6 +153,7 @@ export type InnovationInfoDTO = {
   status: InnovationStatusEnum;
   archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
+  hasBeenAssessed: boolean;
   submittedAt: null | DateISOType;
   countryName: null | string;
   postCode: null | string;

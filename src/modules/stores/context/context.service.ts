@@ -119,6 +119,7 @@ export class ContextService {
               ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT
               : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
+          hasBeenAssessed: response.hasBeenAssessed,
           archivedStatus: response.archivedStatus,
           ...(response.owner
             ? {
