@@ -3,9 +3,9 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { UtilsHelper } from '@app/base/helpers';
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -50,7 +50,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     if ((event && event.url.includes(`/assessments/`)) || innovation.status === 'ARCHIVED') {
       this.data.link = null;
     } else {
-      if (innovation.assessment) {
+      if (innovation.status === InnovationStatusEnum.IN_PROGRESS && innovation.assessment) {
         const assessmentType = innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
         this.data.link = {
