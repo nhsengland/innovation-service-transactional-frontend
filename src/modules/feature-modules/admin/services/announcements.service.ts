@@ -12,7 +12,13 @@ import { AnnouncementParamsType } from '@modules/theme/components/announcements/
 export enum AnnouncementStatusEnum {
   SCHEDULED = 'SCHEDULED',
   ACTIVE = 'ACTIVE',
-  DONE = 'DONE'
+  DONE = 'DONE',
+  DELETED = 'DELETED'
+}
+
+export enum AnnouncementTypeEnum {
+  LOG_IN = 'LOG_IN',
+  HOMEPAGE = 'HOMEPAGE'
 }
 
 export type GetAnnouncementsListType = {
@@ -23,6 +29,7 @@ export type GetAnnouncementsListType = {
     status: AnnouncementStatusEnum;
     startsAt: DateISOType;
     expiresAt: null | DateISOType;
+    type: AnnouncementTypeEnum;
   }[];
 };
 
