@@ -142,7 +142,7 @@
           routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit"
           class="nhsuk-button nhsuk-u-margin-top-5"
         >
-          Continue needs assessment
+          Continue needs {{ assessmentType }}
         </button>
         <button
           *ngSwitchCase="'IN_PROGRESS'"

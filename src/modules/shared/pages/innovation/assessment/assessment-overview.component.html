@@ -117,7 +117,7 @@
       <ng-container *ngIf="isAssessmentType && assessment && assessment.isLatest" [ngSwitch]="innovation.status">
         <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">
           <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
-            {{ assessment.minorVersion ? "Continue editing" : "Continue " + (isReassessment ? "reassessment" : "assessment") }}
+            {{ assessment.minorVersion ? "Continue editing" : "Continue needs " + assessmentType }}
           </a>
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">Go to innovation</a>
         </ng-container>
@@ -132,7 +132,7 @@
         <ng-container *ngSwitchCase="'IN_PROGRESS'">
           <a routerLink="/assessment/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Go to innovation</a>
           <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit/reason" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary">
-            Edit {{ isReassessment ? "reassessment" : "assessment" }}
+            Edit {{ assessmentType }}
           </a>
         </ng-container>
 
