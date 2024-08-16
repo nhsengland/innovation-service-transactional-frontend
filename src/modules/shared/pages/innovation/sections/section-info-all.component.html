@@ -107,7 +107,7 @@
 
     <ng-container
       *ngIf="
-        ((innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+        (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
         (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
       "
     >
