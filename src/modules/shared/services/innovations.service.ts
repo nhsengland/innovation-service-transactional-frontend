@@ -176,6 +176,20 @@ export type UploadThreadMessageDocumentType = {
   };
 };
 
+export type ChangeSupportStatusDocumentType = {
+  status: Partial<InnovationSupportStatusEnum>;
+  accessors: {
+    id: string;
+    userRoleId: string;
+  }[];
+  message: string;
+  file?: {
+    name: string;
+    description?: string;
+    file: Omit<FileUploadType, 'url'>;
+  };
+};
+
 @Injectable()
 export class InnovationsService extends CoreService {
   constructor() {
