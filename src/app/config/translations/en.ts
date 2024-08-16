@@ -173,7 +173,12 @@ export const locale = {
           status: {
             SCHEDULED: { name: 'Scheduled', cssColorClass: 'nhsuk-tag--yellow' },
             ACTIVE: { name: 'Active', cssColorClass: 'nhsuk-tag--green' },
-            DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' }
+            DONE: { name: 'Done', cssColorClass: 'nhsuk-tag--grey' },
+            DELETED: { name: 'Deleted', cssColorClass: 'nhsuk-tag--red' }
+          },
+          type: {
+            LOG_IN: 'Log in',
+            HOMEPAGE: 'Homepage'
           }
         },
         assessment_exemptions: {

@@ -14,19 +14,25 @@
           </caption>
           <thead class="nhsuk-table__head">
             <tr class="nhsuk-table__row">
-              <th class="nhsuk-table__header" scope="col">Announcement</th>
+              <th class="nhsuk-table__header" scope="col">Announcements</th>
+              <th class="nhsuk-table__header" scope="col">Type</th>
               <th class="nhsuk-table__header text-align-right" scope="col">Status</th>
             </tr>
           </thead>
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of announcementsList.getRecords()" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">Announcement</span>
+                <span class="nhsuk-table-responsive__heading">Announcements</span>
                 <a routerLink="{{ item.id }}" attr.aria-label="View announcement named {{ item.title }}">{{ item.title }}</a>
                 <p class="nhsuk-hint nhsuk-u-font-size-14 nhsuk-u-margin-0">
-                  Live from {{ item.startsAt | date: ("app.date_formats.medium_date" | translate)
-                  }}{{ item.expiresAt ? " to " + (item.expiresAt | date: ("app.date_formats.medium_date" | translate)) : "" }}
+                  Live from {{ item.startsAt | date: ("app.date_formats.long_date" | translate)
+                  }}{{ item.expiresAt ? " to " + (item.expiresAt | date: ("app.date_formats.long_date" | translate)) : "" }}
                 </p>
+              </td>
+
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">Type</span>
+                {{ "shared.catalog.announcements.type." + item.type | translate }}
               </td>
 
               <td class="nhsuk-table__cell text-align-right">
