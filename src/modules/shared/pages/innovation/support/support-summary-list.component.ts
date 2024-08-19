@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationContextDetailEnum } from '@app/base/enums';
+import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import {
   InnovationAssessmentListDTO,
   SupportSummaryOrganisationHistoryDTO,
@@ -11,12 +13,10 @@ import {
   SupportSummarySectionType
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@app/base/enums';
-import { ActivatedRoute } from '@angular/router';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { ObservableInput, forkJoin } from 'rxjs';
-import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -177,12 +177,14 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
           const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
 
-          this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
-            this.innovation.id,
-            userUnitId,
-            results.organisationsList ?? [],
-            engagingUnitsIds
-          ).length;
+          this.showSuggestOrganisationsToSupportLink =
+            this.innovation.status === InnovationStatusEnum.IN_PROGRESS &&
+            !!UtilsHelper.getAvailableOrganisationsToSuggest(
+              this.innovation.id,
+              userUnitId,
+              results.organisationsList ?? [],
+              engagingUnitsIds
+            ).length;
         }
 
         // Throw notification read dismiss.
