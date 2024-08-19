@@ -49,6 +49,7 @@ export type UpsertAnnouncementType = {
   params?: AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt?: DateISOType;
+  type: AnnouncementTypeEnum;
 };
 
 @Injectable()
