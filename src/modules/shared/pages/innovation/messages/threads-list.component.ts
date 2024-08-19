@@ -31,10 +31,12 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
 
   // Flags
   isInnovatorType: boolean;
+  isAccessorType: boolean;
   isAdmin: boolean;
   isInnovationSubmitted: boolean;
   canCreateThread: boolean = false;
   isArchived: boolean;
+  isInAssessment: boolean;
 
   constructor(private innovationsService: InnovationsService) {
     super();
@@ -50,11 +52,16 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
     this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
-    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+    if (this.stores.authentication.isAssessmentType()) {
       this.canCreateThread = this.innovation.owner != null;
+    } else if (this.stores.authentication.isAccessorType()) {
+      this.canCreateThread =
+        this.innovation.owner != null && this.innovation.status === InnovationStatusEnum.IN_PROGRESS;
     } else if (this.stores.authentication.isInnovatorType()) {
       if (
         this.innovation.status === InnovationStatusEnum.IN_PROGRESS ||

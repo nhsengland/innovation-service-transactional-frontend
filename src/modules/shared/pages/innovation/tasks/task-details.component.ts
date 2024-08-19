@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -32,6 +32,10 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAssessmentType: boolean;
   isAdmin: boolean;
   isArchived: boolean;
+  canReopen = false;
+  canCancel = false;
+
+  readonly innovation = this.stores.context.getInnovation();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -144,7 +148,24 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         });
       }
 
+      this.setAllowedActions();
+
       this.setPageStatus('READY');
     });
+  }
+
+  private setAllowedActions() {
+    this.canReopen =
+      !!this.task &&
+      !this.isArchived &&
+      ['DONE', 'DECLINED'].includes(this.task.status) &&
+      this.task.sameOrganisation &&
+      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+
+    this.canCancel =
+      !!this.task &&
+      this.task.status === 'OPEN' &&
+      this.task.sameOrganisation &&
+      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }

@@ -19,7 +19,7 @@
             label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
           ></theme-tag>
         </dd>
-        <dd *ngIf="!isArchived" class="nhsuk-summary-list__actions width-25">
+        <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
           <a
             *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"
             routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
@@ -40,7 +40,7 @@
         </dd>
         <dd class="nhsuk-summary-list__actions">
           <a
-            *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
+            *ngIf="isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
             routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
             >Change accessors</a
           >
@@ -54,14 +54,20 @@
   </div>
 
   <a
-    *ngIf="!isArchived && isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
+    *ngIf="isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
     routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
     class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
   >
     Change support status
   </a>
 
-  <ng-container *ngIf="isAccessorRole && !isArchived">
+  <div *ngIf="isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+    <span class="nhsuk-u-visually-hidden">Information:</span>
+    <p>The needs assessment team are editing this innovation's needs assessment. 
+    Messages, tasks, support update and suggestions will be unavailable on this innovation until the update is submitted.</p>
+  </div>
+
+  <ng-container *ngIf="isAccessorRole && isInProgress">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3"
       >Request status update</a
     >

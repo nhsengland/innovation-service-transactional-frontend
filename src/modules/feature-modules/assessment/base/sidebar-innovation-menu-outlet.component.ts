@@ -3,9 +3,9 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { ViewportScroller } from '@angular/common';
 import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -62,9 +62,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         ...(innovation.status !== InnovationStatusEnum.CREATED
           ? [{ label: 'Documents', url: `/assessment/innovations/${innovation.id}/documents` }]
           : []),
-        ...(innovation.assessment?.finishedAt == null && innovation.reassessmentCount === 0
-          ? []
-          : [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]),
+        ...(innovation.hasBeenAssessed
+          ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]
+          : []),
         { label: 'Data sharing preferences', url: `/assessment/innovations/${innovation.id}/support` },
         { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
       ];

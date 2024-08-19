@@ -185,6 +185,7 @@ export class ContextStore extends Store<ContextModel> {
         name: '',
         status: InnovationStatusEnum.CREATED,
         statusUpdatedAt: null,
+        hasBeenAssessed: false,
         loggedUser: { isOwner: false },
         reassessmentCount: 0,
         categories: [],
