@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DoCheck,
   ElementRef,
   EventEmitter,
   Injector,
@@ -14,11 +15,12 @@ import {
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
+import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 @Component({
   selector: 'theme-form-select',
   templateUrl: './select.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -27,19 +29,24 @@ import { SelectComponentInputType } from '@modules/theme/components/search/selec
     }
   ]
 })
-export class FormSelectComponent extends ControlValueAccessorComponent implements OnInit {
-  @Input() id?: string;
+export class FormSelectComponent extends ControlValueAccessorComponent implements OnInit, DoCheck {
+  @Input({ required: true }) id!: string;
   @Input() label?: string;
   @Input() description?: string;
   @Input() pageUniqueField = true;
-  @Input({ required: true }) selectItems!: { selectList: SelectComponentInputType[]; defaultKey?: string };
+  @Input({ required: true }) selectItems!: {
+    selectList: { key: string | undefined; text: string }[];
+    defaultKey?: string;
+  };
+  @Input() patchControllerFieldId?: string;
+  @ViewChild('select') selectRef?: ElementRef<HTMLSelectElement>;
 
   @Output() selectChanged = new EventEmitter<string>();
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
 
-  selectedField: string = '';
+  selectedField: string | undefined = '';
 
   constructor(
     injector: Injector,
@@ -57,9 +64,35 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
       this.selectItems.selectList[0].key;
     this.onChangeSelect();
   }
+  ngDoCheck(): void {
+    this.hasError =
+      this.fieldControl.invalid &&
+      this.fieldControl.touched &&
+      document.activeElement !== this.selectRef?.nativeElement;
+
+    this.error = this.hasError
+      ? FormEngineHelper.getValidationMessage(this.fieldControl.errors)
+      : { message: '', params: {} };
+
+    // update selected field when another answer controller is removed
+    this.selectedField = this.formControl?.value;
+  }
+
+  onClick() {
+    this.formControl?.markAsTouched();
+    console.log('clicked selected');
+  }
+  onClose() {
+    console.log('closed');
+  }
 
   onChangeSelect(): void {
-    this.fieldControl.setValue(this.selectedField);
+    this.patchControllerFieldId
+      ? this.formControl?.patchValue({ [this.patchControllerFieldId]: this.selectedField })
+      : this.formControl?.setValue(this.selectedField);
+
+    // this.formControl?.setValue(this.selectedField);
     this.cdr.detectChanges();
+    this.selectChanged.emit(this.formControl?.value);
   }
 }

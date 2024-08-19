@@ -99,6 +99,17 @@
           ></theme-form-file-upload-array>
         </div>
 
+        <div *ngSwitchCase="'announcement-innovation-type-filter'" [formArrayName]="p.id" [formGroupName]="p.id">
+          <app-admin-pages-announcement-innovation-filter-step
+            [parameterValues]="values && values[p.id]"
+            [id]="p.id"
+            [parentFormGroup]="this.form"
+            [arrayName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+          />
+        </div>
+
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
           <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
             <legend *ngIf="p.label" class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
@@ -132,7 +143,7 @@
           </fieldset>
         </div>
 
-        <div *ngSwitchCase="'select-component'">
+        <!-- <div *ngSwitchCase="'select-component'">
           <theme-form-select
             [controlName]="p.id"
             [id]="p.id"
@@ -141,7 +152,7 @@
             [pageUniqueField]="onlyOneField"
             [selectItems]="p.selectItems ?? { selectList: [] }"
           />
-        </div>
+        </div> -->
 
         <div *ngSwitchDefault>
           <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>

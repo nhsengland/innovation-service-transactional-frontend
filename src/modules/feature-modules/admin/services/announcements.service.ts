@@ -34,6 +34,7 @@ export type GetAnnouncementInfoType = {
   params: null | AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
+  filters: { key: string | undefined; text: string }[];
 };
 
 export type UpsertAnnouncementType = {
@@ -42,6 +43,7 @@ export type UpsertAnnouncementType = {
   params?: AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt?: DateISOType;
+  filters?: { section: string; question: string; answers: string[] }[];
 };
 
 @Injectable()

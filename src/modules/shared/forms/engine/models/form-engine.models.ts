@@ -37,7 +37,8 @@ export class FormEngineParameterModel {
     | 'fields-group'
     | 'file-upload'
     | 'file-upload-array'
-    | 'select-component';
+    | 'select-component'
+    | 'announcement-innovation-type-filter';
   label?: string;
   description?: string;
   placeholder?: string;

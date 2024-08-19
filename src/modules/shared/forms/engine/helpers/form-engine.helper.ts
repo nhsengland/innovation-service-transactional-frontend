@@ -51,6 +51,11 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'announcement-innovation-type-filter':
+          form.addControl(parameter.id, new FormArray([]));
+
+          break;
+
         case 'fields-group':
           form.addControl(parameter.id, new FormArray([]));
 

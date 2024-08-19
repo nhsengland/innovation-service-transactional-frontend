@@ -1,0 +1,58 @@
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
+    <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+      <ng-container *ngIf="hasError">
+        <!-- Add error to legend for accessibility purposes -->
+        <div class="nhsuk-u-visually-hidden">Error: {{ error.message | translate: error.params }}</div>
+      </ng-container>
+    </legend>
+
+    <ng-container *ngIf="hasError">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
+    </ng-container>
+
+    <!-- <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> An error! </span> -->
+
+    <div class="d-flex nhsuk-u-margin-bottom-1">
+      <div class="width-75 nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-font-size-19"><span>Filter {{filterIndex+1}}</span></div>
+      <div class="width-25 nhsuk-u-font-size-19 text-align-right"><a *ngIf="filterIndex > 0" href="javascript:void(0)" (click)="removeFilter(filterIndex)">Remove filter</a></div>
+    </div>
+    <ng-container *ngIf="sectionsList">
+      <div class="nhsuk-u-margin-bottom-4">
+        <theme-form-select
+          [formControl]="sectionFormControl"
+          id="filter-{{sectionFormControl}}"
+          [label]="'Section'"
+          [pageUniqueField]="false"
+          [selectItems]="sectionsList"
+          (selectChanged)="onSelectChange($event)"
+        />
+      </div>
+
+      <div class="nhsuk-u-margin-bottom-4">
+        <theme-form-select
+          *ngIf="sectionFormControl.value && questionsList"
+          [formControl]="questionFormControl"
+          id="filter-{{questionFormControl}}"
+          [label]="'Question'"
+          [pageUniqueField]="false"
+          [selectItems]="questionsList"
+          (selectChanged)="onSelectChange($event)"
+        />
+      </div>
+
+      <ng-container *ngIf="questionFormControl.value && answersList">
+        <div *ngFor="let answer of answersFormAsFormArray.controls; let i =  index" class="nhsuk-u-margin-bottom-4">
+          <div class="d-flex nhsuk-u-margin-bottom-1">
+            <div class="width-85 nhsuk-u-font-size-19"><span>Answer {{i+1}}</span></div>
+            <div class="width-15 nhsuk-u-font-size-19 text-align-right"><a *ngIf="i > 0" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a></div>
+          </div>
+          <div class="width-85">
+            <theme-form-select [formControl]="answer" id="filter-answer-{{i+1}}" [pageUniqueField]="false" [selectItems]="answersList" (selectChanged)="onSelectChange($event)" />
+          </div>
+        </div>
+        <a href="javascript:void(0)" (click)="addAnswerField()"> Add answer </a>
+      </ng-container>
+    </ng-container>
+  </fieldset>
+</div>
