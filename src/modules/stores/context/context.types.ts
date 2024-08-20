@@ -1,9 +1,9 @@
 import { DateISOType, LinkType } from '@app/base/types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { NotificationCategoryTypeEnum } from './context.enums';
-import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 export type ContextPageAlertType = {
   type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
@@ -51,6 +51,7 @@ export type ContextInnovationType = {
   status: InnovationStatusEnum;
   statusUpdatedAt: null | DateISOType;
   archivedStatus?: InnovationStatusEnum;
+  hasBeenAssessed: boolean;
   countryName: string | null;
   description: string | null;
   postCode: string | null;

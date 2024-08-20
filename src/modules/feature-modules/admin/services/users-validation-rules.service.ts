@@ -117,11 +117,14 @@ export class UsersValidationRulesService extends CoreService {
   }
 
   // TODO: This payloads are not updated with new validations changes
-  getLockUserRules(userId: string): Observable<AdminValidationResponseDTO> {
+  getAdminOperationUserRules(
+    userId: string,
+    operation: 'LOCK_USER' | 'DELETE_USER'
+  ): Observable<AdminValidationResponseDTO> {
     const url = new UrlModel(this.API_ADMIN_URL)
       .addPath('v1/users/:userId/validate')
       .setPathParams({ userId })
-      .setQueryParams({ operation: 'LOCK_USER' });
+      .setQueryParams({ operation });
     return this.http.get<AdminValidationResponseDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

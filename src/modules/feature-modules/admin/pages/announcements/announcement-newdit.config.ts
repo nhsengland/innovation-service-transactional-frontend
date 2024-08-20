@@ -3,6 +3,7 @@ import { DatesHelper } from '@app/base/helpers';
 
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import {
+  AnnouncementTypeEnum,
   GetAnnouncementInfoType,
   UpsertAnnouncementType
 } from '@modules/feature-modules/admin/services/announcements.service';
@@ -224,6 +225,6 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
         ? { actionLink: { label: data.actionLinkLabel, url: data.actionLinkUrl } }
         : {})
     },
-    ...(data.filters ? { filters: data.filters } : {})
+    type: AnnouncementTypeEnum.LOG_IN // TO DO: Change this in the future. Setting LOG_IN as a default value at the moment
   };
 }

@@ -13,7 +13,13 @@ import { InnovationRecordFilterPayloadType } from '../pages/announcements/announ
 export enum AnnouncementStatusEnum {
   SCHEDULED = 'SCHEDULED',
   ACTIVE = 'ACTIVE',
-  DONE = 'DONE'
+  DONE = 'DONE',
+  DELETED = 'DELETED'
+}
+
+export enum AnnouncementTypeEnum {
+  LOG_IN = 'LOG_IN',
+  HOMEPAGE = 'HOMEPAGE'
 }
 
 export type GetAnnouncementsListType = {
@@ -24,6 +30,7 @@ export type GetAnnouncementsListType = {
     status: AnnouncementStatusEnum;
     startsAt: DateISOType;
     expiresAt: null | DateISOType;
+    type: AnnouncementTypeEnum;
   }[];
 };
 
@@ -44,6 +51,7 @@ export type UpsertAnnouncementType = {
   params?: AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt?: DateISOType;
+  type: AnnouncementTypeEnum;
   filters?: InnovationRecordFilterPayloadType;
 };
 

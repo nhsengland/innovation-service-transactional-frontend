@@ -87,6 +87,7 @@ export type InnovationListSelectType =
   | 'assessment.minorVersion'
   | 'assessment.assignedTo'
   | 'assessment.isExempt'
+  | 'assessment.finishedAt'
   | 'assessment.updatedAt'
   | 'statistics.notifications'
   | 'statistics.tasks'
@@ -134,6 +135,7 @@ export type InnovationListFullDTO = {
     majorVersion: number;
     minorVersion: number;
     assignedTo: string | null;
+    finishedAt: DateISOType | null;
     updatedAt: DateISOType;
     isExempt: boolean;
   } | null;
@@ -151,6 +153,7 @@ export type InnovationInfoDTO = {
   status: InnovationStatusEnum;
   archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
+  hasBeenAssessed: boolean;
   submittedAt: null | DateISOType;
   countryName: null | string;
   postCode: null | string;

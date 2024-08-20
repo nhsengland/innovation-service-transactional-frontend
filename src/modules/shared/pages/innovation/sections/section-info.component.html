@@ -120,7 +120,7 @@
 
       <ng-container
         *ngIf="
-          ((innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+          (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
           (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
         "
       >
@@ -142,7 +142,7 @@
           routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit"
           class="nhsuk-button nhsuk-u-margin-top-5"
         >
-          Continue needs assessment
+          Continue needs {{ assessmentType }}
         </button>
         <button
           *ngSwitchCase="'IN_PROGRESS'"

@@ -7,7 +7,7 @@ import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -39,6 +39,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     engagingAccessors: { name: string }[];
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED, engagingAccessors: [] };
 
+  isInProgress: boolean = false;
+  isInAssessment: boolean = false;
   isArchived: boolean = false;
   showCards: boolean = false;
 
@@ -60,6 +62,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovation = this.stores.context.getInnovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
+    this.isInAssessment = [
+      InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT,
+      InnovationStatusEnum.NEEDS_ASSESSMENT,
+      InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+    ].includes(this.innovation.status);
+    this.isInProgress = this.innovation.status === 'IN_PROGRESS';
     this.isArchived = this.innovation.status === 'ARCHIVED';
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });

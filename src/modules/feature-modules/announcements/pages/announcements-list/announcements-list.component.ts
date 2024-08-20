@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
+import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 
 import {
   AnnouncementType,
@@ -24,7 +25,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
   }
 
   ngOnInit(): void {
-    this.announcementsService.getAnnouncements().subscribe(response => {
+    this.announcementsService.getAnnouncements({ type: [AnnouncementTypeEnum.LOG_IN] }).subscribe(response => {
       this.#announcements = response;
       this.announcement = this.#announcements[this.#announcementIndex];
 

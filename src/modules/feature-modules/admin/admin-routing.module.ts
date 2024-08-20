@@ -83,6 +83,7 @@ import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-dat
 import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
+import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
@@ -92,23 +93,46 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
 const header: RoutesDataType['header'] = {
   menuBarItems: {
     left: [
-      { id: 'adminUsers', label: 'Users', url: '/admin/users' },
       {
         id: 'management',
         label: 'Management',
         children: [
-          { label: 'Announcements', url: '/admin/announcements', description: 'Manage and create announcements' },
+          {
+            label: 'Users',
+            url: '/admin/users',
+            description: 'Find or add a new user'
+          },
+          /*           {
+            label: 'Innovation record',
+            url: '#',
+            description: 'Manage and update the questions in the innovation record'
+          }, */
           {
             label: 'Organisations',
             url: '/admin/organisations',
             description: 'Manage organisations and associated units'
           },
           {
+            label: 'Elastic Search',
+            url: '/admin/elastic-search',
+            description: 'Reindex elastic search - for developer use only'
+          }
+        ]
+      },
+      {
+        id: 'communications',
+        label: 'Communications',
+        children: [
+          {
+            label: 'Announcement',
+            url: '/admin/announcements',
+            description: 'Manage and create announcements'
+          },
+          {
             label: 'Terms of use',
             url: '/admin/terms-conditions',
-            description: 'Create a new version and trigger acceptance by the users'
-          },
-          { label: 'Elastic Search', url: '/admin/elastic-search' }
+            description: 'Update the terms of use and send it to users to accept'
+          }
         ]
       },
       { id: 'innovations', label: 'Innovations', url: '/admin/innovations' }
@@ -223,6 +247,7 @@ const routes: Routes = [
             children: [
               { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
               { path: 'email', pathMatch: 'full', component: PageUserEmailComponent, data: { breadcrumb: null } },
+              { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent, data: { breadcrumb: null } },
               { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
               { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } },
               {
