@@ -75,6 +75,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         } else {
           this.redirectTo('info');
         }
+        console.log('response', response);
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
@@ -96,30 +97,30 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.wizard.addAnswers(formData.data).runRules();
 
     console.log('this.wizard.currentAnswers', this.wizard.currentAnswers);
-    // switch (action) {
-    //   case 'previous':
-    //     if (this.wizard.isFirstStep()) {
-    //       this.redirectTo(`admin/announcements${this.announcementData.isEdition ? '/' + this.announcementId : ''}`);
-    //     } else {
-    //       this.wizard.previousStep();
-    //     }
-    //     break;
-    //   case 'next':
-    //     this.wizard.nextStep();
-    //     break;
-    //   default: // Should NOT happen!
-    //     break;
-    // }
+    switch (action) {
+      case 'previous':
+        if (this.wizard.isFirstStep()) {
+          this.redirectTo(`admin/announcements${this.announcementData.isEdition ? '/' + this.announcementId : ''}`);
+        } else {
+          this.wizard.previousStep();
+        }
+        break;
+      case 'next':
+        this.wizard.nextStep();
+        break;
+      default: // Should NOT happen!
+        break;
+    }
 
-    // if (this.wizard.isQuestionStep()) {
-    //   this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-    // } else {
-    //   this.setPageTitle('Check your answers', { size: 'l' });
-    //   this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
-    //   this.wizardSummaryUserGroupsLabels = this.wizardSummary.userRoles
-    //     .map(item => this.stores.authentication.getRoleDescription(item))
-    //     .join('\n');
-    // }
+    if (this.wizard.isQuestionStep()) {
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+    } else {
+      this.setPageTitle('Check your answers', { size: 'l' });
+      this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
+      this.wizardSummaryUserGroupsLabels = this.wizardSummary.userRoles
+        .map(item => this.stores.authentication.getRoleDescription(item))
+        .join('\n');
+    }
   }
 
   onGotoStep(stepNumber: number): void {

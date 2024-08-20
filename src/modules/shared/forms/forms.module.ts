@@ -30,9 +30,9 @@ import { FormCheckboxArrayV3Component } from './components/checkbox-array-v3.com
 import { FormEngineV3Component } from './engine/form-engine-v3.component';
 import { FormCheckboxGroupV3Component } from './components/checkbox-group-v3.component';
 import { FormInputAutocompleteArrayV3Component } from './components/input-autocomplete-array-v3.component';
-import { FormAnnouncementInnovationsTypeFilter } from '@modules/feature-modules/admin/pages/announcements/announcement-innovations-type-filter';
+import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
 import { ThemeModule } from '../../theme/theme.module';
-import { FormAnnouncementInnovationsFilterStep } from '@modules/feature-modules/admin/pages/announcements/announcement-innovations-filter-step.component';
+import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
 
 @NgModule({
   imports: [
@@ -68,8 +68,8 @@ import { FormAnnouncementInnovationsFilterStep } from '@modules/feature-modules/
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,
-    FormAnnouncementInnovationsTypeFilter,
-    FormAnnouncementInnovationsFilterStep
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ],
   exports: [
     // CommonModule,
@@ -98,8 +98,8 @@ import { FormAnnouncementInnovationsFilterStep } from '@modules/feature-modules/
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
     FormSelectComponent,
-    FormAnnouncementInnovationsTypeFilter,
-    FormAnnouncementInnovationsFilterStep
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ]
 })
 export class FormsModule {}

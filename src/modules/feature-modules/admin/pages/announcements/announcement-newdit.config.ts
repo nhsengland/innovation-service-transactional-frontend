@@ -79,67 +79,67 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
         }
       ]
     }),
-    new FormEngineModel({
-      label: stepsLabels.l2.label,
-      description: stepsLabels.l2.description,
-      parameters: [
-        {
-          id: 'insetTitle',
-          dataType: 'text',
-          label: 'Title (optional)',
-          description: 'Enter the title of the inset text'
-        },
-        { id: 'insetContent', dataType: 'text', label: 'Content (optional)', description: 'Enter message' },
-        { id: 'insetLinkLabel', dataType: 'text', label: 'Add a link (optional)', description: 'Enter the link label' },
-        {
-          id: 'insetLinkUrl',
-          dataType: 'text',
-          label: 'Enter the link URL. (Make sure that it starts with http:// or https://)'
-        }
-      ]
-    }),
-    new FormEngineModel({
-      parameters: [
-        {
-          id: 'content',
-          dataType: 'textarea',
-          label: stepsLabels.l3.label,
-          description: stepsLabels.l3.description,
-          lengthLimit: 'xs'
-        }
-      ]
-    }),
-    new FormEngineModel({
-      label: stepsLabels.l4.label,
-      description: stepsLabels.l4.description,
-      parameters: [
-        { id: 'actionLinkLabel', dataType: 'text', label: 'Enter the link label' },
-        {
-          id: 'actionLinkUrl',
-          dataType: 'text',
-          label: 'Enter the link URL (Make sure that it starts with http:// or https://)'
-        }
-      ]
-    }),
-    new FormEngineModel({
-      label: stepsLabels.l5.label,
-      parameters: [
-        {
-          id: 'startsAt',
-          dataType: 'date',
-          label: 'Set a start date',
-          description: 'For example, 21/12/2014.',
-          validations: { isRequired: [true, 'Start date is required'] }
-        },
-        {
-          id: 'expiresAt',
-          dataType: 'date',
-          label: 'Set an end date',
-          description:
-            'If you do not set an end date, the announcement will remain on the service until the user clicks continue. For example, 21/12/2014.'
-        }
-      ]
-    }),
+    // new FormEngineModel({
+    //   label: stepsLabels.l2.label,
+    //   description: stepsLabels.l2.description,
+    //   parameters: [
+    //     {
+    //       id: 'insetTitle',
+    //       dataType: 'text',
+    //       label: 'Title (optional)',
+    //       description: 'Enter the title of the inset text'
+    //     },
+    //     { id: 'insetContent', dataType: 'text', label: 'Content (optional)', description: 'Enter message' },
+    //     { id: 'insetLinkLabel', dataType: 'text', label: 'Add a link (optional)', description: 'Enter the link label' },
+    //     {
+    //       id: 'insetLinkUrl',
+    //       dataType: 'text',
+    //       label: 'Enter the link URL. (Make sure that it starts with http:// or https://)'
+    //     }
+    //   ]
+    // }),
+    // new FormEngineModel({
+    //   parameters: [
+    //     {
+    //       id: 'content',
+    //       dataType: 'textarea',
+    //       label: stepsLabels.l3.label,
+    //       description: stepsLabels.l3.description,
+    //       lengthLimit: 'xs'
+    //     }
+    //   ]
+    // }),
+    // new FormEngineModel({
+    //   label: stepsLabels.l4.label,
+    //   description: stepsLabels.l4.description,
+    //   parameters: [
+    //     { id: 'actionLinkLabel', dataType: 'text', label: 'Enter the link label' },
+    //     {
+    //       id: 'actionLinkUrl',
+    //       dataType: 'text',
+    //       label: 'Enter the link URL (Make sure that it starts with http:// or https://)'
+    //     }
+    //   ]
+    // }),
+    // new FormEngineModel({
+    //   label: stepsLabels.l5.label,
+    //   parameters: [
+    //     {
+    //       id: 'startsAt',
+    //       dataType: 'date',
+    //       label: 'Set a start date',
+    //       description: 'For example, 21/12/2014.',
+    //       validations: { isRequired: [true, 'Start date is required'] }
+    //     },
+    //     {
+    //       id: 'expiresAt',
+    //       dataType: 'date',
+    //       label: 'Set an end date',
+    //       description:
+    //         'If you do not set an end date, the announcement will remain on the service until the user clicks continue. For example, 21/12/2014.'
+    //     }
+    //   ]
+    // }),
     new FormEngineModel({
       parameters: [
         {

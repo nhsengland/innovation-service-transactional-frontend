@@ -1,4 +1,4 @@
-<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+<div class="nhsuk-form-group">
   <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
     <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
       <ng-container *ngIf="pageUniqueField">
@@ -7,11 +7,6 @@
       <ng-container *ngIf="!pageUniqueField"
         ><span class="nhsuk-u-font-weight-bold">{{ label }}</span></ng-container
       >
-
-      <ng-container *ngIf="hasError">
-        <!-- Add error to legend for accessibility purposes -->
-        <div class="nhsuk-u-visually-hidden">Error: {{ error.message | translate: error.params }}</div>
-      </ng-container>
     </legend>
 
     <ng-container *ngIf="description">
@@ -37,12 +32,16 @@
       </div>
     </details>
 
-    <ng-container *ngIf="hasError">
-      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
-    </ng-container>
-
     <ng-container *ngFor="let formGroup of getParentFormGroupItems.controls; let i = index; trackBy: trackFiltersRowsChanges">
-      <theme-form-announcement-innovation-type-filter [id]="id" [formGroup]="this.parentFormGroup" [parentFormGroup]="formGroup" [filterIndex]="i" [arrayName]="arrayName" />
+      <theme-form-ir-selectable-filters-filter-component
+        [id]="id"
+        [previousData]="parameterValues && parameterValues[i]"
+        [formGroup]="this.parentFormGroup"
+        [filterFormGroup]="formGroup"
+        [filterIndex]="i"
+        [arrayName]="arrayName"
+        (removedFilter)="onFilterRemoval(i)"
+      />
     </ng-container>
 
     <button type="button" class="nhsuk-button nhsuk-button--secondary" (click)="addNewFilterFormGroup()">Add filter</button>

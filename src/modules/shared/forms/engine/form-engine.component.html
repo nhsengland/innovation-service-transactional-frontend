@@ -100,7 +100,7 @@
         </div>
 
         <div *ngSwitchCase="'announcement-innovation-type-filter'" [formArrayName]="p.id" [formGroupName]="p.id">
-          <app-admin-pages-announcement-innovation-filter-step
+          <theme-form-ir-selectable-filters-component
             [parameterValues]="values && values[p.id]"
             [id]="p.id"
             [parentFormGroup]="this.form"

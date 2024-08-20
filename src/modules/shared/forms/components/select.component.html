@@ -29,8 +29,10 @@
     (change)="this.onChangeSelect()"
     [attr.aria-label]="label ?? 'select'"
     (click)="this.onClick()"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
   >
-    <option *ngFor="let item of selectItems.selectList" [ngValue]="item.key">
+    <option *ngFor="let item of selectItems.selectList" [ngValue]="item.key" selected="selectedField">
       <span>{{ item.text }}</span>
     </option>
   </select>
