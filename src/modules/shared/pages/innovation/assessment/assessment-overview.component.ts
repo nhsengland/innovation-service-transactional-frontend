@@ -38,7 +38,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   isInnovatorType: boolean;
   isQualifyingAccessorRole: boolean;
 
-  isArchived: boolean;
+  isInProgress: boolean;
 
   assessmentHasBeenSubmitted = false;
   shouldShowUpdatedAt = false;
@@ -65,7 +65,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isQualifyingAccessorRole = this.isAccessorType && this.stores.authentication.isQualifyingAccessorRole();
 
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isInProgress = this.innovation.status === 'IN_PROGRESS';
   }
 
   ngOnInit(): void {
