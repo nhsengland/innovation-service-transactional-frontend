@@ -51,24 +51,6 @@ export class FormIRSelectableFiltersComponent implements OnInit, DoCheck {
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    // this.parameterValues = [
-    //   {
-    //     section: 'INNOVATION_DESCRIPTION',
-    //     question: 'officeLocation',
-    //     answers: ['England', 'Wales']
-    //   },
-    //   {
-    //     section: 'INNOVATION_DESCRIPTION',
-    //     question: 'categories',
-    //     answers: ['MEDICAL_DEVICE', 'MODELS_CARE', 'DATA_MONITORING']
-    //   },
-    //   {
-    //     section: 'CURRENT_CARE_PATHWAY',
-    //     question: 'innovationPathwayKnowledge',
-    //     answers: ['PATHWAY_EXISTS_AND_FITS']
-    //   }
-    // ];
-
     if (this.parameterValues) {
       // If previous values are present, add one FormGroup for each answer
       this.parameterValues?.forEach(() => {

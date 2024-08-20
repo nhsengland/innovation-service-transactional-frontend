@@ -8,6 +8,7 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { AnnouncementParamsType } from '@modules/theme/components/announcements/announcements.types';
+import { InnovationRecordFilterPayloadType } from '../pages/announcements/announcement-newdit.config';
 
 export enum AnnouncementStatusEnum {
   SCHEDULED = 'SCHEDULED',
@@ -34,7 +35,7 @@ export type GetAnnouncementInfoType = {
   params: null | AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
-  filters: { section: string; question: string; answers: string[] }[];
+  filters: InnovationRecordFilterPayloadType;
 };
 
 export type UpsertAnnouncementType = {
@@ -43,7 +44,7 @@ export type UpsertAnnouncementType = {
   params?: AnnouncementParamsType['GENERIC'];
   startsAt: DateISOType;
   expiresAt?: DateISOType;
-  filters?: { section: string; question: string; answers: string[] }[];
+  filters?: InnovationRecordFilterPayloadType;
 };
 
 @Injectable()

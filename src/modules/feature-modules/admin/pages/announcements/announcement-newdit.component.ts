@@ -75,7 +75,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         } else {
           this.redirectTo('info');
         }
-        console.log('response', response);
 
         this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
@@ -88,7 +87,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
   onSubmitStep(action: 'previous' | 'next'): void {
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
-    console.log('formData', formData);
     if (action === 'next' && !formData.valid) {
       // Don't move forward if step is NOT valid.
       return;
@@ -96,7 +94,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
     this.wizard.addAnswers(formData.data).runRules();
 
-    console.log('this.wizard.currentAnswers', this.wizard.currentAnswers);
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {

@@ -99,7 +99,7 @@
           ></theme-form-file-upload-array>
         </div>
 
-        <div *ngSwitchCase="'announcement-innovation-type-filter'" [formArrayName]="p.id" [formGroupName]="p.id">
+        <div *ngSwitchCase="'ir-selectable-filters'" [formArrayName]="p.id" [formGroupName]="p.id">
           <theme-form-ir-selectable-filters-component
             [parameterValues]="values && values[p.id]"
             [id]="p.id"

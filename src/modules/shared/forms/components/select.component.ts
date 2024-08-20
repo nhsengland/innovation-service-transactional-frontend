@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   EventEmitter,
   Injector,
   Input,
@@ -10,7 +9,6 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild,
   forwardRef
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -45,7 +43,6 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
     defaultKey?: string | undefined;
   };
   @Input() patchControllerFieldId?: string;
-  @ViewChild('select') selectRef?: ElementRef<HTMLSelectElement>;
 
   @Output() selectChanged = new EventEmitter<SelectComponentEmitType>();
 
@@ -68,11 +65,6 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // this.hasError = this.fieldControl.invalid && this.fieldControl.touched;
-    //  &&
-    // document.activeElement !== this.selectRef?.nativeElement;
-
-    // !this.hasError && this.onTestWhatWorks();
     !this.isFocus && this.checkError();
 
     this.selectedField = this.formControl?.value;

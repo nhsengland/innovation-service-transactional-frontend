@@ -51,7 +51,7 @@ export class FormEngineHelper {
           });
           break;
 
-        case 'announcement-innovation-type-filter':
+        case 'ir-selectable-filters':
           form.addControl(parameter.id, new FormArray([]));
 
           break;
