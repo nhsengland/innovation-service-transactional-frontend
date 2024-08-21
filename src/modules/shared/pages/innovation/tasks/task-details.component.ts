@@ -32,8 +32,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAssessmentType: boolean;
   isAdmin: boolean;
   isArchived: boolean;
-  canReopen = false;
   canCancel = false;
+  canReopen = false;
+  canSendMessage = false;
 
   readonly innovation = this.stores.context.getInnovation();
 
@@ -167,5 +168,11 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
       this.task.status === 'OPEN' &&
       this.task.sameOrganisation &&
       (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+
+    this.canSendMessage =
+      !this.isArchived &&
+      (this.isInnovatorType ||
+        this.isAssessmentType ||
+        (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }
