@@ -37,7 +37,8 @@ export class FormEngineParameterModel {
     | 'fields-group'
     | 'file-upload'
     | 'file-upload-array'
-    | 'select-component';
+    | 'select-component'
+    | 'ir-selectable-filters';
   label?: string;
   description?: string;
   placeholder?: string;

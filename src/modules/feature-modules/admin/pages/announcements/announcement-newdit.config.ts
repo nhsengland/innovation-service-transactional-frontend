@@ -50,12 +50,27 @@ type StepPayloadType = {
   content?: string;
   actionLinkLabel?: string;
   actionLinkUrl?: string;
+  filters?: InnovationRecordFilterPayloadType;
 };
+
+export type InnovationRecordFilterPayloadType = { section: string; question: string; answers: string[] }[];
 export type OutboundPayloadType = UpsertAnnouncementType;
 
 export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'filters',
+          dataType: 'ir-selectable-filters',
+          label: 'Filter innovation type',
+          description:
+            'Filter which types of innovations you want this announcement to show for. You can filter by question and answer.',
+          validations: { isRequired: [true, 'Title is required'] }
+        }
+      ]
+    }),
     new FormEngineModel({
       parameters: [
         {
@@ -181,7 +196,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     insetLinkUrl: data.params?.inset?.link?.url,
     content: data.params?.content,
     actionLinkLabel: data.params?.actionLink?.label,
-    actionLinkUrl: data.params?.actionLink?.url
+    actionLinkUrl: data.params?.actionLink?.url,
+    filters: data.filters
   };
 }
 
