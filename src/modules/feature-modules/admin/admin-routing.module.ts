@@ -85,6 +85,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
+import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
@@ -247,7 +248,6 @@ const routes: Routes = [
             children: [
               { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
               { path: 'email', pathMatch: 'full', component: PageUserEmailComponent, data: { breadcrumb: null } },
-              { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent, data: { breadcrumb: null } },
               { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
               { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } },
               {
@@ -255,6 +255,16 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageUsersRoleChangeComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'manage',
+                data: { breadcrumb: 'Manage account' },
+                children: [
+                  { path: '', pathMatch: 'full', component: PageUserManageComponent, data: { breadcrumb: null } },
+                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent, data: { breadcrumb: null } },
+                  { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
+                  { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } }
+                ]
               },
               {
                 path: 'role',

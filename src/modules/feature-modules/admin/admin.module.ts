@@ -15,11 +15,12 @@ import { PageUsersRoleActivateComponent } from './pages/users/roles/role-activat
 import { PageUsersRoleChangeComponent } from './pages/users/roles/role-change.component';
 import { PageUsersRoleInactivateComponent } from './pages/users/roles/role-inactivate.component';
 import { PageRoleNewComponent } from './pages/users/roles/role-new.component';
+import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
-import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
+import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
@@ -59,16 +60,16 @@ import { UserInformationComponent } from './components/user-information.componen
 // Services.
 import { AdminOrganisationsService } from './services/admin-organisations.service';
 import { AnnouncementsService } from './services/announcements.service';
+import { ElasticSearchService } from './services/elastic-search.service';
 import { UsersValidationRulesService } from './services/users-validation-rules.service';
 import { AdminUsersService } from './services/users.service';
-import { ElasticSearchService } from './services/elastic-search.service';
 
 // Resolvers.
+import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
-import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-outlet.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AdminRoutingModule],
@@ -104,6 +105,7 @@ import { SidebarAccountMenuOutletComponent } from './base/sidebar-account-menu-o
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserDeleteComponent,
+    PageUserManageComponent,
     PageUserLockComponent,
     PageUserUnlockComponent,
     PageUsersRoleInactivateComponent,
