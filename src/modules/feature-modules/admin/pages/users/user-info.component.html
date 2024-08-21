@@ -22,8 +22,6 @@
           <dd class="nhsuk-summary-list__actions">
             <ul class="nhsuk-list">
               <li><a routerLink="manage">Manage account</a></li>
-              <li><a *ngIf="user.isActive" routerLink="{{ action.url }}">{{ action.label }}</a></li>
-              <li><a routerLink="/admin/users/{{ user.id }}/delete">Delete user</a></li>
             </ul>
           </dd>
         </div>
