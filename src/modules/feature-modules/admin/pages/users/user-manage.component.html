@@ -1,0 +1,20 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div *ngIf="isActive" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">Lock account</h2>
+      <p>Accounts should only be locked in exceptional circumstances, for example if the user has breached the term of use.
+      You will be able to unlock the user by activating any of their specific roles</p>
+      <a routerLink="lock"> Lock account </a>
+    </div>
+  </div>
+
+  <!-- <app-account-mfa-list *ngIf="MFAInfo" [MFAInfo]="MFAInfo" /> -->
+
+  <div *ngIf="isInnovator" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">Delete your account</h2>
+      <p>You will need to confirm your email address to delete your account.</p>
+      <a routerLink="delete"> Delete your account </a>
+    </div>
+  </div>
+</theme-content-wrapper>
