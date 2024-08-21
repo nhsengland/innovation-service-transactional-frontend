@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
@@ -7,16 +7,15 @@ import { CoreComponent } from '@app/base';
   templateUrl: './user-manage.component.html'
 })
 export class PageUserManageComponent extends CoreComponent implements OnInit {
-  @Input() isInnovator = false;
-  @Input() isActive = false;
-
-  user: any = {}; // TODO
+  isActive: boolean;
+  isInnovator: boolean;
 
   constructor(private route: ActivatedRoute) {
     super();
     this.setPageTitle('Manage account');
-    this.user = this.route.snapshot.data.user;
-    console.log(this.user);
+    const user = this.route.snapshot.data.user;
+    this.isActive = user.isActive;
+    this.isInnovator = user.isInnovator;
   }
 
   ngOnInit(): void {
