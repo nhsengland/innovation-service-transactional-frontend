@@ -1,12 +1,13 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
-import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } from './mfa-edit.config';
+import { UsersService } from '@modules/shared/services/users.service';
 import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
-import { combineLatest, forkJoin } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { combineLatest, Observable } from 'rxjs';
+import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } from './mfa-edit.config';
 
 export type CurrentMFAModeType = 'phone' | 'email' | 'none';
 
@@ -23,21 +24,49 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   showItems: boolean = true;
   formButton = { isActive: true, label: 'Continue' };
   wizardMode: MFAWizardModeType = 'set-mfa';
-  userEmail: string = this.stores.authentication.getUserInfo().email;
+  userId: string | null = null;
+  userEmail: string;
   newPhoneNumber: string = '';
-  manageAccountPageUrl = `${this.stores.authentication.userUrlBasePath()}/account/manage-account`;
+  manageAccountPageUrl: string;
+
+  // Configurations
+  getUserMFAInfo: () => Observable<MFAInfoDTO>;
+  updateUserMFAInfo: (mfaInfo: MFAInfoDTO) => Observable<any>;
+
+  isAdmin = this.stores.authentication.isAdminRole();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private usersService: UsersService
   ) {
     super();
+
+    if (this.isAdmin) {
+      const user = this.activatedRoute.snapshot.data.user;
+      if (!user.id) {
+        throw new Error(
+          'User ID to be changed is required for admin users. Ensure it is provided when instantiating this component.'
+        );
+      }
+
+      this.userEmail = user.email;
+      this.userId = user.id;
+      this.manageAccountPageUrl = `/admin/users/${this.userId}/manage`;
+      this.getUserMFAInfo = this.usersService.getUserMFAInfo(user.id).bind(this.usersService);
+      this.updateUserMFAInfo = this.usersService.updateUserMFAInfo(user.id).bind(this.usersService);
+    } else {
+      this.userEmail = this.stores.authentication.getUserInfo().email;
+      this.manageAccountPageUrl = `${this.stores.authentication.userUrlBasePath()}/account/manage-account`;
+      this.getUserMFAInfo = this.authenticationService.getUserMFAInfo.bind(this.authenticationService);
+      this.updateUserMFAInfo = this.authenticationService.updateUserMFAInfo.bind(this.authenticationService);
+    }
   }
 
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    combineLatest([this.activatedRoute.queryParams, this.authenticationService.getUserMFAInfo()]).subscribe({
+    combineLatest([this.activatedRoute.queryParams, this.getUserMFAInfo()]).subscribe({
       next: ([queryParams, mfaInfo]) => {
         if (!queryParams.mode) {
           this.redirectTo(this.manageAccountPageUrl);
@@ -130,8 +159,8 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
       return;
     }
 
-    this.authenticationService.updateUserMFAInfo(wizardData.mfaInfo).subscribe({
-      next: response => {
+    this.updateUserMFAInfo(wizardData.mfaInfo).subscribe({
+      next: _response => {
         if (wizardData.mfaInfo.type === 'phone') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
