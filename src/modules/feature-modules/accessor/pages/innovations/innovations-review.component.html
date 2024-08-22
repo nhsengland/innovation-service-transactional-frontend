@@ -97,7 +97,7 @@
                     </ng-container>
                     <ng-template #hasLink>
                       <a
-                        *ngIf="item.assessment?.finishedAt && item.assessment?.id ; else noAssessment"
+                        *ngIf="item.support?.status !== 'ENGAGING' && item.assessment?.finishedAt && item.assessment?.id ; else noAssessment"
                         routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
                         attr.aria-label="View {{ item.name }} innovation assessment details"
                       >

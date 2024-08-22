@@ -162,7 +162,9 @@ export const locale = {
               singular: 'Section'
             }
           }
-        }
+        },
+        cant_do_while_in_assessment:
+          'The needs assessment team is assessing this innovation. Messages, tasks, support update and suggestions will be unavailable on this innovation until the assessment is submitted.'
       }
     },
 

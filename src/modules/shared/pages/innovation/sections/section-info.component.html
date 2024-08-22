@@ -131,7 +131,13 @@
         >
           Assign a task for this section
         </button>
+
       </ng-container>
+        
+      <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      </div>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">
         <button *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button nhsuk-u-margin-top-5">
