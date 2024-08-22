@@ -4,6 +4,20 @@
     <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation.userIsOwner ? "Innovation owner" : "Innovation collaborator" }}</p>
   </div>
 
+  <theme-announcements-generic
+    [params]="{
+      title: 'New funding opportunity',
+      content:
+        'The Digital Health Entrepreneurs programme has a new funding opportunity available. To apply, you must have a digital healthcare innovation targeting diabetes with DTAC certification.',
+      link: { label: 'Apply for this funding opportunity (opens in a new window)', url: '' },
+      relatedInnovations: [
+        { id: '1', name: 'Health Talk' },
+        { id: '2', name: 'New Innovation' },
+        { id: '3', name: 'Amazing Inno' }
+      ]
+    }"
+  />
+
   <theme-header-archived-banner />
 
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />

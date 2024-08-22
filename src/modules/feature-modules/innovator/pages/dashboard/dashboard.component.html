@@ -1,4 +1,17 @@
 <theme-content-wrapper [status]="pageStatus">
+  <theme-announcements-generic
+    [params]="{
+      title: 'New funding opportunity',
+      content:
+        'The Digital Health Entrepreneurs programme has a new funding opportunity available. To apply, you must have a digital healthcare innovation targeting diabetes with DTAC certification.',
+      link: { label: 'Apply for this funding opportunity (opens in a new window)', url: '' },
+      relatedInnovations: [
+        { id: '1', name: 'Health Talk' },
+        { id: '2', name: 'New Innovation' },
+        { id: '3', name: 'Amazing Inno' }
+      ]
+    }"
+  />
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div *ngIf="user.innovationsOwner.length === 0 && innovationTransfers.length === 0 && inviteCollaborations.length === 0" class="nhsuk-grid-row">

@@ -1,23 +1,26 @@
 <ng-container *ngIf="params">
-  <!-- Inset -->
-  <ng-container *ngIf="params.inset">
-    <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
-      <span class="nhsuk-u-visually-hidden">Information: </span>
-      <p *ngIf="params.inset.title" class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ params.inset.title }}</p>
-      <p *ngIf="params.inset.content" class="nhsuk-u-margin-bottom-1">{{ params.inset.content }}</p>
-      <a *ngIf="params.inset.link" [href]="params.inset.link.url" target="_blank" rel="noopener noreferrer">
-        {{ params.inset.link.label }}
-      </a>
+  <ng-container>
+    <div class="nhsuk-card nhsuk-u-margin-top-2 nhsuk-u-padding-5 nhsuk-u-font-size-19">
+      <div class="d-flex nhsuk-u-margin-bottom-1">
+        <div class="width-85 nhsuk-u-font-size-19">
+          <p class="nhsuk-u-font-weight-bold">{{ params.title }}</p>
+        </div>
+        <div *ngIf="!isLoginAnnouncementPage" class="width-15 nhsuk-u-font-size-19 text-align-right">
+          <a href="javascript:void(0)" (click)="clearAnnouncement()">Clear</a>
+        </div>
+      </div>
+      <p *ngIf="params.relatedInnovations && !isOverviewPage" class="font-color-secondary">
+        <span
+          >{{ "Re:" }}
+          <ng-container *ngFor="let innovation of params.relatedInnovations; let first = first; let last = last">
+            <span *ngIf="!first && !last">{{ ", " }}</span>
+            <span *ngIf="last">{{ " and " }}</span>
+            <span>{{ innovation.name }}</span>
+          </ng-container>
+        </span>
+      </p>
+      <p>{{ params.content }}</p>
+      <a *ngIf="params.link" [href]="params.link.url">{{ params.link.label }}</a>
     </div>
-  </ng-container>
-
-  <!-- Description -->
-  <p *ngIf="params.content" class="text-pre-wrap">{{ params.content }}</p>
-
-  <!-- Secondary Action -->
-  <ng-container *ngIf="params.actionLink">
-    <a href="{{ params.actionLink.url }}" target="_blank" rel="noopener noreferrer">
-      {{ params.actionLink.label }}
-    </a>
   </ng-container>
 </ng-container>

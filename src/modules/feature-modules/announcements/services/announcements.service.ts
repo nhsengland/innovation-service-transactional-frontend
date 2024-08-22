@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -36,10 +36,20 @@ export class AnnouncementsService extends CoreService {
     );
   }
 
-  readAnnouncement(announcementId: string): Observable<void> {
-    const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/me/announcements/:announcementId/read')
-      .setPathParams({ announcementId });
-    return this.http.patch<void>(url.buildUrl(), null).pipe(take(1));
+  readAnnouncement(announcementId: string, innovationId?: string): Observable<void> {
+    if (innovationId) {
+      console.log('removed only for current innovation');
+    } else {
+      console.log('removed all for this specific announcement');
+    }
+
+    // TODO: Update endpoint to accept clearing all/one announcement for specific innovations
+
+    // const url = new UrlModel(this.API_USERS_URL)
+    //   .addPath('v1/me/announcements/:announcementId/read')
+    //   .setPathParams({ announcementId });
+    // return this.http.patch<void>(url.buildUrl(), null).pipe(take(1));
+
+    return of();
   }
 }
