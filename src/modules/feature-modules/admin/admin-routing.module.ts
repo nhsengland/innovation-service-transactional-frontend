@@ -260,10 +260,27 @@ const routes: Routes = [
                 path: 'manage',
                 data: { breadcrumb: 'Manage account' },
                 children: [
-                  { path: '', pathMatch: 'full', component: PageUserManageComponent, data: { breadcrumb: null } },
-                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent, data: { breadcrumb: null } },
-                  { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
-                  { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } }
+                  { path: '', pathMatch: 'full', component: PageUserManageComponent },
+                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
+                  { path: 'lock', pathMatch: 'full', component: PageUserLockComponent },
+                  { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent },
+                  {
+                    path: 'mfa',
+                    data: { layout: { type: 'full' } },
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        redirectTo: 'edit'
+                      },
+                      {
+                        path: 'edit',
+                        pathMatch: 'full',
+                        component: PageAccountMFAEditComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
+                  }
                 ]
               },
               {

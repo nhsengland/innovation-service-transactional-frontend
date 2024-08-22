@@ -7,9 +7,9 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
+import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
-import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 type GetUserInfoDTO = {
   id: string;
