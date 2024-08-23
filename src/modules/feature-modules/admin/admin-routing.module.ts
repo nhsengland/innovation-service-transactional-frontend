@@ -85,6 +85,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
@@ -261,9 +262,10 @@ const routes: Routes = [
                 data: { breadcrumb: 'Manage account' },
                 children: [
                   { path: '', pathMatch: 'full', component: PageUserManageComponent },
-                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
                   { path: 'lock', pathMatch: 'full', component: PageUserLockComponent },
                   { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent },
+                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
+                  { path: 'innovations', pathMatch: 'full', component: PageUserInnovationsComponent },
                   {
                     path: 'mfa',
                     data: { layout: { type: 'full' } },

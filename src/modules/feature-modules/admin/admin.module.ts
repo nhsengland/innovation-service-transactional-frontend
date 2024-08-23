@@ -19,6 +19,7 @@ import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
@@ -105,6 +106,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserDeleteComponent,
+    PageUserInnovationsComponent,
     PageUserManageComponent,
     PageUserLockComponent,
     PageUserUnlockComponent,
