@@ -44,18 +44,23 @@
         <theme-announcements-generic [params]="announcement.params"></theme-announcements-generic>
 
         <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
-        <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoRemovePage()">
-          Remove announcement
+        <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">
+          Delete announcement
         </button>
       </ng-container>
 
-      <ng-container *ngIf="pageStep === 'REMOVE' && announcement && (announcement.isScheduled || announcement.isActive)">
+      <ng-container *ngIf="pageStep === 'DELETE' && announcement && (announcement.isScheduled || announcement.isActive)">
         <div class="nhsuk-warning-callout">
-          <h3 class="nhsuk-warning-callout__label">Important<span class="nhsuk-u-visually-hidden">:</span></h3>
-          <p *ngIf="announcement.isScheduled">This announcement is not active so is fairly safe to remove it.</p>
-          <p *ngIf="announcement.isActive">This announcement is currently active and could already had been seen by users.</p>
+          <ng-container *ngIf="announcement.isScheduled">
+            <h3 class="nhsuk-warning-callout__label">When you delete a scheduled announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
+            <p>This announcement is not active so is fairly safe to remove it.</p>
+          </ng-container>
+          <ng-container *ngIf="announcement.isActive">
+            <h3 class="nhsuk-warning-callout__label">When you delete a live announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
+            <p>It will no longer be visible on the service. However, it may have already been seen by users. And if it was sent via email, it will have already been delivered.</p>
+          </ng-container>
         </div>
-        <button type="button" class="nhsuk-button" (click)="onDelete()">Remove announcement</button>
+        <button type="button" class="nhsuk-button" (click)="onDelete()">Delete announcement</button>
       </ng-container>
     </div>
   </div>

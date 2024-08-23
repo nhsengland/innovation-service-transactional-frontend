@@ -22,7 +22,7 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
         isScheduled: boolean;
         isActive: boolean;
       }) = null;
-  pageStep: 'INFO' | 'REMOVE' = 'INFO';
+  pageStep: 'INFO' | 'DELETE' = 'INFO';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -62,10 +62,10 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
     this.pageStep = 'INFO';
   }
 
-  gotoRemovePage() {
-    this.setPageTitle('Remove announcement');
+  gotoDeletePage() {
+    this.setPageTitle('Delete announcement');
     this.setBackLink('Go back', this.gotoInfoPage.bind(this));
-    this.pageStep = 'REMOVE';
+    this.pageStep = 'DELETE';
   }
 
   onDelete() {
