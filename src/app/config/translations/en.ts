@@ -493,17 +493,7 @@ export const locale = {
             },
 
             ANNOUNCEMENTS: {
-              INNOVATOR: {
-                title: 'Announcements',
-                description:
-                  'Receive email copies of announcements on the service. For example, funding opportunities and support programmes.'
-              },
-              QUALIFYING_ACCESSOR: {
-                title: 'Announcements',
-                description:
-                  'Receive email copies of announcements on the service. For example, funding opportunities and support programmes.'
-              },
-              ACCESSOR: {
+              SHARED: {
                 title: 'Announcements',
                 description:
                   'Receive email copies of announcements on the service. For example, funding opportunities and support programmes.'
