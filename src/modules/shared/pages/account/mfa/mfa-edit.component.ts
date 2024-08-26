@@ -84,16 +84,16 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   setupWizard(): void {
     switch (this.wizardMode) {
       case 'set-mfa':
-        this.wizard = new WizardEngineModel(MFA_SET_UP);
+        this.wizard = new WizardEngineModel(MFA_SET_UP(this.isAdmin));
         break;
       case 'turn-off':
-        this.wizard = new WizardEngineModel(MFA_TURN_OFF);
+        this.wizard = new WizardEngineModel(MFA_TURN_OFF(this.isAdmin));
         break;
       case 'email':
-        this.wizard = new WizardEngineModel(MFA_EMAIL);
+        this.wizard = new WizardEngineModel(MFA_EMAIL(this.isAdmin));
         break;
       case 'phone':
-        this.wizard = new WizardEngineModel(MFA_PHONE);
+        this.wizard = new WizardEngineModel(MFA_PHONE(this.isAdmin));
         break;
       default:
         this.redirectTo(this.manageAccountPageUrl);
