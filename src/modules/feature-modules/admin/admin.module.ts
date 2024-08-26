@@ -32,6 +32,7 @@ import { PageAnnouncementsListComponent } from './pages/announcements/announceme
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
@@ -96,6 +97,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageDashboardComponent,
     // // Innovation
     InnovationOverviewComponent,
+    PageInnovationManageTransferComponent,
     // // Organisations.
     PageOrganisationNewComponent,
     PageOrganisationEditComponent,

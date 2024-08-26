@@ -29,6 +29,7 @@ import { PageAnnouncementsListComponent } from './pages/announcements/announceme
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
@@ -688,6 +689,24 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageInnovationStatusListComponent,
                 data: { breadcrumb: 'Statuses' }
+              },
+              {
+                path: 'transfer',
+                data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: '1',
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: ':stepId',
+                    pathMatch: 'full',
+                    component: PageInnovationManageTransferComponent,
+                    data: { breadcrumb: null }
+                  }
+                ]
               }
             ]
           }

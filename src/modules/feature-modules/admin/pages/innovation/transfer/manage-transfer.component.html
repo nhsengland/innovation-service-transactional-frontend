@@ -1,0 +1,24 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <ng-container *ngIf="isQuestionStep()">
+        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next', $event)">Continue</button>
+      </ng-container>
+
+      <ng-container *ngIf="isSummaryStep()">
+        <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+          <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+            <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
+          </div>
+          <p>Service users should transfer their own NHS Innovation service accounts. If this is not possible, admins can transfer the innovation on behalf of the user but this should be avoided.</p>
+          <p>Before you continue, make sure you have an explicit request from the NHS Innovation Service service owner to proceed with the transfer innovation.</p>
+        </div>
+        <form [formGroup]="form">
+          <theme-form-input controlName="confirmation" description="To confirm, please type the following: transfer innovation" [pageUniqueField]="false"></theme-form-input>
+          <button class="nhsuk-button" (click)="onSubmitWizard()">Transfer ownership</button>
+        </form>
+      </ng-container>
+    </div>
+  </div>
+</theme-content-wrapper>
