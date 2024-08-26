@@ -44,6 +44,7 @@ import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component'
 import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
+import { KeyProgressAreasCardComponent } from './components/key-progress-areas-card/key-progress-areas-card.component';
 
 @NgModule({
   imports: [
@@ -85,6 +86,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     OnOffTagComponent,
     StatisticsCardsComponent,
     SuggestionsCardsComponent,
+    KeyProgressAreasCardComponent,
 
     InnovationRecordExportComponent,
 
@@ -134,6 +136,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     OnOffTagComponent,
     StatisticsCardsComponent,
     SuggestionsCardsComponent,
+    KeyProgressAreasCardComponent,
 
     ChipsFilterComponent,
     CollapsibleFilterComponent,
