@@ -1,0 +1,19 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations</h2>
+      <table class="nhsuk-table">
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let innovation of innovations" role="row" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }} </a>
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <a routerLink="/admin/innovations/{{ innovation.id }}/transfer">Transfer ownership</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</theme-content-wrapper>

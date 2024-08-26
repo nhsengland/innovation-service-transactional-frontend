@@ -19,6 +19,7 @@ import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
@@ -31,6 +32,7 @@ import { PageAnnouncementsListComponent } from './pages/announcements/announceme
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
@@ -95,6 +97,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageDashboardComponent,
     // // Innovation
     InnovationOverviewComponent,
+    PageInnovationManageTransferComponent,
     // // Organisations.
     PageOrganisationNewComponent,
     PageOrganisationEditComponent,
@@ -105,6 +108,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserDeleteComponent,
+    PageUserInnovationsComponent,
     PageUserManageComponent,
     PageUserLockComponent,
     PageUserUnlockComponent,
