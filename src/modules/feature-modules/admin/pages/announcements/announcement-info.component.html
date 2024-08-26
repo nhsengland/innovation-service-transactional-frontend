@@ -41,7 +41,8 @@
         <p>This is a preview of the announcement. <a *ngIf="announcement.isScheduled" routerLink="edit/1">Change any information necessary.</a></p>
 
         <h2 class="nhsuk-heading-l">{{ announcement.title }}</h2>
-        <theme-announcements-generic [params]="announcement.params"></theme-announcements-generic>
+
+        <theme-announcements-card [announcementCardData]="{ title: announcement.title, params: announcement.params }"></theme-announcements-card>
 
         <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
         <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoRemovePage()">
