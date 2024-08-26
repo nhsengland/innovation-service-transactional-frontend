@@ -16,7 +16,6 @@ import {
   ActivityLogTypesEnum,
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
-  InnovationSectionEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
@@ -55,7 +54,7 @@ import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/i
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
   innovationName?: string;
-  sections?: InnovationSectionEnum[];
+  sections?: string[];
   status?: InnovationTaskStatusEnum[];
   innovationStatus?: InnovationStatusEnum[];
   createdByMe?: boolean;

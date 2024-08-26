@@ -8,7 +8,6 @@ import { DateISOType, StatisticsCardType } from '@app/base/types';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import {
   InnovationGroupedStatusEnum,
-  InnovationSectionEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
@@ -97,9 +96,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
       this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
 
-      const lastTaskSubmitted: InnovationSectionEnum = (<any>InnovationSectionEnum)[
-        statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!
-      ];
+      const lastTaskSubmitted: string = statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!;
 
       this.cardsList = [
         {

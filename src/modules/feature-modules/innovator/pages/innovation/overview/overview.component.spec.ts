@@ -104,7 +104,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   //     sections: [{
   //       title: '',
   //       sections: [{
-  //         id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
+  //         id: 'INNOVATION_DESCRIPTION',
   //         title: '',
   //         status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
   //         actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,
@@ -154,7 +154,7 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
   //     sections: [{
   //       title: '',
   //       sections: [{
-  //         id: InnovationSectionEnum.INNOVATION_DESCRIPTION,
+  //         id: 'INNOVATION_DESCRIPTION',
   //         title: '',
   //         status: 'NOT_STARTED' as keyof typeof INNOVATION_SECTION_STATUS,
   //         actionStatus: 'STARTED' as keyof typeof INNOVATION_SECTION_ACTION_STATUS,

@@ -10,7 +10,7 @@ import { InnovatorService } from '../../services/innovator.service';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { InnovationErrorsEnum } from '@app/base/enums';
-import { NEW_INNOVATION_QUESTIONS } from './innovation-new.config';
+import { getNewInnovationQuestionsWizard } from './innovation-new.config';
 
 @Component({
   selector: 'app-innovator-pages-innovation-new',
@@ -19,7 +19,7 @@ import { NEW_INNOVATION_QUESTIONS } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard = cloneDeep(NEW_INNOVATION_QUESTIONS);
+  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.stores.context.getIrSchema()));
 
   isCreatingInnovation = false;
 

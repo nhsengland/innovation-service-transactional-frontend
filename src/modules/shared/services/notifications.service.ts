@@ -8,7 +8,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import {
-  InnovationSectionEnum,
+
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
@@ -31,7 +31,7 @@ export type NotificationsListInDTO = {
     createdBy: string;
     readAt: null | DateISOType;
     params: null | {
-      section?: InnovationSectionEnum;
+      section?: string;
       actionCode?: string;
       taskStatus?: InnovationTaskStatusEnum;
       supportStatus?: InnovationSupportStatusEnum;

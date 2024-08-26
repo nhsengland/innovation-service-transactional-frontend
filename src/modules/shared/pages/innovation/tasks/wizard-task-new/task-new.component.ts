@@ -4,7 +4,6 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { MappedObjectType, WizardStepEventType } from '@app/base/types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { WizardTaskNewMessageStepComponent } from './steps/message-step.component';
 import { MessageStepInputType, MessageStepOutputType } from './steps/message-step.types';
 import { WizardTaskNewSectionStepComponent } from './steps/section-step.component';
@@ -25,7 +24,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   sections: { value: string; label: string }[];
 
   wizard = new WizardModel<{
-    sectionStep: { section: null | InnovationSectionEnum };
+    sectionStep: { section: null | string };
     messageStep: { message: string };
   }>({});
 
@@ -59,7 +58,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
       const section = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
       if (section) {
-        this.wizard.data.sectionStep.section = this.sectionId as InnovationSectionEnum;
+        this.wizard.data.sectionStep.section = this.sectionId;
       } else {
         this.redirectTo(`${this.taskUrl}/new`);
         return;

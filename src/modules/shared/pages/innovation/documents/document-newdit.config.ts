@@ -1,5 +1,3 @@
-// import { AppInjector } from '@modules/core';
-
 import { FileUploadType } from '@app/base/forms';
 
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
@@ -8,12 +6,7 @@ import {
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-// import { InnovationService } from '@modules/stores';
-import {
-  getAllSectionsList,
-  getAllSectionsListV3
-} from '@modules/stores/innovation/innovation-record/ir-versions.config';
-// import { StringsHelper } from '@app/base/helpers';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 // Labels.
 const stepsLabels = {
@@ -62,7 +55,6 @@ const relatedWithSectionItems = [
 // const injector = AppInjector.getInjector();
 // const innovationStoreInnovationService = injector?.get(InnovationService); // Needs to have the optional because of tests.
 // const evidencesSectionId = 'EVIDENCE_OF_EFFECTIVENESS';
-const innovationSectionsItems = getAllSectionsList();
 
 export const WIZARD_BASE_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [

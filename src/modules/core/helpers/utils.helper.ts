@@ -8,7 +8,7 @@ import {
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
-import { InnovationStore } from '@modules/stores';
+import { InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
@@ -124,12 +124,12 @@ export class UtilsHelper {
 
   static getNotifyMeSubscriptionSectionsText(
     subscription: NotifyMeResponseTypes[NotificationEnum.INNOVATION_RECORD_UPDATED],
-    innovationStore: InnovationStore
+    schemaStore: InnovationRecordSchemaStore
   ): string[] {
     if (subscription.sections) {
       return subscription.sections
         .map(s => {
-          const sectionIdentification = innovationStore.getInnovationRecordSectionIdentification(s);
+          const sectionIdentification = schemaStore.getIrSchemaSectionIdentificationV3(s);
           return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
         })
         .sort((a, b) => a.localeCompare(b));

@@ -129,7 +129,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
     const innovationRecordStepSections = this.data.innovationRecordUpdateStep.innovationRecordSections;
     return innovationRecordStepSections
       .map(s => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
+        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(s);
         return s === 'ALL'
           ? 'All sections'
           : sectionIdentification

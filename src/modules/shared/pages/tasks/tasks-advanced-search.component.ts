@@ -5,13 +5,11 @@ import { debounceTime } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-
 import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './task-advanced-search.config';
-
 
 @Component({
   selector: 'shared-pages-tasks-advanced-search',
@@ -52,7 +50,7 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
       return;
     }
 
-    const { filters, datasets } = getConfig(userType);
+    const { filters, datasets } = getConfig(userType, this.stores.context.getIrSchema());
 
     datasets.status = [
       InnovationTaskStatusEnum.OPEN,

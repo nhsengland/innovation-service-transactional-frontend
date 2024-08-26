@@ -5,8 +5,8 @@ import {
   WizardStepType,
   WizardSummaryType
 } from '@modules/shared/forms';
-import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-import { countriesItems, locationItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 const stepsLabels = {
   q1: {
@@ -34,7 +34,7 @@ const stepsLabels = {
 type StepPayloadType = {
   name: string;
   description?: string;
-  officeLocation: catalogOfficeLocation;
+  officeLocation: string;
   countryLocation: null | string[];
   postcode?: string;
   hasWebsite: string;
@@ -51,60 +51,71 @@ type OutboundPayloadType = {
   hasWebsite: string;
 };
 
-export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
-  showSummary: true,
-  steps: [
-    new FormEngineModel({
-      label: 'Register a new innovation',
-      description: "We'll ask you for the name and a brief description of the innovation.",
-      parameters: []
-    }),
+export function getNewInnovationQuestionsWizard(schema: InnovationRecordSchemaInfoType): WizardEngineModel {
+  return new WizardEngineModel({
+    showSummary: true,
+    steps: [
+      new FormEngineModel({
+        label: 'Register a new innovation',
+        description: "We'll ask you for the name and a brief description of the innovation.",
+        parameters: []
+      }),
 
-    new FormEngineModel({
-      parameters: [
-        {
-          id: 'name',
-          dataType: 'text',
-          label: stepsLabels.q1.label,
-          description: stepsLabels.q1.description,
-          validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 }
-        }
-      ]
-    }),
-    new FormEngineModel({
-      parameters: [
-        {
-          id: 'description',
-          dataType: 'textarea',
-          label: stepsLabels.q2.label,
-          description: stepsLabels.q2.description,
-          validations: { isRequired: [true, 'A description is required'] },
-          lengthLimit: 's'
-        }
-      ]
-    }),
-    new FormEngineModel({
-      parameters: [
-        {
-          id: 'officeLocation',
-          dataType: 'radio-group',
-          label: stepsLabels.q3.label,
-          description: stepsLabels.q3.description,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: locationItems
-        }
-      ]
-    })
-  ],
-  runtimeRules: [
-    (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
-      runtimeRules(steps, currentValues, currentStep)
-  ],
-  outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
-});
+      new FormEngineModel({
+        parameters: [
+          {
+            id: 'name',
+            dataType: 'text',
+            label: stepsLabels.q1.label,
+            description: stepsLabels.q1.description,
+            validations: { isRequired: [true, 'Innovation name is required'], maxLength: 100 }
+          }
+        ]
+      }),
+      new FormEngineModel({
+        parameters: [
+          {
+            id: 'description',
+            dataType: 'textarea',
+            label: stepsLabels.q2.label,
+            description: stepsLabels.q2.description,
+            validations: { isRequired: [true, 'A description is required'] },
+            lengthLimit: 's'
+          }
+        ]
+      }),
+      new FormEngineModel({
+        parameters: [
+          {
+            id: 'officeLocation',
+            dataType: 'radio-group',
+            label: stepsLabels.q3.label,
+            description: stepsLabels.q3.description,
+            validations: { isRequired: [true, 'Choose one option'] },
+            items: getIrSchemaQuestionItemsValueAndLabel(schema, 'officeLocation')
+          }
+        ]
+      })
+    ],
+    runtimeRules: [
+      (
+        steps: WizardStepType[],
+        currentValues: StepPayloadType,
+        currentStep: number | 'summary',
+        schema?: InnovationRecordSchemaInfoType
+      ) => runtimeRules(steps, currentValues, currentStep, schema)
+    ],
+    outboundParsing: (data: StepPayloadType) => outboundParsing(data),
+    summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+  });
+}
 
-function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
+function runtimeRules(
+  steps: WizardStepType[],
+  currentValues: StepPayloadType,
+  currentStep: number | 'summary',
+  schema?: InnovationRecordSchemaInfoType
+): void {
   steps.splice(4);
 
   if (currentValues.officeLocation !== 'Based outside UK') {
@@ -133,7 +144,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
             dataType: 'autocomplete-array',
             label: stepsLabels.q5.label,
             validations: { isRequired: [true, 'You must choose one country'], max: [1, 'Only 1 country is allowed'] },
-            items: countriesItems
+            items: schema ? getIrSchemaQuestionItemsValueAndLabel(schema, 'countryLocation') : []
           }
         ]
       })

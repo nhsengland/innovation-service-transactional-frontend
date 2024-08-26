@@ -3,7 +3,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { CoreComponent } from '@app/base';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 import { SectionStepInputType, SectionStepOutputType } from './section-step.types';
 
 @Component({
@@ -27,7 +26,7 @@ export class WizardTaskNewSectionStepComponent
 
   form = new FormGroup(
     {
-      section: new FormControl<null | InnovationSectionEnum>(null, {
+      section: new FormControl<null | string>(null, {
         validators: CustomValidators.required('Choose one section'),
         updateOn: 'change'
       })

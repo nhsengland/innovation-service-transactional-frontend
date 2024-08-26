@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
-import { FormArray, FormGroup } from '@app/base/forms';
+import { FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import {
@@ -18,14 +17,6 @@ import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/s
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './notifications-list.config';
-
-type FilterKeysType = 'contextTypes';
-type FiltersType = {
-  key: FilterKeysType;
-  title: string;
-  showHideStatus: 'opened' | 'closed';
-  selected: { label: string; value: string }[];
-};
 
 @Component({
   selector: 'shared-pages-notifications-list',

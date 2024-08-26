@@ -10,7 +10,6 @@ export {
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTransferStatusEnum,
-  InnovationSectionEnum,
   InnovationTaskStatusEnum,
   ActivityLogTypesEnum,
   ActivityLogItemsEnum
