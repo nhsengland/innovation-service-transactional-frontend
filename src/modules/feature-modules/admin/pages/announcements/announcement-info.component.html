@@ -53,7 +53,7 @@
         <div class="nhsuk-warning-callout">
           <ng-container *ngIf="announcement.isScheduled">
             <h3 class="nhsuk-warning-callout__label">When you delete a scheduled announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
-            <p>This announcement is not active so is fairly safe to remove it.</p>
+            <p>It will not go live on the service. If it was scheduled to be sent via email, this email will not be sent.</p>
           </ng-container>
           <ng-container *ngIf="announcement.isActive">
             <h3 class="nhsuk-warning-callout__label">When you delete a live announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
