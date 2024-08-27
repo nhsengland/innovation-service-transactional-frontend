@@ -7,8 +7,7 @@ import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import {
   AnnouncementStatusEnum,
   AnnouncementTypeEnum,
-  AnnouncementsService,
-  InnovationRecordFilterPayloadType
+  AnnouncementsService
 } from '@modules/feature-modules/admin/services/announcements.service';
 
 import {
@@ -225,11 +224,11 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       linkUrl: outboundPayload.params.link?.url,
       userRoles: outboundPayload.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n'),
       showToWhom: outboundPayload.userRoles.includes(UserRoleEnum.INNOVATOR)
-        ? outboundPayload.params.filters?.length
+        ? outboundPayload.filters?.length
           ? 'Specific types of innovations'
           : 'All innovators'
         : undefined,
-      filters: outboundPayload.params.filters?.map(filter => {
+      filters: outboundPayload.filters?.map(filter => {
         return {
           section: this.formatSectionLabel(filter.section),
           question: irSchemaTranslations['questions'].get(filter.question)?.label ?? filter.question,
@@ -322,8 +321,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
           this.redirectTo(`admin/announcements`);
         },
         error: () => {
-          this.submitButton = { isActive: true, label: 'Submit' };
-          this.setPageStatus('ERROR');
+          this.submitButton = { isActive: true, label: 'Save announcement' };
           this.setAlertUnknownError();
         }
       });
@@ -334,8 +332,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
           this.redirectTo(`admin/announcements/${this.announcementId}`);
         },
         error: () => {
-          this.submitButton = { isActive: true, label: 'Submit' };
-          this.setPageStatus('ERROR');
+          this.submitButton = { isActive: true, label: 'Save announcement' };
           this.setAlertUnknownError();
         }
       });

@@ -272,11 +272,11 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
     linkUrl: data.params?.link?.url ?? '',
     userRoles: data.userRoles ?? [],
     showToWhom: (data.userRoles ?? []).includes(UserRoleEnum.INNOVATOR)
-      ? data.params?.filters?.length
+      ? data.filters?.length
         ? ShowToWhomEnum.SPECIFIC_INNOVATIONS
         : ShowToWhomEnum.ALL_INNOVATIONS
       : undefined,
-    filters: data.params?.filters ?? undefined,
+    filters: data?.filters,
     startsAt: data.startsAt
       ? DatesHelper.getDateInputFormatFromString(data.startsAt)
       : { day: '', month: '', year: '' },
@@ -290,10 +290,10 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     title: data.title,
     params: {
       content: data.content,
-      ...(data.linkLabel && data.linkUrl ? { link: { label: data.linkLabel, url: data.linkUrl } } : {}),
-      ...(data.filters ? { filters: data.filters } : {})
+      ...(data.linkLabel && data.linkUrl ? { link: { label: data.linkLabel, url: data.linkUrl } } : {})
     },
     userRoles: data.userRoles,
+    filters: data.filters,
     startsAt: DatesHelper.getDateString(data.startsAt.year, data.startsAt.month, data.startsAt.day),
     expiresAt:
       data.expiresAt?.day && data.expiresAt?.month && data.expiresAt?.year

@@ -22,7 +22,6 @@ export enum AnnouncementTypeEnum {
 export type AnnouncementParamsType = {
   content: string;
   link?: { label: string; url: string };
-  filters?: InnovationRecordFilterPayloadType;
 };
 
 export type InnovationRecordFilterPayloadType = { section: string; question: string; answers: string[] }[];
@@ -48,6 +47,7 @@ export type GetAnnouncementInfoType = {
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
   type: AnnouncementTypeEnum;
+  filters?: InnovationRecordFilterPayloadType;
 };
 
 export type UpsertAnnouncementType = {
@@ -57,6 +57,7 @@ export type UpsertAnnouncementType = {
   startsAt: DateISOType;
   expiresAt?: DateISOType;
   type: AnnouncementTypeEnum;
+  filters?: InnovationRecordFilterPayloadType;
 };
 
 @Injectable()
