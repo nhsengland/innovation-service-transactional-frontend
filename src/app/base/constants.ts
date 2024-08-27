@@ -36,6 +36,7 @@ export const URLS = {
   NHR: 'https://www.hra.nhs.uk/about-us',
   SUPPLY_CHAIN: 'https://www.supplychain.nhs.uk',
   SHTG: 'https://shtg.scot',
+  DBT: 'https://www.gov.uk/government/organisations/department-for-business-and-trade',
 
   // Sections links.
   CORE20PLUS5:
