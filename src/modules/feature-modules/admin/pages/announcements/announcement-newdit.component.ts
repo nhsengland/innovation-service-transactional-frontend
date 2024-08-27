@@ -20,6 +20,22 @@ import {
 import { DatePipe } from '@angular/common';
 import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
+import { InnovationRecordSchemaStore } from '@modules/stores';
+
+const QUESTION_LABELS = {
+  linkLabel: 'Link label',
+  linkUrl: 'Link url',
+  startsAt: 'Start date',
+  expiresAt: 'End date'
+};
+
+enum SummaryDataItemTypeEnum {
+  SINGLE_PARAMETER = 'SINGLE_PARAMETER',
+  MULTIPLE_PARAMETERS = 'MULTIPLE_PARAMETERS',
+  FILTER_PARAMETER = 'FILTER_PARAMETER'
+}
+
+type SummaryPayloadFilterType = { section: string; question: string; answer: string };
 
 type SummaryPayloadType = {
   title: string;
@@ -28,26 +44,38 @@ type SummaryPayloadType = {
   linkUrl?: string;
   userRoles: string;
   showToWhom?: string;
-  filters?: InnovationRecordFilterPayloadType;
+  filters?: SummaryPayloadFilterType[];
   startsAt: string;
   expiresAt?: string;
   type: string;
 };
 
-export type SummaryDataType = {
+type SummaryDataItemType = {
   label: string;
   editStepNumber: number;
+  data: SummaryDataItemSingleParameterType | SummaryDataItemMultipleParametersType | SummaryDataItemFilterParamaterType;
+};
+
+type SummaryDataItemSingleParameterType = {
+  type: SummaryDataItemTypeEnum.SINGLE_PARAMETER;
+  answer: string;
+};
+
+type SummaryDataItemMultipleParametersType = {
+  type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS;
   questions: {
-    label?: string;
-    answer?: string | InnovationRecordFilterPayloadType;
+    label: string;
+    answer: string;
   }[];
 };
 
-const QUESTION_LABELS = {
-  linkLabel: 'Link label',
-  linkUrl: 'Link url',
-  startsAt: 'Start date',
-  expiresAt: 'End date'
+type SummaryDataItemFilterParamaterType = {
+  type: SummaryDataItemTypeEnum.FILTER_PARAMETER;
+  sections: {
+    section: string;
+    question: string;
+    answer: string;
+  }[];
 };
 
 @Component({
@@ -68,7 +96,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
-  summaryData: SummaryDataType[] = [];
+  summaryData: SummaryDataItemType[] = [];
 
   isChangeMode: boolean = false;
   submitButton = { isActive: true, label: 'Save announcement' };
@@ -76,7 +104,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   constructor(
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     super();
 
@@ -179,8 +208,15 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
   }
 
+  formatSectionLabel(sectionId: string) {
+    const sectionIdentification = this.irSchemaStore.getIrSchemaSectionIdentificationV3(sectionId);
+    return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
+  }
+
   summaryParsing(): SummaryPayloadType {
     const outboundPayload = this.wizard.runOutboundParsing() as OutboundPayloadType;
+
+    const irSchemaTranslations = this.irSchemaStore.getIrSchemaTranslationsMap();
 
     return {
       title: outboundPayload.title,
@@ -193,7 +229,17 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
           ? 'Specific types of innovations'
           : 'All innovators'
         : undefined,
-      filters: outboundPayload.params.filters,
+      filters: outboundPayload.params.filters?.map(filter => {
+        return {
+          section: this.formatSectionLabel(filter.section),
+          question: irSchemaTranslations['questions'].get(filter.question)?.label ?? filter.question,
+          answer: filter.answers
+            .map(
+              answer => irSchemaTranslations['questions'].get(filter.question.split('_')[0])?.items?.get(answer)?.label
+            )
+            .join('\n')
+        };
+      }),
       startsAt: this.datePipe.transform(outboundPayload.startsAt, this.translate('app.date_formats.long_date'))!,
       expiresAt: outboundPayload.expiresAt
         ? this.datePipe.transform(outboundPayload.expiresAt, this.translate('app.date_formats.long_date'))!
@@ -202,27 +248,51 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     };
   }
 
-  getSummaryData(): SummaryDataType[] {
-    const summaryData: SummaryDataType[] = [];
-
+  getSummaryData(): SummaryDataItemType[] {
+    const summaryData: SummaryDataItemType[] = [];
     const summaryPayload = this.summaryParsing();
 
     this.wizard.steps.forEach((step, stepIndex) => {
-      const summaryItem: SummaryDataType = {
-        label: step.label ?? step.parameters[0].label ?? '',
-        editStepNumber: stepIndex + 1,
-        questions: []
-      };
+      let stepDataType: SummaryDataItemTypeEnum = SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS;
+      if (step.parameters.length === 1) {
+        stepDataType =
+          step.parameters[0].dataType === 'ir-selectable-filters'
+            ? SummaryDataItemTypeEnum.FILTER_PARAMETER
+            : SummaryDataItemTypeEnum.SINGLE_PARAMETER;
+      }
 
-      step.parameters.forEach((parameter, pIndex) => {
-        summaryItem.questions.push({
-          label: step.parameters.length > 1 ? QUESTION_LABELS[parameter.id as keyof typeof QUESTION_LABELS] : undefined,
-          answer: summaryPayload[parameter.id as keyof SummaryPayloadType]
+      const label = step.label ?? step.parameters[0].label ?? '';
+      const editStepNumber = stepIndex + 1;
+
+      if (stepDataType === SummaryDataItemTypeEnum.SINGLE_PARAMETER) {
+        const stepItemData: SummaryDataItemSingleParameterType = {
+          type: stepDataType,
+          answer: summaryPayload[step.parameters[0].id as keyof SummaryPayloadType] as string
+        };
+        summaryData.push({ label, editStepNumber, data: stepItemData });
+      } else if (stepDataType === SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS) {
+        const questions = step.parameters.map(parameter => {
+          return {
+            label: QUESTION_LABELS[parameter.id as keyof typeof QUESTION_LABELS],
+            answer: summaryPayload[parameter.id as keyof SummaryPayloadType] as string
+          };
         });
-      });
 
-      if (summaryItem.questions.some(q => q.answer)) {
-        summaryData.push(summaryItem);
+        const stepItemData: SummaryDataItemMultipleParametersType = {
+          type: stepDataType,
+          questions
+        };
+        summaryData.push({ label, editStepNumber, data: stepItemData });
+      } else if (stepDataType === SummaryDataItemTypeEnum.FILTER_PARAMETER) {
+        const sections = summaryPayload[
+          step.parameters[0].id as keyof SummaryPayloadType
+        ] as SummaryPayloadFilterType[];
+
+        const stepItemData: SummaryDataItemFilterParamaterType = {
+          type: stepDataType,
+          sections
+        };
+        summaryData.push({ label, editStepNumber, data: stepItemData });
       }
     });
 
@@ -242,8 +312,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.resetAlert();
 
     this.submitButton = { isActive: false, label: 'Saving...' };
-
-    //this.wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 

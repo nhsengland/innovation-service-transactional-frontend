@@ -22,20 +22,43 @@
             >
           </div>
 
-          <div *ngFor="let question of item.questions">
-            <dl *ngIf="question.label" class="nhsuk-summary-list">
-              <div class="nhsuk-summary-list__row">
+          <div *ngIf="item.data.type === 'SINGLE_PARAMETER'">
+            <span class="nhsuk-u-font-size-19 text-pre-wrap">{{ item.data.answer }}</span>
+            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
+          </div>
+
+          <div *ngIf="item.data.type === 'MULTIPLE_PARAMETERS'">
+            <dl class="nhsuk-summary-list">
+              <div *ngFor="let question of item.data.questions" class="nhsuk-summary-list__row">
                 <dt class="nhsuk-summary-list__key">{{ question.label }}</dt>
                 <dd class="nhsuk-summary-list__value text-pre-wrap">{{ question.answer }}</dd>
                 <dd class="nhsuk-summary-list__actions"></dd>
               </div>
             </dl>
-
-            <div *ngIf="!question.label">
-              <span class="nhsuk-u-font-size-19 text-pre-wrap">{{ question.answer }}</span>
-              <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
-            </div>
           </div>
+
+          <ng-container *ngIf="item.data.type === 'FILTER_PARAMETER'">
+            <div *ngFor="let section of item.data.sections; let i = index">
+              <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">Filter {{ i + 1 }}</h3>
+              <dl class="nhsuk-summary-list">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Section</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.section }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Question</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.question }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Answer</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.answer }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+              </dl>
+            </div>
+          </ng-container>
         </div>
 
         <p>Preview of this announcement:</p>
