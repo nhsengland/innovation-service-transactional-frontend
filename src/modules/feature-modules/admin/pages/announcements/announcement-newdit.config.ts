@@ -134,6 +134,7 @@ export const ANNOUNCEMENT_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineMo
           id: 'expiresAt',
           dataType: 'date-input',
           label: 'Set an end date',
+          description: `If you do not set an end date, the announcement will be displayed until the user clears it.`,
           validations: {
             dateInputFormat: {}
           }
