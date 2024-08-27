@@ -281,7 +281,8 @@ export class WizardEngineModel {
   checkCurrentStepErrors(form?: FormGroup): { fieldId: string; errorMessage: string }[] | null {
     const currentStep = this.currentStep();
     if (form) {
-      return Object.entries(FormEngineHelper.getErrors(form)).map(([key, value]) => {
+      const formErrors = FormEngineHelper.getErrors(form);
+      return Object.entries(formErrors).map(([key, value]) => {
         const parameter = currentStep.parameters.find(p => p.id === key)!;
         return {
           fieldId:

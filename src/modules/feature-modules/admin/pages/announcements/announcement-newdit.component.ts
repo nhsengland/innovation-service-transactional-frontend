@@ -162,14 +162,16 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
 
       // To display alert error.
       const currentStepErrors = this.wizard.checkCurrentStepErrors(this.formEngineComponent?.form);
-      this.setAlertError('', {
-        itemsList: [
-          {
-            title: this.translate(currentStepErrors?.[0].errorMessage!),
-            fieldId: currentStepErrors?.[0].fieldId
-          }
-        ]
-      });
+      if (currentStepErrors?.length) {
+        this.setAlertError('', {
+          itemsList: [
+            {
+              title: this.translate(currentStepErrors?.[0].errorMessage!),
+              fieldId: currentStepErrors?.[0].fieldId
+            }
+          ]
+        });
+      }
 
       return;
     }
