@@ -36,13 +36,13 @@ export const NO_COLLABORATORS_TRANSFERS = () =>
         ]
       }),
       new FormEngineModel({
-        label: 'Does the innovator wish to continue to collaborate on this innovation?',
+        label: 'Does the current owner wish to continue to collaborate on this innovation?',
         parameters: [
           {
             id: 'ownerToCollaborator',
             dataType: 'radio-group',
             label:
-              'This means the innovator can work on the innovation but are not the owner and do not have owner privileges.',
+              'This means that they can work on the innovation but are not the owner and do not have owner privileges.',
             validations: { isRequired: [true, 'Choose one option'] },
             items: [
               { value: 'YES', label: 'Yes' },
@@ -76,13 +76,13 @@ export const COLLABORATORS_TRANSFERS: WizardEngineModel = new WizardEngineModel(
       ]
     }),
     new FormEngineModel({
-      label: 'Does the innovator wish to continue to collaborate on this innovation?',
+      label: 'Does the current owner wish to continue to collaborate on this innovation?',
       parameters: [
         {
           id: 'ownerToCollaborator',
           dataType: 'radio-group',
           label:
-            'This means the innovator can work on the innovation but are not the owner and do not have owner privileges.',
+            'This means that they can work on the innovation but are not the owner and do not have owner privileges.',
           validations: { isRequired: [true, 'Choose one option'] },
           items: [
             { value: 'YES', label: 'Yes' },

@@ -66,7 +66,7 @@ const stepsLabels = {
     label: 'Set up two-step verification',
     description: {
       admin:
-        'Each time the user logs in we will send a unique code to enter to add a layer of security to the account. You can choose for the user to receive this code via email, text message or phone call.',
+        'Each time the user logs in we will send a unique code to enter to add a layer of security to the account. You can choose for them to receive this code via email, text message or phone call.',
       default:
         'Each time you log in we will send you a unique code to enter to add a layer of security to your account. You can choose to receive this code via email, text message or phone call.'
     }
@@ -75,7 +75,7 @@ const stepsLabels = {
     label: 'Turn off two-step verification?',
     description: {
       admin:
-        'By turning off two-step verification, the user will only use a password to log in. This will remove an additional layer of security from the user account.',
+        'By turning off two-step verification, the user will only use a password to log in. This will remove an additional layer of security from their account.',
       default:
         "By turning off two-step verification, you'll only use a password to log in. This will remove an additional layer of security from your account."
     }
@@ -155,7 +155,7 @@ function getEmailStep(isAdmin: boolean, userEmail: string, currentMFAMode: Curre
   return new FormEngineModel({
     label: `${currentMFAMode === 'phone' ? 'Change' : 'Set'} two-step verification method to email`,
     description: isAdmin
-      ? `When user logs in, we'll send a security code to the email address linked with the user account: `
+      ? `When user logs in, we'll send a security code to the email address linked with the user's account: `
       : `When you log in, we'll send a security code to the email address linked with your account: `,
     parameters: [
       {
