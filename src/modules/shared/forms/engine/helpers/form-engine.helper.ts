@@ -51,6 +51,11 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'ir-selectable-filters':
+          form.addControl(parameter.id, new FormArray([]));
+
+          break;
+
         case 'fields-group':
           form.addControl(parameter.id, new FormArray([]));
 

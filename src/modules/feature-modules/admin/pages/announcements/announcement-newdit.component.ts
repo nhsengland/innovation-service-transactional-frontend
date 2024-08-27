@@ -129,7 +129,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
-
     if (action === 'next' && !formData.valid) {
       // Don't move forward if step is NOT valid.
 

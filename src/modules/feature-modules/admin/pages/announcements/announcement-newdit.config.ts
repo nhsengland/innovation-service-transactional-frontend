@@ -1,7 +1,7 @@
 import { UserRoleEnum } from '@app/base/enums';
 import { DatesHelper } from '@app/base/helpers';
 
-import { CustomValidators, FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { CustomValidators, FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import {
   AnnouncementTypeEnum,
   GetAnnouncementInfoType,
@@ -28,6 +28,7 @@ type StepPayloadType = {
   expiresAt?: { day: string; month: string; year: string };
   type: AnnouncementTypeEnum;
 };
+
 export type OutboundPayloadType = UpsertAnnouncementType;
 
 // Form validations
@@ -183,7 +184,7 @@ function announcementNewRuntimeRules(
         parameters: [
           {
             id: 'filters',
-            dataType: 'text', // change to 'ir-selectable-filters' later
+            dataType: 'ir-selectable-filters',
             label: 'Filter innovation type',
             description:
               'Filter which types of innovations you want this announcement to show for. You can filter by question and answer.'

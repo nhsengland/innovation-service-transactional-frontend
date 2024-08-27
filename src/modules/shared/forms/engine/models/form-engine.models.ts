@@ -38,7 +38,8 @@ export class FormEngineParameterModel {
     | 'file-upload'
     | 'file-upload-array'
     | 'select-component'
-    | 'date-input';
+    | 'date-input'
+    | 'ir-selectable-filters';
   label?: string;
   description?: string;
   placeholder?: string;

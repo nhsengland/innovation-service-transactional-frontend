@@ -99,6 +99,17 @@
           ></theme-form-file-upload-array>
         </div>
 
+        <div *ngSwitchCase="'ir-selectable-filters'" [formArrayName]="p.id" [formGroupName]="p.id">
+          <theme-form-ir-selectable-filters-component
+            [parameterValues]="values && values[p.id]"
+            [id]="p.id"
+            [parentFormGroup]="form"
+            [arrayName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+          />
+        </div>
+
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
           <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
             <legend *ngIf="p.label" class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
