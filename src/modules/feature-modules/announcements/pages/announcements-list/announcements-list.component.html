@@ -1,12 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row" *ngIf="announcement">
     <div id="announcement-container" class="nhsuk-grid-column-two-thirds">
-      <div [ngSwitch]="announcement.template">
-        <div *ngSwitchDefault>
-          <!-- Default: Generic Template -->
-          <theme-announcements-generic [params]="announcement.params"></theme-announcements-generic>
-        </div>
-      </div>
+      <theme-announcements-card [announcementCardData]="{ title: announcement.title, params: announcement.params }"></theme-announcements-card>
 
       <button class="nhsuk-button nhsuk-u-margin-top-7" (click)="onContinue(announcement.id)" [disabled]="!isContinueButtonActive">Continue</button>
 

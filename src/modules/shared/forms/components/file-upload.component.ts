@@ -22,7 +22,7 @@ export class FormFileUploadComponent implements OnInit, DoCheck {
   @Input() groupName = '';
   @Input() label?: string;
   @Input() description?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   @Input()
   set config(

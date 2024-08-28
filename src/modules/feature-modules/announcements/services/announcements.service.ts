@@ -6,16 +6,17 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { DateISOType } from '@app/base/types';
 
-import { AnnouncementParamsType } from '@modules/theme/components/announcements/announcements.types';
-import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
+import {
+  AnnouncementParamsType,
+  AnnouncementTypeEnum
+} from '@modules/feature-modules/admin/services/announcements.service';
 
 export type AnnouncementType = {
   id: string;
   title: string;
-  template: keyof AnnouncementParamsType;
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
-  params: null | AnnouncementParamsType['GENERIC'];
+  params: AnnouncementParamsType;
 };
 
 @Injectable()

@@ -103,6 +103,20 @@ export class FormEngineHelper {
           });
           break;
 
+        case 'date-input':
+          form.addControl(
+            parameter.id,
+            new FormGroup(
+              {
+                day: new FormControl(parameterValue?.day),
+                month: new FormControl(parameterValue?.month),
+                year: new FormControl(parameterValue?.year)
+              },
+              { updateOn: 'blur' }
+            )
+          );
+          break;
+
         default: // Creates a standard FormControl.
           form.addControl(
             parameter.id,
@@ -301,6 +315,12 @@ export class FormEngineHelper {
     if (error.futureDateInput) {
       return { message: error.futureDateInput.message, params: {} };
     }
+    if (error.endDateInputGreaterThanStartDateInput) {
+      return { message: error.endDateInputGreaterThanStartDateInput.message, params: {} };
+    }
+    if (error.endDateInputGreaterThanStartDate) {
+      return { message: error.endDateInputGreaterThanStartDate.message, params: {} };
+    }
     if (error.customError) {
       return { message: error.message, params: {} };
     }
@@ -338,6 +358,9 @@ export class FormEngineHelper {
             break;
           case 'checkbox-group':
             validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
+            break;
+          case 'date-input':
+            validators.push(CustomValidators.requiredDateInputValidator(validation[1]));
             break;
           default:
             validators.push(CustomValidators.required(validation[1]));
@@ -458,6 +481,28 @@ export class FormEngineHelper {
     // Specific types field validations.
     if (parameter.dataType === 'date') {
       validators.push(CustomValidators.parsedDateStringValidator());
+    } else if (parameter.dataType === 'date-input') {
+      if (parameter.validations?.requiredDateInput) {
+        validators.push(CustomValidators.requiredDateInputValidator(parameter.validations?.requiredDateInput.message));
+      }
+      if (parameter.validations?.dateInputFormat) {
+        validators.push(CustomValidators.dateInputFormatValidator(parameter.validations?.dateInputFormat.message));
+      }
+      if (parameter.validations?.futureDateInput) {
+        const futureDateInput = parameter.validations.futureDateInput;
+        validators.push(
+          CustomValidators.futureDateInputValidator(futureDateInput.includeToday, futureDateInput.message)
+        );
+      }
+      if (parameter.validations?.endDateInputGreaterThanStartDate) {
+        const endDateInputGreaterThanStartDate = parameter.validations.endDateInputGreaterThanStartDate;
+        validators.push(
+          CustomValidators.endDateInputGreaterThanStartDateValidator(
+            endDateInputGreaterThanStartDate.startDate,
+            endDateInputGreaterThanStartDate.message
+          )
+        );
+      }
     }
 
     return validators;

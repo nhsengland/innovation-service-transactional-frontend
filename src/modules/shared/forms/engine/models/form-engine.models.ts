@@ -38,12 +38,14 @@ export class FormEngineParameterModel {
     | 'file-upload'
     | 'file-upload-array'
     | 'select-component'
+    | 'date-input'
     | 'ir-selectable-filters';
   label?: string;
   description?: string;
   placeholder?: string;
   isVisible?: boolean;
   isEditable?: boolean;
+  pageUniqueField?: boolean;
   rank?: number;
   validations?: {
     // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
@@ -60,6 +62,10 @@ export class FormEngineParameterModel {
     postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string];
     equalTo?: string | [string, string];
+    requiredDateInput?: { message?: string };
+    dateInputFormat?: { message?: string };
+    futureDateInput?: { includeToday: boolean; message?: string };
+    endDateInputGreaterThanStartDate?: { startDate: { day: string; month: string; year: string }; message?: string };
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;
@@ -112,6 +118,7 @@ export class FormEngineParameterModel {
     this.placeholder = data.placeholder;
     this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
+    this.pageUniqueField = data.pageUniqueField ?? true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.cssOverride = data.cssOverride;

@@ -23,11 +23,11 @@ import { FormEngineParameterModel } from '../engine/models/form-engine.models';
 })
 export class FormCheckboxGroupComponent implements DoCheck {
   @Input() id?: string;
-  @Input() groupName = '';
+  @Input({ required: true }) groupName = '';
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };

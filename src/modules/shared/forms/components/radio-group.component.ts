@@ -41,7 +41,7 @@ export class FormRadioGroupComponent extends ControlValueAccessorComponent imple
   @Input() description?: string;
   @Input() items?: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input() cssOverride?: string;
   @Input() additional?: FormEngineParameterModel[] = [];
 

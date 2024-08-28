@@ -37,7 +37,7 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   @Input({ required: true }) id!: string;
   @Input() label?: string;
   @Input() description?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input({ required: true }) selectItems!: {
     selectList: SelectComponentInputType[];
     defaultKey?: string | undefined;
