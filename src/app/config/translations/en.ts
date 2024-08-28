@@ -513,6 +513,71 @@ export const locale = {
             DEPLOYMENT: 'Deployment'
           },
 
+          key_progress_areas: {
+            areas: {
+              deploymentCount: {
+                label: 'Deployed in an NHS or care setting',
+                section: 'From innovation record'
+              },
+              ukcaceCertification: {
+                label: 'UKCA / CE certification',
+                section: 'From innovation record'
+              },
+              dtacCertification: {
+                label: 'DTAC certification',
+                section: 'From innovation record'
+              },
+              evidenceClinicalOrCare: {
+                label: 'Evidence of clinical or care outcomes',
+                section: 'From innovation record'
+              },
+              evidenceRealWorld: {
+                label: 'Real world evidence',
+                section: 'From innovation record'
+              },
+              assessmentRealWorldValidation: {
+                label: 'Real world validation of organisational and financial benefit',
+                section: 'From needs assessment'
+              },
+              evidenceOfImpact: {
+                label: 'Evidence of impact or benefit',
+                section: 'From innovation record'
+              },
+              assessmentEvidenceProveEfficacy: {
+                label: 'Evidence to prove efficacy',
+                section: 'From needs assessment'
+              },
+              evidenceCostImpact: {
+                label: 'Evidence of cost impact, efficiency gains and/or economic modelling',
+                section: 'From innovation record'
+              },
+              workingProduct: {
+                label: 'Working product, service or prototype',
+                section: 'From innovation record'
+              },
+              carbonReductionPlan: {
+                label: 'Carbon reduction plan',
+                section: 'From innovation record'
+              },
+              htwTerComplete: {
+                label: 'Topic Exploration Report (TER) completed',
+                section: 'Health Technology Wales (HTW) milestone'
+              },
+              niceGuidanceComplete: {
+                label: 'Selected for NICE guidance output',
+                section: 'National Institute for Health and Care Excellence (NICE) milestone'
+              },
+              scProcurementRouteIdentified: {
+                label: 'Procurement route identified',
+                section: 'NHS Supply Chain milestone'
+              }
+            },
+            answers: {
+              YES: 'Yes',
+              PARTIALLY: 'Partially'
+            }
+          },
+
           notification_context_types: {
             NEEDS_ASSESSMENT: {
               INNOVATOR: { title: 'Needs assessment' },

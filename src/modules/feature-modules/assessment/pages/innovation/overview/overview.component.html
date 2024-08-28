@@ -126,6 +126,8 @@
     </div>
   </dl>
 
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress" />
+
   <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator contact details</h2>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovatorSummary" class="nhsuk-summary-list__row">
