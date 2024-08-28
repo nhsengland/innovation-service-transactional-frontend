@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -51,6 +51,7 @@ import {
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -269,6 +270,23 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
+    );
+  }
+
+  getInnovationProgress(
+    innovationId: string,
+    filterInnovationId: boolean = false
+  ): Observable<KeyProgressAreasPayloadType> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/progress')
+      .setPathParams({ innovationId });
+    return this.http.get<KeyProgressAreasPayloadType>(url.buildUrl()).pipe(
+      take(1),
+      map(response =>
+        filterInnovationId
+          ? Object.fromEntries(Object.entries(response).filter(([key, _]) => key !== 'innovationId'))
+          : response
+      )
     );
   }
 

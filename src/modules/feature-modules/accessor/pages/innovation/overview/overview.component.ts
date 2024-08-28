@@ -15,6 +15,7 @@ import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/share
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationService } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -47,6 +48,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
   search?: string;
+
+  innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -89,8 +92,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }),
       ...(this.isQualifyingAccessorRole && {
         unitsSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
-      })
-    }).subscribe(({ support, statistics, collaborators, unitsSuggestions }) => {
+      }),
+      innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true)
+    }).subscribe(({ support, statistics, collaborators, unitsSuggestions, innovationProgress }) => {
       this.qaSuggestions = unitsSuggestions ?? [];
 
       const innovationInfo = this.innovation;
@@ -205,6 +209,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           });
         }
       }
+
+      this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
 
       this.setPageStatus('READY');
     });
