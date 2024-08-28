@@ -29,6 +29,67 @@ type StepPayloadType = {
   type: AnnouncementTypeEnum;
 };
 
+export const stepsLabels = {
+  s1: {
+    label: `What's the title of the announcement?`,
+    description: `Write a title that explains what the announcement is about. For example, 'A new funding opportunity is available.'.`,
+    p1: {
+      label: `Enter a title with a maximum of 100 characters`
+    }
+  },
+  s2: {
+    label: `Write body content`,
+    description: `Add more detailed information to guide the user. For example, applications are open for the Digital Health Entrepreneurs programme until 15 September 2024.`,
+    p1: {
+      label: `Enter body content`
+    }
+  },
+  s3: {
+    label: `Add a link (optional)`,
+    description: `Add a link if you want to guide users to start a task or to point them to relevant content on another page. The label should describe where the link is taking users. For example, apply for the Digital Health Entrepreneurs programme here.`,
+    p1: {
+      label: `Enter the link label`
+    },
+    p2: {
+      label: `Enter the link URL`
+    }
+  },
+  s4: {
+    p1: {
+      label: `Which user groups do you want this announcement to be sent to?`,
+      description: `Select all that apply.`
+    }
+  },
+  s5: {
+    p1: {
+      label: `Should this announcement be shown to all innovators or a specific type of innovations?`,
+      description: `You can select specific types of innovations based on their answers to the innovation record questions. For example, digital innovations that have DTAC certification.`
+    }
+  },
+  s6: {
+    p1: {
+      label: 'Filter innovation type',
+      description:
+        'Filter which types of innovations you want this announcement to show for. You can filter by question and answer.'
+    }
+  },
+  s7: {
+    label: 'When do you want this announcement to be live?',
+    description: `If you do not set an end date, the announcement will be displayed until the user clears it.`,
+    p1: {
+      label: `Set a start date`
+    },
+    p2: {
+      label: `Set an end date`
+    }
+  },
+  s8: {
+    p1: {
+      label: 'Which type of announcement?'
+    }
+  }
+};
+
 export type OutboundPayloadType = UpsertAnnouncementType;
 
 // Form validations
@@ -48,26 +109,26 @@ const linkMustHaveLabelAndUrlValidation = CustomValidators.makeTwoControlsAsRequ
 export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   steps: [
     new FormEngineModel({
-      label: `What's the title of the announcement?`,
-      description: `Write a title that explains what the announcement is about. For example, 'A new funding opportunity is available.'.`,
+      label: stepsLabels.s1.label,
+      description: stepsLabels.s1.description,
       parameters: [
         {
           id: 'title',
           dataType: 'text',
-          label: `Enter a title with a maximum of 100 characters`,
+          label: stepsLabels.s1.p1.label,
           pageUniqueField: false,
           validations: { isRequired: [true, 'Enter a title'], maxLength: 100 }
         }
       ]
     }),
     new FormEngineModel({
-      label: `Write body content`,
-      description: `Add more detailed information to guide the user. For example, applications are open for the Digital Health Entrepreneurs programme until 15 September 2024.`,
+      label: stepsLabels.s2.label,
+      description: stepsLabels.s2.description,
       parameters: [
         {
           id: 'content',
           dataType: 'textarea',
-          label: `Enter body content`,
+          label: stepsLabels.s2.p1.label,
           lengthLimit: 'm',
           pageUniqueField: false,
           validations: { isRequired: [true, 'Enter body content'] }
@@ -75,19 +136,19 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
       ]
     }),
     new FormEngineModel({
-      label: `Add a link (optional)`,
-      description: `Add a link if you want to guide users to start a task or to point them to relevant content on another page. The label should describe where the link is taking users. For example, apply for the Digital Health Entrepreneurs programme here.`,
+      label: stepsLabels.s3.label,
+      description: stepsLabels.s3.description,
       parameters: [
         {
           id: 'linkLabel',
           dataType: 'text',
-          label: 'Enter the link label',
+          label: stepsLabels.s3.p1.label,
           pageUniqueField: false
         },
         {
           id: 'linkUrl',
           dataType: 'text',
-          label: 'Enter the link URL',
+          label: stepsLabels.s3.p2.label,
           pageUniqueField: false,
           validations: { urlFormat: true }
         }
@@ -98,8 +159,8 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
         {
           id: 'userRoles',
           dataType: 'checkbox-array',
-          label: `Which user groups do you want this announcement to be sent to?`,
-          description: `Select all that apply.`,
+          label: stepsLabels.s4.p1.label,
+          description: stepsLabels.s4.p1.description,
           validations: { isRequired: [true, 'Select 1 or more user groups'] },
           items: [
             { value: UserRoleEnum.INNOVATOR, label: 'Innovators' },
@@ -164,8 +225,8 @@ function announcementNewRuntimeRules(
           {
             id: 'showToWhom',
             dataType: 'radio-group',
-            label: `Should this announcement be shown to all innovators or a specific type of innovations?`,
-            description: `You can select specific types of innovations based on their answers to the innovation record questions. For example, digital innovations that have DTAC certification.`,
+            label: stepsLabels.s5.p1.label,
+            description: stepsLabels.s5.p1.description,
             validations: { isRequired: [true, 'Select all innovators or specific types of innovations'] },
             items: [
               { value: ShowToWhomEnum.ALL_INNOVATIONS, label: 'All innovators' },
@@ -186,9 +247,8 @@ function announcementNewRuntimeRules(
           {
             id: 'filters',
             dataType: 'ir-selectable-filters',
-            label: 'Filter innovation type',
-            description:
-              'Filter which types of innovations you want this announcement to show for. You can filter by question and answer.'
+            label: stepsLabels.s6.p1.label,
+            description: stepsLabels.s6.p1.description
           }
         ]
       })
@@ -199,13 +259,13 @@ function announcementNewRuntimeRules(
 
   steps.push(
     new FormEngineModel({
-      label: `When do you want this announcement to be live?`,
-      description: `If you do not set an end date, the announcement will be displayed until the user clears it. `,
+      label: stepsLabels.s7.label,
+      description: stepsLabels.s7.description,
       parameters: [
         {
           id: 'startsAt',
           dataType: 'date-input',
-          label: 'Set a start date',
+          label: stepsLabels.s7.p1.label,
           pageUniqueField: false,
           validations: {
             requiredDateInput: { message: 'Add a start date' },
@@ -216,7 +276,7 @@ function announcementNewRuntimeRules(
         {
           id: 'expiresAt',
           dataType: 'date-input',
-          label: 'Set an end date',
+          label: stepsLabels.s7.p2.label,
           pageUniqueField: false,
           validations: {
             dateInputFormat: {}
@@ -229,7 +289,7 @@ function announcementNewRuntimeRules(
         {
           id: 'type',
           dataType: 'radio-group',
-          label: `Which type of announcement?`,
+          label: stepsLabels.s8.p1.label,
           validations: { isRequired: [true, 'Select login announcement or homepage announcement'] },
           items: [
             {

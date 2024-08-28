@@ -13,7 +13,8 @@ import {
 import {
   ANNOUNCEMENT_EDIT_QUESTIONS,
   ANNOUNCEMENT_NEW_QUESTIONS,
-  OutboundPayloadType
+  OutboundPayloadType,
+  stepsLabels
 } from './announcement-newdit.config';
 
 import { DatePipe } from '@angular/common';
@@ -39,13 +40,13 @@ type SummaryPayloadFilterType = { section: string; question: string; answer: str
 type SummaryPayloadType = {
   title: string;
   content: string;
-  linkLabel?: string;
-  linkUrl?: string;
+  linkLabel: string;
+  linkUrl: string;
   userRoles: string;
   showToWhom?: string;
   filters?: SummaryPayloadFilterType[];
   startsAt: string;
-  expiresAt?: string;
+  expiresAt: string;
   type: string;
 };
 
@@ -222,8 +223,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     return {
       title: outboundPayload.title,
       content: outboundPayload.params.content,
-      linkLabel: outboundPayload.params.link?.label,
-      linkUrl: outboundPayload.params.link?.url,
+      linkLabel: outboundPayload.params.link?.label ?? '',
+      linkUrl: outboundPayload.params.link?.url ?? '',
       userRoles: outboundPayload.userRoles.map(item => this.stores.authentication.getRoleDescription(item)).join('\n'),
       showToWhom: outboundPayload.userRoles.includes(UserRoleEnum.INNOVATOR)
         ? outboundPayload.filters?.length
@@ -244,7 +245,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       startsAt: this.datePipe.transform(outboundPayload.startsAt, this.translate('app.date_formats.long_date'))!,
       expiresAt: outboundPayload.expiresAt
         ? this.datePipe.transform(outboundPayload.expiresAt, this.translate('app.date_formats.long_date'))!
-        : undefined,
+        : '',
       type: outboundPayload.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage'
     };
   }
@@ -253,49 +254,89 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     const summaryData: SummaryDataItemType[] = [];
     const summaryPayload = this.summaryParsing();
 
-    this.wizard.steps.forEach((step, stepIndex) => {
-      let stepDataType: SummaryDataItemTypeEnum = SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS;
-      if (step.parameters.length === 1) {
-        stepDataType =
-          step.parameters[0].dataType === 'ir-selectable-filters'
-            ? SummaryDataItemTypeEnum.FILTER_PARAMETER
-            : SummaryDataItemTypeEnum.SINGLE_PARAMETER;
+    let editStepNumber = 1;
+
+    summaryData.push(
+      {
+        label: stepsLabels.s1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.title
+        }
+      },
+      {
+        label: stepsLabels.s2.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.content
+        }
+      },
+      {
+        label: stepsLabels.s3.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
+          questions: [
+            { label: 'Link label', answer: summaryPayload.linkLabel },
+            { label: 'Link URL', answer: summaryPayload.linkUrl }
+          ]
+        }
+      },
+      {
+        label: stepsLabels.s4.p1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.userRoles
+        }
       }
+    );
 
-      const label = step.label ?? step.parameters[0].label ?? '';
-      const editStepNumber = stepIndex + 1;
+    if (summaryPayload.showToWhom) {
+      summaryData.push({
+        label: stepsLabels.s5.p1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.showToWhom
+        }
+      });
+    }
 
-      if (stepDataType === SummaryDataItemTypeEnum.SINGLE_PARAMETER) {
-        const stepItemData: SummaryDataItemSingleParameterType = {
-          type: stepDataType,
-          answer: summaryPayload[step.parameters[0].id as keyof SummaryPayloadType] as string
-        };
-        summaryData.push({ label, editStepNumber, data: stepItemData });
-      } else if (stepDataType === SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS) {
-        const questions = step.parameters.map(parameter => {
-          return {
-            label: QUESTION_LABELS[parameter.id as keyof typeof QUESTION_LABELS],
-            answer: summaryPayload[parameter.id as keyof SummaryPayloadType] as string
-          };
-        });
+    if (summaryPayload.filters) {
+      summaryData.push({
+        label: stepsLabels.s6.p1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.FILTER_PARAMETER,
+          sections: summaryPayload.filters
+        }
+      });
+    }
 
-        const stepItemData: SummaryDataItemMultipleParametersType = {
-          type: stepDataType,
-          questions
-        };
-        summaryData.push({ label, editStepNumber, data: stepItemData });
-      } else if (stepDataType === SummaryDataItemTypeEnum.FILTER_PARAMETER) {
-        const sections = summaryPayload[
-          step.parameters[0].id as keyof SummaryPayloadType
-        ] as SummaryPayloadFilterType[];
-
-        const stepItemData: SummaryDataItemFilterParamaterType = {
-          type: stepDataType,
-          sections
-        };
-        summaryData.push({ label, editStepNumber, data: stepItemData });
+    summaryData.push(
+      {
+        label: stepsLabels.s7.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
+          questions: [
+            { label: 'Start date', answer: summaryPayload.startsAt },
+            { label: 'End date', answer: summaryPayload.expiresAt }
+          ]
+        }
+      },
+      {
+        label: stepsLabels.s8.p1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.type
+        }
       }
-    });
+    );
 
     return summaryData;
   }
