@@ -48,6 +48,7 @@ type SummaryPayloadType = {
   startsAt: string;
   expiresAt: string;
   type: string;
+  sendEmail: string;
 };
 
 type SummaryDataItemType = {
@@ -246,7 +247,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       expiresAt: outboundPayload.expiresAt
         ? this.datePipe.transform(outboundPayload.expiresAt, this.translate('app.date_formats.long_date'))!
         : '',
-      type: outboundPayload.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage'
+      type: outboundPayload.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage',
+      sendEmail: outboundPayload.sendEmail ? 'Yes' : 'No'
     };
   }
 
@@ -334,6 +336,14 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
           answer: summaryPayload.type
+        }
+      },
+      {
+        label: stepsLabels.s9.p1.label,
+        editStepNumber: editStepNumber++,
+        data: {
+          type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
+          answer: summaryPayload.sendEmail
         }
       }
     );

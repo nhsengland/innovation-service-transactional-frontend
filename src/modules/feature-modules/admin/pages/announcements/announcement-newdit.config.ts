@@ -27,7 +27,12 @@ type StepPayloadType = {
   startsAt: { day: string; month: string; year: string };
   expiresAt?: { day: string; month: string; year: string };
   type: AnnouncementTypeEnum;
+  sendEmail: string;
 };
+
+export type OutboundPayloadType = UpsertAnnouncementType;
+
+// Steps labels.
 
 export const stepsLabels = {
   s1: {
@@ -87,10 +92,14 @@ export const stepsLabels = {
     p1: {
       label: 'Which type of announcement?'
     }
+  },
+  s9: {
+    p1: {
+      label: `Would you like to send this announcement via email too?`,
+      description: `In addition, to the announcement on the service.`
+    }
   }
 };
-
-export type OutboundPayloadType = UpsertAnnouncementType;
 
 // Form validations
 
@@ -305,6 +314,21 @@ function announcementNewRuntimeRules(
           ]
         }
       ]
+    }),
+
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'sendEmail',
+          dataType: 'radio-group',
+          label: stepsLabels.s9.p1.label,
+          validations: { isRequired: [true, 'Select yes or no'] },
+          items: [
+            { value: 'YES', label: 'Yes' },
+            { value: 'NO', label: 'No' }
+          ]
+        }
+      ]
     })
   );
 }
@@ -341,7 +365,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
       ? DatesHelper.getDateInputFormatFromString(data.startsAt)
       : { day: '', month: '', year: '' },
     expiresAt: data.expiresAt ? DatesHelper.getDateInputFormatFromString(data.expiresAt) : undefined,
-    type: data.type ?? ''
+    type: data.type ?? '',
+    sendEmail: data.sendEmail ? 'YES' : data.sendEmail === false ? 'NO' : ''
   };
 }
 
@@ -359,6 +384,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
       data.expiresAt?.day && data.expiresAt?.month && data.expiresAt?.year
         ? DatesHelper.getDateString(data.expiresAt.year, data.expiresAt.month, data.expiresAt.day)
         : undefined,
-    type: data.type
+    type: data.type,
+    sendEmail: data.sendEmail === 'YES' ? true : false
   };
 }

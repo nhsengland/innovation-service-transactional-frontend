@@ -48,6 +48,7 @@ export type GetAnnouncementInfoType = {
   expiresAt: null | DateISOType;
   type: AnnouncementTypeEnum;
   filters?: InnovationRecordFilterPayloadType;
+  sendEmail: boolean;
 };
 
 export type UpsertAnnouncementType = {
@@ -58,6 +59,7 @@ export type UpsertAnnouncementType = {
   expiresAt?: DateISOType;
   type: AnnouncementTypeEnum;
   filters?: InnovationRecordFilterPayloadType;
+  sendEmail: boolean;
 };
 
 @Injectable()
