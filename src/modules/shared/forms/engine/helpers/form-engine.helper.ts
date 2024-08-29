@@ -11,6 +11,8 @@ import {
 import { FormEngineParameterModel } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
+import { TranslateService } from '@ngx-translate/core';
+import { AppInjector } from '@modules/core/injectors/app-injector';
 
 export class FormEngineHelper {
   static buildForm(
@@ -186,7 +188,7 @@ export class FormEngineHelper {
     return returnForm;
   }
 
-  static getErrors(form: FormGroup): { [key: string]: string | null } {
+  static getErrors(form: FormGroup, translateErrorMessage?: boolean): { [key: string]: string | null } {
     let result: { [key: string]: string | null } = {};
 
     Object.keys(form.controls).forEach(key => {
@@ -197,9 +199,16 @@ export class FormEngineHelper {
       const controlErrors: ValidationErrors | null | undefined = formProperty?.errors;
       if (controlErrors) {
         Object.keys(controlErrors).forEach(keyError => {
+          const validationMessage = FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] });
+          let errorMessage = validationMessage.message;
+          if (translateErrorMessage) {
+            const injector = AppInjector.getInjector();
+            const translatorService = injector.get(TranslateService);
+            errorMessage = translatorService.instant(validationMessage.message, validationMessage.params);
+          }
           result = {
             ...result,
-            ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }).message }
+            ...{ [key]: errorMessage }
           };
         });
       }
