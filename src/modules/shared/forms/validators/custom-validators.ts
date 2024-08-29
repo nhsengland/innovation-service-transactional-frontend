@@ -268,7 +268,6 @@ export class CustomValidators {
       }
 
       if (startDateField?.errors) {
-        endDateField.setErrors(null);
         return null;
       }
 
