@@ -202,7 +202,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.sectionFormControl.value,
       selectList: [
-        { key: undefined, text: 'Select section' },
+        { key: undefined, text: 'Select section', disabled: true },
         ...this.schemaStore
           .getIrSchemaSubSectionsIdsListV3()
           .map(section => ({ key: section, text: this.formatSectionLabel(section) }))
@@ -214,7 +214,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.questionFormControl.value,
       selectList: [
-        { key: undefined, text: 'Select question' },
+        { key: undefined, text: 'Select question', disabled: true },
         ...this.schemaStore
           .getIrSchemaSectionQuestions(sectionId)
           .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
@@ -230,7 +230,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.answersFormArrayControl.value[answerIndex],
       selectList: [
-        { key: undefined, text: 'Select answer' },
+        { key: undefined, text: 'Select answer', disabled: true },
         ...(this.schemaStore
           .getIrSchemaSectionQuestions(this.sectionFormControl.value)
           .find(q => q.id === questionId)

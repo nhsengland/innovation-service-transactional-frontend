@@ -32,7 +32,7 @@
     (blur)="onBlur()"
     (focus)="onFocus()"
   >
-    <option *ngFor="let item of selectItems.selectList" [ngValue]="item.key" selected="selectedField">
+    <option *ngFor="let item of selectItems.selectList" [disabled]="item.disabled" [ngValue]="item.key" selected="selectedField">
       <span>{{ item.text }}</span>
     </option>
   </select>

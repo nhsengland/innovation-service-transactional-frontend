@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-export type SelectComponentInputType = { key: string | undefined; text: string };
+export type SelectComponentInputType = { key: string | undefined; text: string; disabled?: boolean };
 
 @Component({
   selector: 'theme-select-component',
