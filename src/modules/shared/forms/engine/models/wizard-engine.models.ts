@@ -232,7 +232,7 @@ export class WizardEngineModel {
 
   getStepObjId(step: FormEngineModel): string {
     // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-    return step.parameters[0].id.split('_')[0] ?? '';
+    return step?.parameters[0].id.split('_')[0] ?? '';
   }
 
   getCurrentStepObjId(): string {
