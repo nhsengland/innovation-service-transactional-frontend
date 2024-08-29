@@ -278,10 +278,10 @@ export class WizardEngineModel {
     };
   }
 
-  checkCurrentStepErrors(form?: FormGroup): { fieldId: string; errorMessage: string }[] | null {
+  checkCurrentStepErrors(form?: FormGroup): { fieldId: string; message: string }[] | null {
     const currentStep = this.currentStep();
     if (form) {
-      const formErrors = FormEngineHelper.getErrors(form);
+      const formErrors = FormEngineHelper.getErrors(form, true);
       return Object.entries(formErrors).map(([key, value]) => {
         const parameter = currentStep.parameters.find(p => p.id === key)!;
         return {
@@ -291,7 +291,7 @@ export class WizardEngineModel {
               : parameter.dataType === 'date-input'
                 ? 'day-' + parameter.id
                 : parameter.id,
-          errorMessage: value ?? ''
+          message: value ?? ''
         };
       });
     }
