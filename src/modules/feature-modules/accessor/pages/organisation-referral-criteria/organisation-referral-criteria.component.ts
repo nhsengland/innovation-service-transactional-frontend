@@ -12,7 +12,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     link: string;
     information: {
       type: 'BULLET_LIST' | 'PARAGRAPH';
-      values: { description: string; subBullets?: string[] }[];
+      values: { description: string; subBullets?: string[]; link?: { url: string; label: string } }[];
     }[];
   }[] = [
     {
@@ -236,39 +236,68 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
       information: [
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'NICE can support innovations that are:' }]
+          values: [{ description: 'NICE:' }]
         },
         {
           type: 'BULLET_LIST',
           values: [
             {
               description:
-                'medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health'
+                'produces guidance on medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health technologies'
             },
             {
-              description: 'pharmaceutical and healthtech companies seeking to enter the NHS market'
+              description:
+                'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics.',
+              link: {
+                url: this.CONSTANTS.URLS.NICE_KEY_PRIORITY_AREAS,
+                label: 'View key priority areas (opens in new window)'
+              }
             },
             {
-              description: 'preparing for a NICE evaluation, or engagement with NHS payers or commissioners'
-            },
-            { description: 'looking to unpick challenges in the evidence generation process' }
+              description:
+                'provides support to developers of health technologies through a range of fee-based, not-for-profit services, via NICE Advice. Companies can use these services regardless of their route to market, for example NICE guidance verse non-NICE routes'
+            }
           ]
         },
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'NICE can provide guidance when:' }]
+          values: [{ description: 'NICE Advice supports innovations with:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            {
+              description: 'advice, including evidence gap analyses or scientific advice'
+            },
+            {
+              description: 'insights, including system engagement meetings'
+            },
+            { description: 'education, including webinars and masterclasses' }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NICE Advice supports innovations that:' }]
         },
         {
           type: 'BULLET_LIST',
           values: [
             {
               description:
-                'regulatory approvals are in place or there are there are well developed plans in place to achieve this'
+                'have a medical purpose, for example for treatment, diagnosis, monitoring, self-management or behaviour changes'
             },
             {
-              description: "there is a clear value proposition for NICE's guidance producing programmes"
-            },
-            { description: 'evidence exists to support claim of benefits' }
+              description: 'already have, or expected to receive, regulatory approval'
+            }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description:
+                'To note: NICE Advice cannot provide support on technologies that are part of an on-going appraisal. It is advised that any engagement with NICE Advice takes place before or after the formal evaluation process.'
+            }
           ]
         }
       ]

@@ -18,7 +18,12 @@
                 <ng-container *ngSwitchCase="'BULLET_LIST'">
                   <ul class="nhsuk-list nhsuk-list--bullet">
                     <ng-container *ngFor="let value of info.values">
-                      <li>{{ value.description }}</li>
+                      <li>
+                        <span>{{ value.description }} </span
+                        ><span *ngIf="value.link"
+                          ><a [href]="value.link.url" target="_blank" rel="noopener noreferrer" attr.aria-label="{{ value.link.label }}">{{ value.link.label }}</a>
+                        </span>
+                      </li>
                       <ul *ngIf="value.subBullets" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
                         <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0">{{ subBullet }}</li>
                       </ul>
