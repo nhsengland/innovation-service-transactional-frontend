@@ -279,7 +279,7 @@ function announcementNewRuntimeRules(
           validations: {
             requiredDateInput: { message: 'Add a start date' },
             dateInputFormat: {},
-            futureDateInput: { includeToday: true, message: 'The start date must be in the future' }
+            futureDateInput: { includeToday: true, message: 'The start date must be in the future or today' }
           }
         },
         {
@@ -322,6 +322,7 @@ function announcementNewRuntimeRules(
           id: 'sendEmail',
           dataType: 'radio-group',
           label: stepsLabels.s9.p1.label,
+          description: stepsLabels.s9.p1.description,
           validations: { isRequired: [true, 'Select yes or no'] },
           items: [
             { value: 'YES', label: 'Yes' },
