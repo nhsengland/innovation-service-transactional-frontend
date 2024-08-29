@@ -492,6 +492,14 @@ export const locale = {
                 description:
                   'Receive invitations to take part in user research and surveys for the NHS Innovation Service.'
               }
+            },
+
+            ANNOUNCEMENTS: {
+              SHARED: {
+                title: 'Announcements',
+                description:
+                  'Receive email copies of announcements on the service. For example, funding opportunities and support programmes.'
+              }
             }
           },
 

@@ -35,10 +35,11 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   @ViewChild('input', { static: true }) inputRef?: ElementRef<HTMLInputElement>;
 
   @Input() id?: string;
-  @Input() title?: string;
+  @Input() groupName = '';
+  @Input() label?: string;
   @Input() description?: string;
   @Input() placeholder?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
 
@@ -54,12 +55,9 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   get parentFieldControl(): AbstractControl | null {
     return this.injector.get(ControlContainer).control;
   }
-  get formGroup(): FormGroup<{
-    day: FormControl;
-    month: FormControl;
-    year: FormControl;
-  }> {
-    return this.parentFieldControl?.get('date') as FormGroup;
+
+  get fieldGroupControl(): FormGroup {
+    return this.parentFieldControl?.get(this.groupName) as FormGroup;
   }
 
   // Accessibility.
@@ -86,7 +84,7 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
     this.inputCssClass = this.width ? `nhsuk-u-width-${this.width}` : 'nhsuk-u-width-two-thirds';
     this.divCssOverride = this.cssOverride || ''; // nhsuk-u-padding-top-4
 
-    this.fieldChangeSubscription.add(this.formGroup.valueChanges.subscribe(i => this.onValueChange()));
+    this.fieldChangeSubscription.add(this.fieldGroupControl.valueChanges.subscribe(i => this.onValueChange()));
   }
 
   ngDoCheck(): void {
@@ -94,9 +92,9 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   }
 
   onValueChange(): void {
-    this.hasError = this.formGroup.invalid && (this.formGroup.touched || this.formGroup.dirty);
+    this.hasError = this.fieldGroupControl.invalid && (this.fieldGroupControl.touched || this.fieldGroupControl.dirty);
     this.error = this.hasError
-      ? FormEngineHelper.getValidationMessage(this.formGroup.errors)
+      ? FormEngineHelper.getValidationMessage(this.fieldGroupControl.errors)
       : { message: '', params: {} };
 
     this.cdr.detectChanges();

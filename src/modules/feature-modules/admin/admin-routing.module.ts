@@ -319,6 +319,10 @@ const routes: Routes = [
       {
         path: 'announcements',
         data: { breadcrumb: 'Announcements' },
+        resolve: {
+          irSchemaData: innovationRecordSchemaResolver
+        },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',

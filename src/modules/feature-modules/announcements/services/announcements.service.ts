@@ -6,15 +6,17 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { DateISOType } from '@app/base/types';
 
-import { AnnouncementParamsType } from '@modules/theme/components/announcements/announcements.types';
+import {
+  AnnouncementParamsType,
+  AnnouncementTypeEnum
+} from '@modules/feature-modules/admin/services/announcements.service';
 
 export type AnnouncementType = {
   id: string;
   title: string;
-  template: keyof AnnouncementParamsType;
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
-  params: null | AnnouncementParamsType['GENERIC'];
+  params: AnnouncementParamsType;
 };
 
 @Injectable()
@@ -23,8 +25,12 @@ export class AnnouncementsService extends CoreService {
     super();
   }
 
-  getAnnouncements(): Observable<AnnouncementType[]> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/announcements');
+  getAnnouncements(filters: { type?: AnnouncementTypeEnum[] }): Observable<AnnouncementType[]> {
+    const qp = {
+      ...(filters.type ? { type: filters.type } : {})
+    };
+
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/announcements').setQueryParams(qp);
     return this.http.get<AnnouncementType[]>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

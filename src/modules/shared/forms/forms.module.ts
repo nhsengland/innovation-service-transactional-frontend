@@ -30,6 +30,9 @@ import { FormCheckboxArrayV3Component } from './components/checkbox-array-v3.com
 import { FormEngineV3Component } from './engine/form-engine-v3.component';
 import { FormCheckboxGroupV3Component } from './components/checkbox-group-v3.component';
 import { FormInputAutocompleteArrayV3Component } from './components/input-autocomplete-array-v3.component';
+import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
+import { ThemeModule } from '../../theme/theme.module';
+import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
 
 @NgModule({
   imports: [
@@ -38,9 +41,9 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
     ReactiveFormsModule,
     TranslateModule,
     NgxDropzoneModule,
-
     // Angular Material.
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    ThemeModule
   ],
   declarations: [
     FormEngineComponent,
@@ -64,7 +67,9 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
-    FormSelectComponent
+    FormSelectComponent,
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ],
   exports: [
     // CommonModule,
@@ -92,7 +97,9 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
-    FormSelectComponent
+    FormSelectComponent,
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ]
 })
 export class FormsModule {}
