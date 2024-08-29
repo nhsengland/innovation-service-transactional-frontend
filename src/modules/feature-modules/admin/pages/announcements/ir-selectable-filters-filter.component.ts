@@ -174,17 +174,19 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       newAnswerControl.updateValueAndValidity();
       this.answersFormArrayControl.push(newAnswerControl);
 
-      if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-        this.canAddAnswerField = false;
-      }
+      // if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
+      //   this.canAddAnswerField = false;
+      // }
+      this.checkCanAddAnswer();
     }
   }
 
   removeAnswerField(i: number) {
     const answersList = this.getAnswersList(this.questionFormControl.value, 0);
-    if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-      this.canAddAnswerField = true;
-    }
+    // if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
+    //   this.canAddAnswerField = true;
+    // }
+    this.checkCanAddAnswer();
 
     this.answersFormArrayControl.removeAt(i);
   }
@@ -241,6 +243,11 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     };
   }
 
+  checkCanAddAnswer() {
+    const answersList = this.getAnswersList(this.questionFormControl.value, 0);
+    this.canAddAnswerField = !(this.answersFormArrayControl.controls.length == answersList.selectList.length - 1);
+  }
+
   onSelectChange(event: SelectComponentEmitType): void {
     if (['section'].includes(event.id.split('_')[1])) {
       this.clearQuestion();
@@ -248,13 +255,15 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     if (['question'].includes(event.id.split('_')[1])) {
       this.clearAnswers();
     }
+    this.checkCanAddAnswer();
   }
 
   clearQuestion() {
-    this.questionFormControl.reset();
+    this.questionFormControl.setValue(undefined);
     this.answersFormArrayControl.clear();
     this.addAnswerField();
   }
+
   clearAnswers() {
     this.answersFormArrayControl.clear();
     this.addAnswerField();
