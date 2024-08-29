@@ -28,6 +28,7 @@
 
         <div *ngSwitchCase="'radio-group'">
           <theme-form-radio-group
+            [id]="p.id"
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
