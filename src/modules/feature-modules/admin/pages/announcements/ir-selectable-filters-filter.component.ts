@@ -218,6 +218,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
         ...this.schemaStore
           .getIrSchemaSectionQuestions(sectionId)
           .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
+          .filter(q => !['mainCategory'].includes(q.id))
           .map(q => ({ key: q.id, text: q.label }))
       ]
     };
