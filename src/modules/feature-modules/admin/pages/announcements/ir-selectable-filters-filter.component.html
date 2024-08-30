@@ -36,6 +36,7 @@
           [pageUniqueField]="false"
           [selectItems]="getQuestionsList(this.sectionFormControl.value)"
           (selectChanged)="onSelectChange($event)"
+          [previouslySelectedItems]="selectedQuestions"
         />
       </div>
 
@@ -54,6 +55,7 @@
               [pageUniqueField]="false"
               [selectItems]="getAnswersList(questionFormControl.value, i)"
               (selectChanged)="onSelectChange($event)"
+              [previouslySelectedItems]="answersFormAsFormArray.value"
             />
           </div>
         </div>

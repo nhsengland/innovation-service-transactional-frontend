@@ -71,6 +71,8 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   questionFormControl: FormControl = new FormControl<string | undefined>(undefined);
   answersFormArrayControl: FormArray = new FormArray<any>([]);
 
+  selectedQuestions: string[] = [];
+
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
     return this.injector.get(ControlContainer).control;
@@ -110,11 +112,11 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     this.parentFormArray = this.filterFormGroup.parent as FormArray;
     this.assignFilterControls();
-    // this.updateFilterControlsReference();
   }
 
   ngDoCheck(): void {
     this.cdr.detectChanges();
+    this.getSelectedQuestions();
     this.updateFilterControlsReference();
   }
 
@@ -174,20 +176,13 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       newAnswerControl.updateValueAndValidity();
       this.answersFormArrayControl.push(newAnswerControl);
 
-      // if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-      //   this.canAddAnswerField = false;
-      // }
       this.checkCanAddAnswer();
     }
   }
 
   removeAnswerField(i: number) {
     const answersList = this.getAnswersList(this.questionFormControl.value, 0);
-    // if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-    //   this.canAddAnswerField = true;
-    // }
     this.checkCanAddAnswer();
-
     this.answersFormArrayControl.removeAt(i);
   }
 
@@ -238,6 +233,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
           .getIrSchemaSectionQuestions(this.sectionFormControl.value)
           .find(q => q.id === questionId)
           ?.items?.filter(i => i.id && i.label && !i.itemsFromAnswer)
+          .filter(i => ![...this.answersFormArrayControl.value].includes(i))
           .map(i => ({ key: i.id!, text: i.label! })) ?? [])
       ]
     };
@@ -256,6 +252,19 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       this.clearAnswers();
     }
     this.checkCanAddAnswer();
+  }
+
+  getSelectedQuestions() {
+    this.selectedQuestions = (this.parentFormArray.controls as FormGroup[]).map(formgroup => {
+      const questionValue = (formgroup as FormGroup).controls['question'];
+      console.log(`(formgroup as FormGroup).controls['question']`, (formgroup as FormGroup).controls['question']);
+      if (questionValue && questionValue.value) {
+        console.log('question has Value');
+        return questionValue.value;
+      } else {
+        return '';
+      }
+    });
   }
 
   clearQuestion() {
