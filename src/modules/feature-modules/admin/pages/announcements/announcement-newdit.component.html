@@ -9,6 +9,7 @@
           [parameters]="wizard.currentStepParameters()"
           [values]="wizard.getAnswers()"
           [formValidations]="wizard.getFormValidations()"
+          [showParamLabelAsTitle]="wizard.currentStep().showParamLabelAsTitle"
         ></theme-form-engine>
         <button type="submit" form="questionForm" class="nhsuk-button" (click)="onSubmitStep('next')">Continue</button>
       </ng-container>
