@@ -1,10 +1,7 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p>
-        Below you will find information on the referral criteria for each organisation that uses the NHS Innovation Service, which may help with the information you can provide to
-        the Needs Assessment team, so that they can provide the best support for your innovation.
-      </p>
+      <p>Use this information to understand whether an innovation is in scope for support from an organisation on the service.</p>
     </div>
   </div>
 
@@ -21,7 +18,12 @@
                 <ng-container *ngSwitchCase="'BULLET_LIST'">
                   <ul class="nhsuk-list nhsuk-list--bullet">
                     <ng-container *ngFor="let value of info.values">
-                      <li>{{ value.description }}</li>
+                      <li>
+                        <span>{{ value.description }} </span
+                        ><span *ngIf="value.link"
+                          ><a [href]="value.link.url" target="_blank" rel="noopener noreferrer" attr.aria-label="{{ value.link.label }}">{{ value.link.label }}</a>
+                        </span>
+                      </li>
                       <ul *ngIf="value.subBullets" class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-0">
                         <li *ngFor="let subBullet of value.subBullets" class="nhsuk-u-margin-0">{{ subBullet }}</li>
                       </ul>
