@@ -22,13 +22,6 @@ import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
 import { InnovationRecordSchemaStore } from '@modules/stores';
 
-const QUESTION_LABELS = {
-  linkLabel: 'Link label',
-  linkUrl: 'Link url',
-  startsAt: 'Start date',
-  expiresAt: 'End date'
-};
-
 enum SummaryDataItemTypeEnum {
   SINGLE_PARAMETER = 'SINGLE_PARAMETER',
   MULTIPLE_PARAMETERS = 'MULTIPLE_PARAMETERS',
@@ -159,7 +152,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.resetAlert();
 
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
-    if (action === 'next' && !formData.valid) {
+    if ((action === 'next' || (action === 'previous' && this.isChangeMode)) && !formData.valid) {
       // Don't move forward if step is NOT valid.
 
       // To display alert error.
@@ -198,16 +191,19 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     } else {
       this.setPageTitle('Check your answers', { size: 'l' });
+      this.resetBackLink();
       this.summaryData = this.getSummaryData();
       this.announcementData.cardData = this.getSummaryCardData();
     }
   }
 
   onGotoStep(stepNumber: number): void {
-    this.wizard.setIsChangingMode(true);
+    this.isChangeMode = true;
+    this.wizard.setIsChangingMode(this.isChangeMode);
     this.wizard.gotoStep(stepNumber);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+    this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
   formatSectionLabel(sectionId: string) {
