@@ -120,12 +120,12 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
     new FormEngineModel({
       label: stepsLabels.s1.label,
       description: stepsLabels.s1.description,
+      showParamLabelAsTitle: false,
       parameters: [
         {
           id: 'title',
           dataType: 'text',
           label: stepsLabels.s1.p1.label,
-          pageUniqueField: false,
           validations: { isRequired: [true, 'Enter a title'], maxLength: 100 }
         }
       ]
@@ -133,13 +133,13 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
     new FormEngineModel({
       label: stepsLabels.s2.label,
       description: stepsLabels.s2.description,
+      showParamLabelAsTitle: false,
       parameters: [
         {
           id: 'content',
           dataType: 'textarea',
           label: stepsLabels.s2.p1.label,
           lengthLimit: 'm',
-          pageUniqueField: false,
           validations: { isRequired: [true, 'Enter body content'] }
         }
       ]
@@ -151,14 +151,12 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
         {
           id: 'linkLabel',
           dataType: 'text',
-          label: stepsLabels.s3.p1.label,
-          pageUniqueField: false
+          label: stepsLabels.s3.p1.label
         },
         {
           id: 'linkUrl',
           dataType: 'text',
           label: stepsLabels.s3.p2.label,
-          pageUniqueField: false,
           validations: { urlFormat: true }
         }
       ]
@@ -275,7 +273,6 @@ function announcementNewRuntimeRules(
           id: 'startsAt',
           dataType: 'date-input',
           label: stepsLabels.s7.p1.label,
-          pageUniqueField: false,
           validations: {
             requiredDateInput: { message: 'Add a start date' },
             dateInputFormat: {},
@@ -286,7 +283,6 @@ function announcementNewRuntimeRules(
           id: 'expiresAt',
           dataType: 'date-input',
           label: stepsLabels.s7.p2.label,
-          pageUniqueField: false,
           validations: {
             dateInputFormat: {}
           }

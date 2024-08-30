@@ -12,11 +12,13 @@ import {
 export class FormEngineModel {
   label?: string;
   description?: string;
+  showParamLabelAsTitle?: boolean;
   parameters: FormEngineParameterModel[];
 
   constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
+    this.showParamLabelAsTitle = data.showParamLabelAsTitle;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
   }
 }
@@ -45,7 +47,6 @@ export class FormEngineParameterModel {
   placeholder?: string;
   isVisible?: boolean;
   isEditable?: boolean;
-  pageUniqueField?: boolean;
   rank?: number;
   validations?: {
     // Validations accepts 2 formats. Second format allows to display a custom (translated or not) message.
@@ -118,7 +119,6 @@ export class FormEngineParameterModel {
     this.placeholder = data.placeholder;
     this.isVisible = data.isVisible !== undefined ? data.isVisible : true;
     this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
-    this.pageUniqueField = data.pageUniqueField ?? true;
     this.rank = data.rank || 0;
     this.validations = data.validations;
     this.cssOverride = data.cssOverride;

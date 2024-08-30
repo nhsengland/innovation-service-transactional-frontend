@@ -5,15 +5,15 @@
     <ng-container *ngIf="p.isVisible">
       <ng-container [ngSwitch]="p.dataType">
         <div *ngSwitchCase="'hidden'">
-          <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="p.pageUniqueField"></theme-form-input>
+          <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'number'">
-          <theme-form-input type="number" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="p.pageUniqueField"></theme-form-input>
+          <theme-form-input type="number" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'password'">
-          <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="p.pageUniqueField"></theme-form-input>
+          <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
 
         <div *ngSwitchCase="'autocomplete-array'">
@@ -22,7 +22,7 @@
             [label]="p.label"
             [description]="p.description"
             [items]="p.items"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-input-autocomplete-array>
         </div>
 
@@ -34,7 +34,7 @@
             [description]="p.description"
             [items]="p.items"
             [additional]="p.additional"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-radio-group>
         </div>
 
@@ -44,7 +44,7 @@
             [label]="p.label"
             [description]="p.description"
             [items]="p.items"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-checkbox-group>
         </div>
 
@@ -55,7 +55,7 @@
             [label]="p.label"
             [description]="p.description"
             [items]="p.items"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-checkbox-array>
         </div>
 
@@ -65,7 +65,7 @@
             [label]="p.label"
             [description]="p.description"
             [groupedItems]="p.groupedItems"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-grouped-checkbox-array>
         </div>
 
@@ -75,7 +75,7 @@
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
             [lengthLimit]="p.lengthLimit"
           ></theme-form-textarea>
         </div>
@@ -86,7 +86,7 @@
             [label]="p.label"
             [description]="p.description"
             [config]="p.fileUploadConfig"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-file-upload>
         </div>
 
@@ -96,7 +96,7 @@
             [label]="p.label"
             [description]="p.description"
             [config]="p.fileUploadConfig"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
           ></theme-form-file-upload-array>
         </div>
 
@@ -150,17 +150,17 @@
             [id]="p.id"
             [label]="p.label"
             [description]="p.description"
-            [pageUniqueField]="p.pageUniqueField"
+            [pageUniqueField]="onlyOneField"
             [selectItems]="p.selectItems ?? { selectList: [] }"
           />
         </div>
 
         <div *ngSwitchCase="'date-input'">
-          <theme-form-date-input [groupName]="p.id" [id]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="p.pageUniqueField" />
+          <theme-form-date-input [groupName]="p.id" [id]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField" />
         </div>
 
         <div *ngSwitchDefault>
-          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="p.pageUniqueField"></theme-form-input>
+          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
       </ng-container>
     </ng-container>
