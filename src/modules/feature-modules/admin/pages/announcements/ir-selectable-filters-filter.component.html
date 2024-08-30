@@ -46,7 +46,9 @@
             <div class="width-85 nhsuk-u-font-size-19">
               <span>Answer {{ i + 1 }}</span>
             </div>
-            <div class="width-15 nhsuk-u-font-size-19 text-align-right"><a *ngIf="i > 0" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a></div>
+            <div class="width-15 nhsuk-u-font-size-19 text-align-right">
+              <a *ngIf="answersFormAsFormArray.controls.length > 1" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a>
+            </div>
           </div>
           <div class="width-85">
             <theme-form-select
