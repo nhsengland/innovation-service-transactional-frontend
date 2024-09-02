@@ -233,7 +233,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
           .getIrSchemaSectionQuestions(this.sectionFormControl.value)
           .find(q => q.id === questionId)
           ?.items?.filter(i => i.id && i.label && !i.itemsFromAnswer)
-          .filter(i => ![...this.answersFormArrayControl.value].includes(i))
+          .filter(i => !this.answersFormArrayControl.value.includes(i))
           .map(i => ({ key: i.id!, text: i.label! })) ?? [])
       ]
     };
@@ -257,12 +257,10 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   getSelectedQuestions() {
     this.selectedQuestions = (this.parentFormArray.controls as FormGroup[]).map(formgroup => {
       const questionValue = (formgroup as FormGroup).controls['question'];
-      console.log(`(formgroup as FormGroup).controls['question']`, (formgroup as FormGroup).controls['question']);
       if (questionValue && questionValue.value) {
-        console.log('question has Value');
         return questionValue.value;
       } else {
-        return '';
+        return null;
       }
     });
   }

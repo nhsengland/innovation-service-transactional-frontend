@@ -115,7 +115,6 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
 
   updateOptionsList() {
     if (this.previouslySelectedItems) {
-      console.log(`updated list on ${this.id}`);
       // filter list by provided items and by current selected value
       this.localSelectList = this.selectItems.selectList.filter(
         i => !this.previouslySelectedItems!.filter(i => i != this.formControl?.value).includes(i.key ?? '')
