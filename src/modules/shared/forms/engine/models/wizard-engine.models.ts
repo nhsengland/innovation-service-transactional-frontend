@@ -189,7 +189,6 @@ export class WizardEngineModel {
       this.gotoSummary();
     } else if (typeof this.currentStepId === 'number') {
       if (this.isChangingMode) {
-        console.log('nextStep isChangingMode', this.isChangingMode);
         this.checkStepConditions();
       } else {
         this.currentStepId++;
