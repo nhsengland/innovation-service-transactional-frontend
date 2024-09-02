@@ -29,7 +29,7 @@ const QUESTION_LABELS = {
   expiresAt: 'End date'
 };
 
-enum SummaryDataItemTypeEnum {
+export enum SummaryDataItemTypeEnum {
   SINGLE_PARAMETER = 'SINGLE_PARAMETER',
   MULTIPLE_PARAMETERS = 'MULTIPLE_PARAMETERS',
   FILTER_PARAMETER = 'FILTER_PARAMETER'
@@ -51,18 +51,18 @@ type SummaryPayloadType = {
   sendEmail: string;
 };
 
-type SummaryDataItemType = {
+export type SummaryDataItemType = {
   label: string;
   editStepNumber: number;
   data: SummaryDataItemSingleParameterType | SummaryDataItemMultipleParametersType | SummaryDataItemFilterParamaterType;
 };
 
-type SummaryDataItemSingleParameterType = {
+export type SummaryDataItemSingleParameterType = {
   type: SummaryDataItemTypeEnum.SINGLE_PARAMETER;
   answer: string;
 };
 
-type SummaryDataItemMultipleParametersType = {
+export type SummaryDataItemMultipleParametersType = {
   type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS;
   questions: {
     label: string;
@@ -70,7 +70,7 @@ type SummaryDataItemMultipleParametersType = {
   }[];
 };
 
-type SummaryDataItemFilterParamaterType = {
+export type SummaryDataItemFilterParamaterType = {
   type: SummaryDataItemTypeEnum.FILTER_PARAMETER;
   sections: {
     section: string;
