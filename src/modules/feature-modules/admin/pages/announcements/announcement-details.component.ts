@@ -11,14 +11,13 @@ import {
   GetAnnouncementInfoType
 } from '@modules/feature-modules/admin/services/announcements.service';
 import { SummaryDataItemType, SummaryDataItemTypeEnum } from './announcement-newdit.component';
-import { irSchemaTranslationsMap } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-admin-pages-announcement-info',
-  templateUrl: './announcement-info.component.html'
+  selector: 'app-admin-pages-announcement-details',
+  templateUrl: './announcement-details.component.html'
 })
-export class PageAnnouncementInfoComponent extends CoreComponent implements OnInit {
+export class PageAnnouncementDetailsComponent extends CoreComponent implements OnInit {
   announcementId: string;
   announcement:
     | null
@@ -32,7 +31,7 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
 
   isInnovatorSelected: boolean = false;
 
-  summaryData: SummaryDataItemType[] = [];
+  summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -71,10 +70,11 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
   }
 
   getSummaryData(): SummaryDataItemType[] {
-    const summaryData: SummaryDataItemType[] = [];
+    const summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
     const irSchemaTranslations = this.stores.schema.getIrSchemaTranslationsMap();
 
     let editStepNumber = 1;
+
     if (this.announcement) {
       summaryData.push(
         {
@@ -83,7 +83,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
             answer: this.announcement!.title
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         },
         {
           label: 'Write body content',
@@ -91,7 +92,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
             answer: this.announcement.params.content
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       );
 
@@ -104,7 +106,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
             { label: 'Link label', answer: this.announcement.params?.link?.label ?? '' },
             { label: 'Link URL', answer: this.announcement.params?.link?.url ?? '' }
           ]
-        }
+        },
+        canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
       });
 
       summaryData.push({
@@ -113,7 +116,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
           answer: this.announcement.userGroupsLabels
-        }
+        },
+        canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
       });
 
       if (this.announcement.userRoles.includes(UserRoleEnum.INNOVATOR)) {
@@ -123,7 +127,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
             answer: this.announcement.filters?.length ? 'Specific types of innovations' : 'All innovators'
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         });
       }
 
@@ -145,14 +150,15 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
                   .join('\n')
               };
             })
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         });
       }
 
       summaryData.push(
         {
           label: 'When do you want this announcement to be live?',
-          editStepNumber: editStepNumber++,
+          editStepNumber: this.announcement.status === AnnouncementStatusEnum.SCHEDULED ? editStepNumber++ : 1,
           data: {
             type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
             questions: [
@@ -170,7 +176,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
                   : ''
               }
             ]
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED, AnnouncementStatusEnum.ACTIVE]
         },
         {
           label: 'Which type of announcement?',
@@ -178,7 +185,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
             answer: this.announcement.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage'
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         },
         {
           label: 'Would you like to send this announcement via email too?',
@@ -186,7 +194,8 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
             answer: this.announcement.sendEmail ? 'Yes' : 'No'
-          }
+          },
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       );
     }

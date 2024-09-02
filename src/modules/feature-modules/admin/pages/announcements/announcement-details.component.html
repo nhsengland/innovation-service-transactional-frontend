@@ -17,7 +17,11 @@
         <div *ngFor="let item of summaryData" class="nhsuk-u-margin-bottom-6">
           <div class="d-flex align-items-baseline justify-content-space-between">
             <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ item.label }}</h2>
-            <a *ngIf="announcement.status === 'SCHEDULED'" href="javascript:void(0)" routerLink="edit/{{ item.editStepNumber }}" [queryParams]="{ isChangeMode: true }"
+            <a
+              *ngIf="item.canChangeOnStatus && item.canChangeOnStatus?.includes(announcement.status)"
+              href="javascript:void(0)"
+              routerLink="edit/{{ item.editStepNumber }}"
+              [queryParams]="{ isChangeMode: true }"
               >Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
             >
           </div>

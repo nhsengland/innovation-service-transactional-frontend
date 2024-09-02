@@ -21,6 +21,8 @@ import { DatePipe } from '@angular/common';
 import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
 import { InnovationRecordSchemaStore } from '@modules/stores';
+import { combineLatest } from 'rxjs';
+import { query } from 'express';
 
 export enum SummaryDataItemTypeEnum {
   SINGLE_PARAMETER = 'SINGLE_PARAMETER',
@@ -124,33 +126,42 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
       this.setPageStatus('READY');
     } else {
-      this.announcementsService.getAnnouncementInfo(this.announcementId).subscribe(response => {
-        this.announcementData.status = response.status;
-        this.announcementData.isScheduled =
-          this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.SCHEDULED;
-        this.announcementData.isActive =
-          this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE;
+      combineLatest([
+        this.activatedRoute.queryParams,
+        this.announcementsService.getAnnouncementInfo(this.announcementId)
+      ]).subscribe({
+        next: ([queryParams, announcementInfo]) => {
+          this.announcementData.status = announcementInfo.status;
+          this.announcementData.isScheduled =
+            this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.SCHEDULED;
+          this.announcementData.isActive =
+            this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE;
 
-        if (this.announcementData.isScheduled) {
-          this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
-        } else if (this.announcementData.isActive) {
-          this.wizard = new WizardEngineModel(ANNOUNCEMENT_EDIT_QUESTIONS);
-        } else {
-          this.redirectTo('info');
+          if (this.announcementData.isScheduled) {
+            this.wizard = new WizardEngineModel(ANNOUNCEMENT_NEW_QUESTIONS);
+          } else if (this.announcementData.isActive) {
+            this.wizard = new WizardEngineModel(ANNOUNCEMENT_EDIT_QUESTIONS);
+          } else {
+            this.redirectTo('info');
+          }
+
+          this.wizard.setInboundParsedAnswers(announcementInfo).runRules();
+
+          if (queryParams.isChangeMode && queryParams.isChangeMode === 'true') {
+            this.onGotoStep(this.activatedRoute.snapshot.params.stepId || 1);
+          } else {
+            this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
+            this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+          }
+
+          this.setPageStatus('READY');
         }
-
-        this.wizard.setInboundParsedAnswers(response).runRules();
-        this.wizard.gotoStep(this.activatedRoute.snapshot.params.stepId || 1);
-
-        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
-        this.setPageStatus('READY');
       });
     }
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
     this.resetAlert();
-
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
     if ((action === 'next' || (action === 'previous' && this.isChangeMode)) && !formData.valid) {
       // Don't move forward if step is NOT valid.

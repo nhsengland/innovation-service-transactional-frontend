@@ -22,7 +22,7 @@ import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
-import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
 import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
@@ -341,7 +341,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAnnouncementInfoComponent,
+                component: PageAnnouncementDetailsComponent,
                 data: { breadcrumb: null }
               },
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },

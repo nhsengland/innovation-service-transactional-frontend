@@ -25,7 +25,7 @@ import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
-import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
 import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
@@ -90,7 +90,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageUserNewComponent,
     PageRoleNewComponent,
     // // Announcements.
-    PageAnnouncementInfoComponent,
+    PageAnnouncementDetailsComponent,
     PageAnnouncementNewditComponent,
     PageAnnouncementsListComponent,
     // // Dashboard.
