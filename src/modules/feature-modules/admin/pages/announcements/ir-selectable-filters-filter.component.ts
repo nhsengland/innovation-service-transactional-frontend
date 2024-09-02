@@ -71,6 +71,8 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   questionFormControl: FormControl = new FormControl<string | undefined>(undefined);
   answersFormArrayControl: FormArray = new FormArray<any>([]);
 
+  selectedQuestions: string[] = [];
+
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
     return this.injector.get(ControlContainer).control;
@@ -110,11 +112,11 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     this.parentFormArray = this.filterFormGroup.parent as FormArray;
     this.assignFilterControls();
-    // this.updateFilterControlsReference();
   }
 
   ngDoCheck(): void {
     this.cdr.detectChanges();
+    this.getSelectedQuestions();
     this.updateFilterControlsReference();
   }
 
@@ -174,18 +176,13 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       newAnswerControl.updateValueAndValidity();
       this.answersFormArrayControl.push(newAnswerControl);
 
-      if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-        this.canAddAnswerField = false;
-      }
+      this.checkCanAddAnswer();
     }
   }
 
   removeAnswerField(i: number) {
     const answersList = this.getAnswersList(this.questionFormControl.value, 0);
-    if (this.answersFormArrayControl.controls.length == answersList.selectList.length - 1) {
-      this.canAddAnswerField = true;
-    }
-
+    this.checkCanAddAnswer();
     this.answersFormArrayControl.removeAt(i);
   }
 
@@ -202,7 +199,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.sectionFormControl.value,
       selectList: [
-        { key: undefined, text: 'Select section' },
+        { key: undefined, text: 'Select section', disabled: true },
         ...this.schemaStore
           .getIrSchemaSubSectionsIdsListV3()
           .map(section => ({ key: section, text: this.formatSectionLabel(section) }))
@@ -214,10 +211,11 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.questionFormControl.value,
       selectList: [
-        { key: undefined, text: 'Select question' },
+        { key: undefined, text: 'Select question', disabled: true },
         ...this.schemaStore
           .getIrSchemaSectionQuestions(sectionId)
           .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
+          .filter(q => !['mainCategory'].includes(q.id))
           .map(q => ({ key: q.id, text: q.label }))
       ]
     };
@@ -230,14 +228,20 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     return {
       defaultKey: this.answersFormArrayControl.value[answerIndex],
       selectList: [
-        { key: undefined, text: 'Select answer' },
+        { key: undefined, text: 'Select answer', disabled: true },
         ...(this.schemaStore
           .getIrSchemaSectionQuestions(this.sectionFormControl.value)
           .find(q => q.id === questionId)
           ?.items?.filter(i => i.id && i.label && !i.itemsFromAnswer)
+          .filter(i => !this.answersFormArrayControl.value.includes(i))
           .map(i => ({ key: i.id!, text: i.label! })) ?? [])
       ]
     };
+  }
+
+  checkCanAddAnswer() {
+    const answersList = this.getAnswersList(this.questionFormControl.value, 0);
+    this.canAddAnswerField = !(this.answersFormArrayControl.controls.length == answersList.selectList.length - 1);
   }
 
   onSelectChange(event: SelectComponentEmitType): void {
@@ -247,13 +251,26 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     if (['question'].includes(event.id.split('_')[1])) {
       this.clearAnswers();
     }
+    this.checkCanAddAnswer();
+  }
+
+  getSelectedQuestions() {
+    this.selectedQuestions = (this.parentFormArray.controls as FormGroup[]).map(formgroup => {
+      const questionValue = (formgroup as FormGroup).controls['question'];
+      if (questionValue && questionValue.value) {
+        return questionValue.value;
+      } else {
+        return null;
+      }
+    });
   }
 
   clearQuestion() {
-    this.questionFormControl.reset();
+    this.questionFormControl.setValue(undefined);
     this.answersFormArrayControl.clear();
     this.addAnswerField();
   }
+
   clearAnswers() {
     this.answersFormArrayControl.clear();
     this.addAnswerField();
