@@ -24,7 +24,7 @@
           </div>
 
           <div *ngIf="item.data.type === 'SINGLE_PARAMETER'">
-            <span class="nhsuk-u-font-size-19 text-pre-wrap">{{ item.data.answer }}</span>
+            <span class="nhsuk-u-font-size-19 text-pre-line text-word-break">{{ item.data.answer }}</span>
             <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
           </div>
 
@@ -32,7 +32,7 @@
             <dl class="nhsuk-summary-list">
               <div *ngFor="let question of item.data.questions" class="nhsuk-summary-list__row">
                 <dt class="nhsuk-summary-list__key">{{ question.label }}</dt>
-                <dd class="nhsuk-summary-list__value text-pre-wrap">{{ question.answer }}</dd>
+                <dd class="nhsuk-summary-list__value text-pre-line text-word-break">{{ question.answer }}</dd>
                 <dd class="nhsuk-summary-list__actions"></dd>
               </div>
             </dl>
@@ -44,17 +44,17 @@
               <dl class="nhsuk-summary-list">
                 <div class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key">Section</dt>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.section }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-line text-word-break">{{ section.section }}</dd>
                   <dd class="nhsuk-summary-list__actions"></dd>
                 </div>
                 <div class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key">Question</dt>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.question }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-line text-word-break">{{ section.question }}</dd>
                   <dd class="nhsuk-summary-list__actions"></dd>
                 </div>
                 <div class="nhsuk-summary-list__row">
                   <dt class="nhsuk-summary-list__key">Answer</dt>
-                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.answer }}</dd>
+                  <dd class="nhsuk-summary-list__value text-pre-line text-word-break">{{ section.answer }}</dd>
                   <dd class="nhsuk-summary-list__actions"></dd>
                 </div>
               </dl>
