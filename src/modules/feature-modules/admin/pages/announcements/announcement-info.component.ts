@@ -61,8 +61,6 @@ export class PageAnnouncementInfoComponent extends CoreComponent implements OnIn
         };
         this.isInnovatorSelected = this.announcement.userRoles.includes(UserRoleEnum.INNOVATOR);
         this.summaryData = this.getSummaryData();
-        console.log('this.summaryData', this.summaryData);
-
         this.setPageStatus('READY');
       },
       error: () => {
