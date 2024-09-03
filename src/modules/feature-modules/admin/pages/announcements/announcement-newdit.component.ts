@@ -22,7 +22,6 @@ import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
 import { InnovationRecordSchemaStore } from '@modules/stores';
 import { combineLatest } from 'rxjs';
-import { query } from 'express';
 
 export enum SummaryDataItemTypeEnum {
   SINGLE_PARAMETER = 'SINGLE_PARAMETER',
@@ -55,6 +54,7 @@ export type SummaryDataItemType = {
 export type SummaryDataItemSingleParameterType = {
   type: SummaryDataItemTypeEnum.SINGLE_PARAMETER;
   answer: string;
+  canChangeOnStatus?: AnnouncementStatusEnum[];
 };
 
 export type SummaryDataItemMultipleParametersType = {
@@ -63,6 +63,7 @@ export type SummaryDataItemMultipleParametersType = {
     label: string;
     answer: string;
   }[];
+  canChangeOnStatus?: AnnouncementStatusEnum[];
 };
 
 export type SummaryDataItemFilterParamaterType = {
@@ -72,6 +73,7 @@ export type SummaryDataItemFilterParamaterType = {
     question: string;
     answer: string;
   }[];
+  canChangeOnStatus?: AnnouncementStatusEnum[];
 };
 
 @Component({
@@ -273,7 +275,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.title
+          answer: summaryPayload.title,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       },
       {
@@ -281,7 +284,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.content
+          answer: summaryPayload.content,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       },
       {
@@ -292,7 +296,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
           questions: [
             { label: 'Link label', answer: summaryPayload.linkLabel },
             { label: 'Link URL', answer: summaryPayload.linkUrl }
-          ]
+          ],
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       },
       {
@@ -300,7 +305,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.userRoles
+          answer: summaryPayload.userRoles,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       }
     );
@@ -311,7 +317,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.showToWhom
+          answer: summaryPayload.showToWhom,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       });
     }
@@ -322,7 +329,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.FILTER_PARAMETER,
-          sections: summaryPayload.filters
+          sections: summaryPayload.filters,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       });
     }
@@ -330,13 +338,14 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     summaryData.push(
       {
         label: stepsLabels.s7.label,
-        editStepNumber: editStepNumber++,
+        editStepNumber: this.announcementData.status === AnnouncementStatusEnum.SCHEDULED ? editStepNumber++ : 1,
         data: {
           type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
           questions: [
             { label: 'Start date', answer: summaryPayload.startsAt },
             { label: 'End date', answer: summaryPayload.expiresAt }
-          ]
+          ],
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED, AnnouncementStatusEnum.ACTIVE]
         }
       },
       {
@@ -344,7 +353,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.type
+          answer: summaryPayload.type,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       },
       {
@@ -352,7 +362,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-          answer: summaryPayload.sendEmail
+          answer: summaryPayload.sendEmail,
+          canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         }
       }
     );

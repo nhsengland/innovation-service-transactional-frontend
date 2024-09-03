@@ -300,11 +300,6 @@ export class CustomValidators {
       if (!control.value) {
         return null;
       }
-
-      if (control.errors?.dateInputFormat) {
-        return null;
-      }
-
       const dateDiffInDays = DatesHelper.dateDiff(
         `${startDate.year}-${startDate.month}-${startDate.day}`,
         `${control.value.year}-${control.value.month}-${control.value.day}`
@@ -312,6 +307,10 @@ export class CustomValidators {
 
       if (dateDiffInDays <= 0) {
         return { endDateInputGreaterThanStartDate: message ? { message } : true };
+      }
+
+      if (control.errors?.dateInputFormat) {
+        return null;
       }
 
       return null;
