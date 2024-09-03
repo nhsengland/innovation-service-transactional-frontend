@@ -181,8 +181,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   }
 
   removeAnswerField(i: number) {
-    const answersList = this.getAnswersList(this.questionFormControl.value, 0);
-    this.checkCanAddAnswer();
+    this.canAddAnswerField = true;
     this.answersFormArrayControl.removeAt(i);
   }
 

@@ -17,7 +17,7 @@ import {
   stepsLabels
 } from './announcement-newdit.config';
 
-import { DatePipe } from '@angular/common';
+import { DatePipe, ViewportScroller } from '@angular/common';
 import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
 import { InnovationRecordSchemaStore } from '@modules/stores';
@@ -101,7 +101,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService,
     private datePipe: DatePipe,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private irSchemaStore: InnovationRecordSchemaStore,
+    private scroller: ViewportScroller
   ) {
     super();
 
@@ -193,6 +194,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         break;
       case 'next':
         this.wizard.nextStep();
+        this.scroller.scrollToPosition([0, 0]);
         break;
       default: // Should NOT happen!
         break;
@@ -212,6 +214,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     this.isChangeMode = true;
     this.wizard.setIsChangingMode(this.isChangeMode);
     this.wizard.gotoStep(stepNumber);
+    this.scroller.scrollToPosition([0, 0]);
     this.resetAlert();
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
