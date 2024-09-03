@@ -8,16 +8,18 @@
     </legend>
 
     <div class="d-flex nhsuk-u-margin-bottom-1">
-      <div class="width-75 nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-font-size-22 nhsuk-u-margin-bottom-3"><span>Filter {{filterIndex+1}}</span></div>
+      <div class="width-75 nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-font-size-22 nhsuk-u-margin-bottom-3">
+        <span>Filter {{ filterIndex + 1 }}</span>
+      </div>
       <div class="width-25 nhsuk-u-font-size-19 text-align-right">
-        <a *ngIf="!(filterIndex == 0 && parentFormArray.controls.length == 1)" href="javascript:void(0)" (click)="removeFilter(filterIndex)">Remove filter</a>
+        <a *ngIf="!(filterIndex === 0 && parentFormArray.controls.length === 1)" href="javascript:void(0)" (click)="removeFilter(filterIndex)">Remove filter</a>
       </div>
     </div>
     <ng-container>
       <div class="nhsuk-u-margin-bottom-4">
         <theme-form-select
           [formControl]="sectionFormControl"
-          id="filter-{{filterIndex}}_section"
+          id="filter-{{ filterIndex }}_section"
           [label]="'Section'"
           [pageUniqueField]="false"
           [selectItems]="getSectionsList()"
@@ -29,27 +31,33 @@
         <theme-form-select
           *ngIf="sectionFormControl.value"
           [formControl]="questionFormControl"
-          id="filter-{{filterIndex}}_question"
+          id="filter-{{ filterIndex }}_question"
           [label]="'Question'"
           [pageUniqueField]="false"
           [selectItems]="getQuestionsList(this.sectionFormControl.value)"
           (selectChanged)="onSelectChange($event)"
+          [previouslySelectedItems]="selectedQuestions"
         />
       </div>
 
       <ng-container *ngIf="questionFormControl.value">
-        <div *ngFor="let answer of answersFormAsFormArray.controls; let i =  index" class="nhsuk-u-margin-bottom-4">
+        <div *ngFor="let answer of answersFormAsFormArray.controls; let i = index" class="nhsuk-u-margin-bottom-4">
           <div class="d-flex nhsuk-u-margin-bottom-1">
-            <div class="width-85 nhsuk-u-font-size-19"><span>Answer {{i+1}}</span></div>
-            <div class="width-15 nhsuk-u-font-size-19 text-align-right"><a *ngIf="i > 0" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a></div>
+            <div class="width-85 nhsuk-u-font-size-19">
+              <span>Answer {{ i + 1 }}</span>
+            </div>
+            <div class="width-15 nhsuk-u-font-size-19 text-align-right">
+              <a *ngIf="answersFormAsFormArray.controls.length > 1" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a>
+            </div>
           </div>
           <div class="width-85">
             <theme-form-select
               [formControl]="answer"
-              id="filter-{{filterIndex}}_answer-{{i}}"
+              id="filter-{{ filterIndex }}_answer-{{ i }}"
               [pageUniqueField]="false"
               [selectItems]="getAnswersList(questionFormControl.value, i)"
               (selectChanged)="onSelectChange($event)"
+              [previouslySelectedItems]="answersFormAsFormArray.value"
             />
           </div>
         </div>

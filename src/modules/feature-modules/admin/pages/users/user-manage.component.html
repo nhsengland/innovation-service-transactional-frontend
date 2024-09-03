@@ -1,0 +1,31 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div *ngIf="isActive" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">Lock account</h2>
+      <p>Accounts should only be locked in exceptional circumstances, for example if the user has breached the term of use.</p>
+      <p>You will be able to unlock the user by activating any of their specific roles</p>
+      <ul class="nhsuk-list">
+        <li><a routerLink="lock"> Lock account </a></li>
+      </ul>
+      <ul>
+        
+      </ul>
+    </div>
+  </div>
+
+  <div *ngIf="isInnovator" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-l">Delete account</h2>
+      <p>If you delete an account, all innovations will be archived and collaborators will lose access to them. All support
+      organisations the innovator has shared your data with, will be able to view an archived version of the innovations.</p>
+      <p>You can transfer ownership of the innovations before deleting the account and this request will be active for 30 days.</p>
+      <ul class="nhsuk-list">
+        <li><a routerLink="innovations"> See innovations list</a></li>
+        <li><a routerLink="delete"> Delete account </a></li>
+      </ul>
+    </div>
+  </div>
+
+  <app-account-mfa-list *ngIf="MFAInfo" [MFAInfo]="MFAInfo" />
+
+</theme-content-wrapper>

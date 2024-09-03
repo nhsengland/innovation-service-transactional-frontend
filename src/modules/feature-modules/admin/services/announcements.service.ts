@@ -7,9 +7,6 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { AnnouncementParamsType } from '@modules/theme/components/announcements/announcements.types';
-import { InnovationRecordFilterPayloadType } from '../pages/announcements/announcement-newdit.config';
-
 export enum AnnouncementStatusEnum {
   SCHEDULED = 'SCHEDULED',
   ACTIVE = 'ACTIVE',
@@ -21,6 +18,13 @@ export enum AnnouncementTypeEnum {
   LOG_IN = 'LOG_IN',
   HOMEPAGE = 'HOMEPAGE'
 }
+
+export type AnnouncementParamsType = {
+  content: string;
+  link?: { label: string; url: string };
+};
+
+export type InnovationRecordFilterPayloadType = { section: string; question: string; answers: string[] }[];
 
 export type GetAnnouncementsListType = {
   count: number;
@@ -39,20 +43,23 @@ export type GetAnnouncementInfoType = {
   title: string;
   userRoles: UserRoleEnum[];
   status: AnnouncementStatusEnum;
-  params: null | AnnouncementParamsType['GENERIC'];
+  params: AnnouncementParamsType;
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
-  filters: InnovationRecordFilterPayloadType;
+  type: AnnouncementTypeEnum;
+  filters?: InnovationRecordFilterPayloadType;
+  sendEmail: boolean;
 };
 
 export type UpsertAnnouncementType = {
   title: string;
   userRoles: UserRoleEnum[];
-  params?: AnnouncementParamsType['GENERIC'];
+  params: AnnouncementParamsType;
   startsAt: DateISOType;
   expiresAt?: DateISOType;
   type: AnnouncementTypeEnum;
   filters?: InnovationRecordFilterPayloadType;
+  sendEmail: boolean;
 };
 
 @Injectable()

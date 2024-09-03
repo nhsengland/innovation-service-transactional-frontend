@@ -1,0 +1,22 @@
+<div class="nhsuk-card nhsuk-u-margin-top-2">
+  <div class="nhsuk-card__content">
+    <h2 class="nhsuk-heading-m">Key progress areas</h2>
+    <ul class="nhsuk-list nhsuk-u-margin-left-0">
+      <li *ngFor="let item of progressData | keyvalue: unsortedKv; let last = last" class="d-flex" [ngClass]="last ? 'nhsuk-u-margin-bottom-0' : 'nhsuk-u-margin-bottom-5'">
+        <div class="d-flex flex-direction-column width-15">
+          <theme-svg-icon type="success" class="nhsuk-u-margin-bottom-1"></theme-svg-icon>
+          <span *ngIf="item.key === 'deploymentCount'" class="nhsuk-u-font-size-16 font-color-secondary text-align-center">
+            {{ item.value }} {{ progressData.deploymentCount | i18nPlural: { "=1": "site", other: "sites" } }}
+          </span>
+          <span *ngIf="!isNumber(item.value)" class="nhsuk-u-font-size-16 font-color-secondary text-align-center">{{
+            "shared.catalog.innovation.key_progress_areas.answers." + item.value | translate
+          }}</span>
+        </div>
+        <div class="d-flex flex-direction-column nhsuk-u-margin-left-2">
+          <span class="nhsuk-u-margin-bottom-1">{{ "shared.catalog.innovation.key_progress_areas.areas." + item.key + ".label" | translate }}</span>
+          <span class="nhsuk-u-font-size-16 font-color-secondary">{{ "shared.catalog.innovation.key_progress_areas.areas." + item.key + ".section" | translate }}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -28,6 +28,7 @@
 
         <div *ngSwitchCase="'radio-group'">
           <theme-form-radio-group
+            [id]="p.id"
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
@@ -143,7 +144,7 @@
           </fieldset>
         </div>
 
-        <!-- <div *ngSwitchCase="'select-component'">
+        <div *ngSwitchCase="'select-component'">
           <theme-form-select
             [controlName]="p.id"
             [id]="p.id"
@@ -152,7 +153,11 @@
             [pageUniqueField]="onlyOneField"
             [selectItems]="p.selectItems ?? { selectList: [] }"
           />
-        </div> -->
+        </div>
+
+        <div *ngSwitchCase="'date-input'">
+          <theme-form-date-input [groupName]="p.id" [id]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField" />
+        </div>
 
         <div *ngSwitchDefault>
           <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>

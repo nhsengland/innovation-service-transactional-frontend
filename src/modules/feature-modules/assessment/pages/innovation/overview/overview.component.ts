@@ -19,7 +19,7 @@ import {
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { ContextAssessmentType } from '@modules/stores/context/context.types';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 @Component({
   selector: 'app-assessment-pages-innovation-overview',
@@ -41,6 +41,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
   search?: string;
+
+  innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -141,11 +143,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             this.innovation.assessment
               ? this.assessmentService.getInnovationExemption(this.innovationId, this.innovation.assessment.id)
               : of(null),
-            this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp)
+            this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp),
+            this.innovationsService.getInnovationProgress(this.innovationId, true)
           ]);
         })
       )
-      .subscribe(([assessmentExemption, statistics]) => {
+      .subscribe(([assessmentExemption, statistics, innovationProgress]) => {
         if (assessmentExemption?.isExempted && assessmentExemption?.exemption) {
           this.assessmentExemption = assessmentExemption.exemption;
         }
@@ -188,6 +191,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             NotificationContextDetailEnum.AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT
           ]
         });
+
+        this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
 
         this.setPageStatus('READY');
       });

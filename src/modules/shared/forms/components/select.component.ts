@@ -37,12 +37,12 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   @Input({ required: true }) id!: string;
   @Input() label?: string;
   @Input() description?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input({ required: true }) selectItems!: {
     selectList: SelectComponentInputType[];
     defaultKey?: string | undefined;
   };
-  @Input() patchControllerFieldId?: string;
+  @Input() previouslySelectedItems?: string[];
 
   @Output() selectChanged = new EventEmitter<SelectComponentEmitType>();
 
@@ -51,6 +51,7 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
 
   isFocus: boolean = false;
 
+  localSelectList: SelectComponentInputType[] = [];
   selectedField: string | undefined = '';
 
   constructor(
@@ -67,6 +68,10 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   ngOnChanges(changes: SimpleChanges): void {
     !this.isFocus && this.checkError();
 
+    if (changes.previouslySelectedItems) {
+      this.updateOptionsList();
+    }
+
     this.selectedField = this.formControl?.value;
   }
 
@@ -76,6 +81,8 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
       this.selectItems.selectList[0].key;
 
     this.formControl?.setValue(this.selectedField);
+    this.localSelectList = this.selectItems.selectList;
+    this.updateOptionsList();
   }
 
   onClick() {
@@ -104,5 +111,14 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
     this.checkError();
     this.cdr.detectChanges();
     this.selectChanged.emit({ id: this.id, value: this.formControl?.value });
+  }
+
+  updateOptionsList() {
+    if (this.previouslySelectedItems) {
+      // filter list by provided items and by current selected value
+      this.localSelectList = this.selectItems.selectList.filter(
+        i => !this.previouslySelectedItems!.filter(i => i != this.formControl?.value).includes(i.key ?? '')
+      );
+    }
   }
 }

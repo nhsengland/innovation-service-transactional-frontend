@@ -12,11 +12,13 @@ import {
 export class FormEngineModel {
   label?: string;
   description?: string;
+  showParamLabelAsTitle?: boolean;
   parameters: FormEngineParameterModel[];
 
   constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
+    this.showParamLabelAsTitle = data.showParamLabelAsTitle;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
   }
 }
@@ -38,6 +40,7 @@ export class FormEngineParameterModel {
     | 'file-upload'
     | 'file-upload-array'
     | 'select-component'
+    | 'date-input'
     | 'ir-selectable-filters';
   label?: string;
   description?: string;
@@ -60,6 +63,10 @@ export class FormEngineParameterModel {
     postcodeFormat?: boolean | [boolean, string];
     urlFormat?: boolean | [boolean, string];
     equalTo?: string | [string, string];
+    requiredDateInput?: { message?: string };
+    dateInputFormat?: { message?: string };
+    futureDateInput?: { includeToday: boolean; message?: string };
+    endDateInputGreaterThanStartDate?: { startDate: { day: string; month: string; year: string }; message?: string };
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;

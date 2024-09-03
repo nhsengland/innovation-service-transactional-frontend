@@ -43,8 +43,7 @@
 
       <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>The needs assessment team are editing this innovation's needs assessment. 
-        Messages, tasks, support update and suggestions will be unavailable on this innovation until the update is submitted.</p>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
       </div>
     </div>
 

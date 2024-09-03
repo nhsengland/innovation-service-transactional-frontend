@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { RoutingHelper } from '@app/base/helpers';
 
+import { FormGroup, UntypedFormControl } from '@angular/forms';
+import { CustomValidators } from '@app/base/forms';
 import { AdminValidationResponseDTO, UsersValidationRulesService } from '../../services/users-validation-rules.service';
 import { AdminUsersService } from '../../services/users.service';
 
@@ -17,6 +19,16 @@ export class PageUserDeleteComponent extends CoreComponent implements OnInit {
   pageStep: 'RULES' | 'DELETE_USER' = 'RULES';
 
   rulesList: AdminValidationResponseDTO['validations'] = [];
+
+  form = new FormGroup(
+    {
+      confirmation: new UntypedFormControl('', [
+        CustomValidators.required('A confirmation text is necessary'),
+        CustomValidators.equalTo("delete user's account")
+      ])
+    },
+    { updateOn: 'blur' }
+  );
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -58,8 +70,16 @@ export class PageUserDeleteComponent extends CoreComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (!this.form.valid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     this.usersService.deleteUser(this.user.id).subscribe({
-      next: () => this.redirectTo(`/admin/users`, { alert: 'deleteSuccess' }),
+      next: () => {
+        this.setRedirectAlertInformation('User deleted successfully');
+        this.redirectTo(`/admin/users`, { alert: 'deleteSuccess' });
+      },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();

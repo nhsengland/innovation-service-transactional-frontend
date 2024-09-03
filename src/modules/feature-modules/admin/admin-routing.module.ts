@@ -22,13 +22,14 @@ import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
-import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
 import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
@@ -85,6 +86,8 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
+import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
@@ -247,7 +250,6 @@ const routes: Routes = [
             children: [
               { path: '', pathMatch: 'full', component: PageUserInfoComponent, data: { breadcrumb: null } },
               { path: 'email', pathMatch: 'full', component: PageUserEmailComponent, data: { breadcrumb: null } },
-              { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent, data: { breadcrumb: null } },
               { path: 'lock', pathMatch: 'full', component: PageUserLockComponent, data: { breadcrumb: null } },
               { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent, data: { breadcrumb: null } },
               {
@@ -255,6 +257,34 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageUsersRoleChangeComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'manage',
+                data: { breadcrumb: 'Manage account' },
+                children: [
+                  { path: '', pathMatch: 'full', component: PageUserManageComponent },
+                  { path: 'lock', pathMatch: 'full', component: PageUserLockComponent },
+                  { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent },
+                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
+                  { path: 'innovations', pathMatch: 'full', component: PageUserInnovationsComponent },
+                  {
+                    path: 'mfa',
+                    data: { layout: { type: 'full' } },
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        redirectTo: 'edit'
+                      },
+                      {
+                        path: 'edit',
+                        pathMatch: 'full',
+                        component: PageAccountMFAEditComponent,
+                        data: { breadcrumb: null, layout: { type: 'full' } }
+                      }
+                    ]
+                  }
+                ]
               },
               {
                 path: 'role',
@@ -311,7 +341,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAnnouncementInfoComponent,
+                component: PageAnnouncementDetailsComponent,
                 data: { breadcrumb: null }
               },
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
@@ -663,6 +693,24 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageInnovationStatusListComponent,
                 data: { breadcrumb: 'Statuses' }
+              },
+              {
+                path: 'transfer',
+                data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: '1',
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: ':stepId',
+                    pathMatch: 'full',
+                    component: PageInnovationManageTransferComponent,
+                    data: { breadcrumb: null }
+                  }
+                ]
               }
             ]
           }
