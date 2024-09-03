@@ -69,7 +69,6 @@
 
         <theme-announcements-card [announcementCardData]="{ title: announcement.title, params: announcement.params }"></theme-announcements-card>
 
-        <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible" />
         <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">
           Delete announcement
         </button>
