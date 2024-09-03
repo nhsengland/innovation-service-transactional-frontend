@@ -32,7 +32,7 @@
 
 <ng-template #fullLayout>
   <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-0">
-    <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
+    <a href="javascript:void(0)" (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
       <theme-svg-icon type="chevron-left" />
       {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
     </a>
@@ -74,7 +74,7 @@
         <div class="app-pane__side-bar">
           <nav id="left-aside-menu" class="app-side-nav" role="navigation" aria-label="Main Navigation">
             <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
-              <a (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
+              <a href="javascript:void(0)" (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
                 <theme-svg-icon type="chevron-left" />
                 {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
               </a>
