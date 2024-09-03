@@ -258,7 +258,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       expiresAt: outboundPayload.expiresAt
         ? this.datePipe.transform(outboundPayload.expiresAt, this.translate('app.date_formats.long_date'))!
         : '',
-      type: outboundPayload.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage',
+      type: outboundPayload.type === AnnouncementTypeEnum.LOG_IN ? 'Login announcement' : 'Homepage announcement',
       sendEmail: outboundPayload.sendEmail ? 'Yes' : 'No'
     };
   }

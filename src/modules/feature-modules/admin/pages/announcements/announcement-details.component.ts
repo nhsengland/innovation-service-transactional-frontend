@@ -184,7 +184,8 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-            answer: this.announcement.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage'
+            answer:
+              this.announcement.type === AnnouncementTypeEnum.LOG_IN ? 'Login announcement' : 'Homepage announcement'
           },
           canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         },
