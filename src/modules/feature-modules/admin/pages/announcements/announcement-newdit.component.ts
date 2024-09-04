@@ -22,7 +22,6 @@ import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
 import { InnovationRecordSchemaStore } from '@modules/stores';
 import { combineLatest } from 'rxjs';
-import { query } from 'express';
 
 export enum SummaryDataItemTypeEnum {
   SINGLE_PARAMETER = 'SINGLE_PARAMETER',
@@ -88,7 +87,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     status: null | AnnouncementStatusEnum;
     isScheduled: boolean;
     isActive: boolean;
-    cardData?: AnnouncementCardDataType;
+    cardData: AnnouncementCardDataType;
   };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
@@ -112,7 +111,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       isEdition: !!this.announcementId,
       status: null,
       isScheduled: false,
-      isActive: false
+      isActive: false,
+      cardData: { title: '', params: { content: '' } }
     };
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
