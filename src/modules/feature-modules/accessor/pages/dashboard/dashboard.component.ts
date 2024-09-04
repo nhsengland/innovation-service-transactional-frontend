@@ -7,6 +7,12 @@ import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import {
+  AnnouncementType,
+  AnnouncementsService
+} from '@modules/feature-modules/announcements/services/announcements.service';
+import { forkJoin } from 'rxjs';
+import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 
 @Component({
   selector: 'app-accessor-pages-dashboard',
@@ -24,7 +30,12 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   isQualifyingAccessorRole = false;
 
-  constructor(private statisticsService: StatisticsService) {
+  announcements: AnnouncementType[] = [];
+
+  constructor(
+    private statisticsService: StatisticsService,
+    private announcementsService: AnnouncementsService
+  ) {
     super();
 
     this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
@@ -53,6 +64,53 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER
       ]
     };
+
+    forkJoin([
+      this.statisticsService.getUserStatisticsInfo(qp),
+      this.announcementsService.getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE] })
+    ]).subscribe(([statistics, announcements]) => {
+      this.cardsList = [
+        {
+          title: 'Your innovations',
+          label: `Engaging innovations are assigned to you`,
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
+          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
+          total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
+          lastMessage: `Last submitted:`,
+          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
+          emptyMessageTitle: 'No engaging innovations assigned to you'
+        },
+        {
+          title: 'Tasks',
+          label: `Tasks assigned by you have been done or declined`,
+          link: `/accessor/tasks`,
+          queryParams: { openTasks: false },
+          count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
+          total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
+          lastMessage: 'Last task update:',
+          date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
+          emptyMessage: 'No tasks assigned by your organisation yet'
+        }
+      ];
+
+      if (this.isQualifyingAccessorRole) {
+        this.cardsList.unshift({
+          title: 'Review innovations',
+          label: `Suggested innovations awaiting status assignment from your organisation unit`,
+          link: '/accessor/innovations',
+          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
+          lastMessage: `Last submitted:`,
+          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
+          emptyMessageTitle: 'No innovations awaiting status assignment'
+        });
+      }
+
+      this.announcements = announcements;
+
+      this.setPageStatus('READY');
+    });
 
     this.statisticsService.getUserStatisticsInfo(qp).subscribe({
       next: statistics => {
@@ -97,5 +155,9 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         this.setPageStatus('READY');
       }
     });
+  }
+
+  onClearAnnouncement(announcementId: string) {
+    this.announcements = this.announcements.filter(a => a.id !== announcementId);
   }
 }

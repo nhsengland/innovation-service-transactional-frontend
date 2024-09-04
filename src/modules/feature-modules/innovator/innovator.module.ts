@@ -47,6 +47,7 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 import { InnovatorService } from './services/innovator.service';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
+import { AnnouncementsService } from '../announcements/services/announcements.service';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -94,7 +95,8 @@ import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/
     ShareInnovationRecordGuard,
 
     // Services.
-    InnovatorService
+    InnovatorService,
+    AnnouncementsService
   ]
 })
 export class InnovatorModule {}

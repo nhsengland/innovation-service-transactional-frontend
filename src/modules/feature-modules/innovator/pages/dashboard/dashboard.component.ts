@@ -17,6 +17,11 @@ import {
   GetInnovationTransfersDTO,
   InnovatorService
 } from '../../services/innovator.service';
+import {
+  AnnouncementType,
+  AnnouncementsService
+} from '@modules/feature-modules/announcements/services/announcements.service';
+import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -50,9 +55,12 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   innovationTransfers: GetInnovationTransfersDTO = [];
   inviteCollaborations: GetInnovationCollaboratorInvitesDTO[] = [];
 
+  announcements: AnnouncementType[] = [];
+
   constructor(
     private innovationsService: InnovationsService,
-    private innovatorService: InnovatorService
+    private innovatorService: InnovatorService,
+    private announcementsService: AnnouncementsService
   ) {
     super();
 
@@ -95,50 +103,60 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       this.innovatorService.getInnovationInviteCollaborations().pipe(
         map(response => response),
         catchError(() => of(null))
-      )
-    ]).subscribe(([innovationsListOwner, innovationsListCollaborator, innovationsTransfers, inviteCollaborations]) => {
-      this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
-        item => item.groupedStatus !== 'ARCHIVED'
-      );
-      this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
-        item => item.groupedStatus !== 'ARCHIVED'
-      );
-      this.user.innovationsArchived = this.user.innovationsArchived = [
-        ...this.getInnovationsListInformation(innovationsListOwner.data),
-        ...this.getInnovationsListInformation(innovationsListCollaborator.data)
-      ]
-        .sort((a, b) => a.name.localeCompare(b.name))
-        .filter(item => item.groupedStatus === 'ARCHIVED');
+      ),
+      this.announcementsService.getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE] })
+    ]).subscribe(
+      ([
+        innovationsListOwner,
+        innovationsListCollaborator,
+        innovationsTransfers,
+        inviteCollaborations,
+        announcements
+      ]) => {
+        this.announcements = announcements;
+        this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
+        );
+        this.user.innovationsCollaborator = this.getInnovationsListInformation(innovationsListCollaborator.data).filter(
+          item => item.groupedStatus !== 'ARCHIVED'
+        );
+        this.user.innovationsArchived = this.user.innovationsArchived = [
+          ...this.getInnovationsListInformation(innovationsListOwner.data),
+          ...this.getInnovationsListInformation(innovationsListCollaborator.data)
+        ]
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .filter(item => item.groupedStatus === 'ARCHIVED');
 
-      if (innovationsTransfers) {
-        this.innovationTransfers = innovationsTransfers;
+        if (innovationsTransfers) {
+          this.innovationTransfers = innovationsTransfers;
 
-        // Throw notification read dismiss.
-        if (this.innovationTransfers.length) {
-          this.stores.context.dismissUserNotification({
-            contextDetails: [
-              NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER,
-              NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER
-            ]
-          });
+          // Throw notification read dismiss.
+          if (this.innovationTransfers.length) {
+            this.stores.context.dismissUserNotification({
+              contextDetails: [
+                NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER,
+                NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER
+              ]
+            });
+          }
+        } else {
+          this.setAlertUnknownError();
         }
-      } else {
-        this.setAlertUnknownError();
-      }
 
-      if (inviteCollaborations) {
-        this.inviteCollaborations = inviteCollaborations.map(i => {
-          return {
-            ...i,
-            invitedAt: DatesHelper.addDaysToDate(i.invitedAt ?? '', 30).toString()
-          };
-        });
-      } else {
-        this.setAlertUnknownError();
-      }
+        if (inviteCollaborations) {
+          this.inviteCollaborations = inviteCollaborations.map(i => {
+            return {
+              ...i,
+              invitedAt: DatesHelper.addDaysToDate(i.invitedAt ?? '', 30).toString()
+            };
+          });
+        } else {
+          this.setAlertUnknownError();
+        }
 
-      this.setPageStatus('READY');
-    });
+        this.setPageStatus('READY');
+      }
+    );
   }
 
   onSubmitTransferResponse(transferId: string, accept: boolean): void {
@@ -185,6 +203,10 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           accept ? `You have successfully accepted ownership` : `You have successfully rejected ownership`
         );
       });
+  }
+
+  onClearAnnouncement(announcementId: string) {
+    this.announcements = this.announcements.filter(a => a.id !== announcementId);
   }
 
   private buildDescriptionString(

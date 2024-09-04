@@ -17,6 +17,7 @@ export type AnnouncementType = {
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
   params: AnnouncementParamsType;
+  innovations?: string[];
 };
 
 @Injectable()
@@ -25,9 +26,10 @@ export class AnnouncementsService extends CoreService {
     super();
   }
 
-  getAnnouncements(filters: { type?: AnnouncementTypeEnum[] }): Observable<AnnouncementType[]> {
+  getAnnouncements(filters: { type?: AnnouncementTypeEnum[]; innovationId?: string }): Observable<AnnouncementType[]> {
     const qp = {
-      ...(filters.type ? { type: filters.type } : {})
+      ...(filters.type ? { type: filters.type } : {}),
+      ...(filters.innovationId ? { innovationId: filters.innovationId } : {})
     };
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/announcements').setQueryParams(qp);
@@ -38,19 +40,15 @@ export class AnnouncementsService extends CoreService {
   }
 
   readAnnouncement(announcementId: string, innovationId?: string): Observable<void> {
-    if (innovationId) {
-      console.log('removed only for current innovation');
-    } else {
-      console.log('removed all for this specific announcement');
-    }
+    const qp = {
+      ...(innovationId ? { innovationId: innovationId } : {})
+    };
 
-    // TODO: Update endpoint to accept clearing all/one announcement for specific innovations
+    const url = new UrlModel(this.API_USERS_URL)
+      .addPath('v1/me/announcements/:announcementId/read')
+      .setPathParams({ announcementId })
+      .setQueryParams(qp);
 
-    // const url = new UrlModel(this.API_USERS_URL)
-    //   .addPath('v1/me/announcements/:announcementId/read')
-    //   .setPathParams({ announcementId });
-    // return this.http.patch<void>(url.buildUrl(), null).pipe(take(1));
-
-    return of();
+    return this.http.patch<void>(url.buildUrl(), null).pipe(take(1));
   }
 }
