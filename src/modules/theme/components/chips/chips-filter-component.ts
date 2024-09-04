@@ -7,8 +7,10 @@ export type ChipFilterInputType = { id: string; value: string; exclusive?: boole
   templateUrl: './chips-filter-component.html'
 })
 export class ChipsFilterComponent implements OnInit {
+
   @Input({ required: true }) chipsInput: ChipFilterInputType = [];
   @Input() exclusive: boolean = false;
+  @Input() ariaDescribedBy: string = '';
 
   @Output() chipsChange = new EventEmitter<string[]>();
 
@@ -47,4 +49,5 @@ export class ChipsFilterComponent implements OnInit {
     this.selectedChips = [];
     this.chipsChange.emit(this.selectedChips);
   }
+
 }

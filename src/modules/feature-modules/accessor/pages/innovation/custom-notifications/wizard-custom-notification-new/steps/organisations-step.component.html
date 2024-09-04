@@ -4,10 +4,10 @@
       <p>You can select multiple organisations.</p>
 
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
-        <theme-form-checkbox-array id="organisations" arrayName="organisations" [items]="organisationsItems"></theme-form-checkbox-array>
-
+        <theme-form-checkbox-array id="organisations" arrayName="organisations" label="Select the organisations you want to be notified about" [items]="organisationsItems" [pageUniqueField]="false"></theme-form-checkbox-array>
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
       </form>
+
     </div>
   </div>
 </theme-content-wrapper>

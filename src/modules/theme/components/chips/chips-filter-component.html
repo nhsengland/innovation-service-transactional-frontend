@@ -1,12 +1,12 @@
-<ul class="nhsuk-u-padding-0">
-  <li *ngFor="let item of chipsInput; first as firstItem" class="d-inline-block" [ngClass]="firstItem? 'nhsuk-u-margin-left-0 nhsuk-u-margin-right-1': 'nhsuk-u-margin-1'">
-    <a
-      href="javascript:void(0)"
+<ul class="nhsuk-u-padding-0" [attr.aria-describedby]="ariaDescribedBy || null">
+  <li *ngFor="let item of chipsInput; first as firstItem" class="d-inline-block" [ngClass]="firstItem ? 'nhsuk-u-margin-left-0 nhsuk-u-margin-right-1' : 'nhsuk-u-margin-1'">
+    <a href="javascript:void(0)"
       (click)="onClickChip(item, $event)"
+      role="button"
       class="app-tag nhsuk-u-font-size-14"
       [ngClass]="{'app-tag__selected': !item.exclusive ? selectedChips.includes(item.id) : selectedChips.length === 0 }"
-    >
-      {{ item.value }} <ng-container *ngIf="item.count">({{ item.count }})</ng-container>
+      [attr.aria-pressed]="!item.exclusive ? selectedChips.includes(item.id) : selectedChips.length === 0">
+      {{ item.value }}<ng-container *ngIf="item.count"> ({{ item.count }})</ng-container>
     </a>
   </li>
 </ul>

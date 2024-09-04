@@ -1,11 +1,11 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p class="font-color-secondary">Select 1 or more support statuses.</p>
 
       <form [formGroup]="form" id="supportStatuses" (ngSubmit)="onNextStep()">
         <div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': supportStatusesArrayHasError }">
           <fieldset class="nhsuk-fieldset">
+            <legend class="nhsuk-fieldset__legend">Select 1 or more support statuses</legend>
             <ng-container *ngIf="supportStatusesArrayHasError">
               <span id="support-statuses-error" class="nhsuk-error-message" role="alert">
                 <span class="nhsuk-u-visually-hidden">Error:</span> {{ supportStatusesArrayErrorMessage.message | translate }}

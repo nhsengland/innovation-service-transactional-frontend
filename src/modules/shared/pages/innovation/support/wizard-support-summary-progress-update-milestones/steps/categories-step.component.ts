@@ -69,8 +69,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
         new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray('Choose at least one category')])
       );
 
-      this.categoriesItems.unshift({ value: 'Select one or more progress categories', label: 'HEADING' });
-
       // Select the categories previously selected by the user
       this.data.selectedCategories.forEach(item => {
         (this.form.get('oneLevelMilestoneCategories') as FormArray).push(new FormControl<string>(item.name));

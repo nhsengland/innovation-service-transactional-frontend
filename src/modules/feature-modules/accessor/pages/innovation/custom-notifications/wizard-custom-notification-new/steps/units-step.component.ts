@@ -54,12 +54,11 @@ export class WizardInnovationCustomNotificationNewUnitsStepComponent
       );
 
       // Add each unit as an option to select on the form
-      const heading = { value: `${org.name}:`, label: 'HEADING' };
       const orgUnits = org.units.map(unit => ({ value: unit.id, label: unit.name }));
 
       this.organisationsItems.push({
         ...org,
-        units: [heading, ...orgUnits]
+        units: orgUnits
       });
 
       // Select the units previously selected by the user
