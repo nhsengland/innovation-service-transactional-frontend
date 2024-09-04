@@ -111,50 +111,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
       this.setPageStatus('READY');
     });
-
-    this.statisticsService.getUserStatisticsInfo(qp).subscribe({
-      next: statistics => {
-        this.cardsList = [
-          {
-            title: 'Your innovations',
-            label: `Engaging innovations are assigned to you`,
-            link: '/accessor/innovations',
-            queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
-            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
-            total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
-            lastMessage: `Last submitted:`,
-            date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No engaging innovations assigned to you'
-          },
-          {
-            title: 'Tasks',
-            label: `Tasks assigned by you have been done or declined`,
-            link: `/accessor/tasks`,
-            queryParams: { openTasks: false },
-            count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
-            total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
-            lastMessage: 'Last task update:',
-            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
-            emptyMessage: 'No tasks assigned by your organisation yet'
-          }
-        ];
-
-        if (this.isQualifyingAccessorRole) {
-          this.cardsList.unshift({
-            title: 'Review innovations',
-            label: `Suggested innovations awaiting status assignment from your organisation unit`,
-            link: '/accessor/innovations',
-            queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
-            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
-            lastMessage: `Last submitted:`,
-            date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-            emptyMessageTitle: 'No innovations awaiting status assignment'
-          });
-        }
-
-        this.setPageStatus('READY');
-      }
-    });
   }
 
   onClearAnnouncement(announcementId: string) {
