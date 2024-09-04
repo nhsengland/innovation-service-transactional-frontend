@@ -43,7 +43,6 @@ export class AnnouncementCardComponent {
     if (this.announcementCardData.id) {
       this.announcementsService.readAnnouncement(this.announcementCardData.id, this.innovationId).subscribe({
         next: () => {
-          console.log('next');
           this.clearedAnnouncement.emit(this.announcementCardData.id);
         },
         error: () => {}
