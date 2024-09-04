@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementParamsType } from '@modules/feature-modules/admin/services/announcements.service';
 import { AnnouncementsService } from '@modules/feature-modules/announcements/services/announcements.service';
 import { AuthenticationStore } from '@modules/stores';
+import { listenerCount } from 'process';
 
 export type AnnouncementCardDataType = {
   title: string;
@@ -16,7 +17,7 @@ export type AnnouncementCardDataType = {
   templateUrl: './announcement-card.component.html',
   providers: [AnnouncementsService]
 })
-export class AnnouncementCardComponent {
+export class AnnouncementCardComponent implements OnInit {
   @Input({ required: true }) announcementCardData!: AnnouncementCardDataType;
 
   @Output() clearedAnnouncement = new EventEmitter<string>();
@@ -26,6 +27,8 @@ export class AnnouncementCardComponent {
   isLoginAnnouncementPage: boolean = false;
 
   innovationId: string | undefined;
+
+  innovationsList: string = '';
 
   constructor(
     private router: Router,
@@ -39,6 +42,10 @@ export class AnnouncementCardComponent {
     this.isLoginAnnouncementPage = this.router.url.endsWith('/announcements');
   }
 
+  ngOnInit(): void {
+    this.innovationsList = this.formatListOfItemsFromArray(this.announcementCardData.innovations ?? []);
+  }
+
   clearAnnouncement() {
     if (this.announcementCardData.id) {
       this.announcementsService.readAnnouncement(this.announcementCardData.id, this.innovationId).subscribe({
@@ -48,5 +55,19 @@ export class AnnouncementCardComponent {
         error: () => {}
       });
     }
+  }
+
+  formatListOfItemsFromArray(words: string[], lastItemJoinWord: string = 'and'): string {
+    let toReturn = '';
+
+    if (words.length == 1) {
+      toReturn = words[0];
+    } else {
+      words.forEach((word, i) => {
+        toReturn += i < words.length - 1 ? `${word}, ` : `${lastItemJoinWord} ${word}`;
+      });
+    }
+
+    return toReturn;
   }
 }
