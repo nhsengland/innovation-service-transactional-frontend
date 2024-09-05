@@ -43,6 +43,7 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
     defaultKey?: string | undefined;
   };
   @Input() previouslySelectedItems?: string[];
+  @Input() ariaLabel?: string;
 
   @Output() selectChanged = new EventEmitter<SelectComponentEmitType>();
 
