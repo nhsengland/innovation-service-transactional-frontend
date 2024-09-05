@@ -7,8 +7,10 @@
         <theme-form-checkbox-array
           *ngFor="let org of organisationsItems; let i = index"
           [attr.id]="org.id + '-units'"
+          [label]="org.name"
           [arrayName]="org.id"
           [items]="org.units"
+          [pageUniqueField]="false"
         ></theme-form-checkbox-array>
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
       </form>

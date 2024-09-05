@@ -9,8 +9,9 @@
         <theme-form-checkbox-array
           *ngIf="data.milestonesType === 'ONE_LEVEL'"
           arrayName="oneLevelMilestoneCategories"
+          label="Select one or more progress categories"
           [items]="categoriesItems"
-          [pageUniqueField]="true"
+          [pageUniqueField]="false"
         ></theme-form-checkbox-array>
 
         <theme-form-radio-group
@@ -18,7 +19,7 @@
           controlName="twoLevelMilestoneCategory"
           label="Select a progress category"
           [items]="categoriesItems"
-          [pageUniqueField]="true"
+          [pageUniqueField]="false"
         ></theme-form-radio-group>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>

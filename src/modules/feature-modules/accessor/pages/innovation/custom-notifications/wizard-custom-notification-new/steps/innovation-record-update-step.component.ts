@@ -51,8 +51,6 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
     const subSections = getInnovationRecordConfig().flatMap(section => section.sections.flatMap(ss => ss.id));
 
     this.sectionsItems.push(
-      { value: 'Select 1 or more sections', label: 'HEADING' },
-
       ...subSections.map(s => {
         const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
         return {

@@ -805,7 +805,7 @@ a.app-tag {
   }
 
   &:focus {
-    box-shadow: none;
+    box-shadow: 0 0 0 2px #ffeb3b !important;
   }
 }
 
