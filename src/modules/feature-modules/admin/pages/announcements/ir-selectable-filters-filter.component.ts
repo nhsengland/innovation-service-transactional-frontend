@@ -71,7 +71,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   questionFormControl: FormControl = new FormControl<string | undefined>(undefined);
   answersFormArrayControl: FormArray = new FormArray<any>([]);
 
-  selectedQuestions: string[] = [];
+  previouslySelectedQuestions: string[] = [];
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
@@ -254,7 +254,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   }
 
   getSelectedQuestions() {
-    this.selectedQuestions = (this.parentFormArray.controls as FormGroup[]).map(formgroup => {
+    this.previouslySelectedQuestions = (this.parentFormArray.controls as FormGroup[]).map(formgroup => {
       const questionValue = (formgroup as FormGroup).controls['question'];
       if (questionValue && questionValue.value) {
         return questionValue.value;
