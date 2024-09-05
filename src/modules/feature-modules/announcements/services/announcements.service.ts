@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -17,6 +17,7 @@ export type AnnouncementType = {
   startsAt: DateISOType;
   expiresAt: null | DateISOType;
   params: AnnouncementParamsType;
+  innovations?: string[];
 };
 
 @Injectable()
@@ -25,9 +26,10 @@ export class AnnouncementsService extends CoreService {
     super();
   }
 
-  getAnnouncements(filters: { type?: AnnouncementTypeEnum[] }): Observable<AnnouncementType[]> {
+  getAnnouncements(filters: { type?: AnnouncementTypeEnum[]; innovationId?: string }): Observable<AnnouncementType[]> {
     const qp = {
-      ...(filters.type ? { type: filters.type } : {})
+      ...(filters.type ? { type: filters.type } : {}),
+      ...(filters.innovationId ? { innovationId: filters.innovationId } : {})
     };
 
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/me/announcements').setQueryParams(qp);
@@ -37,10 +39,16 @@ export class AnnouncementsService extends CoreService {
     );
   }
 
-  readAnnouncement(announcementId: string): Observable<void> {
+  readAnnouncement(announcementId: string, innovationId?: string): Observable<void> {
+    const qp = {
+      ...(innovationId ? { innovationId: innovationId } : {})
+    };
+
     const url = new UrlModel(this.API_USERS_URL)
       .addPath('v1/me/announcements/:announcementId/read')
-      .setPathParams({ announcementId });
+      .setPathParams({ announcementId })
+      .setQueryParams(qp);
+
     return this.http.patch<void>(url.buildUrl(), null).pipe(take(1));
   }
 }

@@ -6,5 +6,12 @@
 
   <theme-header-archived-banner />
 
+  <ng-container *ngFor="let announcement of announcements">
+    <theme-announcements-card
+      [announcementCardData]="{ id: announcement.id, title: announcement.title, params: announcement.params, innovations: announcement.innovations }"
+      (clearedAnnouncement)="onClearAnnouncement($event)"
+    ></theme-announcements-card>
+  </ng-container>
+
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 </div>

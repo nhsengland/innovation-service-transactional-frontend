@@ -90,7 +90,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     status: null | AnnouncementStatusEnum;
     isScheduled: boolean;
     isActive: boolean;
-    cardData?: AnnouncementCardDataType;
+    cardData: AnnouncementCardDataType;
   };
 
   wizard: WizardEngineModel = new WizardEngineModel({});
@@ -115,7 +115,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       isEdition: !!this.announcementId,
       status: null,
       isScheduled: false,
-      isActive: false
+      isActive: false,
+      cardData: { title: '', params: { content: '' } }
     };
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));

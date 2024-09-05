@@ -69,7 +69,7 @@ export class AnnouncementsListComponent extends CoreComponent implements OnInit 
   }
 
   private setTitle() {
-    const title = this.announcement?.title ?? '';
+    const title = 'Announcement';
 
     if (this.#announcements.length > 1) {
       this.setPageTitle(title, { hint: `${this.#announcementIndex + 1} of ${this.#announcements.length}` });

@@ -27,6 +27,7 @@ import { InnovationsListComponent } from './pages/innovations/innovations-list.c
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
+import { AnnouncementsService } from '../announcements/services/announcements.service';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
@@ -53,7 +54,8 @@ import { AssessmentService } from './services/assessment.service';
   ],
   providers: [
     // Services.
-    AssessmentService
+    AssessmentService,
+    AnnouncementsService
   ]
 })
 export class AssessmentModule {}
