@@ -27,7 +27,7 @@
     id="{{ id }}"
     [(ngModel)]="selectedField"
     (change)="this.onChangeSelect()"
-    [attr.aria-label]="label ?? 'select'"
+    [attr.aria-label]="ariaLabel ?? label ?? 'select'"
     (click)="this.onClick()"
     (blur)="onBlur()"
     (focus)="onFocus()"

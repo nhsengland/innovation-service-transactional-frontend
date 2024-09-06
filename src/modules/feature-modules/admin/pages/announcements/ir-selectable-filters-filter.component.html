@@ -9,7 +9,7 @@
 
     <div class="d-flex nhsuk-u-margin-bottom-1">
       <div class="width-75 nhsuk-u-font-size-22 nhsuk-u-font-weight-bold nhsuk-u-font-size-22 nhsuk-u-margin-bottom-3">
-        <span>Filter {{ filterIndex + 1 }}</span>
+        <legend>Filter {{ filterIndex + 1 }}</legend>
       </div>
       <div class="width-25 nhsuk-u-font-size-19 text-align-right">
         <a *ngIf="!(filterIndex === 0 && parentFormArray.controls.length === 1)" href="javascript:void(0)" (click)="removeFilter(filterIndex)">Remove filter</a>
@@ -36,7 +36,6 @@
           [pageUniqueField]="false"
           [selectItems]="getQuestionsList(this.sectionFormControl.value)"
           (selectChanged)="onSelectChange($event)"
-          [previouslySelectedItems]="selectedQuestions"
         />
       </div>
 
@@ -53,7 +52,8 @@
           <div class="width-85">
             <theme-form-select
               [formControl]="answer"
-              id="filter-{{ filterIndex }}_answer-{{ i }}"
+              id="filter-{{ filterIndex }}_answer-{{ i + 1 }}"
+              [ariaLabel]="'Answer ' + (i + 1)"
               [pageUniqueField]="false"
               [selectItems]="getAnswersList(questionFormControl.value, i)"
               (selectChanged)="onSelectChange($event)"

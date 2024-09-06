@@ -6,8 +6,9 @@
 
   <theme-header-archived-banner />
 
-  <ng-container *ngFor="let announcement of announcements">
+  <ng-container *ngIf="displayAnnouncements">
     <theme-announcements-card
+      *ngFor="let announcement of announcements"
       [announcementCardData]="{ id: announcement.id, title: announcement.title, params: announcement.params, innovations: announcement.innovations }"
       (clearedAnnouncement)="onClearAnnouncement($event)"
     ></theme-announcements-card>

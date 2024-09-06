@@ -179,7 +179,7 @@ export const locale = {
             DELETED: { name: 'Deleted', cssColorClass: 'nhsuk-tag--red' }
           },
           type: {
-            LOG_IN: 'Log in',
+            LOG_IN: 'Login',
             HOMEPAGE: 'Homepage'
           }
         },

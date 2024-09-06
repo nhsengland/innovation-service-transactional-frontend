@@ -127,7 +127,7 @@ const header: RoutesDataType['header'] = {
         label: 'Communications',
         children: [
           {
-            label: 'Announcement',
+            label: 'Announcements',
             url: '/admin/announcements',
             description: 'Manage and create announcements'
           },

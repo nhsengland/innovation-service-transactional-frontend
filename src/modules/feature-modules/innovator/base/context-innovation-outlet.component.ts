@@ -25,6 +25,8 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
 
   announcements: AnnouncementType[] = [];
 
+  displayAnnouncements: boolean = false;
+
   constructor(
     private router: Router,
     private contextStore: ContextStore,
@@ -43,6 +45,7 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
       .getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE], innovationId: this.innovation.id })
       .subscribe(announcements => (this.announcements = announcements));
   }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
@@ -58,5 +61,6 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
       name: innovation.name,
       userIsOwner: innovation.loggedUser.isOwner
     };
+    this.displayAnnouncements = this.router.url.endsWith('/overview');
   }
 }

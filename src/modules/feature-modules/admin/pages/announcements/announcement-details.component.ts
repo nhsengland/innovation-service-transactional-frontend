@@ -12,6 +12,7 @@ import {
 } from '@modules/feature-modules/admin/services/announcements.service';
 import { SummaryDataItemType, SummaryDataItemTypeEnum } from './announcement-newdit.component';
 import { DatePipe } from '@angular/common';
+import { stepsLabels } from './announcement-newdit.config';
 
 @Component({
   selector: 'app-admin-pages-announcement-details',
@@ -51,7 +52,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
         this.announcement = {
           ...response,
           userGroupsLabels: response.userRoles
-            .map(item => this.stores.authentication.getRoleDescription(item))
+            .map(item => this.stores.authentication.getRoleDescription(item, true))
             .join('\n'),
 
           isScheduled: response.status === AnnouncementStatusEnum.SCHEDULED,
@@ -78,7 +79,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
     if (this.announcement) {
       summaryData.push(
         {
-          label: `What's the title of the announcement?`,
+          label: stepsLabels.s1.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
@@ -87,7 +88,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
           canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         },
         {
-          label: 'Write body content',
+          label: stepsLabels.s2.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
@@ -98,7 +99,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       );
 
       summaryData.push({
-        label: 'Add a link (optional)',
+        label: stepsLabels.s3.label,
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
@@ -111,7 +112,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       });
 
       summaryData.push({
-        label: 'Which user groups do you want this announcement to be sent to?',
+        label: stepsLabels.s4.p1.label,
         editStepNumber: editStepNumber++,
         data: {
           type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
@@ -122,7 +123,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
 
       if (this.announcement.userRoles.includes(UserRoleEnum.INNOVATOR)) {
         summaryData.push({
-          label: 'Should this announcement be shown to all innovators or a specific type of innovations?',
+          label: stepsLabels.s5.p1.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
@@ -134,7 +135,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
 
       if (this.announcement.filters?.length) {
         summaryData.push({
-          label: 'Filter innovation type',
+          label: stepsLabels.s6.p1.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.FILTER_PARAMETER,
@@ -157,7 +158,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
 
       summaryData.push(
         {
-          label: 'When do you want this announcement to be live?',
+          label: stepsLabels.s7.label,
           editStepNumber: this.announcement.status === AnnouncementStatusEnum.SCHEDULED ? editStepNumber++ : 1,
           data: {
             type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
@@ -180,16 +181,17 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
           canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED, AnnouncementStatusEnum.ACTIVE]
         },
         {
-          label: 'Which type of announcement?',
+          label: stepsLabels.s8.p1.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,
-            answer: this.announcement.type === AnnouncementTypeEnum.LOG_IN ? 'Log in' : 'Homepage'
+            answer:
+              this.announcement.type === AnnouncementTypeEnum.LOG_IN ? 'Login announcement' : 'Homepage announcement'
           },
           canChangeOnStatus: [AnnouncementStatusEnum.SCHEDULED]
         },
         {
-          label: 'Would you like to send this announcement via email too?',
+          label: stepsLabels.s9.p1.label,
           editStepNumber: editStepNumber++,
           data: {
             type: SummaryDataItemTypeEnum.SINGLE_PARAMETER,

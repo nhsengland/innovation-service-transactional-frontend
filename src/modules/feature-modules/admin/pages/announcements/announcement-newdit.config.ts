@@ -8,6 +8,7 @@ import {
   InnovationRecordFilterPayloadType,
   UpsertAnnouncementType
 } from '@modules/feature-modules/admin/services/announcements.service';
+import { INPUT_LENGTH_LIMIT, TEXTAREA_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
 enum ShowToWhomEnum {
   ALL_INNOVATIONS = 'ALL_INNOVATIONS',
@@ -53,7 +54,7 @@ export const stepsLabels = {
     label: `Add a link (optional)`,
     description: `Add a link if you want to guide users to start a task or to point them to relevant content on another page. The label should describe where the link is taking users. For example, apply for the Digital Health Entrepreneurs programme here.`,
     p1: {
-      label: `Enter the link label`
+      label: `Enter the link label with a maximum of 200 characters`
     },
     p2: {
       label: `Enter the link URL`
@@ -151,13 +152,14 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
         {
           id: 'linkLabel',
           dataType: 'text',
-          label: stepsLabels.s3.p1.label
+          label: stepsLabels.s3.p1.label,
+          validations: { maxLength: INPUT_LENGTH_LIMIT.xs }
         },
         {
           id: 'linkUrl',
           dataType: 'text',
           label: stepsLabels.s3.p2.label,
-          validations: { urlFormat: true }
+          validations: { urlFormat: true, maxLength: INPUT_LENGTH_LIMIT.l }
         }
       ]
     }),
