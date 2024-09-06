@@ -341,7 +341,11 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     summaryData.push(
       {
         label: stepsLabels.s7.label,
-        editStepNumber: this.announcementData.status === AnnouncementStatusEnum.SCHEDULED ? editStepNumber++ : 1,
+        editStepNumber: !(
+          this.announcementData.isEdition && this.announcementData.status === AnnouncementStatusEnum.ACTIVE
+        )
+          ? editStepNumber++
+          : 1,
         data: {
           type: SummaryDataItemTypeEnum.MULTIPLE_PARAMETERS,
           questions: [
