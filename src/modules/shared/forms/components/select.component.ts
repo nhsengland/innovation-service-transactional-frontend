@@ -69,9 +69,7 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
   ngOnChanges(changes: SimpleChanges): void {
     !this.isFocus && this.checkError();
 
-    if (changes.previouslySelectedItems) {
-      this.updateOptionsList();
-    }
+    this.updateOptionsList();
 
     this.selectedField = this.formControl?.value;
   }
@@ -120,6 +118,8 @@ export class FormSelectComponent extends ControlValueAccessorComponent implement
       this.localSelectList = this.selectItems.selectList.filter(
         i => !this.previouslySelectedItems!.filter(i => i != this.formControl?.value).includes(i.key ?? '')
       );
+    } else {
+      this.localSelectList = this.selectItems.selectList;
     }
   }
 }
