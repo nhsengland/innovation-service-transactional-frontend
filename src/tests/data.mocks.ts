@@ -20,7 +20,7 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
   hasInnovationCollaborations: false,
-  hasAnnouncements: false,
+  hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [
@@ -51,7 +51,7 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
   hasInnovationCollaborations: false,
-  hasAnnouncements: false,
+  hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: [
@@ -87,7 +87,7 @@ export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
   termsOfUseAccepted: true,
   hasInnovationTransfers: false,
   hasInnovationCollaborations: false,
-  hasAnnouncements: false,
+  hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
   organisations: []
