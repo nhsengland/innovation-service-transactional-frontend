@@ -347,15 +347,9 @@ export class CustomValidators {
       }
 
       if (firstControl?.value) {
-        if (firstControl.value.length > INPUT_LENGTH_LIMIT.xs) {
-          return { maxLength: true };
-        }
         if (!secondControl?.value) {
           secondControl?.setErrors({ required: secondField.message ? { message: secondField.message } : true });
         } else {
-          if (secondControl.value.length > INPUT_LENGTH_LIMIT.l) {
-            return { maxLength: true };
-          }
           secondControl?.setErrors(secondControlErrors);
         }
         return null;
