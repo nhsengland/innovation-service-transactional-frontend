@@ -197,7 +197,8 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
         break;
       case 'next':
         this.wizard.nextStep();
-        this.scroller.scrollToPosition([0, 0]);
+        // scroll to top if we go to summary
+        this.wizard.isSummaryStep() && this.scroller.scrollToPosition([0, 0]);
         break;
       default: // Should NOT happen!
         break;
