@@ -142,11 +142,16 @@ export class CustomValidators {
     };
   }
 
-  static urlFormatValidator(message?: string | null): ValidatorFn {
+  static urlFormatValidator(data?: { message?: string | null; maxLength?: number }): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;
       }
+
+      if (data?.maxLength && control.value.length > data.maxLength) {
+        return { urlFormat: data };
+      }
+
       const pattern = new RegExp(
         '^(https?:\\/\\/)' + // protocol (mandator)
           '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -156,11 +161,12 @@ export class CustomValidators {
           '(\\#[-a-z\\d_]*)?$', // fragment locator
         'i'
       );
+
       if (pattern.test(control.value)) {
         return null;
       }
 
-      return { urlFormat: message ? { message } : true };
+      return { urlFormat: data };
     };
   }
 

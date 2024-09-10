@@ -61,7 +61,7 @@ export class FormEngineParameterModel {
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
-    urlFormat?: boolean | [boolean, string];
+    urlFormat?: { message?: string; maxLength?: number };
     equalTo?: string | [string, string];
     requiredDateInput?: { message?: string };
     dateInputFormat?: { message?: string };

@@ -5,6 +5,7 @@ import {
   WizardStepType,
   WizardSummaryType
 } from '@modules/shared/forms';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { countriesItems, locationItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
@@ -156,7 +157,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: {
+                  isRequired: [true, 'Website url is required'],
+                  urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xxs }
+                }
               })
             },
             { value: 'NO', label: 'No' }

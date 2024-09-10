@@ -20,6 +20,7 @@ import {
   locationItems,
   mainPurposeItems
 } from './forms.config';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
 // Labels.
 const stepsLabels = {
@@ -191,7 +192,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: {
+                  isRequired: [true, 'Website url is required'],
+                  urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xxs }
+                }
               })
             },
             { value: 'NO', label: 'No' }

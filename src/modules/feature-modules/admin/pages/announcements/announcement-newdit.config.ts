@@ -159,7 +159,7 @@ export const ANNOUNCEMENT_NEW_QUESTIONS: WizardEngineModel = new WizardEngineMod
           id: 'linkUrl',
           dataType: 'text',
           label: stepsLabels.s3.p2.label,
-          validations: { urlFormat: true, maxLength: INPUT_LENGTH_LIMIT.l }
+          validations: { urlFormat: { maxLength: INPUT_LENGTH_LIMIT.l } }
         }
       ]
     }),
