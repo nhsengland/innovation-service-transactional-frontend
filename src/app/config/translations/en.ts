@@ -1084,6 +1084,8 @@ export const locale = {
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
           invalid_json_format: 'Invalid JSON format',
           invalid_url_format: 'The format of this URL is invalid. Add the full URL, including http:// or https://',
+          invalid_url_format_maxLength:
+            'The format of this URL is invalid. Add the full URL, including http:// or https://. The URL cannot exceed {{maxLength}} characters.',
           invalid_value: 'Invalid value',
           min: 'Value below the minimum allowed',
           min_hexadecimal: 'Value below the minimum allowed',

@@ -191,7 +191,7 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: { isRequired: [true, 'Website url is required'], urlFormat: { maxLength: 100 } }
               })
             },
             { value: 'NO', label: 'No' }
