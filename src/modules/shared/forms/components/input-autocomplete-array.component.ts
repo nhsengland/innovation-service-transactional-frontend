@@ -25,7 +25,7 @@ export class FormInputAutocompleteArrayComponent implements OnInit, DoCheck {
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   searchableItems: { value: string; label: string; isVisible: boolean }[] = [];
   chosenItems: { value: string; label: string }[] = [];

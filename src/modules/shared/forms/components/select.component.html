@@ -1,4 +1,4 @@
-<div class="nhsuk-form-group">
+<div class="nhsuk-form-group" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
   <ng-container *ngIf="label && pageUniqueField">
     <h1 class="nhsuk-label-wrapper">
       <label class="nhsuk-label nhsuk-label--l nhsuk-u-margin-bottom-3" [for]="id">
@@ -12,12 +12,27 @@
     </label>
   </ng-container>
 
+  <ng-container *ngIf="hasError">
+    <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
+  </ng-container>
+
   <ng-container *ngIf="description">
     <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
   </ng-container>
 
-  <select #select class="nhsuk-select" id="{{ id }}" [(ngModel)]="selectedField" (change)="this.onChangeSelect()" [attr.aria-label]="label ?? 'select'">
-    <option *ngFor="let item of selectItems.selectList" [ngValue]="item.key">
+  <select
+    #select
+    class="nhsuk-select width-100"
+    [ngClass]="{ 'nhsuk-select--error': hasError }"
+    id="{{ id }}"
+    [(ngModel)]="selectedField"
+    (change)="this.onChangeSelect()"
+    [attr.aria-label]="ariaLabel ?? label ?? 'select'"
+    (click)="this.onClick()"
+    (blur)="onBlur()"
+    (focus)="onFocus()"
+  >
+    <option *ngFor="let item of localSelectList" [disabled]="item.disabled" [ngValue]="item.key" selected="selectedField">
       <span>{{ item.text }}</span>
     </option>
   </select>

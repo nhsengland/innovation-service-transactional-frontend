@@ -75,9 +75,9 @@
         <button *ngIf="isInnovatorType" routerLink="evidences/new" class="nhsuk-button nhsuk-button--secondary">Add evidence</button>
         <p *ngIf="sectionSummaryData.evidencesList.length === 0">There are no evidences on this section.</p>
         <dl *ngIf="sectionSummaryData.evidencesList.length > 0" class="nhsuk-summary-list">
-          <div *ngFor="let item of sectionSummaryData.evidencesList" class="nhsuk-summary-list__row">
-            <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
-            <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
+          <div *ngFor="let item of sectionSummaryData.evidencesList; index as i" class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Evidence {{ i + 1 }}</dt>
+            <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.label }}</dd>
             <dd class="nhsuk-summary-list__actions">
               <a routerLink="evidences/{{ item.evidenceId }}" attr.aria-label="View {{ item.value }} details">More details</a>
             </dd>
@@ -120,7 +120,7 @@
 
       <ng-container
         *ngIf="
-          ((innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+          (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
           (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
         "
       >
@@ -131,7 +131,13 @@
         >
           Assign a task for this section
         </button>
+
       </ng-container>
+        
+      <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      </div>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">
         <button *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'" routerLink="/assessment/innovations/{{ innovation.id }}/assessments/new" class="nhsuk-button nhsuk-u-margin-top-5">
@@ -142,7 +148,7 @@
           routerLink="/assessment/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id || '' }}/edit"
           class="nhsuk-button nhsuk-u-margin-top-5"
         >
-          Continue needs assessment
+          Continue needs {{ assessmentType }}
         </button>
         <button
           *ngSwitchCase="'IN_PROGRESS'"

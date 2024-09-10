@@ -144,4 +144,8 @@ export class UtilsHelper {
   ): string {
     return `Notify me on ${datePipe.transform(subscription.date, locale.data.app.date_formats.long_date)} for this reason:`;
   }
+
+  static getAssessmentVersion(majorVersion: number = 1, minorVersion: number = 0): string {
+    return `${majorVersion}.${minorVersion}`;
+  }
 }

@@ -35,12 +35,10 @@
           <div [ngClass]="lastItem ? 'nhsuk-u-margin-bottom-8' : 'nhsuk-u-margin-bottom-2'">
             <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7" [id]="section.id">
               <ng-container *ngIf="isInnovationInArchivedStatus && !isInnovatorType; else innovationLink">
-                {{ i + 1 }}.{{ j + 1 }} {{ "shared.catalog.innovation.innovation_sections." + section.id | translate }}
+                {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }}
               </ng-container>
               <ng-template #innovationLink>
-                <a routerLink="{{ baseUrl }}/record/sections/{{ section.id }}/">
-                  {{ i + 1 }}.{{ j + 1 }} {{ "shared.catalog.innovation.innovation_sections." + section.id | translate }}
-                </a>
+                <a routerLink="{{ baseUrl }}/record/sections/{{ section.id }}/"> {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }} </a>
               </ng-template>
             </h3>
             <ng-container *ngIf="pageStatus === 'READY'">
@@ -109,12 +107,17 @@
 
     <ng-container
       *ngIf="
-        ((innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+        (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
         (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
       "
     >
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
     </ng-container>
+
+    <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <span class="nhsuk-u-visually-hidden">Information:</span>
+      <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+    </div>
   </div>
 </theme-content-wrapper>
 

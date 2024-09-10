@@ -1,18 +1,22 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
+
       <div *ngIf="isInnovatorType && innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
         <p>If you want to stop sharing your innovation with an organisation, <a routerLink="../support">update your data sharing preferences</a>.</p>
       </div>
+
       <ng-container *ngIf="!isSuggestionsListEmpty; else noSupportYetMessage">
         <ng-container *ngFor="let sectionItem of sectionsList; let sectionIndex = index; let sectionIsFirst = first">
           <ng-container *ngIf="sectionItem.unitsList.length">
+
             <h2 [ngClass]="{ 'nhsuk-u-padding-top-3': !sectionIsFirst }">{{ sectionItem.title }}</h2>
 
-            <dl class="nhsuk-u-margin-0">
-              <ng-container *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
-                <dt [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
+            <ul class="nhsuk-list nhsuk-u-margin-0">
+              <li *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
+
+                <div [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                   <button
                     id="engaging-button-{{ unitItem.id }}"
                     (click)="onOpenCloseUnit(sectionIndex, unitIndex)"
@@ -25,18 +29,17 @@
                     <span class="nhsuk-u-margin-left-2"> {{ unitItem.sameOrganisation ? unitItem.name + " (your organisation)" : unitItem.name }}</span>
                   </button>
                   <div class="nhsuk-u-font-size-16 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
-                    <span
-                      >Status:
+                    <span>Status:
                       <theme-tag
                         type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}"
                         label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"
-                      ></theme-tag
-                    ></span>
+                      ></theme-tag>
+                    </span>
                     <span *ngIf="unitItem.temporalDescription" class="nhsuk-u-margin-left-4">{{ unitItem.temporalDescription }}</span>
                   </div>
-                </dt>
+                </div>
 
-                <dd
+                <div
                   *ngIf="unitItem.isOpened"
                   id="engaging-section-{{ unitItem.id }}"
                   class="nhsuk-u-margin-left-0 nhsuk-u-margin-bottom-5"
@@ -65,9 +68,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                              </span>
                             </span>
                           </p>
                           <theme-tag
@@ -76,7 +79,7 @@
                           ></theme-tag>
                           <ng-container *ngIf="historyItem.params.message">
                             <p class="nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">Message</p>
-                            <p class="nhsuk-body-s nhsuk-u-margin-bottom-2">{{ historyItem.params.message }}</p>
+                            <p class="nhsuk-body-s nhsuk-u-margin-bottom-2 text-pre-line">{{ historyItem.params.message }}</p>
                           </ng-container>
                         </ng-container>
 
@@ -86,9 +89,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                </span>
                             </span>
                           </p>
                           <p *ngIf="historyItem.params.message" class="nhsuk-body-s">{{ historyItem.params.message }}</p>
@@ -103,9 +106,9 @@
                             <span class="nhsuk-hint nhsuk-u-font-size-16">
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
-                              <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
-                              >
+                              <span class="nhsuk-u-font-weight-bold">
+                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                </span>
                             </span>
                           </p>
 
@@ -144,7 +147,7 @@
                           </p>
                           <p>
                             <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Comment</span>
-                            <span>{{ historyItem.params.message }}</span>
+                            <span class="nhsuk-body-s text-pre-line">{{ historyItem.params.message }}</span>
                           </p>
                           <p *ngIf="unitItem.canDoProgressUpdates || historyItem.params.file">
                             <span class="d-block nhsuk-u-font-weight-bold font-color-secondary">Document</span>
@@ -208,31 +211,42 @@
                   <a href="javascript:void()" (click)="goToFragment('engaging-button-' + unitItem.id)" class="nhsuk-u-font-size-14">Back to top</a>
 
                   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3" />
-                </dd>
-              </ng-container>
-            </dl>
+                </div>
+
+              </li>
+            </ul>
+
           </ng-container>
         </ng-container>
       </ng-container>
+
       <ng-template #noSupportYetMessage>
         <p>This support summary is blank as the innovation has not received any support yet.</p>
       </ng-template>
 
-      <ng-container *ngIf="innovation.assessment && innovation.assessment.finishedAt !== null">
+      <ng-container *ngIf="innovationAssessmentsList && innovationAssessmentsList.length > 0">
         <h2 class="nhsuk-u-padding-top-3">Needs assessment</h2>
-        <a routerLink="../assessments/{{ innovation.assessment.id }}" class="nhsuk-u-font-size-22">
-          {{ innovation.reassessmentCount > 0 ? "Needs reassessment complete" : "Needs assessment complete" }}
-        </a>
-        <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed at {{ innovation.assessment.finishedAt | date: "MMMM y" }}</div>
+        <ng-container *ngFor="let assessment of innovationAssessmentsList">
+          <a routerLink="../assessments/{{ assessment.id }}" class="nhsuk-u-font-size-22">
+            {{ assessment.linkText }}
+          </a>
+          <div class="nhsuk-u-font-size-14 nhsuk-u-margin-bottom-3">Completed: {{ assessment.finishedAt | date: "MMMM y" }}</div>
+        </ng-container>
       </ng-container>
 
-      <div *ngIf="isQualifyingAccessorRole && innovation.status !== 'ARCHIVED' && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link">
+      <div *ngIf="showSuggestOrganisationsToSupportLink" class="nhsuk-action-link">
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-8" />
         <a routerLink="/accessor/innovations/{{ innovation.id }}/support/suggest" class="nhsuk-action-link__link">
           <theme-svg-icon type="arrow-right-circle" />
           <span class="nhsuk-action-link__text"> Suggest other organisations to support this innovation </span>
         </a>
       </div>
+
+      <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      </div>
+
     </div>
   </div>
 </theme-content-wrapper>

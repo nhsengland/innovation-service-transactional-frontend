@@ -1,0 +1,92 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-three-quarters">
+      <ng-container *ngIf="pageStep === 'INFO' && announcement">
+        <div class="nhsuk-u-margin-bottom-6">
+          <div class="d-flex align-items-baseline justify-content-space-between">
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ "Status" }}</h2>
+          </div>
+          <div>
+            <theme-tag
+              type="{{ 'shared.catalog.announcements.status.' + announcement.status + '.cssColorClass' | translate }}"
+              label="{{ 'shared.catalog.announcements.status.' + announcement.status + '.name' | translate }}"
+            ></theme-tag>
+            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
+          </div>
+        </div>
+        <div *ngFor="let item of summaryData" class="nhsuk-u-margin-bottom-6">
+          <div class="d-flex align-items-baseline justify-content-space-between">
+            <h2 class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ item.label }}</h2>
+            <a
+              *ngIf="item.canChangeOnStatus && item.canChangeOnStatus?.includes(announcement.status)"
+              href="javascript:void(0)"
+              routerLink="edit/{{ item.editStepNumber }}"
+              [queryParams]="{ isChangeMode: true }"
+              >Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span></a
+            >
+          </div>
+
+          <div *ngIf="item.data.type === 'SINGLE_PARAMETER'">
+            <span class="nhsuk-u-font-size-19 text-pre-wrap">{{ item.data.answer }}</span>
+            <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
+          </div>
+
+          <div *ngIf="item.data.type === 'MULTIPLE_PARAMETERS'">
+            <dl class="nhsuk-summary-list">
+              <div *ngFor="let question of item.data.questions" class="nhsuk-summary-list__row">
+                <dt class="nhsuk-summary-list__key">{{ question.label }}</dt>
+                <dd class="nhsuk-summary-list__value text-pre-wrap">{{ question.answer }}</dd>
+                <dd class="nhsuk-summary-list__actions"></dd>
+              </div>
+            </dl>
+          </div>
+
+          <ng-container *ngIf="item.data.type === 'FILTER_PARAMETER'">
+            <div *ngFor="let section of item.data.sections; let i = index">
+              <h3 class="nhsuk-heading-xs nhsuk-u-margin-bottom-2">Filter {{ i + 1 }}</h3>
+              <dl class="nhsuk-summary-list">
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Section</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.section }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Question</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.question }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+                <div class="nhsuk-summary-list__row">
+                  <dt class="nhsuk-summary-list__key">Answer</dt>
+                  <dd class="nhsuk-summary-list__value text-pre-wrap">{{ section.answer }}</dd>
+                  <dd class="nhsuk-summary-list__actions"></dd>
+                </div>
+              </dl>
+            </div>
+          </ng-container>
+        </div>
+
+        <p>Preview of this announcement:</p>
+
+        <theme-announcements-card [announcementCardData]="{ title: announcement.title, params: announcement.params }"></theme-announcements-card>
+
+        <button *ngIf="announcement.isScheduled || announcement.isActive" type="button" class="nhsuk-button nhsuk-button--secondary" (click)="gotoDeletePage()">
+          Delete announcement
+        </button>
+      </ng-container>
+
+      <ng-container *ngIf="pageStep === 'DELETE' && announcement && (announcement.isScheduled || announcement.isActive)">
+        <div class="nhsuk-warning-callout">
+          <ng-container *ngIf="announcement.isScheduled">
+            <h3 class="nhsuk-warning-callout__label">When you delete a scheduled announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
+            <p>It will not go live on the service. If it was scheduled to be sent via email, this email will not be sent.</p>
+          </ng-container>
+          <ng-container *ngIf="announcement.isActive">
+            <h3 class="nhsuk-warning-callout__label">When you delete a live announcement<span class="nhsuk-u-visually-hidden">:</span></h3>
+            <p>It will no longer be visible on the service. However, it may have already been seen by users. And if it was sent via email, it will have already been delivered.</p>
+          </ng-container>
+        </div>
+        <button type="button" class="nhsuk-button" (click)="onDelete()">Delete announcement</button>
+      </ng-container>
+    </div>
+  </div>
+</theme-content-wrapper>

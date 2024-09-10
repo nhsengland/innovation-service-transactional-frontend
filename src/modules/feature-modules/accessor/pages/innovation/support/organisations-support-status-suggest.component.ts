@@ -14,14 +14,15 @@ import { ActivatedRoute } from '@angular/router';
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { UtilsHelper } from '@app/base/helpers';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { ORGANISATIONS_INFORMATION } from './organisations-information/organisations-information';
 
-type OrganisationInformation = {
+export type OrganisationInformation = {
   displayName: string;
   acronym: string;
   link: string;
   supportInformation: {
     title: string;
-    bulletPoints: string[];
+    bulletPoints: { description: string; link?: { url: string; label: string } }[];
     footnote?: string;
   }[];
   programmes?: string[];
@@ -76,201 +77,6 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   } = { organisation: { name: '', acronym: '' }, unitsNames: [], values: [] };
 
   submitButton = { isActive: true, label: 'Confirm' };
-
-  // Move this variable to a new file when updating the referral criteria page
-  organisationsInformation: OrganisationInformation[] = [
-    {
-      displayName: 'Department for Business and Trade (DBT)',
-      acronym: 'DBT',
-      link: this.CONSTANTS.URLS.LIFE_SCIENCES_ORGANISATION,
-      supportInformation: [
-        {
-          title: 'DBT can support innovations that are:',
-          bulletPoints: [
-            'in the later stages of the innovation process',
-            'based in the UK, have a product ready for sale and a sense of what overseas markets they intend to enter',
-            'based overseas and are interested in direct investment in the UK'
-          ]
-        },
-        {
-          title: 'DBT can:',
-          bulletPoints: [
-            'support UK companies wishing to initiate or expand their exports overseas',
-            'support with foreign direct investment (FDI) opportunities, for example investor journey support, location opportunities, understanding tax and other incentives',
-            'provide general information on export support, public offer documents and directories',
-            "refer the innovator to a DBT International Trade Adviser (ITA), to DBT staff based in overseas posts, to DBT's Investment Services team, to DBT's UK regional and DA partners, or within a DBT Sector team, for example Biopharma, Medtech or Digital Health",
-            'support or signpost to opportunities for UK small and medium-sized enterprises (SMEs) seeking to raise venture capital, particularly for fundraising of Series A and beyond'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'Health Innovation Network (HIN)',
-      acronym: 'HIN',
-      link: this.CONSTANTS.URLS.HIN_NETWORK,
-      supportInformation: [
-        {
-          title: 'HINS can support innovations that are:',
-          bulletPoints: [
-            'close to being adoption-ready',
-            'likely to be in scope for an NHS Supply Chain procurement framework',
-            'likely to be in scope for health technology appraisal',
-            'likely to be in scope for advice and support on export to international markets, or establishing a business base within the UK for international companies',
-            'likely to be in scope for other HINs for local adoption (a value proposition and business case have been developed)'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'Health Research Authority (HRA)',
-      acronym: 'HRA',
-      link: this.CONSTANTS.URLS.NHR,
-      supportInformation: [
-        {
-          title: 'HRA can support innovators who are:',
-          bulletPoints: [
-            'seeking advice on research for all types of technologies, including the legal requirements for using health and care data in the development of data driven research',
-            'in early stage, who require guidance on research governance and clinical trial regulation (particularly in relation to public involvement, diversity and inclusion)',
-            'seeking clarity on whether their study is defined as research and advice on the research regulatory approval processes'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'Health Technology Wales (HTW)',
-      acronym: 'HTW',
-      link: this.CONSTANTS.URLS.HEALTH_TECHNOLOGY,
-      supportInformation: [
-        {
-          title: 'HTW can support innovations that are:',
-          bulletPoints: ['MedTech, devices, digital, care pathways, service models or surgical innovations']
-        },
-        {
-          title: 'HTW can support innovations when:',
-          bulletPoints: [
-            'regulatory approvals are already in place, or there is evidence that this is underway',
-            'they are truly innovative or offers benefits above current standard care',
-            'they demonstrate evidence of patient benefit'
-          ]
-        }
-      ],
-      programmes: ['Scientific advice commercial programme', 'Scientific advice specialist trial advice']
-    },
-    {
-      displayName: 'Life Sciences Hub Wales',
-      acronym: 'LSHW',
-      link: this.CONSTANTS.URLS.LSHUBWALES,
-      supportInformation: [
-        { title: 'Life Sciences Hub Wales can support innovations that:', bulletPoints: ['are based in Wales'] },
-        {
-          title: 'Life Sciences Hub Wales can support innovators with:',
-          bulletPoints: [
-            'NHS Wales navigation',
-            'NHS Wales digital landscape navigation',
-            'Welsh Government policy',
-            'healthcare system collaboration focused on preventive medicine and providing care closer to home',
-            'investment readiness and business development support',
-            'access to science parks',
-            'subject expertise and thematic focus groups',
-            'digital and AI',
-            'precision medicine (advanced therapies, early diagnostics)',
-            'user centred design and product design',
-            'research and development',
-            'academic collaboration',
-            'funding support',
-            'intellectual property',
-            'project management'
-          ]
-        }
-      ],
-      programmes: ['Digital Health Ecosystem Wales (DHEW)']
-    },
-    {
-      displayName: 'National Institute for Health and Care Excellence (NICE)',
-      acronym: 'NICE',
-      link: this.CONSTANTS.URLS.NICE,
-      supportInformation: [
-        {
-          title: 'NICE can support innovations that are:',
-          bulletPoints: [
-            'medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health',
-            'pharmaceutical and healthtech companies seeking to enter the NHS market',
-            'preparing for a NICE evaluation, or engagement with NHS payers or commissioners',
-            'looking to unpick challenges in the evidence generation process'
-          ]
-        },
-        {
-          title: 'NICE can provide guidance when:',
-          bulletPoints: [
-            'regulatory approvals are in place or there are there are well developed plans in place to achieve this',
-            "there is a clear value proposition for NICE's guidance producing programmes",
-            'evidence exists to support claim of benefits'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'National Institute for Health and Care Research (NIHR)',
-      acronym: 'NIHR',
-      link: this.CONSTANTS.URLS.NIHR,
-      supportInformation: [
-        {
-          title: 'NIHR can support innovators with:',
-          bulletPoints: [
-            'research and study design - not just clinical trials',
-            'clinical trial and evaluation - identifying and linking to suitable clinical partners, designing and costing research studies and protocols',
-            'real-world evidence gathering',
-            'health economic analysis',
-            'grant funding, and support to identify grant funds and apply for them',
-            'provision of patient and clinical data for research',
-            'provision of patient samples for research'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'NHS Supply Chain',
-      acronym: 'NHS-SC',
-      link: this.CONSTANTS.URLS.SUPPLY_CHAIN,
-      supportInformation: [
-        {
-          title: 'NHS Supply Chain can support innovations that are:',
-          bulletPoints: [
-            'medical devices, equipment, consumables, goods and services used by hospitals',
-            'digital products that are associated with equipment',
-            'products which have a MedTech Funding Mandate',
-            'appropriately regulated and certificated, or are likely to achieve this within the next 2 years',
-            'new products that can demonstrate clinical effectiveness and key benefits over existing suppliers, for example additional cost savings'
-          ]
-        },
-        {
-          title: 'NHS Supply Chain can support innovators by providing information on:',
-          bulletPoints: [
-            'public procurement regulations that need to be met',
-            'the contracts finder',
-            'MHRA regulations for public procurement at start of an engagement'
-          ]
-        }
-      ]
-    },
-    {
-      displayName: 'Scottish Health Technologies Group (SHTG)',
-      acronym: 'SHTG',
-      link: this.CONSTANTS.URLS.SHTG,
-      supportInformation: [
-        {
-          title: 'To receive support from SHTG innovations must be:',
-          bulletPoints: [
-            'MedTech, devices, digital or diagnostics care pathways*',
-            'products with regulatory approval*',
-            'products with a well-defined evidence base*',
-            'new or innovative solutions'
-          ],
-          footnote: '*The first three requirements must all be met to receive support'
-        }
-      ]
-    }
-  ];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -352,7 +158,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           this.chosenUnits.organisation = {
             name: chosenOrganisation.name,
             acronym: chosenOrganisation.acronym,
-            information: this.organisationsInformation.find(org => org.acronym === chosenOrganisation.acronym)
+            information: ORGANISATIONS_INFORMATION.find(org => org.acronym === chosenOrganisation.acronym)
           };
 
           // Count total number of units inside organisation

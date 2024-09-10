@@ -1,0 +1,99 @@
+<div class="nhsuk-form-group {{ divCssOverride }" [ngClass]="{ 'nhsuk-form-group--error': hasError }">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
+    <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+      <ng-container *ngIf="pageUniqueField">
+        <h1 class="nhsuk-fieldset__heading">{{ label }}</h1>
+      </ng-container>
+      <ng-container *ngIf="!pageUniqueField"> {{ label }} </ng-container>
+    </legend>
+
+    <ng-container *ngIf="description">
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+    </ng-container>
+
+    <ng-container *ngIf="hasError">
+      <span id="error-{{ id }}" class="nhsuk-error-message" role="alert"> <span class="nhsuk-u-visually-hidden">Error:</span> {{ error.message | translate: error.params }} </span>
+    </ng-container>
+
+    <div class="nhsuk-radios">
+      <ng-container *ngFor="let item of items; let i = index; let first = first">
+        <ng-container *ngIf="!first && item.group !== items![i - 1]?.group">
+          <div class="nhsuk-u-padding-top-2"></div>
+        </ng-container>
+
+        <ng-container *ngIf="item.group && (first || item.group !== items![i - 1]?.group)">
+          <div class="nhsuk-radios__divider" tabindex="0">{{ item.group }} <span class="nhsuk-u-visually-hidden">group items</span></div>
+        </ng-container>
+
+        <ng-container *ngIf="item.type === 'separator'; else switchOnLabel">
+          <div class="nhsuk-radios__divider">or</div>
+        </ng-container>
+
+        <ng-template #switchOnLabel>
+          <ng-container [ngSwitch]="item.label">
+            <ng-container *ngSwitchCase="'HEADING'">
+              <div class="nhsuk-radios__divider form-items-group nhsuk-u-font-weight-bold">{{ item.label }}</div>
+            </ng-container>
+
+            <ng-container *ngSwitchDefault>
+              <div class="nhsuk-radios__item {{ cssClass }}" [ngClass]="{ 'nhsuk-u-margin-left-4': item.group }">
+                <ng-container *ngIf="isRunningOnBrowser">
+                  <input
+                    [formControl]="fieldControl"
+                    id="{{ id }}{{ i }}"
+                    type="radio"
+                    [name]="controlName"
+                    [value]="item.id"
+                    class="nhsuk-radios__input"
+                    [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
+                    [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null"
+                    [attr.aria-describedby]="item.description ? 'status{{ i }}-hint' : null"
+                  />
+                </ng-container>
+                <ng-container *ngIf="isRunningOnServer">
+                  <input id="{{ id }}{{ i }}" type="radio" [name]="controlName" [value]="item.id" [checked]="fieldControl.value === item.id" class="nhsuk-radios__input" />
+                </ng-container>
+                <label for="{{ id }}{{ i }}" class="nhsuk-label nhsuk-radios__label">{{ item.label }}</label>
+                <div *ngIf="item.description" class="nhsuk-hint nhsuk-radios__hint" id="{{ id }}{{ i }}-hint">{{ item.description }}</div>
+              </div>
+
+              <ng-container *ngIf="item.conditional">
+                <div
+                  id="conditional-{{ id }}{{ i }}"
+                  class="nhsuk-radios__conditional"
+                  [ngClass]="{ 'nhsuk-radios__conditional--hidden': !isConditionalFieldVisible(item.conditional.id), error: isConditionalFieldError(item.conditional.id) }"
+                >
+                  <theme-form-input
+                    [id]="item.conditional.id"
+                    [controlName]="item.conditional.id"
+                    [formControl]="conditionalFormControl(item.conditional.id)"
+                    [label]="item.conditional.label"
+                    [description]="item.conditional.description"
+                    [pageUniqueField]="false"
+                  />
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-template>
+      </ng-container>
+
+      <!-- <ng-container *ngIf="additional">
+        <ng-container *ngFor="let addi of additional; let i = index">
+          <div class="nhsuk-u-padding-top-2"></div>
+          <ng-container *ngIf="addi.dataType === 'text'">
+            <theme-form-input [formControl]="conditionalFormControl(addi.id)" [label]="addi.label" [description]="addi.description" [pageUniqueField]="false"></theme-form-input>
+          </ng-container>
+          <ng-container *ngIf="addi.dataType === 'textarea'">
+            <theme-form-textarea
+              [formControl]="conditionalFormControl(addi.id)"
+              [label]="addi.label"
+              [description]="addi.description"
+              [pageUniqueField]="false"
+            ></theme-form-textarea>
+          </ng-container>
+        </ng-container>
+      </ng-container> -->
+    </div>
+  </fieldset>
+</div>

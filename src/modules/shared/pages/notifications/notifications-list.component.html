@@ -15,7 +15,7 @@
       <shared-filters-selection-wrapper-component [model]="filtersModel" />
 
       <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
-        <div class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">{{ notificationsList.getTotalRowsNumber() }} notifications found</div>
+        <h2 role="alert" class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">{{ notificationsList.getTotalRowsNumber() }} notifications found</h2>
         <a href="javascript:void(0)" (click)="onMarkAsReadAllNotifications()" class="nhsuk-body-s nhsuk-u-margin-bottom-0"> Mark all as read </a>
       </div>
 

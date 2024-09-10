@@ -92,17 +92,23 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
-                    <a
-                      *ngIf="item.support?.status !== 'ENGAGING' && item.assessment?.id"
-                      routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
-                      attr.aria-label="View {{ item.name }} innovation assessment details"
-                    >
-                      {{ item.name }}
-                    </a>
-                    <span *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closedReason?.value === 'STOPPED_SHARED'"> {{ item.name }} </span>
-                    <a *ngIf="item.support?.status === 'ENGAGING'" routerLink="/accessor/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation">
-                      {{ item.name }}
-                    </a>
+                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closedReason?.value === 'STOPPED_SHARED' ; else hasLink">
+                      <span> {{ item.name }} </span>
+                    </ng-container>
+                    <ng-template #hasLink>
+                      <a
+                        *ngIf="item.support?.status !== 'ENGAGING' && item.assessment?.finishedAt && item.assessment?.id ; else noAssessment"
+                        routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
+                        attr.aria-label="View {{ item.name }} innovation assessment details"
+                      >
+                        {{ item.name }}
+                      </a>
+                      <ng-template #noAssessment>
+                        <a routerLink="/accessor/innovations/{{ item.id }}" attr.aria-label="View {{ item.name }} innovation">
+                          {{ item.name }}
+                        </a>
+                      </ng-template>
+                    </ng-template>
                   </div>
                   <theme-notification-tag *ngIf="item.notifications" [label]="item.notifications"></theme-notification-tag>
                 </div>

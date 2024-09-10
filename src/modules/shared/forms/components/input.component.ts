@@ -18,8 +18,8 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
-import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 import { InputLengthLimitType, INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
+import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 @Component({
   selector: 'theme-form-input',
@@ -42,7 +42,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   @Input() description?: string;
   @Input() placeholder?: string;
   @Input() lengthLimit?: InputLengthLimitType;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
 

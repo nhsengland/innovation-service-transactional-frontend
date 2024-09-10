@@ -1,15 +1,23 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <div *ngIf="!assessmentHasBeenSubmitted" class="full-width-section">
+      <div *ngIf="!assessmentHasBeenSubmitted" class="full-width-section nhsuk-u-margin-bottom-5">
         <div class="nhsuk-inset-text nhsuk-u-margin-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>This document is autosaved every minute.</p>
         </div>
       </div>
 
+      <p *ngIf="assessment?.minorVersion" class="font-color-secondary nhsuk-u-margin-bottom-5">
+        While you are editing a needs {{ isReassessment ? "reassessment" : "assessment" }}, organisations will not be able to support this innovation or send messages or tasks.
+      </p>
+
+      <div *ngIf="stepId === 1 && showAssessmentDetails" class="full-width-section margin-bottom-5">
+        <shared-innovation-assessment-details [assessment]="assessment" />
+      </div>
+
       <ng-container *ngFor="let section of form.sections; let i = index">
-        <div class="full-width-section nhsuk-u-padding-top-5" [ngClass]="{ 'bg-color-white': i % 2 }">
+        <div class="full-width-section" [ngClass]="{ 'bg-color-white': i % 2 }">
           <h2 *ngIf="section.title" class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ section.title }}</h2>
           <theme-form-engine formId="assessmentForm" [parameters]="section.parameters" [values]="form.data" (formChanges)="onFormChange()"></theme-form-engine>
         </div>
@@ -29,7 +37,7 @@
 
         <ng-container *ngIf="stepId > 1">
           <button class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3" (click)="onSubmit('submit')">
-            {{ assessmentHasBeenSubmitted ? "Update" : "Submit" }} needs assessment
+            {{ assessmentHasBeenSubmitted ? "Update" : "Submit" }} needs {{ isReassessment ? "reassessment" : "assessment" }}
           </button>
           <button
             *ngIf="!assessmentHasBeenSubmitted"

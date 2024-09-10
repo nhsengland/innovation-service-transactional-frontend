@@ -1,15 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, concatMap, map, take } from 'rxjs/operators';
 
 import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
+import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
 import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum } from './authentication.enums';
-import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 type GetUserInfoDTO = {
   id: string;
@@ -24,7 +24,7 @@ type GetUserInfoDTO = {
   termsOfUseAccepted: boolean;
   hasInnovationTransfers: boolean;
   hasInnovationCollaborations: boolean;
-  hasAnnouncements: boolean;
+  hasLoginAnnouncements: { [k: string]: boolean };
   passwordResetAt: null | DateISOType;
   firstTimeSignInAt: null | DateISOType;
   organisations: {
@@ -136,7 +136,7 @@ export class AuthenticationService {
         termsOfUseAccepted: response.termsOfUseAccepted,
         hasInnovationTransfers: response.hasInnovationTransfers,
         hasInnovationCollaborations: response.hasInnovationCollaborations,
-        hasAnnouncements: response.hasAnnouncements,
+        hasLoginAnnouncements: response.hasLoginAnnouncements,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
         organisations: response.organisations

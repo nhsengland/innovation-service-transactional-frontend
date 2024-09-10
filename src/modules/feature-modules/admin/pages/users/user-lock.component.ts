@@ -34,7 +34,7 @@ export class PageUserLockComponent extends CoreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.usersValidationRulesService.getLockUserRules(this.user.id).subscribe({
+    this.usersValidationRulesService.getAdminOperationUserRules(this.user.id, 'LOCK_USER').subscribe({
       next: response => {
         this.rulesList = response.validations;
 

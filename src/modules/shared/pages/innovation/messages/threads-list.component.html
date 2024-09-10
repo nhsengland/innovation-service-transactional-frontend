@@ -40,6 +40,11 @@
         </div>
         <button type="button" routerLink="new" class="nhsuk-button">Start a new thread</button>
       </ng-container>
+
+      <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      </div>
     </div>
 
     <div class="nhsuk-grid-column-full">

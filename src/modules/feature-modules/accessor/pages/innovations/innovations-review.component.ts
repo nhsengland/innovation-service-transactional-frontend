@@ -64,6 +64,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       accessors: string[];
       assessment: {
         id: string;
+        finishedAt: DateISOType | null;
       } | null;
       notifications: number;
       engagingOrganisations: string[];
@@ -114,6 +115,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'updatedAt',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
@@ -137,6 +139,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'id',
             'name',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
@@ -166,6 +169,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'countryName',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'statistics.notifications'
           ],
@@ -189,6 +193,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'countryName',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'statistics.notifications',
             'engagingOrganisations',
@@ -211,6 +216,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'name',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
@@ -234,6 +240,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'countryName',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
@@ -256,6 +263,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'countryName',
             'mainCategory',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
@@ -278,6 +286,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'id',
             'name',
             'assessment.id',
+            'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
             'support.updatedBy',

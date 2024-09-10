@@ -36,7 +36,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
         dataType: 'textarea',
         label: 'Let the innovator know how you want to proceed',
         validations: { isRequired: [true, 'Message is required'] },
-        lengthLimit: 's'
+        lengthLimit: 'xxl'
       })
     ];
     this.formAnswers = {};

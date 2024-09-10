@@ -5,6 +5,7 @@ import {
   WizardStepType,
   WizardSummaryType
 } from '@modules/shared/forms';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 import { catalogOfficeLocation } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { countriesItems, locationItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
@@ -36,7 +37,6 @@ type StepPayloadType = {
   description?: string;
   officeLocation: catalogOfficeLocation;
   countryLocation: null | string[];
-  countryName?: string;
   postcode?: string;
   hasWebsite: string;
   website?: string;
@@ -45,9 +45,11 @@ type StepPayloadType = {
 type OutboundPayloadType = {
   name: string;
   description: string;
-  countryName: string;
+  officeLocation: string;
+  countryLocation?: string;
   postcode?: string;
   website?: string;
+  hasWebsite: string;
 };
 
 export const NEW_INNOVATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -155,7 +157,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: {
+                  isRequired: [true, 'Website url is required'],
+                  urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xxs }
+                }
               })
             },
             { value: 'NO', label: 'No' }
@@ -170,11 +175,10 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name.trim(),
     description: data.description ?? '',
-    countryName:
-      data.officeLocation === 'Based outside UK' && data.countryLocation
-        ? data.countryLocation[0]
-        : data.officeLocation,
+    officeLocation: data.officeLocation,
+    countryLocation: data.countryLocation ? data.countryLocation[0] : undefined,
     postcode: data.postcode ?? undefined,
+    hasWebsite: data.hasWebsite,
     website: data.website ?? undefined
   };
 }
@@ -208,7 +212,11 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     });
   }
 
-  toReturn.push({ label: stepsLabels.q6.label, value: data.website ?? 'No', editStepNumber: editStepNumber++ });
+  toReturn.push({
+    label: stepsLabels.q6.label,
+    value: data.hasWebsite === 'YES' ? `Yes \n${data.website}` : 'No',
+    editStepNumber: editStepNumber++
+  });
 
   return toReturn;
 }

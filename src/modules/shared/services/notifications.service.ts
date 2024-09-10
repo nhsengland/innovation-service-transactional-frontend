@@ -384,7 +384,7 @@ export class NotificationsService extends CoreService {
           }
 
           const section = item.params?.section
-            ? this.stores.innovation.getInnovationRecordSectionIdentification(item.params.section)
+            ? this.stores.schema.getIrSchemaSectionIdentificationV3(item.params.section)
             : undefined;
 
           return {

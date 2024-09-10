@@ -37,16 +37,16 @@
               <ng-container *ngSwitchCase="'button'">
                 <div *ngIf="isInnovatorType" class="width-max-content">
                   <dt class="nhsuk-u-margin-top-5">
-                    <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label }}</a>
+                    <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label | irv3translate: "questions" }}</a>
                   </dt>
                 </div>
               </ng-container>
               <ng-container *ngSwitchDefault>
                 <div class="nhsuk-summary-list__row">
-                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label }}</dt>
+                  <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label | irv3translate: "questions" }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value" appHighlight [searchTerm]="search"></span>
-                    <span *ngIf="!item.allowHTML" appHighlight [searchTerm]="search">{{ item.value }}</span>
+                    <span *ngIf="!item.allowHTML" appHighlight [searchTerm]="search">{{ item.value | irv3translate: "items" : item.stepId }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a

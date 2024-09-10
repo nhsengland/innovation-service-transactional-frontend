@@ -20,6 +20,7 @@ import {
   locationItems,
   mainPurposeItems
 } from './forms.config';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
 // Labels.
 const stepsLabels = {
@@ -191,7 +192,10 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: {
+                  isRequired: [true, 'Website url is required'],
+                  urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xxs }
+                }
               })
             },
             { value: 'NO', label: 'No' }
@@ -230,8 +234,8 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     currentValues.mainCategory = currentValues.categories[0];
   } else {
     // Set chosen categories adding OTHER if also chosen.
-    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(
-      item => currentValues.categories?.some(e => e === item.value)
+    const selectedCategories: FormSelectableFieldType<string> = categoriesItems.filter(item =>
+      currentValues.categories?.some(e => e === item.value)
     );
     if (currentValues.categories?.includes('OTHER') && currentValues.otherCategoryDescription) {
       selectedCategories.push({ value: 'OTHER', label: currentValues.otherCategoryDescription });

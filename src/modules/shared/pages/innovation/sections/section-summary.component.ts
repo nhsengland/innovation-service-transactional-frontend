@@ -4,16 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { WizardSummaryType } from '@modules/shared/forms';
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
-import { stepsLabels } from '@modules/stores/innovation/innovation-record/202304/section-2-2-evidences.config';
 import { SectionInfoType } from './section-info.component';
+import {
+  EvidenceV3Type,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
-  summaryList: WizardSummaryType[];
-  evidencesList: WizardSummaryType[];
+  summaryList: WizardSummaryV3Type[];
+  evidencesList: EvidenceV3Type[];
   documentsList: InnovationDocumentsListOutDTO['data'];
 };
 
@@ -39,8 +41,8 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       label: string;
     };
   };
-  summaryList: WizardSummaryType[] = [];
-  evidencesList: WizardSummaryType[] = [];
+  summaryList: WizardSummaryV3Type[] = [];
+  evidencesList: EvidenceV3Type[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
   allSteps: SectionStepsList = [];
@@ -92,33 +94,12 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     for (const [index, item] of this.summaryList.entries()) {
       this.displayChangeButtonList.push(index);
-      if (!item.value && !item.isNotMandatory) {
+      if (!this.checkItemHasValue(item) && !item.isNotMandatory) {
         break;
       }
     }
 
-    this.allSteps = Object.values(this.sectionInfo.allStepsList!);
-
-    // add conditional questions regarding evidences for 2.2
-    if (this.sectionInfo.id === 'EVIDENCE_OF_EFFECTIVENESS') {
-      const evidencesToAdd: SectionStepsList = [];
-      this.allSteps.push(...Object.values(stepsLabels));
-    }
-    // add conditional questions special cases regarding 4.1
-    if (this.sectionInfo.id === 'TESTING_WITH_USERS') {
-      const questionToAdd = { label: 'Describe the testing and feedback for each testing', conditional: true };
-      this.allSteps.splice(4, 0, questionToAdd);
-    }
-    // add conditional questions special cases regarding 5.1
-    if (this.sectionInfo.id === 'REGULATIONS_AND_STANDARDS') {
-      const questionToAdd = { label: 'Do you have a certification for each standard?', conditional: true };
-      this.allSteps.splice(2, 0, questionToAdd);
-    }
-    // add conditional questions special cases regarding 5.2
-    if (this.sectionInfo.id === 'INTELLECTUAL_PROPERTY') {
-      const questionToAdd = { label: 'Patent number(s)', conditional: true };
-      this.allSteps.splice(1, 0, questionToAdd);
-    }
+    this.allSteps = this.stores.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
 
     this.setPageStatus('READY');
   }
@@ -129,5 +110,12 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   onStartSection(sectionId: string): void {
     this.router.navigateByUrl(`${this.baseUrl}/record/sections/${sectionId}/edit`);
+  }
+
+  checkItemHasValue(item: WizardSummaryV3Type): boolean {
+    if (item.value) {
+      return Array.isArray(item.value) && item.value.length === 0 ? false : true;
+    }
+    return false;
   }
 }

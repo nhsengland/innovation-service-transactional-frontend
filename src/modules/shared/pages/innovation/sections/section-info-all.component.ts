@@ -1,16 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
 import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { INNOVATION_SECTIONS } from '@modules/stores/innovation/innovation-record/202304/main.config';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { InnovationSectionsListType } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   INNOVATION_SECTION_STATUS,
   InnovationAllSectionsInfoDTO,
@@ -19,6 +15,11 @@ import {
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';
+import {
+  EvidenceV3Type,
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -27,15 +28,16 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './section-info-all.component.html'
 })
 export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit {
-  innovationsSectionsList: InnovationSectionsListType = INNOVATION_SECTIONS;
+  innovationsSectionsList = this.stores.schema.getIrSchemaSectionsListV3();
 
-  innovationsSubSectionsList: string[] = INNOVATION_SECTIONS.flatMap(el => el.sections.flatMap(section => section.id));
+  innovationsSubSectionsList: string[] = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
   innovationId: string;
 
   baseUrl: string;
   documentUrl: string;
   pdfDocumentUrl: string;
+  assessmentUrl: string;
 
   innovation: ContextInnovationType;
   innovationSections: SectionsSummaryModel = [];
@@ -63,11 +65,14 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   sectionIdFragment: string | null;
 
+  assessmentQueryParam?: string;
+  editPageQueryParam?: string;
+
   allSectionsData: {
-    [key in InnovationSectionEnum]?: {
+    [key: string]: {
       sectionInfo: SectionInfoType;
-      summaryList: WizardSummaryType[];
-      evidencesList: WizardSummaryType[];
+      summaryList: WizardSummaryV3Type[];
+      evidencesList: EvidenceV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
     };
   } = {};
@@ -83,12 +88,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionIdFragment = this.activatedRoute.snapshot.fragment;
+    this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
+    this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
     this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
     }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    this.assessmentUrl = `${this.baseUrl}/assessments/${this.innovation.assessment?.id}`;
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -106,18 +114,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
-      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
-    }
-
+    this.setGoBackLink();
     this.setPageTitle('All sections questions and answers', { hint: 'Innovation record' });
 
     this.getSectionsData();
   }
 
   getSectionsData() {
-    let summaryList: WizardSummaryType[];
-    let evidencesList: WizardSummaryType[];
+    let summaryList: WizardSummaryV3Type[];
+    let evidencesList: EvidenceV3Type[];
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
@@ -130,7 +135,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }),
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      const allSections = getAllSectionsList();
+      // const allSections = getAllSectionsList();
+      const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
@@ -148,19 +154,24 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
-          wizard: new WizardEngineModel({}),
+          wizard: new WizardIRV3EngineModel({}),
           allStepsList: {},
           date: '',
           submittedBy: null,
           openTasksCount: 0
         };
-
-        const section = this.stores.innovation.getInnovationRecordSection(responseItem.section.section);
+        const sectionEvidenceData = responseItem.data.evidences
+          ? (responseItem.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
+              evidenceId: item.id,
+              label: item.name,
+              value: item.summary
+            }))
+          : [];
+        const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
         sectionInfo.wizard = section.wizard;
-        sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
         sectionInfo.status = {
           id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS,
@@ -185,7 +196,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           responseItem.data.hasEvidence === 'YES'
         );
 
-        sectionInfo.wizard.setAnswers(sectionInfo.wizard.runInboundParsing(responseItem.data)).runRules();
+        sectionInfo.wizard.setAnswers(responseItem.data).runRules();
 
         const validInformation = sectionInfo.wizard.validateData();
 
@@ -199,14 +210,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           }
         }
 
-        const data = sectionInfo.wizard.runSummaryParsing();
+        const data = sectionInfo.wizard.runInboundParsing().parseSummary();
         summaryList = data.filter(item => !item.evidenceId);
-        evidencesList = data.filter(item => item.evidenceId);
+        evidencesList = sectionEvidenceData;
         documentsList = documentsResponse.data.filter(document => {
           return document.context.id === responseItem.section.section;
         });
-
-        this.allSectionsData[sectionInfo.id as InnovationSectionEnum] = {
+        this.allSectionsData[sectionInfo.id] = {
           evidencesList: evidencesList,
           sectionInfo: sectionInfo,
           summaryList: summaryList,
@@ -275,5 +285,28 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         }
       }
     });
+  }
+
+  setGoBackLink(): void {
+    if (this.isAssessmentType && this.assessmentQueryParam) {
+      let goBackUrl = undefined;
+      switch (this.assessmentQueryParam) {
+        case 'editReason':
+          goBackUrl = `${this.assessmentUrl}/edit/reason`;
+          break;
+        case 'edit':
+          goBackUrl = `${this.assessmentUrl}/edit${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
+          break;
+        case 'overview':
+          goBackUrl = `${this.assessmentUrl}`;
+          break;
+      }
+
+      if (goBackUrl) {
+        this.setBackLink('Back to needs (re)assessment', goBackUrl);
+      }
+    } else if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
+      this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
+    }
   }
 }

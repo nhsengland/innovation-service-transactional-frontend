@@ -19,13 +19,20 @@ import { FormFileUploadPreviewComponent } from './components/file-upload-preview
 import { FormGroupedCheckboxArrayComponent } from './components/grouped-checkbox-array.component';
 import { FormInputComponent } from './components/input.component';
 import { FormInputAutocompleteArrayComponent } from './components/input-autocomplete-array.component';
-// import { FormInputAutocompleteValueComponent } from './components/input-autocomplete-value.component';
+import { FormInputAutocompleteValueComponent } from './components/input-autocomplete-value.component';
 import { FormRadioGroupComponent } from './components/radio-group.component';
 import { FormTextareaComponent } from './components/textarea.component';
 import { FormFileUploadDescriptiveComponent } from './components/file-upload-descriptive.component';
 import { FormDateInputComponent } from './components/date-input.component';
 import { FormSelectComponent } from './components/select.component';
-import { SelectComponent } from '@modules/theme/components/search/select.component';
+import { FormRadioGroupV3Component } from './components/radio-group-v3.component';
+import { FormCheckboxArrayV3Component } from './components/checkbox-array-v3.component';
+import { FormEngineV3Component } from './engine/form-engine-v3.component';
+import { FormCheckboxGroupV3Component } from './components/checkbox-group-v3.component';
+import { FormInputAutocompleteArrayV3Component } from './components/input-autocomplete-array-v3.component';
+import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
+import { ThemeModule } from '../../theme/theme.module';
+import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
 
 @NgModule({
   imports: [
@@ -34,28 +41,35 @@ import { SelectComponent } from '@modules/theme/components/search/select.compone
     ReactiveFormsModule,
     TranslateModule,
     NgxDropzoneModule,
-
     // Angular Material.
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    ThemeModule
   ],
   declarations: [
     FormEngineComponent,
+    FormEngineV3Component,
 
     FormFileUploadPreviewComponent,
     FormCheckboxComponent,
     FormCheckboxArrayComponent,
+    FormCheckboxArrayV3Component,
     FormCheckboxGroupComponent,
+    FormCheckboxGroupV3Component,
     FormFileUploadArrayComponent,
     FormFileUploadComponent,
     FormGroupedCheckboxArrayComponent,
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
-    // FormInputAutocompleteValueComponent,
+    FormInputAutocompleteArrayV3Component,
+    FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
+    FormRadioGroupV3Component,
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
-    FormSelectComponent
+    FormSelectComponent,
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ],
   exports: [
     // CommonModule,
@@ -64,21 +78,28 @@ import { SelectComponent } from '@modules/theme/components/search/select.compone
     ReactiveFormsModule,
 
     FormEngineComponent,
+    FormEngineV3Component,
 
     FormCheckboxComponent,
     FormCheckboxArrayComponent,
+    FormCheckboxArrayV3Component,
     FormCheckboxGroupComponent,
+    FormCheckboxGroupV3Component,
     FormFileUploadArrayComponent,
     FormFileUploadComponent,
     FormGroupedCheckboxArrayComponent,
     FormInputComponent,
     FormInputAutocompleteArrayComponent,
-    // FormInputAutocompleteValueComponent,
+    FormInputAutocompleteArrayV3Component,
+    FormInputAutocompleteValueComponent,
     FormRadioGroupComponent,
+    FormRadioGroupV3Component,
     FormTextareaComponent,
     FormFileUploadDescriptiveComponent,
     FormDateInputComponent,
-    FormSelectComponent
+    FormSelectComponent,
+    FormIRSelectableFiltersFilterComponent,
+    FormIRSelectableFiltersComponent
   ]
 })
 export class FormsModule {}

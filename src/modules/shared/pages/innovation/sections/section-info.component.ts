@@ -6,17 +6,17 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
-import {
-  getInnovationRecordConfig,
-  innovationSectionsWithFiles
-} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+import {
+  EvidenceV3Type,
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { NotificationContextDetailEnum } from '@app/base/enums';
 
 export type SectionInfoType = {
@@ -27,7 +27,7 @@ export type SectionInfoType = {
   submitButton: { show: boolean; label: string };
   isNotStarted: boolean;
   hasEvidences: boolean;
-  wizard: WizardEngineModel;
+  wizard: WizardIRV3EngineModel;
   allStepsList: InnovationSectionStepLabels;
   date: string;
   submittedBy: null | { name: string; displayTag?: string };
@@ -43,14 +43,15 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   isArchived: boolean;
   sectionId: string;
 
+  assessmentType = '';
   sectionSubmittedText: string = '';
 
   sectionsIdsList: string[];
 
   sectionSummaryData: {
     sectionInfo: SectionInfoType;
-    summaryList: WizardSummaryType[];
-    evidencesList: WizardSummaryType[];
+    summaryList: WizardSummaryV3Type[];
+    evidencesList: EvidenceV3Type[];
     documentsList: InnovationDocumentsListOutDTO['data'];
   };
 
@@ -78,10 +79,10 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.innovation = this.stores.context.getInnovation();
     this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.assessmentType =
+      this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
-    this.sectionsIdsList = getInnovationRecordConfig().flatMap(sectionsGroup =>
-      sectionsGroup.sections.map(section => section.id)
-    );
+    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
@@ -99,7 +100,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         submitButton: { show: false, label: 'Confirm section answers' },
         isNotStarted: false,
         hasEvidences: false,
-        wizard: new WizardEngineModel({}),
+        wizard: new WizardIRV3EngineModel({}),
         allStepsList: {},
         date: '',
         submittedBy: null,
@@ -116,7 +117,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
-
     this.subscriptions.push(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -129,7 +129,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(this.sectionId);
+    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
     this.sectionSubmittedText = sectionIdentification
@@ -141,19 +142,18 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
-    const section = this.stores.innovation.getInnovationRecordSection(this.sectionId);
+    const section = this.stores.schema.getIrSchemaSectionV3(this.sectionId);
 
     this.sectionSummaryData.sectionInfo.id = section.id;
     this.sectionSummaryData.sectionInfo.title = section.title;
     this.sectionSummaryData.sectionInfo.wizard = section.wizard;
-    this.sectionSummaryData.sectionInfo.allStepsList = section.allStepsList ? section.allStepsList : {};
 
     // Status not created or archived as created or it's a section with files.
     this.shouldShowDocuments =
       !(
         this.innovation.status === InnovationStatusEnum.CREATED ||
         this.innovation.archivedStatus === InnovationStatusEnum.CREATED
-      ) || innovationSectionsWithFiles.includes(this.sectionSummaryData.sectionInfo.id);
+      ) || this.stores.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
       this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
@@ -177,20 +177,31 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.sectionSummaryData.sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(
         this.sectionSummaryData.sectionInfo.status.id
       );
+
       this.sectionSummaryData.sectionInfo.date = sectionInfo.submittedAt;
       this.sectionSummaryData.sectionInfo.submittedBy = sectionInfo.submittedBy;
       this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
 
       // Special business rule around section 2.2.
+
       this.sectionSummaryData.sectionInfo.hasEvidences = !!(
         section.evidences &&
         sectionInfo.data.hasEvidence &&
         sectionInfo.data.hasEvidence === 'YES'
       );
 
-      this.sectionSummaryData.sectionInfo.wizard
-        .setAnswers(this.sectionSummaryData.sectionInfo.wizard.runInboundParsing(sectionInfo.data))
-        .runRules();
+      const wizard = this.sectionSummaryData.sectionInfo.wizard;
+      wizard.setAnswers(sectionInfo.data).runRules();
+
+      const data = this.sectionSummaryData.sectionInfo.wizard.runInboundParsing().parseSummary();
+
+      const evidenceData = sectionInfo.data.evidences
+        ? (sectionInfo.data.evidences as { id: string; name: string; summary: string }[]).map(item => ({
+            evidenceId: item.id,
+            label: item.name,
+            value: item.summary
+          }))
+        : [];
 
       const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
 
@@ -206,11 +217,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.sectionSummaryData.sectionInfo.submitButton.show = false;
       }
 
-      const data = this.sectionSummaryData.sectionInfo.wizard.runSummaryParsing();
-
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
-      this.sectionSummaryData.evidencesList = data.filter(item => item.evidenceId);
+      this.sectionSummaryData.evidencesList = evidenceData;
 
       this.getPreviousAndNextPagination();
 
@@ -233,7 +242,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
 
     if (previousSectionId) {
-      const previousSection = this.stores.innovation.getInnovationRecordSectionIdentification(previousSectionId);
+      const previousSection = this.stores.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
       this.previousSection = {
         id: previousSectionId,
         title: previousSection
@@ -245,7 +254,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     }
 
     if (nextSectionId) {
-      const nextSection = this.stores.innovation.getInnovationRecordSectionIdentification(nextSectionId);
+      const nextSection = this.stores.schema.getIrSchemaSectionIdentificationV3(nextSectionId);
       this.nextSection = {
         id: nextSectionId,
         title: nextSection

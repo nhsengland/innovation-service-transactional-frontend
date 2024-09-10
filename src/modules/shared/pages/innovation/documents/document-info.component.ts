@@ -9,7 +9,7 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-info',
@@ -51,7 +51,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           ...response,
           locationLink:
             response.context.type === 'INNOVATION_SECTION'
-              ? getAllSectionsList().find(item => item.value === response.context.id)?.label ?? '[Archived section]'
+              ? getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
+                  item => item.value === response.context.id
+                )?.label ?? '[Archived section]'
               : null
         };
 

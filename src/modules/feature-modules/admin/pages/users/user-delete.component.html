@@ -1,0 +1,51 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div *ngIf="pageStep === 'RULES'" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <table class="nhsuk-table">
+        <caption>
+          All conditions must be valid to be able to delete
+          {{
+            user.name
+          }}
+        </caption>
+        <thead class="nhsuk-table__head nhsuk-u-visually-hidden">
+          <tr class="nhsuk-table__row">
+            <th class="nhsuk-table__header" scope="col">Condition</th>
+            <th class="nhsuk-table__header" scope="col">Is valid</th>
+          </tr>
+        </thead>
+        <tbody class="nhsuk-table__body">
+          <tr *ngFor="let item of rulesList" class="nhsuk-table__row">
+            <td class="nhsuk-table__cell">
+              {{ "shared.catalog.user." + item.rule + ".label" | translate }}
+            </td>
+            <td class="nhsuk-table__cell text-align-right">
+              <strong class="nhsuk-tag" [ngClass]="{ 'nhsuk-tag--green': item.valid, 'nhsuk-tag--red': !item.valid }">{{ item.valid ? "Valid" : "Invalid" }}</strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="button" disabled (click)="nextStep()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Continue</button>
+    </div>
+  </div>
+
+  <div *ngIf="pageStep === 'DELETE_USER'" class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+        <div class="nhsuk-heading-m nhsuk-warning-callout__label">
+          <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>Are you sure?</span>
+        </div>
+        <p>Service users should delete their own NHS Innovation service accounts. If this is not possible, admins can delete the account on behalf of the user but this should be avoided.</p>
+        <p>Before you continue, make sure you have an explicit request from the NHS Innovation Service service owner to proceed with the delete account.</p>
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form">
+        <theme-form-input controlName="confirmation" description="To confirm, please type the following: delete user's account" [pageUniqueField]="false"></theme-form-input>
+        <button type="button" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">Delete user</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

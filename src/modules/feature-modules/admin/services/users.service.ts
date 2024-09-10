@@ -95,6 +95,14 @@ export class AdminUsersService extends CoreService {
     );
   }
 
+  deleteUser(userId: string): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
+    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(
+      take(1),
+      map(response => response)
+    );
+  }
+
   changeUserRole(userId: string, body: changeUserRoleDTO): Observable<changeUserTypeDTO> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId').setPathParams({ userId });
     return this.http.patch<changeUserTypeDTO>(url.buildUrl(), { role: body.role }).pipe(
@@ -178,5 +186,17 @@ export class AdminUsersService extends CoreService {
   getInnovationsByOwnerId(userId: string) {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/users/:userId/innovations').setPathParams({ userId });
     return this.http.get<GetInnovationsByOwnerIdDTO>(url.buildUrl()).pipe(take(1));
+  }
+
+  transferInnovation(body: {
+    innovationId: string;
+    email: string;
+    ownerToCollaborator: boolean;
+  }): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/transfers');
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      map(response => response)
+    );
   }
 }

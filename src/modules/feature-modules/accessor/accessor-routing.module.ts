@@ -17,13 +17,13 @@ import { TasksListComponent } from './pages/tasks/tasks-list.component';
 // // Dashboard.
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation.
+import { InnovationCustomNotificationsComponent } from './pages/innovation/custom-notifications/custom-notifications.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationSupportOrganisationsSupportStatusSuggestComponent } from './pages/innovation/support/organisations-support-status-suggest.component';
 import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovation/support/support-request-update-status.component';
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
-import { InnovationCustomNotificationsComponent } from './pages/innovation/custom-notifications/custom-notifications.component';
 
 // Shared module pages.
 // // Account.
@@ -71,18 +71,20 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { InnovationAssessmentDataResolver } from '@modules/shared/resolvers/innovation-assessment-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
-import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
-import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
-import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
-import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
-import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
 import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/custom-notification-delete.component';
+import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
+import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -120,6 +122,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
@@ -140,13 +144,15 @@ const routes: Routes = [
 
           {
             path: ':innovationId',
+            resolve: {
+              innovationData: mapToResolve(InnovationDataResolver)
+            },
             data: {
               module: 'accessor',
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
             },
             runGuardsAndResolvers: 'always',
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
             children: [
               { path: '', outlet: 'page-context-outlet', component: ContextInnovationOutletComponent },
 
@@ -165,6 +171,9 @@ const routes: Routes = [
               {
                 path: 'assessments/:assessmentId',
                 pathMatch: 'full',
+                resolve: {
+                  innovationAssessmentData: mapToResolve(InnovationAssessmentDataResolver)
+                },
                 component: PageInnovationAssessmentOverviewComponent,
                 data: {
                   breadcrumb: 'Needs assessment',
@@ -551,6 +560,8 @@ const routes: Routes = [
           breadcrumb: 'Tasks',
           layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
@@ -572,6 +583,8 @@ const routes: Routes = [
         path: 'notifications',
         pathMatch: 'full',
         component: PageNotificationsListComponent,
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         data: {
           breadcrumb: 'Notifications',
           layout: { type: 'full', backgroundColor: 'bg-color-white' }

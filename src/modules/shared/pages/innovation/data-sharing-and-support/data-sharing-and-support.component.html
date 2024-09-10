@@ -135,6 +135,11 @@
           Change preferences
         </button>
 
+        <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+        </div>
+
         <div *ngIf="isQualifyingAccessorRole && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link nhsuk-u-padding-top-5">
           <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link__link">
             <theme-svg-icon type="arrow-right-circle" />

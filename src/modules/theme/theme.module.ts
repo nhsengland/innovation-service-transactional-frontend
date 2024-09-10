@@ -13,7 +13,7 @@ import { TransactionalLayoutComponent } from './base/transactional-layout.compon
 // Components.
 import { ActivityTimeoutComponent } from './components/activity-timeout/activity-timeout.component';
 import { AlertComponent } from './components/alert/alert.component';
-import { AnnouncementGenericComponent } from './components/announcements/announcement-generic.component';
+import { AnnouncementCardComponent } from './components/announcements/announcement-card.component';
 import { ContentWrapperComponent } from './components/content-wrapper/content-wrapper.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderBreadcrumbsBarComponent } from './components/header/breadcrumbs-bar.component';
@@ -44,6 +44,7 @@ import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component'
 import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
+import { KeyProgressAreasCardComponent } from './components/key-progress-areas-card/key-progress-areas-card.component';
 
 @NgModule({
   imports: [
@@ -64,7 +65,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
-    AnnouncementGenericComponent,
+    AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
@@ -85,6 +86,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     OnOffTagComponent,
     StatisticsCardsComponent,
     SuggestionsCardsComponent,
+    KeyProgressAreasCardComponent,
 
     InnovationRecordExportComponent,
 
@@ -113,7 +115,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     // Components.
     ActivityTimeoutComponent,
     AlertComponent,
-    AnnouncementGenericComponent,
+    AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,
     HeaderBreadcrumbsBarComponent,
@@ -134,6 +136,7 @@ import { HighlightDirective } from '@modules/shared/directives/highlight.directi
     OnOffTagComponent,
     StatisticsCardsComponent,
     SuggestionsCardsComponent,
+    KeyProgressAreasCardComponent,
 
     ChipsFilterComponent,
     CollapsibleFilterComponent,

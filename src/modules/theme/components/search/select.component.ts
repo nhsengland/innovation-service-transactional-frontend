@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 
-export type SelectComponentInputType = { key: string; text: string };
+export type SelectComponentInputType = { key: string | undefined; text: string; disabled?: boolean };
 
 @Component({
   selector: 'theme-select-component',
@@ -13,7 +13,7 @@ export class SelectComponent implements OnInit {
   @Input() defaultValueKey?: string;
   @Output() selectChanged = new EventEmitter<string>();
 
-  selectedField: string = '';
+  selectedField: string | undefined = '';
 
   ngOnInit(): void {
     this.selectedField = this.selectList.find(item => item.key === this.defaultValueKey)?.key ?? this.selectList[0].key;

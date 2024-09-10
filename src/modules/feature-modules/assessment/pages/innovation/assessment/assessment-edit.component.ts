@@ -1,6 +1,6 @@
 import { Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { forkJoin, interval } from 'rxjs';
+import { forkJoin, interval, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { UtilsHelper } from '@app/base/helpers';
@@ -10,6 +10,7 @@ import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/ne
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
+import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { AssessmentService } from '../../../services/assessment.service';
 
@@ -27,6 +28,8 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
 
   entrypointUrl: string = '';
 
+  assessment?: InnovationNeedsAssessmentInfoDTO;
+
   form: {
     sections: {
       title: string;
@@ -36,6 +39,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   };
 
   assessmentHasBeenSubmitted: null | boolean;
+
+  isReassessment = false;
+  showAssessmentDetails = false;
 
   currentAnswers: { [key: string]: any };
 
@@ -75,87 +81,127 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),
       this.innovationsService.getInnovationNeedsAssessment(this.innovationId, this.assessmentId)
-    ]).subscribe(([organisationUnits, needsAssessment]) => {
-      // Update last step with the organisations list with description and pre-select all checkboxes.
-      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.CONSTANTS.URLS.WHO_WE_ARE}" target="_blank" rel="noopener noreferrer"> Support offer guide (opens in a new window) </a>`;
-      NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].groupedItems = organisationUnits.map(item => ({
-        value: item.id,
-        label: item.name,
-        items: item.organisationUnits.map(i => ({ value: i.id, label: i.name }))
-      }));
+    ])
+      .pipe(
+        switchMap(([orgList, needsAssessment]) => {
+          const previousAssessmentId = needsAssessment.previousAssessment?.id;
+          return forkJoin([
+            of(orgList),
+            of(needsAssessment),
+            previousAssessmentId && needsAssessment.minorVersion > 0
+              ? this.innovationsService.getInnovationNeedsAssessment(this.innovationId, previousAssessmentId)
+              : of(null)
+          ]);
+        })
+      )
+      .subscribe(([organisationUnits, needsAssessment, previousNeedsAssessment]) => {
+        // Update last step with the organisations list with description and pre-select all checkboxes.
+        NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].description = `Please select all organisations you think are in a position to offer support, assessment or other type of engagement at this time. The qualifying accessors of the organisations you select will be notified. <br /> <a href="${this.CONSTANTS.URLS.WHO_WE_ARE}" target="_blank" rel="noopener noreferrer"> Check their referral criteria (opens in a new window) </a>`;
+        NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds[0].groupedItems = organisationUnits.map(item => {
+          const previousSuggestedOrgs = previousNeedsAssessment?.suggestedOrganisations ?? [];
+          const curSuggestedOrg = previousSuggestedOrgs.find(s => s.id === item.id);
+          const suggestedUnits = curSuggestedOrg ? new Set(curSuggestedOrg.units.map(u => u.id)) : new Set();
+          return {
+            value: item.id,
+            label: item.name,
+            items: item.organisationUnits.map(i => ({
+              value: i.id,
+              label: i.name,
+              isEditable: !suggestedUnits.has(i.id)
+            })),
+            isEditable: suggestedUnits.size !== item.organisationUnits.length
+          };
+        });
 
-      this.innovationName = this.stores.context.getInnovation().name;
+        this.innovationName = this.stores.context.getInnovation().name;
 
-      this.form.data = {
-        ...needsAssessment,
-        suggestedOrganisationUnitsIds: needsAssessment.suggestedOrganisations.reduce(
-          (unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)],
-          []
-        )
-      };
+        this.assessment = needsAssessment;
 
-      this.assessmentHasBeenSubmitted = !!needsAssessment.finishedAt;
+        this.form.data = {
+          ...this.assessment,
+          suggestedOrganisationUnitsIds: this.assessment.suggestedOrganisations.reduce(
+            (unitsAcc: string[], o) => [...unitsAcc, ...o.units.map(u => u.id)],
+            []
+          )
+        };
 
-      // Only autosave if the assessment has not been submitted.
-      if (!this.assessmentHasBeenSubmitted) {
+        this.assessmentHasBeenSubmitted = !!this.assessment.finishedAt;
+
+        this.isReassessment = this.assessment.majorVersion > 1;
+        this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
+
+        // Only autosave if the assessment has not been submitted.
+        if (!this.assessmentHasBeenSubmitted) {
+          this.subscriptions.push(
+            interval(1000 * 60).subscribe(() => {
+              if (!this.saveButton.disabled) {
+                this.onSubmit('autosave');
+              }
+            })
+          );
+        }
+
         this.subscriptions.push(
-          interval(1000 * 60).subscribe(() => {
-            if (!this.saveButton.disabled) {
-              this.onSubmit('autosave');
+          this.activatedRoute.params.subscribe(params => {
+            this.stepId = Number(params.stepId);
+
+            if (!this.isValidStepId()) {
+              this.redirectTo('/not-found');
+              return;
             }
+
+            switch (this.stepId) {
+              case 1:
+                this.form.sections = [
+                  { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
+                  { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
+                ];
+                this.setBackLink(
+                  'Go back',
+                  this.entrypointUrl.endsWith(`/assessments/${this.assessment?.previousAssessment?.id}/edit/reason`)
+                    ? `/assessment/innovations/${this.innovationId}/overview`
+                    : this.entrypointUrl
+                );
+
+                break;
+              case 2:
+                this.form.sections = [
+                  { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
+                  { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
+                ];
+                this.setBackLink(
+                  'Go back',
+                  `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`
+                );
+                break;
+            }
+
+            const error = Boolean(this.activatedRoute.snapshot.queryParams['error']);
+            if (this.stepId === 1 && error) {
+              (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
+                engine.getFormValues(true);
+              });
+            }
+
+            this.updatePageTitle();
+
+            this.setPageStatus('READY');
           })
         );
-      }
+      });
+  }
 
-      this.setPageStatus('READY');
-    });
+  updatePageTitle(): void {
+    let assessmentTitle =
+      (this.isReassessment ? 'Needs reassessment' : 'Needs assessment') +
+      ` ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
+    if (this.assessment?.minorVersion) {
+      assessmentTitle = this.isReassessment ? 'Edit needs reassessment' : 'Edit needs assessment';
+    }
 
-    this.subscriptions.push(
-      this.activatedRoute.params.subscribe(params => {
-        this.stepId = Number(params.stepId);
-
-        if (!this.isValidStepId()) {
-          this.redirectTo('/not-found');
-          return;
-        }
-
-        switch (this.stepId) {
-          case 1:
-            this.form.sections = [
-              { title: 'The innovation', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovation },
-              { title: 'The innovator', parameters: NEEDS_ASSESSMENT_QUESTIONS.innovator }
-            ];
-            this.setBackLink(
-              'Go back',
-              this.entrypointUrl.endsWith('/new')
-                ? `/assessment/innovations/${this.innovationId}/overview`
-                : this.entrypointUrl
-            );
-
-            break;
-          case 2:
-            this.form.sections = [
-              { title: 'Support need summary', parameters: NEEDS_ASSESSMENT_QUESTIONS.summary },
-              { title: '', parameters: NEEDS_ASSESSMENT_QUESTIONS.suggestedOrganisationUnitsIds }
-            ];
-            this.setBackLink(
-              'Go back',
-              `/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}/edit/1`
-            );
-            break;
-        }
-
-        const error = Boolean(this.activatedRoute.snapshot.queryParams['error']);
-        if (this.stepId === 1 && error) {
-          (this.formEngineComponent?.toArray() || []).forEach(engine => /* istanbul ignore next */ {
-            engine.getFormValues(true);
-          });
-        }
-
-        this.setPageTitle('Needs assessment', { hint: `${this.stepId} of 2` });
-        this.setPageStatus('READY');
-      })
-    );
+    const pageTitle = `${assessmentTitle}`;
+    const hint = `${this.stepId} of 2`;
+    this.setPageTitle(pageTitle, { hint });
   }
 
   onSubmit(
@@ -230,7 +276,9 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
               break;
             case 'submit':
               if (isValid) {
-                this.setRedirectAlertSuccess('Needs assessment successfully completed');
+                this.setRedirectAlertSuccess(
+                  `Needs ${this.isReassessment ? 'reassessment' : 'assessment'} successfully completed`
+                );
                 this.redirectTo(`/assessment/innovations/${this.innovationId}/assessments/${this.assessmentId}`);
               } else {
                 if (isFirstStepValid) {

@@ -5,5 +5,12 @@
     </div>
   </div>
 
+  <ng-container *ngFor="let announcement of announcements">
+    <theme-announcements-card
+      [announcementCardData]="{ id: announcement.id, title: announcement.title, params: announcement.params, innovations: announcement.innovations }"
+      (clearedAnnouncement)="onClearAnnouncement($event)"
+    ></theme-announcements-card>
+  </ng-container>
+
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-third'"></app-statistics-cards>
 </theme-content-wrapper>

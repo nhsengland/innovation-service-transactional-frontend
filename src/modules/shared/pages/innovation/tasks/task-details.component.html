@@ -108,7 +108,7 @@
               </li>
               <li class="nhsuk-u-margin-bottom-4">
                 <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}">
-                  View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
+                  View messages about this task<ng-container *ngIf="canSendMessage"> and send a reply</ng-container></a
                 >
               </li>
               <li *ngIf="task.status === 'OPEN'">
@@ -124,7 +124,7 @@
             <ul class="nhsuk-list">
               <li>
                 <a
-                  *ngIf="!isArchived && ['DONE', 'DECLINED'].includes(task.status) && task.sameOrganisation"
+                  *ngIf="canReopen"
                   routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/reopen"
                   class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-3"
                 >
@@ -133,7 +133,7 @@
               </li>
               <li>
                 <a
-                  *ngIf="task.status === 'OPEN' && task.sameOrganisation"
+                  *ngIf="canCancel"
                   routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/tasks/{{ task.id }}/cancel"
                   class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-3"
                 >
@@ -142,7 +142,7 @@
               </li>
               <li class="nhsuk-u-margin-bottom-4">
                 <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/threads/{{ task.threadId }}"
-                  >View messages about this task<ng-container *ngIf="!isArchived"> and send a reply</ng-container></a
+                  >View messages about this task<ng-container *ngIf="canSendMessage"> and send a reply</ng-container></a
                 >
               </li>
               <li *ngIf="!isArchived && task.status === 'DONE'">

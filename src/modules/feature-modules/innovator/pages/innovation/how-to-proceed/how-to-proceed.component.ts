@@ -6,7 +6,7 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
-enum FormFieldActionsEnum {
+export enum FormFieldActionsEnum {
   ARCHIVE = 'ARCHIVE',
   DELETE_ACCOUNT = 'DELETE_ACCOUNT',
   NEEDS_REASSESSMENT = 'NEEDS_REASSESSMENT',
@@ -20,8 +20,16 @@ enum FormFieldActionsEnum {
 export class PageInnovationHowToProceedComponent extends CoreComponent {
   innovationId: string;
   baseUrl: string;
+  action: FormFieldActionsEnum;
 
-  form: FormGroup;
+  form = new FormGroup(
+    {
+      action: new FormControl<null | FormFieldActionsEnum>(null, {
+        validators: CustomValidators.required('Please choose an option')
+      })
+    },
+    { updateOn: 'blur' }
+  );
 
   formfieldAction = {
     title: 'Decide what to do next with your innovation',
@@ -29,8 +37,8 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     items: [
       {
         value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
-        label: `Find out if you qualify for a needs reassessment`,
-        description: `If you have significantly progressed your innovation or introduced major changes since your first needs assessment, you can submit your innovation for a needs reassessment. You may be offered a different type of support following the reassessment.`
+        label: `Submit for needs reassessment`,
+        description: `Update your innovation record before you submit for needs reassessment to get access to the right support.`
       },
       {
         value: FormFieldActionsEnum.NO_ACTION,
@@ -42,7 +50,10 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.action = this.activatedRoute.snapshot.queryParams.action;
+
     const isOwner = this.stores.context.getInnovation().loggedUser.isOwner;
 
     if (isOwner) {
@@ -62,19 +73,14 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
       );
     }
 
+    if (this.action) {
+      this.form.get('action')?.setValue(this.action);
+    }
+
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
 
     this.setPageTitle(this.formfieldAction.title, { showPage: false });
     this.setBackLink('Go back', this.baseUrl);
-
-    this.form = new FormGroup(
-      {
-        action: new FormControl<null | FormFieldActionsEnum>(null, {
-          validators: CustomValidators.required('Please choose an option')
-        })
-      },
-      { updateOn: 'blur' }
-    );
 
     // Throw notification read dismiss.
     this.stores.context.dismissNotification(this.innovationId, {
@@ -92,15 +98,21 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.ARCHIVE:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`);
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`, {
+          action: FormFieldActionsEnum.ARCHIVE
+        });
         break;
 
       case FormFieldActionsEnum.DELETE_ACCOUNT:
-        this.redirectTo('/innovator/account/manage-account/delete');
+        this.redirectTo('/innovator/account/manage-account/delete', {
+          action: FormFieldActionsEnum.DELETE_ACCOUNT
+        });
         break;
 
       case FormFieldActionsEnum.NEEDS_REASSESSMENT:
-        this.redirectTo(`${this.baseUrl}/how-to-proceed/needs-reassessment-send`);
+        this.redirectTo(`${this.baseUrl}/how-to-proceed/needs-reassessment-send`, {
+          action: FormFieldActionsEnum.NEEDS_REASSESSMENT
+        });
         break;
 
       case FormFieldActionsEnum.NO_ACTION:

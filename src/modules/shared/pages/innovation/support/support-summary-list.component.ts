@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ActivatedRoute } from '@angular/router';
+import { NotificationContextDetailEnum } from '@app/base/enums';
+import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import {
+  InnovationAssessmentListDTO,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
   SupportSummarySectionType
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@app/base/enums';
-import { ActivatedRoute } from '@angular/router';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { ObservableInput, forkJoin } from 'rxjs';
-import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -31,6 +32,10 @@ type unitsListType = SupportSummaryOrganisationsListDTO[SupportSummarySectionTyp
   canDoProgressUpdates: boolean;
 };
 
+type innovationAssessmentListType = InnovationAssessmentListDTO & {
+  linkText: string;
+};
+
 const lsCacheId = 'page-innovations-support-summary-list::open-units';
 
 @Component({
@@ -40,6 +45,7 @@ const lsCacheId = 'page-innovations-support-summary-list::open-units';
 export class PageInnovationSupportSummaryListComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
   lsCache: Set<string>;
+  innovationAssessmentsList: innovationAssessmentListType[] = [];
 
   // Flags
   isQualifyingAccessorRole: boolean;
@@ -88,8 +94,10 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const subscriptions: {
       supportSummaryOrganisationsList: ObservableInput<SupportSummaryOrganisationsListDTO>;
       organisationsList?: ObservableInput<OrganisationsListDTO[]>;
+      innovationAssessmentsObservable: ObservableInput<InnovationAssessmentListDTO[]>;
     } = {
-      supportSummaryOrganisationsList: this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id)
+      supportSummaryOrganisationsList: this.innovationsService.getSupportSummaryOrganisationsList(this.innovation.id),
+      innovationAssessmentsObservable: this.innovationsService.getInnovationAssessmentsList(this.innovation.id)
     };
 
     if (this.isQualifyingAccessorRole) {
@@ -130,6 +138,11 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             : ''
         }));
 
+        this.innovationAssessmentsList = results.innovationAssessmentsObservable.map(item => ({
+          ...item,
+          linkText: `${item.majorVersion > 1 ? 'Needs reassessment' : 'Needs assessment'} ${UtilsHelper.getAssessmentVersion(item.majorVersion, item.minorVersion)}`
+        }));
+
         this.isSuggestionsListEmpty = !this.sectionsList.some(s => s.unitsList.length > 0);
 
         const queryUnitId = this.activatedRoute.snapshot.queryParams.unitId;
@@ -164,12 +177,14 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
 
           const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
 
-          this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
-            this.innovation.id,
-            userUnitId,
-            results.organisationsList ?? [],
-            engagingUnitsIds
-          ).length;
+          this.showSuggestOrganisationsToSupportLink =
+            this.innovation.status === InnovationStatusEnum.IN_PROGRESS &&
+            !!UtilsHelper.getAvailableOrganisationsToSuggest(
+              this.innovation.id,
+              userUnitId,
+              results.organisationsList ?? [],
+              engagingUnitsIds
+            ).length;
         }
 
         // Throw notification read dismiss.

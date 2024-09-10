@@ -29,6 +29,8 @@ export const TEXTAREA_LENGTH_LIMIT = {
 export type TextareaLengthLimitType = keyof typeof TEXTAREA_LENGTH_LIMIT;
 
 export const INPUT_LENGTH_LIMIT = {
-  xs: 100
+  xxs: 100,
+  xs: 200,
+  l: 1500
 };
 export type InputLengthLimitType = keyof typeof INPUT_LENGTH_LIMIT;

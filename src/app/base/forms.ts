@@ -5,7 +5,11 @@ export { FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 // // Components.
 export { FormEngineComponent } from '@modules/shared/forms/engine/form-engine.component';
 // // Models.
-export { FormEngineModel, FormEngineParameterModel } from '@modules/shared/forms/engine/models/form-engine.models';
+export {
+  FormEngineModel,
+  FormEngineParameterModel,
+  FormEngineParameterModelV3
+} from '@modules/shared/forms/engine/models/form-engine.models';
 export {
   WizardEngineModel,
   WizardStepType,

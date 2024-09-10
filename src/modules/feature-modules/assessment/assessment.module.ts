@@ -21,11 +21,13 @@ import { InnovationAssessmentExemptionInfoComponent } from './pages/innovation/a
 import { InnovationAssessmentExemptionUpsertComponent } from './pages/innovation/assessment/exemption-upsert.component';
 import { InnovationChangeAssessorComponent } from './pages/innovation/change-assessor/change-assessor.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 // // Innovations.
 import { InnovationsListComponent } from './pages/innovations/innovations-list.component';
 
 // Services.
 import { AssessmentService } from './services/assessment.service';
+import { AnnouncementsService } from '../announcements/services/announcements.service';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
@@ -46,12 +48,14 @@ import { AssessmentService } from './services/assessment.service';
     InnovationAssessmentExemptionUpsertComponent,
     InnovationOverviewComponent,
     InnovationChangeAssessorComponent,
+    PageInnovationAssessmentEditReasonComponent,
     // // Innovations.
     InnovationsListComponent
   ],
   providers: [
     // Services.
-    AssessmentService
+    AssessmentService,
+    AnnouncementsService
   ]
 })
 export class AssessmentModule {}

@@ -71,7 +71,8 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
           });
         } else {
           this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({
-            innovationId: this.innovationId
+            innovationId: this.innovationId,
+            schema: this.stores.context.getIrSchema()
           });
         }
       } else {

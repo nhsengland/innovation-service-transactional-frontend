@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationSectionEnum, InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -32,6 +32,11 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   isAssessmentType: boolean;
   isAdmin: boolean;
   isArchived: boolean;
+  canCancel = false;
+  canReopen = false;
+  canSendMessage = false;
+
+  readonly innovation = this.stores.context.getInnovation();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -114,8 +119,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
       this.task = response;
       this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
-
-      const section = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
       this.sectionTitle = section
         ? `${section.group.number}.${section.section.number} ${section.section.title}`
         : 'Section no longer available';
@@ -145,7 +149,30 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         });
       }
 
+      this.setAllowedActions();
+
       this.setPageStatus('READY');
     });
+  }
+
+  private setAllowedActions() {
+    this.canReopen =
+      !!this.task &&
+      !this.isArchived &&
+      ['DONE', 'DECLINED'].includes(this.task.status) &&
+      this.task.sameOrganisation &&
+      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+
+    this.canCancel =
+      !!this.task &&
+      this.task.status === 'OPEN' &&
+      this.task.sameOrganisation &&
+      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+
+    this.canSendMessage =
+      !this.isArchived &&
+      (this.isInnovatorType ||
+        this.isAssessmentType ||
+        (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }

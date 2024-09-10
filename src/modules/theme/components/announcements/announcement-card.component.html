@@ -1,0 +1,24 @@
+<ng-container *ngIf="announcementCardData">
+  <div class="nhsuk-card">
+    <div class="nhsuk-card__content">
+      <div class="d-flex justify-content-space-between nhsuk-u-margin-bottom-1">
+        <div>
+          <h2 class="nhsuk-card__heading nhsuk-heading-xs text-pre-line text-word-break">{{ announcementCardData.title }}</h2>
+        </div>
+        <div *ngIf="isDashboardPage || isOverviewPage" class="width-15 nhsuk-u-font-size-19 text-align-right">
+          <a href="javascript:void(0)" (click)="clearAnnouncement()">Clear</a>
+        </div>
+      </div>
+      <p *ngIf="announcementCardData.innovations && !isOverviewPage" class="font-color-secondary">
+        <span
+          >{{ "Re:" }}
+          <span>{{ innovationsList }}</span>
+        </span>
+      </p>
+      <p class="nhsuk-card__description text-pre-line text-word-break">{{ announcementCardData.params.content }}</p>
+      <a *ngIf="announcementCardData.params.link" class="text-pre-line text-word-break" [href]="announcementCardData.params.link.url" target="_blank" rel="noopener noreferrer">
+        {{ announcementCardData.params.link.label }} (opens in a new window)
+      </a>
+    </div>
+  </div>
+</ng-container>

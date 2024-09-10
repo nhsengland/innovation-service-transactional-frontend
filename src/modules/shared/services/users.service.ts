@@ -7,6 +7,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType } from '@app/base/types';
 
+import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { GetUsersRequestDTO, UsersListDTO } from '../dtos/users.dto';
 
 export type UserListFiltersType = {
@@ -60,5 +61,23 @@ export class UsersService extends CoreService {
         }))
       }))
     );
+  }
+
+  // these are only used by the admin module but are used by admin module but are used in a share component
+  getUserMFAInfo(userId: string): () => Observable<MFAInfoDTO> {
+    return () => {
+      const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/${userId}/mfa`);
+      return this.http.get<MFAInfoDTO>(url.buildUrl()).pipe(
+        take(1),
+        map(response => response)
+      );
+    };
+  }
+
+  updateUserMFAInfo(userId: string): (body: MFAInfoDTO) => Observable<void> {
+    return (body: MFAInfoDTO) => {
+      const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/${userId}/mfa`);
+      return this.http.put<void>(url.buildUrl(), body).pipe(take(1));
+    };
   }
 }

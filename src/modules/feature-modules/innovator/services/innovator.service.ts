@@ -47,7 +47,6 @@ export class InnovatorService extends CoreService {
   createInnovation(body: {
     name: string;
     description: string;
-    countryName: string;
     postcode?: string;
     website?: string;
   }): Observable<{ id: string }> {
@@ -55,19 +54,6 @@ export class InnovatorService extends CoreService {
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)
-    );
-  }
-
-  createNeedsReassessment(
-    innovationId: string,
-    body: { updatedInnovationRecord: string; description: string }
-  ): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/reassessments')
-      .setPathParams({ innovationId });
-    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
-      take(1),
-      finalize(() => this.stores.context.clearInnovation())
     );
   }
 

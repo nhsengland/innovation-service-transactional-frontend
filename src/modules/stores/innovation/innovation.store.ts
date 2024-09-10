@@ -5,7 +5,6 @@ import { map } from 'rxjs/operators';
 
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
-import { WizardEngineModel } from '@modules/shared/forms';
 import { Store } from '../store.class';
 
 import { InnovationService } from './innovation.service';
@@ -23,9 +22,15 @@ import {
   SectionsSummaryModel
 } from './innovation.models';
 
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
+
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
-  constructor(private innovationsService: InnovationService) {
+  constructor(
+    private innovationsService: InnovationService,
+    private irSchemaStore: InnovationRecordSchemaStore
+  ) {
     super('store::innovations', new InnovationModel());
   }
 
@@ -49,8 +54,9 @@ export class InnovationStore extends Store<InnovationModel> {
 
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
     return this.innovationsService.getInnovationSections(innovationId).pipe(
-      map(response =>
-        getInnovationRecordConfig().map(item => ({
+      map(response => {
+        return this.irSchemaStore.getIrSchemaSectionsListV3().map(item => ({
+          id: item.id,
           title: item.title,
           sections: item.sections.map(ss => {
             const sectionState = response.find(a => a.section === ss.id) || {
@@ -76,8 +82,8 @@ export class InnovationStore extends Store<InnovationModel> {
               openTasksCount: sectionState.openTasksCount
             };
           })
-        }))
-      )
+        }));
+      })
     );
   }
 
@@ -140,8 +146,13 @@ export class InnovationStore extends Store<InnovationModel> {
     return section;
   }
 
-  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardEngineModel {
-    return this.getInnovationRecordSection(sectionId, version)?.wizard;
+  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
+    // return this.getInnovationRecordSection(sectionId, version)?.wizard;
+    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
+  }
+
+  getInnovationRecordSectionWizardV3(sectionId: string, version?: string): WizardIRV3EngineModel {
+    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
   }
 
   getInnovationRecordSectionIdentification(

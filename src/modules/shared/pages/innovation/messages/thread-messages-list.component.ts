@@ -1,4 +1,3 @@
-import { UserRoleEnum } from './../../../../stores/authentication/authentication.enums';
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -70,6 +69,8 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   isAdmin: boolean;
   isFollower: boolean = false;
   isArchived: boolean;
+  isInAssessment: boolean;
+  canCreateMessage: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -113,6 +114,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
+
+    this.canCreateMessage = !this.isAdmin && (!this.isAccessorType || !this.isInAssessment);
   }
 
   ngOnInit(): void {

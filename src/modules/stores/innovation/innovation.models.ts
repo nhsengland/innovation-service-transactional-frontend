@@ -3,7 +3,12 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSectionsVersions } from './innovation-record/ir-versions.types';
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationSectionEnum } from './innovation.enums';
+import {
+  ActivityLogItemsEnum,
+  ActivityLogTypesEnum,
+  InnovationGroupedStatusEnum,
+  InnovationSectionEnum
+} from './innovation.enums';
 
 // Store state model.
 export class InnovationModel {
@@ -23,7 +28,7 @@ export type InnovationSectionConfigType = {
 
 export type sectionType = {
   id: null | string;
-  section: InnovationSectionEnum;
+  section: InnovationSectionEnum | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };
@@ -65,7 +70,7 @@ export type getInnovationInfoResponse = {
 
 export type InnovationSectionsListDTO = {
   id: null | string;
-  section: InnovationSectionsVersions;
+  section: InnovationSectionsVersions | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   submittedAt: null | DateISOType;
   submittedBy: null | {
@@ -92,9 +97,10 @@ export type GetInnovationEvidenceDTO = {
 };
 
 export type SectionsSummaryModel = {
+  id: string;
   title: string;
   sections: {
-    id: InnovationSectionsVersions;
+    id: InnovationSectionsVersions | string;
     title: string;
     status: keyof typeof INNOVATION_SECTION_STATUS;
     submittedAt: null | DateISOType;
@@ -224,12 +230,13 @@ export const ACTIVITY_LOG_ITEMS: {
   SECTION_SUBMISSION_DEPRECATED: { type: ActivityLogTypesEnum.INNOVATION_RECORD, details: null, link: 'SECTION' },
   INNOVATION_SUBMISSION: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: null },
   NEEDS_ASSESSMENT_START: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: 'COMMENT', link: null },
+  NEEDS_ASSESSMENT_START_EDIT: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: null },
   NEEDS_ASSESSMENT_COMPLETED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
   NEEDS_ASSESSMENT_EDITED: { type: ActivityLogTypesEnum.NEEDS_ASSESSMENT, details: null, link: 'NEEDS_ASSESSMENT' },
   NEEDS_ASSESSMENT_REASSESSMENT_REQUESTED: {
     type: ActivityLogTypesEnum.NEEDS_ASSESSMENT,
     details: null,
-    link: 'NEEDS_REASSESSMENT'
+    link: null
   },
   ORGANISATION_SUGGESTION: {
     type: ActivityLogTypesEnum.SUPPORT,
@@ -247,3 +254,10 @@ export const ACTIVITY_LOG_ITEMS: {
   TASK_STATUS_OPEN_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' },
   TASK_STATUS_CANCELLED_UPDATE: { type: ActivityLogTypesEnum.TASKS, details: null, link: 'TASK' }
 };
+
+export const ASSESSMENT_COMPLETED_STATUSES = [
+  InnovationGroupedStatusEnum.AWAITING_SUPPORT,
+  InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
+  InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
+  InnovationGroupedStatusEnum.ARCHIVED
+];

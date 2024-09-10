@@ -2,7 +2,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <ng-container *ngIf="wizard.isQuestionStep()">
-        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <theme-form-engine-v3 formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" />
         <button type="submit" form="sectionForm" [disabled]="!saveButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')">{{ saveButton.label }}</button>
       </ng-container>
 
@@ -13,20 +13,24 @@
               <ng-container *ngSwitchCase="'button'">
                 <div class="width-max-content">
                   <dt class="nhsuk-u-margin-top-5">
-                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onChangeStep(item.editStepNumber || 1)">{{ item.label }}</button>
+                    <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0" (click)="onChangeStep(item.editStepNumber, item)">{{ item.label }}</button>
                   </dt>
                 </div>
               </ng-container>
               <ng-container *ngSwitchDefault>
                 <div class="nhsuk-summary-list__row">
-                  <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+                  <dt class="nhsuk-summary-list__key">{{ item.label | irv3translate: "questions" }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-                    <span *ngIf="!item.allowHTML">{{ item.value }}</span>
+                    <span *ngIf="!item.allowHTML">{{ item.value | irv3translate: "items" : item.stepId }}</span>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
-                    <a href="javascript:void(0)" (click)="onChangeStep(item.editStepNumber || 1)" *ngIf="displayChangeButtonList.includes(i)">
-                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                    <a
+                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
+                      href="javascript:void(0)"
+                      (click)="onChangeStep(item.editStepNumber, item)"
+                    >
+                      Change<span class="nhsuk-u-visually-hidden"> {{ item.label }} </span>
                     </a>
                   </dd>
                 </div>

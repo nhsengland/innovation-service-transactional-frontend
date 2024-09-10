@@ -8,9 +8,17 @@ import { InnovationStatusEnum } from '../innovation/innovation.enums';
 import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
-import { ContextInnovationType, ContextPageLayoutType, ContextPageStatusType } from './context.types';
+import {
+  ContextAssessmentType,
+  ContextInnovationType,
+  ContextPageLayoutType,
+  ContextPageStatusType,
+  ContextSchemaType
+} from './context.types';
 
 import { AuthenticationModel } from '../authentication/authentication.models';
+import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaService } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
 
 @Injectable()
@@ -18,7 +26,8 @@ export class ContextStore extends Store<ContextModel> {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private logger: NGXLogger,
-    private contextService: ContextService
+    private contextService: ContextService,
+    private innovationRecordSchemaService: InnovationRecordSchemaService
   ) {
     super('STORE::Context', new ContextModel());
   }
@@ -141,6 +150,32 @@ export class ContextStore extends Store<ContextModel> {
     this.setPageLayoutState();
   }
 
+  // Innovation Record Schema methods.
+  setIrSchema(data: ContextSchemaType): void {
+    this.state.irSchema = data;
+    this.setState();
+  }
+
+  getIrSchema(): InnovationRecordSchemaInfoType {
+    if (!this.state.irSchema?.schema) {
+      console.error('Context has NO schema');
+      return { id: '', version: 0, schema: { sections: [] } };
+    }
+    return this.state.irSchema.schema;
+  }
+
+  clearIrSchema(): void {
+    this.state.irSchema = null;
+    this.setState();
+  }
+
+  getOrLoadIrSchema(): Observable<ContextSchemaType> {
+    if (this.state.irSchema?.schema && Date.now() < this.state.irSchema.expiryAt) {
+      return of(this.state.irSchema);
+    }
+    return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
+  }
+
   // Innovation methods.
   getInnovation(): ContextInnovationType {
     if (!this.state.innovation) {
@@ -150,6 +185,7 @@ export class ContextStore extends Store<ContextModel> {
         name: '',
         status: InnovationStatusEnum.CREATED,
         statusUpdatedAt: null,
+        hasBeenAssessed: false,
         loggedUser: { isOwner: false },
         reassessmentCount: 0,
         categories: [],
@@ -204,6 +240,42 @@ export class ContextStore extends Store<ContextModel> {
     return this.contextService.getInnovationContextInfo(innovationId, context).pipe(
       tap(innovation => {
         this.setInnovation(innovation);
+      })
+    );
+  }
+
+  // Assessment methods
+  getAssessment(): ContextAssessmentType {
+    if (!this.state.assessment) {
+      console.error('Context has NO assessment');
+      return {
+        id: '',
+        description: '',
+        expiryAt: 0
+      } as any;
+    }
+    return this.state.assessment;
+  }
+  setAssessment(data: ContextAssessmentType): void {
+    this.state.assessment = data;
+    this.setState();
+  }
+  clearAssessment(): void {
+    this.state.assessment = null;
+    this.setState();
+  }
+
+  getOrLoadAssessment(innovationId: string, assessmentId: string): Observable<ContextAssessmentType> {
+    if (
+      this.state.assessment &&
+      this.state.assessment.id === assessmentId &&
+      Date.now() < this.state.assessment.expiryAt
+    ) {
+      return of(this.state.assessment);
+    }
+    return this.contextService.getAssessmentContextInfo(innovationId, assessmentId).pipe(
+      tap(assessment => {
+        this.setAssessment(assessment);
       })
     );
   }

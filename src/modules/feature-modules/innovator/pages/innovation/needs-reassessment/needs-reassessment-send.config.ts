@@ -1,15 +1,40 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel, WizardStepType } from '@modules/shared/forms';
+import {
+  FormEngineModel,
+  WizardSummaryType,
+  WizardEngineModel,
+  WizardStepType,
+  FormEngineParameterModel
+} from '@modules/shared/forms';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
+
+export type ReassessmentSendType = {
+  reassessmentReason: ReassessmentReasonsType[];
+  otherReassessmentReason?: string;
+  description: string;
+  whatSupportDoYouNeed: string;
+};
+
+export type ReassessmentReasonsType = 'NO_SUPPORT' | 'PREVIOUSLY_ARCHIVED' | 'HAS_PROGRESSED_SIGNIFICANTLY' | 'OTHER';
 
 // Labels.
 const stepsLabels = {
-  l1: 'Have you updated your Innovation record since submitting it to the last needs assessment?',
-  l2: 'What has changed with your innovation and what support you need next?'
-};
-
-const stepsLabelsInnovationPaused = {
-  l1: 'Have you updated your innovation record since you stopped sharing it?',
-  l2: 'How has your innovation changed?'
+  q1: {
+    id: 'reassessmentReason',
+    label: 'Why do you want a needs reassessment?',
+    description:
+      'Update your innovation record before you submit for needs reassessment to get access to the right support.<br><br>Select all that apply.'
+  },
+  q2: {
+    id: 'description',
+    label: 'Explain any significant changes to your innovation since your last needs assessment',
+    description:
+      'For example, you have conducted clinical trials, or have obtained regulatory approval.<br><br>Explain changes'
+  },
+  q3: {
+    id: 'whatSupportDoYouNeed',
+    label: 'What support do you need next?',
+    description: 'Explain support required'
+  }
 };
 
 // Catalogs.
@@ -19,16 +44,9 @@ export const yesNoItems = [
 ];
 
 // Types.
-type InboundPayloadType = { status: InnovationStatusEnum };
-type StepPayloadType = {
-  updatedInnovationRecord: '' | 'YES' | 'NO';
-  description: string;
-  status: InnovationStatusEnum;
-};
-export type OutboundPayloadType = {
-  updatedInnovationRecord: string;
-  description: string;
-};
+type InboundPayloadType = ReassessmentSendType & { status: InnovationStatusEnum };
+type StepPayloadType = ReassessmentSendType & { status: InnovationStatusEnum };
+export type OutboundPayloadType = ReassessmentSendType;
 
 export const NEEDS_REASSESSMENT_CONFIG: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
@@ -42,19 +60,57 @@ export const NEEDS_REASSESSMENT_CONFIG: WizardEngineModel = new WizardEngineMode
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
+export const REASSESSMENT_REASON_ITEMS = [
+  { value: 'NO_SUPPORT', label: 'There is no active support for my innovation' },
+  {
+    value: 'PREVIOUSLY_ARCHIVED',
+    label: 'My innovation was previously archived or I stopped working on it for a period of time'
+  },
+  {
+    value: 'HAS_PROGRESSED_SIGNIFICANTLY',
+    label: 'My innovation has progressed significantly since my last needs assessment'
+  },
+  {
+    value: 'OTHER',
+    label: 'Other',
+    conditional: new FormEngineParameterModel({
+      id: 'otherReassessmentReason',
+      dataType: 'text',
+      placeholder: 'Explain',
+      validations: { isRequired: [true, 'Add explanation'], maxLength: 100 }
+    })
+  }
+];
+
 function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary'): void {
   steps.splice(0);
 
+  if (currentValues.status !== 'ARCHIVED') {
+    steps.push(
+      new FormEngineModel({
+        parameters: [
+          {
+            id: stepsLabels.q1.id,
+            dataType: 'checkbox-array',
+            label: stepsLabels.q1.label,
+            ...(stepsLabels.q1.description && { description: stepsLabels.q1.description }),
+            validations: { isRequired: [true, 'Add explanation'] },
+            items: REASSESSMENT_REASON_ITEMS
+          }
+        ]
+      })
+    );
+  }
   steps.push(
     new FormEngineModel({
       parameters: [
         {
-          id: 'updatedInnovationRecord',
-          dataType: 'radio-group',
-          label:
-            currentValues.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
-          validations: { isRequired: [true, 'Choose one option'] },
-          items: yesNoItems
+          id: stepsLabels.q2.id,
+          dataType: 'textarea',
+          label: stepsLabels.q2.label,
+          ...(stepsLabels.q2.description && { description: stepsLabels.q2.description }),
+          validations: { isRequired: [true, 'Add explanation'] },
+          lengthLimit: 'l'
         }
       ]
     }),
@@ -62,16 +118,12 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
     new FormEngineModel({
       parameters: [
         {
-          id: 'description',
+          id: stepsLabels.q3.id,
           dataType: 'textarea',
-          label:
-            currentValues.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
-          description:
-            currentValues.status === InnovationStatusEnum.ARCHIVED
-              ? 'Let us know what has changed and what support you now need with your innovation.'
-              : 'Enter your comment',
-          validations: { isRequired: [true, 'A comment is required'] },
-          lengthLimit: 'xs'
+          label: stepsLabels.q3.label,
+          ...(stepsLabels.q3.description && { description: stepsLabels.q3.description }),
+          validations: { isRequired: [true, 'Add explanation'] },
+          lengthLimit: 'l'
         }
       ]
     })
@@ -80,32 +132,52 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
-    updatedInnovationRecord: '',
+    reassessmentReason: [],
+    otherReassessmentReason: '',
     description: '',
+    whatSupportDoYouNeed: '',
     status: data.status
   };
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
-    updatedInnovationRecord: data.updatedInnovationRecord,
-    description: data.description
+    reassessmentReason:
+      data.status === InnovationStatusEnum.ARCHIVED ? ['PREVIOUSLY_ARCHIVED'] : data.reassessmentReason,
+    ...(data.otherReassessmentReason && { otherReassessmentReason: data.otherReassessmentReason }),
+    description: data.description,
+    whatSupportDoYouNeed: data.whatSupportDoYouNeed
   };
 }
 
 function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
+  let editStepNumber = 1;
 
   toReturn.push(
     {
-      label: data.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l1 : stepsLabels.l1,
-      value: yesNoItems.find(item => item.value === data.updatedInnovationRecord)?.label,
-      editStepNumber: 1
+      label: stepsLabels.q1.label,
+      value:
+        data.status === InnovationStatusEnum.ARCHIVED
+          ? REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? ''
+          : data.reassessmentReason
+              .map(chosenReason =>
+                chosenReason === 'OTHER'
+                  ? data.otherReassessmentReason
+                  : REASSESSMENT_REASON_ITEMS.find(i => i.value === chosenReason)?.label
+              )
+              .join('\n'),
+      editStepNumber: data.status === InnovationStatusEnum.ARCHIVED ? undefined : editStepNumber++
     },
     {
-      label: data.status === InnovationStatusEnum.ARCHIVED ? stepsLabelsInnovationPaused.l2 : stepsLabels.l2,
+      label: stepsLabels.q2.label,
       value: data.description,
-      editStepNumber: 2
+      editStepNumber: editStepNumber++
+    },
+    {
+      label: stepsLabels.q3.label,
+      value: data.whatSupportDoYouNeed,
+      editStepNumber: editStepNumber++
     }
   );
 

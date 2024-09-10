@@ -1,7 +1,11 @@
 <div *ngIf="data.innovation" class="nhsuk-u-padding-top-3">
   <div class="d-flex align-items-center justify-content-space-between nhsuk-u-padding-bottom-3">
     <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ data.innovation.name }}</p>
-    <a *ngIf="data.link" [routerLink]="data.link.url">{{ data.link.label }}</a>
+    <div *ngIf="data.links.length" class="d-flex flex-direction-column text-align-right">
+      <ng-container *ngFor="let link of data.links; last as lastItem">
+        <a [ngClass]="{ 'nhsuk-u-margin-bottom-2': !lastItem }" class="nhsuk-u-margin-bottom-2" [routerLink]="link.url" [queryParams]="link.queryParams">{{ link.label }}</a>
+      </ng-container>
+    </div>
   </div>
 
   <theme-header-archived-banner />

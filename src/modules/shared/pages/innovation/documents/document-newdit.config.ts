@@ -7,8 +7,12 @@ import {
   InnovationDocumentInfoOutDTO,
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 // import { InnovationService } from '@modules/stores';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import {
+  getAllSectionsList,
+  getAllSectionsListV3
+} from '@modules/stores/innovation/innovation-record/ir-versions.config';
 // import { StringsHelper } from '@app/base/helpers';
 
 // Labels.
@@ -31,6 +35,7 @@ const stepsLabels = {
 type InboundPayloadType = Partial<InnovationDocumentInfoOutDTO> & {
   innovationId: string;
   wizardType: 'WIZARD_BASE_QUESTIONS' | 'WIZARD_EDIT_QUESTIONS' | 'WIZARD_WITH_LOCATION_QUESTIONS';
+  schema: InnovationRecordSchemaInfoType;
 };
 type StepPayloadType = {
   // Logic fields.
@@ -98,7 +103,8 @@ export const WIZARD_BASE_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   inboundParsing: (data: InboundPayloadType) => inboundParsing({ ...data, wizardType: 'WIZARD_BASE_QUESTIONS' }),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+  summaryParsing: (data: StepPayloadType, steps?: FormEngineModel[], schema?: InnovationRecordSchemaInfoType) =>
+    summaryParsing(data, schema)
 });
 
 export const WIZARD_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -129,7 +135,8 @@ export const WIZARD_EDIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   inboundParsing: (data: InboundPayloadType) => inboundParsing({ ...data, wizardType: 'WIZARD_EDIT_QUESTIONS' }),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+  summaryParsing: (data: StepPayloadType, steps?: FormEngineModel[], schema?: InnovationRecordSchemaInfoType) =>
+    summaryParsing(data, schema)
 });
 
 export const WIZARD_WITH_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
@@ -148,19 +155,25 @@ export const WIZARD_WITH_LOCATION_QUESTIONS: WizardEngineModel = new WizardEngin
   ],
   showSummary: true,
   runtimeRules: [
-    (steps: WizardStepType[], currentValues: StepPayloadType, currentStep: number | 'summary') =>
-      wizardWithLocationRuntimeRules(steps, currentValues, currentStep)
+    (
+      steps: WizardStepType[],
+      currentValues: StepPayloadType,
+      currentStep: number | 'summary',
+      schema?: InnovationRecordSchemaInfoType
+    ) => wizardWithLocationRuntimeRules(steps, currentValues, currentStep, schema)
   ],
   inboundParsing: (data: InboundPayloadType) =>
     inboundParsing({ ...data, wizardType: 'WIZARD_WITH_LOCATION_QUESTIONS' }),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
-  summaryParsing: (data: StepPayloadType) => summaryParsing(data)
+  summaryParsing: (data: StepPayloadType, steps?: FormEngineModel[], schema?: InnovationRecordSchemaInfoType) =>
+    summaryParsing(data, schema)
 });
 
 function wizardWithLocationRuntimeRules(
   steps: WizardStepType[],
   data: StepPayloadType,
-  currentStep: number | 'summary'
+  currentStep: number | 'summary',
+  schema: InnovationRecordSchemaInfoType | undefined
 ): void {
   // As we need to do async calls, we do it only one time at the begginning.
   // Response will be received after this method finishes, but that's not a problem as this information is only needed on step 3.
@@ -178,7 +191,7 @@ function wizardWithLocationRuntimeRules(
   // }
 
   steps.splice(1);
-
+  const innovationSectionsItems = schema ? getAllSectionsListV3(schema) : [];
   if (data.relatedWithSection === 'YES') {
     steps.push(
       new FormEngineModel({
@@ -313,10 +326,12 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   };
 }
 
-function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
+function summaryParsing(data: StepPayloadType, schema?: InnovationRecordSchemaInfoType): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   let editStepNumber = 1;
+
+  const innovationSectionsItems = schema ? getAllSectionsListV3(schema) : [];
 
   if (data.wizardType === 'WIZARD_WITH_LOCATION_QUESTIONS') {
     toReturn.push({

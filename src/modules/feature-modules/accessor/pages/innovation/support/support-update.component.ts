@@ -4,14 +4,18 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
-import { CustomValidators } from '@app/base/forms';
+import { CustomValidators, FileTypes } from '@app/base/forms';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { AccessorService } from '../../../services/accessor.service';
+
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { switchMap } from 'rxjs/operators';
+import { omit } from 'lodash';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -49,10 +53,20 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       }),
       accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
       message: new FormControl<string>('', CustomValidators.required('A message is required')),
-      suggestOrganisations: new FormControl<string>('YES', { validators: Validators.required, updateOn: 'change' })
+      suggestOrganisations: new FormControl<string>('YES', { validators: Validators.required, updateOn: 'change' }),
+      file: new FormControl<File | null>(null, [
+        CustomValidators.emptyFileValidator(),
+        CustomValidators.maxFileSizeValidator(20)
+      ]),
+      fileName: new FormControl<string>('')
     },
     { updateOn: 'blur' }
   );
+
+  configInputFile = {
+    acceptedFiles: [FileTypes.CSV, FileTypes.XLSX, FileTypes.DOCX, FileTypes.PDF],
+    maxFileSize: 20 // In Mb.
+  };
 
   formfieldSuggestOrganisations = {
     description: `Based on the innovation's current support status, can you refer another organisation to continue supporting this Innovation at this moment in time?`,
@@ -92,7 +106,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private usersService: UsersService,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private fileUploadService: FileUploadService
   ) {
     super();
 
@@ -229,7 +244,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         break;
     }
   }
-
   onSubmit(): void {
     if (!this.form.valid) {
       this.form.markAllAsTouched();
@@ -238,7 +252,18 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    const body = {
+    const body: ChangeSupportStatusDocumentType = this.createSupportStatusBody();
+
+    const file = this.form.value.file;
+    if (file) {
+      this.uploadFileAndSaveStatus(file, body);
+    } else {
+      this.saveSupportStatus(body);
+    }
+  }
+
+  private createSupportStatusBody(): ChangeSupportStatusDocumentType {
+    return {
       status: this.form.get('status')?.value ?? InnovationSupportStatusEnum.UNASSIGNED,
       accessors: this.selectedAccessors.map(item => ({
         id: item.id,
@@ -246,8 +271,37 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       })),
       message: this.form.get('message')?.value ?? ''
     };
+  }
 
-    this.accessorService.saveSupportStatus(this.innovationId, body, this.supportId).subscribe({
+  private uploadFileAndSaveStatus(file: any, body: ChangeSupportStatusDocumentType): void {
+    const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovationId };
+
+    this.fileUploadService
+      .uploadFile(httpUploadBody, file)
+      .pipe(
+        switchMap(response => {
+          const fileData = omit(response, 'url');
+          const updatedBody = {
+            ...body,
+            file: {
+              name: this.form.value.fileName!,
+              file: fileData
+            }
+          };
+          return this.accessorService.saveSupportStatus(this.innovationId, updatedBody, this.supportId);
+        })
+      )
+      .subscribe(this.getSaveSupportStatusSubscriber());
+  }
+
+  private saveSupportStatus(body: ChangeSupportStatusDocumentType): void {
+    this.accessorService
+      .saveSupportStatus(this.innovationId, body, this.supportId)
+      .subscribe(this.getSaveSupportStatusSubscriber());
+  }
+
+  private getSaveSupportStatusSubscriber(): { next: () => void; error: () => void } {
+    return {
       next: () => {
         if (
           this.chosenStatus &&
@@ -281,7 +335,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         };
         this.setAlertUnknownError();
       }
-    });
+    };
   }
 
   onSubmitRedirect() {

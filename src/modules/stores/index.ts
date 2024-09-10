@@ -13,3 +13,7 @@ export { ContextInnovationType } from './context/context.types';
 // // Innovation Store.
 export { InnovationStore } from './innovation/innovation.store';
 export { InnovationService } from './innovation/innovation.service';
+
+// // IR Schema Store.
+export { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
+export { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';

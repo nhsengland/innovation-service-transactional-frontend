@@ -1,6 +1,11 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ContextInnovationType, ContextPageLayoutType } from './context.types';
+import {
+  ContextAssessmentType,
+  ContextInnovationType,
+  ContextPageLayoutType,
+  ContextSchemaType
+} from './context.types';
 
 // Store state model.
 export class ContextModel {
@@ -13,6 +18,12 @@ export class ContextModel {
 
   // If has value, user is navigating within the context of a innovation.
   innovation: null | ContextInnovationType = null;
+
+  // For Innovation Record Schema
+  irSchema: null | ContextSchemaType = null;
+
+  // For assessment
+  assessment: null | ContextAssessmentType = null;
 
   // For back link navigation
   currentUrl: string | null = null;

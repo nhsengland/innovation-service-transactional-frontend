@@ -26,8 +26,12 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'ACCESSOR'">
-      <ng-container *ngIf="innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'; then requestActionBtn"></ng-container>
-
+      <ng-container *ngIf="innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'); then requestActionBtn"></ng-container>
+      <div *ngIf="innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      </div>
+        
       <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
     </ng-container>
 

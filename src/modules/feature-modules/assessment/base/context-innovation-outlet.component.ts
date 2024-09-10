@@ -5,6 +5,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -15,8 +16,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   data: {
     innovation: null | { id: string; name: string; status: InnovationStatusEnum; assessmentId?: string };
-    link: null | { label: string; url: string };
-  } = { innovation: null, link: null };
+    links: { label: string; url: string; queryParams?: { [key: string]: undefined | string } }[];
+  } = { innovation: null, links: [] };
 
   constructor(
     private router: Router,
@@ -47,45 +48,92 @@ export class ContextInnovationOutletComponent implements OnDestroy {
       assessmentId: innovation.assessment?.id
     };
 
-    // Do not show link, if ON any assessments/* route.
-    if (
-      url.endsWith(`/assessments/new`) ||
-      url.endsWith(`/assessments/${innovation.assessment?.id}`) ||
-      url.includes(`/assessments/${innovation.assessment?.id}/edit`)
-    ) {
-      this.data.link = null;
+    if (url.includes(`/assessments/`)) {
+      if (url.includes(`/${innovation.assessment?.id}`)) {
+        const assessmentEditUrl = `/assessments/${innovation.assessment?.id}/edit`;
+
+        const isAssessmentEditPage =
+          url.endsWith(assessmentEditUrl) ||
+          url.endsWith(`${assessmentEditUrl}/1`) ||
+          url.endsWith(`${assessmentEditUrl}/2`);
+        const isAssessmentEditReasonPage = url.endsWith(`${assessmentEditUrl}/reason`);
+
+        let assessmentQueryParam = undefined;
+        let editPageQueryParam = undefined;
+        if (isAssessmentEditPage) {
+          assessmentQueryParam = 'edit';
+          editPageQueryParam = url.endsWith('edit/2') ? '2' : '1';
+        } else if (isAssessmentEditReasonPage) {
+          assessmentQueryParam = 'editReason';
+        } else {
+          assessmentQueryParam = 'overview';
+        }
+
+        this.data.links = [
+          {
+            label: 'View innovation record',
+            url: `/assessment/innovations/${innovation.id}/record/sections/all`,
+            queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+          }
+        ];
+
+        const assessment = this.contextStore.getAssessment();
+        if (isAssessmentEditPage && assessment.minorVersion === 0) {
+          if (assessment.previousAssessment && (assessment.majorVersion > 1 || assessment.minorVersion)) {
+            const previousAssessmentType =
+              assessment.previousAssessment.majorVersion > 1 ? 'reassessment' : 'assessment';
+            this.data.links.push({
+              label: `View needs ${previousAssessmentType} ${UtilsHelper.getAssessmentVersion(assessment.previousAssessment.majorVersion, assessment.previousAssessment.minorVersion)} `,
+              url: `/assessment/innovations/${innovation.id}/assessments/${assessment.previousAssessment.id}`,
+              queryParams: { assessment: assessmentQueryParam, editPage: editPageQueryParam }
+            });
+          }
+        }
+      } else {
+        this.data.links = [];
+      }
     } else {
+      const assessmentType =
+        innovation.assessment && innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
       switch (innovation.status) {
         case InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT:
           if (!innovation.assessment?.id) {
-            this.data.link = {
-              label: 'Start needs assessment',
-              url: `/assessment/innovations/${innovation.id}/assessments/new`
-            };
+            this.data.links = [
+              {
+                label: 'Start needs assessment',
+                url: `/assessment/innovations/${innovation.id}/assessments/new`
+              }
+            ];
           } else {
-            this.data.link = {
-              label: 'Continue needs assessment',
-              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit`
-            };
+            this.data.links = [
+              {
+                label: `Continue needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment.majorVersion, innovation.assessment.minorVersion)}`,
+                url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment.id}/edit`
+              }
+            ];
           }
           break;
         case InnovationStatusEnum.NEEDS_ASSESSMENT:
-          this.data.link = {
-            label: 'Continue needs assessment',
-            url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit`
-          };
+          this.data.links = [
+            {
+              label: `Continue needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment?.majorVersion, innovation.assessment?.minorVersion)}`,
+              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}/edit`
+            }
+          ];
           break;
 
         case InnovationStatusEnum.IN_PROGRESS:
         case InnovationStatusEnum.ARCHIVED:
-          this.data.link = {
-            label: 'View needs assessment',
-            url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
-          };
+          this.data.links = [
+            {
+              label: `View needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment?.majorVersion, innovation.assessment?.minorVersion)}`,
+              url: `/assessment/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
+            }
+          ];
           break;
 
         default:
-          this.data.link = null;
+          this.data.links = [];
           break;
       }
     }

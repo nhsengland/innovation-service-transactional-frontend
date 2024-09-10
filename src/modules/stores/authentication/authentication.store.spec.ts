@@ -39,7 +39,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
         termsOfUseAccepted: false,
         hasInnovationTransfers: false,
         hasInnovationCollaborations: false,
-        hasAnnouncements: false,
+        hasLoginAnnouncements: {},
         passwordResetAt: null,
         firstTimeSignInAt: null,
         organisations: []
@@ -61,7 +61,7 @@ describe('Stores/AuthenticationStore/AuthenticationStore', () => {
         termsOfUseAccepted: false,
         hasInnovationTransfers: false,
         hasInnovationCollaborations: false,
-        hasAnnouncements: false,
+        hasLoginAnnouncements: {},
         passwordResetAt: null,
         firstTimeSignInAt: null,
         organisations: []

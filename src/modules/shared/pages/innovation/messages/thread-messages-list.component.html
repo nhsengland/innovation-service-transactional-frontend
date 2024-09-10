@@ -7,6 +7,11 @@
           <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
         </p>
 
+        <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+        </div>
+
         <ng-container *ngIf="(isAssessmentType || isAccessorType) && !isArchived">
           <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
             <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
@@ -45,7 +50,7 @@
 
           <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
-          <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="isAdmin === false">
+          <form *ngIf="canCreateMessage" [formGroup]="form" (ngSubmit)="onSubmit()">
             <theme-form-textarea controlName="message" description="Write a message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 
             <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
@@ -64,7 +69,7 @@
             </button>
           </form>
 
-          <div class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral">
+          <div *ngIf="canCreateMessage" class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral">
             <span class="nhsuk-u-visually-hidden">Information: </span>
             <span
               >Once sent, all recipients in this thread will be notified. For transparency reasons, this message can be seen and replied to by everyone who has access to this
@@ -92,7 +97,7 @@
               </p>
             </div>
 
-            <p class="nhsuk-u-margin-bottom-2 word-break">
+            <p class="nhsuk-u-margin-bottom-2 text-pre-line text-word-break">
               {{ message.message }}
               <span *ngIf="message.updatedAt && message.updatedAt !== message.createdAt" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-2"
                 >(last edited at {{ message.updatedAt | date: ("app.date_formats.long_date_time" | translate) }})</span

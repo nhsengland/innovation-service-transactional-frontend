@@ -3,19 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum } from '@app/base/enums';
-import { DatesHelper } from '@app/base/helpers';
+import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import {
-  maturityLevelItems,
-  yesNoItems,
-  yesPartiallyNoItems
-} from '@modules/stores/innovation/config/innovation-catalog.config';
+import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
@@ -24,12 +21,13 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 export class PageInnovationAssessmentOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   assessmentId: string;
+  assessmentQueryParam?: string;
+  editPageQueryParam?: string;
   innovation: ContextInnovationType;
 
   assessment?: InnovationNeedsAssessmentInfoDTO;
 
   innovationMaturityLevel = { label: '', value: '', levelIndex: 0, description: '', comment: '' };
-  innovationReassessment: { label?: string; value: null | string }[] = [];
   innovationSummary: { label?: string; value: null | string; comment: string }[] = [];
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
@@ -40,10 +38,13 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   isInnovatorType: boolean;
   isQualifyingAccessorRole: boolean;
 
-  isArchived: boolean;
+  isInProgress: boolean;
 
   assessmentHasBeenSubmitted = false;
   shouldShowUpdatedAt = false;
+  isReassessment = false;
+  assessmentType = '';
+  showAssessmentDetails = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -53,6 +54,9 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
+    this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
+    this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
+
     this.innovation = this.stores.context.getInnovation();
 
     this.isAdminType = this.stores.authentication.isAdminRole();
@@ -61,7 +65,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isQualifyingAccessorRole = this.isAccessorType && this.stores.authentication.isQualifyingAccessorRole();
 
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isInProgress = this.innovation.status === 'IN_PROGRESS';
   }
 
   ngOnInit(): void {
@@ -71,20 +75,9 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       this.assessmentHasBeenSubmitted = !!response.finishedAt;
       this.shouldShowUpdatedAt =
         DatesHelper.dateDiff(this.assessment.finishedAt || '', this.assessment.updatedAt || '') > 0;
-
-      if (this.assessment.reassessment) {
-        this.innovationReassessment = [
-          {
-            label:
-              'Did the innovator update the innovation record since submitting it to the previous needs assessment?',
-            value: yesNoItems.find(item => item.value === response.reassessment?.updatedInnovationRecord)?.label || ''
-          },
-          {
-            label: 'What has changed with the innovation and what support does the innovator need next?',
-            value: response.reassessment?.description || ''
-          }
-        ];
-      }
+      this.isReassessment = this.assessment.majorVersion > 1;
+      this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
+      this.showAssessmentDetails = !(this.assessment.majorVersion === 1 && this.assessment.minorVersion === 0);
 
       const maturityLevelIndex = (maturityLevelItems.findIndex(item => item.value === response.maturityLevel) || 0) + 1;
       this.innovationMaturityLevel = {
@@ -136,10 +129,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
-      this.setPageTitle(!this.assessment.reassessment ? 'Needs assessment' : 'Needs reassessment', {
-        hint: `Innovation ${this.innovation.name}`
-      });
-
       // Throw notification read dismiss.
       if (this.isInnovatorType) {
         this.stores.context.dismissNotification(this.innovationId, {
@@ -147,7 +136,38 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         });
       }
 
+      this.setGoBackLink();
+      this.updatePageTitle();
       this.setPageStatus('READY');
     });
+  }
+
+  updatePageTitle(): void {
+    let assessmentTitle = this.isReassessment ? 'Needs reassessment' : 'Needs assessment';
+    if (this.assessment?.isLatest && this.innovation.status === InnovationStatusEnum.NEEDS_ASSESSMENT) {
+      assessmentTitle = this.isReassessment ? 'In draft needs reassessment' : 'In draft needs assessment';
+    }
+
+    const pageTitle = `${assessmentTitle} ${UtilsHelper.getAssessmentVersion(this.assessment?.majorVersion, this.assessment?.minorVersion)}`;
+    const baseHint = `Innovation ${this.innovation.name}`;
+    this.setPageTitle(pageTitle, { hint: baseHint });
+  }
+
+  setGoBackLink(): void {
+    if (this.isAssessmentType) {
+      let goBackUrl = undefined;
+      const assessmentEditUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}/edit`;
+      switch (this.assessmentQueryParam) {
+        case 'editReason':
+          goBackUrl = `${assessmentEditUrl}/reason`;
+          break;
+        case 'edit':
+          goBackUrl = `${assessmentEditUrl}${this.editPageQueryParam ? `/${this.editPageQueryParam}` : ''}`;
+          break;
+      }
+      if (goBackUrl) {
+        this.setBackLink('Go back', goBackUrl);
+      }
+    }
   }
 }

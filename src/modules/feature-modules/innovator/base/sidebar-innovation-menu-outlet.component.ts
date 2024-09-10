@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
-import { ContextStore, InnovationStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { ViewportScroller } from '@angular/common';
+import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -26,7 +26,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private router: Router,
     private contextStore: ContextStore,
     private innovationStore: InnovationStore,
-    private scroller: ViewportScroller
+    private scroller: ViewportScroller,
+    private irSchemaStore: InnovationRecordSchemaStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -49,7 +50,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = this.innovationStore.getInnovationRecordSectionsTree('innovator', innovation.id);
+      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
@@ -59,8 +60,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         innovation.archivedStatus !== InnovationStatusEnum.CREATED
           ? [{ label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` }]
           : []),
-        ...(innovation.status === InnovationStatusEnum.IN_PROGRESS ||
-        innovation.archivedStatus === InnovationStatusEnum.IN_PROGRESS
+        ...(innovation.hasBeenAssessed
           ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }]
           : []),
         { label: 'Data sharing preferences', url: `/innovator/innovations/${innovation.id}/support` },

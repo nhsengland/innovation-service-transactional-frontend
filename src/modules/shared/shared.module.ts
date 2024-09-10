@@ -84,6 +84,7 @@ import { JoinArrayPipe } from './pipes/join-array.pipe';
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
 
 // Resolvers.
+import { InnovationAssessmentDataResolver } from './resolvers/innovation-assessment-data.resolver';
 import { InnovationDataResolver } from './resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from './resolvers/innovation-document-data.resolver';
 import { InnovationSectionDataResolver } from './resolvers/innovation-section-data.resolver';
@@ -115,6 +116,8 @@ import { PageSharedAccountManageAccountInfoComponent } from './pages/account/man
 import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessment/assessment-details.component';
+import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 @NgModule({
   imports: [
@@ -152,6 +155,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     WizardTaskNewMessageStepComponent,
     PageInnovationActivityLogComponent,
     PageInnovationAssessmentOverviewComponent,
+    InnovationAssessmentDetailsComponent,
     PageInnovationDataSharingAndSupportComponent,
     PageInnovationDocumentsNewditComponent,
     PageInnovationDocumentInfoComponent,
@@ -212,6 +216,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
+    IrV3TranslatePipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -220,6 +225,7 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
   ],
   providers: [
     // Resolvers.
+    InnovationAssessmentDataResolver,
     InnovationTaskDataResolver,
     InnovationDataResolver,
     InnovationDocumentDataResolver,
@@ -251,7 +257,11 @@ import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progre
     // Pipes.
     BytesPrettyPrintPipe,
     PluralTranslatePipe,
-    JoinArrayPipe
+    IrV3TranslatePipe,
+    JoinArrayPipe,
+
+    // Components.
+    InnovationAssessmentDetailsComponent
   ]
 })
 export class SharedModule {}

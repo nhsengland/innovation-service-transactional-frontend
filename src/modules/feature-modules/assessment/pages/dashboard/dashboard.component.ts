@@ -8,6 +8,11 @@ import { StatisticsCardType } from '@app/base/types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
+import {
+  AnnouncementType,
+  AnnouncementsService
+} from '@modules/feature-modules/announcements/services/announcements.service';
 
 @Component({
   selector: 'app-assessment-pages-dashboard',
@@ -26,9 +31,12 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   latestInnovations: TableModel<{ id: string; name: string; assessment: { id: string } | null }>;
 
+  announcements: AnnouncementType[] = [];
+
   constructor(
     private statisticsService: StatisticsService,
-    private innovationsService: InnovationsService
+    private innovationsService: InnovationsService,
+    private announcementsService: AnnouncementsService
   ) {
     super();
     this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
@@ -64,8 +72,9 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         ['id', 'name', 'assessment.id'],
         { latestWorkedByMe: true },
         { take: 5, skip: 0 }
-      )
-    ]).subscribe(([statistics, innovationsList]) => {
+      ),
+      this.announcementsService.getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE] })
+    ]).subscribe(([statistics, innovationsList, announcements]) => {
       this.latestInnovations.setData(innovationsList.data, innovationsList.count);
 
       this.cardsList = [
@@ -88,11 +97,17 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         }
       ];
 
+      this.announcements = announcements;
+
       this.setPageStatus('READY');
     });
   }
 
   getFooter(counter: number): string {
     return counter === 1 ? `${counter} innovation is overdue` : `${counter} innovations are overdue`;
+  }
+
+  onClearAnnouncement(announcementId: string) {
+    this.announcements = this.announcements.filter(a => a.id !== announcementId);
   }
 }

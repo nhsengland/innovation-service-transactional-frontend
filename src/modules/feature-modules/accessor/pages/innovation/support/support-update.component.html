@@ -69,11 +69,21 @@
             [label]="getMessageLabel()"
             [description]="getMessageDescription()"
             [pageUniqueField]="false"
-            lengthLimit="xl"
+            lengthLimit="xxl"
           ></theme-form-textarea>
 
           <div *ngIf="chosenStatus !== 'ENGAGING'" class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-6 nhsuk-u-margin-bottom-6">
             <p>Everyone will be able to see this message. It will appear on the innovation's support summary.</p>
+          </div>
+
+          <div *ngIf="!supportId">
+            <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Upload a document (optional)</h2>
+
+            <theme-form-file-upload-descriptive
+              description="You can upload 1 document up to 20MB. The file format must be CSV, XLSX, DOCX or PDF."
+              [pageUniqueField]="false"
+              [config]="configInputFile"
+            ></theme-form-file-upload-descriptive>
           </div>
 
           <button [disabled]="!submitButton.isActive" (click)="onSubmit()" class="nhsuk-button nhsuk-u-margin-top-3 nhsuk-u-margin-right-3">{{ submitButton.label }}</button>
@@ -116,7 +126,6 @@
               </div>
             </fieldset>
           </div>
-
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitRedirect()">Continue</button>
         </ng-container>
 

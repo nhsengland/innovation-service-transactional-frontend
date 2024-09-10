@@ -1,8 +1,10 @@
 # NHS Service Transaccional Frontend
 NHS Service Transactional Frontend is a visual gateway to the NHS Innovation Service, in the transactional component. It will be used by the following user profiles:
-Unregistered Innovators
-Registered innovators
-Accessors
+- Unregistered Innovators
+- Registered innovators
+- Accessors
+- Needs Assessors
+- Admins
 
 This project is build in JavaScript + TypeScript, with the **Angular framework** ([angular.io]()), configured as **Server Side Rendering** ([angular.io/guide/universal](Angular Universal)).
 
@@ -30,9 +32,11 @@ This project is build in JavaScript + TypeScript, with the **Angular framework**
 | OAUTH_CLIENT_SECRET             |   Yes    |         |                                           |                                      |
 | OAUTH_SIGNUP_POLICY             |   Yes    |         |                                           |                                      |
 | OAUTH_SIGNIN_POLICY             |   Yes    |         |                                           |                                      |
+| OAUTH_CHANGE_PW_POLICY          |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNUP       |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNIN       |   Yes    |         |                                           |                                      |
 | OAUTH_REDIRECT_URL_SIGNOUT      |   Yes    |         |                                           |                                      |
+| OAUTH_REDIRECT_URL_CHANGE_PW    |   Yes    |         |                                           |                                      |
 | OAUTH_SCOPE                     |   Yes    |         |                                           |                                      |
 | OAUTH_ALLOW_HTTP_REDIRECT       |   Yes    |         |                                           |                                      |
 | SESSION_SECRET                  |   Yes    |         |                                           |                                      |

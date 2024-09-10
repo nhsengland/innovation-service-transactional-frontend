@@ -8,14 +8,17 @@ import { DateISOType } from '@app/base/types';
 import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
 
 import { GetOwnedInnovations, InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
-import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { CookieService } from 'ngx-cookie-service';
+import { FormFieldActionsEnum } from '../innovation/how-to-proceed/how-to-proceed.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'shared-pages-account-account-delete',
   templateUrl: './account-delete.component.html'
 })
 export class PageAccountDeleteComponent extends CoreComponent implements OnInit {
+  action: FormFieldActionsEnum;
+
   stepNumber: 1 | 2 | 3 | 4 = 1;
   firstStep: 1 | 2 | 3 | 4 = 1;
 
@@ -37,9 +40,11 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
   constructor(
     private cookieService: CookieService,
     private innovatorService: InnovatorService,
-    private innovationsService: InnovationsService
+    private activatedRoute: ActivatedRoute
   ) {
     super();
+
+    this.action = this.activatedRoute.snapshot.queryParams.action;
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
@@ -106,7 +111,22 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
   onSubmitStep(action: 'previous' | 'next'): void {
     if (action === 'previous') {
       if (this.stepNumber === this.firstStep) {
-        this.redirectTo('/innovator/account/manage-account');
+        const previousUrl = this.stores.context.getPreviousUrl();
+        if (previousUrl) {
+          if (previousUrl.includes('how-to-proceed')) {
+            const howToProceedUrl = previousUrl.split('?')[0];
+            this.redirectTo(
+              howToProceedUrl,
+              this.action && {
+                action: this.action
+              }
+            );
+          } else {
+            this.redirectTo(previousUrl);
+          }
+        } else {
+          this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
+        }
         return;
       } else if (this.stepNumber === 3 && !this.innovator.hasPendingTransfer) {
         this.stepNumber = 1;

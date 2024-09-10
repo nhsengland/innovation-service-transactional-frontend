@@ -65,16 +65,19 @@ import { PageNotificationsListComponent } from '@modules/shared/pages/notificati
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
 
 // Resolvers.
+import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
+import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
+import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
+import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
+import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
+import { InnovationAssessmentDataResolver } from '@modules/shared/resolvers/innovation-assessment-data.resolver';
 import { InnovationDataResolver } from '@modules/shared/resolvers/innovation-data.resolver';
 import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innovation-document-data.resolver';
+import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
-import { PageInnovationThreadRecipientsComponent } from '@modules/shared/pages/innovation/messages/thread-recipients.component';
-import { PageInnovationAllSectionsInfoComponent } from '@modules/shared/pages/innovation/sections/section-info-all.component';
-import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
-import { PageProgressCategoriesWrapperComponent } from '@modules/shared/pages/progress-categories/progress-categories-wrapper.component';
-import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
+import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -111,6 +114,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
@@ -134,7 +139,10 @@ const routes: Routes = [
           {
             path: ':innovationId',
             runGuardsAndResolvers: 'always', // TODO: Try to remove this in the future. triggering update when doing actions (Ex: new).
-            resolve: { innovationData: mapToResolve(InnovationDataResolver) },
+            resolve: {
+              innovationData: mapToResolve(InnovationDataResolver),
+              irSchemaData: innovationRecordSchemaResolver
+            },
             data: {
               layout: { type: '1.third-2.thirds' },
               breadcrumb: (data: RoutesDataType) => data.innovationData?.name
@@ -171,6 +179,10 @@ const routes: Routes = [
                   {
                     path: ':assessmentId',
                     data: { breadcrumb: null },
+                    resolve: {
+                      innovationAssessmentData: mapToResolve(InnovationAssessmentDataResolver)
+                    },
+                    runGuardsAndResolvers: 'always',
                     children: [
                       {
                         path: '',
@@ -178,12 +190,27 @@ const routes: Routes = [
                         component: PageInnovationAssessmentOverviewComponent,
                         data: { breadcrumb: null }
                       },
-                      { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
                       {
-                        path: 'edit/:stepId',
-                        pathMatch: 'full',
-                        component: InnovationAssessmentEditComponent,
-                        data: { breadcrumb: null, layout: { type: 'full' } }
+                        path: 'edit',
+                        data: {
+                          data: { breadcrumb: null },
+                          layout: { type: 'full' }
+                        },
+                        children: [
+                          { path: '', pathMatch: 'full', redirectTo: '1' },
+                          {
+                            path: 'reason',
+                            pathMatch: 'full',
+                            component: PageInnovationAssessmentEditReasonComponent,
+                            data: { breadcrumb: null }
+                          },
+                          {
+                            path: ':stepId',
+                            pathMatch: 'full',
+                            component: InnovationAssessmentEditComponent,
+                            data: { breadcrumb: null }
+                          }
+                        ]
                       },
                       {
                         path: 'change-assessor',
@@ -484,6 +511,8 @@ const routes: Routes = [
           breadcrumb: 'Tasks',
           layout: { type: 'full', chosenMenu: 'tasks', backgroundColor: 'bg-color-white' }
         },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           { path: '', pathMatch: 'full', component: PageTasksAdvancedSearchComponent, data: { breadcrumb: null } },
           {
@@ -501,6 +530,8 @@ const routes: Routes = [
         path: 'notifications',
         pathMatch: 'full',
         component: PageNotificationsListComponent,
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         data: {
           breadcrumb: 'Notifications',
           layout: { type: 'full', backgroundColor: 'bg-color-white' }

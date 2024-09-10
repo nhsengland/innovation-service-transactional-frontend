@@ -5,14 +5,14 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
+import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
 
-import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationSharesListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UtilsHelper } from '@app/base/helpers';
+import { InnovationSharesListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 
 @Component({
   selector: 'shared-pages-innovation-data-sharing-and-support',
@@ -260,12 +260,14 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
           .filter(support => support.status === InnovationSupportStatusEnum.ENGAGING)
           .map(support => support.organisation.unit.id);
 
-        this.showSuggestOrganisationsToSupportLink = !!UtilsHelper.getAvailableOrganisationsToSuggest(
-          this.innovation.id,
-          userUnitId,
-          results.organisationsList,
-          engagingUnitsIds
-        ).length;
+        this.showSuggestOrganisationsToSupportLink =
+          this.innovation.status === InnovationStatusEnum.IN_PROGRESS &&
+          !!UtilsHelper.getAvailableOrganisationsToSuggest(
+            this.innovation.id,
+            userUnitId,
+            results.organisationsList,
+            engagingUnitsIds
+          ).length;
       }
 
       this.setPageStatus('READY');

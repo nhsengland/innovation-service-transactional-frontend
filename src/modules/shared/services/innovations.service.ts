@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
@@ -28,6 +28,7 @@ import {
   InnovationActionsListInDTO,
   InnovationActivityLogListDTO,
   InnovationActivityLogListInDTO,
+  InnovationAssessmentListDTO,
   InnovationCollaboratorsListDTO,
   InnovationExportRequestInfoDTO,
   InnovationExportRequestsListDTO,
@@ -35,20 +36,22 @@ import {
   InnovationListFullDTO,
   InnovationListSelectType,
   InnovationNeedsAssessmentInfoDTO,
+  InnovationRulesDTO,
+  InnovationSearchFullDTO,
+  InnovationSearchSelectType,
   InnovationSharesListDTO,
   InnovationSupportInfoDTO,
   InnovationSupportsListDTO,
   InnovationTaskInfoDTO,
   InnovationTasksListDTO,
+  InnovationValidationRules,
   InnovationsListFiltersType,
   SupportSummaryOrganisationHistoryDTO,
   SupportSummaryOrganisationsListDTO,
-  getInnovationCollaboratorInfoDTO,
-  InnovationRulesDTO,
-  InnovationValidationRules,
-  InnovationSearchFullDTO,
-  InnovationSearchSelectType
+  getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -174,6 +177,20 @@ export type UploadThreadMessageDocumentType = {
   };
 };
 
+export type ChangeSupportStatusDocumentType = {
+  status: Partial<InnovationSupportStatusEnum>;
+  accessors: {
+    id: string;
+    userRoleId: string;
+  }[];
+  message: string;
+  file?: {
+    name: string;
+    description?: string;
+    file: Omit<FileUploadType, 'url'>;
+  };
+};
+
 @Injectable()
 export class InnovationsService extends CoreService {
   constructor() {
@@ -253,6 +270,23 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
+    );
+  }
+
+  getInnovationProgress(
+    innovationId: string,
+    filterInnovationId: boolean = false
+  ): Observable<KeyProgressAreasPayloadType> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/progress')
+      .setPathParams({ innovationId });
+    return this.http.get<KeyProgressAreasPayloadType>(url.buildUrl()).pipe(
+      take(1),
+      map(response =>
+        filterInnovationId
+          ? Object.fromEntries(Object.entries(response).filter(([key, _]) => key !== 'innovationId'))
+          : response
+      )
     );
   }
 
@@ -465,13 +499,18 @@ export class InnovationsService extends CoreService {
     innovationId: string,
     assessmentId: string
   ): Observable<InnovationNeedsAssessmentInfoDTO> {
-    const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/assessments/:assessmentId')
-      .setPathParams({ innovationId, assessmentId });
-    return this.http.get<InnovationNeedsAssessmentInfoDTO>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
+    // Leverage the store if possible
+    if (this.stores.context.getAssessment().id === assessmentId) {
+      return this.stores.context.getOrLoadAssessment(innovationId, assessmentId);
+    } else {
+      const url = new UrlModel(this.API_INNOVATIONS_URL)
+        .addPath('v1/:innovationId/assessments/:assessmentId')
+        .setPathParams({ innovationId, assessmentId });
+      return this.http.get<InnovationNeedsAssessmentInfoDTO>(url.buildUrl()).pipe(
+        take(1),
+        map(response => response)
+      );
+    }
   }
 
   // Tasks methods.
@@ -496,7 +535,7 @@ export class InnovationsService extends CoreService {
       map(response => ({
         count: response.count,
         data: response.data.map(item => {
-          const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(item.section);
+          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(item.section);
 
           return {
             ...item,
@@ -518,7 +557,8 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(response.section);
+        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
+
         return {
           id: response.id,
           displayId: response.displayId,
@@ -539,10 +579,7 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  createAction(
-    innovationId: string,
-    body: { section: InnovationSectionEnum; description: string }
-  ): Observable<{ id: string }> {
+  createAction(innovationId: string, body: { section: string; description: string }): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/tasks')
       .setPathParams({ innovationId });
@@ -703,7 +740,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
           let link: null | { label: string; url: string } = null;
           const sectionIdentification = i.params.sectionId
-            ? this.stores.innovation.getInnovationRecordSectionIdentification(i.params.sectionId)
+            ? this.stores.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
             : '';
 
           // Handle sections from previous innovation record versions
@@ -864,5 +901,22 @@ export class InnovationsService extends CoreService {
       .addPath('v1/:innovationId/supports/available-status')
       .setPathParams({ innovationId });
     return this.http.get<{ availableStatus: InnovationSupportStatusEnum[] }>(url.buildUrl()).pipe(take(1));
+  }
+
+  createNeedsReassessment(innovationId: string, body: ReassessmentSendType): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/reassessments')
+      .setPathParams({ innovationId });
+    return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
+      take(1),
+      finalize(() => this.stores.context.clearInnovation())
+    );
+  }
+
+  getInnovationAssessmentsList(innovationId: string): Observable<InnovationAssessmentListDTO[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/assessments')
+      .setPathParams({ innovationId });
+    return this.http.get<InnovationAssessmentListDTO[]>(url.buildUrl()).pipe(take(1));
   }
 }

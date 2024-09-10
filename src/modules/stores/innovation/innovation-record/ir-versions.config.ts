@@ -1,6 +1,6 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { InnovationSectionEnum } from '../innovation.enums';
-import { INNOVATION_SECTION_STATUS } from '../innovation.models';
+import { INNOVATION_SECTION_STATUS, sectionType } from '../innovation.models';
 import { InnovationSectionsListType } from './ir-versions.types';
 
 import {
@@ -13,6 +13,10 @@ import {
   evidenceTypeItems as SECTIONS_202304_evidenceTypeItems
 } from './202304/forms.config';
 import { INNOVATION_SECTIONS as SECTIONS_202304 } from './202304/main.config';
+import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
+
+import { irSchemaTranslationsMap } from './202405/ir-v3-schema-translation.helper';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;
@@ -75,6 +79,39 @@ export function getAllSectionsSummary(
   }));
 }
 
+export function getAllSectionsSummaryV3(
+  sections: {
+    section: sectionType;
+    data: MappedObjectType;
+  }[],
+  schema: InnovationRecordSchemaInfoType
+): AllSectionsOutboundPayloadType {
+  const sectionMap = new Map(sections.map(d => [d.section.section, d]));
+
+  return schema.schema.sections.map(s => {
+    return {
+      title: s.title,
+      sections: s.subSections.map(sub => {
+        const wizard = new WizardIRV3EngineModel({
+          schema: schema,
+          translations: irSchemaTranslationsMap(schema.schema),
+          sectionId: sub.id
+        });
+
+        wizard
+          .setAnswers(sectionMap.get(sub.id)?.data ?? {})
+          .runRules()
+          .runInboundParsing();
+        return {
+          section: sub.title,
+          status: sectionMap.get(sub.id as any)?.section.status ?? 'UNKNOWN',
+          answers: wizard.translateSummaryForIRDocumentExport().map(a => ({ label: a.label, value: a.value }))
+        };
+      })
+    };
+  });
+}
+
 export function getAllSectionsList(): { value: string; label: string }[] {
   return getInnovationRecordConfig().reduce((sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
     return [
@@ -84,4 +121,19 @@ export function getAllSectionsList(): { value: string; label: string }[] {
       }, [])
     ];
   }, []);
+}
+
+export function getAllSectionsListV3(
+  schema: InnovationRecordSchemaInfoType | null
+): { value: string; label: string }[] {
+  return !schema
+    ? []
+    : schema.schema.sections.reduce((sectionGroupAcc: { value: string; label: string }[], sectionGroup, i) => {
+        return [
+          ...sectionGroupAcc,
+          ...sectionGroup.subSections.reduce((sectionAcc: { value: string; label: string }[], section, j) => {
+            return [...sectionAcc, ...[{ value: section.id, label: `${i + 1}.${j + 1} ${section.title}` }]];
+          }, [])
+        ];
+      }, []);
 }

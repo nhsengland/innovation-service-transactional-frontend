@@ -12,150 +12,109 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
     link: string;
     information: {
       type: 'BULLET_LIST' | 'PARAGRAPH';
-      values: { description: string; subBullets?: string[] }[];
+      values: { description: string; subBullets?: string[]; link?: { url: string; label: string } }[];
     }[];
   }[] = [
     {
-      name: 'The Health Innovation Network (HIN, formerly known as AHSN)',
+      name: 'Department for Business and Trade (DBT)',
+      link: this.CONSTANTS.URLS.DBT,
+      information: [
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'DBT can support innovations that are:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'in the later stages of the innovation process' },
+            {
+              description:
+                'based in the UK, have a product ready for sale and a sense of what overseas markets they intend to enter'
+            },
+            { description: 'based overseas and are interested in direct investment in the UK' }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'DBT can:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'support UK companies wishing to initiate or expand their exports overseas' },
+            {
+              description:
+                'support with foreign direct investment (FDI) opportunities, for example investor journey support, location opportunities, understanding tax and other incentives'
+            },
+            { description: 'provide general information on export support, public offer documents and directories' },
+            {
+              description:
+                "refer the innovator to a DBT International Trade Adviser (ITA), to DBT staff based in overseas posts, to DBT's Investment Services team, to DBT's UK regional and DA partners, or within a DBT Sector team, for example Biopharma, Medtech or Digital Health"
+            },
+            {
+              description:
+                'support or signpost to opportunities for UK small and medium-sized enterprises (SMEs) seeking to raise venture capital, particularly for fundraising of Series A and beyond'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Health Innovation Network (HIN)',
       link: this.CONSTANTS.URLS.HIN_NETWORK,
       information: [
         {
-          type: 'BULLET_LIST',
-          values: [
-            { description: 'Innovation is close to being adoption-ready' },
-            { description: 'Innovation is likely to be in scope for an NHS Supply Chain procurement framework' },
-            { description: 'Innovation is likely to be in scope for health technology appraisal' },
-            {
-              description:
-                'Innovation is likely to be in scope for advice and support on export to international markets, or establishing a business base within the UK for international companies'
-            },
-            {
-              description:
-                'Innovation is likely to be in scope for other AHSNs for local adoption (a value proposition and business case have been developed)'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'NHS Supply Chain',
-      link: this.CONSTANTS.URLS.SUPPLY_CHAIN,
-      information: [
-        {
-          type: 'BULLET_LIST',
-          values: [
-            { description: 'Medical devices, equipment, consumables, goods & services used by hospitals' },
-            { description: 'Product and supplier must be appropriately regulated and certificated' },
-            {
-              description:
-                'New products need to demonstrate clinical effectiveness and key benefits over existing suppliers (e.g. additional cost savings)'
-            },
-            { description: 'Submissions which are also being allocated by NAS to NICE for MIB or other appraisal' },
-            { description: 'Digital products that are associated with equipment' },
-            { description: 'Products which have a Medtech Funding Mandate' },
-            {
-              description:
-                '(For advice on future eligibility) Within 2 years of achieving and demonstrating criteria above'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'National Institute for Health and Care Excellence (NICE)',
-      link: this.CONSTANTS.URLS.NICE,
-      information: [
-        {
-          type: 'BULLET_LIST',
-          values: [
-            {
-              description:
-                'Medical Devices, Diagnostic Technologies, Interventional Procedures, Pharmaceuticals and Digital Health'
-            }
-          ]
-        },
-        {
           type: 'PARAGRAPH',
-          values: [{ description: 'Criteria for guidance programmes (not early support):' }]
-        },
-        {
-          type: 'BULLET_LIST',
           values: [
             {
-              description:
-                'Appropriate Regulatory approvals are in place or there are well developed plans in place to achieve this'
-            },
-            {
-              description: 'There is a clear value proposition for guidance producing programmes (MTEP, DAP, IP & TA)'
-            },
-            { description: 'Evidence exists to support claims of benefits.' }
+              description: 'HINS can support innovations that are:'
+            }
           ]
         },
         {
-          type: 'PARAGRAPH',
-          values: [{ description: 'Criteria for early support, e.g. OMA, NICE Scientific Advice, META Tool:' }]
-        },
-        {
-          type: 'BULLET_LIST',
-          values: [{ description: 'Would be eligible for NICE guidance in the future' }]
-        }
-      ]
-    },
-    {
-      name: 'National Institute for Health Research (NIHR)',
-      link: this.CONSTANTS.URLS.NIHR,
-      information: [
-        {
           type: 'BULLET_LIST',
           values: [
-            { description: 'Collaboration in research and study design - not just clinical trials' },
+            { description: 'close to being adoption-ready' },
+            { description: 'likely to be in scope for an NHS Supply Chain procurement framework' },
+            { description: 'likely to be in scope for health technology appraisal' },
             {
               description:
-                'Collaboration in clinical trial and evaluation - Identifying and linking to suitable clinical partners, designing and costing research studies & protocols'
+                'likely to be in scope for advice and support on export to international markets, or establishing a business base within the UK for international companies'
             },
-            { description: 'Collaboration in real-world evidence gathering' },
-            { description: 'Health economic analysis' },
-            { description: 'Grant funding, and support to identify grant funds and apply for them' },
-            { description: 'Provision of patient and clinical data for research' },
-            { description: 'Provision of patient samples for research' }
+            {
+              description:
+                'likely to be in scope for other HINs for local adoption (a value proposition and business case have been developed)'
+            }
           ]
         }
       ]
     },
     {
-      name: 'Life Sciences Organisation (LSO) - Part of Department for International Trade (DIT)',
-      link: this.CONSTANTS.URLS.LIFE_SCIENCES_ORGANISATION,
-      information: [
-        {
-          type: 'BULLET_LIST',
-          values: [
-            {
-              description:
-                'UK-based companies seeking to reach international markets - NHS-based innovation, MedTech, BioPharma, Digital'
-            },
-            { description: 'International companies seeking to invest in the UK - MedTech, BioPharma, Digital' }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Health Research Authority (NHR)',
+      name: 'Health Research Authority (HRA)',
       link: this.CONSTANTS.URLS.NHR,
       information: [
         {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description: 'HRA can support innovators who are:'
+            }
+          ]
+        },
+        {
           type: 'BULLET_LIST',
           values: [
             {
               description:
-                'Innovators seeking advice on research for all types of technologies, including the legal requirements for using health and care data in the development of data-driven research'
+                'seeking advice on research for all types of technologies, including the legal requirements for using health and care data in the development of data driven research'
             },
             {
               description:
-                'Early-stage innovators who require guidance on research governance and clinical trial regulation (particularly in relation to public involvement, diversity and inclusion)'
+                'in early stage, who require guidance on research governance and clinical trial regulation (particularly in relation to public involvement, diversity and inclusion)'
             },
             {
               description:
-                'Innovations seeking clarity on whether their study is defined as research and advice on the research regulatory approval processes'
+                'seeking clarity on whether their study is defined as research and advice on the research regulatory approval processes'
             }
           ]
         }
@@ -166,97 +125,263 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
       link: this.CONSTANTS.URLS.HEALTH_TECHNOLOGY,
       information: [
         {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description: 'HTW can support innovations that are:'
+            }
+          ]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [{ description: 'MedTech, devices, digital, care pathways, service models or surgical innovations' }]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description: 'HTW can support innovations when:'
+            }
+          ]
+        },
+        {
           type: 'BULLET_LIST',
           values: [
-            { description: 'MedTech, Devices, Digital, Care pathways / service models and Surgical innovations' },
-            { description: 'Regulatory approval in place (or evidence this is underway)' },
-            { description: 'Truly innovative or offer benefits above current standard care' },
-            { description: 'Demonstrate evidence of patient benefit' }
+            { description: 'regulatory approvals are already in place, or there is evidence that this is underway' },
+            { description: 'they are truly innovative or offers benefits above current standard care' },
+            { description: 'they demonstrate evidence of patient benefit' }
           ]
         },
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'Scientific Advice (SA) Commercial programme:' }]
-        },
-        {
-          type: 'BULLET_LIST',
           values: [
-            { description: 'MedTech, Devices, Digital, Care pathways / service models and Surgical innovations' }
+            {
+              description: 'Programmes:'
+            }
           ]
         },
         {
-          type: 'PARAGRAPH',
-          values: [{ description: 'SA Specialist trial advice:' }]
-        },
-        {
           type: 'BULLET_LIST',
           values: [
-            { description: 'MedTech, Devices, Digital, Care pathways / service models and Surgical innovations' }
+            { description: 'Scientific advice commercial programme' },
+            { description: 'Scientific advice specialist trial advice' }
           ]
         }
       ]
     },
     {
-      name: 'Life Science Hub Wales (LSHW)',
+      name: 'Life Sciences Hub Wales',
       link: this.CONSTANTS.URLS.LSHUBWALES,
       information: [
         {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description: 'Life Sciences Hub Wales can support innovations that:'
+            }
+          ]
+        },
+        {
           type: 'BULLET_LIST',
-          values: [{ description: 'All submissions originating in Wales' }]
+          values: [{ description: 'are based in Wales' }]
         },
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'Programmes:' }]
+          values: [
+            {
+              description: 'Life Sciences Hub Wales can support innovators with:'
+            }
+          ]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'NHS Wales navigation' },
+            { description: 'NHS Wales digital landscape navigation' },
+            { description: 'Welsh Government policy' },
+            {
+              description:
+                'healthcare system collaboration focused on preventive medicine and providing care closer to home'
+            },
+            { description: 'investment readiness and business development support' },
+            { description: 'access to science parks' },
+            { description: 'subject expertise and thematic focus groups' },
+            { description: 'digital and AI' },
+            { description: 'precision medicine (advanced therapies, early diagnostics)' },
+            { description: 'user centred design and product design' },
+            { description: 'research and development' },
+            { description: 'academic collaboration' },
+            { description: 'funding support' },
+            { description: 'intellectual property' },
+            { description: 'project management' }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description: 'Programmes:'
+            }
+          ]
         },
         {
           type: 'BULLET_LIST',
           values: [{ description: 'Digital Health Ecosystem Wales (DHEW)' }]
-        },
+        }
+      ]
+    },
+    {
+      name: 'National Institute for Health and Care Excellence (NICE)',
+      link: this.CONSTANTS.URLS.NICE,
+      information: [
         {
           type: 'PARAGRAPH',
-          values: [{ description: 'Specialist Support:' }]
+          values: [{ description: 'NICE:' }]
         },
         {
           type: 'BULLET_LIST',
           values: [
-            { description: 'NHS Wales Navigation (Insights)' },
-            { description: 'NHS Wales Digital Landscape Navigation' },
             {
               description:
-                'Welsh Government Policy - Healthcare system collaboration focused on Preventive Medicine & Providing Care Closer to Home'
+                'produces guidance on medical devices, diagnostic technologies, interventional procedures, pharmaceuticals and digital health technologies'
             },
-            { description: 'Investment Readiness and Business Development Support' },
-            { description: 'Access to Science Parks' },
             {
-              description: 'Subject Expertise and Thematic Focus Groups',
-              subBullets: ['Digital & AI', 'Precision medicine (advanced therapies, early diagnostics)']
+              description:
+                'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics.',
+              link: {
+                url: this.CONSTANTS.URLS.NICE_KEY_PRIORITY_AREAS,
+                label: 'View key priority areas (opens in a new window)'
+              }
             },
-            { description: 'User Centred Design / Product Design' },
-            { description: 'Research and Development' },
-            { description: 'Academic Collaboration' },
-            { description: 'Funding Support' },
-            { description: 'Intellectual Property' },
-            { description: 'Project Management' }
+            {
+              description:
+                'provides support to developers of health technologies through a range of fee-based, not-for-profit services, via NICE Advice. Companies can use these services regardless of their route to market, for example NICE guidance verse non-NICE routes'
+            }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NICE Advice supports innovations with:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            {
+              description: 'advice, including evidence gap analyses or scientific advice'
+            },
+            {
+              description: 'insights, including system engagement meetings'
+            },
+            { description: 'education, including webinars and masterclasses' }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NICE Advice supports innovations that:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            {
+              description:
+                'have a medical purpose, for example for treatment, diagnosis, monitoring, self-management or behaviour changes'
+            },
+            {
+              description: 'already have, or expected to receive, regulatory approval'
+            }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [
+            {
+              description:
+                'To note: NICE Advice cannot provide support on technologies that are part of an on-going appraisal. It is advised that any engagement with NICE Advice takes place before or after the formal evaluation process.'
+            }
           ]
         }
       ]
     },
     {
-      name: 'Scottish Health Technology Group (SHTG)',
-      link: this.CONSTANTS.URLS.SHTG,
+      name: 'National Institute for Health and Care Research (NIHR)',
+      link: this.CONSTANTS.URLS.NIHR,
       information: [
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NIHR can support innovators with:' }]
+        },
         {
           type: 'BULLET_LIST',
           values: [
-            { description: 'MedTech, Devices, Digital, Diagnostics Care pathways*' },
-            { description: 'Products with regulatory approval*' },
-            { description: 'Products with a well-defined evidence base*' },
-            { description: 'New / Innovative solutions' },
+            { description: 'research and study design - not just clinical trials' },
             {
               description:
-                '*These requirements are not mutually exclusive; the first three requirements must all be present'
+                'clinical trial and evaluation - identifying and linking to suitable clinical partners, designing and costing research studies and protocols'
+            },
+            { description: 'real-world evidence gathering' },
+            { description: 'health economic analysis' },
+            { description: 'grant funding, and support to identify grant funds and apply for them' },
+            { description: 'provision of patient and clinical data for research' },
+            { description: 'provision of patient samples for research' }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'NHS Supply Chain',
+      link: this.CONSTANTS.URLS.SUPPLY_CHAIN,
+      information: [
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NHS Supply Chain can support innovations that are:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'medical devices, equipment, consumables, goods and services used by hospitals' },
+            { description: 'digital products that are associated with equipment' },
+            { description: 'products which have a MedTech Funding Mandate' },
+            {
+              description:
+                'appropriately regulated and certificated, or are likely to achieve this within the next 2 years'
+            },
+            {
+              description:
+                'new products that can demonstrate clinical effectiveness and key benefits over existing suppliers, for example additional cost savings'
             }
           ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: 'NHS Supply Chain can support innovators by providing information on:' }]
+        },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'public procurement regulations that need to be met' },
+            { description: 'the contracts finder' },
+            { description: 'MHRA regulations for public procurement at start of an engagement' }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Scottish Health Technologies Group (SHTG)',
+      link: this.CONSTANTS.URLS.SHTG,
+      information: [
+        { type: 'PARAGRAPH', values: [{ description: 'To receive support from SHTG innovations must be:' }] },
+        {
+          type: 'BULLET_LIST',
+          values: [
+            { description: 'MedTech, devices, digital or diagnostics care pathways*' },
+            { description: 'products with regulatory approval*' },
+            { description: 'products with a well-defined evidence base*' },
+            { description: 'new or innovative solutions' }
+          ]
+        },
+        {
+          type: 'PARAGRAPH',
+          values: [{ description: '*The first three requirements must all be met to receive support' }]
         }
       ]
     }
@@ -265,7 +390,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
   constructor() {
     super();
 
-    this.setPageTitle('Referral criteria for organisations');
+    this.setPageTitle('Referral criteria for support organisations on the NHS Innovation Service');
 
     this.setPageStatus('READY');
   }

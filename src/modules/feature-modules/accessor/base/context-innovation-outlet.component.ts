@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
+import { UtilsHelper } from '@app/base/helpers';
 import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
@@ -37,6 +38,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   private onRouteChange(event?: NavigationEnd): void {
     const innovation = this.contextStore.getInnovation();
+
     this.data.innovation = {
       id: innovation.id,
       name: innovation.name,
@@ -45,16 +47,17 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     };
 
     // Do not show link, ON assessments route.
-    if (
-      (event && event.url.endsWith(`/assessments/${innovation.assessment?.id}`)) ||
-      innovation.status === 'ARCHIVED'
-    ) {
+    if ((event && event.url.includes(`/assessments/`)) || innovation.status === 'ARCHIVED') {
       this.data.link = null;
     } else {
-      this.data.link = {
-        label: 'View needs assessment',
-        url: `/accessor/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
-      };
+      if (innovation.status === InnovationStatusEnum.IN_PROGRESS && innovation.assessment) {
+        const assessmentType = innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
+
+        this.data.link = {
+          label: `View needs ${assessmentType} ${UtilsHelper.getAssessmentVersion(innovation.assessment.majorVersion, innovation.assessment.minorVersion)}`,
+          url: `/accessor/innovations/${innovation.id}/assessments/${innovation.assessment?.id}`
+        };
+      }
     }
   }
 }

@@ -45,6 +45,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() formValidations?: ValidatorFn[];
   @Input() values?: { [key: string]: any } = {};
+  @Input() showParamLabelAsTitle?: boolean;
   @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
 
   private formChangeSubscription = new Subscription();
@@ -92,7 +93,8 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
     this.form = FormEngineHelper.buildForm(this.parameters, this.values, this.formValidations);
 
-    this.onlyOneField = this.parameters.length === 1;
+    this.onlyOneField =
+      this.showParamLabelAsTitle !== undefined ? this.showParamLabelAsTitle : this.parameters.length === 1;
 
     this.formChangeSubscription.unsubscribe();
     this.formChangeSubscription = new Subscription();

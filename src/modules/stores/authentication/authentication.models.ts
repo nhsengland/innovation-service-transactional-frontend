@@ -28,7 +28,7 @@ export class AuthenticationModel {
     termsOfUseAccepted: boolean;
     hasInnovationTransfers: boolean;
     hasInnovationCollaborations: boolean;
-    hasAnnouncements: boolean;
+    hasLoginAnnouncements: { [k: string]: boolean };
     passwordResetAt: null | DateISOType;
     firstTimeSignInAt: null | DateISOType;
     organisations: {

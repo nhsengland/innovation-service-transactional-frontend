@@ -28,6 +28,7 @@
 
         <div *ngSwitchCase="'radio-group'">
           <theme-form-radio-group
+            [id]="p.id"
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
@@ -49,6 +50,7 @@
 
         <div *ngSwitchCase="'checkbox-array'">
           <theme-form-checkbox-array
+            [id]="p.id"
             [arrayName]="p.id"
             [label]="p.label"
             [description]="p.description"
@@ -69,6 +71,7 @@
 
         <div *ngSwitchCase="'textarea'">
           <theme-form-textarea
+            [id]="p.id"
             [controlName]="p.id"
             [label]="p.label"
             [description]="p.description"
@@ -95,6 +98,17 @@
             [config]="p.fileUploadConfig"
             [pageUniqueField]="onlyOneField"
           ></theme-form-file-upload-array>
+        </div>
+
+        <div *ngSwitchCase="'ir-selectable-filters'" [formArrayName]="p.id" [formGroupName]="p.id">
+          <theme-form-ir-selectable-filters-component
+            [parameterValues]="values && values[p.id]"
+            [id]="p.id"
+            [parentFormGroup]="form"
+            [arrayName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+          />
         </div>
 
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
@@ -139,6 +153,10 @@
             [pageUniqueField]="onlyOneField"
             [selectItems]="p.selectItems ?? { selectList: [] }"
           />
+        </div>
+
+        <div *ngSwitchCase="'date-input'">
+          <theme-form-date-input [groupName]="p.id" [id]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField" />
         </div>
 
         <div *ngSwitchDefault>

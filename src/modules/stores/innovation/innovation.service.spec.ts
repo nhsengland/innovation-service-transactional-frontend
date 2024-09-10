@@ -4,7 +4,13 @@ import { TestBed } from '@angular/core/testing';
 import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationService, AuthenticationStore, ContextService, ContextStore } from '@modules/stores';
+import {
+  AuthenticationService,
+  AuthenticationStore,
+  ContextService,
+  ContextStore,
+  InnovationRecordSchemaService
+} from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
 
@@ -17,6 +23,7 @@ describe('Stores/Innovation/InnovationService', () => {
   let contextStore: ContextStore;
 
   let service: InnovationService;
+  let schemaService: InnovationRecordSchemaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -27,6 +34,7 @@ describe('Stores/Innovation/InnovationService', () => {
         ContextStore,
         ContextService,
         InnovationService,
+        InnovationRecordSchemaService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -37,6 +45,7 @@ describe('Stores/Innovation/InnovationService', () => {
     contextStore = TestBed.inject(ContextStore);
 
     service = TestBed.inject(InnovationService);
+    schemaService = TestBed.inject(InnovationRecordSchemaService);
 
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.getUserId = () => 'user001';

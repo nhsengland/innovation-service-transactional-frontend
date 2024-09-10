@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { FormFieldActionsEnum } from '../how-to-proceed/how-to-proceed.component';
 
 @Component({
   selector: 'app-innovator-pages-innovation-reassessment-innovation-reassessment-send',
@@ -21,6 +22,8 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   baseUrl: string;
   innovation: ContextInnovationType;
 
+  action: FormFieldActionsEnum;
+
   wizard = new WizardEngineModel(NEEDS_REASSESSMENT_CONFIG);
 
   saveButton = { isActive: true, label: 'Continue' };
@@ -28,11 +31,13 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovatorService: InnovatorService
+    private innovationsService: InnovationsService
   ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
+    this.action = this.activatedRoute.snapshot.queryParams.action;
+
     this.innovation = this.stores.context.getInnovation();
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
   }
@@ -45,10 +50,29 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
+    this.resetAlert();
+
     const formData = this.formEngineComponent?.getFormValues() || { valid: false, data: {} };
 
     if (action === 'next' && !formData.valid) {
       // Don't move forward if step is NOT valid.
+
+      // To display alert error when parameter is required.
+      const parameterRequiredValidation = this.wizard.currentStep().parameters[0].validations?.isRequired;
+      if (parameterRequiredValidation && Array.isArray(parameterRequiredValidation)) {
+        this.setAlertError('', {
+          itemsList: [
+            {
+              title: parameterRequiredValidation[1],
+              fieldId:
+                this.wizard.currentStep().parameters[0].dataType === 'checkbox-array'
+                  ? this.wizard.currentStep().parameters[0].id + '0'
+                  : this.wizard.currentStep().parameters[0].id
+            }
+          ]
+        });
+      }
+
       return;
     }
 
@@ -57,10 +81,21 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
-          if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
-            this.redirectTo(`${this.baseUrl}/record`);
+          const previousUrl = this.stores.context.getPreviousUrl();
+          if (previousUrl) {
+            if (previousUrl.includes('how-to-proceed')) {
+              const howToProceedUrl = previousUrl.split('?')[0];
+              this.redirectTo(
+                howToProceedUrl,
+                this.action && {
+                  action: this.action
+                }
+              );
+            } else {
+              this.redirectTo(previousUrl);
+            }
           } else {
-            this.redirectTo(`${this.baseUrl}/how-to-proceed`);
+            this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
           }
         } else {
           this.wizard.previousStep();
@@ -96,11 +131,11 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
     const body = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    this.innovatorService.createNeedsReassessment(this.innovationId, body).subscribe({
+    this.innovationsService.createNeedsReassessment(this.innovationId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('Your innovation has been reshared for a needs reassessment', {
+        this.setRedirectAlertSuccess('Your innovation has been submitted for a needs reassessment', {
           message:
-            'Our team will be in touch within a week to let you know if further support is available for your innovation.'
+            'The needs assessment team will be in touch within a week to let you know what support is available for your innovation.'
         });
         this.redirectTo(`${this.baseUrl}`);
       },

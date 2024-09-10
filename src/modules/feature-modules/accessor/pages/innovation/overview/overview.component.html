@@ -19,7 +19,7 @@
             label="{{ 'shared.catalog.innovation.support_status.' + innovationSupport.status + '.name' | translate }}"
           ></theme-tag>
         </dd>
-        <dd *ngIf="!isArchived" class="nhsuk-summary-list__actions width-25">
+        <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
           <a
             *ngIf="isQualifyingAccessorRole && innovationSupport.status !== 'UNASSIGNED'"
             routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
@@ -40,7 +40,7 @@
         </dd>
         <dd class="nhsuk-summary-list__actions">
           <a
-            *ngIf="isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
+            *ngIf="isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
             routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
             >Change accessors</a
           >
@@ -54,14 +54,19 @@
   </div>
 
   <a
-    *ngIf="!isArchived && isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
+    *ngIf="isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'UNASSIGNED'"
     routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
     class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
   >
     Change support status
   </a>
 
-  <ng-container *ngIf="isAccessorRole && !isArchived">
+  <div *ngIf="isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+    <span class="nhsuk-u-visually-hidden">Information:</span>
+    <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
+  </div>
+
+  <ng-container *ngIf="isAccessorRole && isInProgress">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3"
       >Request status update</a
     >
@@ -74,7 +79,7 @@
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'" *ngIf="showCards"></app-statistics-cards>
 
   <h2 class="nhsuk-heading-l nhsuk-u-margin-top-9">Innovation summary</h2>
-  <p class="nhsuk-u-font-size-18" *ngIf="innovation.assessment?.id">
+  <p class="nhsuk-u-font-size-18" *ngIf="isInProgress && innovation.assessment?.id">
     <a routerLink="/accessor/innovations/{{ innovation.id }}/assessments/{{ innovation.assessment?.id }}">View needs assessment</a> to better understand what kind of support this
     innovation needs.
   </p>
@@ -84,6 +89,7 @@
       <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
     </div>
   </dl>
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress" />
 
   <h2 class="nhsuk-heading-m">Innovator contact details</h2>
   <dl class="nhsuk-summary-list">

@@ -1,0 +1,131 @@
+<form [formGroup]="form" [id]="formId" method="post" [action]="action" enctype="application/json" novalidate="" *ngIf="contentReady">
+  <input type="hidden" name="_csrf" [value]="csrfToken" />
+
+  <ng-container *ngFor="let p of parameters; let i = index">
+    <ng-container *ngIf="!p.isHidden">
+      <ng-container [ngSwitch]="p.dataType">
+        <div *ngSwitchCase="'hidden'">
+          <theme-form-input type="hidden" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+        </div>
+
+        <div *ngSwitchCase="'autocomplete-array'">
+          <theme-form-input-autocomplete-array-v3 [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField" />
+        </div>
+
+        <div *ngSwitchCase="'radio-group'">
+          <theme-form-radio-group-v3
+            [controlName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [items]="p.items"
+            [additional]="p.additional"
+            [pageUniqueField]="onlyOneField"
+          />
+        </div>
+
+        <div *ngSwitchCase="'checkbox-array'">
+          <theme-form-checkbox-array-v3 [arrayName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField" />
+        </div>
+
+        <div *ngSwitchCase="'textarea'">
+          <theme-form-textarea
+            [controlName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [pageUniqueField]="onlyOneField"
+            [lengthLimit]="p.lengthLimit"
+          ></theme-form-textarea>
+        </div>
+
+        <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
+          <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
+            <legend *ngIf="p.label" class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">
+              <ng-container *ngIf="onlyOneField">
+                <h1 class="nhsuk-fieldset__heading">{{ p.label }}</h1>
+              </ng-container>
+              <ng-container *ngIf="!onlyOneField"> {{ p.label }} </ng-container>
+            </legend>
+
+            <ng-container *ngIf="p.description">
+              <div class="nhsuk-hint" id="{{ p.id }}-hint" [innerHTML]="p.description"></div>
+            </ng-container>
+
+            <div *ngFor="let item of form.get(p.id)?.value; let i = index; trackBy: trackFieldGroupRowsChanges" class="nhsuk-grid-row">
+              <div [formGroupName]="i" class="nhsuk-grid-column-full">
+                <ng-container *ngIf="p.field">
+                  <div [ngSwitch]="p.field.dataType">
+                    <div *ngSwitchDefault>
+                      <theme-form-input [controlName]="p.field.id" label="{{ p.field.label }} {{ i + 1 }}" [pageUniqueField]="false">
+                        <ng-container append>
+                          <button type="button" class="nhsuk-button nhsuk-button--secondary form-input-appended-button" (click)="removeFieldGroupRow(p.id, i)">Remove</button>
+                        </ng-container>
+                      </theme-form-input>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <a href="javascript:void(0)" (click)="addFieldGroupRow(p)"> {{ p.addNewLabel || "Add new" }} </a>
+          </fieldset>
+        </div>
+
+        <div *ngSwitchDefault>
+          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+        </div>
+
+        <!-- <div *ngSwitchCase="'select-component'">
+                  <theme-form-select
+                    [controlName]="p.id"
+                    [id]="p.id"
+                    [label]="p.label"
+                    [description]="p.description"
+                    [pageUniqueField]="onlyOneField"
+                    [selectItems]="p.selectItems ?? { selectList: [] }"
+                  />
+                </div> -->
+
+        <!-- <div *ngSwitchCase="'number'">
+          <theme-form-input type="number" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+        </div> -->
+        <!-- 
+        <div *ngSwitchCase="'password'">
+          <theme-form-input type="password" [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+        </div> -->
+
+        <!-- <div *ngSwitchCase="'checkbox-group'">
+          <theme-form-checkbox-group-v3 [groupName]="p.id" [label]="p.label" [description]="p.description" [items]="p.items" [pageUniqueField]="onlyOneField" />
+        </div> -->
+        <!-- 
+        <div *ngSwitchCase="'grouped-checkbox-array'">
+          <theme-form-grouped-checkbox-array
+            [arrayName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [groupedItems]="p.groupedItems"
+            [pageUniqueField]="onlyOneField"
+          ></theme-form-grouped-checkbox-array>
+        </div> -->
+        <!-- <div *ngSwitchCase="'file-upload'">
+          <theme-form-file-upload
+            [groupName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [config]="p.fileUploadConfig"
+            [pageUniqueField]="onlyOneField"
+          ></theme-form-file-upload>
+        </div>
+
+        <div *ngSwitchCase="'file-upload-array'">
+          <theme-form-file-upload-array
+            [arrayName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [config]="p.fileUploadConfig"
+            [pageUniqueField]="onlyOneField"
+          ></theme-form-file-upload-array>
+        </div> -->
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</form>

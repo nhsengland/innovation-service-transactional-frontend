@@ -8,12 +8,13 @@ import { ENV } from '@tests/app.mocks';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 
 import { InnovationService } from './innovation.service';
-import { StoresModule } from '@modules/stores';
+import { InnovationRecordSchemaService, StoresModule } from '@modules/stores';
 
 describe('Core/Services/InnovationService', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let service: InnovationService;
+  let schemaService: InnovationRecordSchemaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,6 +27,7 @@ describe('Core/Services/InnovationService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(InnovationService);
+    schemaService = TestBed.inject(InnovationRecordSchemaService);
   });
 
   afterEach(() => {

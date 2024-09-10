@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
-import { debounceTime, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
@@ -12,6 +12,7 @@ import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovati
 import { DateISOType, NotificationValueType } from '@app/base/types';
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
+import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/innovation/innovation.models';
 
 export enum InnovationAssessmentStatusEnum {
   WAITING_NEEDS_ASSESSMENT = 'WAITING_NEEDS_ASSESSMENT',
@@ -60,8 +61,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
         id: string;
         assignedTo: string | null;
         updatedAt: DateISOType;
-        daysFromSubmittedAtToToday: number | null;
-        overdueStatus: 'EXEMPT' | 'OVERDUE' | 'ALMOST_DUE' | null;
+        daysFromSubmittedAtToToday?: number | null;
+        overdueStatus?: 'EXEMPT' | 'OVERDUE' | 'ALMOST_DUE' | null;
       } | null;
     },
     InnovationsListFiltersType
@@ -90,6 +91,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -111,6 +114,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -132,6 +137,8 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
           'lastAssessmentRequestAt',
           'statusUpdatedAt',
           'assessment.id',
+          'assessment.majorVersion',
+          'assessment.minorVersion',
           'assessment.assignedTo',
           'assessment.isExempt',
           'assessment.updatedAt',
@@ -193,21 +200,31 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       .getInnovationsList(this.currentTab.queryFields, filters, { take, skip, order })
       .pipe(
         map(response => ({
-          data: response.data.map(innovation => ({
-            ...innovation,
-            assessment: innovation.assessment
-              ? {
-                  id: innovation.assessment.id,
-                  assignedTo: innovation.assessment.assignedTo,
-                  updatedAt: innovation.assessment.updatedAt,
-                  daysFromSubmittedAtToToday: this.getOverdueDays(innovation.lastAssessmentRequestAt),
-                  overdueStatus: this.getOverdueStatus(
-                    innovation.assessment.isExempt,
-                    innovation.lastAssessmentRequestAt
-                  )
-                }
-              : null
-          })),
+          data: response.data.map(innovation => {
+            const needsKPIVerification =
+              innovation.assessment?.minorVersion === 0 &&
+              !ASSESSMENT_COMPLETED_STATUSES.includes(innovation.groupedStatus);
+            return {
+              ...innovation,
+              assessment: innovation.assessment
+                ? {
+                    id: innovation.assessment.id,
+                    assignedTo: innovation.assessment.assignedTo,
+                    updatedAt: innovation.assessment.updatedAt,
+                    daysFromSubmittedAtToToday: this.getOverdueDays(
+                      innovation.assessment.isExempt,
+                      innovation.lastAssessmentRequestAt,
+                      needsKPIVerification
+                    ),
+                    overdueStatus: this.getOverdueStatus(
+                      innovation.assessment.isExempt,
+                      needsKPIVerification,
+                      innovation.lastAssessmentRequestAt
+                    )
+                  }
+                : null
+            };
+          }),
           count: response.count
         }))
       )
@@ -259,12 +276,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
 
       case InnovationAssessmentStatusEnum.COMPLETED:
         this.innovationsList.setFilters({
-          groupedStatuses: [
-            InnovationGroupedStatusEnum.AWAITING_SUPPORT,
-            InnovationGroupedStatusEnum.RECEIVING_SUPPORT,
-            InnovationGroupedStatusEnum.NO_ACTIVE_SUPPORT,
-            InnovationGroupedStatusEnum.ARCHIVED
-          ],
+          groupedStatuses: ASSESSMENT_COMPLETED_STATUSES,
           assignedToMe: this.form.get('assignedToMe')?.value ?? false
         });
         break;
@@ -328,23 +340,31 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
     this.form.controls.search.updateValueAndValidity({ onlySelf: true });
   }
 
-  getOverdueStatus(isExempted: boolean, submittedAt: string | null) {
-    if (!submittedAt) {
-      return null;
-    } // this shouldn't happen since submittedAt is required to reach the assessment phase
+  getOverdueStatus(isExempted: boolean, needsKPIVerification: boolean, submittedAt: string | null) {
+    // Just to make sure, this shouldn't happen since to reach the reassessment phase you need to submit the Innovation.
+    if (!submittedAt) return null;
+
+    // Exempt tag always needs to appear doesn't matter the state of the assessment.
     if (isExempted) {
       return 'EXEMPT' as const;
-    } else {
-      const daysFromSubmittedAtToToday = this.getOverdueDays(submittedAt) ?? 0;
+    }
+
+    // Only the reassessments requests from the innovator counts for KPIs.
+    if (needsKPIVerification) {
+      const daysFromSubmittedAtToToday = this.getOverdueDays(isExempted, submittedAt, needsKPIVerification) ?? 0;
       return daysFromSubmittedAtToToday >= 15
         ? ('OVERDUE' as const)
         : daysFromSubmittedAtToToday >= 10
           ? ('ALMOST_DUE' as const)
           : null;
     }
+
+    return null;
   }
 
-  getOverdueDays(submittedAt: string | null) {
-    return submittedAt ? DatesHelper.dateDiff(submittedAt, new Date().toISOString()) : null;
+  getOverdueDays(isExempted: boolean, submittedAt: string | null, needsKPIVerification: boolean) {
+    return submittedAt && needsKPIVerification && !isExempted
+      ? DatesHelper.dateDiff(submittedAt, new Date().toISOString())
+      : null;
   }
 }

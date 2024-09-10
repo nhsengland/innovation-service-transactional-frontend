@@ -1,22 +1,27 @@
-import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn } from '@angular/forms';
 
 import { FileTypes, TextareaLengthLimitType } from '../config/form-engine.config';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
+import {
+  InnovationRecordFormComponentType,
+  InnovationRecordMinMaxValidationType,
+  InnovationRecordQuestionStepType,
+  InnovationRecordStepValidationsType
+} from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 export class FormEngineModel {
   label?: string;
   description?: string;
+  showParamLabelAsTitle?: boolean;
   parameters: FormEngineParameterModel[];
-  defaultData: Record<string, any>; // { [key: string]: any };
 
   constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
+    this.showParamLabelAsTitle = data.showParamLabelAsTitle;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
-    this.defaultData = data.defaultData ?? {};
   }
 }
-
 export class FormEngineParameterModel {
   id: string;
   dataType:
@@ -34,7 +39,9 @@ export class FormEngineParameterModel {
     | 'fields-group'
     | 'file-upload'
     | 'file-upload-array'
-    | 'select-component';
+    | 'select-component'
+    | 'date-input'
+    | 'ir-selectable-filters';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -54,8 +61,12 @@ export class FormEngineParameterModel {
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
-    urlFormat?: boolean | [boolean, string];
+    urlFormat?: { message?: string; maxLength?: number };
     equalTo?: string | [string, string];
+    requiredDateInput?: { message?: string };
+    dateInputFormat?: { message?: string };
+    futureDateInput?: { includeToday: boolean; message?: string };
+    endDateInputGreaterThanStartDate?: { startDate: { day: string; month: string; year: string }; message?: string };
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;
@@ -128,5 +139,144 @@ export class FormEngineParameterModel {
     }
 
     this.fileUploadConfig = data.fileUploadConfig;
+  }
+}
+
+export class FormEngineModelV3 {
+  label?: string;
+  description?: string;
+  parameters: FormEngineParameterModelV3[];
+
+  constructor(data: FormEngineModelV3) {
+    this.label = data.label;
+    this.description = data.description;
+    this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModelV3(item));
+  }
+}
+
+export class FormEngineParameterModelV3 {
+  id: string;
+  dataType: InnovationRecordFormComponentType;
+  // | 'number'
+  // | 'password'
+  // | 'hidden'
+  // | 'date'
+  // | 'checkbox-group'
+  // | 'grouped-checkbox-array'
+  // | 'file-upload'
+  // | 'file-upload-array'
+  // | 'select-component';
+  label?: string;
+  description?: string;
+  checkboxAnswerId?: string;
+  parentId?: string;
+  placeholder?: string;
+  isHidden?: boolean;
+  isEditable?: boolean;
+  rank?: number;
+  validations?: {
+    isRequired?: string;
+    pattern?: string | [string, string];
+    min?: InnovationRecordMinMaxValidationType;
+    max?: InnovationRecordMinMaxValidationType;
+    minLength?: number;
+    maxLength?: number;
+    equalToLength?: number | [number, string];
+    async?: AsyncValidatorFn[];
+    existsIn?: string[] | [string[], string];
+    validEmail?: string;
+    postcodeFormat?: boolean;
+    urlFormat?: boolean;
+    equalTo?: string | [string, string];
+  };
+  lengthLimit?: TextareaLengthLimitType;
+  cssOverride?: string;
+
+  additional?: FormEngineParameterModelV3[];
+
+  groupedItems?: {
+    // Used in "grouped-checkbox-array" dataType.
+    value: string;
+    label: string;
+    description?: string;
+    isEditable?: boolean;
+    items: {
+      value: string;
+      label: string;
+      description?: string;
+      isEditable?: boolean;
+    }[];
+  }[];
+
+  items?: {
+    id?: string;
+    label?: string;
+    description?: string;
+    exclusive?: boolean;
+    conditional?: FormEngineParameterModelV3;
+    group?: string;
+    type?: string;
+    itemsFromAnswer?: string;
+  }[];
+  addQuestion?: InnovationRecordQuestionStepType;
+  addNewLabel?: string;
+
+  isNestedField?: boolean;
+
+  condition?: {
+    id: string;
+    options: string[];
+  };
+
+  field?: {
+    id: string;
+    dataType: InnovationRecordFormComponentType;
+    label: string;
+    validations: InnovationRecordStepValidationsType;
+  };
+
+  // fieldsGroupConfig?: {
+  //   fields: FormEngineParameterModelV3[]; // Used in "fields-group" dataType.
+  //   addNewLabel?: string;
+  // };
+
+  // fileUploadConfig?: {
+  //   httpUploadUrl: string;
+  //   httpUploadBody?: Record<string, {}>;
+  //   acceptedFiles?: FileTypes[];
+  //   maxFileSize?: number; // In Mb.
+  //   previousUploadedFiles?: { id: string; name: string }[];
+  // };
+
+  // selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
+
+  constructor(data: FormEngineParameterModelV3) {
+    this.id = data.id;
+    this.dataType = data.dataType || 'text';
+    this.label = data.label;
+    this.description = data.description;
+    this.placeholder = data.placeholder;
+    this.isHidden = data.isHidden ?? false;
+    this.isEditable = data.isEditable !== undefined ? data.isEditable : true;
+    this.rank = data.rank || 0;
+    this.validations = data.validations;
+    this.cssOverride = data.cssOverride;
+    this.addQuestion = data.addQuestion;
+    this.addNewLabel = data.addNewLabel;
+    this.field = data.field;
+    this.condition = data.condition;
+    this.lengthLimit = data.lengthLimit;
+    this.items = data.items;
+    this.isNestedField = data.isNestedField;
+    this.checkboxAnswerId = data.checkboxAnswerId;
+    this.parentId = data.parentId;
+
+    // this.additional = data.additional;
+
+    // this.groupedItems = data.groupedItems;
+
+    // this.selectItems = data.selectItems;
+
+    // this.fileUploadConfig = data.fileUploadConfig;
   }
 }

@@ -1,6 +1,6 @@
 import { Writeable } from '@app/base/types';
 
-import { FormEngineParameterModel, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineParameterModel, FormEngineParameterModelV3, WizardEngineModel } from '@modules/shared/forms';
 
 import { InnovationSections as InnovationSection_202209 } from './202209/catalog.types';
 import { InnovationSections as InnovationSection_202304 } from './202304/catalog.types';
@@ -13,6 +13,15 @@ export type FormSelectableFieldType<T> = {
   description?: string;
   group?: string;
   conditional?: FormEngineParameterModel;
+  exclusive?: boolean;
+}[];
+
+export type FormSelectableFieldV3Type<T> = {
+  value: 'SEPARATOR' | Writeable<T>;
+  label: 'SEPARATOR' | string;
+  description?: string;
+  group?: string;
+  conditional?: FormEngineParameterModelV3;
   exclusive?: boolean;
 }[];
 

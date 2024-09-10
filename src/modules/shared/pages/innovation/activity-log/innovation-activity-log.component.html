@@ -9,7 +9,7 @@
 
       <ng-container *ngIf="pageStatus === 'READY'" aria-live="polite">
         <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-2">
-          <div class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">{{ activitiesList.getTotalRowsNumber() }} activities found</div>
+          <h2 role="alert" class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">{{ activitiesList.getTotalRowsNumber() }} activities found</h2>
           <div class="d-flex">
             <a
               *ngIf="currentDateOrderBy === 'ascending'"

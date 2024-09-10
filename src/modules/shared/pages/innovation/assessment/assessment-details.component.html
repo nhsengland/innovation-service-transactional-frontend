@@ -1,0 +1,9 @@
+<h2 class="nhsuk-heading-l nhsuk-u-margin-bottom-3">{{ assessmentType | titlecase }} details</h2>
+<dl class="nhsuk-summary-list">
+  <div *ngFor="let item of assessmentDetails" class="nhsuk-summary-list__row">
+    <ng-container *ngIf="item.value">
+      <dt class="nhsuk-summary-list__key nhsuk-u-font-weight-normal">{{ item.label }}</dt>
+      <dd class="nhsuk-summary-list__value nhsuk-u-font-weight-bold text-pre-wrap">{{ item.value }}</dd>
+    </ng-container>
+  </div>
+</dl>

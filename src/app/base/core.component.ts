@@ -20,6 +20,7 @@ import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
+import { InnovationRecordSchemaStore } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 
 @Component({ template: '' })
 export class CoreComponent implements OnDestroy {
@@ -49,6 +50,7 @@ export class CoreComponent implements OnDestroy {
     authentication: AuthenticationStore;
     context: ContextStore;
     innovation: InnovationStore;
+    schema: InnovationRecordSchemaStore;
   };
 
   protected subscriptions: Subscription[] = [];
@@ -89,7 +91,8 @@ export class CoreComponent implements OnDestroy {
     this.stores = {
       authentication: injector.get(AuthenticationStore),
       context: injector.get(ContextStore),
-      innovation: injector.get(InnovationStore)
+      innovation: injector.get(InnovationStore),
+      schema: injector.get(InnovationRecordSchemaStore)
     };
 
     this.stores.context.setCurrentUrl(this.location.path());

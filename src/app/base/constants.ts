@@ -32,10 +32,12 @@ export const URLS = {
   LIFE_SCIENCES_ORGANISATION: 'https://www.gov.uk/government/organisations/life-sciences-organisation',
   LSHUBWALES: 'https://lshubwales.com',
   NICE: 'https://www.nice.org.uk/about',
+  NICE_KEY_PRIORITY_AREAS: 'https://www.nice.org.uk/about/what-we-do/forward-view---our-priority-topics',
   NIHR: 'https://www.nihr.ac.uk',
   NHR: 'https://www.hra.nhs.uk/about-us',
   SUPPLY_CHAIN: 'https://www.supplychain.nhs.uk',
   SHTG: 'https://shtg.scot',
+  DBT: 'https://www.gov.uk/government/organisations/department-for-business-and-trade',
 
   // Sections links.
   CORE20PLUS5:

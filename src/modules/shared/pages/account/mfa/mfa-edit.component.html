@@ -6,7 +6,7 @@
           <p>
             {{ wizard.currentStep().description }}<span class="nhsuk-u-font-weight-bold">{{ this.userEmail }}</span>
           </p>
-          <p>Enter your email to confirm</p>
+          <p>Enter {{isAdmin ? 'the user\'s' : 'your'}} email to confirm</p>
         </ng-container>
         <ng-template #description>
           <p>{{ wizard.currentStep().description }}</p>

@@ -11,11 +11,22 @@
   <ng-container [ngSwitch]="innovation?.status">
     <ng-container *ngSwitchCase="'WAITING_NEEDS_ASSESSMENT'">
       <div class="nhsuk-action-link">
-        <a *ngIf="!innovation?.assessment?.id" class="nhsuk-action-link__link" routerLink="/assessment/innovations/{{ innovation?.id || '' }}/assessments/new">
+        <a
+          *ngIf="!innovation?.assessment?.id; else editAssessmentLink"
+          class="nhsuk-action-link__link"
+          routerLink="/assessment/innovations/{{ innovation?.id || '' }}/assessments/new"
+        >
           <theme-svg-icon type="arrow-right-circle" />
           <span class="nhsuk-action-link__text">Start the needs assessment process</span>
         </a>
-        <a *ngIf="innovation?.assessment?.id" routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button">Continue needs assessment</a>
+        <ng-template #editAssessmentLink>
+          <a *ngIf="innovation?.groupedStatus === 'AWAITING_NEEDS_ASSESSMENT'" routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button"
+            >Continue needs assessment</a
+          >
+          <a *ngIf="innovation?.groupedStatus === 'AWAITING_NEEDS_REASSESSMENT'" routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button"
+            >Start reassessment</a
+          >
+        </ng-template>
       </div>
     </ng-container>
 
@@ -23,10 +34,10 @@
       <div class="d-flex">
         <theme-svg-icon type="edit"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
-        <h2 class="nhsuk-heading-m">Needs assessment in progress</h2>
+        <h2 class="nhsuk-heading-m">Needs {{ assessmentType }} in progress</h2>
       </div>
 
-      <div *ngIf="!assessmentExemption" class="nhsuk-u-margin-bottom-5">
+      <div *ngIf="showAssessmentExemptionLink" class="nhsuk-u-margin-bottom-5">
         <a routerLink="../assessments/{{ innovation?.assessment?.id }}/exemption-upsert">Mark this innovation as exempt from KPI reports</a>
       </div>
 
@@ -41,7 +52,7 @@
           </dd>
         </div>
       </dl>
-      <a routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button">Continue needs assessment</a>
+      <a routerLink="../assessments/{{ innovation?.assessment?.id }}/edit" class="nhsuk-button">Continue needs {{ assessmentType }}</a>
     </ng-container>
 
     <ng-container *ngSwitchCase="'IN_PROGRESS'">
@@ -53,7 +64,7 @@
         </h2>
       </div>
 
-      <div *ngIf="!assessmentExemption" class="nhsuk-u-margin-bottom-5">
+      <div *ngIf="showAssessmentExemptionLink" class="nhsuk-u-margin-bottom-5">
         <a routerLink="../assessments/{{ innovation?.assessment?.id }}/exemption-upsert">Mark this innovation as exempt from KPI reports</a>
       </div>
 
@@ -114,6 +125,8 @@
       <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
     </div>
   </dl>
+
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress" />
 
   <h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator contact details</h2>
   <dl class="nhsuk-summary-list">

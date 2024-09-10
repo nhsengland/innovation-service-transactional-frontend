@@ -7,7 +7,11 @@ export { FormEngineComponent } from './engine/form-engine.component';
 // Services.
 
 // Models.
-export { FormEngineModel, FormEngineParameterModel } from './engine/models/form-engine.models';
+export {
+  FormEngineModel,
+  FormEngineParameterModel,
+  FormEngineParameterModelV3
+} from './engine/models/form-engine.models';
 export { WizardEngineModel, WizardStepType, WizardSummaryType } from './engine/models/wizard-engine.models';
 
 // Config..

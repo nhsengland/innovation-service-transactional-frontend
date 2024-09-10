@@ -1,5 +1,6 @@
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 import {
@@ -82,8 +83,11 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closedReason'
   | 'assessment.id'
+  | 'assessment.majorVersion'
+  | 'assessment.minorVersion'
   | 'assessment.assignedTo'
   | 'assessment.isExempt'
+  | 'assessment.finishedAt'
   | 'assessment.updatedAt'
   | 'statistics.notifications'
   | 'statistics.tasks'
@@ -126,7 +130,15 @@ export type InnovationListFullDTO = {
     closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
-  assessment: { id: string; assignedTo: string | null; updatedAt: DateISOType; isExempt: boolean } | null;
+  assessment: {
+    id: string;
+    majorVersion: number;
+    minorVersion: number;
+    assignedTo: string | null;
+    finishedAt: DateISOType | null;
+    updatedAt: DateISOType;
+    isExempt: boolean;
+  } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
@@ -141,6 +153,7 @@ export type InnovationInfoDTO = {
   status: InnovationStatusEnum;
   archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
+  hasBeenAssessed: boolean;
   submittedAt: null | DateISOType;
   countryName: null | string;
   postCode: null | string;
@@ -162,6 +175,8 @@ export type InnovationInfoDTO = {
   lastEndSupportAt: null | DateISOType;
   assessment?: null | {
     id: string;
+    majorVersion: number;
+    minorVersion: number;
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
@@ -281,7 +296,15 @@ export enum SupportLogType {
 // Needs Assessment.
 export type InnovationNeedsAssessmentInfoDTO = {
   id: string;
-  reassessment?: { updatedInnovationRecord: string; description: string };
+  majorVersion: number;
+  minorVersion: number;
+  editReason: null | string;
+  previousAssessment?: { id: string; majorVersion: number; minorVersion: number };
+  reassessment?: ReassessmentSendType & {
+    sectionsUpdatedSinceLastAssessment: string[];
+    createdAt: DateISOType;
+    previousCreatedAt: DateISOType;
+  };
   summary: null | string;
   description: null | string;
   finishedAt: null | DateISOType;
@@ -310,6 +333,7 @@ export type InnovationNeedsAssessmentInfoDTO = {
   }[];
   updatedAt: null | DateISOType;
   updatedBy: { id: string; name: string };
+  isLatest: boolean;
 };
 
 export type InnovationActionsListInDTO = {
@@ -327,7 +351,7 @@ export type InnovationTaskData = {
   description: string;
   innovation: { id: string; name: string };
   status: InnovationTaskStatusEnum;
-  section: InnovationSectionEnum;
+  section: string;
   createdAt: DateISOType;
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
@@ -341,7 +365,7 @@ export type InnovationTaskInfoDTO = {
   displayId: string;
   status: InnovationTaskStatusEnum;
   descriptions: InnovationDescription[];
-  section: InnovationSectionEnum;
+  section: string;
   name: string;
   createdAt: DateISOType;
   updatedAt: DateISOType;
@@ -420,4 +444,12 @@ export type InnovationExportRequestInfoDTO = {
   };
   updatedAt: DateISOType;
   updatedBy: { name: string };
+};
+
+export type InnovationAssessmentListDTO = {
+  id: string;
+  majorVersion: number;
+  minorVersion: number;
+  startedAt: Date;
+  finishedAt: Date;
 };

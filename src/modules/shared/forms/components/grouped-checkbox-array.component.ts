@@ -47,7 +47,7 @@ export class FormGroupedCheckboxArrayComponent implements OnInit, DoCheck {
       }
     });
   }
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
