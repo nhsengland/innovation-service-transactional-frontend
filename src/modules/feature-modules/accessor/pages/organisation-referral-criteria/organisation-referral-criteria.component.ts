@@ -250,7 +250,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
                 'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics.',
               link: {
                 url: this.CONSTANTS.URLS.NICE_KEY_PRIORITY_AREAS,
-                label: 'View key priority areas (opens in new window)'
+                label: 'View key priority areas (opens in new a window)'
               }
             },
             {
@@ -303,7 +303,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
       ]
     },
     {
-      name: 'National Institute for Health Research (NIHR)',
+      name: 'National Institute for Health and Care Research (NIHR)',
       link: this.CONSTANTS.URLS.NIHR,
       information: [
         {
@@ -366,7 +366,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
       ]
     },
     {
-      name: 'Scottish Health Technology Group (SHTG)',
+      name: 'Scottish Health Technologies Group (SHTG)',
       link: this.CONSTANTS.URLS.SHTG,
       information: [
         { type: 'PARAGRAPH', values: [{ description: 'To receive support from SHTG innovations must be:' }] },

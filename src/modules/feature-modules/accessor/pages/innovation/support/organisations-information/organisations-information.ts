@@ -160,7 +160,7 @@ export const ORGANISATIONS_INFORMATION: OrganisationInformation[] = [
               'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics. ',
             link: {
               url: URLS.NICE_KEY_PRIORITY_AREAS,
-              label: 'View key priority areas (opens in new window)'
+              label: 'View key priority areas (opens in a new window)'
             }
           },
           {
