@@ -208,7 +208,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
             { description: 'subject expertise and thematic focus groups' },
             { description: 'digital and AI' },
             { description: 'precision medicine (advanced therapies, early diagnostics)' },
-            { description: 'user centered design and product design' },
+            { description: 'user centred design and product design' },
             { description: 'research and development' },
             { description: 'academic collaboration' },
             { description: 'funding support' },
@@ -250,7 +250,7 @@ export class InnovationSupportOrganisationReferralCriteriaComponent extends Core
                 'makes decisions about which topics to select for guidance production through its prioritisation board and uses the NHS Innovation Service to help identify technologies that fit with those topics.',
               link: {
                 url: this.CONSTANTS.URLS.NICE_KEY_PRIORITY_AREAS,
-                label: 'View key priority areas (opens in new a window)'
+                label: 'View key priority areas (opens in a new window)'
               }
             },
             {
