@@ -1,23 +1,46 @@
-.pagination {
+nav.pagination {
   display: inline-block;
   padding: 25px 0 0 0;
 
-  a,
-  span {
-    background-color: #eff4f5;
-    float: left;
-    padding: 8px 16px;
-    margin: 2px;
-  }
+  ul {
+    display: flex;
 
-  a {
-    cursor: pointer;
-    text-decoration: underline;
-  }
+    li {
+      border-radius: 2px;
+      font-size: 16px;
+      margin: 2px;
 
-  a.active {
-    background-color: #0060b8;
-    cursor: pointer;
-    color: white;
+      a {
+        display: block;
+        padding: 8px 16px;
+        cursor: pointer;
+        text-decoration: none;
+        &:hover {
+          background-color: var(--color_nhsuk-grey-5);
+          text-decoration: underline;
+        }
+        &:focus {
+          text-decoration: underline;
+        }
+      }
+
+      span {
+        display: block;
+        padding: 8px 16px;
+      }
+
+      &.active {
+        background-color: #0060b8;
+        a {
+          color: white;
+          &:hover {
+            color: black;
+          }
+          &:focus {
+            color: black;
+          }
+        }
+      }
+    }
   }
 }

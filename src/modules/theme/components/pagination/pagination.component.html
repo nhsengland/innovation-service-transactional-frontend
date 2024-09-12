@@ -1,19 +1,27 @@
-<div *ngIf="totalRows > pageSize" class="pagination">
+<nav *ngIf="totalRows > pageSize" class="pagination" aria-label="Pagination">
+  <ul class="nhsuk-list">
 
-  <a *ngIf="currentPage !== 1" href="javascript:void(0)" (click)="onPreviousPage()">« Prev</a>
+    <li *ngIf="currentPage !== 1">
+      <a href="javascript:void(0)" (click)="onPreviousPage()" aria-label="Previous page">« Prev</a>
+    </li>
 
-  <ng-container *ngIf="getPages().includes(1) === false">
-    <a href="javascript:void(0)" (click)="onPageChange(1)">1</a>
-    <span>...</span>
-  </ng-container>
+    <ng-container *ngIf="getPages().includes(1) === false">
+      <li><a href="javascript:void(0)" (click)="onPageChange(1)" aria-label="Page 1 (first page)">1</a></li>
+      <li><span>...</span></li>
+    </ng-container>
 
-  <a *ngFor="let page of getPages()" href="javascript:void(0)" (click)="onPageChange(page)" [ngClass]="{ active: currentPage === page }">{{ page }}</a>
+    <li *ngFor="let page of getPages()" [ngClass]="{ active: currentPage === page }">
+      <a href="javascript:void(0)" (click)="onPageChange(page)" [attr.aria-label]="currentPage === page ? 'Current page, page ' + page : 'Page ' + page" [attr.aria-current]="currentPage === page ? 'page' : null">{{ page }}</a>
+    </li>
 
-  <ng-container *ngIf="getPages().includes(totalPages) === false">
-    <span>...</span>
-    <a href="javascript:void(0)" (click)="onPageChange(totalPages)">{{ totalPages }}</a>
-  </ng-container>
+    <ng-container *ngIf="getPages().includes(totalPages) === false">
+      <li><span>...</span></li>
+      <li><a href="javascript:void(0)" (click)="onPageChange(totalPages)" [attr.aria-label]="'Page ' + totalPages + ' (last page)'">{{ totalPages }}</a></li>
+    </ng-container>
 
-  <a *ngIf="currentPage !== totalPages" href="javascript:void(0)" (click)="onNextPage()">Next »</a>
+    <li *ngIf="currentPage !== totalPages">
+      <a href="javascript:void(0)" (click)="onNextPage()" aria-label="Next page">Next »</a>
+    </li>
 
-</div>
+  </ul>
+</nav>
