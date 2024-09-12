@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.user = {
         displayName: state.user?.displayName ?? '',
         description: this.authenticationStore.isAccessorType()
-          ? `Logged in as ${userRole} (${orgUnitName})`
+          ? `Logged in as ${userRole}, ${orgUnitName}`
           : `Logged in as ${userRole}`,
         showSwitchProfile: hasMultipleRoles
       };

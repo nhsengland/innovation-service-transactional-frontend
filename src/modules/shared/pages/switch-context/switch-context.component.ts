@@ -77,7 +77,7 @@ export class PageSwitchContextComponent extends CoreComponent {
 
     if (this.currentRole?.id !== role.id) {
       sessionStorage.clear();
-      
+
       this.authenticationStore.setUserContext({
         id: this.user.id,
         roleId: role.id,
@@ -87,7 +87,7 @@ export class PageSwitchContextComponent extends CoreComponent {
       });
 
       const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${
-        role.organisationUnit ? ` (${role.organisationUnit.name})` : ''
+        role.organisationUnit ? `, ${role.organisationUnit.name}` : ''
       }`;
       this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}`);
 
