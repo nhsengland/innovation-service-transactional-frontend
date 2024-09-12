@@ -14,7 +14,7 @@ import {
   PLATFORM_ID,
   SimpleChanges
 } from '@angular/core';
-import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { NGXLogger } from 'ngx-logger';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -164,6 +164,10 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     return FormEngineHelper.getFormValues(this.form, this.parameters);
+  }
+
+  getFormControl(id: string): FormControl<string | undefined> {
+    return (this.form as FormGroup).controls[id] as FormControl;
   }
 
   ngOnDestroy(): void {
