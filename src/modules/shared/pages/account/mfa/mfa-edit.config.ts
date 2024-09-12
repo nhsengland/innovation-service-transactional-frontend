@@ -37,12 +37,12 @@ const selectCountryList: SelectComponentInputType[] = fullCountryCodeList.map(co
 const verificationMethodItems = (isAdmin: boolean) => [
   {
     value: 'EMAIL',
-    label: 'Email me',
+    label: `Email ${isAdmin ? 'them' : 'me'}`,
     description: `We'll send a security code to the email address linked with ${isAdmin ? 'user' : 'your'} account.`
   },
   {
     value: 'PHONE',
-    label: 'Send me a text message or phone me',
+    label: `Send ${isAdmin ? 'them' : 'me'} a text message or phone ${isAdmin ? 'them' : 'me'}`,
     description: 'Receive a security code by text message or phone call.'
   }
 ];
