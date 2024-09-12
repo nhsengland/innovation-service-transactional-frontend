@@ -94,7 +94,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
         { value: 'Engaging organisations', label: 'HEADING' },
         ...engagingSupports.map(support => ({
           value: support.organisation.unit.id,
-          label: `${support.organisation.unit.name} (${support.organisation.unit.acronym})`,
+          label: `${support.organisation.unit.name}`,
           description: support.engagingAccessors.map(item => item.name).join('<br />')
         }))
       );
@@ -105,7 +105,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
         { value: 'Waiting organisations', label: 'HEADING' },
         ...waitingSupports.map(s => ({
           value: s.organisation.unit.id,
-          label: `${s.organisation.unit.name} (${s.organisation.unit.acronym})`,
+          label: `${s.organisation.unit.name}`,
           description: s.engagingAccessors.map(item => item.name).join('<br />')
         }))
       );

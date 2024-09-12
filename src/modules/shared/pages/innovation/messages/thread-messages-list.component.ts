@@ -159,7 +159,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
             ...message,
             displayUserName: `${message.createdBy.name}, ${
               message.createdBy.organisationUnit?.name
-                ? message.createdBy.organisationUnit?.acronym
+                ? message.createdBy.organisationUnit?.name
                 : message.createdBy.role === 'ASSESSMENT'
                   ? 'Needs assessment'
                   : message.createdBy.isOwner
