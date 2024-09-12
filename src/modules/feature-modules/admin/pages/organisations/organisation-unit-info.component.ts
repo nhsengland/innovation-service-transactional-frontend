@@ -14,10 +14,10 @@ import { OrganisationDataResolver } from '../../resolvers/organisation-data.reso
 import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';
 
 @Component({
-  selector: 'app-admin-pages-organisations-other-teams-info',
-  templateUrl: './teams-info.component.html'
+  selector: 'app-admin-pages-organisation-unit-info',
+  templateUrl: './organisation-unit-info.component.html'
 })
-export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
+export class OrganisationUnitInfoComponent extends CoreComponent implements OnInit {
   public unit: ObservedValueOf<ReturnType<OrganisationUnitDataResolver['resolve']>>;
   public organisation: ObservedValueOf<ReturnType<OrganisationDataResolver['resolve']>>;
 
@@ -68,7 +68,7 @@ export class PageTeamsInfoComponent extends CoreComponent implements OnInit {
       this.addUserQueryParams = { team: UserRoleEnum.ADMIN };
       this.usersListFilters.filters.userTypes = [UserRoleEnum.ADMIN];
     } else if (this.isUnitTeamPage) {
-      this.setPageTitle(`${this.unit.name} (${this.unit.acronym})`);
+      this.setPageTitle(`${this.unit.name}`);
       this.pageRole = UserRoleEnum.ASSESSMENT; // change this it will be different params
       this.usersListFilters.filters.userTypes = [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR];
       this.usersListFilters.filters.organisationUnitId = this.unit.id;

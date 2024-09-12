@@ -26,7 +26,10 @@
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
             <dd class="nhsuk-summary-list__value">
-              {{ organisation.name }} <span class="nhsuk-hint nhsuk-u-margin-bottom-0"> {{ organisation.acronym }} </span>
+              {{ organisation.name }}
+              <span *ngIf="organisation.name && organisation.acronym && !organisation.name.includes(organisation.acronym)" class="nhsuk-hint nhsuk-u-margin-bottom-0">
+                {{ organisation.acronym }}
+              </span>
             </dd>
             <dd class="nhsuk-summary-list__actions">
               <a routerLink="edit">
