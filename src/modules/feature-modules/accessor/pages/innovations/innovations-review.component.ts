@@ -95,7 +95,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.userUnitAcronym = this.stores.authentication.state.userContext?.organisationUnit?.acronym ?? '';
     this.userUnit = this.stores.authentication.state.userContext?.organisationUnit?.name ?? '';
 
-    this.setPageTitle('Innovations', { hint: `${this.userUnit} (${this.userUnitAcronym})` });
+    this.setPageTitle('Innovations', { hint: `${this.userUnit}` });
 
     if (this.stores.authentication.isAccessorRole()) {
       this.defaultStatus = 'ENGAGING';
@@ -485,7 +485,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
   }
 
   onRouteChange(queryParams: Params): void {
-    this.setPageTitle('Innovations', { hint: `${this.userUnit} (${this.userUnitAcronym})` });
+    this.setPageTitle('Innovations', { hint: `${this.userUnit}` });
 
     const currentStatus = queryParams.status;
     const currentTabIndex = this.tabs.findIndex(tab => tab.key === currentStatus);
