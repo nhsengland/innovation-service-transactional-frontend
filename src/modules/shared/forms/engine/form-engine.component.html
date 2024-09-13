@@ -146,7 +146,7 @@
 
         <div *ngSwitchCase="'select-component'">
           <theme-form-select
-            [controlName]="p.id"
+            [formControl]="getFormControl(p.id)"
             [id]="p.id"
             [label]="p.label"
             [description]="p.description"

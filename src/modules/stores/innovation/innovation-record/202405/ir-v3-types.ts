@@ -3,6 +3,7 @@ import { INNOVATION_SECTION_STATUS } from '../../innovation.models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
 import { FormEngineParameterModelV3 } from '@modules/shared/forms';
+import { FormatUrlValidatorType } from '@modules/shared/forms/engine/models/form-engine.models';
 
 export type InnovationRecordSchemaV3Type = {
   sections: {
@@ -72,7 +73,7 @@ export type InnovationRecordStepValidationsType = {
   maxLength?: number;
   minLength?: number;
   postcodeFormat?: boolean;
-  urlFormat?: boolean;
+  urlFormat?: FormatUrlValidatorType;
   pattern?: string | [string, string];
   equalToLength?: number | [number, string];
   async?: AsyncValidatorFn[];

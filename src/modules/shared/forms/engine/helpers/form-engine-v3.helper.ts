@@ -274,7 +274,13 @@ export class FormEngineHelperV3 {
       };
     }
     if (error.urlFormat) {
-      return { message: error.urlFormat.message || 'shared.forms_module.validations.invalid_url_format', params: {} };
+      return {
+        message:
+          error.urlFormat.message || error.urlFormat.maxLength
+            ? 'shared.forms_module.validations.invalid_url_format_maxLength'
+            : 'shared.forms_module.validations.invalid_url_format',
+        params: { maxLength: error.urlFormat.maxLength }
+      };
     }
 
     if (error.hexadecimalFormat) {
@@ -439,8 +445,7 @@ export class FormEngineHelperV3 {
     }
 
     if (parameter.validations?.urlFormat) {
-      validation = parameter.validations.urlFormat;
-      validators.push(CustomValidators.urlFormatValidator());
+      validators.push(CustomValidators.urlFormatValidator(parameter.validations.urlFormat));
     }
 
     // Specific types field validations.
