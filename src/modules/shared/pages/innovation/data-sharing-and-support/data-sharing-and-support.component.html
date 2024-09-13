@@ -70,7 +70,7 @@
                 </ng-container>
 
                 <div class="d-flex flex-direction-column">
-                  <div>{{ organisation.info.name }} ({{ organisation.info.acronym }})</div>
+                  <div>{{ organisation.info.name }}</div>
                   <div
                     *ngIf="isAccessorType && organisation.info.suggestedByPhrase && organisation.info.organisationUnits.length === 0"
                     class="nhsuk-u-margin-top-2 font-color-secondary"
@@ -137,7 +137,7 @@
 
         <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
         </div>
 
         <div *ngIf="isQualifyingAccessorRole && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link nhsuk-u-padding-top-5">
