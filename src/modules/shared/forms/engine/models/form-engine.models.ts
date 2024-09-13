@@ -186,7 +186,7 @@ export class FormEngineParameterModelV3 {
     existsIn?: string[] | [string[], string];
     validEmail?: string;
     postcodeFormat?: boolean;
-    urlFormat?: boolean;
+    urlFormat?: { message?: string; maxLength?: number };
     equalTo?: string | [string, string];
   };
   lengthLimit?: TextareaLengthLimitType;

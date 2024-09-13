@@ -72,7 +72,7 @@ export type InnovationRecordStepValidationsType = {
   maxLength?: number;
   minLength?: number;
   postcodeFormat?: boolean;
-  urlFormat?: boolean;
+  urlFormat?: { message?: string; maxLength?: number };
   pattern?: string | [string, string];
   equalToLength?: number | [number, string];
   async?: AsyncValidatorFn[];
