@@ -9,6 +9,8 @@ import {
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
+export type FormatUrlValidatorType = { message?: string; maxLength?: number };
+
 export class FormEngineModel {
   label?: string;
   description?: string;
@@ -61,7 +63,7 @@ export class FormEngineParameterModel {
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
-    urlFormat?: { message?: string; maxLength?: number };
+    urlFormat?: FormatUrlValidatorType;
     equalTo?: string | [string, string];
     requiredDateInput?: { message?: string };
     dateInputFormat?: { message?: string };
@@ -186,7 +188,7 @@ export class FormEngineParameterModelV3 {
     existsIn?: string[] | [string[], string];
     validEmail?: string;
     postcodeFormat?: boolean;
-    urlFormat?: { message?: string; maxLength?: number };
+    urlFormat?: FormatUrlValidatorType;
     equalTo?: string | [string, string];
   };
   lengthLimit?: TextareaLengthLimitType;
