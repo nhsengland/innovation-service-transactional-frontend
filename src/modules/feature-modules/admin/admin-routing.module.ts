@@ -36,7 +36,7 @@ import { PageOrganisationInfoComponent } from './pages/organisations/organisatio
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
+import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -162,8 +162,8 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
 
-          { path: 'ASSESSMENT', pathMatch: 'full', component: PageTeamsInfoComponent },
-          { path: 'ADMIN', pathMatch: 'full', component: PageTeamsInfoComponent },
+          { path: 'ASSESSMENT', pathMatch: 'full', component: OrganisationUnitInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: OrganisationUnitInfoComponent },
 
           {
             path: ':organisationId',
@@ -209,7 +209,7 @@ const routes: Routes = [
                         path: '',
                         pathMatch: 'full',
                         data: { breadcrumb: null },
-                        component: PageTeamsInfoComponent
+                        component: OrganisationUnitInfoComponent
                       },
                       {
                         path: 'edit',

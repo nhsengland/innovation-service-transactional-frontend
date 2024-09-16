@@ -2,8 +2,13 @@ import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/
 
 // Labels.
 const stepsLabels = {
-  l1: "What's the name of the new organisation unit?",
-  l2: "What's the acronym of the new organisation unit?"
+  l1: 'Add the name of the new organisation unit',
+  l2: 'Add an acronym for this organisation unit'
+};
+
+export const organisationUnitStepsDescriptions = {
+  l1: "If the unit has an official acronym, write it in brackets next to the organisation's name. For example, National Institute for Health and Care Excellence (NICE).",
+  l2: 'This will be used for tags on the service. If the unit does not have an official acronym you must create one. Before you create one, check that it could not be confused with an existing acronym for another support organisation.'
 };
 
 // Types.
@@ -26,7 +31,7 @@ export const NEW_UNIT_CONFIG: WizardEngineModel = new WizardEngineModel({
           id: 'name',
           dataType: 'text',
           label: stepsLabels.l1,
-          description: 'Enter the name of the new unit with a maximum of 100 characters',
+          description: organisationUnitStepsDescriptions.l1,
           validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
         }
       ]
@@ -37,7 +42,7 @@ export const NEW_UNIT_CONFIG: WizardEngineModel = new WizardEngineModel({
           id: 'acronym',
           dataType: 'text',
           label: stepsLabels.l2,
-          description: 'Enter the acronym of the unit with a maximum of 10 characters',
+          description: organisationUnitStepsDescriptions.l2,
           validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
         }
       ]

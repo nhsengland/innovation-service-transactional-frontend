@@ -1,4 +1,5 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { organisationUnitStepsDescriptions } from './organisation-unit-new/organisation-unit-new.config';
 
 // Types.
 type InboundPayloadType = {
@@ -19,7 +20,7 @@ export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngin
           id: 'name',
           dataType: 'text',
           label: 'Unit name',
-          description: 'Enter the name of the Unit with a maximum of 255 characters',
+          description: organisationUnitStepsDescriptions.l1,
           validations: { isRequired: [true, 'Name is required'], maxLength: 255 }
         }
       ]
@@ -31,7 +32,7 @@ export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngin
           id: 'acronym',
           dataType: 'text',
           label: 'Unit acronym',
-          description: 'Enter the acronym of the Unit with a maximum of 10 characters',
+          description: organisationUnitStepsDescriptions.l2,
           validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
         }
       ]
