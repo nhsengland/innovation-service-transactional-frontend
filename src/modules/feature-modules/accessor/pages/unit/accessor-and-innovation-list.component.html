@@ -1,0 +1,80 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-one-half">
+      <form [formGroup]="form">
+        <theme-form-input label="Search list by accessor name" placeholder="Search" controlName="search" [pageUniqueField]="false">
+          <ng-container append>
+            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+              <theme-svg-icon type="search" />
+              <span class="nhsuk-u-visually-hidden">Search</span>
+            </button>
+          </ng-container>
+        </theme-form-input>
+      </form>
+    </div>
+
+    <div class="nhsuk-grid-column-full">
+      <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+        <h2 role="alert" class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">Showing {{ accessorList.getTotalRowsNumber() }} accessors</h2>
+      </div>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+      <ng-container *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() === 0">
+        <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
+      </ng-container>
+
+      <ng-container *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() > 0">
+        <table *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table">
+          <caption class="nhsuk-u-visually-hidden">
+            Accessor and associated innovations list
+            <span *ngIf="accessorList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of accessorList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button [id]="item.key" *ngIf="item.orderable" type="button">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let item of accessorList.getRecords()" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell nhsuk-body-s width-30">
+                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
+                <span class="d-block">{{ item.accessor.name }},</span>
+                <!-- TODO: Create new pipe -->
+                <span class="d-block">{{ item.accessor.role }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
+                {{ item.innovations.length }}
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovations") }}</span>
+                <ul class="nhsuk-list nhsuk-u-margin-bottom-1" *ngFor="let innovation of item.innovations">
+                  <li>
+                    <a routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="nhsuk-u-padding-bottom-4">
+          <theme-pagination
+            [currentPage]="accessorList.page"
+            [pageSize]="accessorList.pageSize"
+            [totalRows]="accessorList.getTotalRowsNumber()"
+            (updatePageEvent)="onPageChange($event)"
+          ></theme-pagination>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</theme-content-wrapper>
