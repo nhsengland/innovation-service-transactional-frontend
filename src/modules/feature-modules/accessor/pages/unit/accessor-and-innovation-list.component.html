@@ -15,7 +15,7 @@
 
     <div class="nhsuk-grid-column-full">
       <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
-        <h2 role="alert" class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">Showing {{ accessorList.getTotalRowsNumber() }} accessors</h2>
+        <h2 role="alert" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0">Showing {{ accessorList.getTotalRowsNumber() }} accessors</h2>
       </div>
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
@@ -44,11 +44,10 @@
 
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of accessorList.getRecords()" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell nhsuk-body-s width-30">
+              <td class="nhsuk-table__cell width-30">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
-                <span class="d-block">{{ item.accessor.name }},</span>
-                <!-- TODO: Create new pipe -->
-                <span class="d-block">{{ item.accessor.role }}</span>
+                <span class="d-block text-word-break">{{ item.accessor.name }},</span>
+                <span class="d-block">{{ item.accessor.role | serviceRoleTranslate }}</span>
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
@@ -56,11 +55,14 @@
               </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovations") }}</span>
-                <ul class="nhsuk-list nhsuk-u-margin-bottom-1" *ngFor="let innovation of item.innovations">
-                  <li>
-                    <a routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
+
+                <ul class="nhsuk-list">
+                  <li *ngFor="let innovation of item.innovations">
+                    <a class="text-word-break" routerLink="/accessor/innovations/{{ innovation.id }}">{{ innovation.name }}</a>
                   </li>
                 </ul>
+
+                <span *ngIf="item.innovations.length === 0" class="nhsuk-u-visually-hidden">There are no assigned innovations.</span>
               </td>
             </tr>
           </tbody>
