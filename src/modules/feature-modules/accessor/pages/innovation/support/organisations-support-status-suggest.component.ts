@@ -120,7 +120,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
         this.organisationItems = this.organisationsToSuggest.map(org => ({
           value: org.id,
-          label: `${org.name} (${org.acronym})`,
+          label: `${org.name}`,
           description: org.description
         }));
 
@@ -346,10 +346,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     if (this.stepNumber === 1) {
       this.setPageTitle(`Suggest an organisation to support ${this.innovation.name}`, { width: '2.thirds', size: 'l' });
     } else if (this.stepNumber === 2) {
-      this.setPageTitle(
-        `You have selected ${this.chosenUnits.organisation.name} (${this.chosenUnits.organisation.acronym})`,
-        { width: '2.thirds', size: 'l' }
-      );
+      this.setPageTitle(`You have selected ${this.chosenUnits.organisation.name}`, { width: '2.thirds', size: 'l' });
     } else if (this.stepNumber === 3) {
       this.setPageTitle(`Why are you suggesting this organisation to support?`, { width: '2.thirds', size: 'l' });
     } else {
@@ -364,7 +361,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     switch (this.chosenUnits.unitsNames.length) {
       case 0:
         this.setRedirectAlertSuccess(
-          `You have suggested ${this.chosenUnits.organisation.name} (${this.chosenUnits.organisation.acronym}) to support this innovation`
+          `You have suggested ${this.chosenUnits.organisation.name} to support this innovation`
         );
         break;
       case 1:
