@@ -42,6 +42,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   @Input() description?: string;
   @Input() placeholder?: string;
   @Input() lengthLimit?: InputLengthLimitType;
+  @Input() isEditable?: boolean;
   @Input() pageUniqueField? = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;

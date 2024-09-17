@@ -5,9 +5,13 @@ import { CoreComponent } from '@app/base';
 import { WizardModel, WizardStepModel } from '@app/base/models';
 import { ContextInnovationType, MappedObjectType, WizardStepEventType } from '@app/base/types';
 
-import { InnovationCollaboratorsListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationsService, UploadThreadDocumentType } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
+import {
+  InnovationsService,
+  ThreadAvailableRecipientsDTO,
+  UploadThreadDocumentType
+} from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './steps/organisations-step.types';
@@ -17,18 +21,21 @@ import { WizardInnovationThreadNewWarningStepComponent } from './steps/warning-s
 import { WarningStepInputType, WarningStepOutputType } from './steps/warning-step.types';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { omit } from 'lodash';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new',
   templateUrl: './thread-new.component.html'
 })
 export class WizardInnovationThreadNewComponent extends CoreComponent implements OnInit {
+  sectionId?: string;
   innovation: ContextInnovationType;
+  isInnovatorType: boolean;
 
   wizard = new WizardModel<{
     innovationOwnerAndCollaborators: { name: string; role: string }[];
     organisationsStep: {
-      organisationUnits: { id: string; name: string; users: { id: string; userRoleId: string; name: string }[] }[];
+      organisationUnits: { id: string; name: string; users: { id: string; roleId: string; name: string }[] }[];
     };
     subjectMessageStep: {
       subject: string;
@@ -39,16 +46,21 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   }>({});
 
   datasets: {
-    organisationUnits: InnovationSupportsListDTO;
+    organisationUnits: ThreadAvailableRecipientsDTO;
   };
 
   constructor(
     private innovationsService: InnovationsService,
-    private fileUploadService: FileUploadService
+    private fileUploadService: FileUploadService,
+    private activatedRoute: ActivatedRoute
   ) {
     super();
 
+    this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId;
+
     this.innovation = this.stores.context.getInnovation();
+
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
     this.wizard.data = {
       innovationOwnerAndCollaborators:
@@ -68,7 +80,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     const subscriptions: {
       empty: Observable<null>;
       collaborators?: Observable<InnovationCollaboratorsListDTO>;
-      supports?: Observable<InnovationSupportsListDTO>;
+      threadAvailableRecipients?: Observable<ThreadAvailableRecipientsDTO>;
     } = {
       empty: of(null)
     };
@@ -80,7 +92,9 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     }
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
-      subscriptions.supports = this.innovationsService.getInnovationSupportsList(this.innovation.id, true);
+      subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
+        this.innovation.id
+      );
     }
 
     forkJoin(subscriptions).subscribe({
@@ -94,13 +108,10 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           ];
         }
 
-        if (response.supports) {
-          // Engaging organisation units except the user unit, if accessor.
-          this.datasets.organisationUnits = response.supports.filter(
-            item =>
-              item.status === InnovationSupportStatusEnum.ENGAGING ||
-              item.status === InnovationSupportStatusEnum.WAITING
-          );
+        if (response.threadAvailableRecipients) {
+          this.datasets.organisationUnits = response.threadAvailableRecipients;
+
+          // Filter out the user unit, if accessor.
           if (this.stores.authentication.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
               item =>
@@ -108,20 +119,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             );
           }
 
-          // Keep only active engaging accessor
-          this.datasets.organisationUnits = this.datasets.organisationUnits.map(item => {
-            return {
-              ...item,
-              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
-            };
-          });
-
-          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
-            item => item.engagingAccessors.length > 0
-          );
-
-          // Show first step if there's engaging organisations.
-          if (this.stores.authentication.isInnovatorType() && this.datasets.organisationUnits.length === 0) {
+          // Show warning step if there's no units to display.
+          if (this.isInnovatorType && this.datasets.organisationUnits.length === 0) {
             this.wizard.addStep(
               new WizardStepModel<WarningStepInputType, WarningStepOutputType>({
                 id: 'WarningStep',
@@ -137,8 +136,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             this.wizard.addStep(
               new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
                 id: 'organisationsStep',
-                title: this.stores.authentication.isInnovatorType()
-                  ? 'Who do you want to notify about this message?'
+                title: this.isInnovatorType
+                  ? 'Select the support organisations you want to message'
                   : 'Would you like to notify other support organisations about this message?',
                 component: WizardInnovationThreadNewOrganisationsStepComponent,
                 data: {
@@ -164,8 +163,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             data: {
               innovation: { id: this.innovation.id },
               teams: this.getNotifiableTeamsList().visibleList,
-              subject: '',
-              message: '',
+              subject: this.getThreadSubject(),
+              message: this.getThreadMessage(),
               file: null,
               fileName: ''
             },
@@ -185,11 +184,52 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     });
   }
 
+  getSubmittedSectionText() {
+    let submittedSectionText = '';
+
+    if (this.sectionId) {
+      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+      submittedSectionText = sectionIdentification
+        ? `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
+        : '';
+    }
+
+    return submittedSectionText;
+  }
+
+  getThreadSubject(): string {
+    let subject = this.wizard.data.subjectMessageStep.subject;
+
+    if (this.isInnovatorType && this.sectionId && !subject) {
+      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+      subject = sectionIdentification ? `Innovation record update to section ${this.getSubmittedSectionText()}` : '';
+    }
+
+    return subject;
+  }
+
+  getThreadMessage(): string {
+    let message = this.wizard.data.subjectMessageStep.message;
+
+    if (this.isInnovatorType && this.sectionId && !message) {
+      message = `Please take a look at the changes I have made to section ${this.getSubmittedSectionText()}.  \n\nThe main changes I have made are: `;
+    }
+
+    return message;
+  }
+
   onPreviousStep<T extends WizardStepEventType<MappedObjectType>>(stepData: T, ...args: ((data: T) => void)[]): void {
     this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
-      this.redirectToThreadsList();
+      if (this.isInnovatorType && this.sectionId) {
+        this.redirectTo(
+          `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/${this.sectionId}/submitted`
+        );
+      } else {
+        this.redirectToThreadsList();
+      }
+
       return;
     }
 
@@ -230,8 +270,8 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.wizard.setStepData<SubjectMessageStepInputType>('titleMessageStep', {
       innovation: { id: this.innovation.id },
       teams: this.getNotifiableTeamsList().visibleList,
-      subject: this.wizard.data.subjectMessageStep.subject,
-      message: this.wizard.data.subjectMessageStep.message,
+      subject: this.getThreadSubject(),
+      message: this.getThreadMessage(),
       file: this.wizard.data.subjectMessageStep.file,
       fileName: this.wizard.data.subjectMessageStep.fileName
     });
@@ -311,7 +351,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
       return {
         followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
-          item.users.map(u => u.userRoleId)
+          item.users.map(u => u.roleId)
         ),
         visibleList: [
           {
@@ -342,7 +382,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       } else if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
         return {
           followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
-            item.users.map(u => u.userRoleId)
+            item.users.map(u => u.roleId)
           ),
           visibleList: this.wizard.data.organisationsStep.organisationUnits.map(item => ({
             name: item.name,

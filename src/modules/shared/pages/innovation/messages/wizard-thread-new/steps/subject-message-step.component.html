@@ -18,8 +18,8 @@
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Who will be notified about this message</h2>
         <ul class="nhsuk-list">
           <li *ngFor="let team of data.teams" class="nhsuk-u-margin-0">
-            <span class="nhsuk-u-font-weight-bold">{{ team.name }}</span>
-            <ul class="nhsuk-list">
+            <span>{{ team.name }}</span>
+            <ul class="nhsuk-list font-color-secondary">
               <li *ngFor="let user of team.users" class="nhsuk-u-margin-0">{{ user.name }}</li>
             </ul>
           </li>
@@ -29,7 +29,13 @@
       <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
 
-        <theme-form-input controlName="subject" label="Enter a subject for your thread" width="full" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-input
+          controlName="subject"
+          label="Enter a subject for your thread"
+          width="full"
+          [isEditable]="isInnovatorType && sectionId ? false : true"
+          [pageUniqueField]="false"
+        ></theme-form-input>
 
         <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 

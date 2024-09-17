@@ -30,6 +30,7 @@
       [placeholder]="placeholder"
       [value]="fieldControl.value"
       [maxlength]="lengthLimitCharacters ?? null"
+      [readonly]="isEditable === false"
       class="nhsuk-input"
       [ngClass]="inputCssClass"
       [attr.aria-invalid]="hasError ? 'true' : null"

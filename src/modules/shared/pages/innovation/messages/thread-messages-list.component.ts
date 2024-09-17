@@ -11,15 +11,15 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
-import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
 import {
   GetThreadFollowersDTO,
   GetThreadInfoDTO,
   GetThreadMessagesListOutDTO,
   InnovationsService,
+  ThreadAvailableRecipientsDTO,
   UploadThreadMessageDocumentType
 } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { omit } from 'lodash';
 
 @Component({
@@ -35,7 +35,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   messagesList = new TableModel<GetThreadMessagesListOutDTO['messages'][0] & { displayUserName: string }>({
     pageSize: 10
   });
-  engagingOrganisationUnits: InnovationSupportsListDTO;
+  organisationUnits: ThreadAvailableRecipientsDTO;
 
   showFollowersHideStatus: string | null = null;
   threadFollowers: GetThreadFollowersDTO['followers'] | null = null;
@@ -106,7 +106,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         : this.threadsLink
     );
 
-    this.engagingOrganisationUnits = [];
+    this.organisationUnits = [];
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
@@ -131,7 +131,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       threadInfo: Observable<GetThreadInfoDTO>;
       threadFollowers: Observable<GetThreadFollowersDTO>;
       threadMessages: Observable<GetThreadMessagesListOutDTO>;
-      supports?: Observable<InnovationSupportsListDTO>;
+      threadAvailableRecipients?: Observable<ThreadAvailableRecipientsDTO>;
     } = {
       threadInfo: this.innovationsService.getThreadInfo(this.innovation.id, this.threadId),
       threadFollowers: this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId),
@@ -143,7 +143,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     };
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
-      subscriptions.supports = this.innovationsService.getInnovationSupportsList(this.innovation.id, true);
+      subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
+        this.innovation.id
+      );
     }
 
     forkJoin(subscriptions).subscribe({
@@ -171,33 +173,21 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
         this.messagesList.setData(threadMessages, response.threadMessages.count);
 
-        if (response.supports) {
-          // Engaging organisation units except the user unit, if accessor.
-          this.engagingOrganisationUnits = response.supports.filter(
-            item =>
-              item.status === InnovationSupportStatusEnum.ENGAGING ||
-              item.status === InnovationSupportStatusEnum.WAITING
-          );
+        if (response.threadAvailableRecipients) {
+          this.organisationUnits = response.threadAvailableRecipients;
 
+          // Filter out the user unit, if accessor.
           if (this.stores.authentication.isAccessorType()) {
-            this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(
+            this.organisationUnits = this.organisationUnits.filter(
               item =>
                 item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
             );
           }
 
-          // Keep only active engaging accessors
-          this.engagingOrganisationUnits = this.engagingOrganisationUnits.map(item => {
-            return {
-              ...item,
-              engagingAccessors: item.engagingAccessors.filter(accessor => accessor.isActive)
-            };
-          });
-
-          // Checks if there's any engaging accessor that's not a follower
-          this.showAddRecipientsLink = this.engagingOrganisationUnits
-            .reduce((acc: string[], item) => [...acc, ...item.engagingAccessors.map(a => a.userRoleId)], [])
-            .some(userRoleId => !this.threadFollowers?.map(follower => follower.role.id).includes(userRoleId));
+          // Checks if there's any accessor that's not a follower
+          this.showAddRecipientsLink = this.organisationUnits
+            .reduce((acc: string[], item) => [...acc, ...item.recipients.map(a => a.roleId)], [])
+            .some(roleId => !this.threadFollowers?.map(follower => follower.role.id).includes(roleId));
         }
 
         // Throw notification read dismiss.
