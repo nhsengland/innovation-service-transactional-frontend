@@ -5,6 +5,7 @@ import { TableModel } from '@app/base/models';
 import { AccessorService, GetUnitAccessorList } from '../../services/accessor.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
 type AccessorAndInnovationsInfo = GetUnitAccessorList['data'][0];
 
@@ -24,7 +25,7 @@ export class AccessorAndInnovationListComponent extends CoreComponent implements
   });
 
   form = new FormGroup({
-    search: new FormControl('', { validators: [Validators.maxLength(200)], updateOn: 'blur' })
+    search: new FormControl('', { validators: [Validators.maxLength(INPUT_LENGTH_LIMIT.xs)], updateOn: 'blur' })
   });
 
   constructor(private readonly accessorService: AccessorService) {
