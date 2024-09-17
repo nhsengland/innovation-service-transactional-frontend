@@ -152,6 +152,25 @@ export type CreateThreadMessageDTO = {
   };
 };
 
+export enum InnovationRelevantOrganisationsStatusEnum {
+  ENGAGING = 'ENGAGING',
+  SUGGESTED = 'SUGGESTED',
+  WAITING = 'WAITING',
+  PREVIOUS_ENGAGED = 'PREVIOUS_ENGAGED'
+}
+
+export type ThreadAvailableRecipientsDTO = {
+  id: string;
+  status: InnovationRelevantOrganisationsStatusEnum;
+  organisation: {
+    id: string;
+    name: string;
+    acronym: string;
+    unit: { id: string; name: string; acronym: string };
+  };
+  recipients: { id: string; roleId: string; name: string }[];
+}[];
+
 export type InnovationThreadListFiltersType = {
   subject?: string;
   following?: boolean;
@@ -694,6 +713,14 @@ export class InnovationsService extends CoreService {
       .addPath('v1/:innovationId/threads')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
+  }
+
+  getThreadAvailableRecipients(innovationId: string): Observable<ThreadAvailableRecipientsDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/threads/available-recipients')
+      .setPathParams({ innovationId });
+
+    return this.http.get<ThreadAvailableRecipientsDTO>(url.buildUrl()).pipe(take(1));
   }
 
   createThreadMessage(
