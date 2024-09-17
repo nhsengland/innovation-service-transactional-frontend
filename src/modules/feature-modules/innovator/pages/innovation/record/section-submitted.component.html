@@ -12,10 +12,18 @@
         </p>
       </ng-container>
 
-      <p *ngIf="!isArchived">
-        Send a message to those who are supporting you to let them know about the changes you have made.
-        <a routerLink="/innovator/innovations/{{ innovation.id }}/threads" target="_blank" rel="noopener noreferrer">Go to messages (opens in a new window).</a>
-      </p>
+      <ng-container *ngIf="!isArchived">
+        <p>
+          Message your support organisations to let them know if you've made any significant changes to your innovation record. For example, you have conducted clinical trials.
+        </p>
+
+        <div class="nhsuk-action-link">
+          <a routerLink="/innovator/innovations/{{ innovation.id }}/threads/new" [queryParams]="{ sectionId: section.id }" class="nhsuk-action-link__link">
+            <theme-svg-icon type="arrow-right-circle" />
+            <span class="nhsuk-action-link__text">Select organisations to message</span>
+          </a>
+        </div>
+      </ng-container>
 
       <div>
         <a [routerLink]="sectionLink">Return to section</a>
