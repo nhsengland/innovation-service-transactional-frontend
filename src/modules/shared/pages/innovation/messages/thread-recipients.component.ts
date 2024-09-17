@@ -8,9 +8,12 @@ import {
   OrganisationsStepInputType,
   OrganisationsStepOutputType
 } from '@modules/shared/pages/innovation/messages/wizard-thread-new/steps/organisations-step.types';
-import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { GetThreadFollowersDTO, InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import {
+  GetThreadFollowersDTO,
+  InnovationsService,
+  ThreadAvailableRecipientsDTO
+} from '@modules/shared/services/innovations.service';
+import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { Observable, forkJoin } from 'rxjs';
 
 @Component({
@@ -22,13 +25,16 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
   threadId: string;
 
   threadFollowers: GetThreadFollowersDTO['followers'] | null = null;
-  engagingOrganisationUnits: InnovationSupportsListDTO;
 
   wizard = new WizardModel<{
     organisationsStep: {
-      organisationUnits: { id: string; name: string; users: { id: string; userRoleId: string; name: string }[] }[];
+      organisationUnits: { id: string; name: string; users: { id: string; roleId: string; name: string }[] }[];
     };
   }>({});
+
+  datasets: {
+    organisationUnits: ThreadAvailableRecipientsDTO;
+  };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -39,10 +45,12 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
     this.innovation = this.stores.context.getInnovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
 
-    this.engagingOrganisationUnits = [];
-
     this.wizard.data = {
       organisationsStep: { organisationUnits: [] }
+    };
+
+    this.datasets = {
+      organisationUnits: []
     };
   }
 
@@ -51,50 +59,45 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
 
     const subscriptions: {
       threadFollowers: Observable<GetThreadFollowersDTO>;
-      supports?: Observable<InnovationSupportsListDTO>;
+      threadAvailableRecipients?: Observable<ThreadAvailableRecipientsDTO>;
     } = {
       threadFollowers: this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId)
     };
 
     if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
-      subscriptions.supports = this.innovationsService.getInnovationSupportsList(this.innovation.id, true);
+      subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
+        this.innovation.id
+      );
     }
 
     forkJoin(subscriptions).subscribe({
       next: response => {
         this.threadFollowers = response.threadFollowers.followers.filter(follower => !follower.isLocked); //remove locked users;
 
-        if (response.supports) {
-          // Engaging organisation units except the user unit, if accessor.
-          this.engagingOrganisationUnits = response.supports.filter(
-            item =>
-              item.status === InnovationSupportStatusEnum.ENGAGING ||
-              item.status === InnovationSupportStatusEnum.WAITING
-          );
+        if (response.threadAvailableRecipients) {
+          this.datasets.organisationUnits = response.threadAvailableRecipients;
 
+          // Filter out the user unit, if accessor.
           if (this.stores.authentication.isAccessorType()) {
-            this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(
+            this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
               item =>
                 item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
             );
           }
 
-          // Keep only active engaging accessors that are not followers
-          this.engagingOrganisationUnits = this.engagingOrganisationUnits.map(item => {
+          // Keep only accessors that are not followers.
+          this.datasets.organisationUnits = this.datasets.organisationUnits.map(item => {
             return {
               ...item,
-              engagingAccessors: item.engagingAccessors.filter(
+              recipients: item.recipients.filter(
                 accessor =>
-                  accessor.isActive &&
                   this.threadFollowers &&
-                  !this.threadFollowers.map(follower => follower.role.id).includes(accessor.userRoleId)
+                  !this.threadFollowers.map(follower => follower.role.id).includes(accessor.roleId)
               )
             };
           });
 
-          this.engagingOrganisationUnits = this.engagingOrganisationUnits.filter(
-            item => item.engagingAccessors.length > 0
-          );
+          this.datasets.organisationUnits = this.datasets.organisationUnits.filter(item => item.recipients.length > 0);
 
           this.wizard.addStep(
             new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
@@ -104,7 +107,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
               component: WizardInnovationThreadNewOrganisationsStepComponent,
               data: {
                 innovation: { id: this.innovation.id },
-                organisationUnits: this.engagingOrganisationUnits,
+                organisationUnits: this.datasets.organisationUnits,
                 selectedOrganisationUnits: [],
                 activeInnovators: false
               },
@@ -171,7 +174,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
     if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
       return {
         followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
-          item.users.map(u => u.userRoleId)
+          item.users.map(u => u.roleId)
         )
       };
     } else if (this.stores.authentication.isInnovatorType()) {
@@ -187,7 +190,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
       } else if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS) {
         return {
           followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
-            item.users.map(u => u.userRoleId)
+            item.users.map(u => u.roleId)
           )
         };
       } else {
