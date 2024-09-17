@@ -168,6 +168,14 @@ export const locale = {
       }
     },
 
+    roles: {
+      ADMIN: 'Administrator',
+      INNOVATOR: 'Innovator',
+      ASSESSMENT: 'Needs assessor',
+      ACCESSOR: 'Accessor',
+      QUALIFYING_ACCESSOR: 'Qualifying accessor'
+    },
+
     // Shared translations to serve external / catalog modules.
     shared: {
       catalog: {

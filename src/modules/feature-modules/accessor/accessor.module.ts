@@ -43,6 +43,7 @@ import { AccessorService } from './services/accessor.service';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
+import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AccessorRoutingModule],
@@ -81,7 +82,9 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     WizardInnovationCustomNotificationDeleteNotificationsStepComponent,
     WizardInnovationCustomNotificationDeleteSummaryStepComponent,
     // // Training.
-    TrainingAndResourcesComponent
+    TrainingAndResourcesComponent,
+    // // Unit
+    AccessorAndInnovationListComponent
   ],
   providers: [
     // Services.
