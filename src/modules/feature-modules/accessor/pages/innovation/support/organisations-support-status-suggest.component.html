@@ -59,7 +59,7 @@
             </ng-container>
             <ng-template #noUnits>
               <p class="nhsuk-u-font-weight-bold" [ngClass]="{ 'nhsuk-u-margin-bottom-0': !chosenUnits.organisation.information }">
-                You have selected {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})
+                You have selected {{ chosenUnits.organisation.name }}
               </p>
             </ng-template>
 
@@ -87,7 +87,7 @@
           <theme-form-textarea
             [id]="'comment'"
             controlName="comment"
-            label="Describe why you think this innovation would benefit from support from {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})"
+            label="Describe why you think this innovation would benefit from support from {{ chosenUnits.organisation.name }}"
             [pageUniqueField]="false"
             lengthLimit="xl"
           ></theme-form-textarea>
