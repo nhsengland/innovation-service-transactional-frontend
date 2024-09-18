@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Observable, Observer, of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { LocalStorageHelper } from '@modules/core/helpers/local-storage.helper';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
@@ -23,43 +23,30 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
   }
 
   initializeAuthentication$(): Observable<boolean> {
-    return new Observable((observer: Observer<boolean>) => {
-      //this.authenticationService.verifyUserSession()
-      of(true)
-        .pipe(
-          concatMap(() => this.authenticationService.getUserInfo()),
-          concatMap(user => {
-            this.state.user = user;
-            this.state.isSignIn = true;
+    return this.authenticationService.getUserInfo().pipe(
+      tap(user => {
+        this.state.user = user;
+        this.state.isSignIn = true;
 
-            if (user.roles.length === 1) {
-              this.setUserContext({
-                id: user.id,
-                roleId: user.roles[0].id,
-                type: user.roles[0].role,
-                ...(user.roles[0].organisation && { organisation: user.roles[0].organisation }),
-                ...(user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit })
-              });
-            } else {
-              this.setUserContextFromStorage();
-            }
-
-            return of(true);
-          })
-        )
-        .subscribe({
-          next: () => {
-            this.setState(this.state);
-            observer.next(true);
-            observer.complete();
-          },
-          error: e => {
-            this.setState(this.state);
-            observer.error(e);
-            observer.complete();
-          }
-        });
-    });
+        if (user.roles.length === 1) {
+          this.setUserContext({
+            id: user.id,
+            roleId: user.roles[0].id,
+            type: user.roles[0].role,
+            ...(user.roles[0].organisation && { organisation: user.roles[0].organisation }),
+            ...(user.roles[0].organisationUnit && { organisationUnit: user.roles[0].organisationUnit })
+          });
+        } else {
+          this.setUserContextFromStorage();
+        }
+      }),
+      tap(() => this.setState(this.state)),
+      map(() => true),
+      catchError(error => {
+        this.setState(this.state);
+        return throwError(() => error);
+      })
+    );
   }
 
   signOut() {
@@ -84,7 +71,12 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.user?.hasInnovationCollaborations ?? false;
   }
   hasAnnouncements(): boolean {
-    return this.state.user?.hasAnnouncements ?? false;
+    const role = this.state.userContext?.type;
+    const hasLoginAnnouncements = this.state.user?.hasLoginAnnouncements;
+    if (role && hasLoginAnnouncements) {
+      return hasLoginAnnouncements[role] ?? false;
+    }
+    return false;
   }
 
   isAccessorType(): boolean {
@@ -161,7 +153,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
         termsOfUseAccepted: false,
         hasInnovationTransfers: false,
         hasInnovationCollaborations: false,
-        hasAnnouncements: false,
+        hasLoginAnnouncements: {},
         passwordResetAt: null,
         firstTimeSignInAt: null,
         organisations: []
@@ -199,21 +191,21 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     this.state.userContext = userContext;
   }
 
-  getRoleDescription(role: string): string {
+  getRoleDescription(role: string, plural: boolean = false): string {
     switch (role) {
       case 'ADMIN':
-        return 'Administrator';
+        return !plural ? 'Administrator' : 'Administrators';
       // Think this one is not used
       case 'INNOVATOR_OWNER':
-        return 'Owner';
+        return !plural ? 'Owner' : 'Owners';
       case 'ASSESSMENT':
-        return 'Needs assessor';
+        return !plural ? 'Needs assessor' : 'Needs assessors';
       case 'INNOVATOR':
-        return 'Innovator';
+        return !plural ? 'Innovator' : 'Innovators';
       case 'ACCESSOR':
-        return 'Accessor';
+        return !plural ? 'Accessor' : 'Accessors';
       case 'QUALIFYING_ACCESSOR':
-        return 'Qualifying accessor';
+        return !plural ? 'Qualifying accessor' : 'Qualifying accessors';
       default:
         return '';
     }

@@ -22,7 +22,7 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
   @Input() arrayName = '';
   @Input() label?: string;
   @Input() description?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   @Input()
   set config(

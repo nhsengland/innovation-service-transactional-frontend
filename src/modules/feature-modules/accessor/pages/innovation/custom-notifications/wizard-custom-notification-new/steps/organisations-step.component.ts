@@ -30,9 +30,7 @@ export class WizardInnovationCustomNotificationNewOrganisationsStepComponent
     organisations: new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray(this.errorMessage)])
   });
 
-  organisationsItems: Required<FormEngineParameterModel>['items'] = [
-    { value: 'Select the organisations you want to be notified about:', label: 'HEADING' }
-  ];
+  organisationsItems: Required<FormEngineParameterModel>['items'] = [];
 
   constructor() {
     super();

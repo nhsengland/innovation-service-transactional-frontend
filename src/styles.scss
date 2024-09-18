@@ -171,6 +171,12 @@ $service-manual-container-size: 1100px; // Container width variable.
 .width-75 {
   width: 75%;
 }
+.width-85 {
+  width: 85%;
+}
+.width-100 {
+  width: 100%;
+}
 
 .height-100 {
   height: 100%;
@@ -799,7 +805,7 @@ a.app-tag {
   }
 
   &:focus {
-    box-shadow: none;
+    box-shadow: 0 0 0 2px #ffeb3b !important;
   }
 }
 

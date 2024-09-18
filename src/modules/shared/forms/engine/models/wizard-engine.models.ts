@@ -3,6 +3,7 @@ import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { FormGroup } from '@app/base/forms';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -23,8 +24,8 @@ export type StepsParentalRelationsType = {
 
 export class WizardEngineModel {
   schema: InnovationRecordSchemaInfoType | undefined;
-  isChangingMode: boolean = false;
-  visitedSteps: Set<string> = new Set<string>();
+  isChangingMode: boolean;
+  visitedSteps: Set<string>;
   steps: WizardStepType[];
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
@@ -60,6 +61,8 @@ export class WizardEngineModel {
     this.inboundParsing = data.inboundParsing;
     this.outboundParsing = data.outboundParsing;
     this.summaryParsing = data.summaryParsing;
+    this.visitedSteps = new Set<string>();
+    this.isChangingMode = false;
   }
 
   runRules(data?: MappedObjectType): this {
@@ -127,15 +130,36 @@ export class WizardEngineModel {
 
   previousStep(): this {
     if (this.showSummary && this.currentStepId === 'summary') {
-      this.currentStepId = this.steps.length;
-    } else if (typeof this.currentStepId === 'number') {
-      this.currentStepId--;
       if (this.isChangingMode) {
-        if (this.visitedSteps.has(this.getCurrentStepObjId())) {
-          return this;
-        } else {
-          this.previousStep();
+        // If we are in changing mode, we should go to the last visited step.
+        const lastVisitedStepObjId = [...this.visitedSteps][0]; // in changing mode, when the current step is the summary, we only have one visited step;
+        const lastVisitedStepId = this.steps.findIndex(step => this.getStepObjId(step) === lastVisitedStepObjId);
+
+        this.currentStepId = lastVisitedStepId + 1;
+
+        return this;
+      } else {
+        this.currentStepId = this.steps.length;
+      }
+    } else if (typeof this.currentStepId === 'number') {
+      if (this.isChangingMode) {
+        const stepObjIdBeforeDecrement = this.getCurrentStepObjId();
+        while (true) {
+          this.currentStepId--;
+          // If the new current step is a child of any visited step, we should visit it.
+          if (this.visitedSteps.has(this.getCurrentStepObjId())) {
+            return this;
+          }
+          // If the new current step is the first step, we should go to the summary.
+          if (this.currentStepId === 1) {
+            this.visitedSteps.clear();
+            this.visitedSteps.add(stepObjIdBeforeDecrement);
+            this.gotoSummary();
+            return this;
+          }
         }
+      } else {
+        this.currentStepId--;
       }
     }
     return this;
@@ -146,10 +170,8 @@ export class WizardEngineModel {
     this.currentStepId = 'summary';
   }
 
-  gotoStep(step: number | 'summary', isChangeMode: boolean = false): this {
+  gotoStep(step: number | 'summary'): this {
     this.visitedSteps.clear();
-
-    this.isChangingMode = isChangeMode;
 
     if (step === 'summary') {
       this.runSummaryParsing();
@@ -166,11 +188,10 @@ export class WizardEngineModel {
     if (this.showSummary && typeof this.currentStepId === 'number' && this.currentStepId === this.steps.length) {
       this.gotoSummary();
     } else if (typeof this.currentStepId === 'number') {
-      this.currentStepId++;
-      this.visitedSteps.add(this.getCurrentStepObjId());
-
       if (this.isChangingMode) {
         this.checkStepConditions();
+      } else {
+        this.currentStepId++;
       }
     }
 
@@ -179,21 +200,28 @@ export class WizardEngineModel {
 
   checkStepConditions(): this {
     if (typeof this.currentStepId === 'number') {
-      const isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
-        this.stepsChildParentRelations[this.getCurrentStepObjId()]
-      );
+      const stepObjIdBeforeIncrement = this.getCurrentStepObjId();
+      while (true) {
+        this.currentStepId++;
 
-      // Check if visitedSteps has no 'parent' steps in it, if so go to summary.
-      if (![...this.visitedSteps].some(step => Object.values(this.stepsChildParentRelations).includes(step))) {
-        this.gotoSummary();
-        return this;
-      }
+        // Check if the new current step is a child of any visited step.
+        const isCurrentStepChildOfAnyVisitedSteps = this.visitedSteps.has(
+          this.stepsChildParentRelations[this.getCurrentStepObjId()]
+        );
 
-      if (isCurrentStepChildOfAnyVisitedSteps) {
-        return this;
-      } else {
-        this.visitedSteps.delete(this.getCurrentStepObjId());
-        this.nextStep();
+        // If the new current step is a child of any visited step, we should visit it.
+        if (isCurrentStepChildOfAnyVisitedSteps) {
+          this.visitedSteps.add(this.getCurrentStepObjId());
+          return this;
+        }
+
+        // If we reach the last step, we should go to the summary.
+        if (this.currentStepId === this.steps.length) {
+          this.visitedSteps.clear();
+          this.visitedSteps.add(stepObjIdBeforeIncrement);
+          this.gotoSummary();
+          return this;
+        }
       }
     } else {
       this.gotoSummary();
@@ -202,9 +230,13 @@ export class WizardEngineModel {
     return this;
   }
 
-  getCurrentStepObjId(): string {
+  getStepObjId(step: FormEngineModel): string {
     // split on '_' to account for dynamic named steps (i.e.: 'standardHasMet_xxxxxxx' => 'standardHasMet')
-    return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
+    return step?.parameters[0].id.split('_')[0] ?? '';
+  }
+
+  getCurrentStepObjId(): string {
+    return this.getStepObjId(this.currentStep());
   }
 
   getAnswers(): { [key: string]: any } {
@@ -224,6 +256,11 @@ export class WizardEngineModel {
     return this;
   }
 
+  setIsChangingMode(value: boolean): this {
+    this.isChangingMode = value;
+    return this;
+  }
+
   getSummary(): WizardSummaryType[] {
     return this.summary;
   }
@@ -239,5 +276,26 @@ export class WizardEngineModel {
         description: value || ''
       }))
     };
+  }
+
+  checkCurrentStepErrors(form?: FormGroup): { fieldId: string; message: string }[] | null {
+    const currentStep = this.currentStep();
+    if (form) {
+      const formErrors = FormEngineHelper.getErrors(form, true);
+      return Object.entries(formErrors).map(([key, value]) => {
+        const parameter = currentStep.parameters.find(p => p.id === key)!;
+        return {
+          fieldId:
+            parameter.dataType === 'checkbox-array' || parameter.dataType === 'radio-group'
+              ? parameter.id + '0'
+              : parameter.dataType === 'date-input'
+                ? 'day-' + parameter.id
+                : parameter.id,
+          message: value ?? ''
+        };
+      });
+    }
+
+    return null;
   }
 }

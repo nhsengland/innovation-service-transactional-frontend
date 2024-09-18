@@ -5,9 +5,11 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators, FormEngineParameterModel, FormGroup } from '@app/base/forms';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
-import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './organisations-step.types';
+import {
+  InnovationRelevantOrganisationsStatusEnum,
+  ThreadAvailableRecipientsDTO
+} from '@modules/shared/services/innovations.service';
 
 @Component({
   selector: 'shared-pages-innovation-messages-wizard-thread-new-organisations-step',
@@ -59,19 +61,14 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
   }
 
   ngOnInit(): void {
-    this.leadText =
-      this.isInnovatorType || this.isAssessmentType
-        ? 'You can select organisations that are currently engaging or waiting to support this innovation.'
-        : 'You can select other organisations that are currently engaging or waiting to support this innovation.';
+    this.leadText = this.isInnovatorType
+      ? 'These organisations are either currently supporting your innovation, have been suggested or are waiting to support, or have supported you in the past.'
+      : `You can select other organisations that are either currently supporting this innovation, have been suggested or are waiting to support, or have supported this innovation in the past.`;
 
     if (this.isInnovatorType || !(this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType))) {
       this.formValidationMessage = 'Select the organisations you want to notify about this message';
-    } else if (this.isAssessmentType) {
-      this.formValidationMessage =
-        "Select organisations, or select 'No, I only want to notify the innovator about this message'";
     } else {
-      this.formValidationMessage =
-        "Select other organisations, or select 'No, I only want to notify the innovator about this message'";
+      this.formValidationMessage = `Select other organisations, or select 'No, I only want to notify the innovator about this message'`;
     }
 
     this.form.controls['organisationUnits'].setValidators([
@@ -82,20 +79,36 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
       (this.form.get('organisationUnits') as FormArray).push(new FormControl<string>(item));
     });
 
-    const engagingSupports: InnovationSupportsListDTO = [];
-    const waitingSupports: InnovationSupportsListDTO = [];
+    const engagingSupports: ThreadAvailableRecipientsDTO = [];
+    const suggestedOrganisations: ThreadAvailableRecipientsDTO = [];
+    const waitingSupports: ThreadAvailableRecipientsDTO = [];
+    const engagedInThePastSupports: ThreadAvailableRecipientsDTO = [];
     for (const unit of this.data.organisationUnits) {
-      unit.status === InnovationSupportStatusEnum.ENGAGING && engagingSupports.push(unit);
-      unit.status === InnovationSupportStatusEnum.WAITING && waitingSupports.push(unit);
+      unit.status === InnovationRelevantOrganisationsStatusEnum.ENGAGING && engagingSupports.push(unit);
+      unit.status === InnovationRelevantOrganisationsStatusEnum.SUGGESTED && suggestedOrganisations.push(unit);
+      unit.status === InnovationRelevantOrganisationsStatusEnum.WAITING && waitingSupports.push(unit);
+      unit.status === InnovationRelevantOrganisationsStatusEnum.PREVIOUS_ENGAGED && engagedInThePastSupports.push(unit);
     }
 
+    // For the following logic to display organisations' checkboxes, keep in mind that if 'submitStep' is true, it means this component is being used as part of the 'Add recipientes' flow (thread recipients component). Thus, we display the names of the engaging accessors. Otherwise, while on the thread creation flow, we do not display the names of the engaging accessors.
     if (engagingSupports.length > 0) {
       this.formOrganisationUnitsItems.push(
         { value: 'Engaging organisations', label: 'HEADING' },
         ...engagingSupports.map(support => ({
           value: support.organisation.unit.id,
-          label: `${support.organisation.unit.name} (${support.organisation.unit.acronym})`,
-          description: support.engagingAccessors.map(item => item.name).join('<br />')
+          label: `${support.organisation.unit.name}`,
+          ...(this.isSubmitStep && { description: support.recipients.map(item => item.name).join('<br />') })
+        }))
+      );
+    }
+
+    if (suggestedOrganisations.length > 0) {
+      this.formOrganisationUnitsItems.push(
+        { value: 'Suggested organisations', label: 'HEADING' },
+        ...suggestedOrganisations.map(support => ({
+          value: support.organisation.unit.id,
+          label: `${support.organisation.unit.name}`,
+          ...(this.isSubmitStep && { description: support.recipients.map(item => item.name).join('<br />') })
         }))
       );
     }
@@ -105,8 +118,19 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
         { value: 'Waiting organisations', label: 'HEADING' },
         ...waitingSupports.map(s => ({
           value: s.organisation.unit.id,
-          label: `${s.organisation.unit.name} (${s.organisation.unit.acronym})`,
-          description: s.engagingAccessors.map(item => item.name).join('<br />')
+          label: `${s.organisation.unit.name}`,
+          ...(this.isSubmitStep && { description: s.recipients.map(item => item.name).join('<br />') })
+        }))
+      );
+    }
+
+    if (engagedInThePastSupports.length > 0) {
+      this.formOrganisationUnitsItems.push(
+        { value: 'Previously supported', label: 'HEADING' },
+        ...engagedInThePastSupports.map(s => ({
+          value: s.organisation.unit.id,
+          label: `${s.organisation.unit.name}`,
+          ...(this.isSubmitStep && { description: s.recipients.map(item => item.name).join('<br />') })
         }))
       );
     }
@@ -118,7 +142,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
       );
     }
 
-    this.setPageTitle(this.title);
+    this.setPageTitle(this.title, { size: 'l' });
     this.setPageStatus('READY');
   }
 
@@ -130,8 +154,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
         return {
           id: formValue,
           name: organisationUnit?.organisation.unit.name ?? '', // TODO: Change this id to userRoleId
-          users:
-            organisationUnit?.engagingAccessors.map(u => ({ id: u.id, userRoleId: u.userRoleId, name: u.name })) ?? []
+          users: organisationUnit?.recipients.map(u => ({ id: u.id, roleId: u.roleId, name: u.name })) ?? []
         };
       })
     };

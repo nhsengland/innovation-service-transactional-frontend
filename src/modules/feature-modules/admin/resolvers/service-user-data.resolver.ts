@@ -7,7 +7,7 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { AdminUsersService } from '../services/users.service';
 
-type ServiceUserData = Pick<UserInfo, 'id' | 'name' | 'email'>;
+export type ServiceUserData = Pick<UserInfo, 'id' | 'name' | 'email' | 'isActive'> & { isInnovator: boolean };
 
 @Injectable()
 export class ServiceUserDataResolver {

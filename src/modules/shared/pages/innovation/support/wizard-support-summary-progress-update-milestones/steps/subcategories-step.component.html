@@ -2,8 +2,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
-        <theme-form-checkbox-array arrayName="subcategories" [items]="subcategoriesItems" [pageUniqueField]="false"></theme-form-checkbox-array>
-
+        <theme-form-checkbox-array arrayName="subcategories" label="Select one or more subcategories" [items]="subcategoriesItems" [pageUniqueField]="false"></theme-form-checkbox-array>
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
       </form>
     </div>

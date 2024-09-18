@@ -19,25 +19,27 @@ import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
 import { PageUserFindComponent } from './pages/users/user-find.component';
 import { PageUserInfoComponent } from './pages/users/user-info.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
-import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
 import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
+import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -88,23 +90,25 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageUserNewComponent,
     PageRoleNewComponent,
     // // Announcements.
-    PageAnnouncementInfoComponent,
+    PageAnnouncementDetailsComponent,
     PageAnnouncementNewditComponent,
     PageAnnouncementsListComponent,
     // // Dashboard.
     PageDashboardComponent,
     // // Innovation
     InnovationOverviewComponent,
+    PageInnovationManageTransferComponent,
     // // Organisations.
     PageOrganisationNewComponent,
     PageOrganisationEditComponent,
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,
     PageOrganisationUnitNewComponent,
-    PageTeamsInfoComponent,
+    OrganisationUnitInfoComponent,
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserDeleteComponent,
+    PageUserInnovationsComponent,
     PageUserManageComponent,
     PageUserLockComponent,
     PageUserUnlockComponent,

@@ -5,6 +5,7 @@ import {
   WizardStepType,
   WizardSummaryType
 } from '@modules/shared/forms';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
@@ -167,7 +168,10 @@ function runtimeRules(
                 id: 'website',
                 dataType: 'text',
                 label: 'Website',
-                validations: { isRequired: [true, 'Website url is required'], maxLength: 100, urlFormat: true }
+                validations: {
+                  isRequired: [true, 'Website url is required'],
+                  urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xxs }
+                }
               })
             },
             { value: 'NO', label: 'No' }

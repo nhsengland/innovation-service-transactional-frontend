@@ -22,20 +22,21 @@ import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
 // // Announcements.
-import { PageAnnouncementInfoComponent } from './pages/announcements/announcement-info.component';
+import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
 import { PageAnnouncementsListComponent } from './pages/announcements/announcements-list.component';
 // // Dashboard.
 import { PageDashboardComponent } from './pages/dashboard/dashboard.component';
 // // Innovation
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/transfer/manage-transfer.component';
 // // Organisations.
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
+import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -85,6 +86,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { PageUserDeleteComponent } from './pages/users/user-delete.component';
 import { PageUserEmailComponent } from './pages/users/user-email.component';
+import { PageUserInnovationsComponent } from './pages/users/user-innovations.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { AnnouncementDataResolver } from './resolvers/announcement-data.resolver';
 import { OrganisationDataResolver } from './resolvers/organisation-data.resolver';
@@ -125,7 +127,7 @@ const header: RoutesDataType['header'] = {
         label: 'Communications',
         children: [
           {
-            label: 'Announcement',
+            label: 'Announcements',
             url: '/admin/announcements',
             description: 'Manage and create announcements'
           },
@@ -160,8 +162,8 @@ const routes: Routes = [
 
           { path: 'new', pathMatch: 'full', component: PageOrganisationNewComponent },
 
-          { path: 'ASSESSMENT', pathMatch: 'full', component: PageTeamsInfoComponent },
-          { path: 'ADMIN', pathMatch: 'full', component: PageTeamsInfoComponent },
+          { path: 'ASSESSMENT', pathMatch: 'full', component: OrganisationUnitInfoComponent },
+          { path: 'ADMIN', pathMatch: 'full', component: OrganisationUnitInfoComponent },
 
           {
             path: ':organisationId',
@@ -207,7 +209,7 @@ const routes: Routes = [
                         path: '',
                         pathMatch: 'full',
                         data: { breadcrumb: null },
-                        component: PageTeamsInfoComponent
+                        component: OrganisationUnitInfoComponent
                       },
                       {
                         path: 'edit',
@@ -261,9 +263,10 @@ const routes: Routes = [
                 data: { breadcrumb: 'Manage account' },
                 children: [
                   { path: '', pathMatch: 'full', component: PageUserManageComponent },
-                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
                   { path: 'lock', pathMatch: 'full', component: PageUserLockComponent },
                   { path: 'unlock', pathMatch: 'full', component: PageUserUnlockComponent },
+                  { path: 'delete', pathMatch: 'full', component: PageUserDeleteComponent },
+                  { path: 'innovations', pathMatch: 'full', component: PageUserInnovationsComponent },
                   {
                     path: 'mfa',
                     data: { layout: { type: 'full' } },
@@ -316,6 +319,10 @@ const routes: Routes = [
       {
         path: 'announcements',
         data: { breadcrumb: 'Announcements' },
+        resolve: {
+          irSchemaData: innovationRecordSchemaResolver
+        },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
@@ -334,7 +341,7 @@ const routes: Routes = [
               {
                 path: '',
                 pathMatch: 'full',
-                component: PageAnnouncementInfoComponent,
+                component: PageAnnouncementDetailsComponent,
                 data: { breadcrumb: null }
               },
               { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
@@ -686,6 +693,24 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: PageInnovationStatusListComponent,
                 data: { breadcrumb: 'Statuses' }
+              },
+              {
+                path: 'transfer',
+                data: { breadcrumb: 'Transfer ownership', layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    redirectTo: '1',
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: ':stepId',
+                    pathMatch: 'full',
+                    component: PageInnovationManageTransferComponent,
+                    data: { breadcrumb: null }
+                  }
+                ]
               }
             ]
           }

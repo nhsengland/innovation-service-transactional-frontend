@@ -9,7 +9,7 @@
 
         <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+          <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
         </div>
 
         <ng-container *ngIf="(isAssessmentType || isAccessorType) && !isArchived">
@@ -36,7 +36,7 @@
               >
                 <span *ngIf="follower.role.role === 'INNOVATOR'; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? "Owner" : "Collaborator" }})</span>
                 <ng-template #notInnovator>
-                  <span>{{ follower.name }} ({{ follower.organisationUnit?.acronym ?? stores.authentication.getRoleDescription(follower.role.role) }})</span>
+                  <span>{{ follower.name }}, {{ follower.organisationUnit?.name ?? stores.authentication.getRoleDescription(follower.role.role) }}</span>
                 </ng-template>
               </dt>
               <dt
@@ -69,7 +69,10 @@
             </button>
           </form>
 
-          <div *ngIf="canCreateMessage" class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral">
+          <div
+            *ngIf="canCreateMessage"
+            class="nhsuk-body-m nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-padding-left-3 nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5 border-left-inset-neutral"
+          >
             <span class="nhsuk-u-visually-hidden">Information: </span>
             <span
               >Once sent, all recipients in this thread will be notified. For transparency reasons, this message can be seen and replied to by everyone who has access to this

@@ -4,7 +4,7 @@
       <p class="nhsuk-u-margin-bottom-7">You can backdate a progress update within the time your organisation has been engaging with this innovation.</p>
 
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
-        <theme-form-date-input id="progressUpdateDate" title="Enter date" [pageUniqueField]="false"></theme-form-date-input>
+        <theme-form-date-input id="progressUpdateDate" groupName="date" label="Enter date" [pageUniqueField]="false"></theme-form-date-input>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="!saveButton.isActive">{{ saveButton.label }}</button>
       </form>

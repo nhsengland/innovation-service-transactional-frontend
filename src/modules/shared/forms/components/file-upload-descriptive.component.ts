@@ -26,7 +26,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
   @Input() value?: File | null;
   @Input() label?: string;
   @Input() description?: string;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input()
   set config(
     c:

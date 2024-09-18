@@ -47,7 +47,7 @@
         <div class="nhsuk-grid-column-two-thirds">
           <div class="bg-color-white nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 nhsuk-u-margin-bottom-5">
             <ng-container *ngIf="chosenUnits.unitsNames.length > 0; else noUnits">
-              <p class="nhsuk-u-font-weight-bold">You have suggested {{ chosenUnits.unitsNames.length > 1 ? "these units" : "this unit" }}:</p>
+              <p class="nhsuk-u-font-weight-bold">You have selected {{ chosenUnits.unitsNames.length > 1 ? "these units" : "this unit" }}:</p>
               <ul
                 class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-3"
                 [ngClass]="chosenUnits.organisation.information ? 'nhsuk-u-margin-bottom-4' : 'nhsuk-u-margin-bottom-0'"
@@ -59,7 +59,7 @@
             </ng-container>
             <ng-template #noUnits>
               <p class="nhsuk-u-font-weight-bold" [ngClass]="{ 'nhsuk-u-margin-bottom-0': !chosenUnits.organisation.information }">
-                You have selected {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})
+                You have selected {{ chosenUnits.organisation.name }}
               </p>
             </ng-template>
 
@@ -71,7 +71,12 @@
                   [ngClass]="lastItem || supportInfo.footnote ? 'nhsuk-u-margin-bottom-0' : 'nhsuk-u-margin-bottom-4'"
                 >
                   <li *ngFor="let supportInfoBulletPoint of supportInfo.bulletPoints">
-                    {{ supportInfoBulletPoint }}
+                    <span>{{ supportInfoBulletPoint.description }}</span
+                    ><span *ngIf="supportInfoBulletPoint.link"
+                      ><a [href]="supportInfoBulletPoint.link.url" target="_blank" rel="noopener noreferrer" attr.aria-label="{{ supportInfoBulletPoint.link.label }}">{{
+                        supportInfoBulletPoint.link.label
+                      }}</a>
+                    </span>
                   </li>
                 </ul>
                 <p *ngIf="supportInfo.footnote" class="font-color-secondary nhsuk-u-margin-top-4">{{ supportInfo.footnote }}</p>
@@ -82,7 +87,7 @@
           <theme-form-textarea
             [id]="'comment'"
             controlName="comment"
-            label="Describe why you think this innovation would benefit from support from {{ chosenUnits.organisation.name }} ({{ chosenUnits.organisation.acronym }})"
+            label="Describe why you think this innovation would benefit from support from {{ chosenUnits.organisation.name }}"
             [pageUniqueField]="false"
             lengthLimit="xl"
           ></theme-form-textarea>

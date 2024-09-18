@@ -11,6 +11,8 @@ import {
 import { FormEngineParameterModel } from '../models/form-engine.models';
 
 import { CustomValidators } from '../../validators/custom-validators';
+import { TranslateService } from '@ngx-translate/core';
+import { AppInjector } from '@modules/core/injectors/app-injector';
 
 export class FormEngineHelper {
   static buildForm(
@@ -49,6 +51,11 @@ export class FormEngineHelper {
               FormEngineHelper.createParameterFormControl(parameter, itemValue)
             );
           });
+          break;
+
+        case 'ir-selectable-filters':
+          form.addControl(parameter.id, new FormArray([]));
+
           break;
 
         case 'fields-group':
@@ -96,6 +103,20 @@ export class FormEngineHelper {
               new FormGroup({ id: new FormControl(v.id), name: new FormControl(v.name), url: new FormControl(v.url) })
             );
           });
+          break;
+
+        case 'date-input':
+          form.addControl(
+            parameter.id,
+            new FormGroup(
+              {
+                day: new FormControl(parameterValue?.day),
+                month: new FormControl(parameterValue?.month),
+                year: new FormControl(parameterValue?.year)
+              },
+              { updateOn: 'blur' }
+            )
+          );
           break;
 
         default: // Creates a standard FormControl.
@@ -167,7 +188,7 @@ export class FormEngineHelper {
     return returnForm;
   }
 
-  static getErrors(form: FormGroup): { [key: string]: string | null } {
+  static getErrors(form: FormGroup, translateErrorMessage?: boolean): { [key: string]: string | null } {
     let result: { [key: string]: string | null } = {};
 
     Object.keys(form.controls).forEach(key => {
@@ -178,9 +199,16 @@ export class FormEngineHelper {
       const controlErrors: ValidationErrors | null | undefined = formProperty?.errors;
       if (controlErrors) {
         Object.keys(controlErrors).forEach(keyError => {
+          const validationMessage = FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] });
+          let errorMessage = validationMessage.message;
+          if (translateErrorMessage) {
+            const injector = AppInjector.getInjector();
+            const translatorService = injector.get(TranslateService);
+            errorMessage = translatorService.instant(validationMessage.message, validationMessage.params);
+          }
           result = {
             ...result,
-            ...{ [key]: FormEngineHelper.getValidationMessage({ [keyError]: controlErrors[keyError] }).message }
+            ...{ [key]: errorMessage }
           };
         });
       }
@@ -245,7 +273,13 @@ export class FormEngineHelper {
       };
     }
     if (error.urlFormat) {
-      return { message: error.urlFormat.message || 'shared.forms_module.validations.invalid_url_format', params: {} };
+      return {
+        message:
+          error.urlFormat.message || error.urlFormat.maxLength
+            ? 'shared.forms_module.validations.invalid_url_format_maxLength'
+            : 'shared.forms_module.validations.invalid_url_format',
+        params: { maxLength: error.urlFormat.maxLength }
+      };
     }
 
     if (error.hexadecimalFormat) {
@@ -296,6 +330,12 @@ export class FormEngineHelper {
     if (error.futureDateInput) {
       return { message: error.futureDateInput.message, params: {} };
     }
+    if (error.endDateInputGreaterThanStartDateInput) {
+      return { message: error.endDateInputGreaterThanStartDateInput.message, params: {} };
+    }
+    if (error.endDateInputGreaterThanStartDate) {
+      return { message: error.endDateInputGreaterThanStartDate.message, params: {} };
+    }
     if (error.customError) {
       return { message: error.message, params: {} };
     }
@@ -333,6 +373,9 @@ export class FormEngineHelper {
             break;
           case 'checkbox-group':
             validators.push(CustomValidators.requiredCheckboxGroup(validation[1]));
+            break;
+          case 'date-input':
+            validators.push(CustomValidators.requiredDateInputValidator(validation[1]));
             break;
           default:
             validators.push(CustomValidators.required(validation[1]));
@@ -441,18 +484,34 @@ export class FormEngineHelper {
     }
 
     if (parameter.validations?.urlFormat) {
-      validation =
-        typeof parameter.validations.urlFormat === 'boolean'
-          ? [parameter.validations.urlFormat, null]
-          : parameter.validations.urlFormat;
-      if (validation[0]) {
-        validators.push(CustomValidators.urlFormatValidator(validation[1]));
-      }
+      validators.push(CustomValidators.urlFormatValidator(parameter.validations.urlFormat));
     }
 
     // Specific types field validations.
     if (parameter.dataType === 'date') {
       validators.push(CustomValidators.parsedDateStringValidator());
+    } else if (parameter.dataType === 'date-input') {
+      if (parameter.validations?.requiredDateInput) {
+        validators.push(CustomValidators.requiredDateInputValidator(parameter.validations?.requiredDateInput.message));
+      }
+      if (parameter.validations?.dateInputFormat) {
+        validators.push(CustomValidators.dateInputFormatValidator(parameter.validations?.dateInputFormat.message));
+      }
+      if (parameter.validations?.futureDateInput) {
+        const futureDateInput = parameter.validations.futureDateInput;
+        validators.push(
+          CustomValidators.futureDateInputValidator(futureDateInput.includeToday, futureDateInput.message)
+        );
+      }
+      if (parameter.validations?.endDateInputGreaterThanStartDate) {
+        const endDateInputGreaterThanStartDate = parameter.validations.endDateInputGreaterThanStartDate;
+        validators.push(
+          CustomValidators.endDateInputGreaterThanStartDateValidator(
+            endDateInputGreaterThanStartDate.startDate,
+            endDateInputGreaterThanStartDate.message
+          )
+        );
+      }
     }
 
     return validators;

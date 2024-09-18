@@ -168,6 +168,14 @@ export const locale = {
       }
     },
 
+    roles: {
+      ADMIN: 'Administrator',
+      INNOVATOR: 'Innovator',
+      ASSESSMENT: 'Needs assessor',
+      ACCESSOR: 'Accessor',
+      QUALIFYING_ACCESSOR: 'Qualifying accessor'
+    },
+
     // Shared translations to serve external / catalog modules.
     shared: {
       catalog: {
@@ -179,7 +187,7 @@ export const locale = {
             DELETED: { name: 'Deleted', cssColorClass: 'nhsuk-tag--red' }
           },
           type: {
-            LOG_IN: 'Log in',
+            LOG_IN: 'Login',
             HOMEPAGE: 'Homepage'
           }
         },
@@ -492,6 +500,14 @@ export const locale = {
                 description:
                   'Receive invitations to take part in user research and surveys for the NHS Innovation Service.'
               }
+            },
+
+            ANNOUNCEMENTS: {
+              SHARED: {
+                title: 'Announcements',
+                description:
+                  'Receive email copies of announcements on the service. For example, funding opportunities and support programmes.'
+              }
             }
           },
 
@@ -511,6 +527,71 @@ export const locale = {
             REVENUE_MODEL: 'Revenue model',
             IMPLEMENTATION_PLAN: 'Implementation plan and deployment',
             DEPLOYMENT: 'Deployment'
+          },
+
+          key_progress_areas: {
+            areas: {
+              deploymentCount: {
+                label: 'Deployed in an NHS or care setting',
+                section: 'From innovation record'
+              },
+              ukcaceCertification: {
+                label: 'UKCA / CE certification',
+                section: 'From innovation record'
+              },
+              dtacCertification: {
+                label: 'DTAC certification',
+                section: 'From innovation record'
+              },
+              evidenceClinicalOrCare: {
+                label: 'Evidence of clinical or care outcomes',
+                section: 'From innovation record'
+              },
+              evidenceRealWorld: {
+                label: 'Real world evidence',
+                section: 'From innovation record'
+              },
+              assessmentRealWorldValidation: {
+                label: 'Real world validation of organisational and financial benefit',
+                section: 'From needs assessment'
+              },
+              evidenceOfImpact: {
+                label: 'Evidence of impact or benefit',
+                section: 'From innovation record'
+              },
+              assessmentEvidenceProveEfficacy: {
+                label: 'Evidence to prove efficacy',
+                section: 'From needs assessment'
+              },
+              evidenceCostImpact: {
+                label: 'Evidence of cost impact, efficiency gains and/or economic modelling',
+                section: 'From innovation record'
+              },
+              workingProduct: {
+                label: 'Working product, service or prototype',
+                section: 'From innovation record'
+              },
+              carbonReductionPlan: {
+                label: 'Carbon reduction plan',
+                section: 'From innovation record'
+              },
+              htwTerComplete: {
+                label: 'Topic Exploration Report (TER) completed',
+                section: 'Health Technology Wales (HTW) milestone'
+              },
+              niceGuidanceComplete: {
+                label: 'Selected for NICE guidance output',
+                section: 'National Institute for Health and Care Excellence (NICE) milestone'
+              },
+              scProcurementRouteIdentified: {
+                label: 'Procurement route identified',
+                section: 'NHS Supply Chain milestone'
+              }
+            },
+            answers: {
+              YES: 'Yes',
+              PARTIALLY: 'Partially'
+            }
           },
 
           notification_context_types: {
@@ -1011,6 +1092,8 @@ export const locale = {
           invalid_hexadecimal_format: 'Invalid hexadecimal format',
           invalid_json_format: 'Invalid JSON format',
           invalid_url_format: 'The format of this URL is invalid. Add the full URL, including http:// or https://',
+          invalid_url_format_maxLength:
+            'The format of this URL is invalid. Add the full URL, including http:// or https://. The URL cannot exceed {{maxLength}} characters.',
           invalid_value: 'Invalid value',
           min: 'Value below the minimum allowed',
           min_hexadecimal: 'Value below the minimum allowed',

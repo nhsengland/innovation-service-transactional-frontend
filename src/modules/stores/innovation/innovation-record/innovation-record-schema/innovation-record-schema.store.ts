@@ -7,6 +7,7 @@ import { Store } from '@modules/stores/store.class';
 import { stepsLabels } from '../202405/evidences-section-2-2.config';
 import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
 import { InnovationRecordSchemaModel, IrSchemaTranslatorMapType } from './innovation-record-schema.models';
+import { InnovationRecordQuestionStepType } from '../202405/ir-v3-types';
 
 @Injectable()
 export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaModel> {
@@ -39,6 +40,17 @@ export class InnovationRecordSchemaStore extends Store<InnovationRecordSchemaMod
         .find(s => s.id === sectionId)
         ?.steps.flatMap(st => st.questions)
         .map(q => q.id) ?? []
+    );
+  }
+
+  getIrSchemaSectionQuestions(sectionId: string): InnovationRecordQuestionStepType[] {
+    const schema = this.contextStore.getIrSchema()?.schema.sections ?? [];
+
+    return (
+      schema
+        .flatMap(section => section.subSections)
+        .find(s => s.id === sectionId)
+        ?.steps.flatMap(st => st.questions) ?? []
     );
   }
 

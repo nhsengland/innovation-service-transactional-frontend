@@ -63,7 +63,7 @@
 
   <div *ngIf="isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
     <span class="nhsuk-u-visually-hidden">Information:</span>
-    <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+    <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
   </div>
 
   <ng-container *ngIf="isAccessorRole && isInProgress">
@@ -89,6 +89,7 @@
       <dd class="nhsuk-summary-list__value text-pre-wrap" appHighlight [searchTerm]="search">{{ item.value }}</dd>
     </div>
   </dl>
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress" />
 
   <h2 class="nhsuk-heading-m">Innovator contact details</h2>
   <dl class="nhsuk-summary-list">

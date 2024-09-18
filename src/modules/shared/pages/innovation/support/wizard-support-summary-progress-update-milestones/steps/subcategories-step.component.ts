@@ -47,7 +47,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategories
 
     // Add each subcategory as an option to select on the form
     this.subcategoriesItems.push(
-      { value: 'Select one or more subcategories', label: 'HEADING' },
       ...this.data.subcategories.map(subcategory => ({
         value: subcategory.name,
         label: subcategory.name,

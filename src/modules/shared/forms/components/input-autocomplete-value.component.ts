@@ -42,7 +42,7 @@ export class FormInputAutocompleteValueComponent extends ControlValueAccessorCom
   @Input() label?: string;
   @Input() description?: string;
   @Input() items: FormEngineParameterModel['items'] = [];
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
 
   placeholder = '';
   optionsList: { value: string; label: string }[] = [];

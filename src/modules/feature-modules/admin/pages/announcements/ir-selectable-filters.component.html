@@ -1,0 +1,48 @@
+<div class="nhsuk-form-group">
+  <fieldset class="nhsuk-fieldset" [attr.aria-describedby]="ariaDescribedBy">
+    <legend *ngIf="label" class="nhsuk-fieldset__legend" [ngClass]="{ 'nhsuk-fieldset__legend--l': pageUniqueField }">
+      <ng-container *ngIf="pageUniqueField">
+        <h1 class="nhsuk-fieldset__heading">{{ label }}</h1>
+      </ng-container>
+      <ng-container *ngIf="!pageUniqueField"
+        ><span class="nhsuk-u-font-weight-bold">{{ label }}</span></ng-container
+      >
+    </legend>
+
+    <ng-container *ngIf="description">
+      <div id="hint-{{ id }}" class="nhsuk-hint" [innerHTML]="description"></div>
+    </ng-container>
+
+    <details class="nhsuk-details">
+      <summary class="nhsuk-details__summary">
+        <span class="nhsuk-details__summary-text">Explanation of the and / or logic for questions and answers</span>
+      </summary>
+      <div class="nhsuk-details__text font-color-secondary">
+        <ul class="nhsuk-list">
+          <li class="nhsuk-u-margin-bottom-2">
+            When you select multiple answers for the same question, the system uses the 'or' logic. For example, selecting 'digital' and 'artificial intelligence (AI)' for the
+            category of innovation will mean the announcement will be sent to innovators that have selected either of those answers.
+          </li>
+          <li>
+            When you add different question filters, the system uses the 'and' logic. For example, if you also filter by category of innovation and certification type, then select
+            'DTAC certification', the announcement will be sent to innovations that are in the 'digital' or 'AI' category and have 'DTAC certification'.
+          </li>
+        </ul>
+      </div>
+    </details>
+
+    <ng-container *ngFor="let formGroup of getParentFormGroupItems.controls; let i = index; trackBy: trackFiltersRowsChanges">
+      <theme-form-ir-selectable-filters-filter-component
+        [id]="id"
+        [previousData]="parameterValues && parameterValues[i]"
+        [formGroup]="parentFormGroup"
+        [filterFormGroup]="formGroup"
+        [filterIndex]="i"
+        [arrayName]="arrayName"
+        (removedFilter)="onFilterRemoval(i)"
+      />
+    </ng-container>
+
+    <button type="button" class="nhsuk-button nhsuk-button--secondary" (click)="addNewFilterFormGroup()">Add filter</button>
+  </fieldset>
+</div>

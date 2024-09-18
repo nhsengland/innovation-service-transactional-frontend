@@ -47,7 +47,9 @@ export class PageSwitchContextComponent extends CoreComponent {
       id: user.id,
       roles: sortBy(user.roles, ['organisation', 'organisationUnit']).map(role => {
         let label = `${this.authenticationStore.getRoleDescription(role.role)}${
-          role.organisationUnit ? ` (${role.organisationUnit.name.trimEnd()})` : ''
+          role.organisationUnit
+            ? ` (${this.displayNameOrAcronym(role.organisationUnit.name, role.organisationUnit.acronym)})`
+            : ''
         }`;
 
         if (currentUserContext) {
@@ -77,7 +79,7 @@ export class PageSwitchContextComponent extends CoreComponent {
 
     if (this.currentRole?.id !== role.id) {
       sessionStorage.clear();
-      
+
       this.authenticationStore.setUserContext({
         id: this.user.id,
         roleId: role.id,
@@ -87,7 +89,9 @@ export class PageSwitchContextComponent extends CoreComponent {
       });
 
       const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${
-        role.organisationUnit ? ` (${role.organisationUnit.name})` : ''
+        role.organisationUnit
+          ? `, ${this.displayNameOrAcronym(role.organisationUnit.name, role.organisationUnit.acronym)}`
+          : ''
       }`;
       this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}`);
 
@@ -102,5 +106,9 @@ export class PageSwitchContextComponent extends CoreComponent {
     }
 
     this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
+  }
+
+  displayNameOrAcronym(name: string, acronym: string): string {
+    return name.includes(acronym) ? acronym : name.trimEnd();
   }
 }

@@ -49,6 +49,8 @@
     </div>
   </dl>
 
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress" />
+
   <h2 class="nhsuk-heading-m">Innovator contact details</h2>
   <dl class="nhsuk-summary-list">
     <div *ngFor="let item of innovatorDetails" class="nhsuk-summary-list__row">
@@ -84,4 +86,12 @@
       </table>
     </div>
   </details>
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <h2 class="nhsuk-heading-m">Transfer ownership</h2>
+      <p>You can transfer ownership of the innovations and this request will be active for 30 days.</p>
+      <a routerLink="/admin/innovations/{{ innovationId }}/transfer">Transfer ownership</a>
+    </div>
+  </div>
 </theme-content-wrapper>

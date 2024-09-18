@@ -42,7 +42,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() description?: string;
   @Input() placeholder?: string;
   @Input() lengthLimit?: TextareaLengthLimitType;
-  @Input() pageUniqueField = true;
+  @Input() pageUniqueField? = true;
   @Input() cssOverride?: string;
 
   hasError = false;

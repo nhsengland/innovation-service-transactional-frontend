@@ -79,6 +79,8 @@ import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
 import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
 import { JoinArrayPipe } from './pipes/join-array.pipe';
+import { ServiceRoleTranslatePipe } from './pipes/service-role-translate.pipe';
+import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 // Components
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
@@ -117,7 +119,6 @@ import { PageProgressCategoriesWrapperComponent } from './pages/progress-categor
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
 import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessment/assessment-details.component';
-import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 
 @NgModule({
   imports: [
@@ -217,6 +218,7 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
     IrV3TranslatePipe,
+    ServiceRoleTranslatePipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -259,6 +261,7 @@ import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
     PluralTranslatePipe,
     IrV3TranslatePipe,
     JoinArrayPipe,
+    ServiceRoleTranslatePipe,
 
     // Components.
     InnovationAssessmentDetailsComponent

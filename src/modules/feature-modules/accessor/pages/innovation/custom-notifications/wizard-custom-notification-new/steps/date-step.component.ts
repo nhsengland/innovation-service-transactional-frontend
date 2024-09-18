@@ -42,7 +42,7 @@ export class WizardInnovationCustomNotificationNewDateStepComponent
         [
           CustomValidators.requiredDateInputValidator(this.dateRequiredErrorMessage),
           CustomValidators.dateInputFormatValidator(),
-          CustomValidators.futureDateInputValidator(this.dateShouldBeInFutureErrorMessage)
+          CustomValidators.futureDateInputValidator(false, this.dateShouldBeInFutureErrorMessage)
         ]
       )
     },

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -50,6 +50,7 @@ import {
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -102,7 +103,7 @@ export type GetThreadFollowersDTO = {
     isLocked: boolean;
     isOwner?: boolean;
     role: { id: string; role: UserRoleEnum };
-    organisationUnit?: { id: string; acronym: string } | null;
+    organisationUnit?: { id: string; name: string; acronym: string } | null;
   }[];
 };
 
@@ -149,6 +150,25 @@ export type CreateThreadMessageDTO = {
     createdAt: DateISOType;
   };
 };
+
+export enum InnovationRelevantOrganisationsStatusEnum {
+  ENGAGING = 'ENGAGING',
+  SUGGESTED = 'SUGGESTED',
+  WAITING = 'WAITING',
+  PREVIOUS_ENGAGED = 'PREVIOUS_ENGAGED'
+}
+
+export type ThreadAvailableRecipientsDTO = {
+  id: string;
+  status: InnovationRelevantOrganisationsStatusEnum;
+  organisation: {
+    id: string;
+    name: string;
+    acronym: string;
+    unit: { id: string; name: string; acronym: string };
+  };
+  recipients: { id: string; roleId: string; name: string }[];
+}[];
 
 export type InnovationThreadListFiltersType = {
   subject?: string;
@@ -268,6 +288,23 @@ export class InnovationsService extends CoreService {
     return this.http.get<InnovationInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
+    );
+  }
+
+  getInnovationProgress(
+    innovationId: string,
+    filterInnovationId: boolean = false
+  ): Observable<KeyProgressAreasPayloadType> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/progress')
+      .setPathParams({ innovationId });
+    return this.http.get<KeyProgressAreasPayloadType>(url.buildUrl()).pipe(
+      take(1),
+      map(response =>
+        filterInnovationId
+          ? Object.fromEntries(Object.entries(response).filter(([key, _]) => key !== 'innovationId'))
+          : response
+      )
     );
   }
 
@@ -675,6 +712,14 @@ export class InnovationsService extends CoreService {
       .addPath('v1/:innovationId/threads')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(take(1));
+  }
+
+  getThreadAvailableRecipients(innovationId: string): Observable<ThreadAvailableRecipientsDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/threads/available-recipients')
+      .setPathParams({ innovationId });
+
+    return this.http.get<ThreadAvailableRecipientsDTO>(url.buildUrl()).pipe(take(1));
   }
 
   createThreadMessage(

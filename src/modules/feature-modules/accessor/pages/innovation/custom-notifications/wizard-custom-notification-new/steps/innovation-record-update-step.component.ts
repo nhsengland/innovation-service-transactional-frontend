@@ -52,8 +52,6 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
     console.log('subSections', subSections);
 
     this.sectionsItems.push(
-      { value: 'Select 1 or more sections', label: 'HEADING' },
-
       ...subSections.map(s => {
         const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(s);
         return {

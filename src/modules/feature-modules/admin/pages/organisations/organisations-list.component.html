@@ -34,7 +34,7 @@
               <td role="cell" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">Organisation </span>
                 <div>
-                  <a [routerLink]="item.id">{{ item.name }} ({{ item.acronym }})</a>
+                  <a [routerLink]="item.id">{{ item.name }}</a>
                   <div *ngIf="item.organisationUnits.length > 1" class="nhsuk-body-s nhsuk-u-margin-0">
                     {{ item.organisationUnits.length }} {{ "dictionary.unit" | pluralTranslate: item.organisationUnits.length | translate }} attached
                   </div>

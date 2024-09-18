@@ -31,8 +31,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
 
     this.sectionLink = `/innovator/innovations/${this.innovation.id}/record/sections/${this.section.id}`;
 
-    this.setPageTitle('What you can do next', { size: 'l' });
-    this.setBackLink('Go back', this.sectionLink);
+    this.setPageTitle(`Let your support organisations know you've updated your innovation record`, { size: 'l' });
 
     this.isArchived = this.innovation.status === 'ARCHIVED';
   }

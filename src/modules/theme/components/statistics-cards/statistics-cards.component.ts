@@ -4,11 +4,11 @@ import { DateISOType } from '@modules/core/interfaces/base.interfaces';
 
 export type StatisticsCardType = {
   title: string;
-  label: string;
+  label?: string;
   link: string;
   queryParams?: Record<string, any>;
 
-  count: number;
+  count?: number;
   total?: number;
   lastMessage?: string;
   overdue?: string;

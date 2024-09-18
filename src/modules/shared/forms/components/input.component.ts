@@ -19,7 +19,7 @@ import { RandomGeneratorHelper } from '@modules/core/helpers/random-generator.he
 import { ControlValueAccessorComponent } from '../base/control-value-accessor.connector';
 
 import { InputLengthLimitType, INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
-import { FormEngineHelperV3 } from '../engine/helpers/form-engine-v3.helper';
+import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 
 @Component({
   selector: 'theme-form-input',
@@ -42,7 +42,8 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   @Input() description?: string;
   @Input() placeholder?: string;
   @Input() lengthLimit?: InputLengthLimitType;
-  @Input() pageUniqueField = true;
+  @Input() isEditable?: boolean;
+  @Input() pageUniqueField? = true;
   @Input() width?: 'one-third' | 'two-thirds' | 'three-quarters' | 'full';
   @Input() cssOverride?: string;
 
@@ -131,7 +132,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
 
     this.hasError = this.fieldControl.invalid && (this.fieldControl.touched || this.fieldControl.dirty);
     this.error = this.hasError
-      ? FormEngineHelperV3.getValidationMessage(this.fieldControl.errors)
+      ? FormEngineHelper.getValidationMessage(this.fieldControl.errors)
       : { message: '', params: {} };
     this.cdr.detectChanges();
   }

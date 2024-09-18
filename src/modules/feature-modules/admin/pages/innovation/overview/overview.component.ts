@@ -13,6 +13,8 @@ import {
   InnovationCollaboratorStatusEnum,
   InnovationGroupedStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-admin-pages-innovation-overview',
@@ -48,6 +50,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   search?: string;
 
+  innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -65,7 +69,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(innovation => {
+    forkJoin({
+      innovation: this.innovationsService.getInnovationInfo(this.innovationId),
+      innovationCollaborators: this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
+      innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true)
+    }).subscribe(({ innovation, innovationCollaborators, innovationProgress }) => {
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
         status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
@@ -150,14 +158,12 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           .join(', ')
       };
 
+      this.innovationCollaborators = innovationCollaborators.data;
+
+      this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
+
       this.setPageStatus('READY');
     });
-
-    this.innovationsService
-      .getInnovationCollaboratorsList(this.innovationId, ['active'])
-      .subscribe(innovationCollaborators => {
-        this.innovationCollaborators = innovationCollaborators.data;
-      });
   }
 
   getSupportStatusCount(supports: InnovationSupportStatusEnum[], status: keyof typeof InnovationSupportStatusEnum) {

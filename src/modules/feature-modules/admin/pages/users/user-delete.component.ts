@@ -24,7 +24,7 @@ export class PageUserDeleteComponent extends CoreComponent implements OnInit {
     {
       confirmation: new UntypedFormControl('', [
         CustomValidators.required('A confirmation text is necessary'),
-        CustomValidators.equalTo('delete user account')
+        CustomValidators.equalTo("delete user's account")
       ])
     },
     { updateOn: 'blur' }
@@ -76,7 +76,10 @@ export class PageUserDeleteComponent extends CoreComponent implements OnInit {
     }
 
     this.usersService.deleteUser(this.user.id).subscribe({
-      next: () => this.redirectTo(`/admin/users`, { alert: 'deleteSuccess' }),
+      next: () => {
+        this.setRedirectAlertInformation('User deleted successfully');
+        this.redirectTo(`/admin/users`, { alert: 'deleteSuccess' });
+      },
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();

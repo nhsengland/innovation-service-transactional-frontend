@@ -9,14 +9,18 @@ import {
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
+export type FormatUrlValidatorType = { message?: string; maxLength?: number };
+
 export class FormEngineModel {
   label?: string;
   description?: string;
+  showParamLabelAsTitle?: boolean;
   parameters: FormEngineParameterModel[];
 
   constructor(data: Partial<FormEngineModel>) {
     this.label = data.label;
     this.description = data.description;
+    this.showParamLabelAsTitle = data.showParamLabelAsTitle;
     this.parameters = (data.parameters ?? []).map(item => new FormEngineParameterModel(item));
   }
 }
@@ -37,7 +41,9 @@ export class FormEngineParameterModel {
     | 'fields-group'
     | 'file-upload'
     | 'file-upload-array'
-    | 'select-component';
+    | 'select-component'
+    | 'date-input'
+    | 'ir-selectable-filters';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -57,8 +63,12 @@ export class FormEngineParameterModel {
     existsIn?: string[] | [string[], string];
     validEmail?: boolean | [boolean, string];
     postcodeFormat?: boolean | [boolean, string];
-    urlFormat?: boolean | [boolean, string];
+    urlFormat?: FormatUrlValidatorType;
     equalTo?: string | [string, string];
+    requiredDateInput?: { message?: string };
+    dateInputFormat?: { message?: string };
+    futureDateInput?: { includeToday: boolean; message?: string };
+    endDateInputGreaterThanStartDate?: { startDate: { day: string; month: string; year: string }; message?: string };
   };
   lengthLimit?: TextareaLengthLimitType;
   cssOverride?: string;
@@ -178,7 +188,7 @@ export class FormEngineParameterModelV3 {
     existsIn?: string[] | [string[], string];
     validEmail?: string;
     postcodeFormat?: boolean;
-    urlFormat?: boolean;
+    urlFormat?: FormatUrlValidatorType;
     equalTo?: string | [string, string];
   };
   lengthLimit?: TextareaLengthLimitType;

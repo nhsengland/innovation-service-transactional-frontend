@@ -1,5 +1,7 @@
-import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
+import { first, omit, isEmpty } from 'lodash';
+import { INPUT_LENGTH_LIMIT } from '../engine/config/form-engine.config';
 
 export class CustomFormGroupValidators {
   static mustMatch(fieldName: string, confirmationFieldName: string, errorMessage: string | null): ValidatorFn {
@@ -140,11 +142,16 @@ export class CustomValidators {
     };
   }
 
-  static urlFormatValidator(message?: string | null): ValidatorFn {
+  static urlFormatValidator(data?: { message?: string | null; maxLength?: number }): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;
       }
+
+      if (data?.maxLength && control.value.length > data.maxLength) {
+        return { urlFormat: data };
+      }
+
       const pattern = new RegExp(
         '^(https?:\\/\\/)' + // protocol (mandator)
           '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
@@ -154,11 +161,12 @@ export class CustomValidators {
           '(\\#[-a-z\\d_]*)?$', // fragment locator
         'i'
       );
+
       if (pattern.test(control.value)) {
         return null;
       }
 
-      return { urlFormat: message ? { message } : true };
+      return { urlFormat: data };
     };
   }
 
@@ -187,7 +195,7 @@ export class CustomValidators {
       if (!control.value) {
         return null;
       }
-      if (control.value.day === '' && control.value.month === '' && control.value.year === '') {
+      if (!control.value.day && !control.value.month && !control.value.year) {
         return { requiredDateInput: message ? { message } : true };
       }
       return null;
@@ -199,27 +207,169 @@ export class CustomValidators {
       if (!control.value) {
         return null;
       }
+
+      if (!control.value.day && !control.value.month && !control.value.year) {
+        return null;
+      }
+
       const inputDateString = DatesHelper.getDateString(control.value.year, control.value.month, control.value.day);
-      return DatesHelper.parseIntoValidFormat(inputDateString) !== null
-        ? null
-        : { dateInputFormat: message ? { message } : true };
+
+      if (DatesHelper.parseIntoValidFormat(inputDateString) !== null) {
+        return null;
+      } else {
+        return { dateInputFormat: message ? { message } : true };
+      }
     };
   }
 
-  static futureDateInputValidator(message?: string | null): ValidatorFn {
+  static futureDateInputValidator(includeToday: boolean, message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) {
         return null;
       }
+
+      const inputDateString = DatesHelper.getDateString(control.value.year, control.value.month, control.value.day);
+      if (DatesHelper.parseIntoValidFormat(inputDateString) === null) {
+        return null;
+      }
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
 
       const inputDate = new Date(`${control.value.year}-${control.value.month}-${control.value.day}`);
       inputDate.setHours(0, 0, 0, 0);
 
-      if (inputDate <= today) {
-        return { futureDateInput: message ? { message } : true };
+      if (includeToday) {
+        if (inputDate < today) {
+          return { futureDateInput: message ? { message } : true };
+        }
+      } else {
+        if (inputDate <= today) {
+          return { futureDateInput: message ? { message } : true };
+        }
       }
+
+      return null;
+    };
+  }
+
+  static endDateInputGreaterThanStartDateInputValidator(
+    startDateFieldName: string,
+    endDateFieldName: string,
+    message?: string | null
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+
+      const startDateField = control.get(startDateFieldName);
+      const endDateField = control.get(endDateFieldName);
+
+      if (!startDateField || !endDateField) {
+        return null;
+      }
+
+      if (!startDateField?.value || !endDateField?.value) {
+        return null;
+      }
+
+      if (startDateField?.errors) {
+        return null;
+      }
+
+      if (endDateField.errors?.dateInputFormat) {
+        return null;
+      }
+
+      const dateDiffInDays = DatesHelper.dateDiff(
+        `${startDateField.value.year}-${startDateField.value.month}-${startDateField.value.day}`,
+        `${endDateField.value.year}-${endDateField.value.month}-${endDateField.value.day}`
+      );
+
+      if (dateDiffInDays <= 0) {
+        endDateField.setErrors({
+          endDateInputGreaterThanStartDateInput: { message: message ?? 'The end date must be after the start date' }
+        });
+      } else {
+        endDateField.setErrors(null);
+      }
+
+      return null;
+    };
+  }
+
+  static endDateInputGreaterThanStartDateValidator(
+    startDate: { day: string; month: string; year: string },
+    message?: string | null
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+      const dateDiffInDays = DatesHelper.dateDiff(
+        `${startDate.year}-${startDate.month}-${startDate.day}`,
+        `${control.value.year}-${control.value.month}-${control.value.day}`
+      );
+
+      if (dateDiffInDays <= 0) {
+        return { endDateInputGreaterThanStartDate: message ? { message } : true };
+      }
+
+      if (control.errors?.dateInputFormat) {
+        return null;
+      }
+
+      return null;
+    };
+  }
+
+  static makeTwoControlsAsRequiredWhenAtLeastOneIsFilledValidator(
+    firstField: { name: string; message?: string },
+    secondField: { name: string; message?: string }
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value) {
+        return null;
+      }
+
+      const firstControl = control.get(firstField.name);
+      const firstControlRemainingErrors = omit(firstControl?.errors, ['required']);
+      const firstControlErrors = isEmpty(firstControlRemainingErrors) ? null : firstControlRemainingErrors;
+
+      const secondControl = control.get(secondField.name);
+      const secondControlRemainingErrors = omit(secondControl?.errors, ['required']);
+      const secondControlErrors = isEmpty(secondControlRemainingErrors) ? null : secondControlRemainingErrors;
+
+      if (!firstControl || !secondControl) {
+        return null;
+      }
+
+      if (!firstControl?.value && !secondControl?.value) {
+        firstControl?.setErrors(firstControlErrors);
+        secondControl?.setErrors(secondControlErrors);
+
+        return null;
+      }
+
+      if (firstControl?.value) {
+        if (!secondControl?.value) {
+          secondControl?.setErrors({ required: secondField.message ? { message: secondField.message } : true });
+        } else {
+          secondControl?.setErrors(secondControlErrors);
+        }
+        return null;
+      }
+
+      if (secondControl?.value) {
+        if (!firstControl?.value) {
+          firstControl?.setErrors({ required: firstField.message ? { message: firstField.message } : true });
+        } else {
+          firstControl?.setErrors(firstControlErrors);
+        }
+        return null;
+      }
+
       return null;
     };
   }

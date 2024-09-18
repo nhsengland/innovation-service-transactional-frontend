@@ -1,16 +1,13 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row" *ngIf="announcement">
     <div id="announcement-container" class="nhsuk-grid-column-two-thirds">
-      <div [ngSwitch]="announcement.template">
-        <div *ngSwitchDefault>
-          <!-- Default: Generic Template -->
-          <theme-announcements-generic [params]="announcement.params"></theme-announcements-generic>
-        </div>
-      </div>
+      <theme-announcements-card
+        [announcementCardData]="{ id: announcement.id, title: announcement.title, params: announcement.params, innovations: announcement.innovations }"
+      ></theme-announcements-card>
 
-      <button class="nhsuk-button nhsuk-u-margin-top-7" (click)="onContinue(announcement.id)" [disabled]="!isContinueButtonActive">Continue</button>
+      <button class="nhsuk-button nhsuk-u-margin-top-0" (click)="onContinue(announcement.id)" [disabled]="!isContinueButtonActive">Continue</button>
 
-      <p class="nhsuk-hint nhsuk-u-font-size-16">Created at: {{ announcement.startsAt | date: ("app.date_formats.long_date" | translate) }}</p>
+      <p class="nhsuk-hint nhsuk-u-font-size-16">Created: {{ announcement.startsAt | date: ("app.date_formats.long_date" | translate) }}</p>
     </div>
   </div>
 </theme-content-wrapper>

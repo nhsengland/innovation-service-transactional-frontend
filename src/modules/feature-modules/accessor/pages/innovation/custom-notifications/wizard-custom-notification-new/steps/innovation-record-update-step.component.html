@@ -6,7 +6,9 @@
           *ngIf="sectionsItems.length > 0"
           id="innovationRecordSections"
           arrayName="innovationRecordSections"
+          label="Select 1 or more sections"
           [items]="sectionsItems"
+          [pageUniqueField]="false"
         ></theme-form-checkbox-array>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>

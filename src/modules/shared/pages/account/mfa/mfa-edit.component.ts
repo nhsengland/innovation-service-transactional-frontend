@@ -84,16 +84,16 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   setupWizard(): void {
     switch (this.wizardMode) {
       case 'set-mfa':
-        this.wizard = new WizardEngineModel(MFA_SET_UP);
+        this.wizard = new WizardEngineModel(MFA_SET_UP(this.isAdmin));
         break;
       case 'turn-off':
-        this.wizard = new WizardEngineModel(MFA_TURN_OFF);
+        this.wizard = new WizardEngineModel(MFA_TURN_OFF(this.isAdmin));
         break;
       case 'email':
-        this.wizard = new WizardEngineModel(MFA_EMAIL);
+        this.wizard = new WizardEngineModel(MFA_EMAIL(this.isAdmin));
         break;
       case 'phone':
-        this.wizard = new WizardEngineModel(MFA_PHONE);
+        this.wizard = new WizardEngineModel(MFA_PHONE(this.isAdmin));
         break;
       default:
         this.redirectTo(this.manageAccountPageUrl);
@@ -164,12 +164,12 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
         if (wizardData.mfaInfo.type === 'phone') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
-              ? `Your phone number has been changed to ${getCensoredPhoneNumber(wizardData.mfaInfo.phoneNumber)}`
+              ? `${this.isAdmin ? 'Phone' : 'Your phone'} number has been changed to ${getCensoredPhoneNumber(wizardData.mfaInfo.phoneNumber)}`
               : this.wizardMode === 'phone'
-                ? 'Your two-step verification method has been changed to phone'
-                : 'You have set up two-step verification on your account',
+                ? `${this.isAdmin ? 'Two-step' : 'Your two-step'} verification method has been changed to phone`
+                : `You have set up two-step verification on ${this.isAdmin ? 'their' : 'your'} account`,
             {
-              message: 'A security code will be sent to your phone when you log in to your account.'
+              message: `A security code will be sent to ${this.isAdmin ? "the user's" : 'your'} phone when you log in to your account.`
             }
           );
         }
@@ -177,18 +177,21 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
         if (wizardData.mfaInfo.type === 'email') {
           this.setRedirectAlertSuccess(
             this.currentMFAMode === 'phone'
-              ? 'Your two-step verification method has been changed to email'
-              : 'You have set up two-step verification on your account',
+              ? `${this.isAdmin ? 'Two-step' : 'Your two-step'} verification method has been changed to email`
+              : `You have set up two-step verification on ${this.isAdmin ? 'their' : 'your'} account`,
             {
-              message: 'A security code will be sent to your email when you log in to your account.'
+              message: `A security code will be sent to ${this.isAdmin ? "the user's" : 'your'} email when you log in to your account.`
             }
           );
         }
 
         if (wizardData.mfaInfo.type === 'none') {
-          this.setRedirectAlertSuccess('You have turned off two-step verification on your account', {
-            message: 'You will only use your password to log in.'
-          });
+          this.setRedirectAlertSuccess(
+            `You have turned off two-step verification on ${this.isAdmin ? 'their' : 'your'} account`,
+            {
+              message: `${this.isAdmin ? 'They' : 'You'} will only use ${this.isAdmin ? 'their' : 'your'} password to log in.`
+            }
+          );
         }
         this.redirectTo(this.manageAccountPageUrl);
       },

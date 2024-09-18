@@ -23,11 +23,11 @@
         <form [formGroup]="form" class="d-flex flex-direction-column">
           <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-0">
             <div *ngIf="uploadedByChips.length > 0">
-              <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Show uploaded documents by' }" />
-              <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
+              <h2 id="filter-show-uploaded-documents-by" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Show uploaded documents by</h2>
+              <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" ariaDescribedBy="filter-show-uploaded-documents-by" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
             </div>
             <div>
-              <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Search by document name' }" />
+              <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Search by document name</h2>
               <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name">
                 <ng-container append>
                   <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
@@ -46,26 +46,28 @@
               <div class="nhsuk-details__text d-flex flex-direction-column">
                 <div *ngIf="locationChipsInput.length > 0">
                   <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
-                    <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by location' }" />
+                    <h2 id="filter-by-location" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by location</h2>
                     <theme-chips-filter-component
                       #locationTagsComponent
                       [chipsInput]="locationChipsInput"
+                      ariaDescribedBy="filter-by-location"
                       (chipsChange)="setSelectedLocations($event)"
                     ></theme-chips-filter-component>
                   </div>
                 </div>
                 <div *ngIf="uploadedByUnitChips.length > 0">
                   <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
-                    <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by organisation' }" />
+                    <h2 id="filter-by-organisation" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by organisation</h2>
                     <theme-chips-filter-component
                       #uploadedByUnitComponent
                       [chipsInput]="uploadedByUnitChips"
+                      ariaDescribedBy="filter-by-organisation"
                       (chipsChange)="setSelectedUploadedByUnits($event)"
                     ></theme-chips-filter-component>
                   </div>
                 </div>
                 <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-                  <ng-container *ngTemplateOutlet="label; context: { $implicit: 'Filter by date range' }" />
+                  <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by date range</h2>
                   <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                   <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
                 </div>
@@ -76,10 +78,10 @@
           </div>
         </form>
 
-        <p class="nhsuk-body-s nhsuk-u-margin-bottom-1">
+        <h2 role="alert" class="nhsuk-body-s nhsuk-u-margin-bottom-1">
           Showing {{ tableList.getVisibleRowsNumber() }} {{ "dictionary.document" | pluralTranslate: tableList.getVisibleRowsNumber() | translate }} of
           {{ tableList.getTotalRowsNumber() }}
-        </p>
+        </h2>
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
 
@@ -157,7 +159,3 @@
     </div>
   </div>
 </theme-content-wrapper>
-
-<ng-template #label let-title>
-  <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">{{ title }}</p>
-</ng-template>
