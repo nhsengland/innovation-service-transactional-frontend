@@ -41,7 +41,7 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
           description: organisationStepsDescriptions.l1,
           validations: {
             isRequired: [true, 'Name is required'],
-            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            pattern: ['^[a-zA-Z() ]*$', 'Organisation names must not include numbers or brackets'],
             maxLength: 100
           }
         }
@@ -139,7 +139,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
               description: organisationUnitStepsDescriptions.l1,
               validations: {
                 isRequired: [true, 'Unit name is required'],
-                pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+                pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
                 maxLength: 100,
                 existsIn: [
                   // Excludes current value from validation.
