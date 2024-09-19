@@ -27,6 +27,7 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
           description: organisationStepsDescriptions.l1,
           validations: {
             isRequired: [true, 'Name is required'],
+            pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
             maxLength: 100
           }
         }
@@ -40,7 +41,11 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
           dataType: 'text',
           label: 'Organisation acronym',
           description: organisationStepsDescriptions.l2,
-          validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
+          validations: {
+            isRequired: [true, 'Acronym is required'],
+            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            maxLength: 10
+          }
         }
       ]
     })
