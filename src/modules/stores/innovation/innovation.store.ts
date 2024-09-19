@@ -118,7 +118,7 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getInnovationRecordSection(sectionId: string): WizardEngineModel {
+  getInnovationRecordSectionEvidencesWizard(sectionId: string): WizardEngineModel {
     const section = INNOVATION_SECTIONS_EVIDENCES_WIZARD.find(section => section.id === sectionId)?.wizard;
 
     if (!section) {

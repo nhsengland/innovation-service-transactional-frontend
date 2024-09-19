@@ -38,7 +38,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.wizard = this.stores.innovation.getInnovationRecordSection(this.sectionId) ?? new WizardEngineModel({});
+    this.wizard =
+      this.stores.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {

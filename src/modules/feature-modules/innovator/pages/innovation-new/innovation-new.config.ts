@@ -52,7 +52,7 @@ type OutboundPayloadType = {
   hasWebsite: string;
 };
 
-export function getNewInnovationQuestionsWizard(schema: InnovationRecordSchemaInfoType): WizardEngineModel {
+export function getNewInnovationQuestionsWizard(currentSchema: InnovationRecordSchemaInfoType): WizardEngineModel {
   return new WizardEngineModel({
     showSummary: true,
     steps: [
@@ -93,7 +93,9 @@ export function getNewInnovationQuestionsWizard(schema: InnovationRecordSchemaIn
             label: stepsLabels.q3.label,
             description: stepsLabels.q3.description,
             validations: { isRequired: [true, 'Choose one option'] },
-            items: getIrSchemaQuestionItemsValueAndLabel(schema, 'officeLocation')
+            items: translateOfficeLocationListFromV3(
+              getIrSchemaQuestionItemsValueAndLabel(currentSchema, 'officeLocation')
+            )
           }
         ]
       })
@@ -104,7 +106,7 @@ export function getNewInnovationQuestionsWizard(schema: InnovationRecordSchemaIn
         currentValues: StepPayloadType,
         currentStep: number | 'summary',
         schema?: InnovationRecordSchemaInfoType
-      ) => runtimeRules(steps, currentValues, currentStep, schema)
+      ) => runtimeRules(steps, currentValues, currentStep, currentSchema)
     ],
     outboundParsing: (data: StepPayloadType) => outboundParsing(data),
     summaryParsing: (data: StepPayloadType) => summaryParsing(data)
@@ -230,4 +232,25 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   });
 
   return toReturn;
+}
+
+// Helper to translate new officeLocation format to old IR one
+function translateOfficeLocationListFromV3(
+  officeLocation: {
+    value: string;
+    label: string;
+  }[]
+): {
+  value: string;
+  label: string;
+}[] {
+  return officeLocation.map(loc => {
+    if (loc.value === '') {
+      return { value: '', label: 'SEPARATOR' };
+    }
+    if (loc.value === "I'm based outside of the UK") {
+      return { value: loc.label, label: loc.value };
+    }
+    return loc;
+  });
 }
