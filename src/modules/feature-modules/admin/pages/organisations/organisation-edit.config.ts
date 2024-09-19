@@ -27,7 +27,7 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
           description: organisationStepsDescriptions.l1,
           validations: {
             isRequired: [true, 'Name is required'],
-            pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
+            pattern: ['^[a-zA-Z() ]*$', 'Organisation names must not include numbers or brackets'],
             maxLength: 100
           }
         }
