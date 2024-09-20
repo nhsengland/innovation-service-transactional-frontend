@@ -89,9 +89,7 @@ export class PageSwitchContextComponent extends CoreComponent {
       });
 
       const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${
-        role.organisationUnit
-          ? `, ${this.displayNameOrAcronym(role.organisationUnit.name, role.organisationUnit.acronym)}`
-          : ''
+        role.organisationUnit ? `, ${role.organisationUnit.name}` : ''
       }`;
       this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}`);
 
