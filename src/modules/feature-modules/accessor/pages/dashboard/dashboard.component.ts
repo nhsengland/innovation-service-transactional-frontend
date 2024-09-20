@@ -93,8 +93,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           emptyMessage: 'No tasks assigned by your organisation yet'
         },
         {
-          title: 'List of accessors ',
-          emptyMessage: 'Accessor in your organisation and the innovations they are assigned to',
+          title: 'List of accessors',
+          emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
           link: `/accessor/accessor-list`
         }
       ];
