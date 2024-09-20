@@ -248,9 +248,6 @@ function translateOfficeLocationListFromV3(
     if (loc.value === '') {
       return { value: '', label: 'SEPARATOR' };
     }
-    if (loc.value === "I'm based outside of the UK") {
-      return { value: loc.label, label: loc.value };
-    }
     return loc;
   });
 }

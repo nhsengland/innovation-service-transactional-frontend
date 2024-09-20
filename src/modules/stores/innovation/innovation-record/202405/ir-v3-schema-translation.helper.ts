@@ -92,7 +92,6 @@ export function getIrSchemaQuestionItemsValueAndLabel(
   const toReturn: { value: string; label: string }[] = [];
   irSchemaTranslationsMap(schema.schema)
     .questions.get(questionId)
-    ?.items.forEach((v, k) => toReturn.push({ label: k, value: v.label }));
-
+    ?.items.forEach((v, k) => toReturn.push({ value: k, label: v.label }));
   return toReturn;
 }

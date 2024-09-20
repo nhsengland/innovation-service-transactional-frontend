@@ -4,6 +4,7 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { iif } from 'rxjs';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
   search: { key: 'search', placeholder: 'Search', maxLength: 200 },
@@ -96,17 +97,14 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
     })),
     groupedStatuses: [],
     diseasesAndConditions: getIrSchemaQuestionItemsValueAndLabel(schema, 'diseasesConditionsImpact'),
-    categories: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'categories'), { value: 'OTHER', label: 'Other' }],
-    careSettings: [
-      ...getIrSchemaQuestionItemsValueAndLabel(schema, 'careSettings'),
-      { value: 'OTHER', label: 'Other' }
-    ],
-    keyHealthInequalities: getIrSchemaQuestionItemsValueAndLabel(schema, 'keyHealthInequalities')
-      .filter(i => i.label !== 'SEPARATOR')
-      .map(i => ({ value: i.value, label: i.label })),
-    involvedAACProgrammes: getIrSchemaQuestionItemsValueAndLabel(schema, 'involvedAACProgrammes')
-      .filter(i => i.label !== 'SEPARATOR')
-      .map(i => ({ value: i.value, label: i.label }))
+    categories: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'categories')],
+    careSettings: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'careSettings')],
+    keyHealthInequalities: getIrSchemaQuestionItemsValueAndLabel(schema, 'keyHealthInequalities').filter(
+      i => i.label !== ''
+    ),
+    involvedAACProgrammes: getIrSchemaQuestionItemsValueAndLabel(schema, 'involvedAACProgrammes').filter(
+      i => i.label !== ''
+    )
   };
 }
 
@@ -115,6 +113,7 @@ export function getConfig(
   role?: UserRoleEnum
 ): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
   const innovationListDatasets = getInnovationListDatasets(schema);
+  console.log('innovationListDatasets', innovationListDatasets);
   if (!role) return { filters: InnovationsListFiltersConfig, datasets: innovationListDatasets };
 
   let filters: string[] = [];
