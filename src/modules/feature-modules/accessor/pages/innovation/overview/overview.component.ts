@@ -6,7 +6,6 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-// import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';

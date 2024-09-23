@@ -10,7 +10,6 @@ import { InnovationsListFiltersType } from '@modules/shared/services/innovations
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-// import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type TabType = {

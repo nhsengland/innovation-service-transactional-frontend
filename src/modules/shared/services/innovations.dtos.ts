@@ -9,7 +9,6 @@ import {
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
   InnovationGroupedStatusEnum,
-  // InnovationSectionEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum

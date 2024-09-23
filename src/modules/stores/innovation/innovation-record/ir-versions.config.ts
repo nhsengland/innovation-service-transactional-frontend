@@ -16,12 +16,7 @@ export type AllSectionsOutboundPayloadType = {
   }[];
 }[];
 
-// export const irVersionsMainCategoryItems = [...SECTIONS_202209_categoriesItems, ...SECTIONS_202304_categoriesItems];
-export const irVersionsClinicalMainCategoryItems = [
-  // ...SECTIONS_202209_evidencetypeItems,
-  // ...SECTIONS_202304_evidenceTypeItems
-  ...SECTIONS_202405_evidenceTypeItems
-];
+export const irVersionsClinicalMainCategoryItems = [...SECTIONS_202405_evidenceTypeItems];
 
 // These sections should accept documents/files even before the innovation is submitted for NA.
 export const innovationSectionsWithFiles = [

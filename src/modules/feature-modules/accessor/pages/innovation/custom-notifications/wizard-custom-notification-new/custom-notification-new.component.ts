@@ -35,7 +35,6 @@ import {
   InnovationRecordUpdateStepOutputType
 } from './steps/innovation-record-update-step.types';
 import { WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
-// import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { DatesHelper } from '@app/base/helpers';
 
 type WizardData = {

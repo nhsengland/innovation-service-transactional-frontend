@@ -96,12 +96,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         {
           label: 'Categories',
           value: innovation.categories
-            .map(
-              v =>
-                v === 'OTHER'
-                  ? innovation.otherCategoryDescription
-                  : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
-              // : irVersionsMainCategoryItems.find(item => item.value === v)?.label
+            .map(v =>
+              v === 'OTHER'
+                ? innovation.otherCategoryDescription
+                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }

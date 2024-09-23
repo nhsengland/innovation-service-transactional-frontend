@@ -35,7 +35,7 @@ export function getConfig(
     config.filters = config.filters.filter(f => f.key !== 'innovationStatus');
   }
 
-  const dataSets: Record<string, Dataset> = {
+  const TaskAdvancedSearchDatasets: Record<string, Dataset> = {
     status: [],
     sections: getAllSectionsListV3(schema),
     innovationStatus: [
@@ -44,5 +44,5 @@ export function getConfig(
     ]
   };
 
-  return { filters: config, datasets: dataSets };
+  return { filters: config, datasets: TaskAdvancedSearchDatasets };
 }
