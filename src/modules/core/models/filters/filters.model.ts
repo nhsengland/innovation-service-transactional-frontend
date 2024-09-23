@@ -32,7 +32,7 @@ type DateRangeFilter = {
   selectionTitle: string; // This is used in the selection since title !== selection title
 } & CollapsibleFilter;
 
-type SearchFilter = BaseFilter & { placeholder?: string; maxLength?: number };
+type SearchFilter = BaseFilter & { label?: string; placeholder?: string; maxLength?: number };
 
 type CollapsibleFilter = { title: string; description?: string; state: 'opened' | 'closed'; scrollable?: boolean };
 type DateFilter = { key: string; label: string; description?: string; defaultValue?: string };

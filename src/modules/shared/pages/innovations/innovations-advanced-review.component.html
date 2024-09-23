@@ -1,10 +1,15 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row" *ngIf="filtersModel && filtersModel.search as search">
     <div class="nhsuk-grid-column-full">
-      <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-1">Search all innovations</h2>
-
       <form [formGroup]="form">
-        <theme-form-input [id]="'searchInnovation'" [placeholder]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false" width="one-third">
+        <theme-form-input
+          [id]="'searchInnovation'"
+          label="Search all innovations"
+          [placeholder]="search.placeholder"
+          [controlName]="search.key"
+          [pageUniqueField]="false"
+          width="one-third"
+        >
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
