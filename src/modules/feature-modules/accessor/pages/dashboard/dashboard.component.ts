@@ -91,11 +91,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           lastMessage: 'Last task update:',
           date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
           emptyMessage: 'No tasks assigned by your organisation yet'
-        },
-        {
-          title: 'List of accessors',
-          emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
-          link: `/accessor/accessor-list`
         }
       ];
 
@@ -109,6 +104,12 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           lastMessage: `Last submitted:`,
           date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
           emptyMessageTitle: 'No innovations awaiting status assignment'
+        });
+
+        this.cardsList.push({
+          title: 'List of accessors',
+          emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
+          link: `/accessor/accessor-list`
         });
       }
 
