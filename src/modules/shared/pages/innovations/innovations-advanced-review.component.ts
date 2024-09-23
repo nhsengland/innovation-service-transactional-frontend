@@ -92,7 +92,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.router.navigate([]);
     }
 
-    this.baseUrl = this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations`;
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations`;
 
     this.setPageTitle('Advanced search');
 
