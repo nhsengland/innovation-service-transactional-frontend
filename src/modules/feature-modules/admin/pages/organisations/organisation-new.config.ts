@@ -1,4 +1,6 @@
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { organisationUnitStepsDescriptions } from './organisation-unit-new/organisation-unit-new.config';
+import { organisationStepsDescriptions } from './organisation-edit.config';
 
 // Types.
 type organisationsListType = {
@@ -35,10 +37,11 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
         {
           id: 'name',
           dataType: 'text',
-          label: `What's the name of the new organisation?`,
+          label: `Add the name of the new organisation`,
+          description: organisationStepsDescriptions.l1,
           validations: {
             isRequired: [true, 'Name is required'],
-            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            pattern: ['^[a-zA-Z() ]*$', 'Organisation names must not include numbers or brackets'],
             maxLength: 100
           }
         }
@@ -50,7 +53,8 @@ export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngi
         {
           id: 'acronym',
           dataType: 'text',
-          label: `What's the acronym of the new organisation?`,
+          label: `Add an acronym for this organisation`,
+          description: organisationStepsDescriptions.l2,
           validations: {
             isRequired: [true, 'Acronym is required'],
             pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
@@ -131,10 +135,11 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
             {
               id: `unitName-${i}`,
               dataType: 'text',
-              label: `Provide the name for unit number ${i}`,
+              label: `Add a name for unit number ${i}`,
+              description: organisationUnitStepsDescriptions.l1,
               validations: {
                 isRequired: [true, 'Unit name is required'],
-                pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+                pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
                 maxLength: 100,
                 existsIn: [
                   // Excludes current value from validation.
@@ -150,7 +155,8 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
             {
               id: `unitAcronym-${i}`,
               dataType: 'text',
-              label: `Provide the acronym for unit number ${i}`,
+              label: `Add an acronym for unit number ${i}`,
+              description: organisationUnitStepsDescriptions.l2,
               validations: {
                 isRequired: [true, 'Unit acronym is required'],
                 pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],

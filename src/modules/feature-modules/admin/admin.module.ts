@@ -39,7 +39,7 @@ import { PageOrganisationInfoComponent } from './pages/organisations/organisatio
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { PageTeamsInfoComponent } from './pages/organisations/teams-info.component';
+import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
@@ -104,7 +104,7 @@ import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver'
     PageOrganisationInfoComponent,
     PageOrganisationsListComponent,
     PageOrganisationUnitNewComponent,
-    PageTeamsInfoComponent,
+    OrganisationUnitInfoComponent,
     // // Service Users.
     PageUsersRoleChangeComponent,
     PageUserDeleteComponent,

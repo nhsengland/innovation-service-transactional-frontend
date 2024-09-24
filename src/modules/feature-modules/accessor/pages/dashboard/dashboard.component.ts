@@ -105,6 +105,12 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
           emptyMessageTitle: 'No innovations awaiting status assignment'
         });
+
+        this.cardsList.push({
+          title: 'List of accessors',
+          emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
+          link: `/accessor/accessor-list`
+        });
       }
 
       this.announcements = announcements;

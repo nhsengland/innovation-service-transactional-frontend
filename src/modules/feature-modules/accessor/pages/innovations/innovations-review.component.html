@@ -1,10 +1,8 @@
 <theme-content-wrapper [status]="pageStatus">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h2 class="nhsuk-heading-xs nhsuk-u-margin-bottom-1">Search all innovations</h2>
-
       <form [formGroup]="form">
-        <theme-form-input [id]="'searchInnovation'" controlName="search" [pageUniqueField]="false" placeholder="Search" width="one-third">
+        <theme-form-input [id]="'searchInnovation'" controlName="search" label="Search all innovations" [pageUniqueField]="false" placeholder="Search" width="one-third">
           <ng-container append>
             <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
@@ -92,12 +90,12 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
-                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closedReason?.value === 'STOPPED_SHARED' ; else hasLink">
+                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closedReason?.value === 'STOPPED_SHARED'; else hasLink">
                       <span> {{ item.name }} </span>
                     </ng-container>
                     <ng-template #hasLink>
                       <a
-                        *ngIf="item.support?.status !== 'ENGAGING' && item.assessment?.finishedAt && item.assessment?.id ; else noAssessment"
+                        *ngIf="item.support?.status !== 'ENGAGING' && item.assessment?.finishedAt && item.assessment?.id; else noAssessment"
                         routerLink="/accessor/innovations/{{ item.id }}/assessments/{{ item.assessment?.id }}"
                         attr.aria-label="View {{ item.name }} innovation assessment details"
                       >

@@ -29,7 +29,13 @@
       <form [formGroup]="form" (ngSubmit)="onSubmitStep()">
         <h2 class="nhsuk-heading-m nhsuk-u-margin-bottom-1">Your message</h2>
 
-        <theme-form-input controlName="subject" label="Enter a subject for your thread" width="full" [pageUniqueField]="false"></theme-form-input>
+        <theme-form-input
+          controlName="subject"
+          label="Enter a subject for your thread"
+          width="full"
+          [isEditable]="isInnovatorType && sectionId ? false : true"
+          [pageUniqueField]="false"
+        ></theme-form-input>
 
         <theme-form-textarea controlName="message" label="Enter your message" [pageUniqueField]="false" lengthLimit="xxl"></theme-form-textarea>
 

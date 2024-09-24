@@ -9,6 +9,11 @@ type InboundPayloadType = {
 type OutboundPayloadType = InboundPayloadType;
 type StepPayloadType = InboundPayloadType;
 
+export const organisationStepsDescriptions = {
+  l1: "If the organisation has an official acronym, write it in brackets next to the organisation's name. For example, National Institute for Health and Care Excellence (NICE).",
+  l2: 'This will be used for tags on the service. If the organisation does not have an official acronym you must create one. Before you create one, check that it could not be confused with an existing acronym for another support organisation.'
+};
+
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
 export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
@@ -19,9 +24,10 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
           id: 'name',
           dataType: 'text',
           label: 'Organisation name',
-          description: 'Enter the name of the Organisation with a maximum of 100 characters',
+          description: organisationStepsDescriptions.l1,
           validations: {
             isRequired: [true, 'Name is required'],
+            pattern: ['^[a-zA-Z() ]*$', 'Organisation names must not include numbers or brackets'],
             maxLength: 100
           }
         }
@@ -34,8 +40,12 @@ export let EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineMod
           id: 'acronym',
           dataType: 'text',
           label: 'Organisation acronym',
-          description: 'Enter the acronym of the Organisation with a maximum of 10 characters',
-          validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
+          description: organisationStepsDescriptions.l2,
+          validations: {
+            isRequired: [true, 'Acronym is required'],
+            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            maxLength: 10
+          }
         }
       ]
     })

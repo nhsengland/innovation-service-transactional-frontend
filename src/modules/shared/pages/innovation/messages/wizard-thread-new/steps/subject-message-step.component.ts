@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Validators } from '@angular/forms';
 
@@ -29,6 +30,10 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SubjectMessageStepOutputType>>();
 
+  sectionId?: string;
+
+  isInnovatorType: boolean;
+
   form = new FormGroup(
     {
       subject: new FormControl<string>('', [
@@ -56,8 +61,12 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
     maxFileSize: 20 // In Mb.
   };
 
-  constructor() {
+  constructor(private activatedRoute: ActivatedRoute) {
     super();
+
+    this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId;
+
+    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
   ngOnInit(): void {

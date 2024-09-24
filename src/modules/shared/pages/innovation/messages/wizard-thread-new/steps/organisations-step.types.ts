@@ -1,8 +1,8 @@
-import { InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';
+import { ThreadAvailableRecipientsDTO } from '@modules/shared/services/innovations.service';
 
 export type OrganisationsStepInputType = {
   innovation: { id: string };
-  organisationUnits: InnovationSupportsListDTO;
+  organisationUnits: ThreadAvailableRecipientsDTO;
   selectedOrganisationUnits: string[];
   activeInnovators: boolean;
 };
@@ -11,6 +11,6 @@ export type OrganisationsStepOutputType = {
   organisationUnits: {
     id: string;
     name: string;
-    users: { id: string; userRoleId: string; name: string }[];
+    users: { id: string; roleId: string; name: string }[];
   }[];
 };

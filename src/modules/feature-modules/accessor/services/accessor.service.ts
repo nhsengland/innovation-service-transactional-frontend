@@ -9,6 +9,7 @@ import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { DateISOType } from '@app/base/types';
+import { UserRoleEnum } from '@app/base/enums';
 
 // Notify me
 export enum NotificationEnum {
@@ -147,6 +148,14 @@ export type GetNotifyMeInnovationsWithSubscriptions = {
   subscriptions?: GetNotifyMeInnovationSubscription[];
 };
 
+export type GetUnitAccessorList = {
+  count: number;
+  data: {
+    accessor: { name: string; role: UserRoleEnum };
+    innovations: { id: string; name: string }[];
+  }[];
+};
+
 @Injectable()
 export class AccessorService extends CoreService {
   constructor() {
@@ -265,5 +274,12 @@ export class AccessorService extends CoreService {
     };
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/notify-me').setQueryParams(qp);
     return this.http.get<GetNotifyMeInnovationsWithSubscriptions[]>(url.buildUrl()).pipe(take(1));
+  }
+
+  getUnitAccessorAndInnovationsList(orgId: string, unitId: string): Observable<GetUnitAccessorList> {
+    const url = new UrlModel(this.API_USERS_URL)
+      .addPath('v1/organisations/:orgId/units/:unitId/accessors')
+      .setPathParams({ orgId, unitId });
+    return this.http.get<GetUnitAccessorList>(url.buildUrl()).pipe(take(1));
   }
 }

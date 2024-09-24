@@ -46,6 +46,15 @@ export type GetInnovationsByOwnerIdDTO = {
   name: string;
 }[];
 
+export type AssignedInnovationsList = {
+  count: number;
+  data: {
+    innovation: { id: string; name: string };
+    supportedBy: { id: string; name: string; role: UserRoleEnum }[];
+    unit: string;
+  }[];
+};
+
 @Injectable()
 export class AdminUsersService extends CoreService {
   constructor() {
@@ -198,5 +207,12 @@ export class AdminUsersService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getAssignedInnovations(userId: string): Observable<AssignedInnovationsList> {
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('/v1/users/:userId/assigned-innovations')
+      .setPathParams({ userId });
+    return this.http.get<AssignedInnovationsList>(url.buildUrl()).pipe(take(1));
   }
 }

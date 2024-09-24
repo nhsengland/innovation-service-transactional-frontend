@@ -85,6 +85,7 @@ import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
 import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/custom-notification-delete.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
+import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -712,6 +713,12 @@ const routes: Routes = [
           layout: { type: 'full' }
         },
         component: PageProgressCategoriesWrapperComponent
+      },
+
+      {
+        path: 'accessor-list',
+        pathMatch: 'full',
+        component: AccessorAndInnovationListComponent
       }
     ]
   }

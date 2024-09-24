@@ -11,7 +11,7 @@ import {
 } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
-  search: { key: 'search', placeholder: 'Search', maxLength: 200 },
+  search: { key: 'search', label: 'Search all innovations', placeholder: 'Search', maxLength: 200 },
   filters: [
     {
       type: 'CHECKBOXES',

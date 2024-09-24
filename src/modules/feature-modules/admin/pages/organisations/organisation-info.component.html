@@ -26,7 +26,10 @@
           <div class="nhsuk-summary-list__row">
             <dt class="nhsuk-summary-list__key">Name</dt>
             <dd class="nhsuk-summary-list__value">
-              {{ organisation.name }} <span class="nhsuk-hint nhsuk-u-margin-bottom-0"> {{ organisation.acronym }} </span>
+              {{ organisation.name }}
+              <span *ngIf="organisation.name && organisation.acronym && !organisation.name.includes(organisation.acronym)" class="nhsuk-hint nhsuk-u-margin-bottom-0">
+                {{ organisation.acronym }}
+              </span>
             </dd>
             <dd class="nhsuk-summary-list__actions">
               <a routerLink="edit">
@@ -88,7 +91,7 @@
             <div class="d-flex nhsuk-body-m nhsuk-u-margin-0 nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-3 bottom-border-separator">
               <dt class="mr-auto">
                 <a routerLink="unit/{{ unit.id }}" title="View">
-                  {{ unit.name }} ({{ unit.acronym }})
+                  {{ unit.name }}
                   <span class="nhsuk-u-visually-hidden">organisation unit</span>
                 </a>
                 <div *ngIf="unit.isActive" class="nhsuk-u-margin-bottom-0">{{ unit.userCount }} users</div>

@@ -17,7 +17,7 @@ export class UtilsHelper {
       case 'number':
         return value < 0; // 0 is considered NOT empty.
       case 'string':
-        return value === '';
+        return value.trim() === '';
       case 'boolean':
         return !value;
       default:
