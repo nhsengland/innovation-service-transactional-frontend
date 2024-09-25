@@ -51,9 +51,10 @@
           <theme-form-checkbox-array
             class="nhsuk-u-margin-bottom-4"
             arrayName="accessors"
-            label="Select 1 or more accessors from {{ userOrganisationUnit?.name }} to support this innovation."
+            [label]="selectAccessorsStepLabel"
             [items]="formAccessorsList"
             [pageUniqueField]="false"
+            [disabledItems]="disabledCheckboxAccessors"
           ></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>

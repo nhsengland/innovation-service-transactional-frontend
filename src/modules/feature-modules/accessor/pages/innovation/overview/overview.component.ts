@@ -51,6 +51,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
 
+  canChangeAccessorsOnWaiting: boolean = false;
+  isUserSupportingInnovation: boolean = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
@@ -108,6 +111,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           (this.isArchived ? InnovationSupportStatusEnum.CLOSED : InnovationSupportStatusEnum.UNASSIGNED),
         engagingAccessors: support?.engagingAccessors ?? []
       };
+
+      this.isUserSupportingInnovation =
+        support?.engagingAccessors.some(accessor => (accessor.id = this.stores.authentication.getUserId())) ?? false;
+
+      this.canChangeAccessorsOnWaiting =
+        this.isInProgress &&
+        this.isQualifyingAccessorRole &&
+        this.isUserSupportingInnovation &&
+        this.innovationSupport.status === InnovationSupportStatusEnum.WAITING;
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },

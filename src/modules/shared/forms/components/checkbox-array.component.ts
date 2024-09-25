@@ -32,6 +32,7 @@ export class FormCheckboxArrayComponent implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModel['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField? = true;
+  @Input() disabledItems?: string[] = [];
 
   hasError = false;
   error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };

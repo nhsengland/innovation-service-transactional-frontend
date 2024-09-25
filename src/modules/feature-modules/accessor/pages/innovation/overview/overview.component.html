@@ -40,7 +40,7 @@
         </dd>
         <dd class="nhsuk-summary-list__actions">
           <a
-            *ngIf="isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING'"
+            *ngIf="(isInProgress && isQualifyingAccessorRole && innovationSupport.status === 'ENGAGING') || canChangeAccessorsOnWaiting"
             routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
             >Change accessors</a
           >

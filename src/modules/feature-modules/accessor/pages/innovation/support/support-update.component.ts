@@ -16,13 +16,15 @@ import { AccessorService } from '../../../services/accessor.service';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { switchMap } from 'rxjs/operators';
 import { omit } from 'lodash';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
   templateUrl: './support-update.component.html'
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
-  private accessorsList: { id: string; userRoleId: string; name: string }[] = [];
+  private allAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
+  private QAList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
 
   innovationId: string;
   supportId: string;
@@ -30,8 +32,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   submitButton = { isActive: true, label: 'Confirm' };
 
   formAccessorsList: { value: string; label: string }[] = [];
-  selectedAccessors: typeof this.accessorsList = [];
+  selectedAccessors: typeof this.allAccessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
+  disabledCheckboxAccessors: string[] = [];
+
+  selectAccessorsStepLabel: string = '';
 
   supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
     .map(([key, item]) => ({
@@ -90,7 +95,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]:
-      'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.',
+      "This message will be sent to the innovator and collaborators. It will also appear on the innovation's support summary.",
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
     [InnovationSupportStatusEnum.UNSUITABLE]: 'The innovator and collaborators will be notified.',
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
@@ -145,28 +150,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.setPageTitle('Update support status', { showPage: false, size: 'l' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
-    if (!this.supportId) {
-      this.setPageStatus('READY');
-    } else {
-      this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
-        this.currentStatus = response.status;
-
-        response.engagingAccessors.forEach(accessor => {
-          (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
-        });
-
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
-          contextIds: [this.supportId]
-        });
-
-        this.setPageStatus('READY');
-      });
-    }
-
-    this.usersService
-      .getUsersList({
+    forkJoin([
+      this.usersService.getUsersList({
         queryParams: {
           take: 100,
           skip: 0,
@@ -177,17 +162,92 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
           }
         }
-      })
-      .subscribe(response => {
-        for (const item of response.data) {
-          this.accessorsList.push({ id: item.id, userRoleId: item.roleId, name: item.name });
-          this.formAccessorsList.push({ value: item.id, label: item.name });
-        }
-      });
+      }),
+      this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId),
+      ...(this.supportId ? [this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId)] : [])
+    ]).subscribe({
+      next: ([usersList, availableSupportStatuses, innovationSupportInfo]) => {
+        if (innovationSupportInfo) {
+          this.currentStatus = innovationSupportInfo.status;
 
-    this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(availableStatuses => {
-      this.availableSupportStatuses = availableStatuses.availableStatus;
+          innovationSupportInfo.engagingAccessors.forEach(accessor => {
+            (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
+          });
+
+          // Throw notification read dismiss.
+          this.stores.context.dismissNotification(this.innovationId, {
+            contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
+            contextIds: [this.supportId]
+          });
+        }
+
+        // for (const item of usersList.data) {
+        //   this.allAccessorsList.push({ id: item.id, role: item.role, userRoleId: item.roleId, name: item.name });
+        // }
+
+        this.allAccessorsList = usersList.data.map(item => ({
+          id: item.id,
+          role: item.role,
+          userRoleId: item.roleId,
+          name: item.name
+        }));
+        this.QAList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
+        this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
+
+        this.availableSupportStatuses = availableSupportStatuses.availableStatus;
+
+        this.setPageStatus('READY');
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
     });
+
+    // if (!this.supportId) {
+    //   this.setPageStatus('READY');
+    // } else {
+    //   this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
+    //     this.currentStatus = response.status;
+
+    //     response.engagingAccessors.forEach(accessor => {
+    //       (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
+    //     });
+
+    //     // Throw notification read dismiss.
+    //     this.stores.context.dismissNotification(this.innovationId, {
+    //       contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
+    //       contextIds: [this.supportId]
+    //     });
+
+    //     this.setPageStatus('READY');
+    //   });
+    // }
+
+    // this.usersService
+    //   .getUsersList({
+    //     queryParams: {
+    //       take: 100,
+    //       skip: 0,
+    //       filters: {
+    //         email: false,
+    //         onlyActive: true,
+    //         organisationUnitId: this.userOrganisationUnit?.id ?? '',
+    //         userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
+    //       }
+    //     }
+    //   })
+    //   .subscribe(response => {
+    //     for (const item of response.data) {
+    //       this.allAccessorsList.push({ id: item.id, role: item.role, userRoleId: item.roleId, name: item.name });
+    //     }
+    //     this.QAList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
+    //     this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
+    //   });
+
+    // this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(availableStatuses => {
+    //   this.availableSupportStatuses = availableStatuses.availableStatus;
+    // });
   }
 
   onSubmitStep(): void {
@@ -202,8 +262,35 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        if (this.chosenStatus === InnovationSupportStatusEnum.ENGAGING) {
-          this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+        if (
+          this.chosenStatus === InnovationSupportStatusEnum.ENGAGING ||
+          (this.chosenStatus === InnovationSupportStatusEnum.WAITING && this.QAList.length > 1)
+        ) {
+          switch (this.chosenStatus) {
+            case InnovationSupportStatusEnum.ENGAGING:
+              this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+              this.selectAccessorsStepLabel = `Select 1 or more accessors from ${this.userOrganisationUnit?.name} to support this innovation.`;
+              break;
+
+            case InnovationSupportStatusEnum.WAITING:
+              this.setPageTitle('Assign qualifying accessors to this innovation', { width: 'full', size: 'l' });
+              this.selectAccessorsStepLabel = `Select 1 or more qualifying accessors from ${this.userOrganisationUnit?.name} to be assigned to this innovation. They will receive notifications regarding this innovation.`;
+
+              // set list of QA only
+              this.formAccessorsList = this.allAccessorsList
+                .filter(accessor => accessor.role === UserRoleEnum.QUALIFYING_ACCESSOR)
+                .map(i => ({ value: i.id, label: i.name }));
+
+              // add this user by default, and disable input
+              const userId = this.stores.authentication.getUserId();
+              (this.form.get('accessors') as FormArray).push(new FormControl<string>(userId));
+              this.disabledCheckboxAccessors = [userId];
+
+              break;
+            default:
+              break;
+          }
+
           this.stepNumber = 2;
         } else {
           this.selectedAccessors = [];
@@ -225,7 +312,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        this.selectedAccessors = this.accessorsList.filter(item =>
+        this.selectedAccessors = this.allAccessorsList.filter(item =>
           (this.form.get('accessors')?.value ?? []).includes(item.id)
         );
 
