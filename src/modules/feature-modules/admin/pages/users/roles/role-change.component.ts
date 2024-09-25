@@ -5,14 +5,14 @@ import { CoreComponent } from '@app/base';
 import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 
 import { UserInfo } from '@modules/shared/dtos/users.dto';
-import { AdminUsersService, changeUserRoleDTO, GetInnovationsByOwnerIdDTO } from '../../../services/users.service';
+import { AdminUsersService, changeUserRoleDTO, GetInnovationsByInnovatorIdDTO } from '../../../services/users.service';
 
 @Component({
   selector: 'app-admin-pages-users-role-change',
   templateUrl: './role-change.component.html'
 })
 export class PageUsersRoleChangeComponent extends CoreComponent implements OnInit {
-  user: UserInfo & { rolesDescription: string[]; innovations?: GetInnovationsByOwnerIdDTO } = {
+  user: UserInfo & { rolesDescription: string[]; innovations?: GetInnovationsByInnovatorIdDTO } = {
     id: '',
     email: '',
     name: '',

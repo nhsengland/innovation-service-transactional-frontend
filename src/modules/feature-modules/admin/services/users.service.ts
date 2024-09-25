@@ -41,9 +41,10 @@ type GetListByIdDTO = {
   releasedAt: null | DateISOType;
 };
 
-export type GetInnovationsByOwnerIdDTO = {
+export type GetInnovationsByInnovatorIdDTO = {
   id: string;
   name: string;
+  isOwner: boolean;
 }[];
 
 export type AssignedInnovationsList = {
@@ -192,9 +193,16 @@ export class AdminUsersService extends CoreService {
     return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
   }
 
-  getInnovationsByOwnerId(userId: string) {
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/users/:userId/innovations').setPathParams({ userId });
-    return this.http.get<GetInnovationsByOwnerIdDTO>(url.buildUrl()).pipe(take(1));
+  getInnovationsByInnovatorId(userId: string, asCollaborator?: boolean) {
+    const qp = {
+      ...(asCollaborator ? { asCollaborator } : {})
+    };
+
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('/v1/users/:userId/innovations')
+      .setPathParams({ userId })
+      .setQueryParams(qp);
+    return this.http.get<GetInnovationsByInnovatorIdDTO>(url.buildUrl()).pipe(take(1));
   }
 
   transferInnovation(body: {

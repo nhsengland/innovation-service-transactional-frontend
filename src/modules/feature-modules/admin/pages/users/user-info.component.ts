@@ -8,7 +8,11 @@ import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { UsersValidationRulesService } from '../../services/users-validation-rules.service';
-import { AdminUsersService, AssignedInnovationsList, GetInnovationsByOwnerIdDTO } from '../../services/users.service';
+import {
+  AdminUsersService,
+  AssignedInnovationsList,
+  GetInnovationsByInnovatorIdDTO
+} from '../../services/users.service';
 import { TableModel } from '@app/base/models';
 import { get } from 'lodash';
 
@@ -19,7 +23,7 @@ type AssignedInnovationData = AssignedInnovationsList['data'][0];
   templateUrl: './user-info.component.html'
 })
 export class PageUserInfoComponent extends CoreComponent implements OnInit {
-  user: UserInfo & { rolesDescription: string[]; innovations?: GetInnovationsByOwnerIdDTO } = {
+  user: UserInfo & { rolesDescription: string[]; innovations?: GetInnovationsByInnovatorIdDTO } = {
     id: '',
     email: '',
     name: '',
@@ -118,7 +122,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           }
 
           return forkJoin([
-            isInnovator ? this.usersService.getInnovationsByOwnerId(this.user.id) : of(null),
+            isInnovator ? this.usersService.getInnovationsByInnovatorId(this.user.id, true) : of(null),
             this.canAddRole ? this.usersValidationService.canAddAnyRole(this.user.id) : of(null),
             !isInnovator && !isAdmin ? this.usersService.getAssignedInnovations(this.user.id) : of(null)
           ]);
@@ -127,7 +131,8 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
       .subscribe({
         next: ([innovations, canAddAnyRoleValidations, assignedInnovations]) => {
           if (innovations) {
-            this.user.innovations = innovations;
+            // To display first the innovations owned by the innovator, and then the innovations where the innovator collaborate.
+            this.user.innovations = innovations.sort((a, b) => Number(b.isOwner) - Number(a.isOwner));
           }
           if (canAddAnyRoleValidations) {
             this.canAddRole = !canAddAnyRoleValidations.some(v => !v.valid);
