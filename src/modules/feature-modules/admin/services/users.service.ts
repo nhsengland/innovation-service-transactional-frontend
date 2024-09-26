@@ -193,9 +193,9 @@ export class AdminUsersService extends CoreService {
     return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
   }
 
-  getInnovationsByInnovatorId(userId: string, asCollaborator?: boolean) {
+  getInnovationsByInnovatorId(userId: string, includeAsCollaborator?: boolean) {
     const qp = {
-      ...(asCollaborator ? { asCollaborator } : {})
+      ...(includeAsCollaborator ? { includeAsCollaborator } : {})
     };
 
     const url = new UrlModel(this.API_ADMIN_URL)
