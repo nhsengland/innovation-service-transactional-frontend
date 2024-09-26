@@ -181,10 +181,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           });
         }
 
-        // for (const item of usersList.data) {
-        //   this.allAccessorsList.push({ id: item.id, role: item.role, userRoleId: item.roleId, name: item.name });
-        // }
-
         this.allAccessorsList = usersList.data.map(item => ({
           id: item.id,
           role: item.role,
@@ -203,51 +199,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.setAlertUnknownError();
       }
     });
-
-    // if (!this.supportId) {
-    //   this.setPageStatus('READY');
-    // } else {
-    //   this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
-    //     this.currentStatus = response.status;
-
-    //     response.engagingAccessors.forEach(accessor => {
-    //       (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
-    //     });
-
-    //     // Throw notification read dismiss.
-    //     this.stores.context.dismissNotification(this.innovationId, {
-    //       contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
-    //       contextIds: [this.supportId]
-    //     });
-
-    //     this.setPageStatus('READY');
-    //   });
-    // }
-
-    // this.usersService
-    //   .getUsersList({
-    //     queryParams: {
-    //       take: 100,
-    //       skip: 0,
-    //       filters: {
-    //         email: false,
-    //         onlyActive: true,
-    //         organisationUnitId: this.userOrganisationUnit?.id ?? '',
-    //         userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
-    //       }
-    //     }
-    //   })
-    //   .subscribe(response => {
-    //     for (const item of response.data) {
-    //       this.allAccessorsList.push({ id: item.id, role: item.role, userRoleId: item.roleId, name: item.name });
-    //     }
-    //     this.QAList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
-    //     this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
-    //   });
-
-    // this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(availableStatuses => {
-    //   this.availableSupportStatuses = availableStatuses.availableStatus;
-    // });
   }
 
   onSubmitStep(): void {

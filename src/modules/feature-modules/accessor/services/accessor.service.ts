@@ -167,13 +167,11 @@ export class AccessorService extends CoreService {
     body: { status: InnovationSupportStatusEnum; message: string; accessors?: { id: string; userRoleId: string }[] },
     supportId?: string
   ): Observable<{ id: string }> {
-    // If NOT enganging, the endpoint won't accept an accessors key.
+    // If NOT enganging or waiting, the endpoint won't accept an accessors key.
     if (![InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(body.status)) {
       delete body.accessors;
     }
 
-    console.log('body', body);
-    // return of();
     if (!supportId) {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
         .addPath('v1/:innovationId/supports')
