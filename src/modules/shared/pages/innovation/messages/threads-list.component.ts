@@ -90,7 +90,8 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
         contextDetails: [
           NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT,
           NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
-          NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS
+          NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS,
+          NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS
         ]
       });
     }
