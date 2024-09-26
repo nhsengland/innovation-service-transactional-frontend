@@ -85,6 +85,7 @@
               <td class="nhsuk-table__cell">
                 <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }} </a>
               </td>
+              <td class="nhsuk-table__cell">{{ innovation.isOwner ? "Owner" : "Collaborator" }}</td>
             </tr>
           </tbody>
         </table>

@@ -23,7 +23,7 @@ export class PageUserInnovationsComponent extends CoreComponent implements OnIni
   }
 
   ngOnInit(): void {
-    this.usersService.getInnovationsByOwnerId(this.user.id).subscribe(innovations => {
+    this.usersService.getInnovationsByInnovatorId(this.user.id).subscribe(innovations => {
       this.innovations = innovations;
       this.setPageStatus('READY');
     });
