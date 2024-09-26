@@ -896,6 +896,10 @@ export const locale = {
             AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
               title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
             },
+            AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS: {
+              title: `{{innovationName}} has been waiting for 6 weeks. `,
+              link: `View innovation and update support status within the next 5 weeks.`
+            },
             // NOTIFY ME
             SUPPORT_UPDATED: {
               title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
