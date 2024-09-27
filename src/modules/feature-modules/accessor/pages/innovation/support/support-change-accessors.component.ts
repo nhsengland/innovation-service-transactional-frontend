@@ -82,7 +82,6 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
           userRoleId: item.roleId,
           name: item.name
         }));
-        this.formAccessorsList = usersList.data.map(r => ({ value: r.id, label: r.name }));
 
         if (innovationSupportInfo) {
           this.innovationSupportStatus = innovationSupportInfo.status;
@@ -136,6 +135,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
       case InnovationSupportStatusEnum.ENGAGING:
         this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
         this.selectAccessorsStepLabel = `Select 1 or more accessors from ${this.userOrganisationUnit?.name} to support this innovation.`;
+        this.formAccessorsList = this.accessorsList.map(r => ({ value: r.id, label: r.name }));
         break;
 
       case InnovationSupportStatusEnum.WAITING:

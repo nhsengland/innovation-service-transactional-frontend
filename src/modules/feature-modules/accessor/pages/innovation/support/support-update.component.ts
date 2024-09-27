@@ -228,9 +228,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
               this.selectAccessorsStepLabel = `Select 1 or more qualifying accessors from ${this.userOrganisationUnit?.name} to be assigned to this innovation. They will receive notifications regarding this innovation.`;
 
               // set list of QA only
-              this.formAccessorsList = this.allAccessorsList
-                .filter(accessor => accessor.role === UserRoleEnum.QUALIFYING_ACCESSOR)
-                .map(i => ({ value: i.id, label: i.name }));
+              this.formAccessorsList = this.qualifyingAccessorsList.map(i => ({ value: i.id, label: i.name }));
 
               // add this user by default, and disable input
               const userId = this.stores.authentication.getUserId();
