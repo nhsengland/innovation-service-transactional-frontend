@@ -24,7 +24,7 @@ import { forkJoin } from 'rxjs';
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
   private allAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
-  private QAList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
+  private qualifyingAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
 
   innovationId: string;
   supportId: string;
@@ -187,7 +187,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           userRoleId: item.roleId,
           name: item.name
         }));
-        this.QAList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
+        this.qualifyingAccessorsList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
         this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
 
         this.availableSupportStatuses = availableSupportStatuses.availableStatus;
@@ -215,7 +215,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
         if (
           this.chosenStatus === InnovationSupportStatusEnum.ENGAGING ||
-          (this.chosenStatus === InnovationSupportStatusEnum.WAITING && this.QAList.length > 1)
+          (this.chosenStatus === InnovationSupportStatusEnum.WAITING && this.qualifyingAccessorsList.length > 1)
         ) {
           switch (this.chosenStatus) {
             case InnovationSupportStatusEnum.ENGAGING:
