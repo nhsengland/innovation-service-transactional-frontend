@@ -10,13 +10,16 @@ import { UsersService } from '@modules/shared/services/users.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
+import { RESPONSE } from 'src/express.tokens';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-accessor-pages-innovation-change-accessors',
   templateUrl: './support-change-accessors.component.html'
 })
 export class InnovationChangeAccessorsComponent extends CoreComponent implements OnInit {
-  private accessorsList: { id: string; userRoleId: string; name: string }[] = [];
+  private accessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
 
   innovationId: string;
   supportId: string;
@@ -25,6 +28,10 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   formAccessorsList: { value: string; label: string }[] = [];
   selectedAccessors: typeof this.accessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
+
+  selectAccessorsStepLabel: string = '';
+
+  innovationSupportStatus: InnovationSupportStatusEnum | undefined;
 
   form = new FormGroup(
     {
@@ -53,20 +60,8 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   ngOnInit(): void {
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
-    this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
-
-    if (!this.supportId) {
-      this.setPageStatus('READY');
-    } else {
-      this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
-        response.engagingAccessors.forEach(accessor => {
-          (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
-        });
-      });
-    }
-
-    this.usersService
-      .getUsersList({
+    forkJoin([
+      this.usersService.getUsersList({
         queryParams: {
           take: 100,
           skip: 0,
@@ -77,13 +72,32 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
             userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
           }
         }
-      })
-      .subscribe(response => {
-        this.accessorsList = response.data.map(item => ({ id: item.id, userRoleId: item.roleId, name: item.name }));
-        this.formAccessorsList = response.data.map(r => ({ value: r.id, label: r.name }));
+      }),
+      ...(this.supportId ? [this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId)] : [])
+    ]).subscribe({
+      next: ([usersList, innovationSupportInfo]) => {
+        this.accessorsList = usersList.data.map(item => ({
+          id: item.id,
+          role: item.role,
+          userRoleId: item.roleId,
+          name: item.name
+        }));
+
+        if (innovationSupportInfo) {
+          this.innovationSupportStatus = innovationSupportInfo.status;
+          this.setTitleAndLabels();
+          innovationSupportInfo.engagingAccessors.forEach(accessor => {
+            (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
+          });
+        }
 
         this.setPageStatus('READY');
-      });
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
+    });
   }
 
   onSubmitStep(): void {
@@ -106,11 +120,30 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
         break;
 
       case 2:
-        this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+        this.setTitleAndLabels();
+
         this.stepNumber = 1;
         break;
 
       default:
+        break;
+    }
+  }
+
+  setTitleAndLabels() {
+    switch (this.innovationSupportStatus) {
+      case InnovationSupportStatusEnum.ENGAGING:
+        this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+        this.selectAccessorsStepLabel = `Select 1 or more accessors from ${this.userOrganisationUnit?.name} to support this innovation.`;
+        this.formAccessorsList = this.accessorsList.map(r => ({ value: r.id, label: r.name }));
+        break;
+
+      case InnovationSupportStatusEnum.WAITING:
+        this.setPageTitle('Assign qualifying accessors to this innovation', { width: 'full', size: 'l' });
+        this.selectAccessorsStepLabel = `Select 1 or more qualifying accessors from ${this.userOrganisationUnit?.name} to be assigned to this innovation. They will receive notifications regarding this innovation.`;
+        this.formAccessorsList = this.accessorsList
+          .filter(accessor => accessor.role === UserRoleEnum.QUALIFYING_ACCESSOR)
+          .map(r => ({ value: r.id, label: r.name }));
         break;
     }
   }

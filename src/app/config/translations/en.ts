@@ -727,6 +727,9 @@ export const locale = {
               title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{status}}. `,
               link: `Update support status.`
             },
+            ST08_SUPPORT_NEW_ASSIGNED_WAITING_INNOVATION_TO_QA: {
+              title: `You have been assigned to innovation {{innovationName}}. You will receive notifications for this innovation while it is in the waiting status.`
+            },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: {
               title: `{{unitName}} added a progress update for innovation {{innovationName}}. `,
               link: `View this update in support summary.`
