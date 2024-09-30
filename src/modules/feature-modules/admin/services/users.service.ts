@@ -41,10 +41,20 @@ type GetListByIdDTO = {
   releasedAt: null | DateISOType;
 };
 
-export type GetInnovationsByOwnerIdDTO = {
+export type GetInnovationsByInnovatorIdDTO = {
   id: string;
   name: string;
+  isOwner: boolean;
 }[];
+
+export type AssignedInnovationsList = {
+  count: number;
+  data: {
+    innovation: { id: string; name: string };
+    supportedBy: { id: string; name: string; role: UserRoleEnum }[];
+    unit: string;
+  }[];
+};
 
 @Injectable()
 export class AdminUsersService extends CoreService {
@@ -183,9 +193,16 @@ export class AdminUsersService extends CoreService {
     return this.http.get<UserInfo>(url.buildUrl()).pipe(take(1));
   }
 
-  getInnovationsByOwnerId(userId: string) {
-    const url = new UrlModel(this.API_ADMIN_URL).addPath('/v1/users/:userId/innovations').setPathParams({ userId });
-    return this.http.get<GetInnovationsByOwnerIdDTO>(url.buildUrl()).pipe(take(1));
+  getInnovationsByInnovatorId(userId: string, includeAsCollaborator?: boolean) {
+    const qp = {
+      ...(includeAsCollaborator ? { includeAsCollaborator } : {})
+    };
+
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('/v1/users/:userId/innovations')
+      .setPathParams({ userId })
+      .setQueryParams(qp);
+    return this.http.get<GetInnovationsByInnovatorIdDTO>(url.buildUrl()).pipe(take(1));
   }
 
   transferInnovation(body: {
@@ -198,5 +215,12 @@ export class AdminUsersService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getAssignedInnovations(userId: string): Observable<AssignedInnovationsList> {
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('/v1/users/:userId/assigned-innovations')
+      .setPathParams({ userId });
+    return this.http.get<AssignedInnovationsList>(url.buildUrl()).pipe(take(1));
   }
 }

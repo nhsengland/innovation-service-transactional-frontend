@@ -32,7 +32,11 @@ export const NEW_UNIT_CONFIG: WizardEngineModel = new WizardEngineModel({
           dataType: 'text',
           label: stepsLabels.l1,
           description: organisationUnitStepsDescriptions.l1,
-          validations: { isRequired: [true, 'Name is required'], maxLength: 100 }
+          validations: {
+            isRequired: [true, 'Name is required'],
+            pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
+            maxLength: 100
+          }
         }
       ]
     }),
@@ -43,7 +47,11 @@ export const NEW_UNIT_CONFIG: WizardEngineModel = new WizardEngineModel({
           dataType: 'text',
           label: stepsLabels.l2,
           description: organisationUnitStepsDescriptions.l2,
-          validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
+          validations: {
+            isRequired: [true, 'Acronym is required'],
+            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            maxLength: 10
+          }
         }
       ]
     })

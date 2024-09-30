@@ -46,6 +46,7 @@
                   [attr.aria-controls]="item.conditional ? 'conditional-' + id + i : null"
                   [attr.aria-expanded]="item.conditional ? (isConditionalFieldVisible(item.conditional.id) ? 'true' : 'false') : null"
                   [attr.aria-describedby]="item.description ? id! + i + '-hint' : null"
+                  [disabled]="disabledItems?.includes(item.value)"
                 />
               </ng-container>
               <ng-container *ngIf="isRunningOnServer">

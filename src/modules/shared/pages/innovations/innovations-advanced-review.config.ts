@@ -7,7 +7,7 @@ import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innov
 import { iif } from 'rxjs';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
-  search: { key: 'search', placeholder: 'Search', maxLength: 200 },
+  search: { key: 'search', label: 'Search all innovations', placeholder: 'Search', maxLength: 200 },
   filters: [
     {
       type: 'CHECKBOXES',

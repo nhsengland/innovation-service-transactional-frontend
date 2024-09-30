@@ -727,6 +727,9 @@ export const locale = {
               title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{status}}. `,
               link: `Update support status.`
             },
+            ST08_SUPPORT_NEW_ASSIGNED_WAITING_INNOVATION_TO_QA: {
+              title: `You have been assigned to innovation {{innovationName}}. You will receive notifications for this innovation while it is in the waiting status.`
+            },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: {
               title: `{{unitName}} added a progress update for innovation {{innovationName}}. `,
               link: `View this update in support summary.`
@@ -895,6 +898,10 @@ export const locale = {
             },
             AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
               title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
+            },
+            AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS: {
+              title: `{{innovationName}} has been waiting for 6 weeks. `,
+              link: `View innovation and update support status within the next 5 weeks.`
             },
             // NOTIFY ME
             SUPPORT_UPDATED: {

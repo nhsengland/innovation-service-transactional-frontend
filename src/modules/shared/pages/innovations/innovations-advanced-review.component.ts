@@ -69,6 +69,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
+  currentPageTitle: string = '';
   search?: string;
 
   constructor(
@@ -77,8 +78,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     private activatedRoute: ActivatedRoute
   ) {
     super();
-
-    this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();
@@ -89,7 +88,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       this.router.navigate([]);
     }
 
-    this.baseUrl = this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
+    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations`;
 
     this.setPageTitle('Advanced search');
 
@@ -165,11 +164,23 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
         this.form = this.filtersModel.form;
 
-        if (this.search !== undefined) {
-          this.form.get('search')?.setValue(this.search);
-        }
+        this.currentPageTitle = this.pageTitle;
 
-        this.subscriptions.push(this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange()));
+        this.subscriptions.push(
+          this.activatedRoute.queryParams.subscribe(params => {
+            // To keep the same page title when updating query params.
+            this.setPageTitle(this.currentPageTitle);
+            this.search = params.search;
+            if (this.search && this.search !== this.form.value.search) {
+              this.form.get('search')?.setValue(this.search);
+            } else if (!this.search) {
+              this.onFormChange();
+            }
+          }),
+          this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+            this.onFormChange();
+          })
+        );
 
         this.onFormChange();
       },
@@ -301,7 +312,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.pageNumber = 1;
 
-    this.updateSearchQueryParams();
+    // If 'search' has a different value from 'form search field' value, the user typed a new value into 'form search field'.
+    const currentSearch = this.form.value.search;
+    if (this.search != currentSearch && (this.search !== undefined || (this.search === undefined && currentSearch))) {
+      this.updateSearchQueryParams(currentSearch);
+    }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
 
@@ -341,21 +356,24 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return translation.get(value)?.label ?? value;
   }
 
-  private updateSearchQueryParams(): void {
-    const currentSearch = this.form.get('search')?.value;
+  private updateSearchQueryParams(currentSearch: string): void {
+    const url = this.router
+      .createUrlTree([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { search: currentSearch },
+        queryParamsHandling: 'merge'
+      })
+      .toString();
 
-    if ((this.search === undefined && currentSearch) || this.search !== undefined) {
-      this.search = currentSearch;
+    this.location.replaceState(url);
 
-      const url = this.router
-        .createUrlTree([], {
-          relativeTo: this.activatedRoute,
-          queryParams: { search: this.search },
-          queryParamsHandling: 'merge'
-        })
-        .toString();
-
-      this.location.replaceState(url);
+    // To update 'search' query param.
+    if (this.isAdminType) {
+      this.redirectTo(`${this.baseUrl}`, { search: currentSearch });
+    } else {
+      this.redirectTo(`${this.baseUrl}/advanced-search`, {
+        search: currentSearch
+      });
     }
   }
 }

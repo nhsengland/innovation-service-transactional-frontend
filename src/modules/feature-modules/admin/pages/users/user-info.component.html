@@ -85,6 +85,7 @@
               <td class="nhsuk-table__cell">
                 <a routerLink="/admin/innovations/{{ innovation.id }}/overview">{{ innovation.name }} </a>
               </td>
+              <td class="nhsuk-table__cell">{{ innovation.isOwner ? "Owner" : "Collaborator" }}</td>
             </tr>
           </tbody>
         </table>
@@ -98,4 +99,73 @@
       <span class="nhsuk-action-link__text">Add role</span>
     </a>
   </div>
+
+  <section *ngIf="assignedInnovations">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Innovations supported by user</h2>
+
+        <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3">
+          <h3 role="alert" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-0">Supporting {{ assignedInnovations.getTotalRowsNumber() }} innovations</h3>
+        </div>
+
+        <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+        <ng-container *ngIf="assignedInnovations.getTotalRowsNumber() === 0">
+          <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
+        </ng-container>
+
+        <ng-container *ngIf="assignedInnovations.getTotalRowsNumber() > 0">
+          <table *ngIf="assignedInnovations.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table">
+            <caption class="nhsuk-u-visually-hidden">
+              Assigned innovations list
+              <span *ngIf="assignedInnovations.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+            </caption>
+            <thead class="nhsuk-table__head">
+              <tr>
+                <th *ngFor="let item of assignedInnovations.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                  <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                  <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                    {{ item.label }}
+                    <span aria-hidden="true"></span>
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody class="nhsuk-table__body">
+              <tr *ngFor="let item of assignedInnovations.getRecords()" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("innovation") }}</span>
+                  <a class="text-word-break" routerLink="/admin/innovations/{{ item.innovation.id }}">{{ item.innovation.name }}</a>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("supportedBy") }}</span>
+
+                  <ul class="nhsuk-list">
+                    <li *ngFor="let user of item.supportedBy">
+                      <span>{{ user.name }}, {{ user.role | serviceRoleTranslate }}</span>
+                    </li>
+                  </ul>
+                </td>
+                <td class="nhsuk-table__cell">
+                  <span class="nhsuk-table-responsive__heading">{{ assignedInnovations.getColumnLabel("unit") }}</span>
+                  {{ item.unit }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="nhsuk-u-padding-bottom-4">
+            <theme-pagination
+              [currentPage]="assignedInnovations.page"
+              [pageSize]="assignedInnovations.pageSize"
+              [totalRows]="assignedInnovations.getTotalRowsNumber()"
+              (updatePageEvent)="onAssignedInnovationsPageChange($event)"
+            ></theme-pagination>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
 </theme-content-wrapper>

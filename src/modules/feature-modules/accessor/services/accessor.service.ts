@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -166,8 +166,8 @@ export class AccessorService extends CoreService {
     body: { status: InnovationSupportStatusEnum; message: string; accessors?: { id: string; userRoleId: string }[] },
     supportId?: string
   ): Observable<{ id: string }> {
-    // If NOT enganging, the endpoint won't accept an accessors key.
-    if (body.status !== InnovationSupportStatusEnum.ENGAGING) {
+    // If NOT enganging or waiting, the endpoint won't accept an accessors key.
+    if (![InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(body.status)) {
       delete body.accessors;
     }
 

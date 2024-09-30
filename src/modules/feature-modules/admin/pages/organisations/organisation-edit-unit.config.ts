@@ -21,7 +21,11 @@ export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngin
           dataType: 'text',
           label: 'Unit name',
           description: organisationUnitStepsDescriptions.l1,
-          validations: { isRequired: [true, 'Name is required'], maxLength: 255 }
+          validations: {
+            isRequired: [true, 'Name is required'],
+            pattern: ['^[a-zA-Z() ]*$', 'Unit names must not include numbers or brackets'],
+            maxLength: 255
+          }
         }
       ]
     }),
@@ -33,7 +37,11 @@ export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngin
           dataType: 'text',
           label: 'Unit acronym',
           description: organisationUnitStepsDescriptions.l2,
-          validations: { isRequired: [true, 'Acronym is required'], maxLength: 10 }
+          validations: {
+            isRequired: [true, 'Acronym is required'],
+            pattern: ['^[a-zA-Z ]*$', 'Special characters and numbers are not allowed'],
+            maxLength: 10
+          }
         }
       ]
     })

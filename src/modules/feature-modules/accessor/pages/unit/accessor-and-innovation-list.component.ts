@@ -30,13 +30,6 @@ export class AccessorAndInnovationListComponent extends CoreComponent implements
 
   constructor(private readonly accessorService: AccessorService) {
     super();
-
-    this.setPageTitle('List of accessors and supported innovations', {
-      hint: this.stores.authentication.getAccessorOrganisationUnitName()
-    });
-
-    this.setBackLink();
-    this.setPageStatus('READY');
   }
 
   ngOnInit(): void {
@@ -55,6 +48,12 @@ export class AccessorAndInnovationListComponent extends CoreComponent implements
       .subscribe(response => {
         this.rawList = response.data;
         this.onPageChange({ pageNumber: 1 });
+
+        this.setPageTitle('List of accessors and supported innovations', {
+          hint: this.stores.authentication.getAccessorOrganisationUnitName()
+        });
+
+        this.setBackLink();
         this.setPageStatus('READY');
       });
 
