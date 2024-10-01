@@ -15,6 +15,7 @@
             [label]="selectAccessorsStepLabel"
             [items]="formAccessorsList"
             [pageUniqueField]="false"
+            [disabledItems]="disabledCheckboxAccessors"
           ></theme-form-checkbox-array>
 
           <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmitStep()">Continue</button>

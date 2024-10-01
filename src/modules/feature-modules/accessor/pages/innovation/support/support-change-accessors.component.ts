@@ -33,6 +33,8 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
   innovationSupportStatus: InnovationSupportStatusEnum | undefined;
 
+  disabledCheckboxAccessors: string[] = [];
+
   form = new FormGroup(
     {
       accessors: new FormArray<FormControl<string>>([], { updateOn: 'change' }),
@@ -89,6 +91,13 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
           innovationSupportInfo.engagingAccessors.forEach(accessor => {
             (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
           });
+        }
+
+        if (this.innovationSupportStatus === InnovationSupportStatusEnum.WAITING) {
+          // add this user by default, and disable input
+          const userId = this.stores.authentication.getUserId();
+          (this.form.get('accessors') as FormArray).push(new FormControl<string>(userId));
+          this.disabledCheckboxAccessors = [userId];
         }
 
         this.setPageStatus('READY');
