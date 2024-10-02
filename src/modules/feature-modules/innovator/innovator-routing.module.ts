@@ -97,6 +97,7 @@ import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/inno
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
+import { IrSubmitComponent } from './pages/innovation/ir-submit.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -173,6 +174,8 @@ const routes: Routes = [
               { path: '', outlet: 'page-sidebar-mobile-outlet', component: SidebarInnovationMenuOutletComponent },
 
               { path: '', pathMatch: 'full', redirectTo: 'overview' },
+
+              { path: 'submit', pathMatch: 'full', component: IrSubmitComponent, data: { layout: { type: 'full' } } },
 
               {
                 path: 'overview',

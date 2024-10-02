@@ -37,6 +37,7 @@ import { InnovationDataSharingEditComponent } from './pages/innovation/record/da
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
+import { IrSubmitComponent } from './pages/innovation/ir-submit.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -86,7 +87,8 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     InnovationNewComponent,
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,
-    InnovationDataSharingEditComponent
+    InnovationDataSharingEditComponent,
+    IrSubmitComponent
   ],
   providers: [
     // Guards.

@@ -1,0 +1,25 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+        <p class="nhsuk-u-font-weight-bold">Congratulations.</p>
+        <p class="nhsuk-u-font-size-16">This is a major milestone in your innovation lifecycle.</p>
+      </div>
+      <p>You can now share this innovation with the needs assessment team. They can help you with:</p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <li>Doing this</li>
+        <li>And Doing this</li>
+        <li>Lastly Doing this</li>
+      </ul>
+
+      <div>
+        <button routerLink="/innovator/innovations/{{ innovation.id }}/record/support" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6">
+          Submit record for needs assessment
+        </button>
+
+        <a class="d-block" routerLink="/innovator/innovations/{{ innovation.id }}/record/sections/all">Check the innovation record one last time</a>
+      </div>
+    </div>
+  </div>
+</theme-content-wrapper>
