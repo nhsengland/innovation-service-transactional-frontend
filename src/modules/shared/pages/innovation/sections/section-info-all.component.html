@@ -6,27 +6,6 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
   <div class="nhsuk-grid-column-full nhsuk-u-padding-left-0">
-    <div class="nhsuk-u-margin-top-0" *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))">
-      <span class="nhsuk-u-visually-hidden">Information: </span>
-
-      <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
-      </ul>
-
-      <p class="d-flex nhsuk-u-margin-0">
-        <ng-container *ngTemplateOutlet="icon; context: { type: 'success' }" />
-        {{ sections.submitted }} of {{ sections.progressBar.length }} {{ "dictionary.section" | pluralTranslate: sections.progressBar.length | translate }} completed
-      </p>
-      <p *ngIf="sections.draft > 0" class="d-flex nhsuk-u-margin-0">
-        <ng-container *ngTemplateOutlet="icon; context: { type: 'edit' }" />
-        {{ sections.draft }} {{ "dictionary.section" | pluralTranslate: sections.draft | translate }} in draft
-      </p>
-      <p *ngIf="sections.notStarted > 0" class="d-flex">
-        <ng-container *ngTemplateOutlet="icon; context: { type: 'error', color: 'grey' }" />
-        {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
-      </p>
-    </div>
-
     <ng-container *ngFor="let item of innovationsSectionsList; let i = index">
       <div class="nhsuk-u-margin-top-7">
         <h3 class="nhsuk-heading-l nhsuk-u-margin-0">{{ i + 1 }}. {{ item.title }}</h3>
@@ -107,16 +86,19 @@
 
     <ng-container
       *ngIf="
-        (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+        (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
         (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
       "
     >
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
     </ng-container>
 
-    <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+    <div
+      *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
+      class="nhsuk-inset-text nhsuk-u-margin-top-0"
+    >
       <span class="nhsuk-u-visually-hidden">Information:</span>
-      <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
     </div>
   </div>
 </theme-content-wrapper>

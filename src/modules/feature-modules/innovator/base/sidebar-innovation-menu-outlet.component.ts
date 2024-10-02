@@ -6,20 +6,33 @@ import { ViewportScroller } from '@angular/common';
 import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
+type SectionStatus = 'not_started' | 'draft' | 'submitted';
+
+// NOTE: When developing the feature this needs an entire refactor
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
-  templateUrl: './sidebar-innovation-menu-outlet.component.html'
+  templateUrl: './sidebar-innovation-menu-outlet.component.html',
+  styleUrl: './sidebar-innovation-menu-outlet.component.scss'
 })
 export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
-  sidebarItems: { label: string; url: string; children?: { label: string; url: string; id?: string }[] }[] = [];
+  sidebarItems: {
+    label: string;
+    url: string;
+    status?: SectionStatus;
+    children?: { label: string; url: string; id?: string; status?: SectionStatus }[];
+  }[] = [];
   navHeading: string = 'Innovation Record sections';
   showHeading: boolean = false;
   isAllSectionsDetailsPage: boolean = false;
 
-  private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
-    [];
+  private sectionsSidebar: {
+    label: string;
+    url: string;
+    status?: SectionStatus; // Turn this required
+    children?: { label: string; id: string; url: string; status?: SectionStatus }[];
+  }[] = [];
   private _sidebarItems: { label: string; url: string; id?: string }[] = [];
 
   constructor(
@@ -39,7 +52,39 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.generateSidebar();
+    const innovation = this.contextStore.getInnovation();
+
+    this.innovationStore.getAllSectionsInfo$(innovation.id).subscribe(sections => {
+      const sectionsStatuses = new Map<string, SectionStatus>();
+      for (const { section } of sections) {
+        switch (section.status) {
+          case 'SUBMITTED':
+            sectionsStatuses.set(section.section, 'submitted');
+            break;
+          case 'DRAFT':
+            sectionsStatuses.set(section.section, 'draft');
+            break;
+          default:
+            sectionsStatuses.set(section.section, 'not_started');
+        }
+      }
+
+      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id).map(s => {
+        const childrenStatuses = new Set(s.children.map(sub => sectionsStatuses.get(sub.id) ?? 'not_started'));
+        return {
+          ...s,
+          status: childrenStatuses.has('draft')
+            ? 'draft'
+            : childrenStatuses.has('submitted')
+              ? 'submitted'
+              : 'not_started',
+          children: s.children.map(sub => ({ ...sub, status: sectionsStatuses.get(sub.id) ?? 'not_started' }))
+        };
+      });
+
+      this.generateSidebar();
+      this.onRouteChange();
+    });
   }
 
   ngOnDestroy(): void {
@@ -50,7 +95,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.contextStore.getInnovation();
 
-      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },

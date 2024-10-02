@@ -1,9 +1,23 @@
+<!-- Changed directly the sizes here but this should be dynamic. Probably having a size 28 and size 24 for our icons. -->
 <ng-container *ngIf="type">
   <div class="icon" [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'not-started'">
+      <svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" tabindex="-1">
+        <path
+          fill-rule="evenodd"
+          d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z"
+          clip-rule="evenodd"
+          [attr.stroke]="svgColors.stroke"
+          [attr.fill]="svgColors.fill"
+          transform="scale(0.75) translate(3, 3)"
+        />
+      </svg>
+    </ng-container>
+
     <ng-container *ngSwitchCase="'success'">
       <svg
-        width="28px"
-        height="28px"
+        width="24px"
+        height="24px"
         viewBox="0 0 28 28"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -24,8 +38,8 @@
 
     <ng-container *ngSwitchCase="'error'">
       <svg
-        width="28px"
-        height="28px"
+        width="24px"
+        height="24px"
         viewBox="0 0 28 28"
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
@@ -45,7 +59,7 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'edit'">
-      <svg width="28px" height="28px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <svg width="24px" height="24px" viewBox="0 0 28 28" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
           <g transform="translate(14.000000, 14.000000) rotate(45.000000) translate(-14.000000, -14.000000) translate(12.000000, 5.000000)">
             <path

@@ -15,17 +15,23 @@
 </ng-container>
 
 <ng-container *ngIf="isAllSectionsDetailsPage">
-  <h2 *ngIf="showHeading" class="app-side-nav__heading">All sections</h2>
+  <h2 *ngIf="showHeading" class="app-side-nav__heading nhsuk-u-margin-0">All sections</h2>
+  <span class="nhsuk-hint nhsuk-u-font-size-14">1 of 11 sections completed</span>
 
   <ul class="nhsuk-list app-side-nav__list">
-    <li *ngFor="let item of sidebarItems; first as firstItem" [ngClass]="firstItem ? 'nhsuk-u-padding-top-1' : 'nhsuk-u-padding-top-4'">
+    <li *ngFor="let item of sidebarItems; first as firstItem" [ngClass]="['vertical-status-line', item.status, firstItem ? 'nhsuk-u-margin-top-1' : 'nhsuk-u-margin-top-3']">
       <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-bottom-1">
         <span class="app-side-nav__section nhsuk-u-padding-right-1">{{ item.label }}</span>
       </p>
 
       <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--expanded nhsuk-u-margin-0">
-        <li *ngFor="let nestedItem of item.children" class="app-side-nav__item nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-0">
-          <a href="javascript:void(0)" (click)="onScrollToSection(nestedItem.id!, $event)" class="app-side-nav__link--all nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
+        <li *ngFor="let nestedItem of item.children" class="d-flex app-side-nav__item nhsuk-u-margin-top-1 nhsuk-u-padding-bottom-0 nhsuk-u-padding-left-2">
+          <ng-container [ngSwitch]="nestedItem.status">
+            <theme-svg-icon *ngSwitchCase="'submitted'" type="success" customColor="green" />
+            <theme-svg-icon *ngSwitchCase="'draft'" type="edit" customColor="yellow" />
+            <theme-svg-icon *ngSwitchDefault="'draft'" type="not-started" customColor="grey" />
+          </ng-container>
+          <a href="javascript:void(0)" (click)="onScrollToSection(nestedItem.id!, $event)" class="app-side-nav__link--all nhsuk-u-margin-left-1 nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
         </li>
       </ul>
     </li>

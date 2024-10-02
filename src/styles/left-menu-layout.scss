@@ -4,7 +4,6 @@
   display: -ms-flexbox;
   display: flex;
   min-height: 0;
-  overflow: inherit;
   position: relative;
 
   .app-pane__side-bar {
@@ -12,6 +11,12 @@
     -webkit-box-flex: 0;
     flex: 0 0 auto;
     width: 220px;
+    height: fit-content;
+
+    &.sticky-div {
+      position: sticky;
+      top: 20px;
+    }
 
     .app-side-nav__back {
       border-bottom: 1px solid #d8dde0;

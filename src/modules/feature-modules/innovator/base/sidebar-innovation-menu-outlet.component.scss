@@ -1,0 +1,26 @@
+.vertical-status-line {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -15px; // before: 20
+    width: 6px; // before: 8
+    height: 100%;
+
+    border: 1px solid var(--color_nhsuk-grey-1);
+    border-radius: 5px;
+  }
+
+  &.submitted::before {
+    background-color: #007F3B;
+  }
+
+  &.draft::before {
+    background-color: #FFEB3B;
+  }
+
+  &.not_started::before {
+    background-color: #AEB7BD;
+  }
+}

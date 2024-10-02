@@ -23,7 +23,8 @@ export class SvgIconComponent implements OnInit {
     | 'minus'
     | 'notification-tag'
     | 'back-to-top'
-    | 'logo';
+    | 'logo'
+    | 'not-started';
 
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
 
