@@ -186,7 +186,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
   getMessageDescription() {
     const status = this.form.get('status')?.value;
-    return 'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.';
+    return 'This message will be sent to the innovator and collaborators.';
   }
 
   private handleGoBack() {
