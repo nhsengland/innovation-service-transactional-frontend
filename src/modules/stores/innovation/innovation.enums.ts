@@ -27,7 +27,8 @@ export enum InnovationSupportStatusEnum {
   ENGAGING = 'ENGAGING',
   WAITING = 'WAITING',
   UNSUITABLE = 'UNSUITABLE',
-  CLOSED = 'CLOSED'
+  CLOSED = 'CLOSED',
+  SUGGESTED = 'SUGGESTED'
 }
 
 export enum InnovationTransferStatusEnum {

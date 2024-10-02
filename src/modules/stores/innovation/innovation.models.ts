@@ -199,6 +199,12 @@ export const INNOVATION_SUPPORT_STATUS = {
     description:
       'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
     hidden: false
+  },
+  SUGGESTED: {
+    label: 'Suggested',
+    cssClass: 'nhsuk-tag--purple',
+    description: 'A placeholder description for Suggested status',
+    hidden: false
   }
 };
 

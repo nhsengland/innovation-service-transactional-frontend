@@ -974,6 +974,12 @@ export const locale = {
                 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
               accessorTypeDescription:
                 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.'
+            },
+            SUGGESTED: {
+              name: 'Suggested',
+              cssColorClass: 'nhsuk-tag--purple',
+              description: 'Placeholder description for suggested',
+              accessorTypeDescription: 'Placeholder description for suggested to accessors'
             }
           },
           grouped_status: {
