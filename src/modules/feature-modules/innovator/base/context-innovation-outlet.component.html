@@ -4,6 +4,20 @@
     <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation.userIsOwner ? "Innovation owner" : "Innovation collaborator" }}</p>
   </div>
 
+  <!-- NOTE: New context CTA, this should be dynamic. -->
+  <div class="d-flex align-items-center justify-content-space-between">
+    <div class="nhsuk-card border-color-silent nhsuk-u-margin-bottom-3 nhsuk-u-margin-top-3">
+      <div
+        class="nhsuk-card__content d-flex justify-content-space-between align-items-center nhsuk-u-margin-0 nhsuk-u-padding-left-5 nhsuk-u-padding-right-5 nhsuk-u-padding-bottom-3 nhsuk-u-padding-top-3"
+      >
+        <h2 class="nhsuk-card__heading nhsuk-heading-m nhsuk-u-margin-0 nhsuk">Your innovation is now ready</h2>
+        <a routerLink="/innovator/innovations/760CF4A5-497F-EF11-9C38-6045BDD29764/submit" class="nhsuk-button nhsuk-u-font-size-16 nhsuk-u-padding-bottom-2 nhsuk-u-padding-top-2"
+          >Submit Innovation</a
+        >
+      </div>
+    </div>
+  </div>
+
   <theme-header-archived-banner />
 
   <ng-container *ngIf="displayAnnouncements">
