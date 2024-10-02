@@ -32,7 +32,7 @@ type TabType = {
   templateUrl: './innovations-review.component.html'
 })
 export class InnovationsReviewComponent extends CoreComponent implements OnInit {
-  defaultStatus: '' | 'UNASSIGNED' | 'ENGAGING' = '';
+  defaultStatus: '' | 'SUGGESTED' | 'ENGAGING' = '';
 
   userUnitAcronym: string;
   userUnit: string;
@@ -151,7 +151,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         }
       ];
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
-      this.defaultStatus = 'UNASSIGNED';
+      this.defaultStatus = 'SUGGESTED';
       this.tabs = [
         {
           key: 'ALL',
@@ -176,7 +176,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         },
         {
-          key: InnovationSupportStatusEnum.UNASSIGNED,
+          key: InnovationSupportStatusEnum.SUGGESTED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
           secondaryDescription:
@@ -185,7 +185,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showSuggestedOnlyFilter: true,
           showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+          queryParams: { status: InnovationSupportStatusEnum.SUGGESTED },
           queryFields: [
             'id',
             'name',
@@ -300,14 +300,14 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     }
 
     this.currentTab = {
-      key: InnovationSupportStatusEnum.UNASSIGNED,
+      key: InnovationSupportStatusEnum.SUGGESTED,
       title: '',
       mainDescription: '',
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
       showClosedByMyOrganisationFilter: false,
       link: '',
-      queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+      queryParams: { status: InnovationSupportStatusEnum.SUGGESTED },
       queryFields: [],
       notifications: null
     };
@@ -386,7 +386,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status] : undefined;
 
     switch (status) {
-      case InnovationSupportStatusEnum.UNASSIGNED:
+      case InnovationSupportStatusEnum.SUGGESTED:
         this.innovationsList
           .clearData()
           .setFilters({
@@ -503,7 +503,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.form.get('tabsFilters')?.get('assignedToMe')?.setValue(true);
     }
 
-    if (this.currentTab.key === InnovationSupportStatusEnum.UNASSIGNED) {
+    if (this.currentTab.key === InnovationSupportStatusEnum.SUGGESTED) {
       this.form.get('tabsFilters')?.get('suggestedOnly')?.setValue(true);
     }
 
