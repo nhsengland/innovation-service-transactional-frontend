@@ -16,7 +16,6 @@ import {
   ActivityLogTypesEnum,
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
-  InnovationSectionEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
@@ -56,7 +55,7 @@ import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progr
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
   innovationName?: string;
-  sections?: InnovationSectionEnum[];
+  sections?: string[];
   status?: InnovationTaskStatusEnum[];
   innovationStatus?: InnovationStatusEnum[];
   createdByMe?: boolean;

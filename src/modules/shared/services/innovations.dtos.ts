@@ -3,20 +3,12 @@ import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import {
-  catalogCareSettings,
-  catalogCategory,
-  catalogInvolvedAACProgrammes,
-  catalogKeyHealthInequalities,
-  catalogOfficeLocation
-} from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 import {
   ActivityLogItemsEnum,
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
   InnovationGroupedStatusEnum,
-  InnovationSectionEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
@@ -38,7 +30,7 @@ export type InnovationsListFiltersType = Partial<{
   groupedStatuses: InnovationGroupedStatusEnum[];
   hasAccessThrough: ('owner' | 'collaborator')[];
   latestWorkedByMe: boolean;
-  locations: catalogOfficeLocation[];
+  locations: string[];
   suggestedOnly: boolean;
   supportStatuses: InnovationSupportStatusEnum[];
   supportUnit: string;
@@ -105,15 +97,15 @@ export type InnovationListFullDTO = {
   lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
   // Document fields
-  careSettings: catalogCareSettings[] | null;
+  careSettings: string[] | null;
   otherCareSetting: string | null;
-  categories: catalogCategory[] | null;
+  categories: string[] | null;
   countryName: string | null;
   postcode: string | null;
   diseasesAndConditions: string[] | null; // not strongly typed atm
-  involvedAACProgrammes: catalogInvolvedAACProgrammes[] | null;
-  keyHealthInequalities: catalogKeyHealthInequalities[] | null;
-  mainCategory: catalogCategory | null;
+  involvedAACProgrammes: string[] | null;
+  keyHealthInequalities: string[] | null;
+  mainCategory: string | null;
   otherCategoryDescription: string | null;
 
   // Relation fields
@@ -391,7 +383,7 @@ export type InnovationActivityLogListInDTO = {
       actionUserOrganisationUnit?: string;
 
       assessmentId?: string;
-      sectionId?: InnovationSectionEnum;
+      sectionId?: string;
       taskId?: string;
       innovationSupportStatus?: InnovationSupportStatusEnum;
 

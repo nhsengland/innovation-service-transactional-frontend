@@ -7,8 +7,6 @@ import {
 } from './innovation-record-update-step.types';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { CustomValidators, FormEngineParameterModel } from '@modules/shared/forms';
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-import { getInnovationRecordConfig } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-innovation-record-update-step',
@@ -48,11 +46,11 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
 
   ngOnInit(): void {
     // Add each section as an option to select on the form
-    const subSections = getInnovationRecordConfig().flatMap(section => section.sections.flatMap(ss => ss.id));
+    const subSections = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
 
     this.sectionsItems.push(
       ...subSections.map(s => {
-        const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(s);
+        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(s);
         return {
           value: s,
           label: `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`
@@ -74,7 +72,7 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
   }
 
   prepareOutputData(): InnovationRecordUpdateStepOutputType {
-    const selectedSectionsIds = this.form.value.innovationRecordSections as InnovationSections[];
+    const selectedSectionsIds = this.form.value.innovationRecordSections as string[];
 
     return {
       innovationRecordSections: selectedSectionsIds ?? []

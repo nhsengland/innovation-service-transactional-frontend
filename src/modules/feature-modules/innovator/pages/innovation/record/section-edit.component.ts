@@ -4,7 +4,7 @@ import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { INNOVATION_SECTION_STATUS, InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
@@ -26,7 +26,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   innovation: ContextInnovationType;
   isArchived: boolean;
-  sectionId: InnovationSectionEnum;
+  sectionId: string;
   baseUrl: string;
 
   sectionsIdsList: string[];

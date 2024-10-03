@@ -1,10 +1,8 @@
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
-
 export type InnovationRecordUpdateStepInputType = {
-  innovationRecordSections: InnovationSections[];
-  selectedInnovationRecordSections: (InnovationSections | 'ALL')[];
+  innovationRecordSections: string[];
+  selectedInnovationRecordSections: (string | 'ALL')[];
 };
 
 export type InnovationRecordUpdateStepOutputType = {
-  innovationRecordSections: (InnovationSections | 'ALL')[];
+  innovationRecordSections: (string | 'ALL')[];
 };

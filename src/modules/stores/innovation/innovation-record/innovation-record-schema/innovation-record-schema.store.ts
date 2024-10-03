@@ -4,7 +4,7 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { Store } from '@modules/stores/store.class';
-import { stepsLabels } from '../202304/section-2-2-evidences.config';
+import { stepsLabels } from '../202405/evidences-section-2-2.config';
 import { irSchemaTranslationsMap } from '../202405/ir-v3-schema-translation.helper';
 import { InnovationRecordSchemaModel, IrSchemaTranslatorMapType } from './innovation-record-schema.models';
 import { InnovationRecordQuestionStepType } from '../202405/ir-v3-types';

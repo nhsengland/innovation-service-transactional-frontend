@@ -6,7 +6,7 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 import {
   INNOVATION_SECTION_STATUS,
   InnovationAllSectionsInfoDTO,
@@ -135,7 +135,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }),
       this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      // const allSections = getAllSectionsList();
       const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
@@ -278,7 +277,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
 
   scrollToSectionWhenFragmentExists() {
     setTimeout(() => {
-      if (this.sectionIdFragment && this.sectionIdFragment in InnovationSectionEnum) {
+      if (this.sectionIdFragment && this.sectionIdFragment in this.innovationsSubSectionsList) {
         const section = document.getElementById(this.sectionIdFragment);
         if (section) {
           this.viewportScroller.scrollToAnchor(this.sectionIdFragment);

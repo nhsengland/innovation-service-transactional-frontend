@@ -35,7 +35,6 @@ import {
   InnovationRecordUpdateStepOutputType
 } from './steps/innovation-record-update-step.types';
 import { WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComponent } from './steps/innovation-record-update-step.component';
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { DatesHelper } from '@app/base/helpers';
 
 type WizardData = {
@@ -52,7 +51,7 @@ type WizardData = {
     supportStatuses: InnovationSupportStatusEnum[];
   };
   innovationRecordUpdateStep: {
-    innovationRecordSections: (InnovationSections | 'ALL')[];
+    innovationRecordSections: (string | 'ALL')[];
   };
   reminderStep: {
     reminder: string;
@@ -102,7 +101,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   datasets: {
     organisations: Organisation[];
-    sections: InnovationSections[];
+    sections: string[];
   };
 
   wizard = new WizardModel<WizardData>({});
@@ -714,7 +713,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           eventType: NotificationEnum.INNOVATION_RECORD_UPDATED,
           subscriptionType: 'INSTANTLY',
           preConditions: {
-            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() as InnovationSections[] })
+            ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() as string[] })
           }
         };
         break;

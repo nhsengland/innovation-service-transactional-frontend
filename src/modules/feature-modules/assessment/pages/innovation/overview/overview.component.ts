@@ -7,8 +7,6 @@ import { NotificationContextDetailEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
 import { StatisticsCardType } from '@app/base/types';
 
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-
 import { InnovationCollaboratorsListDTO, InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
@@ -110,7 +108,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                 .map(v =>
                   v === 'OTHER'
                     ? this.innovation?.otherCategoryDescription
-                    : irVersionsMainCategoryItems.find(item => item.value === v)?.label
+                    : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)
+                        ?.label
                 )
                 .join('\n')
             }
