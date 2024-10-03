@@ -4,7 +4,6 @@ import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { iif } from 'rxjs';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
   search: { key: 'search', label: 'Search all innovations', placeholder: 'Search', maxLength: 200 },
