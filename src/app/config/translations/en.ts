@@ -1115,8 +1115,7 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           validEmail: 'Enter a valid email',
-          invalid_postcode_format:
-            'The postcode format is invalid. Check the postcode format is correct and includes the space.',
+          invalid_postcode_format: 'Enter a valid UK postcode, including the space',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',
