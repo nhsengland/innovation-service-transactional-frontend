@@ -5,6 +5,7 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
+import { InnovationSupportCloseReasonEnum } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -72,8 +73,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         status: InnovationSupportStatusEnum;
         updatedAt: DateISOType | null;
         updatedBy: string | null;
-        closedReason?: {
-          value: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+        closeReason?: {
+          value: InnovationSupportCloseReasonEnum | null;
           label: string | null;
         };
       } | null;
@@ -143,7 +144,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
-            'support.closedReason',
+            'support.closeReason',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -290,7 +291,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
-            'support.closedReason',
+            'support.closeReason',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -354,15 +355,16 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                 status: item.support.status,
                 updatedAt: item.support.updatedAt,
                 updatedBy: item.support.updatedBy,
-                closedReason: {
-                  value: item.support.closedReason,
+                closeReason: {
+                  value: item.support.closeReason,
                   label:
-                    item.support.closedReason === InnovationStatusEnum.ARCHIVED
+                    item.support.closeReason === InnovationSupportCloseReasonEnum.ARCHIVE
                       ? 'Archived'
-                      : item.support.closedReason === 'STOPPED_SHARED'
+                      : item.support.closeReason === InnovationSupportCloseReasonEnum.STOP_SHARE
                         ? 'Stopped sharing'
-                        : item.support.closedReason === InnovationSupportStatusEnum.CLOSED
-                          ? 'Closed'
+                        : item.support.closeReason === InnovationSupportCloseReasonEnum.SUPPORT_COMPLETE
+                          ? // TODO: REVISIT NAMING WHEN DESIGN IS PROVIDED
+                            'Closed'
                           : null
                 }
               },
@@ -457,7 +459,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             'support.updatedAt': { label: 'Closed date', orderable: true },
             'support.updatedBy': { label: 'Closed by', orderable: false },
-            'support.closedReason': { label: 'Reason', orderable: true },
+            'support.closeReason': { label: 'Reason', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('support.updatedAt', 'descending');

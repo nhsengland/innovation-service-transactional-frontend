@@ -21,6 +21,7 @@ import {
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
+import { InnovationSupportCloseReasonEnum } from '../pages/innovations/innovation-advanced-search-card.component';
 
 // Innovations.
 export type InnovationsListFiltersType = Partial<{
@@ -81,7 +82,7 @@ export type InnovationListSelectType =
   | 'support.status'
   | 'support.updatedAt'
   | 'support.updatedBy'
-  | 'support.closedReason'
+  | 'support.closeReason'
   | 'assessment.id'
   | 'assessment.majorVersion'
   | 'assessment.minorVersion'
@@ -127,7 +128,7 @@ export type InnovationListFullDTO = {
     status: InnovationSupportStatusEnum;
     updatedAt: DateISOType | null;
     updatedBy: string | null;
-    closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+    closeReason: InnovationSupportCloseReasonEnum | null;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: {
