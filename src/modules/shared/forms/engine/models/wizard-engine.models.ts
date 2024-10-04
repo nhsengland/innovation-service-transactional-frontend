@@ -84,7 +84,7 @@ export class WizardEngineModel {
       return [];
     }
 
-    this.summary = this.summaryParsing(data || this.currentAnswers, this.steps);
+    this.summary = this.summaryParsing(data || this.currentAnswers, this.steps, this.schema);
 
     return this.summary;
   }
