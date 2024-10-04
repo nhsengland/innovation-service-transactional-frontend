@@ -1,86 +1,80 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-      <p *ngIf="isArchived && isInnovatorType">You cannot upload documents in this section as your innovation is archived. You can add documents on your innovation record.</p>
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full">
 
-      <ng-container *ngIf="!isArchived">
-        <p *ngIf="isInnovatorType">
-          Everyone who has access to your innovation will be able to view and download your documents. If you want to stop sharing your innovation with an organisation, update your
-          <a routerLink="../support">data sharing preferences</a>.
+    <p *ngIf="isArchived && isInnovatorType">You cannot upload documents in this section as your innovation is archived. You can add documents on your innovation record.</p>
+
+    <ng-container *ngIf="!isArchived">
+      <p *ngIf="isInnovatorType">
+        Everyone who has access to your innovation will be able to view and download your documents. If you want to stop sharing your innovation with an organisation, update your
+        <a routerLink="../support">data sharing preferences</a>.
+      </p>
+      <div *ngIf="isInnovatorType" class="nhsuk-inset-text">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>
+          If you want to upload evidence of impact and benefit, go to <a routerLink="../record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>.
         </p>
+      </div>
+      <button *ngIf="!isAdmin" class="nhsuk-button nhsuk-u-margin-bottom-9" routerLink="new">Upload a new document</button>
+    </ng-container>
 
-        <div *ngIf="isInnovatorType" class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>
-            If you want to upload evidence of impact and benefit, go to <a routerLink="../record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>.
-          </p>
-        </div>
+    <ng-container *ngIf="hasUploadedDocuments; else noDocsEmptyState">
 
-        <button *ngIf="!isAdmin" class="nhsuk-button nhsuk-u-margin-bottom-9" routerLink="new">Upload a new document</button>
-      </ng-container>
-
-      <ng-container *ngIf="hasUploadedDocuments; else noDocsEmptyState">
-        <form [formGroup]="form" class="d-flex flex-direction-column">
-          <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-0">
-            <div *ngIf="uploadedByChips.length > 0">
-              <h2 id="filter-show-uploaded-documents-by" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Show uploaded documents by</h2>
-              <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" ariaDescribedBy="filter-show-uploaded-documents-by" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
-            </div>
-            <div>
-              <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Search by document name</h2>
-              <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name">
-                <ng-container append>
-                  <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
-                    <theme-svg-icon type="search" />
-                    <span class="nhsuk-u-visually-hidden">Search</span>
-                  </button>
-                </ng-container>
-              </theme-form-input>
-            </div>
+      <form [formGroup]="form" class="d-flex flex-direction-column">
+        <div class="nhsuk-grid-column-two-thirds nhsuk-u-padding-0">
+          <div *ngIf="uploadedByChips.length > 0">
+            <h2 id="filter-show-uploaded-documents-by" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Show uploaded documents by</h2>
+            <theme-chips-filter-component [chipsInput]="uploadedByChips" [exclusive]="true" ariaDescribedBy="filter-show-uploaded-documents-by" (chipsChange)="setSelectedUploadedBy($event)"></theme-chips-filter-component>
           </div>
           <div>
-            <details class="nhsuk-details">
-              <summary class="nhsuk-details__summary">
-                <span class="nhsuk-details__summary-text">More search options {{ filterCount > 0 ? "(" + filterCount + ")" : "" }}</span>
-              </summary>
-              <div class="nhsuk-details__text d-flex flex-direction-column">
-                <div *ngIf="locationChipsInput.length > 0">
-                  <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
-                    <h2 id="filter-by-location" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by location</h2>
-                    <theme-chips-filter-component
-                      #locationTagsComponent
-                      [chipsInput]="locationChipsInput"
-                      ariaDescribedBy="filter-by-location"
-                      (chipsChange)="setSelectedLocations($event)"
-                    ></theme-chips-filter-component>
-                  </div>
-                </div>
-                <div *ngIf="uploadedByUnitChips.length > 0">
-                  <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
-                    <h2 id="filter-by-organisation" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by organisation</h2>
-                    <theme-chips-filter-component
-                      #uploadedByUnitComponent
-                      [chipsInput]="uploadedByUnitChips"
-                      ariaDescribedBy="filter-by-organisation"
-                      (chipsChange)="setSelectedUploadedByUnits($event)"
-                    ></theme-chips-filter-component>
-                  </div>
-                </div>
-                <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
-                  <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by date range</h2>
-                  <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-                  <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
-                </div>
-                <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()">Apply filters</button></div>
-                <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
-              </div>
-            </details>
+            <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Search by document name</h2>
+            <theme-form-input controlName="name" [pageUniqueField]="false" placeholder="Search by document name">
+              <ng-container append>
+                <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+                  <theme-svg-icon type="search" />
+                  <span class="nhsuk-u-visually-hidden">Search</span>
+                </button>
+              </ng-container>
+            </theme-form-input>
           </div>
-        </form>
+        </div>
+        <div>
+          <details class="nhsuk-details">
+            <summary class="nhsuk-details__summary">
+              <span class="nhsuk-details__summary-text">More search options {{ filterCount > 0 ? "(" + filterCount + ")" : "" }}</span>
+            </summary>
+            <div class="nhsuk-details__text d-flex flex-direction-column">
+              <div *ngIf="locationChipsInput.length > 0">
+                <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
+                  <h2 id="filter-by-location" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by location</h2>
+                  <theme-chips-filter-component #locationTagsComponent [chipsInput]="locationChipsInput" ariaDescribedBy="filter-by-location" (chipsChange)="setSelectedLocations($event)"></theme-chips-filter-component>
+                </div>
+              </div>
+              <div *ngIf="uploadedByUnitChips.length > 0">
+                <div class="nhsuk-grid-column-full nhsuk-u-padding-0">
+                  <h2 id="filter-by-organisation" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by organisation</h2>
+                  <theme-chips-filter-component #uploadedByUnitComponent [chipsInput]="uploadedByUnitChips" ariaDescribedBy="filter-by-organisation" (chipsChange)="setSelectedUploadedByUnits($event)"></theme-chips-filter-component>
+                </div>
+              </div>
+              <div class="nhsuk-grid-column-one-half nhsuk-u-padding-0">
+                <h2 class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">Filter by date range</h2>
+                <theme-form-input controlName="startDate" label="From" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+                <theme-form-input controlName="endDate" label="To" description="For example, 2005 or 21/11/2014" [pageUniqueField]="false"></theme-form-input>
+              </div>
+              <div><button type="button" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onFormChange()">Apply filters</button></div>
+              <div><a href="javascript:void(0)" (click)="onClearFilters()">Clear filters</a></div>
+            </div>
+          </details>
+        </div>
+      </form>
 
-        <h2 role="alert" class="nhsuk-body-s nhsuk-u-margin-bottom-1">
-          Showing {{ tableList.getVisibleRowsNumber() }} {{ "dictionary.document" | pluralTranslate: tableList.getVisibleRowsNumber() | translate }} of
-          {{ tableList.getTotalRowsNumber() }}
+      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+
+      <ng-container *ngIf="pageStatus === 'READY'">
+
+        <h2 class="nhsuk-body-s nhsuk-u-margin-bottom-1">
+          <span role="alert">
+            Showing {{ tableList.getVisibleRowsNumber() }} {{ "dictionary.document" | pluralTranslate: tableList.getVisibleRowsNumber() | translate }} of {{ tableList.getTotalRowsNumber() }}
+          </span>
         </h2>
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2" />
@@ -144,18 +138,16 @@
         </div>
 
         <div class="nhsuk-u-padding-bottom-4">
-          <theme-pagination
-            [currentPage]="tableList.page"
-            [pageSize]="tableList.pageSize"
-            [totalRows]="tableList.getTotalRowsNumber()"
-            (updatePageEvent)="onPageChange($event)"
-          ></theme-pagination>
+          <theme-pagination [currentPage]="tableList.page" [pageSize]="tableList.pageSize" [totalRows]="tableList.getTotalRowsNumber()" (updatePageEvent)="onPageChange($event)"></theme-pagination>
         </div>
+
       </ng-container>
 
-      <ng-template #noDocsEmptyState>
-        <p>No documents were uploaded yet.</p>
-      </ng-template>
-    </div>
+    </ng-container>
+
+    <ng-template #noDocsEmptyState>
+      <p>No documents were uploaded yet.</p>
+    </ng-template>
+
   </div>
-</theme-content-wrapper>
+</div>
