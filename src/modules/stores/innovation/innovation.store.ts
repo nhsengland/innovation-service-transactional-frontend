@@ -23,6 +23,7 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from './innovation-record/202405/evidences-config';
 import { WizardEngineModel } from '@app/base/forms';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
@@ -119,7 +120,7 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getInnovationRecordSectionEvidencesWizard(sectionId: string): WizardEngineModel {
-    const section = INNOVATION_SECTIONS_EVIDENCES_WIZARD.find(section => section.id === sectionId)?.wizard;
+    const section = cloneDeep(INNOVATION_SECTIONS_EVIDENCES_WIZARD.find(section => section.id === sectionId)?.wizard);
 
     if (!section) {
       throw new Error(`Innovation record section "${sectionId}" NOT FOUND`);
