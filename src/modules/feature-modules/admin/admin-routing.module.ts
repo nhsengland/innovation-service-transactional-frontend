@@ -452,6 +452,8 @@ const routes: Routes = [
       {
         path: 'innovations',
         data: { breadcrumb: 'Innovations' },
+        resolve: { irSchemaData: innovationRecordSchemaResolver },
+        runGuardsAndResolvers: 'always',
         children: [
           {
             path: '',
