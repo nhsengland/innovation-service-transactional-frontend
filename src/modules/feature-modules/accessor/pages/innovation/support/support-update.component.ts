@@ -10,7 +10,7 @@ import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/sh
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
+import { ContextInnovationType, ContextPageLayoutType } from '@modules/stores/context/context.types';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
@@ -28,6 +28,8 @@ import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.d
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
   private allAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
   private qualifyingAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
+
+  innovation: ContextInnovationType;
 
   innovationId: string;
   supportId: string;
@@ -119,6 +121,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ) {
     super();
 
+    this.innovation = this.stores.context.getInnovation();
+
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;
 
@@ -182,6 +186,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
         this.innovationId,
         this.supportId
       );
+    } else if (this.innovation.support?.id) {
+      subscriptions.innovationSupportInfo = this.innovationsService.getInnovationSupportInfo(
+        this.innovationId,
+        this.innovation.support?.id
+      );
     }
 
     forkJoin(subscriptions).subscribe({
@@ -202,6 +211,13 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             InnovationSupportStatusEnum.WAITING,
             InnovationSupportStatusEnum.UNSUITABLE
           ];
+
+          // Filter out current status, if any
+          if (response.innovationSupportInfo) {
+            this.availableSupportStatuses = this.availableSupportStatuses.filter(
+              status => status !== response.innovationSupportInfo?.status
+            );
+          }
         }
         // Use these statuses, if changing
         if (this.supportId && response.availableSupportStatuses) {
