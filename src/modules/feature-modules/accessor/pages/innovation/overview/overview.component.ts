@@ -16,6 +16,7 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationService } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
+import { InnovationSupportCloseReasonEnum } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -44,6 +45,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   isInAssessment: boolean = false;
   isArchived: boolean = false;
   showCards: boolean = false;
+  showStartSupport = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
@@ -108,6 +110,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           (this.isArchived ? InnovationSupportStatusEnum.CLOSED : InnovationSupportStatusEnum.UNASSIGNED),
         engagingAccessors: support?.engagingAccessors ?? []
       };
+
+      this.showStartSupport =
+        this.isInProgress &&
+        this.isQualifyingAccessorRole &&
+        !(
+          this.innovationSupport &&
+          [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
+            this.innovationSupport.status
+          )
+        );
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },

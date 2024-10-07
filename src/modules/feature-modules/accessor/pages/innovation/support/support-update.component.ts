@@ -16,8 +16,10 @@ import { AccessorService } from '../../../services/accessor.service';
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { switchMap } from 'rxjs/operators';
 import { omit } from 'lodash';
-import { forkJoin } from 'rxjs';
+import { ObservableInput, forkJoin } from 'rxjs';
 import { timingSafeEqual } from 'crypto';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
+import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -151,8 +153,14 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.setPageTitle('Update support status', { showPage: false, size: 'l' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
-    forkJoin([
-      this.usersService.getUsersList({
+    const subscriptions: {
+      usersList: ObservableInput<UsersListDTO>;
+      availableSupportStatuses?: ObservableInput<{
+        availableStatus: InnovationSupportStatusEnum[];
+      }>;
+      innovationSupportInfo?: ObservableInput<InnovationSupportInfoDTO>;
+    } = {
+      usersList: this.usersService.getUsersList({
         queryParams: {
           take: 100,
           skip: 0,
@@ -163,15 +171,47 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             userTypes: [UserRoleEnum.ACCESSOR, UserRoleEnum.QUALIFYING_ACCESSOR]
           }
         }
-      }),
-      this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId),
-      ...(this.supportId ? [this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId)] : [])
-    ]).subscribe({
-      next: ([usersList, availableSupportStatuses, innovationSupportInfo]) => {
-        if (innovationSupportInfo) {
-          this.currentStatus = innovationSupportInfo.status;
+      })
+    };
 
-          innovationSupportInfo.engagingAccessors.forEach(accessor => {
+    if (this.supportId) {
+      subscriptions.availableSupportStatuses = this.innovationsService.getInnovationAvailableSupportStatuses(
+        this.innovationId
+      );
+      subscriptions.innovationSupportInfo = this.innovationsService.getInnovationSupportInfo(
+        this.innovationId,
+        this.supportId
+      );
+    }
+
+    forkJoin(subscriptions).subscribe({
+      next: response => {
+        this.allAccessorsList = response.usersList.data.map(item => ({
+          id: item.id,
+          role: item.role,
+          userRoleId: item.roleId,
+          name: item.name
+        }));
+        this.qualifyingAccessorsList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
+        this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
+
+        // Use these statuses, if starting support
+        if (!this.supportId) {
+          this.availableSupportStatuses = [
+            InnovationSupportStatusEnum.ENGAGING,
+            InnovationSupportStatusEnum.WAITING,
+            InnovationSupportStatusEnum.UNSUITABLE
+          ];
+        }
+        // Use these statuses, if changing
+        if (this.supportId && response.availableSupportStatuses) {
+          this.availableSupportStatuses = response.availableSupportStatuses.availableStatus;
+        }
+
+        if (response.innovationSupportInfo) {
+          this.currentStatus = response.innovationSupportInfo.status;
+
+          response.innovationSupportInfo.engagingAccessors.forEach(accessor => {
             (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
           });
 
@@ -181,17 +221,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             contextIds: [this.supportId]
           });
         }
-
-        this.allAccessorsList = usersList.data.map(item => ({
-          id: item.id,
-          role: item.role,
-          userRoleId: item.roleId,
-          name: item.name
-        }));
-        this.qualifyingAccessorsList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
-        this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
-
-        this.availableSupportStatuses = availableSupportStatuses.availableStatus;
 
         this.setPageStatus('READY');
       },
