@@ -20,7 +20,7 @@
           ></theme-tag>
         </dd>
         <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
-          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}">Change support status</a>
+          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}">Change support status</a>
         </dd>
       </div>
 
