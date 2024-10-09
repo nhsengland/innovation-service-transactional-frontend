@@ -112,7 +112,6 @@ export function getConfig(
   role?: UserRoleEnum
 ): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
   const innovationListDatasets = getInnovationListDatasets(schema);
-  console.log('innovationListDatasets', innovationListDatasets);
   if (!role) return { filters: InnovationsListFiltersConfig, datasets: innovationListDatasets };
 
   let filters: string[] = [];
