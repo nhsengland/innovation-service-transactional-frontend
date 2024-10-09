@@ -511,6 +511,14 @@ export const locale = {
             }
           },
 
+          innovations_list: {
+            closed_reasons: {
+              ARCHIVE: 'Archived',
+              STOP_SHARE: 'Stopped sharing',
+              SUPPORT_COMPLETE: 'Closed'
+            }
+          },
+
           innovation_sections: {
             INNOVATION_DESCRIPTION: 'Description of innovation',
             VALUE_PROPOSITION: 'Value proposition',

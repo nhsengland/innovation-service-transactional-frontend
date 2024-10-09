@@ -356,15 +356,9 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                 updatedBy: item.support.updatedBy,
                 closeReason: {
                   value: item.support.closeReason,
-                  label:
-                    item.support.closeReason === InnovationSupportCloseReasonEnum.ARCHIVE
-                      ? 'Archived'
-                      : item.support.closeReason === InnovationSupportCloseReasonEnum.STOP_SHARE
-                        ? 'Stopped sharing'
-                        : item.support.closeReason === InnovationSupportCloseReasonEnum.SUPPORT_COMPLETE
-                          ? // TODO: REVISIT NAMING WHEN DESIGN IS PROVIDED
-                            'Closed'
-                          : null
+                  label: this.translate(
+                    'shared.catalog.innovation.innovations_list.closed_reasons.' + item.support.closeReason
+                  )
                 }
               },
               suggestion: item.suggestion && {
