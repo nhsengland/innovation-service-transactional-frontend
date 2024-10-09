@@ -16,7 +16,6 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationService } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
-import { InnovationSupportCloseReasonEnum } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',

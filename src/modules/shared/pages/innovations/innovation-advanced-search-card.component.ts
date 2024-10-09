@@ -4,12 +4,7 @@ import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { InnovationGroupedStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation/innovation.enums';
-
-export enum InnovationSupportCloseReasonEnum {
-  ARCHIVE = 'ARCHIVE',
-  STOP_SHARE = 'STOP_SHARE',
-  SUPPORT_COMPLETE = 'SUPPORT_COMPLETE'
-}
+import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 export type InnovationCardData = {
   id: string;

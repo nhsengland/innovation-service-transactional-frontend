@@ -5,14 +5,13 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
-import { InnovationSupportCloseReasonEnum } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
+import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';

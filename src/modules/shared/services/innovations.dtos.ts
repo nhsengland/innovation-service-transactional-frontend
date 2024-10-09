@@ -21,7 +21,7 @@ import {
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
-import { InnovationSupportCloseReasonEnum } from '../pages/innovations/innovation-advanced-search-card.component';
+import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 // Innovations.
 export type InnovationsListFiltersType = Partial<{

@@ -31,6 +31,12 @@ export enum InnovationSupportStatusEnum {
   SUGGESTED = 'SUGGESTED'
 }
 
+export enum InnovationSupportCloseReasonEnum {
+  ARCHIVE = 'ARCHIVE',
+  STOP_SHARE = 'STOP_SHARE',
+  SUPPORT_COMPLETE = 'SUPPORT_COMPLETE'
+}
+
 export enum InnovationTransferStatusEnum {
   PENDING = 'PENDING',
   COMPLETED = 'COMPLETED',
