@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-submitted',
@@ -14,7 +13,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   isArchived: boolean;
 
   section: {
-    id: InnovationSectionEnum;
+    id: string;
     openTasksCount: number;
   };
 

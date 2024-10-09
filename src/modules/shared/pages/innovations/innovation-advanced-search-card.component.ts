@@ -3,8 +3,10 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum, InnovationSectionEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
+import {
+  InnovationGroupedStatusEnum,
+  InnovationSupportCloseReasonEnum
+} from '@modules/stores/innovation/innovation.enums';
 
 export type InnovationCardData = {
   id: string;
@@ -167,9 +169,9 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
       let sectionId = keyParts[1];
       if (keyParts[1] === 'evidences') {
         // Set
-        sectionId = InnovationSectionEnum.EVIDENCE_OF_EFFECTIVENESS;
+        sectionId = 'EVIDENCE_OF_EFFECTIVENESS';
       }
-      const sectionIdentification = this.stores.innovation.getInnovationRecordSectionIdentification(sectionId);
+      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(sectionId);
       linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
 
       if (this.isInnovationInArchivedStatus) {

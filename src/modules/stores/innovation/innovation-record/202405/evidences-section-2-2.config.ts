@@ -6,8 +6,8 @@ import {
   WizardSummaryType
 } from '@modules/shared/forms';
 
-import { DocumentType202304 } from './document.types';
-import { evidenceSubmitTypeItems, evidenceTypeItems } from './forms.config';
+import { evidenceSubmitTypeItems, evidenceTypeItems } from './evidences-forms.config';
+import { DocumentType202405 } from './evidences-document.types';
 
 // Labels.
 export const stepsLabels = {
@@ -49,9 +49,8 @@ const stepsChildParentRelations = {
 };
 
 // Types.
-// type InboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'files'> & { files: { id: string; name: string, url: string }[] };
-type StepPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
-type OutboundPayloadType = Omit<Required<DocumentType202304>['evidences'][number], 'id'>;
+type StepPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
+type OutboundPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
 
 // Logic.
 export const SECTION_2_EVIDENCES = new WizardEngineModel({

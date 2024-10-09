@@ -2,13 +2,8 @@ import { UserRoleEnum } from '@app/base/enums';
 import { CheckboxesFilter, Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
 import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-import {
-  careSettingsItems,
-  categoriesItems,
-  diseasesConditionsImpactItems,
-  involvedAACProgrammesItems,
-  keyHealthInequalitiesItems
-} from '@modules/stores/innovation/innovation-record/202304/forms.config';
+import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
   search: { key: 'search', label: 'Search all innovations', placeholder: 'Search', maxLength: 200 },
@@ -91,24 +86,33 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
   ]
 };
 
-const InnovationListDatasets: Record<string, Dataset> = {
-  locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
-  engagingOrganisations: [],
-  supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({ value: key, label: item.label })),
-  groupedStatuses: [],
-  diseasesAndConditions: diseasesConditionsImpactItems,
-  categories: [...categoriesItems, { value: 'OTHER', label: 'Other' }],
-  careSettings: [...careSettingsItems, { value: 'OTHER', label: 'Other' }],
-  keyHealthInequalities: keyHealthInequalitiesItems
-    .filter(i => i.label !== 'SEPARATOR')
-    .map(i => ({ value: i.value, label: i.label })),
-  involvedAACProgrammes: involvedAACProgrammesItems
-    .filter(i => i.label !== 'SEPARATOR')
-    .map(i => ({ value: i.value, label: i.label }))
-};
+export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType): Record<string, Dataset> {
+  return {
+    locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
+    engagingOrganisations: [],
+    supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({
+      value: key,
+      label: item.label
+    })),
+    groupedStatuses: [],
+    diseasesAndConditions: getIrSchemaQuestionItemsValueAndLabel(schema, 'diseasesConditionsImpact'),
+    categories: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'categories')],
+    careSettings: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'careSettings')],
+    keyHealthInequalities: getIrSchemaQuestionItemsValueAndLabel(schema, 'keyHealthInequalities').filter(
+      i => i.label !== ''
+    ),
+    involvedAACProgrammes: getIrSchemaQuestionItemsValueAndLabel(schema, 'involvedAACProgrammes').filter(
+      i => i.label !== ''
+    )
+  };
+}
 
-export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
-  if (!role) return { filters: InnovationsListFiltersConfig, datasets: InnovationListDatasets };
+export function getConfig(
+  schema: InnovationRecordSchemaInfoType,
+  role?: UserRoleEnum
+): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
+  const innovationListDatasets = getInnovationListDatasets(schema);
+  if (!role) return { filters: InnovationsListFiltersConfig, datasets: innovationListDatasets };
 
   let filters: string[] = [];
 
@@ -173,7 +177,7 @@ export function getConfig(role?: UserRoleEnum): { filters: FiltersConfig; datase
   }
 
   // Datasets changes
-  const datasets = InnovationListDatasets;
+  const datasets = innovationListDatasets;
   if (role === UserRoleEnum.ACCESSOR) {
     datasets.supportStatuses = datasets.supportStatuses.filter(s => ['ENGAGING', 'CLOSED'].includes(s.value));
   }

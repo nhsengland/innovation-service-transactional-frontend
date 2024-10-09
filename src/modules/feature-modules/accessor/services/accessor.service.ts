@@ -7,7 +7,6 @@ import { UrlModel } from '@app/base/models';
 
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@app/base/enums';
 
@@ -45,7 +44,7 @@ export type InnovationRecordUpdated = {
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
   preConditions: {
-    sections?: InnovationSections[];
+    sections?: string[];
   };
 };
 
@@ -112,7 +111,7 @@ export type InnovationRecordUpdatedDTO = {
   updatedAt: DateISOType;
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
-  sections?: InnovationSections[];
+  sections?: string[];
 };
 
 export type DefaultResponseDTO<T extends EventType, K extends DefaultOptions<T>> = {

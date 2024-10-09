@@ -1,7 +1,8 @@
 import { UserRoleEnum } from '@app/base/enums';
 import { Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { getAllSectionsList } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export const TaskAdvancedSearchFiltersConfig: FiltersConfig = {
   search: { key: 'innovationName', placeholder: 'Search by innovation name', maxLength: 200 },
@@ -25,20 +26,23 @@ export const TaskAdvancedSearchFiltersConfig: FiltersConfig = {
   ]
 };
 
-const TaskAdvancedSearchDatasets: Record<string, Dataset> = {
-  status: [],
-  sections: getAllSectionsList(),
-  innovationStatus: [
-    { label: 'Needs assessment in progress', value: InnovationStatusEnum.NEEDS_ASSESSMENT },
-    { label: 'Needs assessment completed', value: InnovationStatusEnum.IN_PROGRESS }
-  ]
-};
-
-export function getConfig(role: UserRoleEnum): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
+export function getConfig(
+  role: UserRoleEnum,
+  schema: InnovationRecordSchemaInfoType
+): { filters: FiltersConfig; datasets: Record<string, Dataset> } {
   const config: FiltersConfig = TaskAdvancedSearchFiltersConfig;
   if (role !== UserRoleEnum.ASSESSMENT) {
     config.filters = config.filters.filter(f => f.key !== 'innovationStatus');
   }
+
+  const TaskAdvancedSearchDatasets: Record<string, Dataset> = {
+    status: [],
+    sections: getAllSectionsListV3(schema),
+    innovationStatus: [
+      { label: 'Needs assessment in progress', value: InnovationStatusEnum.NEEDS_ASSESSMENT },
+      { label: 'Needs assessment completed', value: InnovationStatusEnum.IN_PROGRESS }
+    ]
+  };
 
   return { filters: config, datasets: TaskAdvancedSearchDatasets };
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { cloneDeep } from 'lodash';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -9,8 +8,6 @@ import { Store } from '../store.class';
 
 import { InnovationService } from './innovation.service';
 
-import { getInnovationRecordConfig } from './innovation-record/ir-versions.config';
-import { InnovationSectionConfigType } from './innovation-record/ir-versions.types';
 import {
   GetInnovationEvidenceDTO,
   INNOVATION_SECTION_STATUS,
@@ -24,6 +21,9 @@ import {
 
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { InnovationRecordSchemaStore } from './innovation-record/innovation-record-schema/innovation-record-schema.store';
+import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from './innovation-record/202405/evidences-config';
+import { WizardEngineModel } from '@app/base/forms';
+import { cloneDeep } from 'lodash';
 
 @Injectable()
 export class InnovationStore extends Store<InnovationModel> {
@@ -119,25 +119,8 @@ export class InnovationStore extends Store<InnovationModel> {
     return this.innovationsService.deleteEvidence(innovationId, evidenceId);
   }
 
-  getInnovationRecordSectionsTree(
-    type: string,
-    innovationId: string
-  ): { label: string; url: string; children: { label: string; id: string; url: string }[] }[] {
-    return getInnovationRecordConfig().map((parentSection, i) => ({
-      label: `${i + 1}. ${parentSection.title}`,
-      url: `/${type}/innovations/${innovationId}/record/sections/${parentSection.sections[0].id}`,
-      children: parentSection.sections.map((section, k) => ({
-        label: `${i + 1}.${k + 1} ${section.title}`,
-        id: `${section.id}`,
-        url: `/${type}/innovations/${innovationId}/record/sections/${section.id}`
-      }))
-    }));
-  }
-
-  getInnovationRecordSection(sectionId: string, version?: string): InnovationSectionConfigType<string> {
-    const section = cloneDeep(getInnovationRecordConfig(version))
-      .find(sectionGroup => sectionGroup.sections.some(s => s.id === sectionId))
-      ?.sections.find(s => s.id === sectionId);
+  getInnovationRecordSectionEvidencesWizard(sectionId: string): WizardEngineModel {
+    const section = cloneDeep(INNOVATION_SECTIONS_EVIDENCES_WIZARD.find(section => section.id === sectionId)?.wizard);
 
     if (!section) {
       throw new Error(`Innovation record section "${sectionId}" NOT FOUND`);
@@ -147,38 +130,6 @@ export class InnovationStore extends Store<InnovationModel> {
   }
 
   getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
-    // return this.getInnovationRecordSection(sectionId, version)?.wizard;
     return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
-  }
-
-  getInnovationRecordSectionWizardV3(sectionId: string, version?: string): WizardIRV3EngineModel {
-    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
-  }
-
-  getInnovationRecordSectionIdentification(
-    sectionId: null | string
-  ): null | { group: { number: number; title: string }; section: { number: number; title: string } } {
-    if (!sectionId) {
-      return null;
-    }
-
-    const irConfig = getInnovationRecordConfig();
-
-    const groupIndex = irConfig.findIndex(sectionGroup =>
-      sectionGroup.sections.some(section => section.id === sectionId)
-    );
-    if (groupIndex === -1) {
-      return null;
-    }
-
-    const sectionIndex = irConfig[groupIndex].sections.findIndex(section => section.id === sectionId);
-    if (sectionIndex === -1) {
-      return null;
-    }
-
-    return {
-      group: { number: groupIndex + 1, title: irConfig[groupIndex]?.title },
-      section: { number: sectionIndex + 1, title: irConfig[groupIndex].sections[sectionIndex].title }
-    };
   }
 }

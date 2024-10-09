@@ -144,7 +144,13 @@ const routes: Routes = [
         children: [
           { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
 
-          { path: 'new', pathMatch: 'full', component: InnovationNewComponent },
+          {
+            path: 'new',
+            resolve: { irSchemaData: innovationRecordSchemaResolver },
+            runGuardsAndResolvers: 'always',
+            pathMatch: 'full',
+            component: InnovationNewComponent
+          },
           {
             canActivate: mapToCanActivate([InnovationCollaborationRedirectionGuard]),
             path: ':innovationId/collaborations/:collaboratorId',

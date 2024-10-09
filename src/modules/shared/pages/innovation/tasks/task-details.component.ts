@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -14,7 +14,7 @@ import { InnovationSectionEnum, InnovationStatusEnum } from '@modules/stores/inn
 })
 export class PageInnovationTaskDetailsComponent extends CoreComponent implements OnInit {
   innovationId: string;
-  sectionId: InnovationSectionEnum;
+  sectionId: string;
   taskId: string;
 
   task?: InnovationTaskInfoDTO;

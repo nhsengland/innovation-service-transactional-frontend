@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
@@ -100,7 +99,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             .map(v =>
               v === 'OTHER'
                 ? innovation.otherCategoryDescription
-                : irVersionsMainCategoryItems.find(item => item.value === v)?.label
+                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }

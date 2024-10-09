@@ -11,7 +11,6 @@ import { InnovationsListFiltersType } from '@modules/shared/services/innovations
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { categoriesItems } from '@modules/stores/innovation/innovation-record/202304/forms.config';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -340,7 +339,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               mainCategory: item.mainCategory
                 ? item.mainCategory === 'OTHER'
                   ? 'Other'
-                  : categoriesItems.find(entry => entry.value === item.mainCategory)?.label ?? item.mainCategory
+                  : this.stores.schema
+                      .getIrSchemaTranslationsMap()
+                      ['questions'].get('categories')
+                      ?.items.get(item.mainCategory)?.label ?? item.mainCategory
                 : '',
               countryName: item.countryName,
               postCode: item.postcode,
