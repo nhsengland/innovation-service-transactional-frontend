@@ -221,13 +221,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'engagingUnits',
       'support.status',
       'support.updatedAt',
-      'support.closedReason'
+      'support.closeReason'
     ];
 
     if (this.isAdminType) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closedReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
       );
     } else if (this.isAccessorType) {
       // filter out unavailable fields for QA/A
@@ -239,7 +239,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           ![
             'support.status',
             'support.updatedAt',
-            'support.closedReason',
+            'support.closeReason',
             'involvedAACProgrammes',
             'keyHealthInequalities'
           ].includes(item)
@@ -293,7 +293,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             support: result.support && {
               status: result.support.status,
               updatedAt: result.support.updatedAt,
-              closedReason: result.support.closedReason
+              closeReason: result.support.closeReason
             },
             highlights: result.highlights
           };

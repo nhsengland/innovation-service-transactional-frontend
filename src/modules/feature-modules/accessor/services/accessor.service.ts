@@ -192,10 +192,10 @@ export class AccessorService extends CoreService {
 
   suggestNewOrganisations(
     innovationId: string,
-    body: { organisationUnits: string[]; type: SupportLogType; description: string }
+    body: { organisationUnits: string[]; description: string }
   ): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/support-logs')
+      .addPath('v1/:innovationId/suggestions')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

@@ -5,12 +5,12 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
+import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -31,7 +31,7 @@ type TabType = {
   templateUrl: './innovations-review.component.html'
 })
 export class InnovationsReviewComponent extends CoreComponent implements OnInit {
-  defaultStatus: '' | 'UNASSIGNED' | 'ENGAGING' = '';
+  defaultStatus: '' | 'SUGGESTED' | 'ENGAGING' = '';
 
   userUnitAcronym: string;
   userUnit: string;
@@ -71,8 +71,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         status: InnovationSupportStatusEnum;
         updatedAt: DateISOType | null;
         updatedBy: string | null;
-        closedReason?: {
-          value: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+        closeReason?: {
+          value: InnovationSupportCloseReasonEnum | null;
           label: string | null;
         };
       } | null;
@@ -142,7 +142,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
-            'support.closedReason',
+            'support.closeReason',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -150,7 +150,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         }
       ];
     } else if (this.stores.authentication.isQualifyingAccessorRole()) {
-      this.defaultStatus = 'UNASSIGNED';
+      this.defaultStatus = 'SUGGESTED';
       this.tabs = [
         {
           key: 'ALL',
@@ -175,7 +175,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         },
         {
-          key: InnovationSupportStatusEnum.UNASSIGNED,
+          key: InnovationSupportStatusEnum.SUGGESTED,
           title: 'Unassigned',
           mainDescription: 'Innovations awaiting status assignment from your organisation.',
           secondaryDescription:
@@ -184,7 +184,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           showSuggestedOnlyFilter: true,
           showClosedByMyOrganisationFilter: false,
           link: '/accessor/innovations',
-          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+          queryParams: { status: InnovationSupportStatusEnum.SUGGESTED },
           queryFields: [
             'id',
             'name',
@@ -289,7 +289,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
-            'support.closedReason',
+            'support.closeReason',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -299,14 +299,14 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     }
 
     this.currentTab = {
-      key: InnovationSupportStatusEnum.UNASSIGNED,
+      key: InnovationSupportStatusEnum.SUGGESTED,
       title: '',
       mainDescription: '',
       showAssignedToMeFilter: false,
       showSuggestedOnlyFilter: false,
       showClosedByMyOrganisationFilter: false,
       link: '',
-      queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+      queryParams: { status: InnovationSupportStatusEnum.SUGGESTED },
       queryFields: [],
       notifications: null
     };
@@ -356,16 +356,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                 status: item.support.status,
                 updatedAt: item.support.updatedAt,
                 updatedBy: item.support.updatedBy,
-                closedReason: {
-                  value: item.support.closedReason,
-                  label:
-                    item.support.closedReason === InnovationStatusEnum.ARCHIVED
-                      ? 'Archived'
-                      : item.support.closedReason === 'STOPPED_SHARED'
-                        ? 'Stopped sharing'
-                        : item.support.closedReason === InnovationSupportStatusEnum.CLOSED
-                          ? 'Closed'
-                          : null
+                closeReason: {
+                  value: item.support.closeReason,
+                  label: this.translate(
+                    'shared.catalog.innovation.innovations_list.closed_reasons.' + item.support.closeReason
+                  )
                 }
               },
               suggestion: item.suggestion && {
@@ -388,7 +383,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.currentTab.queryParams.status !== 'ALL' ? [this.currentTab.queryParams.status] : undefined;
 
     switch (status) {
-      case InnovationSupportStatusEnum.UNASSIGNED:
+      case InnovationSupportStatusEnum.SUGGESTED:
         this.innovationsList
           .clearData()
           .setFilters({
@@ -459,7 +454,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             name: { label: 'Innovation', orderable: true },
             'support.updatedAt': { label: 'Closed date', orderable: true },
             'support.updatedBy': { label: 'Closed by', orderable: false },
-            'support.closedReason': { label: 'Reason', orderable: true },
+            'support.closeReason': { label: 'Reason', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
           .setOrderBy('support.updatedAt', 'descending');
@@ -505,7 +500,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
       this.form.get('tabsFilters')?.get('assignedToMe')?.setValue(true);
     }
 
-    if (this.currentTab.key === InnovationSupportStatusEnum.UNASSIGNED) {
+    if (this.currentTab.key === InnovationSupportStatusEnum.SUGGESTED) {
       this.form.get('tabsFilters')?.get('suggestedOnly')?.setValue(true);
     }
 
