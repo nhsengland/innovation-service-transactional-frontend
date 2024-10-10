@@ -145,7 +145,7 @@
         <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Go to innovation</a>
         <a
           *ngIf="isInProgress && isQualifyingAccessorRole && assessment?.isLatest"
-          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}"
+          routerLink="/accessor/innovations/{{ innovationId }}/support/{{ updateSupportUrlNewOrSupport }}"
           class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
         >
           Update support status

@@ -12,7 +12,7 @@ import { ContextInnovationType } from '@modules/stores/context/context.types';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
@@ -45,6 +45,8 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   isReassessment = false;
   assessmentType = '';
   showAssessmentDetails = false;
+
+  updateSupportUrlNewOrSupport: string | 'new' | undefined;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -136,6 +138,16 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         });
       }
 
+      console.log('this.innovation.support', this.innovation.support);
+      this.updateSupportUrlNewOrSupport =
+        this.innovation.support &&
+        [
+          InnovationSupportStatusEnum.CLOSED,
+          InnovationSupportStatusEnum.UNSUITABLE,
+          InnovationSupportStatusEnum.SUGGESTED
+        ].includes(this.innovation.support.status)
+          ? 'new'
+          : this.innovation.support!.id;
       this.setGoBackLink();
       this.updatePageTitle();
       this.setPageStatus('READY');
