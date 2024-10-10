@@ -44,6 +44,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   isArchived: boolean = false;
   showCards: boolean = false;
   showStartSupport = false;
+  changeSupportUrlNewOrSupport: string | 'new' | undefined;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
@@ -112,12 +113,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       this.showStartSupport =
         this.isInProgress &&
         this.isQualifyingAccessorRole &&
-        !(
-          this.innovationSupport &&
-          [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
-            this.innovationSupport.status
-          )
-        );
+        (!this.innovationSupport ||
+          (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
@@ -222,6 +219,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
 
       this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
+
+      this.changeSupportUrlNewOrSupport =
+        this.innovationSupport &&
+        [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.UNSUITABLE].includes(
+          this.innovationSupport.status
+        )
+          ? 'new'
+          : this.innovation.support?.id;
 
       this.setPageStatus('READY');
     });
