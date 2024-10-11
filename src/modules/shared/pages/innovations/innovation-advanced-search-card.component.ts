@@ -3,7 +3,10 @@ import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import {
+  InnovationGroupedStatusEnum,
+  InnovationSupportCloseReasonEnum
+} from '@modules/stores/innovation/innovation.enums';
 
 export type InnovationCardData = {
   id: string;
@@ -25,7 +28,7 @@ export type InnovationCardData = {
   support: {
     status: InnovationSupportStatusEnum;
     updatedAt: DateISOType | null;
-    closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+    closeReason: InnovationSupportCloseReasonEnum | null;
   } | null;
   highlights?: Record<string, string[]>;
 };
@@ -76,7 +79,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
     this.isAccessorTypeAndArchivedInnovation = this.isAccessorType && this.isInnovationInArchivedStatus;
     this.isAccessorTypeAndStoppedSharingInnovation =
-      this.isAccessorType && this.innovationCardData.support?.closedReason === 'STOPPED_SHARED';
+      this.isAccessorType && this.innovationCardData.support?.closeReason === 'STOP_SHARE';
 
     this.categoriesList = this.getFormattedList(this.innovationCardData.categories);
     this.careSettingsList = this.getFormattedList(this.innovationCardData.careSettings);

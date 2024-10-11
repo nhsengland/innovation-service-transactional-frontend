@@ -265,8 +265,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     const suggestNewOrganisationBody = {
       organisationUnits: this.chosenUnits.values,
-      description: this.form.get('comment')?.value || '',
-      type: SupportLogType.ACCESSOR_SUGGESTION
+      description: this.form.get('comment')?.value || ''
     };
 
     this.accessorService

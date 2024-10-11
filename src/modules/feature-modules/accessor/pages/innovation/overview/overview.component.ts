@@ -43,6 +43,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   isInAssessment: boolean = false;
   isArchived: boolean = false;
   showCards: boolean = false;
+  showStartSupport = false;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
@@ -107,6 +108,16 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           (this.isArchived ? InnovationSupportStatusEnum.CLOSED : InnovationSupportStatusEnum.UNASSIGNED),
         engagingAccessors: support?.engagingAccessors ?? []
       };
+
+      this.showStartSupport =
+        this.isInProgress &&
+        this.isQualifyingAccessorRole &&
+        !(
+          this.innovationSupport &&
+          [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
+            this.innovationSupport.status
+          )
+        );
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },

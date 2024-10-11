@@ -159,7 +159,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
                 dataType: 'checkbox-array',
                 label: stepsLabels.l5.label,
                 validations: { isRequired: [true, 'Unit is required'] },
-                items: units.sort((a, b) => a.value.localeCompare(b.value))
+                items: units.sort((a, b) => a.label.localeCompare(b.label))
               }
             ]
           })
