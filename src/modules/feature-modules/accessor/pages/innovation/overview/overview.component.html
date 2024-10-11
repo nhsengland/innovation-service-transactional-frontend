@@ -20,7 +20,7 @@
           ></theme-tag>
         </dd>
         <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
-          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}">Change support status</a>
+          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ changeSupportUrlNewOrSupport }}">Change support status</a>
         </dd>
       </div>
 
@@ -35,11 +35,7 @@
           </ul>
         </dd>
         <dd class="nhsuk-summary-list__actions">
-          <a
-            *ngIf="isInProgress && isQualifyingAccessorRole && (innovationSupport.status === 'ENGAGING' || innovationSupport.status === 'WAITING')"
-            routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id || 'new' }}/change-accessors"
-            >Change accessors</a
-          >
+          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/change-accessors">Change accessors</a>
         </dd>
       </div>
     </dl>
@@ -50,7 +46,7 @@
   </div>
 
   <a *ngIf="showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/new" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5">
-    Start support
+    Change support status
   </a>
 
   <div *ngIf="isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">

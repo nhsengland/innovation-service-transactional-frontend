@@ -185,10 +185,10 @@ export const INNOVATION_SUPPORT_STATUS = {
     hidden: false
   },
   SUGGESTED: {
-    label: 'Suggested',
-    cssClass: 'nhsuk-tag--purple',
-    description: 'A placeholder description for Suggested status',
-    hidden: false
+    label: 'Unassigned',
+    cssClass: 'nhsuk-tag--red',
+    description: 'A support status has not been assigned yet.',
+    hidden: true
   }
 };
 
