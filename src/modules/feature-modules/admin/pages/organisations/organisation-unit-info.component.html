@@ -6,11 +6,17 @@
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Name</dt>
+
           <dd class="nhsuk-summary-list__value">
-            {{ unit.name }}
-            <span *ngIf="unit.name && unit.acronym && !unit.name.includes(unit.acronym)" class="nhsuk-hint nhsuk-u-margin-bottom-0">
-              {{ unit.acronym }}
-            </span>
+            <ng-container *ngIf="!unit">
+              <span>{{ pageTitle }}</span>
+            </ng-container>
+            <ng-container *ngIf="unit">
+              <span>{{ unit ? unit.name : pageTitle }}</span>
+              <span *ngIf="unit && unit.name && unit.acronym && !unit.name.includes(unit.acronym)" class="nhsuk-hint nhsuk-u-margin-bottom-0">
+                {{ unit.acronym }}
+              </span>
+            </ng-container>
           </dd>
           <dd class="nhsuk-summary-list__actions" *ngIf="isUnitTeamPage">
             <a routerLink="edit">
