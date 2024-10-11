@@ -12,7 +12,7 @@
               <span>{{ pageTitle }}</span>
             </ng-container>
             <ng-container *ngIf="unit">
-              <span>{{ unit ? unit.name : pageTitle }}</span>
+              <span>{{ unit.name }}</span>
               <span *ngIf="unit && unit.name && unit.acronym && !unit.name.includes(unit.acronym)" class="nhsuk-hint nhsuk-u-margin-bottom-0">
                 {{ unit.acronym }}
               </span>
