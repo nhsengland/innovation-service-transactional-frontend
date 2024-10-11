@@ -105,8 +105,8 @@ export class AuthenticationService {
     );
   }
 
-  getUserInfo(): Observable<GetUserInfoDTO> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/me');
+  getUserInfo(forceRefresh?: boolean): Observable<GetUserInfoDTO> {
+    const url = new UrlModel(this.API_USERS_URL).addPath(`v1/me${forceRefresh ? '?forceRefresh=true' : ''}`);
     return this.http.get<GetUserInfoDTO>(url.buildUrl()).pipe(
       take(1),
       // if for some reason the user is authenticated but v1/me returns 404 and user not found we need to create the user
