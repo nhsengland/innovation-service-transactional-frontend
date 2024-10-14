@@ -138,16 +138,17 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         });
       }
 
-      console.log('this.innovation.support', this.innovation.support);
-      this.updateSupportUrlNewOrSupport =
-        this.innovation.support &&
-        [
-          InnovationSupportStatusEnum.CLOSED,
-          InnovationSupportStatusEnum.UNSUITABLE,
-          InnovationSupportStatusEnum.SUGGESTED
-        ].includes(this.innovation.support.status)
-          ? 'new'
-          : this.innovation.support!.id;
+      if (this.isAccessorType) {
+        this.updateSupportUrlNewOrSupport =
+          this.innovation.support &&
+          [
+            InnovationSupportStatusEnum.CLOSED,
+            InnovationSupportStatusEnum.UNSUITABLE,
+            InnovationSupportStatusEnum.SUGGESTED
+          ].includes(this.innovation.support.status)
+            ? 'new'
+            : this.innovation.support!.id;
+      }
       this.setGoBackLink();
       this.updatePageTitle();
       this.setPageStatus('READY');
