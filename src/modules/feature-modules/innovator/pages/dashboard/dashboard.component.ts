@@ -83,6 +83,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
+      this.stores.authentication.updateUserPasswordResetDate();
     }
 
     forkJoin([
