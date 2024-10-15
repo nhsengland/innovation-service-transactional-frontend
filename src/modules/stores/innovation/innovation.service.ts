@@ -153,8 +153,6 @@ export class InnovationService {
       .setPathParams({ innovationId })
       .setQueryParams(qp);
 
-    console.log('url', url);
-
     return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

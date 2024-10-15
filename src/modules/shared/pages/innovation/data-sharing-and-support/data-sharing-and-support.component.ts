@@ -87,8 +87,6 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   }
 
   ngOnInit(): void {
-    console.log(this.innovation.assessment);
-
     const subscriptions: {
       organisationsList: ObservableInput<OrganisationsListDTO[]>;
       innovationSupports: ObservableInput<InnovationSupportsListDTO>;
