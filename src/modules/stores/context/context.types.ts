@@ -65,6 +65,7 @@ export type ContextInnovationType = {
   loggedUser: { isOwner: boolean };
   assessment?: {
     id: string;
+    currentMajorAssessmentId: null | string;
     majorVersion: number;
     minorVersion: number;
     createdAt: DateISOType;

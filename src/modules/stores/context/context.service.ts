@@ -135,6 +135,7 @@ export class ContextService {
             ? {
                 assessment: {
                   id: response.assessment.id,
+                  currentMajorAssessmentId: response.assessment.currentMajorAssessmentId,
                   majorVersion: response.assessment.majorVersion,
                   minorVersion: response.assessment.minorVersion,
                   createdAt: response.assessment.createdAt,

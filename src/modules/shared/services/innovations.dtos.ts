@@ -168,6 +168,7 @@ export type InnovationInfoDTO = {
   lastEndSupportAt: null | DateISOType;
   assessment?: null | {
     id: string;
+    currentMajorAssessmentId: null | string;
     majorVersion: number;
     minorVersion: number;
     createdAt: DateISOType;

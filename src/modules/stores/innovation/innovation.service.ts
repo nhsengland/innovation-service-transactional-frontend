@@ -140,10 +140,21 @@ export class InnovationService {
     return this.http.delete<void>(url.buildUrl()).pipe(take(1));
   }
 
-  getInnovationOrganisationSuggestions(innovationId: string): Observable<OrganisationSuggestionModel> {
+  getInnovationOrganisationSuggestions(
+    innovationId: string,
+    filters: { majorAssessmentId?: string }
+  ): Observable<OrganisationSuggestionModel> {
+    const qp = {
+      ...(filters.majorAssessmentId ? { majorAssessmentId: filters.majorAssessmentId } : {})
+    };
+
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/suggestions')
-      .setPathParams({ innovationId });
+      .setPathParams({ innovationId })
+      .setQueryParams(qp);
+
+    console.log('url', url);
+
     return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
