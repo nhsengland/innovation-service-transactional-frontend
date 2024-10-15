@@ -383,10 +383,10 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     const initialData = {
       description: this.wizard.data.descriptionStep.description,
-      createdAt: new Date(
-        +this.wizard.data.dateStep.year,
-        +this.wizard.data.dateStep.month - 1,
-        +this.wizard.data.dateStep.day
+      createdAt: DatesHelper.getDateString(
+        this.wizard.data.dateStep.year,
+        this.wizard.data.dateStep.month,
+        this.wizard.data.dateStep.day
       )
     };
 

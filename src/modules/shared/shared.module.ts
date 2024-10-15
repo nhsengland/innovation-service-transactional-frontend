@@ -57,9 +57,7 @@ import { PageInnovationStatusListComponent } from './pages/innovation/status/inn
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from './pages/innovation/support/support-summary-progress-update-delete.component';
-import { PageInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/support-summary-progress-update.component';
-import { PageInnovationSupportSummaryProgressUpdateNoMilestonesComponent } from './pages/innovation/support/support-summary-progress-update-no-milestones.component';
-
+import { PageInnovationSupportSummaryProgressUpdateWrapperComponent } from './pages/innovation/support/support-summary-progress-update-wrapper.component';
 import { InnovationSectionSummaryComponent } from './pages/innovation/sections/section-summary.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
@@ -119,6 +117,14 @@ import { PageProgressCategoriesWrapperComponent } from './pages/progress-categor
 import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
 import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
 import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessment/assessment-details.component';
+import { WizardInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/wizard-support-summary-progress-update/support-summary-progress-update.component';
+import { WizardInnovationSupportSummaryProgressUpdateTitleStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/title-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateAddDocumentStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/add-document-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentNameStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-name-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-file-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/summary-step.component';
 
 @NgModule({
   imports: [
@@ -186,8 +192,7 @@ import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessm
     PageInnovationSupportStatusListComponent,
     PageInnovationSupportSummaryListComponent,
     PageInnovationSupportSummaryProgressUpdateDeleteComponent,
-    PageInnovationSupportSummaryProgressUpdateComponent,
-    PageInnovationSupportSummaryProgressUpdateNoMilestonesComponent,
+    PageInnovationSupportSummaryProgressUpdateWrapperComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent,
@@ -197,6 +202,14 @@ import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessm
     PageProgressCategoriesWrapperComponent,
     PageProgressCategoriesOneLevelMilestoneComponent,
     PageProgressCategoriesTwoLevelMilestoneComponent,
+    WizardInnovationSupportSummaryProgressUpdateComponent,
+    WizardInnovationSupportSummaryProgressUpdateTitleStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateDescriptionStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateAddDocumentStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateDocumentNameStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateDocumentDescriptionStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent,
 
     InnovationSectionSummaryComponent,
     // // Innovations.
