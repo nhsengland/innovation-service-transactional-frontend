@@ -384,12 +384,14 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     switch (status) {
       case InnovationSupportStatusEnum.SUGGESTED:
+        this.form.get('tabsFilters')?.get('suggestedOnly')?.value === false &&
+          filteredArr?.push(InnovationSupportStatusEnum.UNASSIGNED);
+
         this.innovationsList
           .clearData()
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe: false,
-            suggestedOnly: this.form.get('tabsFilters')?.get('suggestedOnly')?.value ?? false,
             closedByMyOrganisation: false
           })
           .setVisibleColumns({
