@@ -15,8 +15,9 @@ import {
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { ObservableInput, forkJoin } from 'rxjs';
+import { DateISOType } from '@app/base/types';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -111,9 +112,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           historyList: [],
           isLoading: false,
           isOpened: false,
-          canDoProgressUpdates:
-            this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === item.id &&
-            this.innovation.status !== InnovationStatusEnum.ARCHIVED,
+          canDoProgressUpdates: this.canDoProgressUpdates(item.id, item.support?.minStart),
           temporalDescription: `Support period: ${this.datePipe.transform(item.support.start, 'MMMM y')} to present`
         }));
         this.sectionsList[1].unitsList = results.supportSummaryOrganisationsList.BEEN_ENGAGED.map(item => ({
@@ -121,7 +120,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           historyList: [],
           isLoading: false,
           isOpened: false,
-          canDoProgressUpdates: false,
+          canDoProgressUpdates: this.canDoProgressUpdates(item.id, item.support?.minStart),
           temporalDescription: `Support period: ${this.datePipe.transform(
             item.support.start,
             'MMMM y'
@@ -132,7 +131,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
           historyList: [],
           isLoading: false,
           isOpened: false,
-          canDoProgressUpdates: false,
+          canDoProgressUpdates: this.canDoProgressUpdates(item.id, item.support?.minStart),
           temporalDescription: item.support.start
             ? `Date: ${this.datePipe.transform(item.support.start, 'MMMM y')}`
             : ''
@@ -266,6 +265,20 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const element = document.querySelector(`#${goToId}`);
     if (element) {
       element.scrollIntoView(true);
+    }
+  }
+
+  canDoProgressUpdates(unitId: string, minStartSupport?: DateISOType) {
+    if (!minStartSupport) {
+      return false;
+    }
+    const minStart = new Date(minStartSupport).setHours(0, 0, 0, 0);
+    const today = new Date().setHours(0, 0, 0, 0);
+
+    if (this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === unitId && today >= minStart) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

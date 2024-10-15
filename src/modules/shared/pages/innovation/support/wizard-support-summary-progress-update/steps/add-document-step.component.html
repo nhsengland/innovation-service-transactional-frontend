@@ -1,0 +1,11 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-radio-group controlName="addDocument" [label]="title" [items]="addDocumentItems"></theme-form-radio-group>
+
+        <button type="submit" class="nhsuk-button">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

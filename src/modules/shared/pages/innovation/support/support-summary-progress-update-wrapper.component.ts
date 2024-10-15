@@ -5,10 +5,10 @@ import { CoreComponent } from '@app/base';
 import { SUPPORT_SUMMARY_MILESTONES } from './wizard-support-summary-progress-update-milestones/constants';
 
 @Component({
-  selector: 'shared-pages-innovation-support-support-summary-progress-update',
-  templateUrl: './support-summary-progress-update.component.html'
+  selector: 'shared-pages-innovation-support-support-summary-progress-update-wrapper',
+  templateUrl: './support-summary-progress-update-wrapper.component.html'
 })
-export class PageInnovationSupportSummaryProgressUpdateComponent extends CoreComponent {
+export class PageInnovationSupportSummaryProgressUpdateWrapperComponent extends CoreComponent {
   userOrgHasMilestones: boolean = false;
 
   constructor() {

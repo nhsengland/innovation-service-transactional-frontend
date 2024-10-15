@@ -184,7 +184,7 @@ export type InnovationInfoDTO = {
 export type InnovationSharesListDTO = { organisation: { id: string; name: string; acronym: string } }[];
 
 export enum InnovationValidationRules {
-  checkIfSupportStatusAtDate = 'checkIfSupportStatusAtDate'
+  checkIfSupportHadAlreadyStartedAtDate = 'checkIfSupportHadAlreadyStartedAtDate'
 }
 
 export type InnovationRulesDTO = {
@@ -246,6 +246,7 @@ export type SupportSummaryOrganisationsListDTO = {
       status: InnovationSupportStatusEnum;
       start?: DateISOType;
       end?: DateISOType;
+      minStart?: DateISOType;
     };
     organisation: {
       id: string;
@@ -277,7 +278,7 @@ type TwoLevelProgressUpdateParams = { category: string; subCategories: string[] 
 export type CreateSupportSummaryProgressUpdateType = {
   description: string;
   document?: { name: string; description?: string; file?: Omit<FileUploadType, 'url'> };
-  createdAt?: Date;
+  createdAt: DateISOType;
 } & (SimpleProgressUpdateParams | OneLevelProgressUpdateParams | TwoLevelProgressUpdateParams);
 
 // Support log
