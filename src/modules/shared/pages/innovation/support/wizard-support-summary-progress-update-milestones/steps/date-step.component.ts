@@ -100,26 +100,26 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     const dateString = `${this.form.value.date?.year!}-${this.form.value.date?.month!}-${this.form.value.date?.day!}`;
 
     const data = {
-      supportId: this.innovation.support?.id!,
-      date: dateString,
-      status: this.innovation.support?.status!
+      unitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id!,
+      date: dateString
     };
 
-    // Check if organisation was engaging with the innovation on the date provided and if the date is not in the future
+    // Check if organisation had already started support on the date provided and if the date is not in the future
     this.innovationsService
-      .getInnovationRules(this.innovation.id, InnovationValidationRules.checkIfSupportStatusAtDate, data)
+      .getInnovationRules(this.innovation.id, InnovationValidationRules.checkIfSupportHadAlreadyStartedAtDate, data)
       .subscribe({
         next: res => {
           const supportStatusValidation = res.validations.find(
-            validation => validation.rule === InnovationValidationRules.checkIfSupportStatusAtDate
+            validation => validation.rule === InnovationValidationRules.checkIfSupportHadAlreadyStartedAtDate
           );
 
           if (!supportStatusValidation?.valid) {
-            this.setAlertError('Your organisation was not engaging with this innovation on the date provided', {
+            const supportNotStartedErrorMessage =
+              'Date must be any date after your organisation started supporting this innovation';
+            this.setAlertError('', {
               itemsList: [
                 {
-                  title:
-                    'The date provided must be during the time your organisation was engaging with this innovation',
+                  title: supportNotStartedErrorMessage,
                   fieldId: 'day-progressUpdateDate'
                 }
               ],
@@ -128,7 +128,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
 
             this.form.get('date')?.setErrors({
               customError: true,
-              message: 'The date provided must be during the time your organisation was engaging with this innovation'
+              message: supportNotStartedErrorMessage
             });
             this.form.markAllAsTouched();
 
@@ -139,12 +139,13 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
         },
         error: ({ error: err }: HttpErrorResponse) => {
           if (err.error === GenericErrorsEnum.INVALID_PAYLOAD) {
+            const dateNotInThePastOrTodayErrorMessage = 'The date must be in the past or today';
             this.setAlertError('The date provided is in the future', {
-              itemsList: [{ title: 'The date must be in the past or today', fieldId: 'day-progressUpdateDate' }],
+              itemsList: [{ title: dateNotInThePastOrTodayErrorMessage, fieldId: 'day-progressUpdateDate' }],
               width: '2.thirds'
             });
 
-            this.form.get('date')?.setErrors({ customError: true, message: 'The date must be in the past or today' });
+            this.form.get('date')?.setErrors({ customError: true, message: dateNotInThePastOrTodayErrorMessage });
             this.form.markAllAsTouched();
           } else {
             this.setAlertUnknownError();
