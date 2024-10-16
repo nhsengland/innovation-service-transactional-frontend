@@ -90,10 +90,12 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
   return {
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
-    supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS).map(([key, item]) => ({
-      value: key,
-      label: item.label
-    })),
+    supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS)
+      .filter(s => s[0] != 'SUGGESTED') // Remove the SUGGESTED status as it's "UNASSIGNED"
+      .map(([key, item]) => ({
+        value: key,
+        label: item.label
+      })),
     groupedStatuses: [],
     diseasesAndConditions: getIrSchemaQuestionItemsValueAndLabel(schema, 'diseasesConditionsImpact'),
     categories: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'categories')],
