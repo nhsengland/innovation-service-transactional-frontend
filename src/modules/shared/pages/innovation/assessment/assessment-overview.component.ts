@@ -141,13 +141,11 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
       if (this.isAccessorType) {
         this.updateSupportUrlNewOrSupport =
           this.innovation.support &&
-          [
-            InnovationSupportStatusEnum.CLOSED,
-            InnovationSupportStatusEnum.UNSUITABLE,
-            InnovationSupportStatusEnum.SUGGESTED
-          ].includes(this.innovation.support.status)
-            ? 'new'
-            : this.innovation.support!.id;
+          [InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.ENGAGING].includes(
+            this.innovation.support.status
+          )
+            ? this.innovation.support.id
+            : 'new';
       }
       this.setGoBackLink();
       this.updatePageTitle();
