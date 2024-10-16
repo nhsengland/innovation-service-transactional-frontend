@@ -100,13 +100,23 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     if (this.isInnovatorType) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
-        this.innovationId
+        this.innovationId,
+        {
+          ...(this.innovation.assessment?.currentMajorAssessmentId && {
+            majorAssessmentId: this.innovation.assessment?.currentMajorAssessmentId
+          })
+        }
       );
     }
 
     if (this.isAccessorType) {
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
-        this.innovationId
+        this.innovationId,
+        {
+          ...(this.innovation.assessment?.currentMajorAssessmentId && {
+            majorAssessmentId: this.innovation.assessment?.currentMajorAssessmentId
+          })
+        }
       );
     }
 
