@@ -54,7 +54,7 @@ export function app(): express.Express {
       cookie: {
         httpOnly: true,
         secure: 'auto',
-        sameSite: 'strict'
+        sameSite: 'lax'
       }
     })
   );
