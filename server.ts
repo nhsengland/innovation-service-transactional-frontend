@@ -3,7 +3,7 @@ import 'zone.js/node';
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 
-import * as coockieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as session from 'express-session';
@@ -45,7 +45,7 @@ export function app(): express.Express {
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
-  server.use(coockieParser());
+  server.use(cookieParser());
   server.use(
     session({
       secret: process.env.SESSION_SECRET || 'secret',
@@ -54,7 +54,7 @@ export function app(): express.Express {
       cookie: {
         httpOnly: true,
         secure: 'auto',
-        sameSite: 'lax'
+        sameSite: 'strict'
       }
     })
   );
