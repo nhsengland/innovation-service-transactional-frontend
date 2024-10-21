@@ -56,11 +56,11 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'IN_PROGRESS'">
-      <div class="d-flex">
+      <div class="d-flex" *ngIf="innovation?.assessment as assessment">
         <theme-svg-icon type="success"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
         <h2 class="nhsuk-heading-m">
-          {{ innovation?.assessment?.reassessmentCount ? "Needs reassessment complete" : "Needs assessment complete" }}
+          {{ assessment.majorVersion > 1 ? "Needs reassessment complete" : "Needs assessment complete" }}
         </h2>
       </div>
 
@@ -79,11 +79,11 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'ARCHIVED'">
-      <div class="d-flex">
+      <div class="d-flex" *ngIf="innovation?.assessment as assessment">
         <theme-svg-icon type="success"></theme-svg-icon>
         <span class="nhsuk-u-margin-right-2"></span>
         <h2 class="nhsuk-heading-m">
-          {{ innovation?.assessment?.reassessmentCount ? "Needs reassessment complete" : "Needs assessment complete" }}
+          {{ assessment.majorVersion > 1 ? "Needs reassessment complete" : "Needs assessment complete" }}
         </h2>
       </div>
 

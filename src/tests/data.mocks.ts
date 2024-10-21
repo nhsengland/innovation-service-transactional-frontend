@@ -109,7 +109,6 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
     createdAt: '2020-01-01T00:00:00.000Z',
     finishedAt: null
   },
-  reassessmentCount: 0,
   categories: [],
   countryName: 'England',
   description: 'Description',

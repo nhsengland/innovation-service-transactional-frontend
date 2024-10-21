@@ -174,7 +174,6 @@ export type InnovationInfoDTO = {
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
-    reassessmentCount: number;
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
   statusUpdatedAt: null | DateISOType;
