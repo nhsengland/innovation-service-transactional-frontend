@@ -76,7 +76,6 @@ export type ContextInnovationType = {
   notifications?: { [key in NotificationCategoryTypeEnum]?: number };
   collaboratorId?: string;
   createdAt?: DateISOType;
-  reassessmentCount: number;
   expiryAt: number;
 };
 

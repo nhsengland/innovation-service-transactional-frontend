@@ -155,7 +155,6 @@ export class ContextService {
           ...(support ? { support: { id: support.id, status: support.status } } : {}),
           collaboratorId: response.collaboratorId ? response.collaboratorId : undefined,
           createdAt: response.createdAt,
-          reassessmentCount: response.assessment?.reassessmentCount ? response.assessment.reassessmentCount : 0,
           categories: response.categories,
           otherCategoryDescription: response.otherCategoryDescription,
           countryName: response.countryName,

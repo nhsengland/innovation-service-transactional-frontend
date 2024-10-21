@@ -187,7 +187,6 @@ export class ContextStore extends Store<ContextModel> {
         statusUpdatedAt: null,
         hasBeenAssessed: false,
         loggedUser: { isOwner: false },
-        reassessmentCount: 0,
         categories: [],
         otherCategoryDescription: '',
         countryName: '',
