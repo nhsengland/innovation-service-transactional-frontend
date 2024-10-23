@@ -466,9 +466,11 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
         this.innovationsList
           .clearData()
           .setFilters({
-            supportStatuses: undefined,
+            // Clear unassigned status if suggestedOnly is true
+            supportStatuses: this.form.get('tabsFilters')?.get('suggestedOnly')?.value
+              ? Object.values(InnovationSupportStatusEnum).filter(v => v !== InnovationSupportStatusEnum.UNASSIGNED)
+              : undefined,
             assignedToMe: this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false,
-            suggestedOnly: this.form.get('tabsFilters')?.get('suggestedOnly')?.value ?? false,
             closedByMyOrganisation: false
           })
           .setVisibleColumns({
