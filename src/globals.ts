@@ -7,6 +7,7 @@ export const initAppInsights = () => {
     insights = appinsights
       .setup(process.env.APPINSIGHTS_INSTRUMENTATION_KEY)
       .setDistributedTracingMode(appinsights.DistributedTracingModes.AI_AND_W3C)
+      .enableWebInstrumentation(true)
       .start();
 
     appinsights.defaultClient.addTelemetryProcessor((envelope, context) => {
@@ -17,6 +18,8 @@ export const initAppInsights = () => {
           envelope.data.baseData.properties['session'] = context?.['http.ServerRequest']?.sessionID;
         }
       }
+
+      // 401 if (envelope.data.baseData) //
       return true;
     });
   }
