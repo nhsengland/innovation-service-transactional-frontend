@@ -102,11 +102,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status:
-          // The support status is whatever comes from the support, if there's no support (first occurrence) then it's
-          // status depends on the archive status. Closed if the innovation is archived unassigned otherwise
-          support?.status ??
-          (this.isArchived ? InnovationSupportStatusEnum.CLOSED : InnovationSupportStatusEnum.UNASSIGNED),
+        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
         engagingAccessors: support?.engagingAccessors ?? []
       };
 
