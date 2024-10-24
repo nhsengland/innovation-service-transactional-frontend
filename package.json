@@ -37,6 +37,7 @@
     "@azure/msal-node": "^2.15.0",
     "@ngx-translate/core": "^15.0.0",
     "applicationinsights": "^2.9.6",
+    "applicationinsights-native-metrics": "^0.0.11",
     "axios": "^1.7.7",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
