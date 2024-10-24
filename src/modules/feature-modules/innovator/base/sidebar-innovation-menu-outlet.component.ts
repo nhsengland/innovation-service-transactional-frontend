@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ViewportScroller } from '@angular/common';
-import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
+import { InnovationRecordSchemaStore, InnovationContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
@@ -24,15 +24,14 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private innovationStore: InnovationStore,
+    private innovationCtxStore: InnovationContextStore,
     private scroller: ViewportScroller,
     private irSchemaStore: InnovationRecordSchemaStore
   ) {
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.onRouteChange())
+        .subscribe(() => this.onRouteChange())
     );
 
     this.onRouteChange();
@@ -48,7 +47,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.contextStore.getInnovation();
+      const innovation = this.innovationCtxStore.innovation();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id);
       this._sidebarItems = [

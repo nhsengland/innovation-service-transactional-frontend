@@ -33,7 +33,7 @@ export class WizardInnovationSupportSummaryProgressUpdateDocumentFileStepCompone
     httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload-file').buildUrl(),
     httpUploadBody: {
       innovatorId: this.stores.authentication.getUserId(),
-      innovationId: this.stores.context.getInnovation().id
+      innovationId: this.stores.other.innovation().id
     },
     maxFileSize: 20,
     acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]

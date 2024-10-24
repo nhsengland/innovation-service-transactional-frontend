@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
@@ -62,8 +62,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.context.getInnovation();
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.innovation = this.stores.other.innovation();
+    this.isArchived = this.stores.other.isArchived();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }

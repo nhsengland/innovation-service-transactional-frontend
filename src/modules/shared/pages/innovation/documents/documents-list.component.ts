@@ -16,8 +16,7 @@ import {
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType } from '@modules/stores';
 import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
 
 @Component({
@@ -66,8 +65,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     super();
     this.setPageTitle('Documents');
 
-    this.innovation = this.stores.context.getInnovation();
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.innovation = this.stores.other.innovation();
+    this.isArchived = this.stores.other.isArchived();
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();

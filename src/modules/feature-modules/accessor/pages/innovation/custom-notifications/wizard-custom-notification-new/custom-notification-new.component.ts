@@ -118,7 +118,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     super();
 
     this.subscriptionId = this.activatedRoute.snapshot.params.subscriptionId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
 
     this.subscription = {
       id: '',

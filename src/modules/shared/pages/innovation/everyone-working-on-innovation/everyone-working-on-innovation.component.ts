@@ -4,7 +4,7 @@ import { CoreComponent } from '@app/base';
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -44,7 +44,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     super();
     this.setPageTitle('Everyone who is working with this innovation', { showPage: false });
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
   }
 
   ngOnInit(): void {

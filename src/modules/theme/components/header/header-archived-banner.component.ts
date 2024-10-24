@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { ContextInnovationType } from '@app/base/types';
-import { AuthenticationStore, ContextStore } from '@modules/stores';
+import { AuthenticationStore, InnovationContextStore } from '@modules/stores';
 import { filter } from 'rxjs';
 
 @Component({
@@ -13,26 +12,27 @@ export class HeaderArchivedBannerComponent implements OnInit {
   baseUrl: string = '';
   regEx: RegExp = RegExp('');
 
-  isInnovator: boolean;
-  isAdmin: boolean;
-  isOwner: boolean;
-  innovation: ContextInnovationType;
+  isOwner = signal(false);
+  isAdmin = signal(false);
+  isInnovator = signal(false);
+  statusUpdatedAt = signal<null | string>(null);
 
   constructor(
     private router: Router,
     private authentication: AuthenticationStore,
-    private context: ContextStore
+    private innovationStore: InnovationContextStore
   ) {
-    this.isInnovator = this.authentication.isInnovatorType();
-    this.isAdmin = this.authentication.isAdminRole();
-    this.innovation = this.context.getInnovation();
-    this.isOwner = this.innovation.loggedUser.isOwner;
+    this.isInnovator.set(this.authentication.isInnovatorType());
+    this.isAdmin.set(this.authentication.isAdminRole());
+    const innovation = this.innovationStore.innovation();
+    this.statusUpdatedAt.set(innovation.statusUpdatedAt);
+    this.isOwner.set(this.innovationStore.isOwner());
 
     this.regEx = new RegExp(/innovations\/[\w\-]+\/([\w\-]+|manage\/innovation)(\?.*)?$/);
 
-    this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
-      this.checkShowBanner();
-    });
+    this.router.events
+      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+      .subscribe(() => this.checkShowBanner());
   }
 
   ngOnInit(): void {
@@ -40,7 +40,6 @@ export class HeaderArchivedBannerComponent implements OnInit {
   }
 
   private checkShowBanner() {
-    this.innovation = this.context.getInnovation();
-    this.showBanner = this.innovation.status === 'ARCHIVED' && this.regEx.test(this.router.url);
+    this.showBanner = this.innovationStore.isArchived() && this.regEx.test(this.router.url);
   }
 }

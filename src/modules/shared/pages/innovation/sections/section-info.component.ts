@@ -77,8 +77,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.context.getInnovation();
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.innovation = this.stores.other.innovation();
+    this.isArchived = this.stores.other.isArchived();
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 

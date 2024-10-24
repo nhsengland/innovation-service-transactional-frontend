@@ -32,4 +32,4 @@
   </ul>
 </ng-container>
 
-<theme-go-to-top-link *ngIf="isAllSectionsDetailsPage || (isInnovationRecordPage && isInnovationInArchivedStatus)" />
+<theme-go-to-top-link *ngIf="isAllSectionsDetailsPage || (isInnovationRecordPage && this.innovationCtxStore.isArchived())" />

@@ -22,7 +22,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
 
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
@@ -33,7 +33,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
 
     this.setPageTitle(`Let your support organisations know you've updated your innovation record`, { size: 'l' });
 
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isArchived = this.stores.other.isArchived();
   }
 
   ngOnInit() {

@@ -30,7 +30,7 @@ export class PageInnovationManageArchiveComponent extends CoreComponent implemen
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
     this.userEmail = this.stores.authentication.getUserInfo().email;
 
     this.setPageTitle(`Archive ${this.innovation.name} innovation`, { size: 'xl', width: '2.thirds' });

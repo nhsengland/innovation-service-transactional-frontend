@@ -42,7 +42,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
 
     this.wizard.data = {

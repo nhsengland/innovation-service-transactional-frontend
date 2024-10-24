@@ -6,7 +6,7 @@ import { FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { InnovationActivityLogListDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { ACTIVITY_LOG_ITEMS, ActivityLogTypesEnum } from '@modules/stores/innovation';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -36,7 +36,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   constructor(private innovationsService: InnovationsService) {
     super();
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
 
     this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';
