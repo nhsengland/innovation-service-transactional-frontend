@@ -42,7 +42,7 @@ export class AssessmentService extends CoreService {
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
-      finalize(() => this.stores.context.clearInnovation())
+      finalize(() => this.stores.other.clear$.next())
     );
   }
 
@@ -53,7 +53,7 @@ export class AssessmentService extends CoreService {
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
       finalize(() => {
-        this.stores.context.clearInnovation();
+        this.stores.other.clear$.next();
         this.stores.context.clearAssessment();
       })
     );
@@ -77,7 +77,7 @@ export class AssessmentService extends CoreService {
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       finalize(() => {
-        this.stores.context.clearInnovation();
+        this.stores.other.clear$.next();
         this.stores.context.clearAssessment();
       })
     );

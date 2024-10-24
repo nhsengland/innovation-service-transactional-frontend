@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores/context';
+import { ContextInnovationType } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-record-download',
@@ -19,7 +19,7 @@ export class PageInnovationRecordDownloadComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
 
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId

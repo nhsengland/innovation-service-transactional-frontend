@@ -58,7 +58,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId;
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
 

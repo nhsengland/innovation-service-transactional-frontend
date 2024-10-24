@@ -4,7 +4,7 @@ import {
   UserRoleEnum
 } from '@modules/stores/authentication/authentication.enums';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {

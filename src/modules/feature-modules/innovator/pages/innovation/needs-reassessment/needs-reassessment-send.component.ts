@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
@@ -38,7 +38,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.action = this.activatedRoute.snapshot.queryParams.action;
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.stores.other.innovation();
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
   }
 

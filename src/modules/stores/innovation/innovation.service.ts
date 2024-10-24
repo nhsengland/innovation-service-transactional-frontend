@@ -8,7 +8,6 @@ import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { ContextStore } from '../context/context.store';
 import {
   GetInnovationEvidenceDTO,
   INNOVATION_STATUS,
@@ -18,6 +17,7 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
+import { InnovationContextStore } from '../ctx/innovation/innovation-context.store';
 
 @Injectable()
 export class InnovationService {
@@ -26,7 +26,7 @@ export class InnovationService {
   constructor(
     private http: HttpClient,
     private authenticationStore: AuthenticationStore,
-    private contextStore: ContextStore,
+    private innovationCtxStore: InnovationContextStore,
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
@@ -36,7 +36,9 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
-      finalize(() => this.contextStore.clearInnovation())
+      finalize(() => {
+        this.innovationCtxStore.clear$.next();
+      })
     );
   }
 

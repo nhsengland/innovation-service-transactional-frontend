@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { AuthenticationStore, ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
+import { AuthenticationStore, InnovationRecordSchemaStore, InnovationContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
@@ -19,7 +19,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   showHeading: boolean = false;
   isAllSectionsDetailsPage: boolean = false;
   isInnovationRecordPage: boolean = false;
-  isInnovationInArchivedStatus: boolean = false;
   isQualifyingAccessorRole: boolean;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
@@ -28,8 +27,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private innovationStore: InnovationStore,
+    readonly innovationCtxStore: InnovationContextStore,
     private scroller: ViewportScroller,
     private authenticationStore: AuthenticationStore,
     private irSchemaStore: InnovationRecordSchemaStore
@@ -39,7 +37,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.onRouteChange())
+        .subscribe(() => this.onRouteChange())
     );
 
     this.onRouteChange();
@@ -55,7 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.contextStore.getInnovation();
+      const innovation = this.innovationCtxStore.innovation();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('accessor', innovation.id);
       this._sidebarItems = [
@@ -84,8 +82,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.isAllSectionsDetailsPage = this.router.url.includes('/all');
     this.isInnovationRecordPage = this.router.url.endsWith('/record');
-
-    this.isInnovationInArchivedStatus = this.contextStore.getInnovation().status === InnovationStatusEnum.ARCHIVED;
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;
