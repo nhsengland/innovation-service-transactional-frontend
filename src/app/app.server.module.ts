@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ServerModule } from '@angular/platform-server';
 
 import { AppModule } from './app.module';
@@ -17,7 +18,10 @@ export class ServerXhr implements XhrFactory {
 
 @NgModule({
   imports: [AppModule, ServerModule],
-  providers: [{ provide: XhrFactory, useClass: ServerXhr }],
+  providers: [
+    provideHttpClient(withFetch()),
+    { provide: XhrFactory, useClass: ServerXhr }
+  ],
   bootstrap: [AppComponent]
 })
-export class AppServerModule {}
+export class AppServerModule { }
