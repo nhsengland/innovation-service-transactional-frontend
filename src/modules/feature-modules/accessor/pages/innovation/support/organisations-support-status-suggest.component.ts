@@ -85,7 +85,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     private organisationsService: OrganisationsService
   ) {
     super();
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.stepNumber = 1;
   }
 

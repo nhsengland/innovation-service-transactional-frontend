@@ -48,7 +48,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
@@ -210,7 +210,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               // NOTE: This is a very specific operation that updates the context (store) innovation name.
               // If more exceptions appears, a wizard configurations should be considered.
               if (this.sectionId === 'INNOVATION_DESCRIPTION' && this.wizard.currentStepId === 1) {
-                this.ctx.innovation.update$.next({ name: this.wizard.getAnswers().name });
+                this.ctx.innovation.update({ name: this.wizard.getAnswers().name });
                 // this.stores.context.updateInnovation({ name: this.wizard.getAnswers().name });
               }
               return of(true);

@@ -40,7 +40,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   }
 
   private onRouteChange(url: string): void {
-    const innovation = this.ctx.innovation.innovation();
+    const innovation = this.ctx.innovation.info();
 
     this.data.innovation = {
       id: innovation.id,

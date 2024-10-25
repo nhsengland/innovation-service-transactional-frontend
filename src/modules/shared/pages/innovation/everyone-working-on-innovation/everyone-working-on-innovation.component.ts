@@ -44,7 +44,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     super();
     this.setPageTitle('Everyone who is working with this innovation', { showPage: false });
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
   }
 
   ngOnInit(): void {

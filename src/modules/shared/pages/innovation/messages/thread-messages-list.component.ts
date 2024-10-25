@@ -87,7 +87,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       role: this.stores.authentication.getUserContextInfo()?.type ?? ''
     };
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     const documentAction = this.activatedRoute.snapshot.queryParams.action;
 

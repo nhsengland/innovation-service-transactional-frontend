@@ -24,7 +24,7 @@ export class InnovationAssessmentDataResolver {
   resolve(route: ActivatedRouteSnapshot): Observable<null | InnovationNeedsAssessmentInfoDTO> {
     return this.contextStore.getOrLoadAssessment(route.params.innovationId, route.params.assessmentId).pipe(
       catchError(error => {
-        this.ctx.innovation.clear$.next();
+        this.ctx.innovation.clear();
         this.contextStore.clearAssessment();
         this.router.navigateByUrl('error/forbidden-innovation');
 

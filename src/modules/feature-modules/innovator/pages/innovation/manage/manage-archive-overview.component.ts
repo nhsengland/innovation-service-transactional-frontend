@@ -21,7 +21,7 @@ export class PageInnovationManageArchiveOverviewComponent extends CoreComponent 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.action = this.activatedRoute.snapshot.queryParams.action;
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.setGoBackLink();
   }

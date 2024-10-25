@@ -37,7 +37,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   }
 
   private onRouteChange(event?: NavigationEnd): void {
-    const innovation = this.ctx.innovation.innovation();
+    const innovation = this.ctx.innovation.info();
 
     this.data.innovation = {
       id: innovation.id,

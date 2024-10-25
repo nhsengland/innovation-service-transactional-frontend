@@ -113,7 +113,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
           };
         });
 
-        this.innovationName = this.ctx.innovation.innovation().name;
+        this.innovationName = this.ctx.innovation.info().name;
 
         this.assessment = needsAssessment;
 

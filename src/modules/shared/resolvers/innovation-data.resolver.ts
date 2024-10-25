@@ -25,7 +25,7 @@ export class InnovationDataResolver {
       .pipe(
         map(response => ({ id: response.id, name: response.name })),
         catchError(error => {
-          this.ctx.innovation.clear$.next();
+          this.ctx.innovation.clear();
           this.router.navigateByUrl('error/forbidden-innovation');
           this.logger.error('Error fetching data innovation data', error);
           return of(null);

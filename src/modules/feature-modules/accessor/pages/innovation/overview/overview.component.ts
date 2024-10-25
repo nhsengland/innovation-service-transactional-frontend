@@ -63,7 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
     this.isInAssessment = [

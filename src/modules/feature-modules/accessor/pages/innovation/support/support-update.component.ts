@@ -121,7 +121,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;

@@ -53,7 +53,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
   constructor(private innovationsService: InnovationsService) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 

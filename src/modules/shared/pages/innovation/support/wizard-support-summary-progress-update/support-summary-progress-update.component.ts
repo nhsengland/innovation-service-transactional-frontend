@@ -104,7 +104,7 @@ export class WizardInnovationSupportSummaryProgressUpdateComponent extends CoreC
   constructor(private innovationsService: InnovationsService) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.wizard.data = { ...wizardEmptyState };
   }

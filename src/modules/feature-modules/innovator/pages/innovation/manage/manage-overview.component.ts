@@ -28,7 +28,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
     super();
     this.setPageTitle('Manage innovation');
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
     this.isArchived = this.ctx.innovation.isArchived();
   }
 

@@ -55,7 +55,7 @@ export class WizardInnovationCustomNotificationDeleteComponent extends CoreCompo
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.subscriptionId = this.activatedRoute.snapshot.params.subscriptionId;
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.datasets = {
       innovationsWithSubscriptions: []

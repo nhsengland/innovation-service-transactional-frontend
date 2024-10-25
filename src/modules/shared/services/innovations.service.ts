@@ -935,7 +935,7 @@ export class InnovationsService extends CoreService {
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
-      finalize(() => this.ctx.innovation.clear$.next())
+      finalize(() => this.ctx.innovation.clear())
     );
   }
 

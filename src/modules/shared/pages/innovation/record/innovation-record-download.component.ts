@@ -19,7 +19,7 @@ export class PageInnovationRecordDownloadComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId

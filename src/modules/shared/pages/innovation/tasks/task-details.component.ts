@@ -36,7 +36,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   canReopen = false;
   canSendMessage = false;
 
-  readonly innovation = this.ctx.innovation.innovation();
+  readonly innovation = this.ctx.innovation.info();
 
   constructor(
     private activatedRoute: ActivatedRoute,

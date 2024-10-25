@@ -84,7 +84,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   ) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionIdFragment = this.activatedRoute.snapshot.fragment;

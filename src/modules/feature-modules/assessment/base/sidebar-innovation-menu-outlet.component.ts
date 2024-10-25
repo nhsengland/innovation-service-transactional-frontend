@@ -50,7 +50,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.ctx.innovation.innovation();
+      const innovation = this.ctx.innovation.info();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('assessment', innovation.id);
       this._sidebarItems = [

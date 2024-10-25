@@ -20,7 +20,7 @@ export class PageInnovationManageAccessOverviewComponent extends CoreComponent i
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.setPageTitle('You are collaborating on this innovation');
   }

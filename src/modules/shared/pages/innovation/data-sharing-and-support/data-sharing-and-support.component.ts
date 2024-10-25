@@ -70,7 +70,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     this.userType = this.stores.authentication.getUserType() ?? '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();

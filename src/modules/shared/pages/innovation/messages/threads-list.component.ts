@@ -47,7 +47,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       organisationUnitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
     };
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();

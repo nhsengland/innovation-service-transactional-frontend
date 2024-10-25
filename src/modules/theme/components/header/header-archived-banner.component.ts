@@ -24,7 +24,7 @@ export class HeaderArchivedBannerComponent implements OnInit {
   ) {
     this.isInnovator.set(this.authentication.isInnovatorType());
     this.isAdmin.set(this.authentication.isAdminRole());
-    const innovation = this.ctx.innovation.innovation();
+    const innovation = this.ctx.innovation.info();
     this.statusUpdatedAt.set(innovation.statusUpdatedAt);
     this.isOwner.set(this.ctx.innovation.isOwner());
 

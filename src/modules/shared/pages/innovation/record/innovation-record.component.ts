@@ -67,7 +67,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       this.innovationId
     }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();

@@ -18,7 +18,7 @@ export class PageInnovationRecordWrapperComponent extends CoreComponent {
   constructor() {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();

@@ -22,7 +22,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
-    this.innovation = this.ctx.innovation.innovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,

@@ -36,9 +36,7 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
-      finalize(() => {
-        this.ctx.innovation.clear$.next();
-      })
+      finalize(() => this.ctx.innovation.clear())
     );
   }
 
