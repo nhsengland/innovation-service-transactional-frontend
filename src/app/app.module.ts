@@ -8,9 +8,9 @@ import { ThemeModule } from '@modules/theme/theme.module';
 
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
+import { ApplicationinsightsAngularpluginErrorService } from '@microsoft/applicationinsights-angularplugin-js';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 
 @NgModule({
   imports: [
@@ -27,7 +27,10 @@ import { GlobalErrorHandler } from './config/handlers/global-error.handler';
   ],
   providers: [
     { provide: APP_ID, useValue: 'serverApp' },
-    { provide: ErrorHandler, useClass: GlobalErrorHandler }
+    {
+      provide: ErrorHandler,
+      useClass: ApplicationinsightsAngularpluginErrorService
+    }
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent]

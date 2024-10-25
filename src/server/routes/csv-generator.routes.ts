@@ -1,9 +1,10 @@
+import { KnownSeverityLevel } from 'applicationinsights';
 import * as express from 'express';
 import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
+import { generateCSV } from '../utils/csv/parser';
 import { CSVGeneratorSectionsNotFoundError } from '../utils/errors';
 import { getAccessTokenBySessionId } from './authentication.routes';
-import { generateCSV } from '../utils/csv/parser';
 
 const csvRouter = express.Router();
 
@@ -26,7 +27,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
 
         client.trackTrace({
           message: 'CSVGenerator Success',
-          severity: 0,
+          severity: KnownSeverityLevel.Information,
           properties: {
             params: req.params,
             query: req.query,
@@ -48,7 +49,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
         const client = getAppInsightsClient();
         client.trackException({
           exception: error,
-          severity: 3,
+          severity: KnownSeverityLevel.Error,
           properties: {
             params: req.params,
             query: req.query,
@@ -66,7 +67,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
     const client = getAppInsightsClient();
     client.trackException({
       exception: error,
-      severity: 3,
+      severity: KnownSeverityLevel.Error,
       properties: {
         params: req.params,
         query: req.query,

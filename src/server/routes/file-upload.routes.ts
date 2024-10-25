@@ -5,7 +5,7 @@ import * as multer from 'multer';
 import { extname } from 'path';
 
 import { UrlModel } from '@app/base/models';
-import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { KnownSeverityLevel } from 'applicationinsights';
 import { getAppInsightsClient } from 'src/globals';
 import { ENVIRONMENT } from '../config/constants.config';
 import { getAccessTokenBySessionId } from './authentication.routes';
@@ -106,17 +106,13 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
         id: fileInfo.id,
         name: fileInfo.name,
         size: req.file?.size,
-        extension: req.file
-          ? extname(req.file?.originalname)
-              .toLowerCase()
-              .substring(1)
-          : '',
+        extension: req.file ? extname(req.file?.originalname).toLowerCase().substring(1) : '',
         url: fileInfo.url
       });
     } catch (error: any) {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: SeverityLevel.Warning,
+        severity: KnownSeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,

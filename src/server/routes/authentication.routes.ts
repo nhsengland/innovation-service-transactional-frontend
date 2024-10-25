@@ -6,7 +6,7 @@ import {
   Configuration,
   LogLevel
 } from '@azure/msal-node';
-import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { KnownSeverityLevel } from 'applicationinsights';
 import axios from 'axios';
 import { randomBytes } from 'crypto';
 import * as dotenv from 'dotenv';
@@ -41,10 +41,10 @@ const confidentialClientConfig: Configuration = {
   },
   system: {
     loggerOptions: {
-      loggerCallback(logLevel: LogLevel, message) {
+      loggerCallback(logLevel: LogLevel, message: string) {
         try {
           getAppInsightsClient().trackTrace({
-            severity: ((4 - logLevel) as SeverityLevel) ?? SeverityLevel.Information, // logLevel is reverse of SeverityLevel
+            severity: getLogLevel(logLevel),
             message: message
           });
         } catch (error) {
@@ -98,7 +98,7 @@ export async function getAccessTokenBySessionId(sessionId: string): Promise<stri
     } catch (error: any) {
       // This will fail if we don't have the token cached but there will be a 401 and a redirect to b2c
       getAppInsightsClient().trackException({
-        severity: SeverityLevel.Information,
+        severity: KnownSeverityLevel.Information,
         exception: error
       });
     }
@@ -111,7 +111,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
   const authenticated = req.session.id && (await getAccessTokenBySessionId(req.session.id));
   if (authenticated) {
     getAppInsightsClient().trackTrace({
-      severity: SeverityLevel.Information,
+      severity: KnownSeverityLevel.Information,
       message: '/session called and user is authenticated',
       properties: {
         params: req.params,
@@ -126,7 +126,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
     res.send('OK');
   } else {
     getAppInsightsClient().trackTrace({
-      severity: SeverityLevel.Information,
+      severity: KnownSeverityLevel.Information,
       message: '/session called and user is NOT authenticated',
       properties: {
         params: req.params,
@@ -162,7 +162,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
     ) {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
-        severity: SeverityLevel.Error,
+        severity: KnownSeverityLevel.Error,
         properties: {
           authenticatedUser: (req.session as any).oid
         }
@@ -173,7 +173,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because no code was provided`,
-        severity: SeverityLevel.Error,
+        severity: KnownSeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -216,7 +216,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         .catch(error => {
           getAppInsightsClient().trackException({
             exception: error,
-            severity: SeverityLevel.Error,
+            severity: KnownSeverityLevel.Error,
             properties: {
               params: req.params,
               query: req.query,
@@ -235,7 +235,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because the state ${state} was not recognized`,
-        severity: SeverityLevel.Warning,
+        severity: KnownSeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -284,7 +284,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     ) {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
-        severity: SeverityLevel.Error,
+        severity: KnownSeverityLevel.Error,
         properties: {
           authenticatedUser: (req.session as any).oid
         }
@@ -295,7 +295,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because no code was provided`,
-        severity: SeverityLevel.Error,
+        severity: KnownSeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -334,7 +334,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
         .catch((error: any) => {
           getAppInsightsClient().trackException({
             exception: error,
-            severity: SeverityLevel.Error,
+            severity: KnownSeverityLevel.Error,
             properties: {
               params: req.params,
               query: req.query,
@@ -351,7 +351,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     .catch(error => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: SeverityLevel.Error,
+        severity: KnownSeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -404,8 +404,25 @@ function deleteAccessTokenBySessionId(sessionId: string): void {
   }
   userSessions.delete(sessionId);
 }
-//#endregion
 
+const getLogLevel = (logLevel: LogLevel): KnownSeverityLevel => {
+  switch (logLevel) {
+    case LogLevel.Error:
+      return KnownSeverityLevel.Error;
+    case LogLevel.Warning:
+      return KnownSeverityLevel.Warning;
+    case LogLevel.Info:
+      return KnownSeverityLevel.Information;
+    case LogLevel.Verbose:
+      return KnownSeverityLevel.Verbose;
+    case LogLevel.Trace:
+      return KnownSeverityLevel.Verbose;
+    default:
+      return KnownSeverityLevel.Information;
+  }
+};
+
+//#endregion
 export default authenticationRouter;
 
 // Didn't create from previous seems it wasn't used

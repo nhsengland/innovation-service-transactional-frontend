@@ -5,7 +5,7 @@ import * as https from 'https';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
-import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
+import { KnownSeverityLevel } from 'applicationinsights';
 import { getAppInsightsClient } from 'src/globals';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
@@ -60,7 +60,9 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] })
+        ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] }),
+        ...(req.headers['request-id'] && { 'request-id': req.headers['request-id'] })
+        //...(req.headers['traceparent'] && { traceparent: req.headers['traceparent'] })
       }
     };
 
@@ -72,7 +74,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
     const fail = (error: any) => {
       getAppInsightsClient().trackTrace({
         message: `Error calling API URL: ${url}`,
-        severity: SeverityLevel.Warning,
+        severity: KnownSeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -130,7 +132,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: SeverityLevel.Warning,
+        severity: KnownSeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -156,7 +158,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: SeverityLevel.Warning,
+        severity: KnownSeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,

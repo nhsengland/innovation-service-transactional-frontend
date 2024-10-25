@@ -1,3 +1,4 @@
+import { KnownSeverityLevel } from 'applicationinsights';
 import * as express from 'express';
 import { getAppInsightsClient } from '../../globals';
 import { ENVIRONMENT } from '../config/constants.config';
@@ -26,7 +27,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, 
 
         client.trackTrace({
           message: 'PDFGenerator Success',
-          severity: 0,
+          severity: KnownSeverityLevel.Information,
           properties: {
             params: req.params,
             query: req.query,
@@ -48,7 +49,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, 
         const client = getAppInsightsClient();
         client.trackException({
           exception: error,
-          severity: 3,
+          severity: KnownSeverityLevel.Error,
           properties: {
             params: req.params,
             query: req.query,
@@ -67,7 +68,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, 
     const client = getAppInsightsClient();
     client.trackException({
       exception: error,
-      severity: 3,
+      severity: KnownSeverityLevel.Error,
       properties: {
         params: req.params,
         query: req.query,
