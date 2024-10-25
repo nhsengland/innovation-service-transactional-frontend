@@ -1,4 +1,4 @@
-import { KnownSeverityLevel } from 'applicationinsights';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from '../../globals';
 
 export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: any) => {
@@ -6,7 +6,7 @@ export const exceptionLoggingMiddleware = (err: any, req: any, res: any, next: a
 
   client.trackException({
     exception: err,
-    severity: KnownSeverityLevel.Error,
+    severity: SeverityLevel.Error,
     properties: {
       params: req.params,
       query: req.query,

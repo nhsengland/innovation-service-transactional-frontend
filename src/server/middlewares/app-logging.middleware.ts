@@ -1,4 +1,4 @@
-import { KnownSeverityLevel } from 'applicationinsights';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from '../../globals';
 
 export const appLoggingMiddleware = (req: any, res: any, next: any) => {
@@ -7,7 +7,7 @@ export const appLoggingMiddleware = (req: any, res: any, next: any) => {
 
     client.trackTrace({
       message: `[${req.method}] ${req.url} requested by ${req.session.oid ?? 'anonymous'}`,
-      severity: KnownSeverityLevel.Verbose,
+      severity: SeverityLevel.Verbose,
       properties: {
         params: req.params,
         query: req.query,

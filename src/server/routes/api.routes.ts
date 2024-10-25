@@ -5,7 +5,7 @@ import * as https from 'https';
 
 import { ENVIRONMENT } from '../config/constants.config';
 
-import { KnownSeverityLevel } from 'applicationinsights';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from 'src/globals';
 import { getAccessTokenBySessionId } from './authentication.routes';
 
@@ -74,7 +74,7 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
     const fail = (error: any) => {
       getAppInsightsClient().trackTrace({
         message: `Error calling API URL: ${url}`,
-        severity: KnownSeverityLevel.Warning,
+        severity: SeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -132,7 +132,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-transfers/:id/chec
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: KnownSeverityLevel.Warning,
+        severity: SeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -158,7 +158,7 @@ apiRouter.get(`${ENVIRONMENT.BASE_PATH}/innovators/innovation-collaborations/:id
     .catch((error: any) => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: KnownSeverityLevel.Warning,
+        severity: SeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,

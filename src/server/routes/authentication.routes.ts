@@ -6,7 +6,7 @@ import {
   Configuration,
   LogLevel
 } from '@azure/msal-node';
-import { KnownSeverityLevel } from 'applicationinsights';
+import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import axios from 'axios';
 import { randomBytes } from 'crypto';
 import * as dotenv from 'dotenv';
@@ -98,7 +98,7 @@ export async function getAccessTokenBySessionId(sessionId: string): Promise<stri
     } catch (error: any) {
       // This will fail if we don't have the token cached but there will be a 401 and a redirect to b2c
       getAppInsightsClient().trackException({
-        severity: KnownSeverityLevel.Information,
+        severity: SeverityLevel.Information,
         exception: error
       });
     }
@@ -111,7 +111,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
   const authenticated = req.session.id && (await getAccessTokenBySessionId(req.session.id));
   if (authenticated) {
     getAppInsightsClient().trackTrace({
-      severity: KnownSeverityLevel.Information,
+      severity: SeverityLevel.Information,
       message: '/session called and user is authenticated',
       properties: {
         params: req.params,
@@ -126,7 +126,7 @@ authenticationRouter.head(`${ENVIRONMENT.BASE_PATH}/session`, async (req, res) =
     res.send('OK');
   } else {
     getAppInsightsClient().trackTrace({
-      severity: KnownSeverityLevel.Information,
+      severity: SeverityLevel.Information,
       message: '/session called and user is NOT authenticated',
       properties: {
         params: req.params,
@@ -162,7 +162,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
     ) {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
-        severity: KnownSeverityLevel.Error,
+        severity: SeverityLevel.Error,
         properties: {
           authenticatedUser: (req.session as any).oid
         }
@@ -173,7 +173,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because no code was provided`,
-        severity: KnownSeverityLevel.Error,
+        severity: SeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -216,7 +216,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         .catch(error => {
           getAppInsightsClient().trackException({
             exception: error,
-            severity: KnownSeverityLevel.Error,
+            severity: SeverityLevel.Error,
             properties: {
               params: req.params,
               query: req.query,
@@ -235,7 +235,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because the state ${state} was not recognized`,
-        severity: KnownSeverityLevel.Warning,
+        severity: SeverityLevel.Warning,
         properties: {
           params: req.params,
           query: req.query,
@@ -284,7 +284,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     ) {
       getAppInsightsClient().trackTrace({
         message: `[${req.method}] ${req.url} requested by ${(req.session as any).oid ?? 'anonymous'} canceled request`,
-        severity: KnownSeverityLevel.Error,
+        severity: SeverityLevel.Error,
         properties: {
           authenticatedUser: (req.session as any).oid
         }
@@ -295,7 +295,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
         message: `[${req.method}] ${req.url} requested by ${
           (req.session as any).oid ?? 'anonymous'
         } failed because no code was provided`,
-        severity: KnownSeverityLevel.Error,
+        severity: SeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -334,7 +334,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
         .catch((error: any) => {
           getAppInsightsClient().trackException({
             exception: error,
-            severity: KnownSeverityLevel.Error,
+            severity: SeverityLevel.Error,
             properties: {
               params: req.params,
               query: req.query,
@@ -351,7 +351,7 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signup/callback`, (req, res) 
     .catch(error => {
       getAppInsightsClient().trackException({
         exception: error,
-        severity: KnownSeverityLevel.Error,
+        severity: SeverityLevel.Error,
         properties: {
           params: req.params,
           query: req.query,
@@ -405,20 +405,20 @@ function deleteAccessTokenBySessionId(sessionId: string): void {
   userSessions.delete(sessionId);
 }
 
-const getLogLevel = (logLevel: LogLevel): KnownSeverityLevel => {
+const getLogLevel = (logLevel: LogLevel): SeverityLevel => {
   switch (logLevel) {
     case LogLevel.Error:
-      return KnownSeverityLevel.Error;
+      return SeverityLevel.Error;
     case LogLevel.Warning:
-      return KnownSeverityLevel.Warning;
+      return SeverityLevel.Warning;
     case LogLevel.Info:
-      return KnownSeverityLevel.Information;
+      return SeverityLevel.Information;
     case LogLevel.Verbose:
-      return KnownSeverityLevel.Verbose;
+      return SeverityLevel.Verbose;
     case LogLevel.Trace:
-      return KnownSeverityLevel.Verbose;
+      return SeverityLevel.Verbose;
     default:
-      return KnownSeverityLevel.Information;
+      return SeverityLevel.Information;
   }
 };
 
