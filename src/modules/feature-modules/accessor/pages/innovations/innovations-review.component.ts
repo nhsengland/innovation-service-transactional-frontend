@@ -75,6 +75,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           value: InnovationSupportCloseReasonEnum | null;
           label: string | null;
         };
+        isShared: boolean;
       } | null;
       suggestion: {
         suggestedBy: string[];
@@ -142,6 +143,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'support.updatedBy',
+            'support.isShared',
             'support.closeReason',
             'statistics.notifications',
             'engagingOrganisations'
@@ -265,6 +267,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'assessment.finishedAt',
             'support.status',
             'support.updatedAt',
+            'support.isShared',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -290,6 +293,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt',
             'support.updatedBy',
             'support.closeReason',
+            'support.isShared',
             'statistics.notifications',
             'engagingOrganisations'
           ],
@@ -339,10 +343,10 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               mainCategory: item.mainCategory
                 ? item.mainCategory === 'OTHER'
                   ? 'Other'
-                  : this.stores.schema
+                  : (this.stores.schema
                       .getIrSchemaTranslationsMap()
                       ['questions'].get('categories')
-                      ?.items.get(item.mainCategory)?.label ?? item.mainCategory
+                      ?.items.get(item.mainCategory)?.label ?? item.mainCategory)
                 : '',
               countryName: item.countryName,
               postCode: item.postcode,
@@ -361,7 +365,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
                   label: this.translate(
                     'shared.catalog.innovation.innovations_list.closed_reasons.' + item.support.closeReason
                   )
-                }
+                },
+                isShared: item.support.isShared ?? true // Not asking for the tabs where it is true, shouldn't be used anyway
               },
               suggestion: item.suggestion && {
                 suggestedBy: item.suggestion.suggestedBy,
