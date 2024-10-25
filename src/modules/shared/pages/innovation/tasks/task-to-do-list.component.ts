@@ -45,8 +45,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = this.stores.other.innovation();
-    this.isArchived = this.stores.other.isArchived();
+    this.innovation = this.ctx.innovation.innovation();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.allTasksList = new TableModel({
       visibleColumns: {

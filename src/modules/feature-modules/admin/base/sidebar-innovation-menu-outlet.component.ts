@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { InnovationRecordSchemaStore, InnovationContextStore } from '@modules/stores';
+import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { Subscription, filter } from 'rxjs';
@@ -24,7 +24,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private innovationCtxStore: InnovationContextStore,
+    private ctx: CtxStore,
     private irSchemaStore: InnovationRecordSchemaStore
   ) {
     this.subscriptions.add(
@@ -46,7 +46,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.innovationCtxStore.innovation();
+      const innovation = this.ctx.innovation.innovation();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('admin', innovation.id);
       this._sidebarItems = [
@@ -72,7 +72,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
     this.isInnovationRecordPage = this.router.url.endsWith('/record');
 
-    this.isInnovationInArchivedStatus = this.innovationCtxStore.isArchived();
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;

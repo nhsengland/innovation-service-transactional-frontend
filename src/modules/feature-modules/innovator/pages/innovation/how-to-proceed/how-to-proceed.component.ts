@@ -54,7 +54,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.action = this.activatedRoute.snapshot.queryParams.action;
 
-    const isOwner = this.stores.other.isOwner();
+    const isOwner = this.ctx.innovation.isOwner();
 
     if (isOwner) {
       this.formfieldAction.items.splice(

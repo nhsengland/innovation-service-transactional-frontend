@@ -68,7 +68,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.sectionInfo = {
       id: '',

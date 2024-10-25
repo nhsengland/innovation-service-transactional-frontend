@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { InnovationNeedsAssessmentInfoDTO } from '../services/innovations.dtos';
-import { InnovationContextStore, ContextStore } from '@modules/stores';
+import { ContextStore, CtxStore } from '@modules/stores';
 
 /**
  * Note: With the creation of the context store, this can be changed to a guard in the future,
@@ -18,13 +18,13 @@ export class InnovationAssessmentDataResolver {
     private router: Router,
     private logger: NGXLogger,
     private contextStore: ContextStore,
-    private innovationCtxStore: InnovationContextStore
+    private ctx: CtxStore
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<null | InnovationNeedsAssessmentInfoDTO> {
     return this.contextStore.getOrLoadAssessment(route.params.innovationId, route.params.assessmentId).pipe(
       catchError(error => {
-        this.innovationCtxStore.clear$.next();
+        this.ctx.innovation.clear$.next();
         this.contextStore.clearAssessment();
         this.router.navigateByUrl('error/forbidden-innovation');
 

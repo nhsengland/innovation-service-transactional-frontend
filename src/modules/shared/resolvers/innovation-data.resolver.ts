@@ -4,7 +4,7 @@ import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { AuthenticationStore, InnovationContextStore } from '@modules/stores';
+import { AuthenticationStore, CtxStore } from '@modules/stores';
 
 /**
  * Note: With the creation of the context store, this can be changed to a guard in the future,
@@ -16,16 +16,16 @@ export class InnovationDataResolver {
     private router: Router,
     private logger: NGXLogger,
     private authenticationStore: AuthenticationStore,
-    private innovationStoreService: InnovationContextStore
+    private ctx: CtxStore
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<null | { id: string; name: string }> {
-    return this.innovationStoreService
+    return this.ctx.innovation
       .getOrLoadInnovation(route.params.innovationId, this.authenticationStore.getUserContextInfo())
       .pipe(
         map(response => ({ id: response.id, name: response.name })),
         catchError(error => {
-          this.innovationStoreService.clear$.next();
+          this.ctx.innovation.clear$.next();
           this.router.navigateByUrl('error/forbidden-innovation');
           this.logger.error('Error fetching data innovation data', error);
           return of(null);

@@ -95,6 +95,7 @@
         >
           Upload a new document
         </button>
+
         <p *ngIf="sectionSummaryData.documentsList.length === 0">There are no documents uploaded to this section.</p>
         <dl *ngIf="sectionSummaryData.documentsList.length > 0" class="nhsuk-summary-list">
           <div *ngFor="let document of sectionSummaryData.documentsList; let i = index" class="nhsuk-summary-list__row">
@@ -120,7 +121,7 @@
 
       <ng-container
         *ngIf="
-          (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+          (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
           (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
         "
       >
@@ -131,12 +132,14 @@
         >
           Assign a task for this section
         </button>
-
       </ng-container>
-        
-      <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+
+      <div
+        *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
+        class="nhsuk-inset-text nhsuk-u-margin-top-0"
+      >
         <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
       </div>
 
       <ng-container *ngIf="isAssessmentType" [ngSwitch]="innovation.status">

@@ -31,7 +31,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
   constructor(private innovationsService: InnovationsService) {
     super();
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     const user = this.stores.authentication.getUserInfo();
     this.user = { id: user.id, name: user.displayName, email: user.email };

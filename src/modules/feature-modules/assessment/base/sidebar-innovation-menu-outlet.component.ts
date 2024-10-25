@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { InnovationContextStore, InnovationRecordSchemaStore } from '@modules/stores';
+import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 @Component({
@@ -29,7 +29,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private router: Router,
     private scroller: ViewportScroller,
     private irSchemaStore: InnovationRecordSchemaStore,
-    private innovationCtxStore: InnovationContextStore
+    private ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -50,7 +50,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.innovationCtxStore.innovation();
+      const innovation = this.ctx.innovation.innovation();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('assessment', innovation.id);
       this._sidebarItems = [
@@ -76,7 +76,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.isAllSectionsDetailsPage = this.router.url.includes('/all');
     this.isInnovationRecordPage = this.router.url.endsWith('/record');
 
-    this.isInnovationInArchivedStatus = this.innovationCtxStore.isArchived();
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;

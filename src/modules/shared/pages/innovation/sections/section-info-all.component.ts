@@ -84,7 +84,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   ) {
     super();
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.sectionIdFragment = this.activatedRoute.snapshot.fragment;
@@ -104,7 +104,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInnovationInArchivedStatus = this.stores.other.isArchived();
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =

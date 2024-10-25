@@ -70,14 +70,14 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     this.userType = this.stores.authentication.getUserType() ?? '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     // Flags
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isArchived = this.stores.other.isArchived();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     if (this.isQualifyingAccessorRole) {
       this.setPageTitle('Suggest organisations to support');

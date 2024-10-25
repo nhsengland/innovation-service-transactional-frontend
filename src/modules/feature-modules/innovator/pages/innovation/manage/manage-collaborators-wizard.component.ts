@@ -39,7 +39,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
 
     this.innovationCollaboratorId = this.activatedRoute.snapshot.params.collaboratorId ?? null;
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
     this.baseUrl = `innovator/innovations/${this.innovation.id}/manage/innovation/collaborators`;
     this.action = this.router.url.endsWith('edit') ? 'update' : 'create';
     this.submitButton.label = this.action === 'create' ? 'Send invitation' : 'Update collaborator';

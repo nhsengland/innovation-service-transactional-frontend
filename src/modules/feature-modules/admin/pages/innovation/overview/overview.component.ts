@@ -62,8 +62,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.other.innovation();
-    this.isArchived = this.stores.other.isArchived();
+    this.innovation = this.ctx.innovation.innovation();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }

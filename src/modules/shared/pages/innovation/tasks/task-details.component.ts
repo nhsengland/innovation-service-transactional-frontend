@@ -36,7 +36,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   canReopen = false;
   canSendMessage = false;
 
-  readonly innovation = this.stores.other.innovation();
+  readonly innovation = this.ctx.innovation.innovation();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -56,7 +56,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.stores.other.isArchived();
+    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {

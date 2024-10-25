@@ -34,12 +34,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   ) {
     super();
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
 
-    this.isArchived = this.stores.other.isArchived();
+    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {

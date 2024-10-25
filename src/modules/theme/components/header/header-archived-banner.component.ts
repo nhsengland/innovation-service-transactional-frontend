@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AuthenticationStore, InnovationContextStore } from '@modules/stores';
+import { AuthenticationStore, CtxStore } from '@modules/stores';
 import { filter } from 'rxjs';
 
 @Component({
@@ -20,13 +20,13 @@ export class HeaderArchivedBannerComponent implements OnInit {
   constructor(
     private router: Router,
     private authentication: AuthenticationStore,
-    private innovationStore: InnovationContextStore
+    private ctx: CtxStore
   ) {
     this.isInnovator.set(this.authentication.isInnovatorType());
     this.isAdmin.set(this.authentication.isAdminRole());
-    const innovation = this.innovationStore.innovation();
+    const innovation = this.ctx.innovation.innovation();
     this.statusUpdatedAt.set(innovation.statusUpdatedAt);
-    this.isOwner.set(this.innovationStore.isOwner());
+    this.isOwner.set(this.ctx.innovation.isOwner());
 
     this.regEx = new RegExp(/innovations\/[\w\-]+\/([\w\-]+|manage\/innovation)(\?.*)?$/);
 
@@ -40,6 +40,6 @@ export class HeaderArchivedBannerComponent implements OnInit {
   }
 
   private checkShowBanner() {
-    this.showBanner = this.innovationStore.isArchived() && this.regEx.test(this.router.url);
+    this.showBanner = this.ctx.innovation.isArchived() && this.regEx.test(this.router.url);
   }
 }

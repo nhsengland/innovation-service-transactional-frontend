@@ -33,7 +33,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;

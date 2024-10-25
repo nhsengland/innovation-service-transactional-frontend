@@ -5,7 +5,7 @@ import { filter } from 'rxjs/operators';
 
 import { UtilsHelper } from '@app/base/helpers';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { InnovationContextStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -21,7 +21,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private innovationStore: InnovationContextStore
+    private ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -37,7 +37,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   }
 
   private onRouteChange(event?: NavigationEnd): void {
-    const innovation = this.innovationStore.innovation();
+    const innovation = this.ctx.innovation.innovation();
 
     this.data.innovation = {
       id: innovation.id,

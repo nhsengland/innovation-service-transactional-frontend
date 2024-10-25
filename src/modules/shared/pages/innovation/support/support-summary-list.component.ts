@@ -72,7 +72,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     super();
     this.setPageTitle('Support summary');
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     try {
       // Cache holds opened sections in the format ["sectionIndex,unitId", ...]

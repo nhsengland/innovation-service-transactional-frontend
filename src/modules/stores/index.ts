@@ -18,6 +18,7 @@ export { InnovationRecordSchemaStore } from './innovation/innovation-record/inno
 export { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 
 // Ctx
+export { CtxStore } from './ctx/ctx.store';
 // // Innovation
 export { InnovationContextService } from './ctx/innovation/innovation-context.service';
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';

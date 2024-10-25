@@ -37,7 +37,7 @@ export class InnovationChangeAssessorComponent extends CoreComponent implements 
     this.setPageTitle('Assign a new needs assessor to support this innovation');
 
     this.usersService.getUsersList().subscribe(userList => {
-      const innovation = this.stores.other.innovation();
+      const innovation = this.ctx.innovation.innovation();
       this.needsAssessorList = userList.data.filter(i => i.id !== innovation.assignedTo?.id);
 
       this.setBackLink('Go Back', `/assessment/innovations/${this.innovationId}/overview`, `Innovation Overview page`);

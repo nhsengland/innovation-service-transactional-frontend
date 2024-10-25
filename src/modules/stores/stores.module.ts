@@ -12,6 +12,7 @@ import { InnovationRecordSchemaStore } from './innovation/innovation-record/inno
 import { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
+import { CtxStore } from './ctx/ctx.store';
 
 @NgModule({
   providers: [
@@ -23,6 +24,8 @@ import { InnovationContextService } from './ctx/innovation/innovation-context.se
 
     InnovationStore,
     InnovationService,
+
+    CtxStore,
 
     InnovationContextStore,
     InnovationContextService,

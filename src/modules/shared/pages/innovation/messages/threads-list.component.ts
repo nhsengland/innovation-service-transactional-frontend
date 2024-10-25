@@ -47,14 +47,14 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       organisationUnitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
     };
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
-    this.isArchived = this.stores.other.isArchived();
+    this.isArchived = this.ctx.innovation.isArchived();
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
     if (this.stores.authentication.isAssessmentType()) {

@@ -17,7 +17,7 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
-import { InnovationContextStore } from '../ctx/innovation/innovation-context.store';
+import { CtxStore } from '../ctx/ctx.store';
 
 @Injectable()
 export class InnovationService {
@@ -26,7 +26,7 @@ export class InnovationService {
   constructor(
     private http: HttpClient,
     private authenticationStore: AuthenticationStore,
-    private innovationCtxStore: InnovationContextStore,
+    private ctx: CtxStore,
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
@@ -37,7 +37,7 @@ export class InnovationService {
     return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
       finalize(() => {
-        this.innovationCtxStore.clear$.next();
+        this.ctx.innovation.clear$.next();
       })
     );
   }

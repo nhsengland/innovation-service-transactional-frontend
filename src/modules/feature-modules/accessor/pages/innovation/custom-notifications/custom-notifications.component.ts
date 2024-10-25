@@ -29,7 +29,7 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
   ) {
     super();
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.setPageTitle('Custom notifications');
   }

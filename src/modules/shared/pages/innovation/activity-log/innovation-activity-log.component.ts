@@ -36,7 +36,7 @@ export class PageInnovationActivityLogComponent extends CoreComponent implements
 
   constructor(private innovationsService: InnovationsService) {
     super();
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.activitiesList.setOrderBy('createdAt', 'descending');
     this.currentDateOrderBy = 'descending';

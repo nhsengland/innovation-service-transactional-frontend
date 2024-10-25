@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
-import { ContextStore, InnovationContextStore } from '@modules/stores';
+import { ContextStore, CtxStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { UtilsHelper } from '@app/base/helpers';
 
@@ -22,7 +22,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   constructor(
     private router: Router,
     private contextStore: ContextStore,
-    private innovationStore: InnovationContextStore
+    private ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -40,7 +40,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
   }
 
   private onRouteChange(url: string): void {
-    const innovation = this.innovationStore.innovation();
+    const innovation = this.ctx.innovation.innovation();
 
     this.data.innovation = {
       id: innovation.id,

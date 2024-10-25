@@ -63,7 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
     this.isInAssessment = [
@@ -72,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
     ].includes(this.innovation.status);
     this.isInProgress = this.innovation.status === 'IN_PROGRESS';
-    this.isArchived = this.stores.other.isArchived();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }

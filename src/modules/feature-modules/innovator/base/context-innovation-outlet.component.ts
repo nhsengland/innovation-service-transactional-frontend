@@ -8,7 +8,7 @@ import {
   AnnouncementsService
 } from '@modules/feature-modules/announcements/services/announcements.service';
 import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
-import { InnovationContextStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -26,7 +26,7 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
   constructor(
     private router: Router,
     private announcementsService: AnnouncementsService,
-    readonly innovationStore: InnovationContextStore
+    readonly ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -51,7 +51,7 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
   }
 
   private onRouteChange(_event?: NavigationEnd): void {
-    const innovation = this.innovationStore.innovation();
+    const innovation = this.ctx.innovation.innovation();
     if (innovation) {
       this.innovation.update(() => ({
         id: innovation.id,

@@ -69,7 +69,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
     ]).subscribe(([innovationInfo, innovationCollaborators, statistics, submit]) => {
-      const innovationContext = this.stores.other.innovation();
+      const innovationContext = this.ctx.innovation.innovation();
 
       const engagingOrganisationsCount = (innovationInfo.supports ?? []).filter(supports =>
         [InnovationSupportStatusEnum.ENGAGING].includes(supports.status)

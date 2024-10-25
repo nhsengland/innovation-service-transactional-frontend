@@ -67,7 +67,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       this.innovationId
     }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
@@ -75,7 +75,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInnovationInArchivedStatus = this.stores.other.isArchived();
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =

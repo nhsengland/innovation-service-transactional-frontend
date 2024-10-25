@@ -59,7 +59,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
-    this.innovation = this.stores.other.innovation();
+    this.innovation = this.ctx.innovation.innovation();
 
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();

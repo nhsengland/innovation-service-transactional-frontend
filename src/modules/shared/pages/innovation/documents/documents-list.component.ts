@@ -65,8 +65,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     super();
     this.setPageTitle('Documents');
 
-    this.innovation = this.stores.other.innovation();
-    this.isArchived = this.stores.other.isArchived();
+    this.innovation = this.ctx.innovation.innovation();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();

@@ -9,13 +9,13 @@ import {
   AuthenticationStore,
   ContextService,
   ContextStore,
+  CtxStore,
   InnovationRecordSchemaService
 } from '@modules/stores';
 
 import { InnovationService } from './innovation.service';
 
 import { UserRoleEnum } from '../authentication/authentication.enums';
-import { InnovationContextStore } from '../ctx/innovation/innovation-context.store';
 
 describe('Stores/Innovation/InnovationService', () => {
   let httpMock: HttpTestingController;
@@ -35,7 +35,7 @@ describe('Stores/Innovation/InnovationService', () => {
         ContextService,
         InnovationService,
         InnovationRecordSchemaService,
-        InnovationContextStore,
+        CtxStore,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
