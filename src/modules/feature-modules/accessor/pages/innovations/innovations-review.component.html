@@ -90,7 +90,7 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
-                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closeReason?.value === 'STOP_SHARE'; else hasLink">
+                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || !item.support?.isShared; else hasLink">
                       <span> {{ item.name }} </span>
                     </ng-container>
                     <ng-template #hasLink>
