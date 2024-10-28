@@ -10,6 +10,8 @@ import {
   ContextService,
   ContextStore,
   CtxStore,
+  InnovationContextService,
+  InnovationContextStore,
   InnovationRecordSchemaService
 } from '@modules/stores';
 
@@ -35,6 +37,8 @@ describe('Stores/Innovation/InnovationService', () => {
         ContextService,
         InnovationService,
         InnovationRecordSchemaService,
+        InnovationContextStore,
+        InnovationContextService,
         CtxStore,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]

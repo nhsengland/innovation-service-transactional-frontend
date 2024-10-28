@@ -52,7 +52,6 @@ export class CoreComponent implements OnDestroy {
     context: ContextStore;
     innovation: InnovationStore;
     schema: InnovationRecordSchemaStore;
-    other: InnovationContextStore;
   };
 
   protected ctx: CtxStore;
@@ -96,8 +95,7 @@ export class CoreComponent implements OnDestroy {
       authentication: injector.get(AuthenticationStore),
       context: injector.get(ContextStore),
       innovation: injector.get(InnovationStore),
-      schema: injector.get(InnovationRecordSchemaStore),
-      other: injector.get(InnovationContextStore)
+      schema: injector.get(InnovationRecordSchemaStore)
     };
 
     this.ctx = injector.get(CtxStore);
