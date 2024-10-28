@@ -16,6 +16,11 @@ export const initAppInsights = () => {
           envelope.data.baseData.properties['authenticatedUser'] = oid;
           envelope.data.baseData.properties['session'] = context?.['http.ServerRequest']?.sessionID;
         }
+
+        // Handle 401 as successes
+        if (envelope.data.baseData.responseCode === '401') {
+          envelope.data.baseData.success = true;
+        }
       }
       return true;
     });
