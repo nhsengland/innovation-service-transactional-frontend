@@ -51,8 +51,7 @@ export class AppComponent {
       };
       const appInsights = new ApplicationInsights({
         config: {
-          connectionString:
-            'InstrumentationKey=1477c2e2-3c23-4553-9aad-88e18f2c1d2d;IngestionEndpoint=https://uksouth-1.in.applicationinsights.azure.com/;LiveEndpoint=https://uksouth.livediagnostics.monitor.azure.com/;ApplicationId=913c6b33-c768-4747-b6c5-c53472de9c32',
+          connectionString: this.environmentStore.ENV.APPLICATIONINSIGHTS_CONNECTION_STRING,
           // *** Add the Click Analytics plug-in. ***
           extensions: [angularPlugin, clickPluginInstance],
           extensionConfig: {

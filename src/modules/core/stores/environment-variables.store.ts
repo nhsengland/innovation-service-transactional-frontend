@@ -8,6 +8,7 @@ type envVariablesType = {
   BASE_PATH: string;
   LOG_LEVEL: NgxLoggerLevel;
   ENABLE_ANALYTICS: boolean;
+  APPLICATIONINSIGHTS_CONNECTION_STRING: string;
   TAG_MEASUREMENT_ID: string;
   GTM_ID: string;
 };
@@ -25,6 +26,7 @@ export class EnvironmentVariablesStore {
     BASE_PATH: '/',
     LOG_LEVEL: NgxLoggerLevel.ERROR,
     ENABLE_ANALYTICS: true,
+    APPLICATIONINSIGHTS_CONNECTION_STRING: '',
     TAG_MEASUREMENT_ID: '',
     GTM_ID: ''
   };
@@ -77,6 +79,7 @@ export class EnvironmentVariablesStore {
           BASE_PATH: this.parseBasePath(appServerENV.BASE_PATH),
           LOG_LEVEL: NgxLoggerLevel[appServerENV.LOG_LEVEL],
           ENABLE_ANALYTICS: appServerENV.ENABLE_ANALYTICS,
+          APPLICATIONINSIGHTS_CONNECTION_STRING: appServerENV.APPLICATIONINSIGHTS_CONNECTION_STRING,
           TAG_MEASUREMENT_ID: appServerENV.TAG_MEASUREMENT_ID,
           GTM_ID: appServerENV.GTM_ID
         };
@@ -90,6 +93,7 @@ export class EnvironmentVariablesStore {
           BASE_PATH: this.parseBasePath(browserEnv.BASE_PATH),
           LOG_LEVEL: NgxLoggerLevel[browserEnv.LOG_LEVEL],
           ENABLE_ANALYTICS: browserEnv.ENABLE_ANALYTICS,
+          APPLICATIONINSIGHTS_CONNECTION_STRING: browserEnv.APPLICATIONINSIGHTS_CONNECTION_STRING,
           TAG_MEASUREMENT_ID: browserEnv.TAG_MEASUREMENT_ID,
           GTM_ID: browserEnv.GTM_ID
         };
