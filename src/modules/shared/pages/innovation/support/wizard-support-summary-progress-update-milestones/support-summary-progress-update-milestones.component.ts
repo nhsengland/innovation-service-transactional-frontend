@@ -60,7 +60,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
 

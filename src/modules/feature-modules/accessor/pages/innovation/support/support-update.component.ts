@@ -10,16 +10,16 @@ import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/sh
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { ContextInnovationType, ContextPageLayoutType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { switchMap } from 'rxjs/operators';
 import { omit } from 'lodash';
 import { ObservableInput, forkJoin } from 'rxjs';
-import { timingSafeEqual } from 'crypto';
 import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -121,7 +121,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;

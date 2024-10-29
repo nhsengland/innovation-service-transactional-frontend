@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators, FormGroup } from '@app/base/forms';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UntypedFormControl } from '@angular/forms';
@@ -34,7 +34,7 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
       urlBasePath: this.stores.authentication.userUrlBasePath()
     };
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     this.messageId = this.activatedRoute.snapshot.params.messageId;
   }

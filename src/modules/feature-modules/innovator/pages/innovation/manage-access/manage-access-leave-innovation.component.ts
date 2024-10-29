@@ -22,7 +22,7 @@ export class PageInnovationManageAccessLeaveInnovationComponent extends CoreComp
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.setPageTitle(`Leave '${this.innovation.name}' innovation`);
     this.setBackLink('Go back', `innovator/innovations/${this.innovation.id}/manage/access`);

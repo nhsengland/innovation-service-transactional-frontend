@@ -8,17 +8,15 @@ import { ENV } from '@tests/app.mocks';
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
 
 import { InnovationService } from './innovation.service';
-import { InnovationRecordSchemaService, StoresModule } from '@modules/stores';
 
 describe('Core/Services/InnovationService', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let service: InnovationService;
-  let schemaService: InnovationRecordSchemaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, CoreModule, StoresModule],
+      imports: [HttpClientTestingModule, CoreModule],
       providers: [{ provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }]
     });
 
@@ -27,7 +25,6 @@ describe('Core/Services/InnovationService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     service = TestBed.inject(InnovationService);
-    schemaService = TestBed.inject(InnovationRecordSchemaService);
   });
 
   afterEach(() => {
@@ -39,13 +36,16 @@ describe('Core/Services/InnovationService', () => {
     const expected = responseMock;
     let response: any = null;
 
-    service
-      .getInnovationTransfer('id01')
-      .subscribe({ next: success => (response = success), error: error => (response = error) });
-
-    const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/innovators/innovation-transfers/id01/check`);
-    httpRequest.flush(responseMock);
-    expect(httpRequest.request.method).toBe('GET');
-    expect(response).toBe(expected);
+    service.getInnovationTransfer('id01').subscribe({
+      next: response => {
+        const httpRequest = httpMock.expectOne(
+          `${envVariablesStore.APP_URL}/innovators/innovation-transfers/id01/check`
+        );
+        httpRequest.flush(responseMock);
+        expect(httpRequest.request.method).toBe('GET');
+        expect(response).toBe(expected);
+      },
+      error: error => (response = error)
+    });
   });
 });

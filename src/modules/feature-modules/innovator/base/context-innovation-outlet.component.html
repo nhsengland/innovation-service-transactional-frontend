@@ -1,7 +1,7 @@
-<div id="context-innovation-outlet" *ngIf="innovation" class="nhsuk-u-padding-top-3">
+<div id="context-innovation-outlet" class="nhsuk-u-padding-top-3">
   <div class="d-flex align-items-center justify-content-space-between nhsuk-u-padding-bottom-3">
-    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation.name }}</p>
-    <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation.userIsOwner ? "Innovation owner" : "Innovation collaborator" }}</p>
+    <p class="nhsuk-heading-l nhsuk-u-margin-bottom-0">{{ innovation().name }}</p>
+    <p class="nhsuk-caption-m nhsuk-u-margin-0">{{ innovation().userIsOwner ? "Innovation owner" : "Innovation collaborator" }}</p>
   </div>
 
   <theme-header-archived-banner />

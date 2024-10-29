@@ -14,7 +14,7 @@ import {
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { DateISOType } from '@app/base/types';
@@ -72,7 +72,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     super();
     this.setPageTitle('Support summary');
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     try {
       // Cache holds opened sections in the format ["sectionIndex,unitId", ...]

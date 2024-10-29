@@ -4,7 +4,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
@@ -67,7 +67,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       this.innovationId
     }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
@@ -75,7 +75,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInnovationInArchivedStatus = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
     this.showSupportingTeamsShareRequestSection =
       this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
     this.showInnovatorShareRequestSection =
