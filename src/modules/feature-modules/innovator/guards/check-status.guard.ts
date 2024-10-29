@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { AuthenticationStore, ContextStore } from '@modules/stores';
+import { AuthenticationStore, CtxStore } from '@modules/stores';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, map } from 'rxjs/operators';
@@ -8,10 +8,10 @@ import { of } from 'rxjs';
 export function checkStatusGuard(statusList: InnovationStatusEnum[], blockList: boolean = false): CanActivateFn {
   return (route: ActivatedRouteSnapshot) => {
     const router: Router = inject(Router);
-    const contextStore: ContextStore = inject(ContextStore);
+    const ctx: CtxStore = inject(CtxStore);
     const authenticationStore: AuthenticationStore = inject(AuthenticationStore);
 
-    return contextStore.getOrLoadInnovation(route.params.innovationId, authenticationStore.getUserContextInfo()).pipe(
+    return ctx.innovation.getOrLoadInnovation(route.params.innovationId, authenticationStore.getUserContextInfo()).pipe(
       map(contextInfo => {
         const allowStatusCheck = blockList
           ? !statusList.includes(contextInfo.status)

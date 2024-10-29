@@ -10,10 +10,10 @@ import {
   InnovationExportRequestStatusEnum,
   InnovationGroupedStatusEnum,
   InnovationStatusEnum,
+  InnovationSupportCloseReasonEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
-import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 // Innovations.
 export type InnovationsListFiltersType = Partial<{
@@ -75,6 +75,7 @@ export type InnovationListSelectType =
   | 'support.updatedAt'
   | 'support.updatedBy'
   | 'support.closeReason'
+  | 'support.isShared'
   | 'assessment.id'
   | 'assessment.majorVersion'
   | 'assessment.minorVersion'
@@ -121,6 +122,7 @@ export type InnovationListFullDTO = {
     updatedAt: DateISOType | null;
     updatedBy: string | null;
     closeReason: InnovationSupportCloseReasonEnum | null;
+    isShared: boolean;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: {

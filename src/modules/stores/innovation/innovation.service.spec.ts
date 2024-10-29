@@ -9,6 +9,9 @@ import {
   AuthenticationStore,
   ContextService,
   ContextStore,
+  CtxStore,
+  InnovationContextService,
+  InnovationContextStore,
   InnovationRecordSchemaService
 } from '@modules/stores';
 
@@ -20,7 +23,6 @@ describe('Stores/Innovation/InnovationService', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
-  let contextStore: ContextStore;
 
   let service: InnovationService;
   let schemaService: InnovationRecordSchemaService;
@@ -35,6 +37,9 @@ describe('Stores/Innovation/InnovationService', () => {
         ContextService,
         InnovationService,
         InnovationRecordSchemaService,
+        InnovationContextStore,
+        InnovationContextService,
+        CtxStore,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
@@ -42,14 +47,12 @@ describe('Stores/Innovation/InnovationService', () => {
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
-    contextStore = TestBed.inject(ContextStore);
 
     service = TestBed.inject(InnovationService);
     schemaService = TestBed.inject(InnovationRecordSchemaService);
 
     authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
     authenticationStore.getUserId = () => 'user001';
-    contextStore.clearInnovation = () => {};
   });
 
   afterEach(() => {

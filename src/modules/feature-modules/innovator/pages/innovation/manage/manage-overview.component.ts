@@ -28,11 +28,8 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
     super();
     this.setPageTitle('Manage innovation');
 
-    this.innovation = this.stores.context.getInnovation();
-
-    if (this.innovation.status === InnovationStatusEnum.ARCHIVED) {
-      this.isArchived = true;
-    }
+    this.innovation = this.ctx.innovation.info();
+    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {

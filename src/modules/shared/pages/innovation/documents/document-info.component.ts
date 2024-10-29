@@ -34,12 +34,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
 
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {
@@ -51,9 +51,9 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           ...response,
           locationLink:
             response.context.type === 'INNOVATION_SECTION'
-              ? getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
+              ? (getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
                   item => item.value === response.context.id
-                )?.label ?? '[Archived section]'
+                )?.label ?? '[Archived section]')
               : null
         };
 

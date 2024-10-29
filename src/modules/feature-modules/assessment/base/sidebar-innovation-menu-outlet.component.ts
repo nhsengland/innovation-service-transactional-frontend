@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { ContextStore, InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
+import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 @Component({
@@ -27,15 +27,14 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private innovationStore: InnovationStore,
     private scroller: ViewportScroller,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private irSchemaStore: InnovationRecordSchemaStore,
+    private ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.onRouteChange())
+        .subscribe(() => this.onRouteChange())
     );
 
     this.onRouteChange();
@@ -51,7 +50,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
 
   private generateSidebar(): void {
     if (this.sidebarItems.length === 0) {
-      const innovation = this.contextStore.getInnovation();
+      const innovation = this.ctx.innovation.info();
 
       this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('assessment', innovation.id);
       this._sidebarItems = [
@@ -77,7 +76,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     this.isAllSectionsDetailsPage = this.router.url.includes('/all');
     this.isInnovationRecordPage = this.router.url.endsWith('/record');
 
-    this.isInnovationInArchivedStatus = this.contextStore.getInnovation().status === InnovationStatusEnum.ARCHIVED;
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
 
     if (this.router.url.includes('sections')) {
       this.showHeading = true;

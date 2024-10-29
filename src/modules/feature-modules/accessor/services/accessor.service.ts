@@ -177,7 +177,7 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId });
       return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        finalize(() => this.stores.context.clearInnovation())
+        finalize(() => this.ctx.innovation.clear())
       );
     } else {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
@@ -185,7 +185,7 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId, supportId });
       return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        finalize(() => this.stores.context.clearInnovation())
+        finalize(() => this.ctx.innovation.clear())
       );
     }
   }

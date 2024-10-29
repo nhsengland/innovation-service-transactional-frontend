@@ -8,7 +8,7 @@ import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@ap
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import {
@@ -87,7 +87,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       role: this.stores.authentication.getUserContextInfo()?.type ?? ''
     };
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
     const documentAction = this.activatedRoute.snapshot.queryParams.action;
 

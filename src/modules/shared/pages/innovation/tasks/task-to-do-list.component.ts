@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
@@ -45,8 +45,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.innovation = this.stores.context.getInnovation();
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.innovation = this.ctx.innovation.info();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.allTasksList = new TableModel({
       visibleColumns: {
