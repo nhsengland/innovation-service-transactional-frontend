@@ -62,7 +62,6 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
         Authorization: `Bearer ${accessToken}`,
         ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] }),
         ...(req.headers['request-id'] && { 'request-id': req.headers['request-id'] })
-        //...(req.headers['traceparent'] && { traceparent: req.headers['traceparent'] })
       }
     };
 
