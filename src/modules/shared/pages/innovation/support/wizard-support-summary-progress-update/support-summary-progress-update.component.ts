@@ -472,11 +472,9 @@ export class WizardInnovationSupportSummaryProgressUpdateComponent extends CoreC
           })
         }
       }),
-      createdAt: DatesHelper.getDateString(
-        this.wizard.data.dateStep.year,
-        this.wizard.data.dateStep.month,
-        this.wizard.data.dateStep.day
-      )
+      createdAt: DatesHelper.setCurrentTimeToDate(
+        new Date(+this.wizard.data.dateStep.year, +this.wizard.data.dateStep.month - 1, +this.wizard.data.dateStep.day)
+      ).toISOString()
     };
 
     this.innovationsService.createSupportSummaryProgressUpdate(this.innovation.id, body).subscribe({

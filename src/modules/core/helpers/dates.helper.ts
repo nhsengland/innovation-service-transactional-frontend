@@ -53,4 +53,15 @@ export class DatesHelper {
     const [year, month, day] = date.slice(0, 10).split('-');
     return { day, month, year };
   }
+
+  static setCurrentTimeToDate(date: Date): Date {
+    const currentDate = new Date();
+    date.setHours(
+      currentDate.getHours(),
+      currentDate.getMinutes(),
+      currentDate.getSeconds(),
+      currentDate.getMilliseconds()
+    );
+    return date;
+  }
 }
