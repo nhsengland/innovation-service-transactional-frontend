@@ -2,9 +2,9 @@ import { isPlatformServer } from '@angular/common';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { AuthenticationStore } from '@modules/stores';
-import { REQUEST } from '../../../express.tokens';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
+import { REQUEST } from '../../../express.tokens';
 
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
