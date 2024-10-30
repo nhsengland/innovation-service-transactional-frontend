@@ -513,13 +513,14 @@ export class InnovationsService extends CoreService {
   }
 
   // Needs Assessment.
+  // TODO: Check if this could be totally replaced by the ctx.assessment.getOrLoad()
   getInnovationNeedsAssessment(
     innovationId: string,
     assessmentId: string
   ): Observable<InnovationNeedsAssessmentInfoDTO> {
     // Leverage the store if possible
-    if (this.stores.context.getAssessment().id === assessmentId) {
-      return this.stores.context.getOrLoadAssessment(innovationId, assessmentId);
+    if (this.ctx.assessment.info()?.id === assessmentId) {
+      return this.ctx.assessment.getOrLoad(innovationId, assessmentId);
     } else {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
         .addPath('v1/:innovationId/assessments/:assessmentId')

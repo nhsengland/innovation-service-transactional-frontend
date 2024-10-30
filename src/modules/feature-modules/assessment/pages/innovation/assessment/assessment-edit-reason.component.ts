@@ -37,9 +37,9 @@ export class PageInnovationAssessmentEditReasonComponent extends CoreComponent i
   }
 
   ngOnInit() {
-    const assessment = this.stores.context.getAssessment();
+    const assessment = this.ctx.assessment.info();
 
-    this.isReassessment = assessment.majorVersion > 1;
+    this.isReassessment = assessment !== null && assessment.majorVersion > 1;
     this.assessmentType = this.isReassessment ? 'reassessment' : 'assessment';
 
     const pageTitle = `Why are you editing this needs ${this.assessmentType}?`;

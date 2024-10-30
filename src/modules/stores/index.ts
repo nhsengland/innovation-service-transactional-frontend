@@ -19,6 +19,10 @@ export { InnovationRecordSchemaService } from './innovation/innovation-record/in
 
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
+// // Assessment
+export { AssessmentContextService } from './ctx/assessment/assessment-context.service';
+export { AssessmentContextStore } from './ctx/assessment/assessment-context.store';
+export { ContextAssessmentType } from './ctx/assessment/assessment-context.types';
 // // Innovation
 export { InnovationContextService } from './ctx/innovation/innovation-context.service';
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';

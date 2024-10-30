@@ -13,6 +13,8 @@ import { InnovationRecordSchemaService } from './innovation/innovation-record/in
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
 import { CtxStore } from './ctx/ctx.store';
+import { AssessmentContextStore } from './ctx/assessment/assessment-context.store';
+import { AssessmentContextService } from './ctx/assessment/assessment-context.service';
 
 @NgModule({
   providers: [
@@ -29,6 +31,8 @@ import { CtxStore } from './ctx/ctx.store';
 
     InnovationContextStore,
     InnovationContextService,
+    AssessmentContextStore,
+    AssessmentContextService,
 
     InnovationRecordSchemaStore,
     InnovationRecordSchemaService

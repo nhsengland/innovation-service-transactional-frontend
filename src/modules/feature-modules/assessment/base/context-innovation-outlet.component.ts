@@ -78,8 +78,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
           }
         ];
 
-        const assessment = this.contextStore.getAssessment();
-        if (isAssessmentEditPage && assessment.minorVersion === 0) {
+        const assessment = this.ctx.assessment.info();
+        if (assessment && isAssessmentEditPage && assessment.minorVersion === 0) {
           if (assessment.previousAssessment && (assessment.majorVersion > 1 || assessment.minorVersion)) {
             const previousAssessmentType =
               assessment.previousAssessment.majorVersion > 1 ? 'reassessment' : 'assessment';

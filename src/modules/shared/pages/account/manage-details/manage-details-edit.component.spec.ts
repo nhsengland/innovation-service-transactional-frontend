@@ -18,6 +18,8 @@ import {
   CtxStore,
   InnovationContextService,
   InnovationContextStore,
+  AssessmentContextStore,
+  AssessmentContextService,
   InnovationRecordSchemaService,
   InnovationRecordSchemaStore,
   InnovationService,
@@ -52,6 +54,8 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
         CtxStore,
         InnovationContextStore,
         InnovationContextService,
+        AssessmentContextStore,
+        AssessmentContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
