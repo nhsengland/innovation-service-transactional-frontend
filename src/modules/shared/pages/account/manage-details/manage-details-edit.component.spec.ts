@@ -10,12 +10,27 @@ import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 import { AppInjector, CoreModule } from '@modules/core';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { SharedModule } from '@modules/shared/shared.module';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import {
+  AuthenticationService,
+  AuthenticationStore,
+  ContextService,
+  ContextStore,
+  CtxStore,
+  InnovationContextService,
+  InnovationContextStore,
+  AssessmentContextStore,
+  AssessmentContextService,
+  InnovationRecordSchemaService,
+  InnovationRecordSchemaStore,
+  InnovationService,
+  InnovationStore
+} from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
 
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
+import { ENV } from '@tests/app.mocks';
 
 describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditComponent', () => {
   let activatedRoute: ActivatedRoute;
@@ -26,7 +41,23 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, SharedModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, SharedModule],
+      providers: [
+        AuthenticationStore,
+        AuthenticationService,
+        InnovationStore,
+        InnovationRecordSchemaStore,
+        ContextStore,
+        ContextService,
+        InnovationRecordSchemaService,
+        InnovationService,
+        CtxStore,
+        InnovationContextStore,
+        InnovationContextService,
+        AssessmentContextStore,
+        AssessmentContextService,
+        { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
+      ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

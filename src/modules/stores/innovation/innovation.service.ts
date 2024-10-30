@@ -8,7 +8,6 @@ import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
-import { ContextStore } from '../context/context.store';
 import {
   GetInnovationEvidenceDTO,
   INNOVATION_STATUS,
@@ -18,6 +17,7 @@ import {
   InnovationSectionsListDTO,
   OrganisationSuggestionModel
 } from './innovation.models';
+import { CtxStore } from '../ctx/ctx.store';
 
 @Injectable()
 export class InnovationService {
@@ -26,7 +26,7 @@ export class InnovationService {
   constructor(
     private http: HttpClient,
     private authenticationStore: AuthenticationStore,
-    private contextStore: ContextStore,
+    private ctx: CtxStore,
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
 
@@ -36,7 +36,7 @@ export class InnovationService {
       .setPathParams({ innovationId });
     return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
       take(1),
-      finalize(() => this.contextStore.clearInnovation())
+      finalize(() => this.ctx.innovation.clear())
     );
   }
 
@@ -140,10 +140,19 @@ export class InnovationService {
     return this.http.delete<void>(url.buildUrl()).pipe(take(1));
   }
 
-  getInnovationOrganisationSuggestions(innovationId: string): Observable<OrganisationSuggestionModel> {
+  getInnovationOrganisationSuggestions(
+    innovationId: string,
+    filters: { majorAssessmentId?: string }
+  ): Observable<OrganisationSuggestionModel> {
+    const qp = {
+      ...(filters.majorAssessmentId ? { majorAssessmentId: filters.majorAssessmentId } : {})
+    };
+
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/suggestions')
-      .setPathParams({ innovationId });
+      .setPathParams({ innovationId })
+      .setQueryParams(qp);
+
     return this.http.get<OrganisationSuggestionModel>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

@@ -10,15 +10,13 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 
-import { InnovationSectionEnum } from '@modules/stores/innovation';
-
 @Component({
   selector: 'shared-pages-innovation-section-evidence-info',
   templateUrl: './section-evidence-info.component.html'
 })
 export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
-  sectionId: InnovationSectionEnum;
+  sectionId: string;
   evidenceId: string;
   baseUrl: string;
 
@@ -36,13 +34,13 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.wizard =
-      this.stores.innovation.getInnovationRecordSection(this.sectionId).evidences ?? new WizardEngineModel({});
+      this.stores.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {

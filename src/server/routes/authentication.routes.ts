@@ -41,10 +41,10 @@ const confidentialClientConfig: Configuration = {
   },
   system: {
     loggerOptions: {
-      loggerCallback(logLevel: LogLevel, message) {
+      loggerCallback(logLevel: LogLevel, message: string) {
         try {
           getAppInsightsClient().trackTrace({
-            severity: ((4 - logLevel) as SeverityLevel) ?? SeverityLevel.Information, // logLevel is reverse of SeverityLevel
+            severity: getLogLevel(logLevel),
             message: message
           });
         } catch (error) {
@@ -203,11 +203,10 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
           (req.session as any).oid = response.uniqueId;
 
           // SET XSRF TOKEN
-          // https://angular.io/guide/http-security-xsrf-protection
-          // https://en.wikipedia.org/wiki/Cross-site_request_forgery#Cookie-to-header_token
           const token = randomBytes(24).toString('hex');
+          (req.session as any).xsrfToken = token; // This only works since we assume we only have one instance for now
           res.cookie('XSRF-TOKEN', token, {
-            httpOnly: false, // required by angular to be false so that it can be used by the interceptor to send in the header
+            httpOnly: true,
             secure: process.env.BASE_URL?.startsWith('https'),
             sameSite: process.env.BASE_URL?.startsWith('https') ? 'strict' : 'lax'
           });
@@ -405,8 +404,25 @@ function deleteAccessTokenBySessionId(sessionId: string): void {
   }
   userSessions.delete(sessionId);
 }
-//#endregion
 
+const getLogLevel = (logLevel: LogLevel): SeverityLevel => {
+  switch (logLevel) {
+    case LogLevel.Error:
+      return SeverityLevel.Error;
+    case LogLevel.Warning:
+      return SeverityLevel.Warning;
+    case LogLevel.Info:
+      return SeverityLevel.Information;
+    case LogLevel.Verbose:
+      return SeverityLevel.Verbose;
+    case LogLevel.Trace:
+      return SeverityLevel.Verbose;
+    default:
+      return SeverityLevel.Information;
+  }
+};
+
+//#endregion
 export default authenticationRouter;
 
 // Didn't create from previous seems it wasn't used

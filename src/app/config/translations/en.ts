@@ -511,6 +511,14 @@ export const locale = {
             }
           },
 
+          innovations_list: {
+            closed_reasons: {
+              ARCHIVE: 'Archived',
+              STOP_SHARE: 'Stopped sharing',
+              SUPPORT_COMPLETE: 'Closed'
+            }
+          },
+
           innovation_sections: {
             INNOVATION_DESCRIPTION: 'Description of innovation',
             VALUE_PROPOSITION: 'Value proposition',
@@ -727,6 +735,9 @@ export const locale = {
               title: `{{accessorName}} has requested that the support status for innovation {{innovationName}} is updated to {{status}}. `,
               link: `Update support status.`
             },
+            ST08_SUPPORT_NEW_ASSIGNED_WAITING_INNOVATION_TO_QA: {
+              title: `You have been assigned to innovation {{innovationName}}. You will receive notifications for this innovation while it is in the waiting status.`
+            },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: {
               title: `{{unitName}} added a progress update for innovation {{innovationName}}. `,
               link: `View this update in support summary.`
@@ -896,6 +907,10 @@ export const locale = {
             AU10_ACCESSOR_IDLE_ENGAGING_SUPPORT_FOR_SIX_WEEKS: {
               title: `It has been 6 weeks since you last interacted with innovation {{innovationName}}. Remember to message the innovator or update their support summary within the next 5 weeks.`
             },
+            AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS: {
+              title: `{{innovationName}} has been waiting for 6 weeks. `,
+              link: `View innovation and update support status within the next 5 weeks.`
+            },
             // NOTIFY ME
             SUPPORT_UPDATED: {
               title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
@@ -967,6 +982,12 @@ export const locale = {
                 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
               accessorTypeDescription:
                 'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.'
+            },
+            SUGGESTED: {
+              name: 'Unassigned',
+              cssColorClass: 'nhsuk-tag--red',
+              description: 'A support status has not been assigned yet.',
+              accessorTypeDescription: 'A support status has not been assigned yet.'
             }
           },
           grouped_status: {
@@ -1108,8 +1129,7 @@ export const locale = {
           required: 'Required',
           existsIn: 'Value already exists',
           validEmail: 'Enter a valid email',
-          invalid_postcode_format:
-            'The postcode format is invalid. Check the postcode format is correct and includes the space.',
+          invalid_postcode_format: 'Enter a valid UK postcode, including the space',
           invalid_parse_date: 'Please enter a valid date format',
           max_file_size: 'The file size is above the limit of 20MB',
           empty_file: 'Uploaded files cannot be empty',

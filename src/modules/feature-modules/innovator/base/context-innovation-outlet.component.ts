@@ -1,14 +1,14 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
 import {
   AnnouncementType,
   AnnouncementsService
 } from '@modules/feature-modules/announcements/services/announcements.service';
 import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -17,11 +17,7 @@ import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/an
 export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
   private subscriptions = new Subscription();
 
-  innovation: {
-    id: string;
-    name: string;
-    userIsOwner: boolean;
-  } = { id: '', name: '', userIsOwner: false };
+  innovation = signal({ id: '', name: '', userIsOwner: false });
 
   announcements: AnnouncementType[] = [];
 
@@ -29,8 +25,8 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
-    private announcementsService: AnnouncementsService
+    private announcementsService: AnnouncementsService,
+    readonly ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -42,7 +38,7 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
 
   ngOnInit(): void {
     this.announcementsService
-      .getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE], innovationId: this.innovation.id })
+      .getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE], innovationId: this.innovation().id })
       .subscribe(announcements => (this.announcements = announcements));
   }
 
@@ -55,12 +51,14 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
   }
 
   private onRouteChange(_event?: NavigationEnd): void {
-    const innovation = this.contextStore.getInnovation();
-    this.innovation = {
-      id: innovation.id,
-      name: innovation.name,
-      userIsOwner: innovation.loggedUser.isOwner
-    };
+    const innovation = this.ctx.innovation.info();
+    if (innovation) {
+      this.innovation.update(() => ({
+        id: innovation.id,
+        name: innovation.name,
+        userIsOwner: innovation.loggedUser.isOwner
+      }));
+    }
     this.displayAnnouncements = this.router.url.endsWith('/overview');
   }
 }

@@ -7,23 +7,21 @@
 
           <dd class="nhsuk-summary-list__value">
             <ng-container *ngFor="let subscription of innovation.subscriptions; last as lastItem">
-              <div [ngClass]="{ 'nhsuk-u-margin-bottom-5': !lastItem }">
-                <span *ngIf="subscription.eventType !== 'REMINDER'" class="d-block nhsuk-u-margin-bottom-3">
+              <div [ngClass]="{ 'nhsuk-u-margin-bottom-4': !lastItem }">
+                <p *ngIf="subscription.eventType !== 'REMINDER'">
                   {{ subscription.displayTitle }}
-                </span>
+                </p>
                 <ng-container *ngIf="subscription.displayOrganisations?.length">
-                  <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold">
-                    {{ "features.accessor.custom_notifications.cards.organisations_selected" | pluralTranslate: subscription.displayOrganisations?.length | translate }}:
-                  </span>
-                  <ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">
+                  <p>{{ "features.accessor.custom_notifications.cards.organisations_selected" | pluralTranslate: subscription.displayOrganisations?.length | translate }}:</p>
+                  <ul class="nhsuk-list">
                     <li *ngFor="let orgName of subscription.displayOrganisations" class="nhsuk-u-margin-0">
                       {{ orgName }}
                     </li>
                   </ul>
                 </ng-container>
                 <ng-container *ngIf="subscription.displaySections?.length">
-                  <span class="nhsuk-u-font-size-19 nhsuk-u-font-weight-bold"> {{ getInnovationRecordSelectedSectionLabel(subscription) }}: </span>
-                  <ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">
+                  <p>{{ getInnovationRecordSelectedSectionLabel(subscription) }}:</p>
+                  <ul class="nhsuk-list">
                     <li *ngFor="let section of subscription.displaySections" class="nhsuk-u-margin-0">
                       {{ section }}
                     </li>

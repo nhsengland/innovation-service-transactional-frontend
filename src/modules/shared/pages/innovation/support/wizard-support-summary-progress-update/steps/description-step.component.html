@@ -1,0 +1,11 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-textarea controlName="description" [label]="title" description="Enter your description" lengthLimit="xl"></theme-form-textarea>
+
+        <button type="submit" class="nhsuk-button">Continue</button>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

@@ -18,11 +18,11 @@ export class PageInnovationRecordWrapperComponent extends CoreComponent {
   constructor() {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isInnovationInArchivedStatus = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
     // Innovators don't have access to this component, but to make sure.
     this.showAllSectionsInfo = this.isInnovationInArchivedStatus && !this.isInnovatorType;
   }

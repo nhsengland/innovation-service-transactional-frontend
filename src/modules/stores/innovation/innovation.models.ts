@@ -1,14 +1,7 @@
 import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { WizardEngineModel } from '@modules/shared/forms';
 
-import { InnovationSectionsVersions } from './innovation-record/ir-versions.types';
-import {
-  ActivityLogItemsEnum,
-  ActivityLogTypesEnum,
-  InnovationGroupedStatusEnum,
-  InnovationSectionEnum
-} from './innovation.enums';
+import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationGroupedStatusEnum } from './innovation.enums';
 
 // Store state model.
 export class InnovationModel {
@@ -16,26 +9,17 @@ export class InnovationModel {
 }
 
 // Types.
-export type InnovationSectionConfigType = {
-  title: string;
-  sections: {
-    id: InnovationSectionEnum;
-    title: string;
-    wizard: WizardEngineModel;
-    evidences?: WizardEngineModel;
-  }[];
-};
 
 export type sectionType = {
   id: null | string;
-  section: InnovationSectionEnum | string;
+  section: string | string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
 };
 
 export type InnovationSectionInfoDTO = {
   id: null | string;
-  section: InnovationSectionEnum;
+  section: string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   updatedAt: string;
   data: MappedObjectType;
@@ -70,7 +54,7 @@ export type getInnovationInfoResponse = {
 
 export type InnovationSectionsListDTO = {
   id: null | string;
-  section: InnovationSectionsVersions | string;
+  section: string;
   status: keyof typeof INNOVATION_SECTION_STATUS;
   submittedAt: null | DateISOType;
   submittedBy: null | {
@@ -100,7 +84,7 @@ export type SectionsSummaryModel = {
   id: string;
   title: string;
   sections: {
-    id: InnovationSectionsVersions | string;
+    id: string;
     title: string;
     status: keyof typeof INNOVATION_SECTION_STATUS;
     submittedAt: null | DateISOType;
@@ -199,6 +183,12 @@ export const INNOVATION_SUPPORT_STATUS = {
     description:
       'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
     hidden: false
+  },
+  SUGGESTED: {
+    label: 'Unassigned',
+    cssClass: 'nhsuk-tag--red',
+    description: 'A support status has not been assigned yet.',
+    hidden: true
   }
 };
 

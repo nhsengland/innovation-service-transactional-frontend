@@ -1,0 +1,83 @@
+<theme-content-wrapper [status]="pageStatus">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <dl class="nhsuk-summary-list">
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Start by adding a title to your progress update</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.titleStep.title }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('titleStep')">Change<span class="nhsuk-u-visually-hidden"> start by adding a title to your progress update </span></a>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ stepsTitles.descriptionStep }}</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.descriptionStep.description }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('descriptionStep')"
+              >Change<span class="nhsuk-u-visually-hidden"> {{ stepsTitles.descriptionStep }}</span></a
+            >
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">{{ stepsTitles.addDocumentStep }}</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.addDocumentStep.addDocument | titlecase }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('addDocumentStep')"
+              >Change<span class="nhsuk-u-visually-hidden"> {{ stepsTitles.addDocumentStep }}</span></a
+            >
+          </dd>
+        </div>
+        <ng-container *ngIf="data.documentFileStep.documentFile">
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">{{ stepsTitles.documentNameStep }}</dt>
+            <dd class="nhsuk-summary-list__value">
+              {{ data.documentNameStep.documentName }}
+            </dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a href="javascript:void(0)" (click)="onGotoStep('documentNameStep')"
+                >Change<span class="nhsuk-u-visually-hidden"> {{ stepsTitles.documentNameStep }}</span></a
+              >
+            </dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">{{ stepsTitles.documentDescriptionStep }}</dt>
+            <dd class="nhsuk-summary-list__value">
+              {{ data.documentDescriptionStep.documentDescription }}
+            </dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a href="javascript:void(0)" (click)="onGotoStep('documentDescriptionStep')"
+                >Change<span class="nhsuk-u-visually-hidden"> {{ stepsTitles.documentDescriptionStep }}</span></a
+              >
+            </dd>
+          </div>
+          <div class="nhsuk-summary-list__row">
+            <dt class="nhsuk-summary-list__key">Uploaded document</dt>
+            <dd class="nhsuk-summary-list__value">
+              <a [href]="data.documentFileStep.documentFile.url" class="nhsuk-u-font-size-19">{{ data.documentFileStep.documentFile.name }}</a>
+            </dd>
+            <dd class="nhsuk-summary-list__actions">
+              <a href="javascript:void(0)" (click)="onGotoStep('documentFileStep')">Change<span class="nhsuk-u-visually-hidden"> uploaded document</span></a>
+            </dd>
+          </div>
+        </ng-container>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Date of update</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.date | date: ("app.date_formats.long_date" | translate) }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date of update</span></a>
+          </dd>
+        </div>
+      </dl>
+
+      <button type="button" class="nhsuk-button" (click)="onSubmit()">Confirm and add update</button>
+    </div>
+  </div>
+</theme-content-wrapper>

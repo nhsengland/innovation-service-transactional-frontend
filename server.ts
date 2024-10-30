@@ -3,7 +3,7 @@ import 'zone.js/node';
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
 
-import * as coockieParser from 'cookie-parser';
+import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as session from 'express-session';
@@ -45,7 +45,7 @@ export function app(): express.Express {
 
   server.use(express.json());
   server.use(express.urlencoded({ extended: true }));
-  server.use(coockieParser());
+  server.use(cookieParser());
   server.use(
     session({
       secret: process.env.SESSION_SECRET || 'secret',
@@ -75,7 +75,7 @@ export function app(): express.Express {
   // CSRF protection.
   server.use((req, res, next) => {
     if (!(req.method === 'OPTIONS' || req.method === 'GET' || req.method === 'HEAD')) {
-      if (req.cookies['XSRF-TOKEN'] !== req.headers['x-xsrf-token']) {
+      if (!req.cookies['XSRF-TOKEN'] && req.cookies['XSRF-TOKEN'] !== (req.session as any).xsrfToken) {
         res.send(403);
       }
     }
@@ -126,6 +126,7 @@ export function app(): express.Express {
               BASE_PATH: ENVIRONMENT.BASE_PATH,
               LOG_LEVEL: ENVIRONMENT.LOG_LEVEL,
               ENABLE_ANALYTICS: ENVIRONMENT.ENABLE_ANALYTICS,
+              APPLICATIONINSIGHTS_CONNECTION_STRING: ENVIRONMENT.APPLICATIONINSIGHTS_CONNECTION_STRING,
               TAG_MEASUREMENT_ID: ENVIRONMENT.TAG_MEASUREMENT_ID,
               GTM_ID: ENVIRONMENT.GTM_ID
             }
@@ -147,6 +148,7 @@ export function app(): express.Express {
       window.__env.BASE_PATH = '${ENVIRONMENT.BASE_PATH}';
       window.__env.LOG_LEVEL = '${ENVIRONMENT.LOG_LEVEL}';
       window.__env.ENABLE_ANALYTICS = ${ENVIRONMENT.ENABLE_ANALYTICS};
+      window.__env.APPLICATIONINSIGHTS_CONNECTION_STRING = '${ENVIRONMENT.APPLICATIONINSIGHTS_CONNECTION_STRING}';
       window.__env.TAG_MEASUREMENT_ID = '${ENVIRONMENT.TAG_MEASUREMENT_ID}';
       window.__env.GTM_ID = '${ENVIRONMENT.GTM_ID}';
     }(this));`);

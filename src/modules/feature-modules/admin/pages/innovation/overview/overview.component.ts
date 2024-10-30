@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { ContextInnovationType } from '@modules/stores';
 
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
@@ -63,8 +62,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.context.getInnovation();
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.innovation = this.ctx.innovation.info();
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }
@@ -100,7 +99,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             .map(v =>
               v === 'OTHER'
                 ? innovation.otherCategoryDescription
-                : irVersionsMainCategoryItems.find(item => item.value === v)?.label
+                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }

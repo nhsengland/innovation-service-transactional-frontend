@@ -70,8 +70,8 @@
       <span class="nhsuk-u-font-weight-bold"
         >Support status:
         <theme-tag
-          type="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.support?.status + '.cssColorClass' | translate }}"
-          label="{{ 'shared.catalog.innovation.support_status.' + innovationCardData.support?.status + '.name' | translate }}"
+          type="{{ 'shared.catalog.innovation.support_status.' + (innovationCardData.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
+          label="{{ 'shared.catalog.innovation.support_status.' + (innovationCardData.support?.status ?? 'UNASSIGNED') + '.name' | translate }}"
         />
       </span>
       <span *ngIf="innovationCardData.support?.updatedAt" class="font-color-secondary">

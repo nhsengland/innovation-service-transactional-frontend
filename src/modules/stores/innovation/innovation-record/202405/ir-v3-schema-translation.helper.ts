@@ -1,6 +1,8 @@
-import { InnovationSectionEnum } from '../../innovation.enums';
 import { InnovationRecordSchemaV3Type } from './ir-v3-types';
-import { IrSchemaTranslatorMapType } from '../innovation-record-schema/innovation-record-schema.models';
+import {
+  InnovationRecordSchemaInfoType,
+  IrSchemaTranslatorMapType
+} from '../innovation-record-schema/innovation-record-schema.models';
 
 export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): IrSchemaTranslatorMapType {
   const flattenedSections = new Map();
@@ -81,4 +83,15 @@ export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): I
     subsections: flattenedSubSections,
     questions: allQuestionsLabelsAndItems
   };
+}
+
+export function getIrSchemaQuestionItemsValueAndLabel(
+  schema: InnovationRecordSchemaInfoType,
+  questionId: string
+): { value: string; label: string }[] {
+  const toReturn: { value: string; label: string }[] = [];
+  irSchemaTranslationsMap(schema.schema)
+    .questions.get(questionId)
+    ?.items.forEach((v, k) => toReturn.push({ value: k, label: v.label }));
+  return toReturn;
 }

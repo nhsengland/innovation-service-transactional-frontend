@@ -60,7 +60,8 @@ apiRouter.all(`${ENVIRONMENT.BASE_PATH}/api/*`, async (req, res) => {
     const config = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] })
+        ...(req.headers['x-is-role'] && { 'x-is-role': req.headers['x-is-role'] }),
+        ...(req.headers['request-id'] && { 'request-id': req.headers['request-id'] })
       }
     };
 

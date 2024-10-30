@@ -3,21 +3,14 @@ import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-import {
-  catalogCareSettings,
-  catalogCategory,
-  catalogInvolvedAACProgrammes,
-  catalogKeyHealthInequalities,
-  catalogOfficeLocation
-} from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 
 import {
   ActivityLogItemsEnum,
   InnovationCollaboratorStatusEnum,
   InnovationExportRequestStatusEnum,
   InnovationGroupedStatusEnum,
-  InnovationSectionEnum,
   InnovationStatusEnum,
+  InnovationSupportCloseReasonEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
 } from '@modules/stores/innovation/innovation.enums';
@@ -38,7 +31,7 @@ export type InnovationsListFiltersType = Partial<{
   groupedStatuses: InnovationGroupedStatusEnum[];
   hasAccessThrough: ('owner' | 'collaborator')[];
   latestWorkedByMe: boolean;
-  locations: catalogOfficeLocation[];
+  locations: string[];
   suggestedOnly: boolean;
   supportStatuses: InnovationSupportStatusEnum[];
   supportUnit: string;
@@ -81,7 +74,8 @@ export type InnovationListSelectType =
   | 'support.status'
   | 'support.updatedAt'
   | 'support.updatedBy'
-  | 'support.closedReason'
+  | 'support.closeReason'
+  | 'support.isShared'
   | 'assessment.id'
   | 'assessment.majorVersion'
   | 'assessment.minorVersion'
@@ -105,15 +99,15 @@ export type InnovationListFullDTO = {
   lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
   // Document fields
-  careSettings: catalogCareSettings[] | null;
+  careSettings: string[] | null;
   otherCareSetting: string | null;
-  categories: catalogCategory[] | null;
+  categories: string[] | null;
   countryName: string | null;
   postcode: string | null;
   diseasesAndConditions: string[] | null; // not strongly typed atm
-  involvedAACProgrammes: catalogInvolvedAACProgrammes[] | null;
-  keyHealthInequalities: catalogKeyHealthInequalities[] | null;
-  mainCategory: catalogCategory | null;
+  involvedAACProgrammes: string[] | null;
+  keyHealthInequalities: string[] | null;
+  mainCategory: string | null;
   otherCategoryDescription: string | null;
 
   // Relation fields
@@ -127,7 +121,8 @@ export type InnovationListFullDTO = {
     status: InnovationSupportStatusEnum;
     updatedAt: DateISOType | null;
     updatedBy: string | null;
-    closedReason: InnovationStatusEnum.ARCHIVED | 'STOPPED_SHARED' | InnovationSupportStatusEnum.CLOSED | null;
+    closeReason: InnovationSupportCloseReasonEnum | null;
+    isShared: boolean;
   } | null;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: {
@@ -175,12 +170,12 @@ export type InnovationInfoDTO = {
   lastEndSupportAt: null | DateISOType;
   assessment?: null | {
     id: string;
+    currentMajorAssessmentId: null | string;
     majorVersion: number;
     minorVersion: number;
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
-    reassessmentCount: number;
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
   statusUpdatedAt: null | DateISOType;
@@ -191,7 +186,7 @@ export type InnovationInfoDTO = {
 export type InnovationSharesListDTO = { organisation: { id: string; name: string; acronym: string } }[];
 
 export enum InnovationValidationRules {
-  checkIfSupportStatusAtDate = 'checkIfSupportStatusAtDate'
+  checkIfSupportHadAlreadyStartedAtDate = 'checkIfSupportHadAlreadyStartedAtDate'
 }
 
 export type InnovationRulesDTO = {
@@ -253,6 +248,7 @@ export type SupportSummaryOrganisationsListDTO = {
       status: InnovationSupportStatusEnum;
       start?: DateISOType;
       end?: DateISOType;
+      minStart?: DateISOType;
     };
     organisation: {
       id: string;
@@ -284,7 +280,7 @@ type TwoLevelProgressUpdateParams = { category: string; subCategories: string[] 
 export type CreateSupportSummaryProgressUpdateType = {
   description: string;
   document?: { name: string; description?: string; file?: Omit<FileUploadType, 'url'> };
-  createdAt?: Date;
+  createdAt: DateISOType;
 } & (SimpleProgressUpdateParams | OneLevelProgressUpdateParams | TwoLevelProgressUpdateParams);
 
 // Support log
@@ -391,7 +387,7 @@ export type InnovationActivityLogListInDTO = {
       actionUserOrganisationUnit?: string;
 
       assessmentId?: string;
-      sectionId?: InnovationSectionEnum;
+      sectionId?: string;
       taskId?: string;
       innovationSupportStatus?: InnovationSupportStatusEnum;
 

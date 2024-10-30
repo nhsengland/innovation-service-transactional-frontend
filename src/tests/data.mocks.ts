@@ -4,7 +4,7 @@ import {
   UserRoleEnum
 } from '@modules/stores/authentication/authentication.enums';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
@@ -103,12 +103,12 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   hasBeenAssessed: false,
   assessment: {
     id: 'assessment01',
+    currentMajorAssessmentId: 'majorAssessmentId01',
     majorVersion: 1,
     minorVersion: 0,
     createdAt: '2020-01-01T00:00:00.000Z',
     finishedAt: null
   },
-  reassessmentCount: 0,
   categories: [],
   countryName: 'England',
   description: 'Description',

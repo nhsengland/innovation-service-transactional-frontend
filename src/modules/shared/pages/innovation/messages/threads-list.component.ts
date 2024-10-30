@@ -11,7 +11,7 @@ import {
   InnovationThreadListFiltersType
 } from '@modules/shared/services/innovations.service';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
@@ -47,14 +47,14 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       organisationUnitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
     };
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isArchived = this.ctx.innovation.isArchived();
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
     if (this.stores.authentication.isAssessmentType()) {
@@ -90,7 +90,8 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
         contextDetails: [
           NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT,
           NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
-          NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS
+          NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS,
+          NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS
         ]
       });
     }

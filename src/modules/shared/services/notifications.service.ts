@@ -8,7 +8,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 import {
-  InnovationSectionEnum,
+
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
@@ -31,7 +31,7 @@ export type NotificationsListInDTO = {
     createdBy: string;
     readAt: null | DateISOType;
     params: null | {
-      section?: InnovationSectionEnum;
+      section?: string;
       actionCode?: string;
       taskStatus?: InnovationTaskStatusEnum;
       supportStatus?: InnovationSupportStatusEnum;
@@ -321,6 +321,7 @@ export class NotificationsService extends CoreService {
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                 case NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING:
+                case NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS:
                   link = {
                     label: 'Click to go to innovation overview',
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`

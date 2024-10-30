@@ -56,7 +56,7 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-delete.component';
-import { PageInnovationSupportSummaryProgressUpdateComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update.component';
+import { PageInnovationSupportSummaryProgressUpdateWrapperComponent } from '@modules/shared/pages/innovation/support/support-summary-progress-update-wrapper.component';
 import { PageInnovationTaskActionComponent } from '@modules/shared/pages/innovation/tasks/task-action.component';
 import { PageInnovationTaskDetailsComponent } from '@modules/shared/pages/innovation/tasks/task-details.component';
 import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/tasks/task-status-list.component';
@@ -470,7 +470,7 @@ const routes: Routes = [
                   {
                     path: 'progress-update-new',
                     pathMatch: 'full',
-                    component: PageInnovationSupportSummaryProgressUpdateComponent,
+                    component: PageInnovationSupportSummaryProgressUpdateWrapperComponent,
                     data: { layout: { type: 'full' } }
                   },
                   {

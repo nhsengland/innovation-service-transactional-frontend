@@ -1,4 +1,3 @@
-import { MappedObjectType } from '@app/base/types';
 import { InnovationRecordSchemaV3Type } from '../202405/ir-v3-types';
 
 export class InnovationRecordSchemaModel {
@@ -13,8 +12,12 @@ export type InnovationRecordSchemaInfoType = {
 
 export type InnovationRecordSectionUpdateType = { version: number; data: { [key: string]: any } };
 
+export type IrSchemaTranslatorQuestionsMapType = Map<string, { label: string; items: IrSchemaTranslatorItemMapType }>;
+
+export type IrSchemaTranslatorItemMapType = Map<string, { label: string; group: string }>;
+
 export type IrSchemaTranslatorMapType = {
   sections: Map<string, string>;
   subsections: Map<string, string>;
-  questions: Map<string, { label: string; items: Map<string, { label: string; group: string }> }>;
+  questions: IrSchemaTranslatorQuestionsMapType;
 };

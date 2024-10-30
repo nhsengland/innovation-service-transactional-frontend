@@ -6,7 +6,6 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { irVersionsMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
@@ -44,6 +43,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   isInAssessment: boolean = false;
   isArchived: boolean = false;
   showCards: boolean = false;
+  showStartSupport = false;
+  changeSupportUrlNewOrSupport: string | 'new' | undefined;
 
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
@@ -62,7 +63,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isAccessorRole = this.stores.authentication.isAccessorRole();
     this.isInAssessment = [
@@ -71,7 +72,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
     ].includes(this.innovation.status);
     this.isInProgress = this.innovation.status === 'IN_PROGRESS';
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isArchived = this.ctx.innovation.isArchived();
 
     this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
   }
@@ -101,13 +102,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovationSupport = {
         organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status:
-          // The support status is whatever comes from the support, if there's no support (first occurrence) then it's
-          // status depends on the archive status. Closed if the innovation is archived unassigned otherwise
-          support?.status ??
-          (this.isArchived ? InnovationSupportStatusEnum.CLOSED : InnovationSupportStatusEnum.UNASSIGNED),
+        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
         engagingAccessors: support?.engagingAccessors ?? []
       };
+
+      this.showStartSupport =
+        this.isInProgress &&
+        this.isQualifyingAccessorRole &&
+        (!this.innovationSupport ||
+          (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
       this.innovationSummary = [
         { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
@@ -133,7 +136,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             .map(v =>
               v === 'OTHER'
                 ? innovationInfo.otherCategoryDescription
-                : irVersionsMainCategoryItems.find(item => item.value === v)?.label
+                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }
@@ -184,7 +187,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE,
           NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
           NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A,
-          NotificationContextDetailEnum.REMINDER
+          NotificationContextDetailEnum.REMINDER,
+          NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS
         ]
       });
 
@@ -211,6 +215,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       }
 
       this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
+
+      this.changeSupportUrlNewOrSupport =
+        this.innovationSupport &&
+        [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.UNSUITABLE].includes(
+          this.innovationSupport.status
+        )
+          ? 'new'
+          : this.innovation.support?.id;
 
       this.setPageStatus('READY');
     });

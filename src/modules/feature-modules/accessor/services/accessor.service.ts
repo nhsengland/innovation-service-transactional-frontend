@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
@@ -7,7 +7,6 @@ import { UrlModel } from '@app/base/models';
 
 import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { InnovationSections } from '@modules/stores/innovation/innovation-record/202304/catalog.types';
 import { DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@app/base/enums';
 
@@ -45,7 +44,7 @@ export type InnovationRecordUpdated = {
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
   preConditions: {
-    sections?: InnovationSections[];
+    sections?: string[];
   };
 };
 
@@ -112,7 +111,7 @@ export type InnovationRecordUpdatedDTO = {
   updatedAt: DateISOType;
   eventType: NotificationEnum.INNOVATION_RECORD_UPDATED;
   subscriptionType: 'INSTANTLY';
-  sections?: InnovationSections[];
+  sections?: string[];
 };
 
 export type DefaultResponseDTO<T extends EventType, K extends DefaultOptions<T>> = {
@@ -167,8 +166,8 @@ export class AccessorService extends CoreService {
     body: { status: InnovationSupportStatusEnum; message: string; accessors?: { id: string; userRoleId: string }[] },
     supportId?: string
   ): Observable<{ id: string }> {
-    // If NOT enganging, the endpoint won't accept an accessors key.
-    if (body.status !== InnovationSupportStatusEnum.ENGAGING) {
+    // If NOT enganging or waiting, the endpoint won't accept an accessors key.
+    if (![InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(body.status)) {
       delete body.accessors;
     }
 
@@ -178,7 +177,7 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId });
       return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        finalize(() => this.stores.context.clearInnovation())
+        finalize(() => this.ctx.innovation.clear())
       );
     } else {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
@@ -186,17 +185,17 @@ export class AccessorService extends CoreService {
         .setPathParams({ innovationId, supportId });
       return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
         take(1),
-        finalize(() => this.stores.context.clearInnovation())
+        finalize(() => this.ctx.innovation.clear())
       );
     }
   }
 
   suggestNewOrganisations(
     innovationId: string,
-    body: { organisationUnits: string[]; type: SupportLogType; description: string }
+    body: { organisationUnits: string[]; description: string }
   ): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
-      .addPath('v1/:innovationId/support-logs')
+      .addPath('v1/:innovationId/suggestions')
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

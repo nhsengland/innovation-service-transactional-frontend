@@ -43,7 +43,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   }
 
   ngOnInit(): void {
-    this.innovationName = this.stores.context.getInnovation().name;
+    this.innovationName = this.ctx.innovation.info().name;
 
     this.setPageTitle(this.innovationName, { hint: 'Starting needs assessment for', size: 'l' });
     this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}`);

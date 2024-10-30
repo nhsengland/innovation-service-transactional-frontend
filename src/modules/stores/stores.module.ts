@@ -10,6 +10,11 @@ import { InnovationStore } from './innovation/innovation.store';
 import { InnovationService } from './innovation/innovation.service';
 import { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
+import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
+import { InnovationContextService } from './ctx/innovation/innovation-context.service';
+import { CtxStore } from './ctx/ctx.store';
+import { AssessmentContextStore } from './ctx/assessment/assessment-context.store';
+import { AssessmentContextService } from './ctx/assessment/assessment-context.service';
 
 @NgModule({
   providers: [
@@ -21,6 +26,13 @@ import { InnovationRecordSchemaService } from './innovation/innovation-record/in
 
     InnovationStore,
     InnovationService,
+
+    CtxStore,
+
+    InnovationContextStore,
+    InnovationContextService,
+    AssessmentContextStore,
+    AssessmentContextService,
 
     InnovationRecordSchemaStore,
     InnovationRecordSchemaService

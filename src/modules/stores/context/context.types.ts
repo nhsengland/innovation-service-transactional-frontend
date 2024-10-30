@@ -1,9 +1,7 @@
 import { DateISOType, LinkType } from '@app/base/types';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../innovation/innovation.enums';
 
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { NotificationCategoryTypeEnum } from './context.enums';
 
 export type ContextPageAlertType = {
   type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
@@ -43,40 +41,6 @@ export type ContextPageLayoutType = {
     width?: 'full' | '2.thirds';
     actions?: LinkType[];
   };
-};
-
-export type ContextInnovationType = {
-  id: string;
-  name: string;
-  status: InnovationStatusEnum;
-  statusUpdatedAt: null | DateISOType;
-  archivedStatus?: InnovationStatusEnum;
-  hasBeenAssessed: boolean;
-  countryName: string | null;
-  description: string | null;
-  postCode: string | null;
-  categories: string[];
-  otherCategoryDescription: string | null;
-  owner?: {
-    name: string;
-    isActive: boolean;
-    organisation?: { name: string; size: null | string; registrationNumber: null | string };
-  };
-  loggedUser: { isOwner: boolean };
-  assessment?: {
-    id: string;
-    majorVersion: number;
-    minorVersion: number;
-    createdAt: DateISOType;
-    finishedAt: null | DateISOType;
-  };
-  assignedTo?: { id: string; userRoleId: string; name: string };
-  support?: { id: string; status: InnovationSupportStatusEnum };
-  notifications?: { [key in NotificationCategoryTypeEnum]?: number };
-  collaboratorId?: string;
-  createdAt?: DateISOType;
-  reassessmentCount: number;
-  expiryAt: number;
 };
 
 export type ContextSchemaType = {

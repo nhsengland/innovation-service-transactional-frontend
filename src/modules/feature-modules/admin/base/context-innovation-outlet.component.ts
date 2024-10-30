@@ -3,8 +3,8 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { ContextStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',
@@ -20,12 +20,12 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore
+    private ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.onRouteChange(e))
+        .subscribe(() => this.onRouteChange())
     );
 
     this.onRouteChange();
@@ -35,8 +35,8 @@ export class ContextInnovationOutletComponent implements OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  private onRouteChange(event?: NavigationEnd): void {
-    const innovation = this.contextStore.getInnovation();
+  private onRouteChange(): void {
+    const innovation = this.ctx.innovation.info();
     this.data.innovation = {
       id: innovation.id,
       name: innovation.name,

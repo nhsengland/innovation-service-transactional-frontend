@@ -57,6 +57,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
+      this.stores.authentication.updateUserPasswordResetDate();
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = {

@@ -10,15 +10,11 @@ import { OrganisationsService } from '@modules/shared/services/organisations.ser
 import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
-import {
-  careSettingsItems,
-  categoriesItems,
-  diseasesConditionsImpactItems,
-  keyHealthInequalitiesItems
-} from '@modules/stores/innovation/innovation-record/202304/forms.config';
+
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
+import { IrSchemaTranslatorItemMapType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -133,7 +129,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ngOnInit(): void {
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
-        const { filters, datasets } = getConfig(this.stores.authentication.state.userContext?.type);
+        const { filters, datasets } = getConfig(
+          this.stores.context.getIrSchema(),
+          this.stores.authentication.state.userContext?.type
+        );
 
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
 
@@ -222,13 +221,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'engagingUnits',
       'support.status',
       'support.updatedAt',
-      'support.closedReason'
+      'support.closeReason'
     ];
 
     if (this.isAdminType) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closedReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
       );
     } else if (this.isAccessorType) {
       // filter out unavailable fields for QA/A
@@ -240,7 +239,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           ![
             'support.status',
             'support.updatedAt',
-            'support.closedReason',
+            'support.closeReason',
             'involvedAACProgrammes',
             'keyHealthInequalities'
           ].includes(item)
@@ -267,16 +266,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
             countryName: result.countryName ?? null,
             postCode: result.postcode,
-            categories: this.translateLists(result.categories, categoriesItems, result.otherCategoryDescription),
-            careSettings: this.translateLists(result.careSettings, careSettingsItems, result.otherCareSetting),
+            categories: this.translateLists(
+              result.categories,
+              this.stores.schema.getIrSchemaTranslationsMap().questions.get('categories')?.items,
+              result.otherCategoryDescription
+            ),
+            careSettings: this.translateLists(
+              result.careSettings,
+              this.stores.schema.getIrSchemaTranslationsMap().questions.get('careSettings')?.items,
+              result.otherCareSetting
+            ),
             diseasesAndConditions: this.translateLists(
               result.diseasesAndConditions,
-              diseasesConditionsImpactItems,
+              this.stores.schema.getIrSchemaTranslationsMap().questions.get('diseasesConditionsImpact')?.items,
               'None'
             ),
             keyHealthInequalities: this.translateLists(
               result.keyHealthInequalities,
-              keyHealthInequalitiesItems,
+              this.stores.schema.getIrSchemaTranslationsMap().questions.get('keyHealthInequalities')?.items,
+
               'None'
             ),
             involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
@@ -285,7 +293,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             support: result.support && {
               status: result.support.status,
               updatedAt: result.support.updatedAt,
-              closedReason: result.support.closedReason
+              closeReason: result.support.closeReason
             },
             highlights: result.highlights
           };
@@ -331,15 +339,21 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.getInnovationsList();
   }
 
-  private translateLists(rawArr: null | string[], translations: any[], other?: null | string): string[] {
-    return rawArr?.length ? rawArr.map(i => this.findTranslation(translations, i, other)) : ['Question not answered'];
+  private translateLists(
+    rawArr: null | string[],
+    translations: IrSchemaTranslatorItemMapType | undefined,
+    other?: null | string
+  ): string[] {
+    return rawArr?.length
+      ? rawArr.map(i => (translations ? this.findTranslation(translations, i, other) : i))
+      : ['Question not answered'];
   }
 
-  private findTranslation(array: any[], value: string, other?: null | string): string {
+  private findTranslation(translation: IrSchemaTranslatorItemMapType, value: string, other?: null | string): string {
     if (value === 'NONE' || value === 'OTHER') {
       return other ?? value;
     }
-    return array.find(c => c.value === value)?.label ?? value;
+    return translation.get(value)?.label ?? value;
   }
 
   private updateSearchQueryParams(currentSearch: string): void {

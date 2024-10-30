@@ -10,19 +10,26 @@ import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/sh
 import { UsersService } from '@modules/shared/services/users.service';
 import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import { switchMap } from 'rxjs/operators';
 import { omit } from 'lodash';
+import { ObservableInput, forkJoin } from 'rxjs';
+import { UsersListDTO } from '@modules/shared/dtos/users.dto';
+import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
   templateUrl: './support-update.component.html'
 })
 export class InnovationSupportUpdateComponent extends CoreComponent implements OnInit {
-  private accessorsList: { id: string; userRoleId: string; name: string }[] = [];
+  private allAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
+  private qualifyingAccessorsList: { id: string; role: UserRoleEnum; userRoleId: string; name: string }[] = [];
+
+  innovation: ContextInnovationType;
 
   innovationId: string;
   supportId: string;
@@ -30,8 +37,11 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   submitButton = { isActive: true, label: 'Confirm' };
 
   formAccessorsList: { value: string; label: string }[] = [];
-  selectedAccessors: typeof this.accessorsList = [];
+  selectedAccessors: typeof this.allAccessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
+  disabledCheckboxAccessors: string[] = [];
+
+  selectAccessorsStepLabel: string = '';
 
   supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
     .map(([key, item]) => ({
@@ -90,7 +100,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
     [InnovationSupportStatusEnum.ENGAGING]:
-      'This message will be sent to the innovator and collaborators. It will also appear on the innovation’s support summary.',
+      "This message will be sent to the innovator and collaborators. It will also appear on the innovation's support summary.",
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
     [InnovationSupportStatusEnum.UNSUITABLE]: 'The innovator and collaborators will be notified.',
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
@@ -110,6 +120,8 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     private fileUploadService: FileUploadService
   ) {
     super();
+
+    this.innovation = this.ctx.innovation.info();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportId = this.activatedRoute.snapshot.params.supportId;
@@ -145,28 +157,14 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     this.setPageTitle('Update support status', { showPage: false, size: 'l' });
     this.setBackLink('Go back', this.handleGoBack.bind(this));
 
-    if (!this.supportId) {
-      this.setPageStatus('READY');
-    } else {
-      this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId).subscribe(response => {
-        this.currentStatus = response.status;
-
-        response.engagingAccessors.forEach(accessor => {
-          (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
-        });
-
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
-          contextIds: [this.supportId]
-        });
-
-        this.setPageStatus('READY');
-      });
-    }
-
-    this.usersService
-      .getUsersList({
+    const subscriptions: {
+      usersList: ObservableInput<UsersListDTO>;
+      availableSupportStatuses?: ObservableInput<{
+        availableStatus: InnovationSupportStatusEnum[];
+      }>;
+      innovationSupportInfo?: ObservableInput<InnovationSupportInfoDTO>;
+    } = {
+      usersList: this.usersService.getUsersList({
         queryParams: {
           take: 100,
           skip: 0,
@@ -178,16 +176,105 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           }
         }
       })
-      .subscribe(response => {
-        for (const item of response.data) {
-          this.accessorsList.push({ id: item.id, userRoleId: item.roleId, name: item.name });
-          this.formAccessorsList.push({ value: item.id, label: item.name });
-        }
-      });
+    };
 
-    this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(availableStatuses => {
-      this.availableSupportStatuses = availableStatuses.availableStatus;
+    if (this.supportId) {
+      subscriptions.availableSupportStatuses = this.innovationsService.getInnovationAvailableSupportStatuses(
+        this.innovationId
+      );
+      subscriptions.innovationSupportInfo = this.innovationsService.getInnovationSupportInfo(
+        this.innovationId,
+        this.supportId
+      );
+    } else if (this.innovation.support?.id) {
+      subscriptions.innovationSupportInfo = this.innovationsService.getInnovationSupportInfo(
+        this.innovationId,
+        this.innovation.support?.id
+      );
+    }
+
+    forkJoin(subscriptions).subscribe({
+      next: response => {
+        this.allAccessorsList = response.usersList.data.map(item => ({
+          id: item.id,
+          role: item.role,
+          userRoleId: item.roleId,
+          name: item.name
+        }));
+        this.qualifyingAccessorsList = this.allAccessorsList.filter(i => i.role === UserRoleEnum.QUALIFYING_ACCESSOR);
+        this.formAccessorsList = this.allAccessorsList.map(i => ({ value: i.id, label: i.name }));
+
+        // Use these statuses, if starting support
+        if (!this.supportId) {
+          this.availableSupportStatuses = [
+            InnovationSupportStatusEnum.ENGAGING,
+            InnovationSupportStatusEnum.WAITING,
+            InnovationSupportStatusEnum.UNSUITABLE
+          ];
+
+          // Filter out current status, if any
+          if (response.innovationSupportInfo) {
+            this.availableSupportStatuses = this.availableSupportStatuses.filter(
+              status => status !== response.innovationSupportInfo?.status
+            );
+          }
+        }
+        // Use these statuses, if changing
+        if (this.supportId && response.availableSupportStatuses) {
+          this.availableSupportStatuses = response.availableSupportStatuses.availableStatus;
+        }
+
+        if (response.innovationSupportInfo) {
+          this.currentStatus = response.innovationSupportInfo.status;
+
+          response.innovationSupportInfo.engagingAccessors.forEach(accessor => {
+            (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
+          });
+
+          // Throw notification read dismiss.
+          this.stores.context.dismissNotification(this.innovationId, {
+            contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
+            contextIds: [this.supportId]
+          });
+        }
+
+        this.setPageStatus('READY');
+      },
+      error: () => {
+        this.setPageStatus('ERROR');
+        this.setAlertUnknownError();
+      }
     });
+  }
+
+  setTitleAndLabel() {
+    if (this.stepNumber === 1) {
+      this.setPageTitle('');
+    }
+
+    if (this.stepNumber === 2) {
+      switch (this.chosenStatus) {
+        case InnovationSupportStatusEnum.ENGAGING:
+          this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
+          this.selectAccessorsStepLabel = `Select 1 or more accessors from ${this.userOrganisationUnit?.name} to support this innovation.`;
+          break;
+
+        case InnovationSupportStatusEnum.WAITING:
+          this.setPageTitle('Assign qualifying accessors to this innovation', { width: 'full', size: 'l' });
+          this.selectAccessorsStepLabel = `Select 1 or more qualifying accessors from ${this.userOrganisationUnit?.name} to be assigned to this innovation. They will receive notifications regarding this innovation.`;
+      }
+    }
+
+    if (this.stepNumber === 3) {
+      this.setPageTitle(`Change support status to ${this.chosenStatus?.toLowerCase()}`, {
+        width: 'full',
+        size: 'l'
+      });
+    }
+
+    if (this.stepNumber === 4) {
+      this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
+    }
   }
 
   onSubmitStep(): void {
@@ -202,9 +289,41 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        if (this.chosenStatus === InnovationSupportStatusEnum.ENGAGING) {
-          this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
-          this.stepNumber = 2;
+        if (
+          this.chosenStatus === InnovationSupportStatusEnum.ENGAGING ||
+          this.chosenStatus === InnovationSupportStatusEnum.WAITING
+        ) {
+          const formSelectedAcessorsList = this.form.get('accessors') as FormArray;
+          switch (this.chosenStatus) {
+            case InnovationSupportStatusEnum.ENGAGING:
+              this.disabledCheckboxAccessors = [];
+              formSelectedAcessorsList.clear();
+              this.stepNumber = 2;
+              break;
+
+            case InnovationSupportStatusEnum.WAITING:
+              // set list of QA only
+              this.formAccessorsList = this.qualifyingAccessorsList.map(i => ({ value: i.id, label: i.name }));
+
+              // add this user by default, and disable input
+              const userId = this.stores.authentication.getUserId();
+              formSelectedAcessorsList.clear();
+              formSelectedAcessorsList.push(new FormControl<string>(userId));
+
+              this.disabledCheckboxAccessors = [userId];
+
+              this.selectedAccessors = this.allAccessorsList.filter(item =>
+                (this.form.get('accessors')?.value ?? []).includes(item.id)
+              );
+
+              this.stepNumber = this.qualifyingAccessorsList.length > 1 ? 2 : 3;
+              break;
+
+            default:
+              break;
+          }
+
+          this.setTitleAndLabel();
         } else {
           this.selectedAccessors = [];
           this.setPageTitle(`Change support status to ${this.chosenStatus?.toLowerCase()}`, {
@@ -225,24 +344,23 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           return;
         }
 
-        this.selectedAccessors = this.accessorsList.filter(item =>
+        this.selectedAccessors = this.allAccessorsList.filter(item =>
           (this.form.get('accessors')?.value ?? []).includes(item.id)
         );
 
         this.submitButton.label = 'Confirm and send message';
         this.stepNumber++;
-        this.setPageTitle(`Change support status to ${this.chosenStatus?.toLowerCase()}`, { size: 'l' });
 
         break;
 
       case 4:
-        this.setPageTitle('Suggest other organisations', { showPage: false, size: 'l' });
         this.resetBackLink();
         break;
 
       default:
         break;
     }
+    this.setTitleAndLabel();
   }
   onSubmit(): void {
     if (!this.form.valid) {
@@ -364,8 +482,19 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   private handleGoBack() {
-    if (this.stepNumber === 3 && this.chosenStatus !== InnovationSupportStatusEnum.ENGAGING) {
-      this.stepNumber = 1;
+    if (this.stepNumber === 3) {
+      switch (this.chosenStatus) {
+        case InnovationSupportStatusEnum.ENGAGING:
+          this.stepNumber--;
+          break;
+
+        case InnovationSupportStatusEnum.WAITING:
+          this.stepNumber = this.qualifyingAccessorsList.length === 1 ? 1 : 2;
+          break;
+
+        default:
+          this.stepNumber = 1;
+      }
     } else {
       this.stepNumber--;
     }
@@ -374,5 +503,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       const previousUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
       this.router.navigateByUrl(previousUrl);
     }
+
+    this.setTitleAndLabel();
   }
 }

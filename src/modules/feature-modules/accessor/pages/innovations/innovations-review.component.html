@@ -90,7 +90,7 @@
                 <div class="d-flex">
                   <div class="nhsuk-u-padding-right-1">
                     <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("name") }} </span>
-                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || item.support?.closedReason?.value === 'STOPPED_SHARED'; else hasLink">
+                    <ng-container *ngIf="(item.support?.status !== 'ENGAGING' && !item.assessment?.id) || !item.support?.isShared; else hasLink">
                       <span> {{ item.name }} </span>
                     </ng-container>
                     <ng-template #hasLink>
@@ -155,8 +155,8 @@
               <td *ngIf="innovationsList.getColumnLabel('support.status')" class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
                 <theme-tag
-                  type="{{ 'shared.catalog.innovation.support_status.' + item.support?.status + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.support_status.' + item.support?.status + '.name' | translate }}"
+                  type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED' ) + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED' ) + '.name' | translate }}"
                 ></theme-tag>
               </td>
 
@@ -165,9 +165,9 @@
                 {{ item.support?.updatedBy }}
               </td>
 
-              <td *ngIf="innovationsList.getColumnLabel('support.closedReason')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("closedReason") }} </span>
-                {{ item.support?.closedReason?.label }}
+              <td *ngIf="innovationsList.getColumnLabel('support.closeReason')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("closeReason") }} </span>
+                {{ item.support?.closeReason?.label }}
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('engagingOrganisations')" class="nhsuk-table__cell text-align-right">

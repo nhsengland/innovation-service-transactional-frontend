@@ -29,7 +29,7 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
   ) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.setPageTitle('Custom notifications');
   }
@@ -47,7 +47,7 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
 
           const displaySections =
             subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
-              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.innovation)
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.schema)
               : undefined;
 
           const displayReminder =

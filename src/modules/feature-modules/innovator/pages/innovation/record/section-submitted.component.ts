@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
-import { InnovationSectionEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-submitted',
@@ -14,7 +13,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   isArchived: boolean;
 
   section: {
-    id: InnovationSectionEnum;
+    id: string;
     openTasksCount: number;
   };
 
@@ -23,7 +22,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.section = {
       id: this.activatedRoute.snapshot.params.sectionId,
@@ -34,7 +33,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
 
     this.setPageTitle(`Let your support organisations know you've updated your innovation record`, { size: 'l' });
 
-    this.isArchived = this.innovation.status === 'ARCHIVED';
+    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit() {

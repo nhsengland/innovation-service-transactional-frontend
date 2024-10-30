@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -8,11 +8,11 @@ import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
@@ -46,6 +46,8 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   assessmentType = '';
   showAssessmentDetails = false;
 
+  updateSupportUrlNewOrSupport: string | 'new' | undefined;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -57,7 +59,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     this.isAdminType = this.stores.authentication.isAdminRole();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
@@ -136,6 +138,15 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         });
       }
 
+      if (this.isAccessorType) {
+        this.updateSupportUrlNewOrSupport =
+          this.innovation.support &&
+          [InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.ENGAGING].includes(
+            this.innovation.support.status
+          )
+            ? this.innovation.support.id
+            : 'new';
+      }
       this.setGoBackLink();
       this.updatePageTitle();
       this.setPageStatus('READY');

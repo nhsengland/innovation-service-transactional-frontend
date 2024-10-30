@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, Injector, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
@@ -7,6 +7,10 @@ import { filter } from 'rxjs/operators';
 import { CookiesService } from '@modules/core/services/cookies.service';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
+import { AngularPlugin } from '@microsoft/applicationinsights-angularplugin-js';
+import { ClickAnalyticsPlugin } from '@microsoft/applicationinsights-clickanalytics-js';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
+import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 import { locale as enLanguage } from './config/translations/en';
 
 declare let gtag: any;
@@ -21,7 +25,8 @@ export class AppComponent {
     public router: Router,
     private translateService: TranslateService,
     private environmentStore: EnvironmentVariablesStore,
-    private cookiesService: CookiesService
+    private cookiesService: CookiesService,
+    private injector: Injector
   ) {
     this.translateService.addLangs(['en']);
     this.translateService.setTranslation(enLanguage.lang, enLanguage.data, true);
@@ -35,6 +40,40 @@ export class AppComponent {
       this.environmentStore.ENV.GTM_ID &&
       this.cookiesService.getConsentCookie().analytics
     ) {
+      const angularPlugin = new AngularPlugin();
+      // *** Add the Click Analytics plug-in. ***
+      const clickPluginInstance = new ClickAnalyticsPlugin();
+      const clickPluginConfig = {
+        autoCapture: true,
+        dataTags: {
+          useDefaultContentNameOrId: true
+        }
+      };
+      const appInsights = new ApplicationInsights({
+        config: {
+          connectionString: this.environmentStore.ENV.APPLICATIONINSIGHTS_CONNECTION_STRING,
+          // *** Add the Click Analytics plug-in. ***
+          extensions: [angularPlugin, clickPluginInstance],
+          extensionConfig: {
+            [angularPlugin.identifier]: { router: this.router, errorServices: [new GlobalErrorHandler(this.injector)] },
+            // *** Add the Click Analytics plug-in. ***
+            [clickPluginInstance.identifier]: clickPluginConfig
+          }
+        }
+      });
+      appInsights.addTelemetryInitializer(envelope => {
+        // Don't send telemetry for google analytics or browser-sync
+        if (
+          envelope.baseData?.target?.includes('google-analytics.com') ||
+          envelope.baseData?.target?.includes('browser-sync')
+        ) {
+          return false;
+        }
+        return true;
+      });
+
+      appInsights.loadAppInsights();
+
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         if (this.environmentStore.ENV.ENABLE_ANALYTICS) {
           typeof gtag === 'function' &&

@@ -6,7 +6,7 @@ import { CustomValidators, FormArray, FormControl, FormEngineParameterModel, For
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 
 import { AccessorService, NotificationEnum, NotifyMeConfig } from '../../../services/accessor.service';
 
@@ -85,7 +85,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     private organisationsService: OrganisationsService
   ) {
     super();
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
     this.stepNumber = 1;
   }
 
@@ -265,8 +265,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
 
     const suggestNewOrganisationBody = {
       organisationUnits: this.chosenUnits.values,
-      description: this.form.get('comment')?.value || '',
-      type: SupportLogType.ACCESSOR_SUGGESTION
+      description: this.form.get('comment')?.value || ''
     };
 
     this.accessorService

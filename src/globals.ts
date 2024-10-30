@@ -5,7 +5,7 @@ let insights: appinsights.Configuration;
 export const initAppInsights = () => {
   if (!insights) {
     insights = appinsights
-      .setup(process.env.APPINSIGHTS_INSTRUMENTATION_KEY)
+      .setup(process.env['APPLICATIONINSIGHTS_CONNECTION_STRING'])
       .setDistributedTracingMode(appinsights.DistributedTracingModes.AI_AND_W3C)
       .start();
 
@@ -15,6 +15,11 @@ export const initAppInsights = () => {
         if (oid) {
           envelope.data.baseData.properties['authenticatedUser'] = oid;
           envelope.data.baseData.properties['session'] = context?.['http.ServerRequest']?.sessionID;
+        }
+
+        // Handle 401 as successes
+        if (envelope.data.baseData.responseCode === '401') {
+          envelope.data.baseData.success = true;
         }
       }
       return true;

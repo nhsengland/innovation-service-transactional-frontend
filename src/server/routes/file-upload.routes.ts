@@ -106,11 +106,7 @@ fileUploadRouter.post(`${ENVIRONMENT.BASE_PATH}/upload-file`, upload.single('fil
         id: fileInfo.id,
         name: fileInfo.name,
         size: req.file?.size,
-        extension: req.file
-          ? extname(req.file?.originalname)
-              .toLowerCase()
-              .substring(1)
-          : '',
+        extension: req.file ? extname(req.file?.originalname).toLowerCase().substring(1) : '',
         url: fileInfo.url
       });
     } catch (error: any) {

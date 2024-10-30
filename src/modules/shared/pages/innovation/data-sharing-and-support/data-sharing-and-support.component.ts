@@ -5,7 +5,7 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
-import { ContextInnovationType } from '@modules/stores/context/context.types';
+import { ContextInnovationType } from '@modules/stores';
 import { InnovationService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
@@ -70,14 +70,14 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
     this.userType = this.stores.authentication.getUserType() ?? '';
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.innovation = this.stores.context.getInnovation();
+    this.innovation = this.ctx.innovation.info();
 
     // Flags
     this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
     this.isAssessmentType = this.stores.authentication.isAssessmentType();
     this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
+    this.isArchived = this.ctx.innovation.isArchived();
 
     if (this.isQualifyingAccessorRole) {
       this.setPageTitle('Suggest organisations to support');
@@ -100,13 +100,23 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     if (this.isInnovatorType) {
       subscriptions.innovationShares = this.innovationsService.getInnovationSharesList(this.innovationId);
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
-        this.innovationId
+        this.innovationId,
+        {
+          ...(this.innovation.assessment?.currentMajorAssessmentId && {
+            majorAssessmentId: this.innovation.assessment?.currentMajorAssessmentId
+          })
+        }
       );
     }
 
     if (this.isAccessorType) {
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
-        this.innovationId
+        this.innovationId,
+        {
+          ...(this.innovation.assessment?.currentMajorAssessmentId && {
+            majorAssessmentId: this.innovation.assessment?.currentMajorAssessmentId
+          })
+        }
       );
     }
 

@@ -42,7 +42,7 @@ export class AssessmentService extends CoreService {
       .setPathParams({ innovationId });
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
-      finalize(() => this.stores.context.clearInnovation())
+      finalize(() => this.ctx.innovation.clear())
     );
   }
 
@@ -53,8 +53,8 @@ export class AssessmentService extends CoreService {
     return this.http.post<{ id: string }>(url.buildUrl(), data).pipe(
       take(1),
       finalize(() => {
-        this.stores.context.clearInnovation();
-        this.stores.context.clearAssessment();
+        this.ctx.innovation.clear();
+        this.ctx.assessment.clear();
       })
     );
   }
@@ -77,8 +77,8 @@ export class AssessmentService extends CoreService {
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       finalize(() => {
-        this.stores.context.clearInnovation();
-        this.stores.context.clearAssessment();
+        this.ctx.innovation.clear();
+        this.ctx.assessment.fetch$.next({ innovationId, assessmentId });
       })
     );
   }
@@ -93,7 +93,7 @@ export class AssessmentService extends CoreService {
       .setPathParams({ innovationId, assessmentId });
     return this.http.patch<{ assessmentId: string; assessorId: string }>(url.buildUrl(), body).pipe(
       take(1),
-      finalize(() => this.stores.context.clearAssessment())
+      finalize(() => this.ctx.assessment.fetch$.next({ innovationId, assessmentId }))
     );
   }
 
