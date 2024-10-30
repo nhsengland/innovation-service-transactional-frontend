@@ -520,7 +520,6 @@ export class InnovationsService extends CoreService {
   ): Observable<InnovationNeedsAssessmentInfoDTO> {
     // Leverage the store if possible
     if (this.ctx.assessment.info()?.id === assessmentId) {
-      console.log('Using innovations.service.ts');
       return this.ctx.assessment.getOrLoad(innovationId, assessmentId);
     } else {
       const url = new UrlModel(this.API_INNOVATIONS_URL)
