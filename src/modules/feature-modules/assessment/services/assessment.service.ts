@@ -54,7 +54,7 @@ export class AssessmentService extends CoreService {
       take(1),
       finalize(() => {
         this.ctx.innovation.clear();
-        this.stores.context.clearAssessment();
+        this.ctx.assessment.clear();
       })
     );
   }
@@ -78,7 +78,7 @@ export class AssessmentService extends CoreService {
       take(1),
       finalize(() => {
         this.ctx.innovation.clear();
-        this.stores.context.clearAssessment();
+        this.ctx.assessment.fetch$.next({ innovationId, assessmentId });
       })
     );
   }
@@ -93,7 +93,7 @@ export class AssessmentService extends CoreService {
       .setPathParams({ innovationId, assessmentId });
     return this.http.patch<{ assessmentId: string; assessorId: string }>(url.buildUrl(), body).pipe(
       take(1),
-      finalize(() => this.stores.context.clearAssessment())
+      finalize(() => this.ctx.assessment.fetch$.next({ innovationId, assessmentId }))
     );
   }
 

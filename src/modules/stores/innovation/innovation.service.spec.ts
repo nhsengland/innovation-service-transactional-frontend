@@ -5,6 +5,8 @@ import { ENV } from '@tests/app.mocks';
 
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
 import {
+  AssessmentContextService,
+  AssessmentContextStore,
   AuthenticationService,
   AuthenticationStore,
   ContextService,
@@ -39,6 +41,8 @@ describe('Stores/Innovation/InnovationService', () => {
         InnovationRecordSchemaService,
         InnovationContextStore,
         InnovationContextService,
+        AssessmentContextStore,
+        AssessmentContextService,
         CtxStore,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]

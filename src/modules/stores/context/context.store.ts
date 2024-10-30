@@ -158,42 +158,6 @@ export class ContextStore extends Store<ContextModel> {
     return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
   }
 
-  // Assessment methods
-  getAssessment(): ContextAssessmentType {
-    if (!this.state.assessment) {
-      console.error('Context has NO assessment');
-      return {
-        id: '',
-        description: '',
-        expiryAt: 0
-      } as any;
-    }
-    return this.state.assessment;
-  }
-  setAssessment(data: ContextAssessmentType): void {
-    this.state.assessment = data;
-    this.setState();
-  }
-  clearAssessment(): void {
-    this.state.assessment = null;
-    this.setState();
-  }
-
-  getOrLoadAssessment(innovationId: string, assessmentId: string): Observable<ContextAssessmentType> {
-    if (
-      this.state.assessment &&
-      this.state.assessment.id === assessmentId &&
-      Date.now() < this.state.assessment.expiryAt
-    ) {
-      return of(this.state.assessment);
-    }
-    return this.contextService.getAssessmentContextInfo(innovationId, assessmentId).pipe(
-      tap(assessment => {
-        this.setAssessment(assessment);
-      })
-    );
-  }
-
   /**
    * sets the current url and the previous url if it is different from the current url
    * @param url The url to set as the current url.
