@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { Response } from 'express';
 
 import { CoreComponent } from '@app/base';
-import { RESPONSE } from 'src/express.tokens';
+import { RESPONSE } from '../../../../express.tokens';
 
 @Component({
   selector: 'shared-pages-not-found',
