@@ -45,6 +45,9 @@ export class AssessmentContextStore {
     if (assessment && assessment.id === assessmentId && Date.now() < assessment.expiryAt) {
       return of(assessment);
     }
+    if (assessment?.id !== assessmentId) {
+      this.clear();
+    }
 
     this.fetch$.next({ innovationId, assessmentId });
     return this.isStateLoaded$.pipe(
