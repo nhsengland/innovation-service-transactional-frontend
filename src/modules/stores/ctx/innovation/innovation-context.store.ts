@@ -1,7 +1,8 @@
 import { Injectable, computed, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
 
-import { BehaviorSubject, Observable, Subject, debounceTime, filter, of, switchMap, take, tap } from 'rxjs';
+import { Observable, Subject, debounceTime, filter, of, switchMap, take, tap } from 'rxjs';
 import { InnovationContextService } from './innovation-context.service';
 import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { isNil, omitBy } from 'lodash';
@@ -13,16 +14,16 @@ export class InnovationContextStore {
   // State
   private state = signal<{
     innovation: ContextInnovationType;
-    isLoaded: boolean;
-  }>({ innovation: EMPTY_CONTEXT, isLoaded: false });
+    isStateLoaded: boolean;
+  }>({ innovation: EMPTY_CONTEXT, isStateLoaded: false });
 
   // Selectors
   info = computed(() => this.state().innovation);
-  isLoaded = computed(() => this.state().isLoaded);
   isArchived = computed(() => this.info().status === InnovationStatusEnum.ARCHIVED ?? false);
   isOwner = computed(() => this.info().loggedUser.isOwner);
 
-  isStateLoaded$ = new BehaviorSubject<boolean>(false);
+  isStateLoaded = computed(() => this.state().isStateLoaded);
+  isStateLoaded$ = toObservable(this.isStateLoaded);
 
   // Actions
   fetch$ = new Subject<{ innovationId: string; userContext: AuthenticationModel['userContext'] }>();
@@ -33,14 +34,12 @@ export class InnovationContextStore {
       .pipe(
         debounceTime(50),
         tap(() => {
-          this.state.update(state => ({ ...state, isLoaded: false }));
+          this.state.update(state => ({ ...state, isStateLoaded: false }));
         }),
         switchMap(ctx => this.innovationService.getContextInfo(ctx.innovationId, ctx.userContext))
       )
       .subscribe(innovation => {
-        this.state.update(state => ({ ...state, innovation, isLoaded: true }));
-        // In angular 18 we could use some rxjs interop functions to use the signal.
-        this.isStateLoaded$.next(true);
+        this.state.update(state => ({ ...state, innovation, isStateLoaded: true }));
       });
 
     // interval(60000).subscribe(() => this.logState('background refresh?'));
@@ -53,8 +52,7 @@ export class InnovationContextStore {
   }
 
   clear(): void {
-    this.state.update(() => ({ innovation: EMPTY_CONTEXT, isLoaded: false }));
-    this.isStateLoaded$.next(false);
+    this.state.update(() => ({ innovation: EMPTY_CONTEXT, isStateLoaded: false }));
   }
   // End Actions + Reducers
 
@@ -66,10 +64,13 @@ export class InnovationContextStore {
     if (innovation && innovation.id === innovationId && Date.now() < innovation.expiryAt) {
       return of(innovation);
     }
+    if (innovation.id !== innovationId) {
+      this.clear();
+    }
 
     this.fetch$.next({ innovationId, userContext: context });
     return this.isStateLoaded$.pipe(
-      filter(() => this.state().isLoaded),
+      filter(() => this.isStateLoaded()),
       switchMap(() => of(this.state().innovation)),
       take(1)
     );
