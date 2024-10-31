@@ -1,9 +1,3 @@
-// Store.
-export { InnovationStore } from './innovation.store';
-
-// Services.
-export { InnovationService } from './innovation.service';
-
 // Enums-
 export {
   InnovationCollaboratorStatusEnum,

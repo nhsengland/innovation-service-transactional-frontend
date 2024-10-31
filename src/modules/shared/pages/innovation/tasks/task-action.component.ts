@@ -60,7 +60,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
           return forkJoin([
             of(task),
             this.status === InnovationTaskStatusEnum.DONE
-              ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section)
+              ? this.ctx.innovation.getSectionInfo$(this.innovationId, task.section)
               : of(null)
           ]);
         })

@@ -6,7 +6,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { InnovationStore, StoresModule } from '@modules/stores';
+import {  StoresModule } from '@modules/stores';
 
 import { InnovationOverviewComponent } from './overview.component';
 
@@ -15,7 +15,6 @@ import { InnovatorService } from '@modules/feature-modules/innovator/services/in
 describe('FeatureModules/Innovator/DashboardComponent', () => {
   let activatedRoute: ActivatedRoute;
 
-  let innovationStore: InnovationStore;
   let innovatorService: InnovatorService;
 
   let component: InnovationOverviewComponent;
@@ -30,7 +29,6 @@ describe('FeatureModules/Innovator/DashboardComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    innovationStore = TestBed.inject(InnovationStore);
     innovatorService = TestBed.inject(InnovatorService);
   });
 

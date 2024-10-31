@@ -126,14 +126,14 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
-      this.stores.innovation.getAllSectionsInfo$(this.innovation.id),
+      this.ctx.innovation.getAllSectionsInfo$(this.innovation.id),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 100,
         order: { createdAt: 'ASC' },
         filters: { contextTypes: ['INNOVATION_SECTION'], fields: ['description'] }
       }),
-      this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
+      this.ctx.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
       const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
 

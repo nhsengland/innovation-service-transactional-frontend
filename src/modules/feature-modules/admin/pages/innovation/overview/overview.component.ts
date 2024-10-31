@@ -38,7 +38,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovatorDetails: { label: string; value: null | string }[] = [];
 
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  innovationSupportStatus = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
 
   innovationCollaborators: {
     id: string;

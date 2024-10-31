@@ -1,13 +1,26 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
+import { Observable, Subject, debounceTime, map, filter, finalize, of, switchMap, take, tap } from 'rxjs';
+import { isNil, omitBy, cloneDeep } from 'lodash';
 
-import { Observable, Subject, debounceTime, filter, of, switchMap, take, tap } from 'rxjs';
+import { AuthenticationModel } from '../../authentication/authentication.models';
 import { InnovationContextService } from './innovation-context.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { isNil, omitBy } from 'lodash';
+import { InnovationStatusEnum } from '../../innovation/innovation.enums';
 import { ContextInnovationType, EMPTY_CONTEXT } from './innovation-context.types';
-import { DeepPartial } from '@app/base/types';
+import { DeepPartial, MappedObjectType } from '@app/base/types';
+import {
+  GetInnovationEvidenceDTO,
+  INNOVATION_SECTION_STATUS,
+  INNOVATION_STATUS,
+  INNOVATION_SUPPORT_STATUS,
+  InnovationAllSectionsInfoDTO,
+  InnovationSectionInfoDTO,
+  SectionsSummaryModel
+} from '../../innovation/innovation.models';
+import { InnovationRecordSchemaStore } from '../../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
+import { WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
+import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from '../../innovation/innovation-record/202405/evidences-config';
+import { toObservable } from '@angular/core/rxjs-interop';
 
 @Injectable()
 export class InnovationContextStore {
@@ -19,7 +32,7 @@ export class InnovationContextStore {
 
   // Selectors
   info = computed(() => this.state().innovation);
-  isArchived = computed(() => this.info().status === InnovationStatusEnum.ARCHIVED ?? false);
+  isArchived = computed(() => this.info().status === InnovationStatusEnum.ARCHIVED);
   isOwner = computed(() => this.info().loggedUser.isOwner);
 
   isStateLoaded = computed(() => this.state().isStateLoaded);
@@ -28,7 +41,10 @@ export class InnovationContextStore {
   // Actions
   fetch$ = new Subject<{ innovationId: string; userContext: AuthenticationModel['userContext'] }>();
 
-  constructor(private innovationService: InnovationContextService) {
+  constructor(
+    private innovationService: InnovationContextService,
+    private irSchemaStore: InnovationRecordSchemaStore
+  ) {
     // Reducers
     this.fetch$
       .pipe(
@@ -74,5 +90,103 @@ export class InnovationContextStore {
       switchMap(() => of(this.state().innovation)),
       take(1)
     );
+  }
+
+  submitInnovation$(innovationId: string): Observable<{ id: string; status: keyof typeof INNOVATION_STATUS }> {
+    return this.innovationService.submitInnovation(innovationId).pipe(finalize(() => this.clear()));
+  }
+
+  getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
+    return this.innovationService.getInnovationSections(innovationId).pipe(
+      map(response => {
+        return this.irSchemaStore.getIrSchemaSectionsListV3().map(item => ({
+          id: item.id,
+          title: item.title,
+          sections: item.sections.map(ss => {
+            const sectionState = response.find(a => a.section === ss.id) || {
+              status: 'UNKNOWN',
+              actionStatus: '',
+              submittedAt: null,
+              submittedBy: null,
+              openTasksCount: 0
+            };
+            return {
+              id: ss.id,
+              title: ss.title,
+              status: sectionState.status,
+              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+              submittedAt: sectionState.submittedAt,
+              submittedBy:
+                sectionState.submittedBy === null
+                  ? null
+                  : {
+                      name: sectionState.submittedBy.name,
+                      isOwner: sectionState.submittedBy.isOwner
+                    },
+              openTasksCount: sectionState.openTasksCount
+            };
+          })
+        }));
+      })
+    );
+  }
+
+  getSectionInfo$(innovationId: string, section: string): Observable<InnovationSectionInfoDTO> {
+    return this.innovationService.getSectionInfo(innovationId, section, { fields: ['tasks'] });
+  }
+
+  getAllSectionsInfo$(innovationId: string): Observable<InnovationAllSectionsInfoDTO> {
+    return this.innovationService.getAllSectionsInfo(innovationId);
+  }
+
+  updateSectionInfo$(innovationId: string, sectionKey: string, data: MappedObjectType): Observable<MappedObjectType> {
+    return this.innovationService.updateSectionInfo(innovationId, sectionKey, data);
+  }
+
+  submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
+    return this.innovationService.submitSections(innovationId, sectionKey);
+  }
+
+  getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {
+    return this.innovationService.getSectionEvidenceInfo(innovationId, evidenceId);
+  }
+
+  upsertSectionEvidenceInfo$(
+    innovationId: string,
+    data: MappedObjectType,
+    evidenceId?: string
+  ): Observable<{ id: string }> {
+    return this.innovationService.upsertSectionEvidenceInfo(innovationId, data, evidenceId);
+  }
+
+  deleteEvidence$(innovationId: string, evidenceId: string): Observable<void> {
+    return this.innovationService.deleteEvidence(innovationId, evidenceId);
+  }
+
+  // TODO: Move this to schema store.
+  getInnovationRecordSectionEvidencesWizard(sectionId: string): WizardEngineModel {
+    const section = cloneDeep(INNOVATION_SECTIONS_EVIDENCES_WIZARD.find(section => section.id === sectionId)?.wizard);
+
+    if (!section) {
+      throw new Error(`Innovation record section "${sectionId}" NOT FOUND`);
+    }
+
+    return section;
+  }
+
+  // TODO: Move this to schema store
+  getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
+    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
+  }
+
+  // TODO: Check if this can be removed.
+  get INNOVATION_STATUS(): typeof INNOVATION_STATUS {
+    return INNOVATION_STATUS;
+  }
+  get INNOVATION_SUPPORT_STATUS(): typeof INNOVATION_SUPPORT_STATUS {
+    return INNOVATION_SUPPORT_STATUS;
+  }
+  get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS {
+    return INNOVATION_SECTION_STATUS;
   }
 }

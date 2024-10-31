@@ -85,7 +85,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     InnovationsListFiltersType
   >;
 
-  innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  innovationStatus = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
 
   constructor(
     private activatedRoute: ActivatedRoute,

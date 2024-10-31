@@ -43,7 +43,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   selectAccessorsStepLabel: string = '';
 
-  supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
+  supportStatus = Object.entries(this.ctx.innovation.INNOVATION_SUPPORT_STATUS)
     .map(([key, item]) => ({
       key,
       checked: false,

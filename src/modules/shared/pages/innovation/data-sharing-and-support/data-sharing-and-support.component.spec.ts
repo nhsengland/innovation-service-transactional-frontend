@@ -3,11 +3,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { StoresModule, InnovationService } from '@modules/stores';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
+import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageInnovationDataSharingAndSupportComponent } from './data-sharing-and-support.component';
@@ -20,7 +18,6 @@ import { SharedModule } from '@modules/shared/shared.module';
 describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAndSupportComponent', () => {
   let activatedRoute: ActivatedRoute;
 
-  let innovationService: InnovationService;
   let innovatorService: InnovatorService;
   let organisationsService: OrganisationsService;
 
@@ -43,7 +40,6 @@ describe('FeatureModules/Innovator/Pages/Innovation/PageInnovationDataSharingAnd
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    innovationService = TestBed.inject(InnovationService);
     innovatorService = TestBed.inject(InnovatorService);
     organisationsService = TestBed.inject(OrganisationsService);
   });

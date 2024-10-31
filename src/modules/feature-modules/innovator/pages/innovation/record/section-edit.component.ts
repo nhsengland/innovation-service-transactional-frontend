@@ -55,7 +55,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
     this.sectionQuestionsIdList = this.stores.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
 
-    this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
+    this.wizard = this.ctx.innovation.getInnovationRecordSectionWizard(this.sectionId);
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.ctx.innovation.isArchived();
@@ -84,7 +84,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       next: ([queryParams, params]) => {
         this.isChangeMode = queryParams.isChangeMode ?? false;
 
-        this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
+        this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
           next: sectionInfoResponse => {
             this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
             this.sectionStatus = sectionInfoResponse.status;
@@ -197,7 +197,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           .pipe(
             concatMap(() => {
               if (shouldUpdateInformation || this.errorOnSubmitStep) {
-                return this.stores.innovation.updateSectionInfo$(
+                return this.ctx.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
                   this.wizard.runOutboundParsing()
@@ -251,7 +251,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
-    this.stores.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
+    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||

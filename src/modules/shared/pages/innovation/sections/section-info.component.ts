@@ -156,7 +156,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       ) || this.stores.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
-      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
+      this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
       !this.shouldShowDocuments
         ? of(null)
         : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
@@ -267,7 +267,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   onSubmitSection(): void {
-    this.stores.innovation.submitSections$(this.innovation.id, this.sectionSummaryData.sectionInfo.id).subscribe({
+    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionSummaryData.sectionInfo.id).subscribe({
       next: () => {
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||

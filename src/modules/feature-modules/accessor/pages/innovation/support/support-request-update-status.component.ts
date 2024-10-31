@@ -15,7 +15,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   supportId: string;
   stepNumber: number;
 
-  supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  supportStatusObj = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
   supportStatus = Object.entries(this.supportStatusObj)
     .map(([key, item]) => ({
       key,

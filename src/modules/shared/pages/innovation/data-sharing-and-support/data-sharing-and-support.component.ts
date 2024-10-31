@@ -5,8 +5,8 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationContextService } from '@modules/stores';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
 
 import { UtilsHelper } from '@app/base/helpers';
@@ -21,7 +21,7 @@ import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/serv
 export class PageInnovationDataSharingAndSupportComponent extends CoreComponent implements OnInit {
   innovationId: string;
 
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
+  innovationSupportStatus = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
 
   innovation: ContextInnovationType;
 
@@ -64,7 +64,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private organisationsService: OrganisationsService,
-    private innovationService: InnovationService
+    private innovationService: InnovationContextService
   ) {
     super();
 
@@ -110,6 +110,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
     }
 
     if (this.isAccessorType) {
+      // TODO: Make sure we want this here
       subscriptions.organisationSuggestions = this.innovationService.getInnovationOrganisationSuggestions(
         this.innovationId,
         {

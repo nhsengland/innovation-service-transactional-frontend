@@ -40,7 +40,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.wizard =
-      this.stores.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
+      this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {
@@ -52,7 +52,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
 
   ngOnInit(): void {
     forkJoin([
-      this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
+      this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 50,
@@ -73,7 +73,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
-    this.stores.innovation.deleteEvidence$(this.innovation.id, this.evidenceId).subscribe({
+    this.ctx.innovation.deleteEvidence$(this.innovation.id, this.evidenceId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been deleted');
         this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`, {
