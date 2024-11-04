@@ -17,7 +17,6 @@ import {
 import { ContextInnovationType } from './innovation-context.types';
 import {
   GetInnovationEvidenceDTO,
-  INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
   InnovationSectionInfoDTO,
   InnovationSectionsListDTO,
@@ -126,11 +125,11 @@ export class InnovationContextService {
     );
   }
 
-  submitInnovation(innovationId: string): Observable<{ id: string; status: keyof typeof INNOVATION_STATUS }> {
+  submitInnovation(innovationId: string): Observable<{ id: string; status: InnovationStatusEnum }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/submit')
       .setPathParams({ innovationId });
-    return this.http.patch<{ id: string; status: keyof typeof INNOVATION_STATUS }>(url.buildUrl(), {}).pipe(
+    return this.http.patch<{ id: string; status: InnovationStatusEnum }>(url.buildUrl(), {}).pipe(
       take(1)
       // finalize(() => this.ctx.innovation.clear()) // TODO: Check this.
     );

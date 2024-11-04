@@ -9,7 +9,6 @@ import { ContextInnovationType, EMPTY_CONTEXT } from './innovation-context.types
 import { DeepPartial, MappedObjectType } from '@app/base/types';
 import {
   GetInnovationEvidenceDTO,
-  INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
   InnovationSectionInfoDTO,
   SectionsSummaryModel
@@ -90,7 +89,7 @@ export class InnovationContextStore {
     );
   }
 
-  submitInnovation$(innovationId: string): Observable<{ id: string; status: keyof typeof INNOVATION_STATUS }> {
+  submitInnovation$(innovationId: string): Observable<{ id: string; status: InnovationStatusEnum }> {
     return this.innovationService.submitInnovation(innovationId).pipe(finalize(() => this.clear()));
   }
 
@@ -175,10 +174,5 @@ export class InnovationContextStore {
   // TODO: Move this to schema store
   getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
     return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
-  }
-
-  // TODO: Check if this can be removed.
-  get INNOVATION_STATUS(): typeof INNOVATION_STATUS {
-    return INNOVATION_STATUS;
   }
 }

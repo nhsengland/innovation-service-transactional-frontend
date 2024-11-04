@@ -137,19 +137,6 @@ export type InnovationUnitSuggestionsType = {
 }[];
 
 // Constants.
-export const INNOVATION_STATUS = {
-  '': null,
-  CREATED: { label: 'Created', cssClass: 'nhsuk-tag--wellow' },
-  WAITING_NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
-  NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
-  AWAITING_NEEDS_REASSESSMENT: { label: 'Awaiting Reassessment', cssClass: 'nhsuk-tag--wellow' },
-  IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
-  // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
-  ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
-  WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
-  ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
-};
-
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;

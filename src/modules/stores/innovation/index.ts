@@ -11,4 +11,4 @@ export {
 } from './innovation.enums';
 
 // Constants.
-export { ACTIVITY_LOG_ITEMS, INNOVATION_STATUS } from './innovation.models';
+export { ACTIVITY_LOG_ITEMS } from './innovation.models';
