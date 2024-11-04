@@ -4,12 +4,11 @@ import { isNil, omitBy, cloneDeep } from 'lodash';
 
 import { AuthenticationModel } from '../../authentication/authentication.models';
 import { InnovationContextService } from './innovation-context.service';
-import { InnovationStatusEnum } from '../../innovation/innovation.enums';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '../../innovation/innovation.enums';
 import { ContextInnovationType, EMPTY_CONTEXT } from './innovation-context.types';
 import { DeepPartial, MappedObjectType } from '@app/base/types';
 import {
   GetInnovationEvidenceDTO,
-  INNOVATION_SECTION_STATUS,
   INNOVATION_STATUS,
   InnovationAllSectionsInfoDTO,
   InnovationSectionInfoDTO,
@@ -103,7 +102,7 @@ export class InnovationContextStore {
           title: item.title,
           sections: item.sections.map(ss => {
             const sectionState = response.find(a => a.section === ss.id) || {
-              status: 'UNKNOWN',
+              status: InnovationSectionStatusEnum.NOT_STARTED,
               actionStatus: '',
               submittedAt: null,
               submittedBy: null,
@@ -113,7 +112,7 @@ export class InnovationContextStore {
               id: ss.id,
               title: ss.title,
               status: sectionState.status,
-              isCompleted: INNOVATION_SECTION_STATUS[sectionState.status]?.isCompleteState || false,
+              isCompleted: sectionState.status === InnovationSectionStatusEnum.SUBMITTED,
               submittedAt: sectionState.submittedAt,
               submittedBy:
                 sectionState.submittedBy === null
@@ -181,8 +180,5 @@ export class InnovationContextStore {
   // TODO: Check if this can be removed.
   get INNOVATION_STATUS(): typeof INNOVATION_STATUS {
     return INNOVATION_STATUS;
-  }
-  get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS {
-    return INNOVATION_SECTION_STATUS;
   }
 }

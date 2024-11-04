@@ -4,7 +4,7 @@ import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
@@ -32,7 +32,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
   wizard: WizardIRV3EngineModel;
-  sectionStatus: keyof typeof INNOVATION_SECTION_STATUS = 'UNKNOWN';
+  sectionStatus = InnovationSectionStatusEnum.NOT_STARTED;
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
 

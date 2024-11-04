@@ -111,11 +111,9 @@
 
           <ol class="app-task-list__items">
             <li *ngFor="let section of sectionGroup.sections; let j = index" class="app-task-list__item">
-              <ng-container *ngIf="section.status !== 'UNKNOWN'">
-                <span class="app-task-list__task-icon">
-                  <ng-container *ngTemplateOutlet="icon; context: { status: section.status }"></ng-container>
-                </span>
-              </ng-container>
+              <span class="app-task-list__task-icon">
+                <ng-container *ngTemplateOutlet="icon; context: { status: section.status }"></ng-container>
+              </span>
 
               <span class="app-task-list__task-name">
                 {{ i + 1 + "." + (j + 1) }}

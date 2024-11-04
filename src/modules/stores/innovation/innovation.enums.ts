@@ -106,3 +106,9 @@ export enum InnovationCollaboratorStatusEnum {
   LEFT = 'LEFT',
   EXPIRED = 'EXPIRED'
 }
+
+export enum InnovationSectionStatusEnum {
+  NOT_STARTED = 'NOT_STARTED',
+  DRAFT = 'DRAFT',
+  SUBMITTED = 'SUBMITTED'
+}

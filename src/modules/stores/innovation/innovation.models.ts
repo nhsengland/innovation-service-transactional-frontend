@@ -1,26 +1,25 @@
 import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationGroupedStatusEnum } from './innovation.enums';
-
-// Store state model.
-export class InnovationModel {
-  constructor() {}
-}
+import {
+  ActivityLogItemsEnum,
+  ActivityLogTypesEnum,
+  InnovationGroupedStatusEnum,
+  InnovationSectionStatusEnum
+} from './innovation.enums';
 
 // Types.
-
 export type sectionType = {
   id: null | string;
   section: string | string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
 };
 
 export type InnovationSectionInfoDTO = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
@@ -34,7 +33,7 @@ export type InnovationSectionInfoDTO = {
 export type InnovationAllSectionsInfoDTO = {
   section: {
     section: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt?: DateISOType;
     submittedBy?: { name: string; displayTag: string };
     openTasksCount: number;
@@ -55,7 +54,7 @@ export type getInnovationInfoResponse = {
 export type InnovationSectionsListDTO = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   submittedAt: null | DateISOType;
   submittedBy: null | {
     name: string;
@@ -86,7 +85,7 @@ export type SectionsSummaryModel = {
   sections: {
     id: string;
     title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt: null | DateISOType;
     submittedBy: null | {
       name: string;
@@ -149,13 +148,6 @@ export const INNOVATION_STATUS = {
   ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
   WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
   ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
-};
-
-export const INNOVATION_SECTION_STATUS = {
-  UNKNOWN: null,
-  NOT_STARTED: { label: 'Not started', isCompleteState: false },
-  DRAFT: { label: 'Draft', isCompleteState: false },
-  SUBMITTED: { label: 'Submitted', isCompleteState: true }
 };
 
 export const ACTIVITY_LOG_ITEMS: {

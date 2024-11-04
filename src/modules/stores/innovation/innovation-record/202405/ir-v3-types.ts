@@ -1,9 +1,9 @@
 import { TextareaLengthLimitType } from '@modules/shared/forms/engine/config/form-engine.config';
-import { INNOVATION_SECTION_STATUS } from '../../innovation.models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
 import { FormEngineParameterModelV3 } from '@modules/shared/forms';
 import { FormatUrlValidatorType } from '@modules/shared/forms/engine/models/form-engine.models';
+import { InnovationSectionStatusEnum } from '../../innovation.enums';
 
 export type InnovationRecordSchemaV3Type = {
   sections: {
@@ -109,7 +109,7 @@ export type SectionsSummaryModelV3Type = {
   sections: {
     id: string;
     title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt: null | DateISOType;
     submittedBy: null | {
       name: string;
@@ -123,7 +123,7 @@ export type SectionsSummaryModelV3Type = {
 export type InnovationSectionInfoDTOV3Type = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;

@@ -6,12 +6,8 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import {
-  INNOVATION_SECTION_STATUS,
-  InnovationAllSectionsInfoDTO,
-  SectionsSummaryModel
-} from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationAllSectionsInfoDTO, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';
@@ -142,14 +138,14 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           s => s.section.section === curSection.value
         ) ?? {
           data: {},
-          section: { section: curSection.value, status: 'NOT_STARTED', openTasksCount: 0 }
+          section: { section: curSection.value, status: InnovationSectionStatusEnum.NOT_STARTED, openTasksCount: 0 }
         };
 
         const sectionInfo: SectionInfoType = {
           id: '',
           nextSectionId: null,
           title: '',
-          status: { id: 'UNKNOWN', label: '' },
+          status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
@@ -173,10 +169,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         sectionInfo.wizard = section.wizard;
 
         sectionInfo.status = {
-          id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS,
-          label:
-            INNOVATION_SECTION_STATUS[responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS]?.label ||
-            ''
+          id: responseItem.section.status,
+          label: this.translate(`shared.catalog.innovation.support_status.${responseItem.section.status}.name`)
         };
         sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
         sectionInfo.date = responseItem.section.submittedAt ?? '';
