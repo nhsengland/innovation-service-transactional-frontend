@@ -49,7 +49,7 @@ export class PageProgressCategoriesWrapperComponent extends CoreComponent implem
 
         this.milestone = SUPPORT_SUMMARY_MILESTONES[organisation.acronym];
 
-        this.setPageTitle(`${organisation.name} (${organisation.acronym}) progress categories`);
+        this.setPageTitle(`${organisation.name} progress categories`);
         this.setPageStatus('READY');
       },
       error: () => {
