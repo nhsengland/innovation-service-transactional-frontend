@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-innovator-pages-innovation-manage-access-leave-innovation',

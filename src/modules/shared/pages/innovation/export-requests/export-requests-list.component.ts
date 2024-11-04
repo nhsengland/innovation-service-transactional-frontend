@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 import { TableModel } from '@app/base/models';
 
-import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationExportRequestStatusEnum } from '@modules/stores';
 
 import { InnovationExportRequestsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';

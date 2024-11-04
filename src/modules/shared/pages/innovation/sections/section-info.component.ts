@@ -10,7 +10,7 @@ import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   EvidenceV3Type,

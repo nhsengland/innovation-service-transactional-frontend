@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 
 import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './task-advanced-search.config';
 

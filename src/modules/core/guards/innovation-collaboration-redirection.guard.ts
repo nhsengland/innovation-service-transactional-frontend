@@ -9,8 +9,7 @@ import { RESPONSE } from '../../../express.tokens';
 
 import { LoggerService, Severity } from '../services/logger.service';
 import { InnovationService } from '../services/innovation.service';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { CANCELLED } from 'dns';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/ctx/innovation/innovation.enums';
 
 @Injectable()
 export class InnovationCollaborationRedirectionGuard {

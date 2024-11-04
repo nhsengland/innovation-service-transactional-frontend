@@ -5,8 +5,7 @@ import { finalize, map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@app/base/enums';
 

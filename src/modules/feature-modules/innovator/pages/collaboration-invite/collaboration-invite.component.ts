@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores';
 import { catchError, EMPTY } from 'rxjs';
 
 import { GetInnovationCollaboratorInvitesDTO, InnovatorService } from '../../services/innovator.service';

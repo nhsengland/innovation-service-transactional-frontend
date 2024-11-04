@@ -4,8 +4,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';

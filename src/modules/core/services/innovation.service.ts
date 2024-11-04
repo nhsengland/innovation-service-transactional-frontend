@@ -6,7 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
 import { UrlModel } from '../models/url.model';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 @Injectable()
 export class InnovationService {

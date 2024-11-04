@@ -4,10 +4,9 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 type TableListsType = {

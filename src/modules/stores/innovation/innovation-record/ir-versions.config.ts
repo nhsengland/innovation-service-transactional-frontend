@@ -1,5 +1,5 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { sectionType } from '../innovation.models';
+import { sectionType } from '../../ctx/innovation/innovation.models';
 
 import { evidenceTypeItems as SECTIONS_202405_evidenceTypeItems } from './202405/evidences-forms.config';
 import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';

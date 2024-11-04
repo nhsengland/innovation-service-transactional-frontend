@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
-import { AuthenticationStore, CtxStore } from '@modules/stores';
+import { AuthenticationStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
 import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 

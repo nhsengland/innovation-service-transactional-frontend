@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { StatisticsCardType } from '@app/base/types';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 import { UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';

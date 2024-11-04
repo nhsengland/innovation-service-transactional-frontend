@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 
-import { AccessorSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { AccessorSuggestionModel, OrganisationSuggestionModel } from '@modules/stores/ctx/innovation/innovation.models';
 
 @Component({
   selector: 'app-organisation-suggestions-card',

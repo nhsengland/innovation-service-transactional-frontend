@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 import { NEEDS_REASSESSMENT_CONFIG, OutboundPayloadType } from './needs-reassessment-send.config';
 import { InnovationsService } from '@modules/shared/services/innovations.service';

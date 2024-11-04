@@ -3,7 +3,7 @@ import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
 import { FormEngineParameterModelV3 } from '@modules/shared/forms';
 import { FormatUrlValidatorType } from '@modules/shared/forms/engine/models/form-engine.models';
-import { InnovationSectionStatusEnum } from '../../innovation.enums';
+import { InnovationSectionStatusEnum } from '../../../ctx/innovation/innovation.enums';
 
 export type InnovationRecordSchemaV3Type = {
   sections: {

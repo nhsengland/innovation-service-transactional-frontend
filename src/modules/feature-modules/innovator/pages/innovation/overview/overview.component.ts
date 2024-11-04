@@ -10,7 +10,7 @@ import {
   InnovationGroupedStatusEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
+} from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';

@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-pages-tasks-tasks-list',

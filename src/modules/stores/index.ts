@@ -23,3 +23,4 @@ export { ContextAssessmentType } from './ctx/assessment/assessment-context.types
 export { InnovationContextService } from './ctx/innovation/innovation-context.service';
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 export { ContextInnovationType } from './ctx/innovation/innovation-context.types';
+export * from './ctx/innovation/innovation.enums';

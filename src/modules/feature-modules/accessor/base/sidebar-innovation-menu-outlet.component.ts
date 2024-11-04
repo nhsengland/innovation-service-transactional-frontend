@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { AuthenticationStore, InnovationRecordSchemaStore, CtxStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { AuthenticationStore, InnovationRecordSchemaStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',

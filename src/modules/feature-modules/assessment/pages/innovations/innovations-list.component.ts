@@ -7,12 +7,12 @@ import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores';
 
 import { DateISOType, NotificationValueType } from '@app/base/types';
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/innovation/innovation.models';
+import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/ctx/innovation/innovation.models';
 
 export enum InnovationAssessmentStatusEnum {
   WAITING_NEEDS_ASSESSMENT = 'WAITING_NEEDS_ASSESSMENT',

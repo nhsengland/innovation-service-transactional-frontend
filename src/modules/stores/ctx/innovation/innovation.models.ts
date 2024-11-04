@@ -1,3 +1,6 @@
+/**
+ * TECHDEBT: Check what is needed and what not from this file, see some duplicates from the ir-v3-types
+ */
 import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
@@ -96,6 +99,7 @@ export type SectionsSummaryModel = {
   }[];
 }[];
 
+// Start of Suggestions
 export type OrganisationModel = {
   id: string;
   name: string;
@@ -135,6 +139,7 @@ export type InnovationUnitSuggestionsType = {
     message: string;
   };
 }[];
+// End of Suggestions
 
 // Constants.
 export const ACTIVITY_LOG_ITEMS: {

@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-request-update-status',

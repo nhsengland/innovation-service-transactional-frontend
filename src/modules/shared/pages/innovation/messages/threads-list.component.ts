@@ -11,8 +11,7 @@ import {
   InnovationThreadListFiltersType
 } from '@modules/shared/services/innovations.service';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-messages-threads-list',

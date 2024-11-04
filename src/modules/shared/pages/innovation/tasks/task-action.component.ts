@@ -9,7 +9,7 @@ import { UtilsHelper } from '@app/base/helpers';
 import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-task-action',

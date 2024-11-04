@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 export type getAccessorsOrganisationsDTO = {
   id: string;

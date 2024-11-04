@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { InnovationSectionStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum } from '@modules/stores';
 import { SectionInfoType } from './section-info.component';
 import {
   EvidenceV3Type,

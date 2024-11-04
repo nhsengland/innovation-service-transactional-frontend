@@ -6,7 +6,7 @@ import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/se
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',

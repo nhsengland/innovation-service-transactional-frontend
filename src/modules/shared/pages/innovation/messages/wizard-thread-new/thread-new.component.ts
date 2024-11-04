@@ -11,7 +11,7 @@ import {
   ThreadAvailableRecipientsDTO,
   UploadThreadDocumentType
 } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 
 import { WizardInnovationThreadNewOrganisationsStepComponent } from './steps/organisations-step.component';
 import { OrganisationsStepInputType, OrganisationsStepOutputType } from './steps/organisations-step.types';

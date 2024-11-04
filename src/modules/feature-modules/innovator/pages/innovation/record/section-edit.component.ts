@@ -4,7 +4,7 @@ import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type

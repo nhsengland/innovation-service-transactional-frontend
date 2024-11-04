@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import {
+  InnovationStatusEnum,
+  InnovationSupportStatusEnum,
   InnovationGroupedStatusEnum,
   InnovationSupportCloseReasonEnum
-} from '@modules/stores/innovation/innovation.enums';
+} from '@modules/stores';
 
 export type InnovationCardData = {
   id: string;

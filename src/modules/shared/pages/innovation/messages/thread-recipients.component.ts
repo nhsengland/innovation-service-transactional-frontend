@@ -13,7 +13,7 @@ import {
   InnovationsService,
   ThreadAvailableRecipientsDTO
 } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationStatusEnum } from '@modules/stores';
 import { Observable, forkJoin } from 'rxjs';
 
 @Component({

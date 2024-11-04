@@ -65,7 +65,7 @@ import { PageInnovationSectionInfoComponent } from '@modules/shared/pages/innova
 import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
-import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';

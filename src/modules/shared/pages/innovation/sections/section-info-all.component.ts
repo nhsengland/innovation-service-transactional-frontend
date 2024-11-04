@@ -6,8 +6,8 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores/innovation';
-import { InnovationAllSectionsInfoDTO, SectionsSummaryModel } from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
+import { InnovationAllSectionsInfoDTO, SectionsSummaryModel } from '@modules/stores/ctx/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';

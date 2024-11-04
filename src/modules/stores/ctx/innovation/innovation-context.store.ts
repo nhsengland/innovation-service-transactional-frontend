@@ -4,7 +4,7 @@ import { isNil, omitBy, cloneDeep } from 'lodash';
 
 import { AuthenticationModel } from '../../authentication/authentication.models';
 import { InnovationContextService } from './innovation-context.service';
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '../../innovation/innovation.enums';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from './innovation.enums';
 import { ContextInnovationType, EMPTY_CONTEXT } from './innovation-context.types';
 import { DeepPartial, MappedObjectType } from '@app/base/types';
 import {
@@ -12,7 +12,7 @@ import {
   InnovationAllSectionsInfoDTO,
   InnovationSectionInfoDTO,
   SectionsSummaryModel
-} from '../../innovation/innovation.models';
+} from './innovation.models';
 import { InnovationRecordSchemaStore } from '../../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';

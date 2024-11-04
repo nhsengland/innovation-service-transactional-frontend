@@ -4,15 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores';
+import {
+  ContextInnovationType,
+  InnovationSupportStatusEnum,
+  InnovationCollaboratorStatusEnum,
+  InnovationGroupedStatusEnum
+} from '@modules/stores';
 
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import {
-  InnovationCollaboratorStatusEnum,
-  InnovationGroupedStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { forkJoin } from 'rxjs';
 

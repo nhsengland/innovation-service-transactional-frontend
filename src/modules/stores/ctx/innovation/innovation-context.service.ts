@@ -13,7 +13,7 @@ import {
   InnovationGroupedStatusEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum
-} from '../../innovation/innovation.enums';
+} from './innovation.enums';
 import { ContextInnovationType } from './innovation-context.types';
 import {
   GetInnovationEvidenceDTO,
@@ -22,7 +22,7 @@ import {
   InnovationSectionsListDTO,
   InnovationUnitSuggestionsType,
   OrganisationSuggestionModel
-} from '../../innovation/innovation.models';
+} from './innovation.models';
 import { MappedObjectType } from '@app/base/types';
 
 @Injectable()
@@ -129,10 +129,7 @@ export class InnovationContextService {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/submit')
       .setPathParams({ innovationId });
-    return this.http.patch<{ id: string; status: InnovationStatusEnum }>(url.buildUrl(), {}).pipe(
-      take(1)
-      // finalize(() => this.ctx.innovation.clear()) // TODO: Check this.
-    );
+    return this.http.patch<{ id: string; status: InnovationStatusEnum }>(url.buildUrl(), {}).pipe(take(1));
   }
 
   getInnovationSections(innovationId: string): Observable<InnovationSectionsListDTO> {

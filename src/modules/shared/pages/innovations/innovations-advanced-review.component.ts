@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 

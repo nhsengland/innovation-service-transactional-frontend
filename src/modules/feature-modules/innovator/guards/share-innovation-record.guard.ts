@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { CtxStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
 @Injectable()

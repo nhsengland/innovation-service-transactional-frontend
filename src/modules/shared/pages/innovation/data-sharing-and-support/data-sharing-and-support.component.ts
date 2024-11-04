@@ -5,9 +5,8 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
 
-import { ContextInnovationType, InnovationContextService } from '@modules/stores';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { ContextInnovationType, InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
+import { OrganisationSuggestionModel } from '@modules/stores/ctx/innovation/innovation.models';
 
 import { UtilsHelper } from '@app/base/helpers';
 import { InnovationSharesListDTO, InnovationSupportsListDTO } from '@modules/shared/services/innovations.dtos';

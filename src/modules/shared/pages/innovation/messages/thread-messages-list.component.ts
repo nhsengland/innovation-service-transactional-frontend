@@ -8,7 +8,7 @@ import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@ap
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import {
@@ -19,7 +19,6 @@ import {
   ThreadAvailableRecipientsDTO,
   UploadThreadMessageDocumentType
 } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { omit } from 'lodash';
 
 @Component({

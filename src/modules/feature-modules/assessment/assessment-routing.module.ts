@@ -76,7 +76,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 
 const header: RoutesDataType['header'] = {
