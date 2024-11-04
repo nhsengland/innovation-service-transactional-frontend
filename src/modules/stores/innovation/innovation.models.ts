@@ -151,47 +151,6 @@ export const INNOVATION_STATUS = {
   ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
 };
 
-export const INNOVATION_SUPPORT_STATUS = {
-  ENGAGING: {
-    label: 'Engaging',
-    cssClass: 'nhsuk-tag--green',
-    description: 'Ready to support, assess or provide guidance.',
-    hidden: false
-  },
-  WAITING: {
-    label: 'Waiting',
-    cssClass: 'nhsuk-tag--yellow',
-    description:
-      'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation close their support offer.',
-    hidden: false
-  },
-  UNASSIGNED: {
-    label: 'Unassigned',
-    cssClass: 'nhsuk-tag--red',
-    description: 'A support status has not been assigned yet.',
-    hidden: true
-  },
-  UNSUITABLE: {
-    label: 'Unsuitable',
-    cssClass: 'nhsuk-tag--grey',
-    description: 'The organisation has no suitable support offer for the innovation.',
-    hidden: false
-  },
-  CLOSED: {
-    label: 'Closed',
-    cssClass: 'nhsuk-tag--dark-grey',
-    description:
-      'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
-    hidden: false
-  },
-  SUGGESTED: {
-    label: 'Unassigned',
-    cssClass: 'nhsuk-tag--red',
-    description: 'A support status has not been assigned yet.',
-    hidden: true
-  }
-};
-
 export const INNOVATION_SECTION_STATUS = {
   UNKNOWN: null,
   NOT_STARTED: { label: 'Not started', isCompleteState: false },

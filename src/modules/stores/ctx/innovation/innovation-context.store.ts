@@ -11,7 +11,6 @@ import {
   GetInnovationEvidenceDTO,
   INNOVATION_SECTION_STATUS,
   INNOVATION_STATUS,
-  INNOVATION_SUPPORT_STATUS,
   InnovationAllSectionsInfoDTO,
   InnovationSectionInfoDTO,
   SectionsSummaryModel
@@ -72,7 +71,7 @@ export class InnovationContextStore {
   }
   // End Actions + Reducers
 
-  getOrLoadInnovation(
+  getOrLoadInnovation$(
     innovationId: string,
     context: AuthenticationModel['userContext']
   ): Observable<ContextInnovationType> {
@@ -182,9 +181,6 @@ export class InnovationContextStore {
   // TODO: Check if this can be removed.
   get INNOVATION_STATUS(): typeof INNOVATION_STATUS {
     return INNOVATION_STATUS;
-  }
-  get INNOVATION_SUPPORT_STATUS(): typeof INNOVATION_SUPPORT_STATUS {
-    return INNOVATION_SUPPORT_STATUS;
   }
   get INNOVATION_SECTION_STATUS(): typeof INNOVATION_SECTION_STATUS {
     return INNOVATION_SECTION_STATUS;

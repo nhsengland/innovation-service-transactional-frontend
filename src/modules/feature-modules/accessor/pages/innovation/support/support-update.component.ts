@@ -43,14 +43,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   selectAccessorsStepLabel: string = '';
 
-  supportStatus = Object.entries(this.ctx.innovation.INNOVATION_SUPPORT_STATUS)
-    .map(([key, item]) => ({
-      key,
-      checked: false,
-      ...item
-    }))
-    .filter(x => !x.hidden);
-
   availableSupportStatuses: string[];
 
   chosenStatus: null | InnovationSupportStatusEnum = null;

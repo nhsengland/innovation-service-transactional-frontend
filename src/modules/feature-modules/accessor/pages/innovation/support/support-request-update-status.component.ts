@@ -15,16 +15,11 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   supportId: string;
   stepNumber: number;
 
-  supportStatusObj = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
-  supportStatus = Object.entries(this.supportStatusObj)
-    .map(([key, item]) => ({
-      key,
-      checked: false,
-      ...item
-    }))
-    .filter(x => !x.hidden && x.key !== InnovationSupportStatusEnum.ENGAGING);
-
-  chosenStatus: null | InnovationSupportStatusEnum = null;
+  availableSupportStatuses = [
+    InnovationSupportStatusEnum.WAITING,
+    InnovationSupportStatusEnum.CLOSED,
+    InnovationSupportStatusEnum.UNSUITABLE
+  ];
 
   form = new FormGroup(
     {
@@ -60,8 +55,6 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   onSubmitStep(): void {
-    this.chosenStatus = this.form.get('status')?.value ?? null;
-
     const formStatusField = this.form.get('status');
     if (!formStatusField?.valid) {
       formStatusField?.markAsTouched();

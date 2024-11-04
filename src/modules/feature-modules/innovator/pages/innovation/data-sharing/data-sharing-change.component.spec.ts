@@ -3,12 +3,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { FormArray } from '@angular/forms';
-import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { StoresModule } from '@modules/stores';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { InnovationDataSharingChangeComponent } from './data-sharing-change.component';

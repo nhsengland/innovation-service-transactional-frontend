@@ -16,20 +16,23 @@
               </ng-container>
 
               <div class="nhsuk-radios">
-                <div *ngFor="let item of supportStatus; let i = index" class="nhsuk-radios__item">
+                <div *ngFor="let status of availableSupportStatuses; let i = index" class="nhsuk-radios__item">
                   <input
                     formControlName="status"
                     id="status-{{ i }}"
                     type="radio"
                     name="status"
-                    [value]="item.key"
+                    [value]="status"
                     class="nhsuk-radios__input"
                     attr.aria-describedby="status-{{ i }}-hint"
                   />
                   <label for="status-{{ i }}" class="nhsuk-label nhsuk-radios__label nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-2">
-                    <strong class="nhsuk-tag" [ngClass]="item.cssClass">{{ item.label }}</strong>
+                    <theme-tag
+                      type="{{ 'shared.catalog.innovation.support_status.' + status + '.cssColorClass' | translate }}"
+                      label="{{ 'shared.catalog.innovation.support_status.' + status + '.name' | translate }}"
+                    ></theme-tag>
                   </label>
-                  <div class="nhsuk-hint nhsuk-radios__hint" id="status-{{ i }}-hint">{{ item.description }}</div>
+                  <div class="nhsuk-hint nhsuk-radios__hint" id="status-{{ i }}-hint">{{ "shared.catalog.innovation.support_status." + status + ".description" | translate }}</div>
                 </div>
               </div>
             </fieldset>

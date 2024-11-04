@@ -21,8 +21,6 @@ import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/serv
 export class PageInnovationDataSharingAndSupportComponent extends CoreComponent implements OnInit {
   innovationId: string;
 
-  innovationSupportStatus = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
-
   innovation: ContextInnovationType;
 
   userType: '' | UserRoleEnum;

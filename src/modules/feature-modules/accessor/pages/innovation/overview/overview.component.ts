@@ -23,7 +23,6 @@ import { InnovationContextService } from '@modules/stores';
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   innovation: ContextInnovationType;
-  innovationSupportStatus = this.ctx.innovation.INNOVATION_SUPPORT_STATUS;
 
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
