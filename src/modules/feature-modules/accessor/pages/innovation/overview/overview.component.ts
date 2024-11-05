@@ -226,9 +226,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           : this.innovation.support?.id;
 
       this.setPageStatus('READY');
-
-      console.log('isQualifyingAccessorRole', this.isQualifyingAccessorRole);
-      console.log('isAccessorRole', this.isAccessorRole);
     });
   }
 }
