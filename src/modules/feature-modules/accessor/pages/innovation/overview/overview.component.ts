@@ -106,7 +106,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.showStartSupport =
         this.isInProgress &&
-        this.isQualifyingAccessorRole &&
         (!this.innovationSupport ||
           (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 

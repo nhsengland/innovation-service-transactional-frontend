@@ -20,7 +20,9 @@
           ></theme-tag>
         </dd>
         <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
-          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ changeSupportUrlNewOrSupport }}">Change support status</a>
+          <a *ngIf="!showStartSupport && isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ changeSupportUrlNewOrSupport }}"
+            >Change support status</a
+          >
         </dd>
       </div>
 
@@ -35,7 +37,9 @@
           </ul>
         </dd>
         <dd class="nhsuk-summary-list__actions">
-          <a *ngIf="!showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/change-accessors">Change accessors</a>
+          <a *ngIf="!showStartSupport && isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/change-accessors"
+            >Change accessors</a
+          >
         </dd>
       </div>
     </dl>
@@ -45,7 +49,11 @@
     </ng-container>
   </div>
 
-  <a *ngIf="showStartSupport" routerLink="/accessor/innovations/{{ innovationId }}/support/new" class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5">
+  <a
+    *ngIf="showStartSupport && isQualifyingAccessorRole"
+    routerLink="/accessor/innovations/{{ innovationId }}/support/new"
+    class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
+  >
     Change support status
   </a>
 
