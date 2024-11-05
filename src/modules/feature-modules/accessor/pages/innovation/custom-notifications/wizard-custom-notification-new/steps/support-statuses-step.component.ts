@@ -51,8 +51,7 @@ export class WizardInnovationCustomNotificationNewSupportStatusesStepComponent
     InnovationSupportStatusEnum.CLOSED,
     InnovationSupportStatusEnum.UNSUITABLE,
     InnovationSupportStatusEnum.WAITING,
-    InnovationSupportStatusEnum.ENGAGING,
-    InnovationSupportStatusEnum.SUGGESTED
+    InnovationSupportStatusEnum.ENGAGING
   ];
 
   constructor() {
