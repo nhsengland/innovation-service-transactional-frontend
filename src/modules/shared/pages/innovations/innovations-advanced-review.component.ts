@@ -7,7 +7,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 
@@ -15,6 +15,7 @@ import { InnovationCardData } from './innovation-advanced-search-card.component'
 import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { UserRoleEnum } from '@app/base/enums';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -134,7 +135,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           this.stores.authentication.state.userContext?.type
         );
 
+        const isAccessor = this.stores.authentication.state.userContext?.type === UserRoleEnum.ACCESSOR;
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
+        datasets.supportStatuses = Object.keys(InnovationSupportStatusEnum)
+          .filter(
+            status =>
+              (!isAccessor && status !== InnovationSupportStatusEnum.SUGGESTED) ||
+              (isAccessor && ['ENGAGING', 'CLOSED'].includes(status))
+          )
+          .map(status => ({
+            label: this.translate(`shared.catalog.innovation.support_status.${status}.name`),
+            value: status
+          }));
 
         if (this.isAdminType) {
           datasets.supportStatuses = [];

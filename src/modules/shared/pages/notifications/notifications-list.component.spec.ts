@@ -5,9 +5,8 @@ import { Injector } from '@angular/core';
 import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AuthenticationStore, StoresModule, InnovationStatusEnum } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';

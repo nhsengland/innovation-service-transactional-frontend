@@ -5,12 +5,11 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
-import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum, InnovationSupportCloseReasonEnum } from '@modules/stores';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -84,8 +83,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     },
     InnovationsListFiltersType
   >;
-
-  innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   constructor(
     private activatedRoute: ActivatedRoute,

@@ -39,7 +39,7 @@ export class InnovationSectionSubmittedComponent extends CoreComponent implement
   ngOnInit() {
     this.isArchived && this.setPageTitle('');
 
-    this.stores.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
+    this.ctx.innovation.getSectionInfo$(this.innovation.id, this.section.id).subscribe({
       next: sectionInfo => {
         this.section.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
         this.setPageStatus('READY');

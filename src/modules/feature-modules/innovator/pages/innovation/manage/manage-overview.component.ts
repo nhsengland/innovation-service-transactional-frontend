@@ -4,8 +4,7 @@ import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum, InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationTransferStatusEnum } from '@modules/stores';
 
 import {
   GetInnovationTransfersDTO,

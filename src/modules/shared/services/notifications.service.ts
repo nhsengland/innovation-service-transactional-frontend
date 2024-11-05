@@ -12,7 +12,7 @@ import {
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
-} from '@modules/stores/innovation';
+} from '@modules/stores';
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',

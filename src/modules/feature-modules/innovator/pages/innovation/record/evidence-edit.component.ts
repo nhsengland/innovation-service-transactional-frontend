@@ -39,7 +39,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     this.baseUrl = `innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
     this.wizard =
-      this.stores.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
+      this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {
@@ -56,7 +56,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.setPageTitle('New evidence', { showPage: false });
       this.setPageStatus('READY');
     } else {
-      this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
+      this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
         this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
         this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 
@@ -108,7 +108,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
     this.submitButton = { isActive: false, label: 'Saving...' };
 
-    this.stores.innovation
+    this.ctx.innovation
       .upsertSectionEvidenceInfo$(this.innovation.id, this.wizard.runOutboundParsing(), this.evidenceId)
       .subscribe({
         next: response => {

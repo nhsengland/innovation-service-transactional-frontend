@@ -6,12 +6,12 @@ import { FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
 import { InnovationActivityLogListDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextInnovationType } from '@modules/stores';
-import { ACTIVITY_LOG_ITEMS, ActivityLogTypesEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, ActivityLogTypesEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { Dataset, FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './innovation-activity-log.config';
+import { ACTIVITY_LOG_ITEMS } from '@modules/stores/ctx/innovation/innovation.models';
 
 type ActivitiesListType = InnovationActivityLogListDTO['data'][0] & {
   showHideStatus: 'opened' | 'closed';

@@ -7,8 +7,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTransferStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores';
 
 import { DatesHelper } from '@app/base/helpers';
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';

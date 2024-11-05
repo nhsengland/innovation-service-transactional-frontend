@@ -3,10 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 type ActionsType = 'cancel' | 'remove';
 

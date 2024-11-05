@@ -16,7 +16,7 @@ import {
   AssessmentExemptionTypeDTO,
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 @Component({

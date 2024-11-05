@@ -1,26 +1,28 @@
+/**
+ * TECHDEBT: Check what is needed and what not from this file, see some duplicates from the ir-v3-types
+ */
 import { DateISOType } from '@app/base/types';
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 
-import { ActivityLogItemsEnum, ActivityLogTypesEnum, InnovationGroupedStatusEnum } from './innovation.enums';
-
-// Store state model.
-export class InnovationModel {
-  constructor() {}
-}
+import {
+  ActivityLogItemsEnum,
+  ActivityLogTypesEnum,
+  InnovationGroupedStatusEnum,
+  InnovationSectionStatusEnum
+} from './innovation.enums';
 
 // Types.
-
 export type sectionType = {
   id: null | string;
   section: string | string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
 };
 
 export type InnovationSectionInfoDTO = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;
@@ -34,7 +36,7 @@ export type InnovationSectionInfoDTO = {
 export type InnovationAllSectionsInfoDTO = {
   section: {
     section: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt?: DateISOType;
     submittedBy?: { name: string; displayTag: string };
     openTasksCount: number;
@@ -55,7 +57,7 @@ export type getInnovationInfoResponse = {
 export type InnovationSectionsListDTO = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   submittedAt: null | DateISOType;
   submittedBy: null | {
     name: string;
@@ -86,7 +88,7 @@ export type SectionsSummaryModel = {
   sections: {
     id: string;
     title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt: null | DateISOType;
     submittedBy: null | {
       name: string;
@@ -97,6 +99,7 @@ export type SectionsSummaryModel = {
   }[];
 }[];
 
+// Start of Suggestions
 export type OrganisationModel = {
   id: string;
   name: string;
@@ -136,69 +139,9 @@ export type InnovationUnitSuggestionsType = {
     message: string;
   };
 }[];
+// End of Suggestions
 
 // Constants.
-export const INNOVATION_STATUS = {
-  '': null,
-  CREATED: { label: 'Created', cssClass: 'nhsuk-tag--wellow' },
-  WAITING_NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
-  NEEDS_ASSESSMENT: { label: 'Awaiting Assessment', cssClass: 'nhsuk-tag--wellow' },
-  AWAITING_NEEDS_REASSESSMENT: { label: 'Awaiting Reassessment', cssClass: 'nhsuk-tag--wellow' },
-  IN_PROGRESS: { label: 'In progress', cssClass: 'nhsuk-tag--wellow' },
-  // NEEDS_ASSESSMENT_REVIEW: { label: 'In review', cssClass: 'nhsuk-tag--wellow' },
-  ABANDONED: { label: 'Abandoned', cssClass: 'nhsuk-tag--grey' },
-  WITHDRAWN: { label: 'Withdrawn', cssClass: 'nhsuk-tag--red' },
-  ARCHIVED: { label: 'Archived', cssClass: 'nhsuk-tag--red' }
-};
-
-export const INNOVATION_SUPPORT_STATUS = {
-  ENGAGING: {
-    label: 'Engaging',
-    cssClass: 'nhsuk-tag--green',
-    description: 'Ready to support, assess or provide guidance.',
-    hidden: false
-  },
-  WAITING: {
-    label: 'Waiting',
-    cssClass: 'nhsuk-tag--yellow',
-    description:
-      'The organisation is waiting for information from the innovator, or for an internal decision to progress, or for another organisation close their support offer.',
-    hidden: false
-  },
-  UNASSIGNED: {
-    label: 'Unassigned',
-    cssClass: 'nhsuk-tag--red',
-    description: 'A support status has not been assigned yet.',
-    hidden: true
-  },
-  UNSUITABLE: {
-    label: 'Unsuitable',
-    cssClass: 'nhsuk-tag--grey',
-    description: 'The organisation has no suitable support offer for the innovation.',
-    hidden: false
-  },
-  CLOSED: {
-    label: 'Closed',
-    cssClass: 'nhsuk-tag--dark-grey',
-    description:
-      'The organisation has finished supporting the innovation or has decided not to support it because it did not receive the information it needed.',
-    hidden: false
-  },
-  SUGGESTED: {
-    label: 'Unassigned',
-    cssClass: 'nhsuk-tag--red',
-    description: 'A support status has not been assigned yet.',
-    hidden: true
-  }
-};
-
-export const INNOVATION_SECTION_STATUS = {
-  UNKNOWN: null,
-  NOT_STARTED: { label: 'Not started', isCompleteState: false },
-  DRAFT: { label: 'Draft', isCompleteState: false },
-  SUBMITTED: { label: 'Submitted', isCompleteState: true }
-};
-
 export const ACTIVITY_LOG_ITEMS: {
   [key in ActivityLogItemsEnum]: {
     type: ActivityLogTypesEnum;

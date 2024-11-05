@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum } from '@modules/stores';
 import { SectionInfoType } from './section-info.component';
 import {
   EvidenceV3Type,
@@ -36,10 +36,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   sectionInfo: Partial<SectionInfoType> & {
     id: string;
     openTasksCount: number;
-    status: {
-      id: keyof typeof INNOVATION_SECTION_STATUS;
-      label: string;
-    };
+    status: { id: InnovationSectionStatusEnum; label: string };
   };
   summaryList: WizardSummaryV3Type[] = [];
   evidencesList: EvidenceV3Type[] = [];
@@ -73,7 +70,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.sectionInfo = {
       id: '',
       openTasksCount: 0,
-      status: { id: 'UNKNOWN', label: '' }
+      status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' }
     };
 
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;

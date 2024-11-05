@@ -5,7 +5,7 @@ import {
   WizardStepType,
   FormEngineParameterModel
 } from '@modules/shared/forms';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 
 export type ReassessmentSendType = {
   reassessmentReason: ReassessmentReasonsType[];

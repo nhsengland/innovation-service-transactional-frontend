@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { CtxStore, InnovationRecordSchemaStore, InnovationStatusEnum } from '@modules/stores';
 
 import { Subscription, filter } from 'rxjs';
 

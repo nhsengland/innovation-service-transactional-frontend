@@ -4,8 +4,7 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
@@ -87,7 +86,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.setPageTitle('Innovation record');
 
     forkJoin([
-      this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
+      this.ctx.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
       ...(this.isInnovatorType
         ? [
             this.statisticsService.getInnovationStatisticsInfo(this.innovationId, {

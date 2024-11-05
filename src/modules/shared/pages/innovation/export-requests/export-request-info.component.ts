@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationExportRequestStatusEnum } from '@modules/stores';
 
 import { InnovationExportRequestInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';

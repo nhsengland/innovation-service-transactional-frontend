@@ -8,9 +8,8 @@ import { CustomValidators, FileTypes } from '@app/base/forms';
 
 import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { UsersService } from '@modules/shared/services/users.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationSupportStatusEnum } from '@modules/stores';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
@@ -42,14 +41,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   disabledCheckboxAccessors: string[] = [];
 
   selectAccessorsStepLabel: string = '';
-
-  supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
-    .map(([key, item]) => ({
-      key,
-      checked: false,
-      ...item
-    }))
-    .filter(x => !x.hidden);
 
   availableSupportStatuses: string[];
 

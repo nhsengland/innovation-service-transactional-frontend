@@ -1,6 +1,6 @@
 import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../../innovation/innovation.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 
 export type ContextInnovationType = {
   id: string;

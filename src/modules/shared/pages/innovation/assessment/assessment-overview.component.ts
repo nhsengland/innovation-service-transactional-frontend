@@ -8,11 +8,9 @@ import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextInnovationType } from '@modules/stores';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-
+import { ContextInnovationType, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',

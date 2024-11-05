@@ -21,7 +21,7 @@ export class InnovationDataResolver {
 
   resolve(route: ActivatedRouteSnapshot): Observable<null | { id: string; name: string }> {
     return this.ctx.innovation
-      .getOrLoadInnovation(route.params.innovationId, this.authenticationStore.getUserContextInfo())
+      .getOrLoadInnovation$(route.params.innovationId, this.authenticationStore.getUserContextInfo())
       .pipe(
         map(response => ({ id: response.id, name: response.name })),
         catchError(error => {

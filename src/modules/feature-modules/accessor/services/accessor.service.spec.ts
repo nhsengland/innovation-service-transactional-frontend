@@ -6,7 +6,7 @@ import { ENV } from '@tests/app.mocks';
 import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
+import { StoresModule, AuthenticationStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { AccessorService } from './accessor.service';
@@ -17,7 +17,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationStore: AuthenticationStore;
-  let innovationStore: InnovationStore;
 
   let service: AccessorService;
 
@@ -33,7 +32,6 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
 
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
     authenticationStore = TestBed.inject(AuthenticationStore);
-    innovationStore = TestBed.inject(InnovationStore);
 
     service = TestBed.inject(AccessorService);
 

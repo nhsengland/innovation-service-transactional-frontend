@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-record-wrapper',

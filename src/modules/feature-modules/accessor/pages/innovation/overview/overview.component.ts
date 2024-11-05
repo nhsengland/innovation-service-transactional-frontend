@@ -6,15 +6,14 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
 
 import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { InnovationService } from '@modules/stores';
-import { InnovationUnitSuggestionsType } from '@modules/stores/innovation/innovation.models';
+import { InnovationUnitSuggestionsType } from '@modules/stores/ctx/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
+import { InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -23,7 +22,6 @@ import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progr
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
   innovation: ContextInnovationType;
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
@@ -55,7 +53,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
-    private innovationService: InnovationService,
+    private innovationService: InnovationContextService,
     private statisticsService: StatisticsService
   ) {
     super();

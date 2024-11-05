@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-support-support-status-list',

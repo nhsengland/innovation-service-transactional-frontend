@@ -1,4 +1,3 @@
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import axios, { AxiosInstance } from 'axios';
 import * as express from 'express';
 import * as https from 'https';
@@ -8,6 +7,8 @@ import { ENVIRONMENT } from '../config/constants.config';
 import { SeverityLevel } from 'applicationinsights/out/Declarations/Contracts';
 import { getAppInsightsClient } from 'src/globals';
 import { getAccessTokenBySessionId } from './authentication.routes';
+
+import { InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 const apiRouter = express.Router();
 let axiosInstance: AxiosInstance;

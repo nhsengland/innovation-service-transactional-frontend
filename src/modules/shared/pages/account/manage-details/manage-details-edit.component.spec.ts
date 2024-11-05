@@ -21,9 +21,7 @@ import {
   AssessmentContextStore,
   AssessmentContextService,
   InnovationRecordSchemaService,
-  InnovationRecordSchemaStore,
-  InnovationService,
-  InnovationStore
+  InnovationRecordSchemaStore
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -45,12 +43,10 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       providers: [
         AuthenticationStore,
         AuthenticationService,
-        InnovationStore,
         InnovationRecordSchemaStore,
         ContextStore,
         ContextService,
         InnovationRecordSchemaService,
-        InnovationService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,

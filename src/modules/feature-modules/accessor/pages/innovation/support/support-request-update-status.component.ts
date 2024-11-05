@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-request-update-status',
@@ -15,16 +15,11 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   supportId: string;
   stepNumber: number;
 
-  supportStatusObj = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-  supportStatus = Object.entries(this.supportStatusObj)
-    .map(([key, item]) => ({
-      key,
-      checked: false,
-      ...item
-    }))
-    .filter(x => !x.hidden && x.key !== InnovationSupportStatusEnum.ENGAGING);
-
-  chosenStatus: null | InnovationSupportStatusEnum = null;
+  availableSupportStatuses = [
+    InnovationSupportStatusEnum.WAITING,
+    InnovationSupportStatusEnum.CLOSED,
+    InnovationSupportStatusEnum.UNSUITABLE
+  ];
 
   form = new FormGroup(
     {
@@ -60,8 +55,6 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   onSubmitStep(): void {
-    this.chosenStatus = this.form.get('status')?.value ?? null;
-
     const formStatusField = this.form.get('status');
     if (!formStatusField?.valid) {
       formStatusField?.markAsTouched();

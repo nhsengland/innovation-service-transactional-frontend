@@ -5,11 +5,10 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationTaskStatusEnum } from '@modules/stores';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-to-do-list',

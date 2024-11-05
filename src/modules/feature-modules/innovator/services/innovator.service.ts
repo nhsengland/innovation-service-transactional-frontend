@@ -8,8 +8,7 @@ import { DateISOType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTransferStatusEnum, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 export type GetInnovationTransfersDTO = {
   id: string;

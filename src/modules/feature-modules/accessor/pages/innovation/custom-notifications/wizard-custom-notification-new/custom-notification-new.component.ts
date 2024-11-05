@@ -17,7 +17,7 @@ import { SupportStatusesStepInputType, SupportStatusesStepOutputType } from './s
 import { WizardInnovationCustomNotificationNewUnitsStepComponent } from './steps/units-step.component';
 import { SummaryStepInputType } from './steps/summary-step.types';
 import { WizardInnovationCustomNotificationNewSummaryStepComponent } from './steps/summary-step.component';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { WizardInnovationCustomNotificationNewSupportStatusesStepComponent } from './steps/support-statuses-step.component';
 import {
   AccessorService,

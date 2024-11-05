@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
-import { InnovationStore } from '@modules/stores/innovation/innovation.store';
 
 import { irVersionsClinicalMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
+import { CtxStore } from '@modules/stores';
 
 @Injectable()
 export class InnovationSectionEvidenceDataResolver {
-  constructor(private innovationStore: InnovationStore) {}
+  constructor(private ctx: CtxStore) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<null | { id: string; name: string }> {
-    return this.innovationStore.getSectionEvidence$(route.params['innovationId'], route.params['evidenceId']).pipe(
+    return this.ctx.innovation.getSectionEvidence$(route.params['innovationId'], route.params['evidenceId']).pipe(
       map(response => {
         return {
           id: route.params['evidenceId'] as string,

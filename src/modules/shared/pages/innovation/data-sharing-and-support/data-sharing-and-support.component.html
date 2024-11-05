@@ -87,11 +87,14 @@
                     {{ organisation.showHideText }} <span class="nhsuk-u-visually-hidden"> {{ organisation.showHideDescription }} </span>
                   </a>
 
-                  <strong *ngIf="organisation.info.status" class="nhsuk-tag" [ngClass]="innovationSupportStatus[organisation.info.status].cssClass">{{
-                    innovationSupportStatus[organisation.info.status].label
-                  }}</strong>
+                  <theme-tag
+                    *ngIf="organisation.info.status"
+                    type="{{ 'shared.catalog.innovation.support_status.' + organisation.info.status + '.cssColorClass' | translate }}"
+                    label="{{ 'shared.catalog.innovation.support_status.' + organisation.info.status + '.name' | translate }}"
+                  />
+
                   <span *ngIf="organisation.info.status" class="nhsuk-u-visually-hidden"
-                    >Organisation unit with support status {{ innovationSupportStatus[organisation.info.status].label }}</span
+                    >Organisation unit with support status {{ "shared.catalog.innovation.support_status." + organisation.info.status + ".name" | translate }}</span
                   >
                 </ng-container>
               </dd>
@@ -113,10 +116,15 @@
                       </div>
                     </dt>
                     <dd class="ml-auto">
-                      <strong class="nhsuk-tag ml-auto" [ngClass]="innovationSupportStatus[organisationUnit.status].cssClass">{{
-                        innovationSupportStatus[organisationUnit.status].label
-                      }}</strong>
-                      <span class="nhsuk-u-visually-hidden">Organisation unit with support status {{ innovationSupportStatus[organisationUnit.status].label.toLowerCase() }}</span>
+                      <theme-tag
+                        class="ml-auto"
+                        type="{{ 'shared.catalog.innovation.support_status.' + organisationUnit.status + '.cssColorClass' | translate }}"
+                        label="{{ 'shared.catalog.innovation.support_status.' + organisationUnit.status + '.name' | translate }}"
+                      />
+
+                      <span class="nhsuk-u-visually-hidden"
+                        >Organisation unit with support status {{ "shared.catalog.innovation.support_status." + organisationUnit.status + ".name" | translate | lowercase }}</span
+                      >
                     </dd>
                   </div>
                 </div>

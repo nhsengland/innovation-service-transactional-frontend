@@ -4,7 +4,7 @@ import { CoreComponent } from '@app/base';
 import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { CustomValidators, FormEngineHelper } from '@modules/shared/forms';
 import { SupportStatusesStepInputType, SupportStatusesStepOutputType } from './support-statuses-step.types';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-support-statuses-step',

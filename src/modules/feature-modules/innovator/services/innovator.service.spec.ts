@@ -6,8 +6,7 @@ import { ENV } from '@tests/app.mocks';
 import { Injector } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { AuthenticationStore, StoresModule, InnovationTransferStatusEnum } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
 

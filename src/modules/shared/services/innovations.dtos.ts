@@ -13,7 +13,7 @@ import {
   InnovationSupportCloseReasonEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
+} from '@modules/stores';
 
 // Innovations.
 export type InnovationsListFiltersType = Partial<{

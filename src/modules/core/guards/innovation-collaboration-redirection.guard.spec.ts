@@ -14,7 +14,7 @@ import { StoresModule } from '@modules/stores';
 
 import { InnovationService } from '../services/innovation.service';
 import { InnovationCollaborationRedirectionGuard } from './innovation-collaboration-redirection.guard';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationCollaboratorStatusEnum } from '@modules/stores/ctx/innovation/innovation.enums';
 
 describe('Core/Guards/InnovationCollaborationRedirectionGuard running SERVER side', () => {
   let innovationService: InnovationService;

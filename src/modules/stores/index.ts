@@ -9,10 +9,6 @@ export { AuthenticationService } from './authentication/authentication.service';
 export { ContextStore } from './context/context.store';
 export { ContextService } from './context/context.service';
 
-// // Innovation Store.
-export { InnovationStore } from './innovation/innovation.store';
-export { InnovationService } from './innovation/innovation.service';
-
 // // IR Schema Store.
 export { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 export { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
@@ -27,3 +23,4 @@ export { ContextAssessmentType } from './ctx/assessment/assessment-context.types
 export { InnovationContextService } from './ctx/innovation/innovation-context.service';
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 export { ContextInnovationType } from './ctx/innovation/innovation-context.types';
+export * from './ctx/innovation/innovation.enums';

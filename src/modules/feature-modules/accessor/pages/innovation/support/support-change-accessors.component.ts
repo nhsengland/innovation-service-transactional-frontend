@@ -10,7 +10,7 @@ import { UsersService } from '@modules/shared/services/users.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { forkJoin } from 'rxjs';
 
 @Component({

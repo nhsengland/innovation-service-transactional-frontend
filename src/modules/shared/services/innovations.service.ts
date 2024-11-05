@@ -7,7 +7,6 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { KeysUnion } from '@modules/core/helpers/types.helper';
 import { APIListResponse, Paginated } from '@modules/core/models/api.model';
@@ -19,8 +18,8 @@ import {
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
   InnovationTaskStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
-import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+} from '@modules/stores';
+import { ACTIVITY_LOG_ITEMS, InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
   CreateSupportSummaryProgressUpdateType,

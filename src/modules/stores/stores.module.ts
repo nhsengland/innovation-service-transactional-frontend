@@ -6,8 +6,6 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { ContextStore } from './context/context.store';
 import { ContextService } from './context/context.service';
 
-import { InnovationStore } from './innovation/innovation.store';
-import { InnovationService } from './innovation/innovation.service';
 import { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
@@ -23,9 +21,6 @@ import { AssessmentContextService } from './ctx/assessment/assessment-context.se
 
     ContextStore,
     ContextService,
-
-    InnovationStore,
-    InnovationService,
 
     CtxStore,
 

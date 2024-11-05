@@ -6,14 +6,12 @@ import { CustomValidators, FormArray, FormControl, FormEngineParameterModel, For
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { AccessorService, NotificationEnum, NotifyMeConfig } from '../../../services/accessor.service';
 
 import { ActivatedRoute } from '@angular/router';
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { UtilsHelper } from '@app/base/helpers';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { ORGANISATIONS_INFORMATION } from './organisations-information/organisations-information';
 
 export type OrganisationInformation = {

@@ -9,7 +9,7 @@ import { UtilsHelper } from '@app/base/helpers';
 import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-task-action',
@@ -60,7 +60,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
           return forkJoin([
             of(task),
             this.status === InnovationTaskStatusEnum.DONE
-              ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section)
+              ? this.ctx.innovation.getSectionInfo$(this.innovationId, task.section)
               : of(null)
           ]);
         })

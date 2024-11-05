@@ -12,7 +12,7 @@ import { OrganisationSuggestionsCardComponent } from './organisation-suggestion-
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
-import { OrganisationSuggestionModel } from '@modules/stores/innovation/innovation.models';
+import { OrganisationSuggestionModel } from '@modules/stores/ctx/innovation/innovation.models';
 import { RouterModule } from '@angular/router';
 
 @Component({

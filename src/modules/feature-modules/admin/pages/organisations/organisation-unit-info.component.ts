@@ -8,7 +8,7 @@ import { APIQueryParamsType } from '@app/base/types';
 import { TableModel } from '@app/base/models';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { ObservedValueOf } from 'rxjs';
 import { OrganisationDataResolver } from '../../resolvers/organisation-data.resolver';
 import { OrganisationUnitDataResolver } from '../../resolvers/organisation-unit-data.resolver';

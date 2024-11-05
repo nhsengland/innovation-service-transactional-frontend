@@ -10,7 +10,7 @@ import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
 import {
   EvidenceV3Type,
@@ -23,7 +23,7 @@ export type SectionInfoType = {
   id: string;
   nextSectionId: null | string;
   title: string;
-  status: { id: keyof typeof INNOVATION_SECTION_STATUS; label: string };
+  status: { id: InnovationSectionStatusEnum; label: string };
   submitButton: { show: boolean; label: string };
   isNotStarted: boolean;
   hasEvidences: boolean;
@@ -96,7 +96,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         id: '',
         nextSectionId: null,
         title: '',
-        status: { id: 'UNKNOWN', label: '' },
+        status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
         submitButton: { show: false, label: 'Confirm section answers' },
         isNotStarted: false,
         hasEvidences: false,
@@ -120,7 +120,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.subscriptions.push(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-        .subscribe(e => this.initializePage())
+        .subscribe(() => this.initializePage())
     );
   }
 
@@ -156,7 +156,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       ) || this.stores.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
-      this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
+      this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
       !this.shouldShowDocuments
         ? of(null)
         : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
@@ -172,7 +172,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     ]).subscribe(([sectionInfo, documents]) => {
       this.sectionSummaryData.sectionInfo.status = {
         id: sectionInfo.status,
-        label: INNOVATION_SECTION_STATUS[sectionInfo.status]?.label || ''
+        label: this.translate(`shared.catalog.innovation.support_status.${sectionInfo.status}.name`)
       };
       this.sectionSummaryData.sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(
         this.sectionSummaryData.sectionInfo.status.id
@@ -267,13 +267,18 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   }
 
   onSubmitSection(): void {
-    this.stores.innovation.submitSections$(this.innovation.id, this.sectionSummaryData.sectionInfo.id).subscribe({
+    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionSummaryData.sectionInfo.id).subscribe({
       next: () => {
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||
           this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.sectionSummaryData.sectionInfo.status = { id: 'SUBMITTED', label: 'Submitted' };
+          this.sectionSummaryData.sectionInfo.status = {
+            id: InnovationSectionStatusEnum.SUBMITTED,
+            label: this.translate(
+              `shared.catalog.innovation.support_status.${InnovationSectionStatusEnum.SUBMITTED}.name`
+            )
+          };
           this.sectionSummaryData.sectionInfo.submitButton.show = false;
           this.sectionSummaryData.sectionInfo.nextSectionId = this.getNextSectionId();
           this.setAlertSuccess('Your answers have been confirmed for this section', {

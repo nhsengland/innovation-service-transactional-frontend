@@ -5,7 +5,7 @@ import {
   AllSectionsOutboundPayloadType,
   getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { sectionType } from '@modules/stores/innovation/innovation.models';
+import { sectionType } from '@modules/stores/ctx/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 

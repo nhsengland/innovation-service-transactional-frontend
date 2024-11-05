@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-status-list',

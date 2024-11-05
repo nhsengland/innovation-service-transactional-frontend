@@ -1,6 +1,6 @@
 import { UserRoleEnum } from '@app/base/enums';
 import { Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
