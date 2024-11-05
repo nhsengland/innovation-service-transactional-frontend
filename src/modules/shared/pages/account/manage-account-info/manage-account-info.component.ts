@@ -25,9 +25,23 @@ export class PageSharedAccountManageAccountInfoComponent extends CoreComponent i
     this.setPageTitle('Manage account');
 
     const user = this.stores.authentication.getUserInfo();
+
     this.user = {
       passwordResetAt: user.passwordResetAt
     };
+
+    if (user.passwordChangeSinceLastSignIn) {
+      this.authenticationService.getUserInfo(true).subscribe({
+        next: updatedUser => {
+          this.user = {
+            passwordResetAt: updatedUser.passwordResetAt
+          };
+        },
+        error: error => {
+          console.error('Failed to fetch user info:', error);
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
