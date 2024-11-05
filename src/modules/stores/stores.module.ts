@@ -6,13 +6,13 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { ContextStore } from './context/context.store';
 import { ContextService } from './context/context.service';
 
-import { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
-import { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
 import { CtxStore } from './ctx/ctx.store';
 import { AssessmentContextStore } from './ctx/assessment/assessment-context.store';
 import { AssessmentContextService } from './ctx/assessment/assessment-context.service';
+import { SchemaContextStore } from './ctx/schema/schema.store';
+import { SchemaContextService } from './ctx/schema/schema.service';
 
 @NgModule({
   providers: [
@@ -28,9 +28,8 @@ import { AssessmentContextService } from './ctx/assessment/assessment-context.se
     InnovationContextService,
     AssessmentContextStore,
     AssessmentContextService,
-
-    InnovationRecordSchemaStore,
-    InnovationRecordSchemaService
+    SchemaContextStore,
+    SchemaContextService
   ]
 })
 export class StoresModule {

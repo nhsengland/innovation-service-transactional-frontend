@@ -96,7 +96,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       }
     }
 
-    this.allSteps = this.stores.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
+    this.allSteps = this.ctx.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
 
     this.setPageStatus('READY');
   }

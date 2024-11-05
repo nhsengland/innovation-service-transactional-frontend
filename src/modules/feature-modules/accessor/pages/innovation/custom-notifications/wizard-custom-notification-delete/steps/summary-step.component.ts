@@ -48,7 +48,7 @@ export class WizardInnovationCustomNotificationDeleteSummaryStepComponent
 
           const displaySections =
             subscription.eventType === NotificationEnum.INNOVATION_RECORD_UPDATED
-              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.schema)
+              ? UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.ctx.schema)
               : undefined;
 
           const displayReminder =

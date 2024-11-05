@@ -52,8 +52,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
-    this.sectionQuestionsIdList = this.stores.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
+    this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
+    this.sectionQuestionsIdList = this.ctx.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
 
     this.wizard = this.ctx.innovation.getInnovationRecordSectionWizard(this.sectionId);
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
@@ -72,7 +72,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
@@ -230,7 +230,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               this.alertErrorsList = [];
               this.setAlertUnknownError();
               if (err.error === IRSchemaErrors.INNOVATION_RECORD_SCHEMA_VERSION_MISMATCH) {
-                this.stores.context.clearIrSchema();
+                this.ctx.schema.clear();
                 this.setAlertError('This section of the innovation record has been updated.', {
                   itemsList: [
                     {

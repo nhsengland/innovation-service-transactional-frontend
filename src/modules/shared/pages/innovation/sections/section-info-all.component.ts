@@ -24,9 +24,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './section-info-all.component.html'
 })
 export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit {
-  innovationsSectionsList = this.stores.schema.getIrSchemaSectionsListV3();
-
-  innovationsSubSectionsList: string[] = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
+  innovationsSubSectionsList: string[] = this.ctx.schema.getSubSectionsIds();
 
   innovationId: string;
 
@@ -131,7 +129,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }),
       this.ctx.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
+      const allSections = this.ctx.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
@@ -162,7 +160,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
               value: item.summary
             }))
           : [];
-        const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
+        const section = this.ctx.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;

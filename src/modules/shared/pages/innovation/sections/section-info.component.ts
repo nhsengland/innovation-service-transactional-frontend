@@ -82,7 +82,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
-    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
+    this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
 
     this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
@@ -129,7 +129,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
 
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
@@ -142,7 +142,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
 
-    const section = this.stores.schema.getIrSchemaSectionV3(this.sectionId);
+    const section = this.ctx.schema.getIrSchemaSectionV3(this.sectionId);
 
     this.sectionSummaryData.sectionInfo.id = section.id;
     this.sectionSummaryData.sectionInfo.title = section.title;
@@ -153,7 +153,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       !(
         this.innovation.status === InnovationStatusEnum.CREATED ||
         this.innovation.archivedStatus === InnovationStatusEnum.CREATED
-      ) || this.stores.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
+      ) || this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
       this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
@@ -242,7 +242,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     const nextSectionId = this.sectionsIdsList[currentSectionIndex + 1] || null;
 
     if (previousSectionId) {
-      const previousSection = this.stores.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
+      const previousSection = this.ctx.schema.getIrSchemaSectionIdentificationV3(previousSectionId);
       this.previousSection = {
         id: previousSectionId,
         title: previousSection
@@ -254,7 +254,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     }
 
     if (nextSectionId) {
-      const nextSection = this.stores.schema.getIrSchemaSectionIdentificationV3(nextSectionId);
+      const nextSection = this.ctx.schema.getIrSchemaSectionIdentificationV3(nextSectionId);
       this.nextSection = {
         id: nextSectionId,
         title: nextSection

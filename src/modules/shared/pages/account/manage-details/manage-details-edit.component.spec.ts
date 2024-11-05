@@ -20,8 +20,8 @@ import {
   InnovationContextStore,
   AssessmentContextStore,
   AssessmentContextService,
-  InnovationRecordSchemaService,
-  InnovationRecordSchemaStore
+  SchemaContextStore,
+  SchemaContextService
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -43,15 +43,15 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       providers: [
         AuthenticationStore,
         AuthenticationService,
-        InnovationRecordSchemaStore,
         ContextStore,
         ContextService,
-        InnovationRecordSchemaService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,
         AssessmentContextStore,
         AssessmentContextService,
+        SchemaContextStore,
+        SchemaContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });

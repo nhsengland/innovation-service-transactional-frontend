@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { AuthenticationStore, InnovationRecordSchemaStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
+import { AuthenticationStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -28,8 +28,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     private router: Router,
     readonly ctx: CtxStore,
     private scroller: ViewportScroller,
-    private authenticationStore: AuthenticationStore,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private authenticationStore: AuthenticationStore
   ) {
     this.isQualifyingAccessorRole = this.authenticationStore.isQualifyingAccessorRole();
 
@@ -54,7 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.ctx.innovation.info();
 
-      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('accessor', innovation.id);
+      this.sectionsSidebar = this.ctx.schema.getIrSchemaSectionsTreeV3('accessor', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },

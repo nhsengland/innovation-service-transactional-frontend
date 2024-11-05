@@ -74,7 +74,7 @@ export class InnovationAssessmentDetailsComponent extends CoreComponent implemen
           },
           {
             label: 'Sections updated since previous needs assessment',
-            value: this.stores.schema.getGroupSectionsFromSubsections(
+            value: this.ctx.schema.getGroupSectionsFromSubsections(
               this.assessment.reassessment.sectionsUpdatedSinceLastAssessment
             )
           }

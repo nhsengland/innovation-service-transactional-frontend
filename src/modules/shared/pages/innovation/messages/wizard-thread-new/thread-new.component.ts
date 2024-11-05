@@ -188,7 +188,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     let submittedSectionText = '';
 
     if (this.sectionId) {
-      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+      const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
       submittedSectionText = sectionIdentification
         ? `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
         : '';
@@ -201,7 +201,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     let subject = this.wizard.data.subjectMessageStep.subject;
 
     if (this.isInnovatorType && this.sectionId && !subject) {
-      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+      const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
       subject = sectionIdentification ? `Innovation record update to section ${this.getSubmittedSectionText()}` : '';
     }
 

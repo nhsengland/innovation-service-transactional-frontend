@@ -10,7 +10,7 @@ import { AuthenticationStore } from '@modules/stores/authentication/authenticati
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ContextStore } from '@modules/stores/context/context.store';
 import { ContextPageLayoutType } from '@modules/stores/context/context.types';
-import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Injectable()
 export class CoreService {
@@ -23,7 +23,6 @@ export class CoreService {
   protected stores: {
     authentication: AuthenticationStore;
     context: ContextStore;
-    schema: InnovationRecordSchemaStore;
   };
 
   protected ctx: CtxStore;
@@ -44,8 +43,7 @@ export class CoreService {
 
     this.stores = {
       authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore),
-      schema: injector.get(InnovationRecordSchemaStore)
+      context: injector.get(ContextStore)
     };
 
     this.ctx = injector.get(CtxStore);

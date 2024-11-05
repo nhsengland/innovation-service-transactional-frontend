@@ -1,8 +1,5 @@
+import { InnovationRecordSchemaInfoType, IrSchemaTranslatorMapType } from '../../../ctx/schema/schema.types';
 import { InnovationRecordSchemaV3Type } from './ir-v3-types';
-import {
-  InnovationRecordSchemaInfoType,
-  IrSchemaTranslatorMapType
-} from '../innovation-record-schema/innovation-record-schema.models';
 
 export function irSchemaTranslationsMap(schema: InnovationRecordSchemaV3Type): IrSchemaTranslatorMapType {
   const flattenedSections = new Map();

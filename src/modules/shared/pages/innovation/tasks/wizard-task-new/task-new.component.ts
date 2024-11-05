@@ -44,7 +44,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
 
     this.sectionUrl = `/${this.baseUrl}/innovations/${this.innovationId}/record/sections/${this.sectionId}`;
 
-    this.sections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
+    this.sections = this.ctx.schema.getIrSchemaNumberedSubSectionsList();
 
     this.wizard.data = {
       sectionStep: { section: null },
@@ -55,7 +55,7 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   ngOnInit() {
     if (this.sectionId) {
       // Check if is a valid sectionId
-      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+      const section = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
       if (section) {
         this.wizard.data.sectionStep.section = this.sectionId;

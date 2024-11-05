@@ -51,7 +51,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           ...response,
           locationLink:
             response.context.type === 'INNOVATION_SECTION'
-              ? (getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
+              ? (getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(
                   item => item.value === response.context.id
                 )?.label ?? '[Archived section]')
               : null

@@ -40,7 +40,7 @@ export class WizardTaskNewMessageStepComponent
 
     this.form.get('message')?.setValue(this.data.message);
 
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.data.selectedSection);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.data.selectedSection);
 
     this.title = sectionIdentification
       ? `Assign a task for section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
