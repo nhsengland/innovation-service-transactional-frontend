@@ -108,7 +108,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.showStartSupport =
         this.isInProgress &&
-        this.isQualifyingAccessorRole &&
         (!this.innovationSupport ||
           (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
@@ -227,6 +226,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           : this.innovation.support?.id;
 
       this.setPageStatus('READY');
+
+      console.log('isQualifyingAccessorRole', this.isQualifyingAccessorRole);
+      console.log('isAccessorRole', this.isAccessorRole);
     });
   }
 }
