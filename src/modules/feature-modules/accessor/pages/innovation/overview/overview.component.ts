@@ -218,9 +218,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.changeSupportUrlNewOrSupport =
         this.innovationSupport &&
-        [InnovationSupportStatusEnum.CLOSED, InnovationSupportStatusEnum.UNSUITABLE].includes(
-          this.innovationSupport.status
-        )
+        [
+          InnovationSupportStatusEnum.CLOSED,
+          InnovationSupportStatusEnum.UNSUITABLE,
+          InnovationSupportStatusEnum.UNASSIGNED
+        ].includes(this.innovationSupport.status)
           ? 'new'
           : this.innovation.support?.id;
 
