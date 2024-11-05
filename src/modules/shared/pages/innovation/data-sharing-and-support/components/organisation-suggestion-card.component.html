@@ -20,12 +20,10 @@
         <ng-container *ngIf="showAccessors">
           <ng-container *ngFor="let suggestion of accessors">
             <div class="d-flex">
-              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">
-                Suggested organisations by {{ suggestion.organisation.name }} ({{ suggestion.organisation.acronym }}):
-              </p>
+              <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-3 nhsuk-u-padding-right-2">Suggested organisations by {{ suggestion.organisation.name }}:</p>
             </div>
             <ul class="nhsuk-list">
-              <li *ngFor="let suggestedOrg of suggestion.suggestedOrganisations">{{ suggestedOrg.name }} ({{ suggestedOrg.acronym }})</li>
+              <li *ngFor="let suggestedOrg of suggestion.suggestedOrganisations">{{ suggestedOrg.name }}</li>
             </ul>
           </ng-container>
         </ng-container>
