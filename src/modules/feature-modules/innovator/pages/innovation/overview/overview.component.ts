@@ -5,7 +5,6 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import {
   InnovationGroupedStatusEnum,
   InnovationStatusEnum,
@@ -139,31 +138,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
-      }
-
-      // Throw notification read dismiss.
-      if (this.innovation.status === 'IN_PROGRESS' && this.innovation.lastEndSupportAt) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT]
-        });
-      }
-
-      if (this.innovation.loggedUser.isOwner && this.isArchived) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER,
-            NotificationContextDetailEnum.AI01_INNOVATION_ARCHIVED_TO_SELF
-          ]
-        });
-      }
-
-      if (!this.innovation.loggedUser.isOwner) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR,
-            NotificationContextDetailEnum.AI02_INNOVATION_ARCHIVED_TO_COLLABORATORS
-          ]
-        });
       }
 
       this.setPageStatus('READY');

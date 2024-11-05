@@ -10,7 +10,6 @@ import {
   InnovationsService,
   InnovationThreadListFiltersType
 } from '@modules/shared/services/innovations.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
@@ -83,18 +82,6 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   }
 
   ngOnInit(): void {
-    // Throw notification read dismiss.
-    if (this.stores.authentication.isAccessorType()) {
-      this.stores.context.dismissNotification(this.innovation.id, {
-        contextDetails: [
-          NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT,
-          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
-          NotificationContextDetailEnum.TO07_TRANSFER_OWNERSHIP_ACCEPTS_ASSIGNED_ACCESSORS,
-          NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS
-        ]
-      });
-    }
-
     this.tableList
       .setVisibleColumns({
         subject: { label: 'Message threads', orderable: false },

@@ -7,7 +7,6 @@ import { InnovationExportRequestStatusEnum } from '@modules/stores';
 
 import { InnovationExportRequestInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 @Component({
   selector: 'shared-pages-innovation-export-request-info',
@@ -42,19 +41,6 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
     this.innovationsService.getExportRequestInfo(this.innovationId, this.requestId).subscribe({
       next: response => {
         this.innovationRequest = response;
-
-        // Throw notification read dismiss.
-        if (this.isInnovatorType) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.RE01_EXPORT_REQUEST_SUBMITTED],
-            contextIds: [this.requestId]
-          });
-        } else if (this.isSupportTeamType) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.RE03_EXPORT_REQUEST_REJECTED],
-            contextIds: [this.requestId]
-          });
-        }
 
         this.setPageStatus('READY');
       },
@@ -100,8 +86,9 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
       return;
     }
     this.redirectTo(
-      `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/${this
-        .innovationRequest?.id}/reject`
+      `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/${
+        this.innovationRequest?.id
+      }/reject`
     );
   }
 

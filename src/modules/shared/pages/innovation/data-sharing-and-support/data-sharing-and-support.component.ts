@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ObservableInput, forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { ContextInnovationType, InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 import { OrganisationSuggestionModel } from '@modules/stores/ctx/innovation/innovation.models';
@@ -243,22 +243,6 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
           };
         }
       });
-
-      if (this.userType === UserRoleEnum.INNOVATOR) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.OS02_UNITS_SUGGESTION_NOT_SHARED_TO_INNOVATOR,
-            NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR,
-            NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER
-          ]
-        });
-
-        if (this.innovation.loggedUser.isOwner) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.AP07_UNIT_INACTIVATED_TO_ENGAGING_INNOVATIONS]
-          });
-        }
-      }
 
       // Check if there are organisations to be suggested by the qualifying accessor
       if (this.userType === UserRoleEnum.QUALIFYING_ACCESSOR) {

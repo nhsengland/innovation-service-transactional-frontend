@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 export enum FormFieldActionsEnum {
   ARCHIVE = 'ARCHIVE',
@@ -81,11 +80,6 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     this.setPageTitle(this.formfieldAction.title, { showPage: false });
     this.setBackLink('Go back', this.baseUrl);
-
-    // Throw notification read dismiss.
-    this.stores.context.dismissNotification(this.innovationId, {
-      contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT]
-    });
 
     this.setPageStatus('READY');
   }

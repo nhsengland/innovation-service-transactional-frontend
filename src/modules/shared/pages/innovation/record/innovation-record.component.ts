@@ -8,8 +8,6 @@ import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-// import { getSectionsSummary } from '@modules/stores/innovation/innovation-record/202405/ir-v3.helpers';
 import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
@@ -138,17 +136,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         );
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
-
-        // Throw notification read dismiss.
-        if (this.isInnovatorType) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.AU01_INNOVATOR_INCOMPLETE_RECORD]
-          });
-        } else if (this.showSupportingTeamsShareRequestSection) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.RE02_EXPORT_REQUEST_APPROVED]
-          });
-        }
 
         this.setPageStatus('READY');
       },

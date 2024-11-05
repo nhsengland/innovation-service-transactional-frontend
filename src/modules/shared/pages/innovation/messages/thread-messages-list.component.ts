@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
@@ -187,54 +186,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           this.showAddRecipientsLink = this.organisationUnits
             .reduce((acc: string[], item) => [...acc, ...item.recipients.map(a => a.roleId)], [])
             .some(roleId => !this.threadFollowers?.map(follower => follower.role.id).includes(roleId));
-        }
-
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, {
-          contextTypes: [NotificationCategoryTypeEnum.MESSAGES],
-          contextIds: [this.threadInfo.id]
-        });
-
-        switch (this.threadInfo.context?.type) {
-          case 'TASK':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS,
-                  NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR,
-                  NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            } else if (this.isAssessmentType || this.isAccessorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT,
-                  NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
-          case 'SUPPORT':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING,
-                  NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
-          case 'NEEDS_ASSESSMENT':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
         }
 
         this.setPageStatus('READY');
