@@ -91,7 +91,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.threadsLink = `/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`;
 
-    const previousUrl = this.stores.context.getPreviousUrl();
+    const previousUrl = this.ctx.layout.previousUrl();
 
     this.setBackLink(
       'Go back',

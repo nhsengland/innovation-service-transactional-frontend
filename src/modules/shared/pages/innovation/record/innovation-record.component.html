@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+<theme-content-wrapper [status]="pageStatus()">  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>User Locked</span>
     </div>

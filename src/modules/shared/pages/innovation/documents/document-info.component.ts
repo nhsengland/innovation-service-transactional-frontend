@@ -50,9 +50,8 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           ...response,
           locationLink:
             response.context.type === 'INNOVATION_SECTION'
-              ? (getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(
-                  item => item.value === response.context.id
-                )?.label ?? '[Archived section]')
+              ? (getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(item => item.value === response.context.id)
+                  ?.label ?? '[Archived section]')
               : null
         };
 
@@ -68,7 +67,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   gotoInfoPage() {
-    if (['/sections', '/support-summary'].some(i => this.stores.context.getPreviousUrl()?.includes(i))) {
+    if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
       this.setBackLink('Go back');
     } else {
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
@@ -89,7 +88,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
+        this.redirectTo(this.ctx.layout.previousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');

@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <ng-container *ngIf="innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt">
+<theme-content-wrapper [status]="pageStatus()">  <ng-container *ngIf="innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt">
     <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
       <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> There is no active support for your innovation</h3>
       <ul class="nhsuk-list" role="list">

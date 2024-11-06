@@ -1,11 +1,10 @@
-<theme-content-wrapper [status]="pageStatus">
-  <button routerLink="new" class="nhsuk-button">Create an announcement</button>
+<theme-content-wrapper [status]="pageStatus()">  <button routerLink="new" class="nhsuk-button">Create an announcement</button>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-three-quarters">
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+      <theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <div *ngIf="pageStatus === 'READY'" aria-live="polite">
+      <div *ngIf="pageStatus() === 'READY'" aria-live="polite">
         <p *ngIf="announcementsList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-5">No announcements have been created yet.</p>
 
         <table *ngIf="announcementsList.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table nhsuk-u-padding-top-5">

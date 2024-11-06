@@ -86,6 +86,6 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
     component.onSubmit();
     fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('READY');
+    expect(component.pageStatus()).toBe('READY');
   });
 });

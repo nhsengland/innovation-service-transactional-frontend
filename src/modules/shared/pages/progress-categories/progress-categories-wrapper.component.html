@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <shared-pages-progress-categories-one-level-milestone *ngIf="milestoneType === 'ONE_LEVEL'" [oneLevelMilestone]="milestone" />
+<theme-content-wrapper [status]="pageStatus()">  <shared-pages-progress-categories-one-level-milestone *ngIf="milestoneType === 'ONE_LEVEL'" [oneLevelMilestone]="milestone" />
 
   <shared-pages-progress-categories-two-level-milestone *ngIf="milestoneType === 'TWO_LEVEL'" [twoLevelMilestone]="milestone" />
 </theme-content-wrapper>

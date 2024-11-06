@@ -80,7 +80,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       this.setRedirectAlertSuccess('Support status updated requested', {
         message: 'The qualifying accessor has been notified of your request.'
       });
-      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
+      this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     });
   }
 }

@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <ng-container *ngIf="isInnovatorType && !isArchived">
         <app-organisation-suggestions-card [suggestions]="organisationSuggestions" [shares]="shares"></app-organisation-suggestions-card>

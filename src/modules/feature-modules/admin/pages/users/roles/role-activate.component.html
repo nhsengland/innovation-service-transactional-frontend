@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <span *ngIf="rulesToShow.length === 0" class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 nhsuk-u-padding-bottom-5">
         Activate {{ user.role.description }} role for {{ user.name }}.
