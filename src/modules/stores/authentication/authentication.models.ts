@@ -30,6 +30,7 @@ export class AuthenticationModel {
     hasInnovationCollaborations: boolean;
     hasLoginAnnouncements: { [k: string]: boolean };
     passwordResetAt: null | DateISOType;
+    passwordChangeSinceLastSignIn?: boolean;
     firstTimeSignInAt: null | DateISOType;
     organisations: {
       id: string;

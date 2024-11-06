@@ -161,17 +161,10 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     );
   }
 
-  updateUserPasswordResetDate() {
-    this.authenticationService.getUserInfo(true).subscribe({
-      next: user => {
-        if (this.state.user) {
-          this.state.user.passwordResetAt = user.passwordResetAt;
-        }
-      },
-      error: error => {
-        console.error('Failed to fetch user info:', error);
-      }
-    });
+  userPasswordSuccessfullyUpdated() {
+    if (this.state.user) {
+      this.state.user.passwordChangeSinceLastSignIn = true;
+    }
   }
 
   updateUserInfo$(body: UpdateUserInfoDTO): Observable<{ id: string }> {
