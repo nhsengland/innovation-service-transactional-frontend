@@ -119,7 +119,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
       this.task = response;
       this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
-      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
+      const section = this.ctx.schema.getIrSchemaSectionIdentificationV3(response.section);
       this.sectionTitle = section
         ? `${section.group.number}.${section.section.number} ${section.section.title}`
         : 'Section no longer available';

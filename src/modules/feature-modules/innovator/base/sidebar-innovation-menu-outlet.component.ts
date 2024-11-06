@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ViewportScroller } from '@angular/common';
-import { CtxStore, InnovationRecordSchemaStore, InnovationStatusEnum } from '@modules/stores';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -24,8 +24,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private ctx: CtxStore,
-    private scroller: ViewportScroller,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private scroller: ViewportScroller
   ) {
     this.subscriptions.add(
       this.router.events
@@ -48,7 +47,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.ctx.innovation.info();
 
-      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id);
+      this.sectionsSidebar = this.ctx.schema.getIrSchemaSectionsTreeV3('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },

@@ -133,7 +133,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             .map(v =>
               v === 'OTHER'
                 ? innovationInfo.otherCategoryDescription
-                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
+                : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }

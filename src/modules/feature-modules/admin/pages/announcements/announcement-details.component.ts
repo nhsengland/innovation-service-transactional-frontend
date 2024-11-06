@@ -72,7 +72,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
 
   getSummaryData(): SummaryDataItemType[] {
     const summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
-    const irSchemaTranslations = this.stores.schema.getIrSchemaTranslationsMap();
+    const irSchemaTranslations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     let editStepNumber = 1;
 
@@ -206,7 +206,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
   }
 
   formatSectionLabel(sectionId: string) {
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
     return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
   }
 

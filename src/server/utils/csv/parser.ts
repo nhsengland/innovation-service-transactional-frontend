@@ -17,7 +17,7 @@ import {
 } from '../errors';
 import { getIRDocumentExportData, getInnovationInfo, getSchema, getSections } from '../pdf/parser';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
 export const generateCSVHandler = async (innovationId: string, body: any, config: any) => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/${innovationId}/csv`;

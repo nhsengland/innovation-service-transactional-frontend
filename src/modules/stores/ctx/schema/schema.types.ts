@@ -1,13 +1,21 @@
-import { InnovationRecordSchemaV3Type } from '../202405/ir-v3-types';
-
-export class InnovationRecordSchemaModel {
-  constructor() {}
-}
+import { InnovationRecordSchemaV3Type } from '../../innovation/innovation-record/202405/ir-v3-types';
 
 export type InnovationRecordSchemaInfoType = {
   id: string;
   version: number;
   schema: InnovationRecordSchemaV3Type;
+};
+
+export type ContextSchemaType = {
+  irSchema: InnovationRecordSchemaInfoType;
+} & BaseContextType;
+
+export type BaseContextType = { expiresAt: number; isStateLoaded: boolean };
+
+export const EMPTY_SCHEMA_CONTEXT: ContextSchemaType['irSchema'] = {
+  id: '0',
+  version: -1,
+  schema: { sections: [] }
 };
 
 export type InnovationRecordSectionUpdateType = { version: number; data: { [key: string]: any } };

@@ -27,7 +27,7 @@
       </p>
     </div>
 
-    <ng-container *ngFor="let item of innovationsSectionsList; let i = index">
+    <ng-container *ngFor="let item of ctx.schema.getSectionsList(); let i = index">
       <div class="nhsuk-u-margin-top-7">
         <h3 class="nhsuk-heading-l nhsuk-u-margin-0">{{ i + 1 }}. {{ item.title }}</h3>
 
@@ -107,16 +107,19 @@
 
     <ng-container
       *ngIf="
-        (innovation.status==='IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
+        (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
         (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
       "
     >
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
     </ng-container>
 
-    <div *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+    <div
+      *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
+      class="nhsuk-inset-text nhsuk-u-margin-top-0"
+    >
       <span class="nhsuk-u-visually-hidden">Information:</span>
-      <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
     </div>
   </div>
 </theme-content-wrapper>

@@ -8,7 +8,7 @@ import {
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
-import { InnovationRecordSchemaStore } from '@modules/stores';
+import { SchemaContextStore } from '@modules/stores';
 import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 
 export class UtilsHelper {
@@ -124,7 +124,7 @@ export class UtilsHelper {
 
   static getNotifyMeSubscriptionSectionsText(
     subscription: NotifyMeResponseTypes[NotificationEnum.INNOVATION_RECORD_UPDATED],
-    schemaStore: InnovationRecordSchemaStore
+    schemaStore: SchemaContextStore
   ): string[] {
     if (subscription.sections) {
       return subscription.sections

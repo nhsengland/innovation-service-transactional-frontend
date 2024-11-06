@@ -46,11 +46,9 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
 
   ngOnInit(): void {
     // Add each section as an option to select on the form
-    const subSections = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
-
     this.sectionsItems.push(
-      ...subSections.map(s => {
-        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(s);
+      ...this.ctx.schema.getSubSectionsIds().map(s => {
+        const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(s);
         return {
           value: s,
           label: `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`

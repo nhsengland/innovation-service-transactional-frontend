@@ -14,8 +14,8 @@ import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
-import { IrSchemaTranslatorItemMapType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { UserRoleEnum } from '@app/base/enums';
+import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -131,7 +131,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
         const { filters, datasets } = getConfig(
-          this.stores.context.getIrSchema(),
+          this.ctx.schema.irSchemaInfo(),
           this.stores.authentication.state.userContext?.type
         );
 
@@ -268,6 +268,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
           const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
+          const translations = this.ctx.schema.getIrSchemaTranslationsMap();
           const innovationData: InnovationCardData = {
             id: result.id,
             name: result.name,
@@ -280,22 +281,22 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             postCode: result.postcode,
             categories: this.translateLists(
               result.categories,
-              this.stores.schema.getIrSchemaTranslationsMap().questions.get('categories')?.items,
+              translations.questions.get('categories')?.items,
               result.otherCategoryDescription
             ),
             careSettings: this.translateLists(
               result.careSettings,
-              this.stores.schema.getIrSchemaTranslationsMap().questions.get('careSettings')?.items,
+              translations.questions.get('careSettings')?.items,
               result.otherCareSetting
             ),
             diseasesAndConditions: this.translateLists(
               result.diseasesAndConditions,
-              this.stores.schema.getIrSchemaTranslationsMap().questions.get('diseasesConditionsImpact')?.items,
+              translations.questions.get('diseasesConditionsImpact')?.items,
               'None'
             ),
             keyHealthInequalities: this.translateLists(
               result.keyHealthInequalities,
-              this.stores.schema.getIrSchemaTranslationsMap().questions.get('keyHealthInequalities')?.items,
+              translations.questions.get('keyHealthInequalities')?.items,
 
               'None'
             ),

@@ -1,7 +1,7 @@
 import { UserRoleEnum } from '@app/base/enums';
 import { Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
 import { InnovationStatusEnum } from '@modules/stores';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 export const TaskAdvancedSearchFiltersConfig: FiltersConfig = {

@@ -5,7 +5,7 @@ import {
   InnovationDocumentInfoOutDTO,
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { getAllSectionsListV3 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 
 // Labels.

@@ -2,8 +2,8 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { FormGroup } from '@app/base/forms';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 

@@ -1,15 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InnovationRecordSchemaStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Pipe({ name: 'irv3translate' })
 export class IrV3TranslatePipe implements PipeTransform {
-  constructor(private irSchemaStore: InnovationRecordSchemaStore) {}
+  constructor(private ctx: CtxStore) {}
   transform(
     value: string | string[] | undefined,
     type: 'sections' | 'subsections' | 'questions' | 'items',
     questionId?: string
   ): string {
-    const translations = this.irSchemaStore.getIrSchemaTranslationsMap();
+    const translations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     switch (type) {
       case 'sections':

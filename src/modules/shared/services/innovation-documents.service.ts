@@ -103,7 +103,7 @@ export class InnovationDocumentsService extends CoreService {
           switch (item.context.type) {
             case 'INNOVATION_SECTION':
               description =
-                getAllSectionsListV3(this.stores.context?.getIrSchema()).find(s => s.value === item.context.id)
+                getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(s => s.value === item.context.id)
                   ?.label ?? '[archived section]';
               break;
             case 'INNOVATION_EVIDENCE':
@@ -152,7 +152,7 @@ export class InnovationDocumentsService extends CoreService {
         let descriptionUrl: null | string = null;
         switch (item.context.type) {
           case 'INNOVATION_SECTION':
-            const section = getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
+            const section = getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(
               s => s.value === item.context.id
             )?.label;
             description = section ?? '[archived section]';

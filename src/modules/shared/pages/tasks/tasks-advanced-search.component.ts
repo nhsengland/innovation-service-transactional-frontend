@@ -50,7 +50,7 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
       return;
     }
 
-    const { filters, datasets } = getConfig(userType, this.stores.context.getIrSchema());
+    const { filters, datasets } = getConfig(userType, this.ctx.schema.irSchemaInfo());
 
     datasets.status = [
       InnovationTaskStatusEnum.OPEN,

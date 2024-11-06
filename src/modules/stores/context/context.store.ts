@@ -2,20 +2,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { NGXLogger } from 'ngx-logger';
 import { Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { Store } from '../store.class';
 import { ContextModel } from './context.models';
 import { ContextService } from './context.service';
-import {
-  ContextAssessmentType,
-  ContextPageLayoutType,
-  ContextPageStatusType,
-  ContextSchemaType
-} from './context.types';
+import { ContextPageLayoutType, ContextPageStatusType } from './context.types';
 
-import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { InnovationRecordSchemaService } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
 import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from './context.enums';
 
 @Injectable()
@@ -23,8 +16,7 @@ export class ContextStore extends Store<ContextModel> {
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private logger: NGXLogger,
-    private contextService: ContextService,
-    private innovationRecordSchemaService: InnovationRecordSchemaService
+    private contextService: ContextService
   ) {
     super('STORE::Context', new ContextModel());
   }
@@ -130,32 +122,6 @@ export class ContextStore extends Store<ContextModel> {
     this.pageLayoutState.status = 'LOADING';
     this.pageLayoutState.title = { main: null };
     this.setPageLayoutState();
-  }
-
-  // Innovation Record Schema methods.
-  setIrSchema(data: ContextSchemaType): void {
-    this.state.irSchema = data;
-    this.setState();
-  }
-
-  getIrSchema(): InnovationRecordSchemaInfoType {
-    if (!this.state.irSchema?.schema) {
-      console.error('Context has NO schema');
-      return { id: '', version: 0, schema: { sections: [] } };
-    }
-    return this.state.irSchema.schema;
-  }
-
-  clearIrSchema(): void {
-    this.state.irSchema = null;
-    this.setState();
-  }
-
-  getOrLoadIrSchema(): Observable<ContextSchemaType> {
-    if (this.state.irSchema?.schema && Date.now() < this.state.irSchema.expiryAt) {
-      return of(this.state.irSchema);
-    }
-    return this.innovationRecordSchemaService.getLatestSchema().pipe(tap(schema => this.setIrSchema(schema)));
   }
 
   /**

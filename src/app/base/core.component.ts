@@ -19,7 +19,6 @@ import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/co
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
-import { InnovationRecordSchemaStore } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { CtxStore } from '@modules/stores';
 
 @Component({ template: '' })
@@ -49,7 +48,6 @@ export class CoreComponent implements OnDestroy {
   protected stores: {
     authentication: AuthenticationStore;
     context: ContextStore;
-    schema: InnovationRecordSchemaStore;
   };
 
   protected ctx: CtxStore;
@@ -91,8 +89,7 @@ export class CoreComponent implements OnDestroy {
 
     this.stores = {
       authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore),
-      schema: injector.get(InnovationRecordSchemaStore)
+      context: injector.get(ContextStore)
     };
 
     this.ctx = injector.get(CtxStore);

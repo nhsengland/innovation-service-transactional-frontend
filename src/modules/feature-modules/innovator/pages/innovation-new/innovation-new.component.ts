@@ -19,7 +19,7 @@ import { getNewInnovationQuestionsWizard } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.stores.context.getIrSchema()));
+  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
 
   isCreatingInnovation = false;
 

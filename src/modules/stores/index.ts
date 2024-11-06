@@ -9,10 +9,6 @@ export { AuthenticationService } from './authentication/authentication.service';
 export { ContextStore } from './context/context.store';
 export { ContextService } from './context/context.service';
 
-// // IR Schema Store.
-export { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
-export { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
-
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
 // // Assessment
@@ -24,3 +20,7 @@ export { InnovationContextService } from './ctx/innovation/innovation-context.se
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 export { ContextInnovationType } from './ctx/innovation/innovation-context.types';
 export * from './ctx/innovation/innovation.enums';
+// // Schema
+export { SchemaContextStore } from './ctx/schema/schema.store';
+export { SchemaContextService } from './ctx/schema/schema.service';
+export { ContextSchemaType } from './ctx/schema/schema.types';

@@ -20,7 +20,6 @@ import {
 import { DatePipe, ViewportScroller } from '@angular/common';
 import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
-import { InnovationRecordSchemaStore } from '@modules/stores';
 import { combineLatest } from 'rxjs';
 
 export enum SummaryDataItemTypeEnum {
@@ -103,7 +102,6 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService,
     private datePipe: DatePipe,
-    private irSchemaStore: InnovationRecordSchemaStore,
     private scroller: ViewportScroller
   ) {
     super();
@@ -225,14 +223,14 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   }
 
   formatSectionLabel(sectionId: string) {
-    const sectionIdentification = this.irSchemaStore.getIrSchemaSectionIdentificationV3(sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
     return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
   }
 
   summaryParsing(): SummaryPayloadType {
     const outboundPayload = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    const irSchemaTranslations = this.irSchemaStore.getIrSchemaTranslationsMap();
+    const irSchemaTranslations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     return {
       title: outboundPayload.title,

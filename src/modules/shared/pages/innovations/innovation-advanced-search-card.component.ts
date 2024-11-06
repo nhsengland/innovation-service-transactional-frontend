@@ -171,7 +171,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
         // Set
         sectionId = 'EVIDENCE_OF_EFFECTIVENESS';
       }
-      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(sectionId);
+      const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
       linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
 
       if (this.isInnovationInArchivedStatus) {

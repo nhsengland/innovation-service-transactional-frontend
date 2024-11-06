@@ -186,7 +186,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
 
     outputInnerHtml += '<ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">';
 
-    const displaySections = UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.schema);
+    const displaySections = UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.ctx.schema);
 
     displaySections.forEach(section => {
       outputInnerHtml += `<li class="nhsuk-u-margin-0">${section}</li>`;

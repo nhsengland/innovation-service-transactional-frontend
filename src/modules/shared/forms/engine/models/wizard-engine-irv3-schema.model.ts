@@ -7,13 +7,13 @@ import {
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { MappedObjectType } from '@app/base/types';
+import { URLS } from '@app/base/constants';
 import {
   InnovationRecordSchemaInfoType,
   InnovationRecordSectionUpdateType,
   IrSchemaTranslatorMapType
-} from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { MappedObjectType } from '@app/base/types';
-import { URLS } from '@app/base/constants';
+} from '@modules/stores/ctx/schema/schema.types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };

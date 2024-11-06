@@ -13,11 +13,11 @@ import {
   InnovationSectionInfoDTO,
   SectionsSummaryModel
 } from './innovation.models';
-import { InnovationRecordSchemaStore } from '../../innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
 import { WizardEngineModel } from '@modules/shared/forms/engine/models/wizard-engine.models';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from '../../innovation/innovation-record/202405/evidences-config';
 import { toObservable } from '@angular/core/rxjs-interop';
+import { SchemaContextStore } from '../schema/schema.store';
 
 @Injectable()
 export class InnovationContextStore {
@@ -40,7 +40,7 @@ export class InnovationContextStore {
 
   constructor(
     private innovationService: InnovationContextService,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private schemaStore: SchemaContextStore
   ) {
     // Reducers
     this.fetch$
@@ -96,7 +96,7 @@ export class InnovationContextStore {
   getSectionsSummary$(innovationId: string): Observable<SectionsSummaryModel> {
     return this.innovationService.getInnovationSections(innovationId).pipe(
       map(response => {
-        return this.irSchemaStore.getIrSchemaSectionsListV3().map(item => ({
+        return this.schemaStore.getSectionsList().map(item => ({
           id: item.id,
           title: item.title,
           sections: item.sections.map(ss => {
@@ -173,6 +173,6 @@ export class InnovationContextStore {
 
   // TODO: Move this to schema store
   getInnovationRecordSectionWizard(sectionId: string, version?: string): WizardIRV3EngineModel {
-    return this.irSchemaStore.getIrSchemaSectionV3(sectionId).wizard;
+    return this.schemaStore.getIrSchemaSectionV3(sectionId).wizard;
   }
 }

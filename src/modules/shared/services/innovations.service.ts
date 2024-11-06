@@ -553,7 +553,7 @@ export class InnovationsService extends CoreService {
       map(response => ({
         count: response.count,
         data: response.data.map(item => {
-          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(item.section);
+          const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(item.section);
 
           return {
             ...item,
@@ -575,7 +575,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
+        const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(response.section);
 
         return {
           id: response.id,
@@ -766,7 +766,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
           let link: null | { label: string; url: string } = null;
           const sectionIdentification = i.params.sectionId
-            ? this.stores.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
+            ? this.ctx.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
             : '';
 
           // Handle sections from previous innovation record versions

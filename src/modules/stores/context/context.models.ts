@@ -1,6 +1,6 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 
-import { ContextAssessmentType, ContextPageLayoutType, ContextSchemaType } from './context.types';
+import { ContextAssessmentType, ContextPageLayoutType } from './context.types';
 
 // Store state model.
 export class ContextModel {
@@ -10,9 +10,6 @@ export class ContextModel {
   notifications = {
     UNREAD: 0
   };
-
-  // For Innovation Record Schema
-  irSchema: null | ContextSchemaType = null;
 
   // For assessment
   assessment: null | ContextAssessmentType = null;

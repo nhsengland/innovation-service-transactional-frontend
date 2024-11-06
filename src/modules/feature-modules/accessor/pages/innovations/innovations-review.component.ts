@@ -340,7 +340,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               mainCategory: item.mainCategory
                 ? item.mainCategory === 'OTHER'
                   ? 'Other'
-                  : (this.stores.schema
+                  : (this.ctx.schema
                       .getIrSchemaTranslationsMap()
                       ['questions'].get('categories')
                       ?.items.get(item.mainCategory)?.label ?? item.mainCategory)

@@ -1,7 +1,6 @@
 import { DateISOType, LinkType } from '@app/base/types';
 
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
-import { InnovationRecordSchemaInfoType } from '../innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export type ContextPageAlertType = {
   type: null | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR';
@@ -41,11 +40,6 @@ export type ContextPageLayoutType = {
     width?: 'full' | '2.thirds';
     actions?: LinkType[];
   };
-};
-
-export type ContextSchemaType = {
-  schema: InnovationRecordSchemaInfoType | null;
-  expiryAt: number;
 };
 
 // InnovationNeedsAssessmentInfoDTO + expiryAt

@@ -1,10 +1,9 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
-import { ContextStore } from '@modules/stores';
-import { ContextSchemaType } from '@modules/stores/context/context.types';
+import { ContextSchemaType, CtxStore } from '@modules/stores';
 import { Observable } from 'rxjs';
 
-export const innovationRecordSchemaResolver: ResolveFn<any> = (): Observable<ContextSchemaType> => {
-  const contextStore: ContextStore = inject(ContextStore);
-  return contextStore.getOrLoadIrSchema();
+export const innovationRecordSchemaResolver: ResolveFn<any> = (): Observable<ContextSchemaType['irSchema']> => {
+  const ctxStore: CtxStore = inject(CtxStore);
+  return ctxStore.schema.getOrLoad$();
 };
