@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
 import { ActivatedRoute } from '@angular/router';
-import { NotificationContextDetailEnum } from '@app/base/enums';
 import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import {
   InnovationAssessmentListDTO,
@@ -185,17 +184,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             ).length;
         }
 
-        // Throw notification read dismiss.
-        if (this.isAccessorType) {
-          this.stores.context.dismissNotification(this.innovation.id, {
-            contextDetails: [
-              NotificationContextDetailEnum.SUPPORT_UPDATED,
-              NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED,
-              NotificationContextDetailEnum.SUGGESTED_SUPPORT_UPDATED
-            ]
-          });
-        }
-
         this.setPageStatus('READY');
       },
       error: () => {
@@ -222,28 +210,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             unitItem.historyList = response;
             unitItem.isLoading = false;
             this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
-
-            // Throw notification read dismiss.
-            if (unitItem.support?.id) {
-              if (this.isInnovatorType) {
-                this.stores.context.dismissNotification(this.innovation.id, {
-                  contextDetails: [
-                    NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER,
-                    NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING,
-                    NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS
-                  ],
-                  contextIds: [unitItem.support.id]
-                });
-              } else if (this.isAccessorType) {
-                this.stores.context.dismissNotification(this.innovation.id, {
-                  contextDetails: [
-                    NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS,
-                    NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT
-                  ],
-                  contextIds: [unitItem.support.id]
-                });
-              }
-            }
           },
           error: () => {
             unitItem.isOpened = false;

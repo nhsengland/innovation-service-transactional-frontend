@@ -5,7 +5,6 @@ import { CoreComponent } from '@app/base';
 import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 import { InnovationStatusEnum } from '@modules/stores';
 
 @Component({
@@ -134,19 +133,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
           `Update section ${section?.group.number}.${section?.section.number} '${section?.section.title}'`,
           { hint: `Task Id: ${this.task.displayId}` }
         );
-      }
-
-      // Throw notification read dismiss.
-      if (this.isInnovatorType) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR],
-          contextIds: [this.taskId]
-        });
-      } else if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT],
-          contextIds: [this.task.id]
-        });
       }
 
       this.setAllowedActions();

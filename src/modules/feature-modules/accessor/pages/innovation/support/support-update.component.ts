@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes } from '@app/base/forms';
 
 import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/shared/services/innovations.service';
@@ -220,12 +220,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
           response.innovationSupportInfo.engagingAccessors.forEach(accessor => {
             (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
-          });
-
-          // Throw notification read dismiss.
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
-            contextIds: [this.supportId]
           });
         }
 

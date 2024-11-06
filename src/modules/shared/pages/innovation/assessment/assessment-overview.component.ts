@@ -2,7 +2,6 @@ import { Component, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum } from '@app/base/enums';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
@@ -128,13 +127,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
           comment: response.hasScaleResourceComment || ''
         }
       ];
-
-      // Throw notification read dismiss.
-      if (this.isInnovatorType) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR]
-        });
-      }
 
       if (this.isAccessorType) {
         this.updateSupportUrlNewOrSupport =

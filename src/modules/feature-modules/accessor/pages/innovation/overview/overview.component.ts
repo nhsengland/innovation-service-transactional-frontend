@@ -4,9 +4,6 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
-
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
@@ -176,40 +173,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: 'No tasks assigned by your organisation yet'
         }
       ];
-
-      // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovationId, {
-        contextDetails: [
-          NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER,
-          NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE,
-          NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING,
-          NotificationContextDetailEnum.AI03_INNOVATION_ARCHIVED_TO_ENGAGING_QA_A,
-          NotificationContextDetailEnum.REMINDER,
-          NotificationContextDetailEnum.AU11_ACCESSOR_IDLE_WAITING_SUPPORT_FOR_SIX_WEEKS
-        ]
-      });
-
-      if (this.isQualifyingAccessorRole) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.OS01_UNITS_SUGGESTION_TO_SUGGESTED_UNITS_QA,
-            NotificationContextDetailEnum.OS03_INNOVATION_DELAYED_SHARED_SUGGESTION
-          ]
-        });
-      }
-
-      if (this.innovation.support?.id) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.ST05_SUPPORT_NEW_ASSIGNED_ACCESSOR_TO_NEW_QA],
-          contextIds: [this.innovation.support.id]
-        });
-        if (this.isQualifyingAccessorRole) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.ST07_SUPPORT_STATUS_CHANGE_REQUEST],
-            contextIds: [this.innovation.support.id]
-          });
-        }
-      }
 
       this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
 

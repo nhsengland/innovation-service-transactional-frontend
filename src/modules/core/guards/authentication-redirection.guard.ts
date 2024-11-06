@@ -1,6 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { ContextStore } from '@modules/stores';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
@@ -9,12 +10,14 @@ export class AuthenticationRedirectionGuard {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
-    private authentication: AuthenticationStore
+    private authentication: AuthenticationStore,
+    private contextStore: ContextStore
   ) {}
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const pathSegment = activatedRouteSnapshot.routeConfig?.path || '';
     const userContext = this.authentication.getUserContextInfo();
+    const dismissNotification = activatedRouteSnapshot.queryParams.dismissNotification;
 
     if (isPlatformServer(this.platformId)) {
       this.router.navigate(['']);
@@ -24,6 +27,10 @@ export class AuthenticationRedirectionGuard {
     if (!userContext) {
       this.router.navigate(['/switch-user-context']);
       return false;
+    }
+
+    if (dismissNotification) {
+      this.contextStore.dismissUserNotification({ notificationIds: [dismissNotification] });
     }
 
     if (

@@ -7,7 +7,6 @@ import { TableModel } from '@app/base/models';
 import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 type TableListsType = {
   id: string;
@@ -98,14 +97,6 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
           action: { label: 'Invite again', url: `${item.id}/invite-again` }
         }))
       );
-
-      // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovation.id, {
-        contextDetails: [
-          NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE,
-          NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE
-        ]
-      });
 
       this.setPageStatus('READY');
     });

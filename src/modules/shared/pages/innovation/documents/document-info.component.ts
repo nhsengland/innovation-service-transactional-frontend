@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
 
 import {
   InnovationDocumentInfoOutDTO,
@@ -58,14 +57,6 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
         };
 
         this.canDelete = response.canDelete;
-
-        // Throw notification read dismiss.
-        if (this.stores.authentication.isInnovatorType()) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS],
-            contextIds: [this.documentInfo.id]
-          });
-        }
 
         this.setPageStatus('READY');
       },
