@@ -24,3 +24,6 @@ export * from './ctx/innovation/innovation.enums';
 export { SchemaContextStore } from './ctx/schema/schema.store';
 export { SchemaContextService } from './ctx/schema/schema.service';
 export { ContextSchemaType } from './ctx/schema/schema.types';
+// // Layout
+export { LayoutContextStore } from './ctx/layout/layout.store';
+export { ContextLayoutType } from './ctx/layout/layout.types';

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
@@ -7,7 +7,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
   templateUrl: './content-wrapper.component.html'
 })
 export class ContentWrapperComponent {
-  @Input() status: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
+  status = input.required<'LOADING' | 'READY' | 'ERROR'>();
 
   errorImage: string;
 

@@ -1,13 +1,12 @@
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ContextStore } from '@modules/stores';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
+import { ContextStore, CtxStore } from '@modules/stores';
 import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
 
 export type RoutesDataType = {
@@ -42,30 +41,17 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
 
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
-  pageLayout: {
-    alert: ContextPageLayoutType['alert'];
-    backLink: ContextPageLayoutType['backLink'];
-    title: ContextPageLayoutType['title'];
-    sidebarItems: { label: string; url: string }[];
-  } = {
-    alert: { type: null },
-    backLink: { label: null },
-    title: { main: null },
-    sidebarItems: []
-  };
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private contextStore: ContextStore,
-    private cdr: ChangeDetectorRef
+    protected ctx: CtxStore
   ) {
     this.subscriptions.add(
-      // Reset page layout. contextStore.resetPage() don't emit and event, so nothing changes visually.
       this.router.events
         .pipe(filter((e): e is NavigationStart => e instanceof NavigationStart))
-        .subscribe(() => this.contextStore.resetPage())
+        .subscribe(() => this.ctx.layout.resetPage())
     );
     this.subscriptions.add(
       this.router.events
@@ -75,16 +61,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscriptions.add(
-      this.contextStore.pageLayout$().subscribe(item => {
-        this.pageLayout.alert = item.alert;
-        this.pageLayout.backLink = item.backLink;
-        this.pageLayout.title = { ...item.title, width: item.title.width ?? 'full' };
-        this.cdr.detectChanges();
-        // console.log('ContextPageLayout', item.alert);
-      })
-    );
-
     this.subscriptions.add(
       // We need to reassign the variable so that the component reacts to it.
       this.contextStore.notifications$().subscribe(item => {
@@ -125,7 +101,7 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     // }
 
     // Always reset focus to body.
-    if (isPlatformBrowser(this.platformId) && !this.pageLayout.alert.type) {
+    if (isPlatformBrowser(this.platformId) && !this.ctx.layout.alert()) {
       setTimeout(() => {
         document.body.setAttribute('tabindex', '-1');
         document.body.focus();
@@ -137,10 +113,13 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
   onBackLinkClicked() {
     // console.log('onBackLinkClicked', this.pageLayout.backLink);
 
-    if (this.pageLayout.backLink.url) {
-      this.router.navigateByUrl(this.pageLayout.backLink.url);
-    } else if (this.pageLayout.backLink.callback) {
-      this.pageLayout.backLink.callback.call(this);
+    const callback = this.ctx.layout.backLink()?.callback;
+    if (!callback) return;
+
+    if (typeof callback === 'string') {
+      this.router.navigateByUrl(callback);
+    } else {
+      callback.call(this);
     }
   }
 }

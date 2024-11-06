@@ -72,7 +72,7 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     component.setPageStatus('LOADING');
-    expect(component.pageStatus).toBe('LOADING');
+    expect(component.pageStatus()).toBe('LOADING');
   });
 
   // it(`should run focusBody()`, fakeAsync(() => {
@@ -175,7 +175,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     component.setPageStatus('LOADING');
-    expect(component.pageStatus).toBe('LOADING');
+    expect(component.pageStatus()).toBe('LOADING');
   });
 
   it(`should run clearAlert()`, () => {

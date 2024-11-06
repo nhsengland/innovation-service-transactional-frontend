@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AlertComponent implements OnChanges {
+  // TECHDEBT: Looks like a great candidate to use signal inputs.
   @Input() type: null | '' | 'ACTION' | 'INFORMATION' | 'SUCCESS' | 'WARNING' | 'ERROR' = null;
   @Input() title?: string = '';
   @Input() listStyleType?: 'bullet';
