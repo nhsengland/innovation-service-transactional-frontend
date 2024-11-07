@@ -48,6 +48,7 @@ import { InnovatorService } from './services/innovator.service';
 import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
 import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
+import { PageInnovationRecommendNeedsReassessment } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -86,7 +87,8 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     InnovationNewComponent,
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,
-    InnovationDataSharingEditComponent
+    InnovationDataSharingEditComponent,
+    PageInnovationRecommendNeedsReassessment
   ],
   providers: [
     // Guards.
