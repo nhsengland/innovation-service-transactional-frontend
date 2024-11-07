@@ -1,13 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
 @Component({
   selector: 'theme-content-wrapper',
-  templateUrl: './content-wrapper.component.html'
+  templateUrl: './content-wrapper.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContentWrapperComponent {
-  @Input() status: 'LOADING' | 'READY' | 'ERROR' = 'LOADING';
+  status = input.required<'LOADING' | 'READY' | 'ERROR'>();
 
   errorImage: string;
 

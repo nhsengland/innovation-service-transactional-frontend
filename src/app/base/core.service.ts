@@ -9,8 +9,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { ContextStore } from '@modules/stores/context/context.store';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
-import { CtxStore } from '@modules/stores';
+import { ContextLayoutType, CtxStore } from '@modules/stores';
 
 @Injectable()
 export class CoreService {
@@ -54,8 +53,13 @@ export class CoreService {
     this.API_USERS_URL = this.envVariablesStore.API_USERS_URL;
   }
 
-  setAlert(type: ContextPageLayoutType['alert']['type'], title: string, message?: string, setFocus?: boolean): void {
-    this.stores.context.setPageAlert({ type, title, message, setFocus: !!setFocus, persistOneRedirect: false });
+  setAlert(
+    type: NonNullable<ContextLayoutType['alert']>['type'],
+    title: string,
+    message?: string,
+    setFocus?: boolean
+  ): void {
+    this.ctx.layout.update({ alert: { type, title, message, setFocus: !!setFocus, persistOneRedirect: false } });
   }
 
   apiUserBasePath(): string {

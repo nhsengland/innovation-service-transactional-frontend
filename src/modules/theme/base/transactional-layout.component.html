@@ -30,36 +30,32 @@
 
 <theme-footer></theme-footer>
 
+<!-- TECHDEBT: Great candidate to use signal inputs -->
 <ng-template #fullLayout>
-  <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-0">
+  <div *ngIf="ctx.layout.backLink() as backLink" class="nhsuk-back-link nhsuk-u-padding-top-4 nhsuk-u-margin-bottom-0">
     <a href="javascript:void(0)" (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
       <theme-svg-icon type="chevron-left" />
-      {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
+      {{ backLink.label }} <span class="nhsuk-u-visually-hidden">{{ backLink.hiddenLabel }}</span>
     </a>
   </div>
 
   <theme-alert
-    *ngIf="pageLayout.alert.type"
-    [type]="pageLayout.alert.type"
-    [title]="pageLayout.alert.title"
-    [listStyleType]="pageLayout.alert.listStyleType"
-    [itemsList]="pageLayout.alert.itemsList"
-    [width]="pageLayout.alert.width"
-    [setFocus]="pageLayout.alert.setFocus"
+    *ngIf="ctx.layout.alert() as alert"
+    [type]="alert.type"
+    [title]="alert.title"
+    [listStyleType]="alert.listStyleType"
+    [itemsList]="alert.itemsList"
+    [width]="alert.width"
+    [setFocus]="alert.setFocus"
     class="d-block nhsuk-u-padding-top-4"
   >
-    <p>{{ pageLayout.alert.message }}</p>
+    <p>{{ alert.message }}</p>
   </theme-alert>
 
   <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
-    <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-      <div [ngClass]="{ 'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds' }">
-        <theme-page-title
-          [title]="pageLayout.title.main"
-          [titleHint]="pageLayout.title.secondary"
-          [size]="pageLayout.title.size"
-          [actions]="pageLayout.title.actions"
-        ></theme-page-title>
+    <div *ngIf="ctx.layout.title() as title" class="nhsuk-grid-row">
+      <div [class.nhsuk-grid-column-full]="title.width === 'full'" [class.nhsuk-grid-column-two-thirds]="title.width === '2.thirds'">
+        <theme-page-title [title]="title.main" [titleHint]="title.secondary" [size]="title.size" [actions]="title.actions"></theme-page-title>
       </div>
     </div>
 
@@ -73,10 +69,10 @@
       <div class="app-pane">
         <div class="app-pane__side-bar">
           <nav id="left-aside-menu" class="app-side-nav" role="navigation" aria-label="Main Navigation">
-            <div *ngIf="pageLayout.backLink.label" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
+            <div *ngIf="ctx.layout.backLink() as backLink" class="nhsuk-back-link app-u-hide-mobile app-side-nav__back">
               <a href="javascript:void(0)" (click)="onBackLinkClicked()" class="nhsuk-back-link__link cursor-pointer">
                 <theme-svg-icon type="chevron-left" />
-                {{ pageLayout.backLink.label }} <span class="nhsuk-u-visually-hidden">{{ pageLayout.backLink.hiddenLabel }}</span>
+                {{ backLink.label }} <span class="nhsuk-u-visually-hidden">{{ backLink.hiddenLabel }}</span>
               </a>
             </div>
 
@@ -86,27 +82,22 @@
 
         <div class="app-pane__main-content">
           <theme-alert
-            *ngIf="pageLayout.alert.type"
-            [type]="pageLayout.alert.type"
-            [title]="pageLayout.alert.title"
-            [listStyleType]="pageLayout.alert.listStyleType"
-            [itemsList]="pageLayout.alert.itemsList"
-            [width]="pageLayout.alert.width"
-            [setFocus]="pageLayout.alert.setFocus"
+            *ngIf="ctx.layout.alert() as alert"
+            [type]="alert.type"
+            [title]="alert.title"
+            [listStyleType]="alert.listStyleType"
+            [itemsList]="alert.itemsList"
+            [width]="alert.width"
+            [setFocus]="alert.setFocus"
           >
-            <p>{{ pageLayout.alert.message }}</p>
+            <p>{{ alert.message }}</p>
           </theme-alert>
 
           <!-- <div class="nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5"> -->
 
-          <div *ngIf="pageLayout.title.main" class="nhsuk-grid-row">
-            <div [ngClass]="{ 'nhsuk-grid-column-full': pageLayout.title.width === 'full', 'nhsuk-grid-column-two-thirds': pageLayout.title.width === '2.thirds' }">
-              <theme-page-title
-                [title]="pageLayout.title.main"
-                [titleHint]="pageLayout.title.secondary"
-                [size]="pageLayout.title.size"
-                [actions]="pageLayout.title.actions"
-              ></theme-page-title>
+          <div *ngIf="ctx.layout.title() as title" class="nhsuk-grid-row">
+            <div [class.nhsuk-grid-column-full]="title.width === 'full'" [class.nhsuk-grid-column-two-thirds]="title.width === '2.thirds'">
+              <theme-page-title [title]="title.main" [titleHint]="title.secondary" [size]="title.size" [actions]="title.actions"></theme-page-title>
             </div>
           </div>
 

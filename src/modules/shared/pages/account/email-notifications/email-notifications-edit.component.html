@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <form [formGroup]="form" class="nhsuk-grid-column-two-thirds nhsuk-u-padding-left-0">
+<theme-content-wrapper [status]="pageStatus()">  <form [formGroup]="form" class="nhsuk-grid-column-two-thirds nhsuk-u-padding-left-0">
     <div *ngIf="isAssessmentType || isQualifyingAccessorRole" class="nhsuk-warning-callout nhsuk-u-margin-top-6">
       <div class="nhsuk-heading-m nhsuk-warning-callout__label">
         <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span>You could miss time sensitive service reminders</span>

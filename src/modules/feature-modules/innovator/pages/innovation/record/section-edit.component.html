@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine-v3 formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" />

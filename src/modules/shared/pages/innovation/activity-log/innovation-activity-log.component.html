@@ -1,13 +1,12 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-quarter">
       <shared-filters-wrapper-component title="Filters" [form]="form" [model]="filtersModel" />
     </div>
 
     <div class="nhsuk-grid-column-three-quarters nhsuk-u-padding-bottom-5">
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+      <theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <ng-container *ngIf="pageStatus === 'READY'" aria-live="polite">
+      <ng-container *ngIf="pageStatus() === 'READY'" aria-live="polite">
         <div class="d-flex align-items-center justify-content-space-between nhsuk-u-margin-bottom-2">
           <h2 role="alert" class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-0">{{ activitiesList.getTotalRowsNumber() }} activities found</h2>
           <div class="d-flex">
@@ -42,11 +41,11 @@
 
         <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-        <ng-container *ngIf="pageStatus === 'READY' && activitiesList.getTotalRowsNumber() === 0">
+        <ng-container *ngIf="pageStatus() === 'READY' && activitiesList.getTotalRowsNumber() === 0">
           <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
         </ng-container>
 
-        <ng-container *ngIf="pageStatus === 'READY' && activitiesList.getTotalRowsNumber() > 0">
+        <ng-container *ngIf="pageStatus() === 'READY' && activitiesList.getTotalRowsNumber() > 0">
           <div *ngFor="let item of activitiesList.getRecords()">
             <div
               class="d-flex align-items-center nhsuk-body-s nhsuk-u-margin-0 nhsuk-u-padding-top-3"

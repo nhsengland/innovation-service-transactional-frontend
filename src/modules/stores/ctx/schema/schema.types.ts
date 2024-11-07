@@ -1,4 +1,5 @@
 import { InnovationRecordSchemaV3Type } from '../../innovation/innovation-record/202405/ir-v3-types';
+import { BaseContextType } from '../ctx.types';
 
 export type InnovationRecordSchemaInfoType = {
   id: string;
@@ -9,8 +10,6 @@ export type InnovationRecordSchemaInfoType = {
 export type ContextSchemaType = {
   irSchema: InnovationRecordSchemaInfoType;
 } & BaseContextType;
-
-export type BaseContextType = { expiresAt: number; isStateLoaded: boolean };
 
 export const EMPTY_SCHEMA_CONTEXT: ContextSchemaType['irSchema'] = {
   id: '0',

@@ -206,7 +206,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     } else if (data?.documentId) {
       return `${baseUrl}/documents/${data.documentId}`;
     } else {
-      return this.stores.context.getPreviousUrl() ?? `${baseUrl}/documents`;
+      return this.ctx.layout.previousUrl() ?? `${baseUrl}/documents`;
     }
   }
 }

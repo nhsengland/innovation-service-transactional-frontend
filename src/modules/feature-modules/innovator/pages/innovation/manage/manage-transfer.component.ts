@@ -50,7 +50,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.redirectToDeleteAccount = this.stores.context.getPreviousUrl()?.includes('/manage-account/delete') ?? false;
+    this.redirectToDeleteAccount = this.ctx.layout.previousUrl()?.includes('/manage-account/delete') ?? false;
   }
 
   ngOnInit(): void {

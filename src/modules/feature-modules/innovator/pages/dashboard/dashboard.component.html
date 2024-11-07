@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <ng-container *ngFor="let announcement of announcements">
+<theme-content-wrapper [status]="pageStatus()">  <ng-container *ngFor="let announcement of announcements">
     <theme-announcements-card
       [announcementCardData]="{ id: announcement.id, title: announcement.title, params: announcement.params, innovations: announcement.innovations }"
       (clearedAnnouncement)="onClearAnnouncement($event)"

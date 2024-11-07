@@ -52,7 +52,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     component = fixture.componentInstance;
 
     fixture.detectChanges();
-    expect(component.pageStatus).toBe('ERROR');
+    expect(component.pageStatus()).toBe('ERROR');
   });
 
   it('should have default information loaded', () => {
@@ -69,7 +69,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('READY');
+    expect(component.pageStatus()).toBe('READY');
   });
 
   it('should show "updateOrganisationSuccess" warning', () => {

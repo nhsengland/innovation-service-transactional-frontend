@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-action-link nhsuk-u-margin-bottom-5">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-action-link nhsuk-u-margin-bottom-5">
     <a class="nhsuk-action-link__link" routerLink="/admin/users/new">
       <theme-svg-icon type="arrow-right-circle" />
       <span class="nhsuk-action-link__text">Add new user</span>
@@ -26,9 +25,9 @@
     </div>
 
     <div class="nhsuk-grid-column-three-quarters nhsuk-u-padding-bottom-5">
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+      <theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <div *ngIf="pageStatus === 'READY'" aria-live="polite">
+      <div *ngIf="pageStatus() === 'READY'" aria-live="polite">
         <ng-container *ngIf="!searchUser">
           <p class="nhsuk-u-padding-top-5">There are no results.</p>
           <p *ngIf="formSubmitted" class="">Please, confirm the provided email.</p>

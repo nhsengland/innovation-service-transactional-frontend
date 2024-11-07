@@ -21,7 +21,8 @@ import {
   AssessmentContextStore,
   AssessmentContextService,
   SchemaContextStore,
-  SchemaContextService
+  SchemaContextService,
+  LayoutContextStore
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -52,6 +53,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
         AssessmentContextService,
         SchemaContextStore,
         SchemaContextService,
+        LayoutContextStore,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });

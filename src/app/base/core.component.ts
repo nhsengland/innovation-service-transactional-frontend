@@ -1,5 +1,5 @@
 import { isPlatformBrowser, isPlatformServer, Location } from '@angular/common';
-import { Component, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Component, computed, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -14,12 +14,19 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { ContextStore } from '@modules/stores/context/context.store';
-import { ContextPageLayoutType, ContextPageStatusType } from '@modules/stores/context/context.types';
+import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
-import { CtxStore } from '@modules/stores';
+import { ContextLayoutType, CtxStore } from '@modules/stores';
+
+type AlertOptions = {
+  message?: string;
+  listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
+  itemsList?: ContextPageLayoutType['alert']['itemsList'];
+  width?: ContextPageLayoutType['alert']['width'];
+};
 
 @Component({ template: '' })
 export class CoreComponent implements OnDestroy {
@@ -56,7 +63,7 @@ export class CoreComponent implements OnDestroy {
 
   public alert: AlertType = { type: null };
 
-  public pageStatus: ContextPageStatusType = 'LOADING';
+  public pageStatus = computed(() => this.ctx.layout.status());
 
   constructor() {
     const injector = AppInjector.getInjector();
@@ -94,15 +101,12 @@ export class CoreComponent implements OnDestroy {
 
     this.ctx = injector.get(CtxStore);
 
-    this.stores.context.setCurrentUrl(this.location.path());
+    this.ctx.layout.setCurrentUrl(this.location.path());
 
     this.subscriptions.push(
-      this.stores.context.pageLayoutStatus$().subscribe(item => {
-        this.pageStatus = item;
-      }),
       this.router.events.subscribe((e: any) => {
         if (e instanceof NavigationEnd) {
-          this.stores.context.setCurrentUrl(e.urlAfterRedirects);
+          this.ctx.layout.setCurrentUrl(e.urlAfterRedirects);
         }
       })
     );
@@ -151,15 +155,17 @@ export class CoreComponent implements OnDestroy {
     main = main ? this.translateService.instant(main) : null;
 
     if (main && (options?.showPage ?? true)) {
-      this.stores.context.setPageTitle({
-        main,
-        secondary: options?.hint,
-        size: options?.size,
-        width: options?.width,
-        actions: options?.actions
+      this.ctx.layout.update({
+        title: {
+          main,
+          secondary: options?.hint,
+          size: options?.size,
+          width: options?.width,
+          actions: options?.actions
+        }
       });
     } else {
-      this.stores.context.setPageTitle({ main: null });
+      this.ctx.layout.update({ title: null });
     }
 
     const tabTitle = main && (options?.showTab ?? true) ? `${main} | ` : '';
@@ -170,12 +176,12 @@ export class CoreComponent implements OnDestroy {
     // When running server side, the status always remains LOADING.
     // The visual effects only are meant to be applied on the browser.
     if (this.isRunningOnBrowser()) {
-      this.stores.context.setPageStatus(status);
+      this.ctx.layout.update({ status });
     }
   }
 
   resetBackLink() {
-    this.stores.context.setPageBackLink({ label: null });
+    this.ctx.layout.update({ backLink: null });
   }
 
   /**
@@ -192,135 +198,61 @@ export class CoreComponent implements OnDestroy {
 
     // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
     if (!urlOrCallback) {
-      urlOrCallback =
-        this.stores.context.getPreviousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
+      urlOrCallback = this.ctx.layout.previousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
     }
 
-    if (typeof urlOrCallback === 'string') {
-      this.stores.context.setPageBackLink({ label, url: urlOrCallback, hiddenLabel });
-    } else {
-      this.stores.context.setPageBackLink({ label, callback: urlOrCallback, hiddenLabel });
-    }
+    this.ctx.layout.update({ backLink: { label, callback: urlOrCallback, hiddenLabel } });
   }
 
   resetAlert(): void {
+    // TODO: Check if we can remote this.alert
     this.alert = { type: null };
-    this.stores.context.resetPageAlert();
+    this.ctx.layout.update({ alert: null });
   }
-  setAlert(data: ContextPageLayoutType['alert']): void {
+  setAlert(data: NonNullable<ContextLayoutType['alert']>): void {
+    // TODO: Check if we can remove this.alert
     this.alert = { type: data.type, title: data.title, message: data.message, setFocus: true };
-    this.stores.context.setPageAlert(data);
+    this.ctx.layout.update({ alert: data });
   }
-  setRedirectAlertSuccess(
-    title: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.stores.context.setPageAlert({
-      type: 'SUCCESS',
-      title,
-      message: options?.message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width,
-      persistOneRedirect: true
+  setRedirectAlertSuccess(title: string, options?: AlertOptions): void {
+    this.ctx.layout.update({
+      alert: {
+        type: 'SUCCESS',
+        title,
+        ...options,
+        persistOneRedirect: true
+      }
     });
   }
-  setRedirectAlertInformation(
-    title: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.stores.context.setPageAlert({
-      type: 'INFORMATION',
-      title,
-      message: options?.message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width,
-      persistOneRedirect: true
+  setRedirectAlertInformation(title: string, options?: AlertOptions): void {
+    this.ctx.layout.update({
+      alert: {
+        type: 'INFORMATION',
+        title,
+        ...options,
+        persistOneRedirect: true
+      }
     });
   }
-  setRedirectAlertError(
-    message: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.stores.context.setPageAlert({
-      type: 'ERROR',
-      title: 'There is a problem',
-      message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width,
-      persistOneRedirect: true
+  setRedirectAlertError(message: string, options?: AlertOptions): void {
+    this.ctx.layout.update({
+      alert: {
+        type: 'ERROR',
+        title: 'There is a problem',
+        message,
+        ...options,
+        persistOneRedirect: true
+      }
     });
   }
-  setAlertSuccess(
-    title: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.setAlert({
-      type: 'SUCCESS',
-      title,
-      message: options?.message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width
-    });
+  setAlertSuccess(title: string, options?: AlertOptions): void {
+    this.setAlert({ type: 'SUCCESS', title, ...options });
   }
-  setAlertWarning(
-    title: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.setAlert({
-      type: 'WARNING',
-      title,
-      message: options?.message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width
-    });
+  setAlertWarning(title: string, options?: AlertOptions): void {
+    this.setAlert({ type: 'WARNING', title, ...options });
   }
-  setAlertError(
-    message: string,
-    options?: {
-      message?: string;
-      listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-      itemsList?: ContextPageLayoutType['alert']['itemsList'];
-      width?: ContextPageLayoutType['alert']['width'];
-    }
-  ): void {
-    this.setAlert({
-      type: 'ERROR',
-      title: 'There is a problem',
-      message,
-      listStyleType: options?.listStyleType,
-      itemsList: options?.itemsList,
-      width: options?.width
-    });
+  setAlertError(message: string, options?: AlertOptions): void {
+    this.setAlert({ type: 'ERROR', title: 'There is a problem', message, ...options });
   }
   setAlertUnknownError(): void {
     this.setAlert({

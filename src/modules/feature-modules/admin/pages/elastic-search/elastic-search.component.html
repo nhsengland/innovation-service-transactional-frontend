@@ -1,4 +1,3 @@
-<theme-content-wrapper [status]="pageStatus">
-  <p>This button recreates Elastic Search index (reingests all documents again).</p>
+<theme-content-wrapper [status]="pageStatus()">  <p>This button recreates Elastic Search index (reingests all documents again).</p>
   <button class="nhsuk-button" (click)="searchReindex()">Reindex</button>
 </theme-content-wrapper>

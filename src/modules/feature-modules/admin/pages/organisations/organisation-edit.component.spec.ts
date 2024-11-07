@@ -59,7 +59,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('ERROR');
+    expect(component.pageStatus()).toBe('ERROR');
   });
 
   it('should run getOrganisation()', () => {
@@ -76,7 +76,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    expect(component.pageStatus).toEqual('READY');
+    expect(component.pageStatus()).toEqual('READY');
   });
 
   it('should run onSubmitStep() with UNDEFINED formEngineComponent field', () => {
