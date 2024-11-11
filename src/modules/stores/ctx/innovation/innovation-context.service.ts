@@ -6,15 +6,12 @@ import { map, take } from 'rxjs/operators';
 import { UrlModel } from '@modules/core/models/url.model';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { AuthenticationModel } from '../../authentication/authentication.models';
 import { UserRoleEnum } from '@app/base/enums';
+import { MappedObjectType } from '@app/base/types';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import {
-  InnovationGroupedStatusEnum,
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum
-} from './innovation.enums';
+import { AuthenticationModel } from '../../authentication/authentication.models';
 import { ContextInnovationType } from './innovation-context.types';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
   GetInnovationEvidenceDTO,
   InnovationAllSectionsInfoDTO,
@@ -23,7 +20,6 @@ import {
   InnovationUnitSuggestionsType,
   OrganisationSuggestionModel
 } from './innovation.models';
-import { MappedObjectType } from '@app/base/types';
 
 @Injectable()
 export class InnovationContextService {
@@ -78,8 +74,8 @@ export class InnovationContextService {
               ? InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT
               : response.status,
           statusUpdatedAt: response.statusUpdatedAt,
+          submittedAt: response.submittedAt,
           hasBeenAssessed: response.hasBeenAssessed,
-          archivedStatus: response.archivedStatus,
           ...(response.owner
             ? {
                 owner: {
