@@ -27,7 +27,7 @@ export class LayoutContextStore {
   }
 
   resetPage() {
-    const empty = EMPTY_PAGE_CONTEXT;
+    const empty = { ...EMPTY_PAGE_CONTEXT };
 
     // If is to be persisted on redirect we don't want to clear the alert until the next resetPage.
     const alert = this.alert();
