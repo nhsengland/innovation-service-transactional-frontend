@@ -38,17 +38,11 @@ export type GetOwnedInnovations = {
 };
 
 export enum InnovationArchiveReasonEnum {
-  // User achive reasons
   DEVELOP_FURTHER = 'DEVELOP_FURTHER',
   HAVE_ALL_SUPPORT = 'HAVE_ALL_SUPPORT',
   DECIDED_NOT_TO_PURSUE = 'DECIDED_NOT_TO_PROCEED',
   ALREADY_LIVE_NHS = 'ALREADY_LIVE_NHS',
-  OTHER_DONT_WANT_TO_SAY = 'OTHER_DONT_WANT_TO_SAY',
-  // Automatic archive reasons
-  SIX_MONTHS_INACTIVITY = 'SIX_MONTHS_INACTIVITY',
-  OWNER_ACCOUNT_DELETED = 'OWNER_ACCOUNT_DELETED',
-  // Legacy archive reasons
-  LEGACY = 'LEGACY' // This is a legacy reason, it should not be used anymore
+  OTHER_DONT_WANT_TO_SAY = 'OTHER_DONT_WANT_TO_SAY'
 }
 
 @Injectable()
