@@ -8,7 +8,7 @@ import { OverviewStepInputType, OverviewStepOutputType } from './overview-step.t
 import { FormFieldActionsEnum } from '../../../how-to-proceed/how-to-proceed.component';
 
 @Component({
-  selector: 'innovator-pages-innovation-wizard-manage-archive-overview-step',
+  selector: 'app-innovator-pages-innovation-wizard-manage-archive-overview-step',
   templateUrl: './overview-step.component.html'
 })
 export class WizardInnovationManageArchiveOverviewStepComponent

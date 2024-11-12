@@ -8,7 +8,7 @@ import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { ConfirmationStepInputType, ConfirmationStepOutputType } from './confirmation-step.types';
 
 @Component({
-  selector: 'innovator-pages-innovation-wizard-manage-archive-confirmation-step',
+  selector: 'app-innovator-pages-innovation-wizard-manage-archive-confirmation-step',
   templateUrl: './confirmation-step.component.html'
 })
 export class WizardInnovationManageArchiveConfirmationStepComponent

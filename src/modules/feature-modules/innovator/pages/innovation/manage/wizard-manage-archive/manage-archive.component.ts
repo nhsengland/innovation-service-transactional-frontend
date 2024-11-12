@@ -36,7 +36,7 @@ const wizardEmptyState = {
 };
 
 @Component({
-  selector: 'innovator-pages-innovation-wizard-manage-archive',
+  selector: 'app-innovator-pages-innovation-wizard-manage-archive',
   templateUrl: './manage-archive.component.html'
 })
 export class WizardInnovationManageArchiveComponent extends CoreComponent implements OnInit {

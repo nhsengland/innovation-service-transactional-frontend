@@ -8,7 +8,7 @@ import { ReasonStepInputType, ReasonStepOutputType } from './reason-step.types';
 import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 @Component({
-  selector: 'innovator-pages-innovation-wizard-manage-archive-reason-step',
+  selector: 'app-innovator-pages-innovation-wizard-manage-archive-reason-step',
   templateUrl: './reason-step.component.html'
 })
 export class WizardInnovationManageArchiveReasonStepComponent
