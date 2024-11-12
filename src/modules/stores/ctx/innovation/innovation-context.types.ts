@@ -7,7 +7,7 @@ export type ContextInnovationType = {
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: null | DateISOType;
-  archivedStatus?: InnovationStatusEnum;
+  submittedAt?: null | DateISOType;
   hasBeenAssessed: boolean;
   countryName: string | null;
   description: string | null;
