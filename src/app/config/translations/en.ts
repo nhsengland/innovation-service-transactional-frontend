@@ -881,8 +881,8 @@ export const locale = {
               link: `add a progress update to their support summary.`
             },
             AU03_INNOVATOR_IDLE_SUPPORT: {
-              title: `Your innovation {{innovationName}} is not receiving any active support on the service. `,
-              link: `Find out more about your options and decide how you want to progress.`
+              title: `Your innovation {{innovationName}} is not receiving any support on the service. If you don't, your innovation will be automatically archived on {{expectedArchiveDate}}. `,
+              link: `Tell us if you need more support.`
             },
             AU04_SUPPORT_KPI_REMINDER: {
               title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and `,
