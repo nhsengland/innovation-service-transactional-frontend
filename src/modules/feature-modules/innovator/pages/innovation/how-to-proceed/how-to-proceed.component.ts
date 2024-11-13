@@ -84,16 +84,14 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/recommend-needs-reassessment`, {
-          action: FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW
-        });
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/recommend-needs-reassessment`);
         break;
       case FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK:
       case FormFieldActionsEnum.HAVE_ALL_I_NEED:
       case FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE:
       case FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`, {
-          action: this.form.get('action')
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/archive`, {
+          ...(this.form.get('action')?.value && { action: this.form.get('action')!.value })
         });
         break;
     }
