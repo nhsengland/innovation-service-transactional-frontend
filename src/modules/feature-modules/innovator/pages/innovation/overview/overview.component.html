@@ -1,6 +1,5 @@
 <theme-content-wrapper [status]="pageStatus">
-  <!-- TODO: ADD 'AMOUNT OF DAYS' NGIF CONDITION WHEN READY ON BE  -->
-  <ng-container *ngIf="true">
+  <ng-container *ngIf="showNextStepsBanner">
     <div class="nhsuk-card">
       <div class="nhsuk-card__content">
         <h3 class="nhsuk-card__heading">Your next steps</h3>
@@ -21,9 +20,8 @@
       </div>
     </div>
   </ng-container>
-
   <!-- TODO: ADD 'AMOUNT OF DAYS' NGIF CONDITION WHEN READY ON BE  -->
-  <ng-container *ngIf="(innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt) || true">
+  <ng-container *ngIf="showNoSupportBanner">
     <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
       <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> There is no active support for your innovation</h3>
       <ul class="nhsuk-list" role="list">

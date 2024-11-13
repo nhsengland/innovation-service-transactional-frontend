@@ -28,6 +28,8 @@ export class PageInnovationRecommendNeedsReassessment extends CoreComponent {
   }
 
   onContinue() {
-    this.redirectTo('`${this.baseUrl}/how-to-proceed/needs-reassessment-send`');
+    this.redirectTo(`${this.baseUrl}/how-to-proceed/needs-reassessment-send`, {
+      entryPoint: 'recommendNeedsReassessment'
+    });
   }
 }

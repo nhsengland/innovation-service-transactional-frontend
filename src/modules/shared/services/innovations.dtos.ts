@@ -167,7 +167,7 @@ export type InnovationInfoDTO = {
     organisation?: { name: string; size: null | string; registrationNumber: null | string };
     lastLoginAt?: DateISOType;
   };
-  lastEndSupportAt: null | DateISOType;
+  daysSinceNoActiveSupport?: number;
   assessment?: null | {
     id: string;
     currentMajorAssessmentId: null | string;

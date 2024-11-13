@@ -5,11 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import {
-  InnovationGroupedStatusEnum,
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum
-} from '@modules/stores';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
@@ -30,10 +26,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     groupedStatus: InnovationGroupedStatusEnum;
     engagingOrganisationsCount: number;
     statusUpdatedAt: null | DateISOType;
-    lastEndSupportAt: null | DateISOType;
+    daysSinceNoActiveSupport?: number;
   } = null;
 
   isArchived: boolean = false;
+
+  showNextStepsBanner: boolean = false;
+  showNoSupportBanner: boolean = false;
 
   cardsList: StatisticsCardType[] = [];
 
@@ -84,10 +83,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         groupedStatus: innovationInfo.groupedStatus,
         engagingOrganisationsCount: engagingOrganisationsCount,
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
-        lastEndSupportAt: innovationInfo.lastEndSupportAt
+        daysSinceNoActiveSupport: innovationInfo.daysSinceNoActiveSupport
       };
 
       this.isArchived = this.innovation.status === 'ARCHIVED';
+
+      if (this.innovation.status === 'IN_PROGRESS' && typeof innovationInfo.daysSinceNoActiveSupport === 'number') {
+        this.showNextStepsBanner = innovationInfo.daysSinceNoActiveSupport <= 6;
+        this.showNoSupportBanner = innovationInfo.daysSinceNoActiveSupport > 6;
+      }
 
       this.isSubmitted = {
         submittedAllSections: submit.submittedAllSections,
@@ -139,6 +143,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
       }
+
+      console.log('daysSinceNoActiveSupport', this.innovation.daysSinceNoActiveSupport);
 
       this.setPageStatus('READY');
     });
