@@ -22,6 +22,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
   innovation: ContextInnovationType;
 
   action: FormFieldActionsEnum;
+  entryPoint: string;
 
   wizard = new WizardEngineModel(NEEDS_REASSESSMENT_CONFIG);
 
@@ -36,6 +37,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.action = this.activatedRoute.snapshot.queryParams.action;
+    this.entryPoint = this.activatedRoute.snapshot.queryParams.entryPoint;
 
     this.innovation = this.ctx.innovation.info();
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
@@ -43,6 +45,11 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
 
   ngOnInit(): void {
     this.wizard.setAnswers(this.wizard.runInboundParsing({ status: this.innovation.status })).runRules();
+
+    if (this.entryPoint === 'recommendNeedsReassessment') {
+      this.wizard.addAnswers({ reassessmentReason: ['NO_SUPPORT'] });
+    }
+
     this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
     this.setPageStatus('READY');
@@ -82,17 +89,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
         if (this.wizard.isFirstStep()) {
           const previousUrl = this.stores.context.getPreviousUrl();
           if (previousUrl) {
-            if (previousUrl.includes('how-to-proceed')) {
-              const howToProceedUrl = previousUrl.split('?')[0];
-              this.redirectTo(
-                howToProceedUrl,
-                this.action && {
-                  action: this.action
-                }
-              );
-            } else {
-              this.redirectTo(previousUrl);
-            }
+            this.redirectTo(previousUrl);
           } else {
             this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
           }
