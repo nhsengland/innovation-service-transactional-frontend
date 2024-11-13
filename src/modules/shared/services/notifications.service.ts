@@ -163,7 +163,7 @@ export class NotificationsService extends CoreService {
                   break;
                 case NotificationContextDetailEnum.ST09_SUPPORT_STATUS_TO_CLOSED:
                   link = {
-                    label: 'Click to go to innovation support summary',
+                    label: 'Give us your feedback on the support',
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/surveys`,
                     queryParams: { unitId: item.params?.unitId ?? '' }
                   };
