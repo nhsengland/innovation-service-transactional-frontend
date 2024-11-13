@@ -320,7 +320,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.form.markAsUntouched();
 
     if (this.stepNumber === 1) {
-      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`);
+      this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`);
     } else {
       if (this.stepNumber === 3 && this.chosenUnits.unitsNames.length === 0) {
         this.stepNumber = 1;
@@ -332,7 +332,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   }
 
   handleCancelOrSubmit() {
-    let cancelUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
+    let cancelUrl = this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
     if (this.supportUpdateSideEffect) {
       cancelUrl = `/accessor/innovations/${this.innovation.id}/overview`;
     }

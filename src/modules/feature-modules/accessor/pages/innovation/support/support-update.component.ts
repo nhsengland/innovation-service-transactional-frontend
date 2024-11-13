@@ -138,7 +138,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   ngOnInit(): void {
-    if (this.stores.context.getPreviousUrl()?.includes('support/suggest')) {
+    if (this.ctx.layout.previousUrl()?.includes('support/suggest')) {
       this.stepNumber = 4;
       this.onSubmitStep();
       this.setPageStatus('READY');
@@ -426,9 +426,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             message: this.getMessageStatusUpdated()?.message,
             itemsList: this.getMessageStatusUpdated()?.itemsList
           });
-          this.redirectTo(
-            this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`
-          );
+          this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
         }
       },
       error: () => {
@@ -485,7 +483,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     }
 
     if (this.stepNumber === 0) {
-      const previousUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
+      const previousUrl = this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
       this.router.navigateByUrl(previousUrl);
     }
 

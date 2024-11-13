@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { CtxStore, InnovationStatusEnum } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 import { Subscription, filter } from 'rxjs';
 
@@ -52,8 +52,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Innovation record', url: `/admin/innovations/${innovation.id}/record` },
         { label: 'Tasks', url: `/admin/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/admin/innovations/${innovation.id}/threads` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED &&
-        innovation.archivedStatus !== InnovationStatusEnum.CREATED
+        ...(innovation.submittedAt
           ? [{ label: 'Documents', url: `/admin/innovations/${innovation.id}/documents` }]
           : []),
         ...(innovation.hasBeenAssessed

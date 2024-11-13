@@ -87,7 +87,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
-          const previousUrl = this.stores.context.getPreviousUrl();
+          const previousUrl = this.ctx.layout.previousUrl();
           if (previousUrl) {
             this.redirectTo(previousUrl);
           } else {

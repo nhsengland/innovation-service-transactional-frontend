@@ -67,9 +67,9 @@
         </div>
       </form>
 
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+      <theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <ng-container *ngIf="pageStatus === 'READY'">
+      <ng-container *ngIf="pageStatus() === 'READY'">
 
         <h2 class="nhsuk-body-s nhsuk-u-margin-bottom-1">
           <span role="alert">

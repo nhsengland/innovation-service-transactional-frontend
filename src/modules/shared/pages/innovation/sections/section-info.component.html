@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
@@ -66,7 +65,7 @@
         <button type="button" routerLink="edit" class="nhsuk-button nhsuk-u-margin-right-3">Start now</button>
       </ng-container>
 
-      <ng-container *ngIf="pageStatus === 'READY'">
+      <ng-container *ngIf="pageStatus() === 'READY'">
         <shared-innovation-summary [sectionData]="this.sectionSummaryData" title="Questions and answers" />
       </ng-container>
 

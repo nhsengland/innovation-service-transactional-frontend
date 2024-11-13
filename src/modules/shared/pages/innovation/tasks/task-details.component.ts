@@ -61,7 +61,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   ngOnInit(): void {
     const taskAction = this.activatedRoute.snapshot.queryParams?.action;
 
-    if (!(this.stores.context.getPreviousUrl() && taskAction)) {
+    if (!(this.ctx.layout.previousUrl() && taskAction)) {
       this.setBackLink('Go back');
     }
 

@@ -13,6 +13,7 @@ import { AssessmentContextStore } from './ctx/assessment/assessment-context.stor
 import { AssessmentContextService } from './ctx/assessment/assessment-context.service';
 import { SchemaContextStore } from './ctx/schema/schema.store';
 import { SchemaContextService } from './ctx/schema/schema.service';
+import { LayoutContextStore } from './ctx/layout/layout.store';
 
 @NgModule({
   providers: [
@@ -29,7 +30,8 @@ import { SchemaContextService } from './ctx/schema/schema.service';
     AssessmentContextStore,
     AssessmentContextService,
     SchemaContextStore,
-    SchemaContextService
+    SchemaContextService,
+    LayoutContextStore
   ]
 })
 export class StoresModule {

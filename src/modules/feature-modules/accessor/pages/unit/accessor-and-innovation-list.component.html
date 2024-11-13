@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-half">
       <form [formGroup]="form">
         <theme-form-input label="Search list by accessor name" placeholder="Search" controlName="search" [pageUniqueField]="false">
@@ -20,12 +19,12 @@
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-      <ng-container *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() === 0">
+      <ng-container *ngIf="pageStatus() === 'READY' && accessorList.getTotalRowsNumber() === 0">
         <p class="nhsuk-u-padding-top-4">There are no matching results.</p>
       </ng-container>
 
-      <ng-container *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() > 0">
-        <table *ngIf="pageStatus === 'READY' && accessorList.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table">
+      <ng-container *ngIf="pageStatus() === 'READY' && accessorList.getTotalRowsNumber() > 0">
+        <table *ngIf="pageStatus() === 'READY' && accessorList.getTotalRowsNumber() > 0" class="nhsuk-table-responsive app-sortable-table">
           <caption class="nhsuk-u-visually-hidden">
             Accessor and associated innovations list
             <span *ngIf="accessorList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>

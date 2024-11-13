@@ -32,7 +32,7 @@ export class PageInnovationManageArchiveOverviewComponent extends CoreComponent 
   }
 
   setGoBackLink(): void {
-    const previousUrl = this.stores.context.getPreviousUrl();
+    const previousUrl = this.ctx.layout.previousUrl();
     if (previousUrl?.includes('how-to-proceed')) {
       const howToProceedUrl = previousUrl.split('?')[0];
       this.setBackLink('Go back', () => {

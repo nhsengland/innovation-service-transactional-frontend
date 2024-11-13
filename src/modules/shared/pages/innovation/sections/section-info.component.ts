@@ -7,16 +7,16 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import {
+  EvidenceV3Type,
+  WizardIRV3EngineModel,
+  WizardSummaryV3Type
+} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import {
   InnovationDocumentsListOutDTO,
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
-import {
-  EvidenceV3Type,
-  WizardIRV3EngineModel,
-  WizardSummaryV3Type
-} from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
 
 export type SectionInfoType = {
   id: string;
@@ -149,10 +149,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     // Status not created or archived as created or it's a section with files.
     this.shouldShowDocuments =
-      !(
-        this.innovation.status === InnovationStatusEnum.CREATED ||
-        this.innovation.archivedStatus === InnovationStatusEnum.CREATED
-      ) || this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
+      !!this.innovation.submittedAt ||
+      this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
       this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),

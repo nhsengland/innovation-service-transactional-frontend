@@ -125,7 +125,7 @@ export class InnovationAssessmentExemptionUpsertComponent extends CoreComponent 
           this.setRedirectAlertSuccess('You have updated this innovation exemption information');
         }
 
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
+        this.redirectTo(this.ctx.layout.previousUrl() ?? this.baseUrl);
       },
       error: () => {
         this.setPageStatus('ERROR');

@@ -37,6 +37,11 @@ import { InnovationDataSharingEditComponent } from './pages/innovation/record/da
 import { InnovationSectionEvidenceEditComponent } from './pages/innovation/record/evidence-edit.component';
 import { InnovationSectionEditComponent } from './pages/innovation/record/section-edit.component';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
+import { WizardInnovationManageArchiveComponent } from './pages/innovation/manage/wizard-manage-archive/manage-archive.component';
+import { WizardInnovationManageArchiveReasonStepComponent } from './pages/innovation/manage/wizard-manage-archive/steps/reason-step.component';
+import { WizardInnovationManageArchiveConfirmationStepComponent } from './pages/innovation/manage/wizard-manage-archive/steps/confirmation-step.component';
+import { WizardInnovationManageArchiveOverviewStepComponent } from './pages/innovation/manage/wizard-manage-archive/steps/overview-step.component';
+import { WizardInnovationHowToProceedArchiveComponent } from './pages/innovation/how-to-proceed/wizard-how-to-proceed-archive/how-to-proceed-archive.component';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -45,8 +50,6 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 
 // Services.
 import { InnovatorService } from './services/innovator.service';
-import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
-import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
 import { PageInnovationRecommendNeedsReassessment } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
@@ -76,8 +79,6 @@ import { PageInnovationRecommendNeedsReassessment } from './pages/innovation/how
     PageInnovationManageCollaboratorsOverviewComponent,
     PageInnovationManageCollaboratorsWizardComponent,
     PageInnovationManageOverviewComponent,
-    PageInnovationManageArchiveOverviewComponent,
-    PageInnovationManageArchiveComponent,
     PageInnovationManageTransferComponent,
     PageInnovationNeedsReassessmentSendComponent,
     InnovationOverviewComponent,
@@ -88,7 +89,12 @@ import { PageInnovationRecommendNeedsReassessment } from './pages/innovation/how
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,
     InnovationDataSharingEditComponent,
-    PageInnovationRecommendNeedsReassessment
+    PageInnovationRecommendNeedsReassessment,
+    WizardInnovationManageArchiveComponent,
+    WizardInnovationManageArchiveOverviewStepComponent,
+    WizardInnovationManageArchiveReasonStepComponent,
+    WizardInnovationManageArchiveConfirmationStepComponent,
+    WizardInnovationHowToProceedArchiveComponent
   ],
   providers: [
     // Guards.

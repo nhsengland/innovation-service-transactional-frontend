@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+<theme-content-wrapper [status]="pageStatus()">  <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"><span class="nhsuk-u-visually-hidden">Important: </span>User Locked</span>
     </div>
@@ -41,7 +40,7 @@
                 <a routerLink="{{ baseUrl }}/record/sections/{{ section.id }}/"> {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }} </a>
               </ng-template>
             </h3>
-            <ng-container *ngIf="pageStatus === 'READY'">
+            <ng-container *ngIf="pageStatus() === 'READY'">
               <ng-container *ngIf="allSectionsData[section.id] as sectionData">
                 <div *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))" class="nhsuk-u-margin-top-0 font-color-secondary">
                   <span class="nhsuk-u-visually-hidden">Information: </span>

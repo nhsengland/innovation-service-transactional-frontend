@@ -76,7 +76,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   }
 
   ngOnInit(): void {
-    this.entrypointUrl = this.stores.context.getPreviousUrl() ?? '';
+    this.entrypointUrl = this.ctx.layout.previousUrl() ?? '';
 
     forkJoin([
       this.organisationsService.getOrganisationsList({ unitsInformation: true }),

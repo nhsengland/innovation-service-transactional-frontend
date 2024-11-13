@@ -7,12 +7,7 @@ import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
-import {
-
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum,
-  InnovationTaskStatusEnum
-} from '@modules/stores';
+import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',
@@ -313,11 +308,6 @@ export class NotificationsService extends CoreService {
                   };
                   break;
                 case NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT:
-                  link = {
-                    label: 'Click to go to how to proceed',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/how-to-proceed`
-                  };
-                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                 case NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING:

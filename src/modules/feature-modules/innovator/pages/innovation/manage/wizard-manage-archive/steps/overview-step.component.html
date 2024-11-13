@@ -1,0 +1,42 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>
+        You can continue to edit and update your innovation record when it is archived. You cannot access support during this time. If you want support on your innovation in
+        future, you can submit your record for a needs reassessment.
+      </p>
+
+      <p class="nhsuk-u-margin-bottom-2">When you archive an innovation:</p>
+      <ul class="nhsuk-list nhsuk-list--bullet">
+        <ng-container *ngIf="entryPointIsManageInnovation">
+          <li>all support on your innovation will end</li>
+          <li>all open tasks will be cancelled</li>
+        </ng-container>
+        <li>you cannot send or reply to messages</li>
+        <li>you can view your previous tasks, messages and documents</li>
+        <li>previous organisations that have supported you will see an archived copy of your innovation</li>
+        <li>you and your collaborators can continue to edit and update your innovation record</li>
+        <li>your updates cannot be viewed by your previous support organisations</li>
+      </ul>
+
+      <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+        <p>If you want support on your innovation in future, you can submit your record for a needs reassessment.</p>
+      </div>
+
+      <ng-container *ngIf="entryPointIsManageInnovation; else entryPointIsNotManageInnovation">
+        <a class="nhsuk-action-link__link" (click)="onNextStep()">
+          <theme-svg-icon type="arrow-right-circle"></theme-svg-icon>
+          <span class="nhsuk-action-link__text">Archive this innovation</span>
+        </a>
+      </ng-container>
+
+      <ng-template #entryPointIsNotManageInnovation>
+        <button class="nhsuk-button" (click)="onNextStep()">Continue</button>
+        <div>
+          <a href="javascript:void()" (click)="onCancelStep()">Cancel</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</theme-content-wrapper>

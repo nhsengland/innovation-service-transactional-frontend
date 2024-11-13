@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ViewportScroller } from '@angular/common';
-import { CtxStore, InnovationStatusEnum } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -53,8 +53,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
         { label: 'Tasks to do', url: `/innovator/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED &&
-        innovation.archivedStatus !== InnovationStatusEnum.CREATED
+        ...(innovation.submittedAt
           ? [{ label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` }]
           : []),
         ...(innovation.hasBeenAssessed

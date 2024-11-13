@@ -37,6 +37,14 @@ export type GetOwnedInnovations = {
   expirationTransferDate: DateISOType | null;
 };
 
+export enum InnovationArchiveReasonEnum {
+  DEVELOP_FURTHER = 'DEVELOP_FURTHER',
+  HAVE_ALL_SUPPORT = 'HAVE_ALL_SUPPORT',
+  DECIDED_NOT_TO_PURSUE = 'DECIDED_NOT_TO_PROCEED',
+  ALREADY_LIVE_NHS = 'ALREADY_LIVE_NHS',
+  OTHER_DONT_WANT_TO_SAY = 'OTHER_DONT_WANT_TO_SAY'
+}
+
 @Injectable()
 export class InnovatorService extends CoreService {
   constructor() {
@@ -152,11 +160,11 @@ export class InnovatorService extends CoreService {
     );
   }
 
-  archiveInnovation(innovationId: string, message: string): Observable<void> {
+  archiveInnovation(innovationId: string, reason: InnovationArchiveReasonEnum): Observable<void> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/archive')
       .setPathParams({ innovationId });
-    return this.http.patch<void>(url.buildUrl(), { message }).pipe(
+    return this.http.patch<void>(url.buildUrl(), { reason }).pipe(
       take(1),
       map(response => response)
     );
