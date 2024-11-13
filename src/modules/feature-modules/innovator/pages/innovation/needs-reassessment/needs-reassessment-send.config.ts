@@ -33,7 +33,14 @@ const stepsLabels = {
   q3: {
     id: 'whatSupportDoYouNeed',
     label: 'What support do you need next?',
-    description: 'Explain support required'
+    description: `
+    For example, support with clinical trials, product development, real-world evidence, regulatory advice, or adoption.
+    <br>
+    <br>
+    This information will replace your previous answer to "What support are you seeking from the innovation service?" in section 1.1 of the innovation record.
+    <br>
+    <br>
+    Explain support required`
   }
 };
 
@@ -159,7 +166,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       label: stepsLabels.q1.label,
       value:
         data.status === InnovationStatusEnum.ARCHIVED
-          ? REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? ''
+          ? (REASSESSMENT_REASON_ITEMS.find(i => i.value === 'PREVIOUSLY_ARCHIVED')?.label ?? '')
           : data.reassessmentReason
               .map(chosenReason =>
                 chosenReason === 'OTHER'
