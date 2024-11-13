@@ -67,6 +67,8 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
+import { WizardInnovationManageArchiveComponent } from './pages/innovation/manage/wizard-manage-archive/manage-archive.component';
+import { WizardInnovationHowToProceedArchiveComponent } from './pages/innovation/how-to-proceed/wizard-how-to-proceed-archive/how-to-proceed-archive.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -95,8 +97,6 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
-import { PageInnovationManageArchiveOverviewComponent } from './pages/innovation/manage/manage-archive-overview.component';
-import { PageInnovationManageArchiveComponent } from './pages/innovation/manage/manage-archive.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -348,12 +348,29 @@ const routes: Routes = [
                   layout: { type: 'full' }
                 },
                 children: [
-                  { path: '', pathMatch: 'full', component: PageInnovationHowToProceedComponent },
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationHowToProceedComponent,
+                    data: { breadcrumb: null }
+                  },
                   {
                     path: 'needs-reassessment-send',
                     pathMatch: 'full',
                     component: PageInnovationNeedsReassessmentSendComponent,
                     data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'archive',
+                    data: { breadcrumb: null },
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        component: WizardInnovationHowToProceedArchiveComponent,
+                        data: { breadcrumb: null }
+                      }
+                    ]
                   }
                 ]
               },
@@ -612,18 +629,12 @@ const routes: Routes = [
                       },
                       {
                         path: 'archive',
-                        data: { breadcrumb: 'Stop sharing', layout: { type: 'full' } },
+                        data: { breadcrumb: 'Archive innovation', layout: { type: 'full' } },
                         children: [
                           {
                             path: '',
                             pathMatch: 'full',
-                            component: PageInnovationManageArchiveOverviewComponent,
-                            data: { breadcrumb: null }
-                          },
-                          {
-                            path: 'request',
-                            pathMatch: 'full',
-                            component: PageInnovationManageArchiveComponent,
+                            component: WizardInnovationManageArchiveComponent,
                             data: { breadcrumb: null }
                           }
                         ]

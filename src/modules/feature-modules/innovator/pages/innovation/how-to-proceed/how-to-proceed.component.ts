@@ -92,8 +92,8 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     switch (this.form.get('action')?.value) {
       case FormFieldActionsEnum.ARCHIVE:
-        this.redirectTo(`/innovator/innovations/${this.innovationId}/manage/innovation/archive`, {
-          action: FormFieldActionsEnum.ARCHIVE
+        this.redirectTo(`${this.baseUrl}/how-to-proceed/archive`, {
+          action: FormFieldActionsEnum.ARCHIVE // update this to have the new available actions in the flow
         });
         break;
 

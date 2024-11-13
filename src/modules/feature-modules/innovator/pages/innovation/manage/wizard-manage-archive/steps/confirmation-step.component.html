@@ -1,0 +1,22 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <theme-form-input controlName="email" label="Enter your email" [pageUniqueField]="false"></theme-form-input>
+
+        <theme-form-input
+          controlName="confirmation"
+          label="Are you sure you want to archive this innovation?"
+          description="To confirm, type: archive innovation"
+          [pageUniqueField]="false"
+        ></theme-form-input>
+
+        <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" [disabled]="form.pending || form.invalid">Archive innovation</button>
+
+        <div>
+          <a href="javascript:void()" (click)="onCancelStep()">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>
