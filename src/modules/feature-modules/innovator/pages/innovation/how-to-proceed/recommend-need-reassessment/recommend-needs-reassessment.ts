@@ -17,14 +17,14 @@ export class PageInnovationRecommendNeedsReassessment extends CoreComponent {
 
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
 
-    this.setPageTitle('We recommend you submit for needs reassessment');
+    this.setPageTitle('We recommend you submit for needs reassessment', { width: '2.thirds', size: 'l' });
     this.setBackLink('Go back', `${this.baseUrl}/how-to-proceed`);
 
     this.setPageStatus('READY');
   }
 
   handleCancel() {
-    this.redirectTo(`${this.baseUrl}`);
+    this.redirectTo(`${this.baseUrl}/overview`);
   }
 
   onContinue() {

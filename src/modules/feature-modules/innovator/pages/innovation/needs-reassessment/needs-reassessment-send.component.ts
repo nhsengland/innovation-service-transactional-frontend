@@ -141,4 +141,8 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
       }
     });
   }
+
+  handleCancel() {
+    this.redirectTo(`${this.baseUrl}/overview`);
+  }
 }
