@@ -740,7 +740,7 @@ export const locale = {
             },
             ST09_SUPPORT_STATUS_TO_CLOSED: {
               title: `{{unitName}} has updated their support status to closed for {{innovationName}}. `,
-              link: `View support summary.`
+              link: `Give us your feedback on the support.`
             },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: {
               title: `{{unitName}} added a progress update for innovation {{innovationName}}. `,
