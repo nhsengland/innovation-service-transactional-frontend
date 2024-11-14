@@ -91,7 +91,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
       case FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE:
       case FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE:
         this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/archive`, {
-          ...(this.form.get('action')?.value && { action: this.form.get('action')!.value })
+          action: this.form.get('action')?.value
         });
         break;
     }

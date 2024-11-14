@@ -97,7 +97,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
-import { PageInnovationRecommendNeedsReassessment } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
+import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -358,7 +358,7 @@ const routes: Routes = [
                   {
                     path: 'recommend-needs-reassessment',
                     pathMatch: 'full',
-                    component: PageInnovationRecommendNeedsReassessment
+                    component: PageInnovationRecommendNeedsReassessmentComponent
                   },
                   {
                     path: 'needs-reassessment-send',

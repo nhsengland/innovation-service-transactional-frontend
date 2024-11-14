@@ -144,8 +144,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
       }
 
-      console.log('daysSinceNoActiveSupport', this.innovation.daysSinceNoActiveSupport);
-
       this.setPageStatus('READY');
     });
   }
