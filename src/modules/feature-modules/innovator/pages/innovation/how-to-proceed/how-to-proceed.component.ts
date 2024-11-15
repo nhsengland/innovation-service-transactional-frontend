@@ -6,10 +6,11 @@ import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 
 export enum FormFieldActionsEnum {
-  ARCHIVE = 'ARCHIVE',
-  DELETE_ACCOUNT = 'DELETE_ACCOUNT',
-  NEEDS_REASSESSMENT = 'NEEDS_REASSESSMENT',
-  NO_ACTION = 'NO_ACTION'
+  NEED_MORE_SUPPORT_NOW = 'NEED_MORE_SUPPORT_NOW',
+  WILL_DEVELOP_AND_COME_BACK = 'WILL_DEVELOP_AND_COME_BACK',
+  HAVE_ALL_I_NEED = 'HAVE_ALL_I_NEED',
+  DECIDED_NOT_TO_PURSUE = 'DECIDED_NOT_TO_PURSUE',
+  INNOVATION_IS_ALREADY_LIVE = 'INNOVATION_IS_ALREADY_LIVE'
 }
 
 @Component({
@@ -31,18 +32,28 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
   );
 
   formfieldAction = {
-    title: 'Decide what to do next with your innovation',
-    description: `There are no organisations currently providing support to your innovation. Here's what you can do next.`,
+    title: 'Do you need more support to develop your innovation now?',
+    description: `If you do not make a decision your innovation will be archived automatically on DD Month YYYY. You can continue to edit and update your innovation record when it is archived.`,
     items: [
       {
-        value: FormFieldActionsEnum.NEEDS_REASSESSMENT,
-        label: `Submit for needs reassessment`,
-        description: `Update your innovation record before you submit for needs reassessment to get access to the right support.`
+        value: FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW,
+        label: `Yes, I need more support now`
       },
       {
-        value: FormFieldActionsEnum.NO_ACTION,
-        label: `Decide later`,
-        description: `If you're not sure what to do next, you can decide later.`
+        value: FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK,
+        label: `Yes, but I will develop it further and come back`
+      },
+      {
+        value: FormFieldActionsEnum.HAVE_ALL_I_NEED,
+        label: `No, I have all I need for now`
+      },
+      {
+        value: FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE,
+        label: `No, I have decided not to pursue this innovation`
+      },
+      {
+        value: FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE,
+        label: `No, my innovation is already live in the NHS`
       }
     ]
   };
@@ -52,25 +63,6 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.action = this.activatedRoute.snapshot.queryParams.action;
-
-    const isOwner = this.ctx.innovation.isOwner();
-
-    if (isOwner) {
-      this.formfieldAction.items.splice(
-        1,
-        0,
-        {
-          value: FormFieldActionsEnum.ARCHIVE,
-          label: `Archive your innovation`,
-          description: `You can continue to edit and update your innovation record when it is archived. You cannot access support during this time. If you want support on your innovation in future, you can submit your record for a needs reassessment.`
-        },
-        {
-          value: FormFieldActionsEnum.DELETE_ACCOUNT,
-          label: `Delete your account`,
-          description: `If you delete your account, your innovations will be archived and your collaborators will lose access to them. You will not be able to access the NHS Innovation Service.`
-        }
-      );
-    }
 
     if (this.action) {
       this.form.get('action')?.setValue(this.action);
@@ -91,31 +83,16 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     }
 
     switch (this.form.get('action')?.value) {
-      case FormFieldActionsEnum.ARCHIVE:
-        this.redirectTo(`${this.baseUrl}/how-to-proceed/archive`, {
-          action: FormFieldActionsEnum.ARCHIVE // update this to have the new available actions in the flow
-        });
+      case FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW:
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/recommend-needs-reassessment`);
         break;
-
-      case FormFieldActionsEnum.DELETE_ACCOUNT:
-        this.redirectTo('/innovator/account/manage-account/delete', {
-          action: FormFieldActionsEnum.DELETE_ACCOUNT
+      case FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK:
+      case FormFieldActionsEnum.HAVE_ALL_I_NEED:
+      case FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE:
+      case FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE:
+        this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/archive`, {
+          action: this.form.get('action')?.value
         });
-        break;
-
-      case FormFieldActionsEnum.NEEDS_REASSESSMENT:
-        this.redirectTo(`${this.baseUrl}/how-to-proceed/needs-reassessment-send`, {
-          action: FormFieldActionsEnum.NEEDS_REASSESSMENT
-        });
-        break;
-
-      case FormFieldActionsEnum.NO_ACTION:
-      default:
-        this.setRedirectAlertSuccess('There is no active support for your innovation', {
-          message:
-            'You can decide whether to submit your innovation for a needs reassessment, archive your innovation or delete your account at any time.'
-        });
-        this.redirectTo(this.baseUrl);
         break;
     }
   }

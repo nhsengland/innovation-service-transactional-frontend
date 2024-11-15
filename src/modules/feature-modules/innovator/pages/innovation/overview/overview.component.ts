@@ -26,10 +26,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     groupedStatus: InnovationGroupedStatusEnum;
     engagingOrganisationsCount: number;
     statusUpdatedAt: null | DateISOType;
-    lastEndSupportAt: null | DateISOType;
+    daysSinceNoActiveSupport?: number;
   } = null;
 
   isArchived: boolean = false;
+
+  showNextStepsBanner: boolean = false;
+  showNoSupportBanner: boolean = false;
 
   cardsList: StatisticsCardType[] = [];
 
@@ -81,10 +84,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         groupedStatus: innovationInfo.groupedStatus,
         engagingOrganisationsCount: engagingOrganisationsCount,
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
-        lastEndSupportAt: innovationInfo.lastEndSupportAt
+        daysSinceNoActiveSupport: innovationInfo.daysSinceNoActiveSupport
       };
 
       this.isArchived = this.innovation.status === 'ARCHIVED';
+
+      if (this.innovation.status === 'IN_PROGRESS' && typeof innovationInfo.daysSinceNoActiveSupport === 'number') {
+        this.showNextStepsBanner = innovationInfo.daysSinceNoActiveSupport <= 6;
+        this.showNoSupportBanner = innovationInfo.daysSinceNoActiveSupport > 6;
+      }
 
       this.isSubmitted = {
         submittedAllSections: submit.submittedAllSections,

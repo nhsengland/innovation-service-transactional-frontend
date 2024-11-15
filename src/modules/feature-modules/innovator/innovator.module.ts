@@ -43,6 +43,8 @@ import { WizardInnovationManageArchiveConfirmationStepComponent } from './pages/
 import { WizardInnovationManageArchiveOverviewStepComponent } from './pages/innovation/manage/wizard-manage-archive/steps/overview-step.component';
 import { WizardInnovationHowToProceedArchiveComponent } from './pages/innovation/how-to-proceed/wizard-how-to-proceed-archive/how-to-proceed-archive.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
+import { EndSupportSurveyJourney } from './pages/innovation/surveys/journeys/end-support.component';
+import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 // Guards.
 import { FirstTimeSigninGuard } from './guards/first-time-signin.guard';
@@ -52,7 +54,7 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 // Services.
 import { InnovatorService } from './services/innovator.service';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
-import { EndSupportSurveyJourney } from './pages/innovation/surveys/journeys/end-support.component';
+
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -90,6 +92,7 @@ import { EndSupportSurveyJourney } from './pages/innovation/surveys/journeys/end
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,
     InnovationDataSharingEditComponent,
+    PageInnovationRecommendNeedsReassessmentComponent,
     WizardInnovationManageArchiveComponent,
     WizardInnovationManageArchiveOverviewStepComponent,
     WizardInnovationManageArchiveReasonStepComponent,

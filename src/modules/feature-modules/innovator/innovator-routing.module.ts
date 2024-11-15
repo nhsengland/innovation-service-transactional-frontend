@@ -99,6 +99,7 @@ import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/inno
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 import { EndSupportSurveyJourney } from './pages/innovation/surveys/journeys/end-support.component';
+import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -355,6 +356,11 @@ const routes: Routes = [
                     pathMatch: 'full',
                     component: PageInnovationHowToProceedComponent,
                     data: { breadcrumb: null }
+                  },
+                  {
+                    path: 'recommend-needs-reassessment',
+                    pathMatch: 'full',
+                    component: PageInnovationRecommendNeedsReassessmentComponent
                   },
                   {
                     path: 'needs-reassessment-send',
