@@ -5,11 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import {
-  InnovationGroupedStatusEnum,
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum
-} from '@modules/stores';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
@@ -63,7 +59,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         statistics: [
           InnovationStatisticsEnum.TASKS_OPEN_COUNTER,
           InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER,
-          InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER
+          InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER,
+          InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER
         ]
       }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
@@ -135,6 +132,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           emptyMessage: 'No messages yet'
         }
       ];
+
+      if (statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count) {
+        this.cardsList.unshift({
+          title: 'Give us your feedback',
+          label: 'organisations needing feedback',
+          link: `/innovator/innovations/${this.innovationId}/surveys`,
+          count: statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count
+        });
+      }
 
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');

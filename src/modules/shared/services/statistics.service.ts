@@ -67,6 +67,7 @@ export type InnovationStatisticsDTO = {
     uploadedByUnits: { id: string; unit: string; count: number }[];
     locations: { location: ContextTypeType; count: number }[];
   };
+  [InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER]: { count: number };
 };
 
 export type OrganisationUnitStatisticsDTO = {

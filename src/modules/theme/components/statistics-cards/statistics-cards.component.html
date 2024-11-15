@@ -5,7 +5,7 @@
         <h2 class="nhsuk-card__heading nhsuk-heading-m">
           <a routerLink="{{ item.link }}" [queryParams]="item.queryParams" class="nhsuk-card__link"> <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }} </a>
         </h2>
-        <ng-container *ngIf="item.count; else noSectionsToSubmit">
+        <div *ngIf="item.count; else noSectionsToSubmit">
           <p class="d-flex nhsuk-u-font-size-18 nhsuk-u-font-weight-bold align-items-baseline nhsuk-u-margin-bottom-1">
             <span class="nhsuk-u-font-size-48">{{ item.count }}</span>
             <ng-container *ngIf="item.total">
@@ -16,7 +16,7 @@
           <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-normal nhsuk-u-margin-bottom-3">
             {{ item.label }}
           </p>
-        </ng-container>
+        </div>
         <ng-container *ngIf="item.date && item.count">
           <p class="nhsuk-u-font-size-14 font-color-secondary">{{ item.lastMessage }} {{ item.date | date: ("app.date_formats.medium_date_time" | translate) }}</p>
         </ng-container>
