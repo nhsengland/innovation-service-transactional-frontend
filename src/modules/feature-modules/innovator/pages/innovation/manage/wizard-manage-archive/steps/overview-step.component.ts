@@ -29,6 +29,8 @@ export class WizardInnovationManageArchiveOverviewStepComponent
   action: FormFieldActionsEnum;
   entryPointIsManageInnovation: boolean;
 
+  isOwner: boolean;
+
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
@@ -38,6 +40,8 @@ export class WizardInnovationManageArchiveOverviewStepComponent
 
     this.innovation = this.ctx.innovation.info();
 
+    this.isOwner = this.ctx.innovation.isOwner();
+
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 
@@ -45,7 +49,7 @@ export class WizardInnovationManageArchiveOverviewStepComponent
     if (this.entryPointIsManageInnovation) {
       this.setPageTitle(this.title);
     } else {
-      this.setPageTitle(this.title, { size: 'l' });
+      this.setPageTitle(this.title, { width: '2.thirds', size: 'l' });
     }
 
     this.setPageStatus('READY');
@@ -61,5 +65,9 @@ export class WizardInnovationManageArchiveOverviewStepComponent
 
   onCancelStep(): void {
     this.cancelEvent.emit({ isComplete: true, data: {} });
+  }
+
+  onGoToInnovation() {
+    this.onCancelStep();
   }
 }
