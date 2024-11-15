@@ -97,6 +97,8 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
+import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
+import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 const header: RoutesDataType['header'] = {
@@ -385,6 +387,25 @@ const routes: Routes = [
                 path: 'everyone',
                 pathMatch: 'full',
                 component: PageEveryoneWorkingOnInnovationComponent
+              },
+
+              {
+                path: 'surveys',
+                data: { breadcrumb: 'Surveys', layout: { type: 'full' } },
+                children: [
+                  {
+                    path: '',
+                    pathMatch: 'full',
+                    component: PageInnovationSupportSurveysComponent,
+                    data: { layout: { type: 'full' }, breadcrumb: null }
+                  },
+                  {
+                    path: ':surveyId',
+                    pathMatch: 'full',
+                    component: EndSupportSurveyJourneyComponent,
+                    data: { breadcrumb: null }
+                  }
+                ]
               },
 
               {

@@ -1,0 +1,25 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      @if (isInfoPage()) {
+        <h1 class="nhsuk-heading-l">Give your feedback on the support given by {{ unitName() }}</h1>
+        <p>{{ unitName() }} has updated their support status to closed.</p>
+        <p>To understand your satisfaction with the support given to your innovation, give us your feedback.</p>
+        <p>This information will be used to monitor the support given by our service and improve the experience on the NHS Innovation Service.</p>
+
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>Your answers will not be anonymised.</p>
+        </div>
+
+        <button class="nhsuk-button" (click)="isInfoPage.set(false)">Start now</button>
+      } @else if (wizard.isQuestionStep()) {
+        <theme-form-engine formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
+        <button type="submit" form="sectionForm" class="nhsuk-button" (click)="onSubmitStep('next')">{{ pageButton() }}</button>
+      }
+      <div>
+        <a [routerLink]="baseUrl">Cancel</a>
+      </div>
+    </div>
+  </div>
+</theme-content-wrapper>

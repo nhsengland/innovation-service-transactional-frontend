@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { finalize, map, take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { DateISOType } from '@app/base/types';
@@ -44,6 +44,24 @@ export enum InnovationArchiveReasonEnum {
   ALREADY_LIVE_NHS = 'ALREADY_LIVE_NHS',
   OTHER_DONT_WANT_TO_SAY = 'OTHER_DONT_WANT_TO_SAY'
 }
+
+export type SurveyType = {
+  id: string;
+  createdAt: DateISOType;
+  info?: {
+    type: 'SUPPORT_END';
+    supportId: string;
+    supportUnit: string;
+    supportFinishedAt: null | Date;
+  };
+};
+
+export type SurveyAnswersType = {
+  supportSatisfaction: string;
+  ideaOnHowToProceed: string;
+  howLikelyWouldYouRecommendIS: string;
+  comment: string;
+};
 
 @Injectable()
 export class InnovatorService extends CoreService {
@@ -181,5 +199,19 @@ export class InnovatorService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getUnansweredSurveys(innovationId: string): Observable<SurveyType[]> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/surveys')
+      .setPathParams({ innovationId });
+    return this.http.get<SurveyType[]>(url.buildUrl()).pipe(take(1));
+  }
+
+  answerSurvey(innovationId: string, surveyId: string, body: SurveyAnswersType): Observable<void> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/:innovationId/surveys/:surveyId')
+      .setPathParams({ innovationId, surveyId });
+    return this.http.patch<void>(url.buildUrl(), body).pipe(take(1));
   }
 }
