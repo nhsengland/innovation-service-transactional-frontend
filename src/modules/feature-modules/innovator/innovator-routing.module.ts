@@ -98,7 +98,7 @@ import { checkStatusGuard } from './guards/check-status.guard';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
-import { EndSupportSurveyJourney } from './pages/innovation/surveys/journeys/end-support.component';
+import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 const header: RoutesDataType['header'] = {
@@ -402,7 +402,7 @@ const routes: Routes = [
                   {
                     path: ':surveyId',
                     pathMatch: 'full',
-                    component: EndSupportSurveyJourney,
+                    component: EndSupportSurveyJourneyComponent,
                     data: { breadcrumb: null }
                   }
                 ]

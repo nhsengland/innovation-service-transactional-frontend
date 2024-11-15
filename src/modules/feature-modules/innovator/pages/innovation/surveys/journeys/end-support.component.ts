@@ -10,10 +10,10 @@ import { cloneDeep } from 'lodash';
 import { InnovationErrorsEnum } from '@app/base/enums';
 
 @Component({
-  selector: 'innovator-end-support-survey-journey',
+  selector: 'app-innovator-end-support-survey-journey',
   templateUrl: './end-support.component.html'
 })
-export class EndSupportSurveyJourney extends CoreComponent implements OnInit {
+export class EndSupportSurveyJourneyComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   wizard: WizardEngineModel = cloneDeep(ACCOUNT_DETAILS_INNOVATOR);
