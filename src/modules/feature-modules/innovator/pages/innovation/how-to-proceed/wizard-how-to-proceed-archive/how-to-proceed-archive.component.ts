@@ -117,7 +117,7 @@ export class WizardInnovationHowToProceedArchiveComponent extends CoreComponent 
     if (this.wizard.isFirstStep()) {
       const previousUrl = this.ctx.layout.previousUrl();
       if (previousUrl) {
-        this.redirectTo(previousUrl, { action: this.action });
+        this.redirectTo(previousUrl.split('?')[0], { action: this.action });
       } else {
         this.redirectTo('/innovator/dashboard');
       }

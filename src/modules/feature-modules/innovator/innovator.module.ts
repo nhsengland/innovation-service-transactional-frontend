@@ -51,6 +51,7 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 // Services.
 import { InnovatorService } from './services/innovator.service';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
+import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -88,6 +89,7 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     PageInnovationManageAccessOverviewComponent,
     PageInnovationManageAccessLeaveInnovationComponent,
     InnovationDataSharingEditComponent,
+    PageInnovationRecommendNeedsReassessmentComponent,
     WizardInnovationManageArchiveComponent,
     WizardInnovationManageArchiveOverviewStepComponent,
     WizardInnovationManageArchiveReasonStepComponent,
