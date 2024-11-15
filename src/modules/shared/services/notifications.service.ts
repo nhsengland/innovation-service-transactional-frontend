@@ -161,6 +161,13 @@ export class NotificationsService extends CoreService {
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`
                   };
                   break;
+                case NotificationContextDetailEnum.ST09_SUPPORT_STATUS_TO_CLOSED:
+                  link = {
+                    label: 'Give us your feedback on the support',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/surveys`,
+                    queryParams: { unitId: item.params?.unitId ?? '' }
+                  };
+                  break;
               }
               break;
 
