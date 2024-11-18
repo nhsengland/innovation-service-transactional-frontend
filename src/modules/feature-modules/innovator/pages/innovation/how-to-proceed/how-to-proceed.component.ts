@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 export enum FormFieldActionsEnum {
   NEED_MORE_SUPPORT_NOW = 'NEED_MORE_SUPPORT_NOW',
@@ -17,7 +19,7 @@ export enum FormFieldActionsEnum {
   selector: 'app-innovator-pages-innovation-how-to-proceed',
   templateUrl: './how-to-proceed.component.html'
 })
-export class PageInnovationHowToProceedComponent extends CoreComponent {
+export class PageInnovationHowToProceedComponent extends CoreComponent implements OnInit {
   innovationId: string;
   baseUrl: string;
   action: FormFieldActionsEnum;
@@ -31,9 +33,16 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     { updateOn: 'blur' }
   );
 
-  formfieldAction = {
+  formfieldAction: {
+    title: string;
+    description: string;
+    items: {
+      value: FormFieldActionsEnum;
+      label: string;
+    }[];
+  } = {
     title: 'Do you need more support to develop your innovation now?',
-    description: `If you do not make a decision your innovation will be archived automatically on DD Month YYYY. You can continue to edit and update your innovation record when it is archived.`,
+    description: `If you do not make a decision your innovation will be archived automatically on {{ date }}. You can continue to edit and update your innovation record when it is archived.`,
     items: [
       {
         value: FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW,
@@ -58,7 +67,11 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
     ]
   };
 
-  constructor(private activatedRoute: ActivatedRoute) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private innovationsService: InnovationsService,
+    private datePipe: DatePipe
+  ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
@@ -72,8 +85,16 @@ export class PageInnovationHowToProceedComponent extends CoreComponent {
 
     this.setPageTitle(this.formfieldAction.title, { showPage: false });
     this.setBackLink('Go back', this.baseUrl);
+  }
+  ngOnInit(): void {
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
+      this.formfieldAction.description = this.formfieldAction.description.replace(
+        `{{ date }}`,
+        `${this.datePipe.transform(response.expectedArchiveDate, this.translate('app.date_formats.long_date'))}`
+      );
 
-    this.setPageStatus('READY');
+      this.setPageStatus('READY');
+    });
   }
 
   onSubmit(): void {

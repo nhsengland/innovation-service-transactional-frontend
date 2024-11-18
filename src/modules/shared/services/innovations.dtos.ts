@@ -167,6 +167,7 @@ export type InnovationInfoDTO = {
     lastLoginAt?: DateISOType;
   };
   daysSinceNoActiveSupport?: number;
+  expectedArchiveDate?: Date;
   assessment?: null | {
     id: string;
     currentMajorAssessmentId: null | string;
