@@ -33,14 +33,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
     { updateOn: 'blur' }
   );
 
-  formfieldAction: {
-    title: string;
-    description: string;
-    items: {
-      value: FormFieldActionsEnum;
-      label: string;
-    }[];
-  } = {
+  formfieldAction = {
     title: 'Do you need more support to develop your innovation now?',
     description: `If you do not make a decision your innovation will be archived automatically on {{ date }}. You can continue to edit and update your innovation record when it is archived.`,
     items: [
