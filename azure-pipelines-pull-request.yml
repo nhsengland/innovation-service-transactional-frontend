@@ -9,9 +9,9 @@ pool:
 
 steps:
 - task: NodeTool@0
-  displayName: 'Install Node 18'
+  displayName: 'Install Node 20'
   inputs:
-    versionSpec: '18.x'
+    versionSpec: '20.x'
 
 - task: CmdLine@2
   displayName: 'Install dependencies'
