@@ -333,6 +333,12 @@ export class NotificationsService extends CoreService {
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation`
                   };
                   break;
+                case NotificationContextDetailEnum.AU12_INNOVATOR_SURVEY_END_SUPPORT_TWO_MONTHS_REMINDER:
+                  link = {
+                    label: 'Click to go to satisfaction survey',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/surveys`
+                  };
+                  break;
               }
               break;
 
