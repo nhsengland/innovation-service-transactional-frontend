@@ -11,6 +11,7 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationUnitSuggestionsType } from '@modules/stores/ctx/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -47,11 +48,14 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
 
+  customNotificationsAmount: number = 0;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService,
     private innovationService: InnovationContextService,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private accessorService: AccessorService
   ) {
     super();
 
@@ -89,104 +93,113 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ...(this.isQualifyingAccessorRole && {
         unitsSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
       }),
-      innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true)
-    }).subscribe(({ support, statistics, collaborators, unitsSuggestions, innovationProgress }) => {
-      this.qaSuggestions = unitsSuggestions ?? [];
+      innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true),
+      customNotifications: this.accessorService.getNotifyMeInnovationSubscriptionsList(this.innovation.id)
+    }).subscribe(
+      ({ support, statistics, collaborators, unitsSuggestions, innovationProgress, customNotifications }) => {
+        this.qaSuggestions = unitsSuggestions ?? [];
 
-      const innovationInfo = this.innovation;
+        const innovationInfo = this.innovation;
 
-      this.innovationSupport = {
-        organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
-        engagingAccessors: support?.engagingAccessors ?? []
-      };
+        this.innovationSupport = {
+          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
+          status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
+          engagingAccessors: support?.engagingAccessors ?? []
+        };
 
-      this.showStartSupport =
-        this.isInProgress &&
-        (!this.innovationSupport ||
-          (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
+        this.showStartSupport =
+          this.isInProgress &&
+          (!this.innovationSupport ||
+            (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
-      this.innovationSummary = [
-        { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
-        ...(this.innovation.owner?.organisation?.size
-          ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]
-          : []),
-        ...(this.innovation.owner?.organisation?.registrationNumber
-          ? [
-              {
-                label: 'Company UK registration number',
-                value: this.innovation.owner.organisation.registrationNumber
-              }
-            ]
-          : []),
-        {
-          label: 'Location',
-          value: `${innovationInfo.countryName}${innovationInfo.postCode ? ', ' + innovationInfo.postCode : ''}`
-        },
-        { label: 'Description', value: innovationInfo.description },
-        {
-          label: 'Categories',
-          value: innovationInfo.categories
-            .map(v =>
-              v === 'OTHER'
-                ? innovationInfo.otherCategoryDescription
-                : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
-            )
-            .join('\n')
-        }
-      ];
+        this.innovationSummary = [
+          { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
+          ...(this.innovation.owner?.organisation?.size
+            ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]
+            : []),
+          ...(this.innovation.owner?.organisation?.registrationNumber
+            ? [
+                {
+                  label: 'Company UK registration number',
+                  value: this.innovation.owner.organisation.registrationNumber
+                }
+              ]
+            : []),
+          {
+            label: 'Location',
+            value: `${innovationInfo.countryName}${innovationInfo.postCode ? ', ' + innovationInfo.postCode : ''}`
+          },
+          { label: 'Description', value: innovationInfo.description },
+          {
+            label: 'Categories',
+            value: innovationInfo.categories
+              .map(v =>
+                v === 'OTHER'
+                  ? innovationInfo.otherCategoryDescription
+                  : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
+              )
+              .join('\n')
+          }
+        ];
 
-      this.innovatorSummary = [{ label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' }];
+        this.innovatorSummary = [{ label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' }];
 
-      this.showCards =
-        [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
-          this.innovationSupport.status
-        ) && !this.isArchived;
+        this.showCards =
+          [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(
+            this.innovationSupport.status
+          ) && !this.isArchived;
 
-      this.innovationCollaborators = collaborators.data;
+        this.innovationCollaborators = collaborators.data;
 
-      this.cardsList = [
-        {
-          title: 'Innovation record',
-          label: `sections submitted since your organisation unit started support`,
-          link: `/accessor/innovations/${this.innovationId}/record`,
-          count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].count,
-          total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
-          lastMessage: `Last submitted section: "${this.translate(
-            'shared.catalog.innovation.innovation_sections.' +
-              statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection
-          )}"`,
-          date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
-          emptyMessage: `No sections have been submitted since support started`
-        },
-        {
-          title: 'Tasks',
-          label: `tasks assigned by your organisation have been done or declined by the innovator`,
-          link: `/accessor/innovations/${this.innovationId}/tasks`,
-          count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
-          total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
-          lastMessage: `Last updated task: "${this.translate(
-            'shared.catalog.innovation.innovation_sections.' +
-              statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER].lastUpdatedSection
-          )}"`,
-          date: statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER]?.lastUpdatedAt,
-          emptyMessage: 'No tasks assigned by your organisation yet'
-        }
-      ];
+        this.cardsList = [
+          {
+            title: 'Innovation record',
+            label: `sections submitted since your organisation unit started support`,
+            link: `/accessor/innovations/${this.innovationId}/record`,
+            count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].count,
+            total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].total,
+            lastMessage: `Last submitted section: "${this.translate(
+              'shared.catalog.innovation.innovation_sections.' +
+                statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedSection
+            )}"`,
+            date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_SINCE_SUPPORT_START_COUNTER].lastSubmittedAt,
+            emptyMessage: `No sections have been submitted since support started`
+          },
+          {
+            title: 'Tasks',
+            label: `tasks assigned by your organisation have been done or declined by the innovator`,
+            link: `/accessor/innovations/${this.innovationId}/tasks`,
+            count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
+            lastMessage: `Last updated task: "${this.translate(
+              'shared.catalog.innovation.innovation_sections.' +
+                statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER].lastUpdatedSection
+            )}"`,
+            date: statistics[InnovationStatisticsEnum.TASKS_RESPONDED_COUNTER]?.lastUpdatedAt,
+            emptyMessage: 'No tasks assigned by your organisation yet'
+          }
+        ];
 
-      this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
+        this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
 
-      this.changeSupportUrlNewOrSupport =
-        this.innovationSupport &&
-        [
-          InnovationSupportStatusEnum.CLOSED,
-          InnovationSupportStatusEnum.UNSUITABLE,
-          InnovationSupportStatusEnum.UNASSIGNED
-        ].includes(this.innovationSupport.status)
-          ? 'new'
-          : this.innovation.support?.id;
+        this.changeSupportUrlNewOrSupport =
+          this.innovationSupport &&
+          [
+            InnovationSupportStatusEnum.CLOSED,
+            InnovationSupportStatusEnum.UNSUITABLE,
+            InnovationSupportStatusEnum.UNASSIGNED
+          ].includes(this.innovationSupport.status)
+            ? 'new'
+            : this.innovation.support?.id;
 
-      this.setPageStatus('READY');
-    });
+        this.customNotificationsAmount = customNotifications.length;
+
+        this.setPageStatus('READY');
+      }
+    );
+  }
+
+  onCreateCustomNotification() {
+    this.redirectTo(`/accessor/innovations/${this.innovationId}/custom-notifications/new`);
   }
 }

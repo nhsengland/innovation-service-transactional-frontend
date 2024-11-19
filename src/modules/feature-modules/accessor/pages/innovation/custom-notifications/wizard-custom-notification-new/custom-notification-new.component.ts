@@ -766,7 +766,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   private redirectInnovationCustomNotifications(): void {
     this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`
+      this.ctx.layout.previousUrl() ??
+        `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`
     );
   }
 }
