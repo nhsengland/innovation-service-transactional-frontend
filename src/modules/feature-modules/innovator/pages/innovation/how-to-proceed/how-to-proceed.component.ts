@@ -33,31 +33,10 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
     { updateOn: 'blur' }
   );
 
-  formfieldAction = {
-    title: 'Do you need more support to develop your innovation now?',
-    description: `If you do not make a decision your innovation will be archived automatically on {{ date }}. You can continue to edit and update your innovation record when it is archived.`,
-    items: [
-      {
-        value: FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW,
-        label: `Yes, I need more support now`
-      },
-      {
-        value: FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK,
-        label: `Yes, but I will develop it further and come back`
-      },
-      {
-        value: FormFieldActionsEnum.HAVE_ALL_I_NEED,
-        label: `No, I have all I need for now`
-      },
-      {
-        value: FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE,
-        label: `No, I have decided not to pursue this innovation`
-      },
-      {
-        value: FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE,
-        label: `No, my innovation is already live in the NHS`
-      }
-    ]
+  formfieldAction: { title: string; description: string; items: { value: FormFieldActionsEnum; label: string }[] } = {
+    title: '',
+    description: '',
+    items: []
   };
 
   constructor(
@@ -75,18 +54,49 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
     }
 
     this.baseUrl = `/innovator/innovations/${this.innovationId}`;
-
-    this.setPageTitle(this.formfieldAction.title, { showPage: false });
-    this.setBackLink('Go back', this.baseUrl);
   }
   ngOnInit(): void {
-    this.innovationsService.getInnovationInfo(this.innovationId).subscribe(response => {
-      this.formfieldAction.description = this.formfieldAction.description.replace(
-        `{{ date }}`,
-        `${this.datePipe.transform(response.expectedArchiveDate, this.translate('app.date_formats.long_date'))}`
-      );
+    this.innovationsService.getInnovationInfo(this.innovationId).subscribe({
+      next: response => {
+        this.formfieldAction = {
+          title: 'Do you need more support to develop your innovation now?',
+          description:
+            `If you do not make a decision your innovation will be archived automatically on ${this.datePipe.transform(response.expectedArchiveDate, this.translate('app.date_formats.long_date'))}. You can continue to edit and update your innovation record when it is archived.`.replace(
+              '',
+              ''
+            ),
+          items: [
+            {
+              value: FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW,
+              label: `Yes, I need more support now`
+            },
+            {
+              value: FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK,
+              label: `Yes, but I will develop it further and come back`
+            },
+            {
+              value: FormFieldActionsEnum.HAVE_ALL_I_NEED,
+              label: `No, I have all I need for now`
+            },
+            {
+              value: FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE,
+              label: `No, I have decided not to pursue this innovation`
+            },
+            {
+              value: FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE,
+              label: `No, my innovation is already live in the NHS`
+            }
+          ]
+        };
 
-      this.setPageStatus('READY');
+        this.setPageTitle(this.formfieldAction.title, { showPage: false });
+        this.setBackLink('Go back', this.baseUrl);
+        this.setPageStatus('READY');
+      },
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('ERROR');
+      }
     });
   }
 
