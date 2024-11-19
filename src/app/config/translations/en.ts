@@ -915,7 +915,7 @@ export const locale = {
               title: `{{innovationName}} has been waiting for 6 weeks. `,
               link: `View innovation and update support status within the next 5 weeks.`
             },
-            AU12_SURVEY_END_SUPPORT_TWO_MONTHS_REMINDER: {
+            AU12_INNOVATOR_SURVEY_END_SUPPORT_TWO_MONTHS_REMINDER: {
               title: `To understand your satisfaction with the support given to your innovation {{innovationName}}, `,
               link: `give us your feedback.`
             },
