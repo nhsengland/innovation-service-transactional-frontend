@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/ctx/notifications/notifications.types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 
 export enum NotificationPreferenceEnum {

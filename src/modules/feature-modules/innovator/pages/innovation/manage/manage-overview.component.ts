@@ -10,7 +10,7 @@ import {
   GetInnovationTransfersDTO,
   InnovatorService
 } from '@modules/feature-modules/innovator/services/innovator.service';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
 
 @Component({
   selector: 'app-innovator-pages-innovation-manage-overview',

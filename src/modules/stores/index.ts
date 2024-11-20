@@ -5,10 +5,6 @@ export { StoresModule } from './stores.module';
 export { AuthenticationStore } from './authentication/authentication.store';
 export { AuthenticationService } from './authentication/authentication.service';
 
-// // Context Store.
-export { ContextStore } from './context/context.store';
-export { ContextService } from './context/context.service';
-
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
 // // Assessment

@@ -3,7 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
-import { ContextStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
@@ -20,7 +20,6 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
     private ctx: CtxStore
   ) {
     this.subscriptions.add(

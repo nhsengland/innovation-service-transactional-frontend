@@ -3,9 +3,6 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthenticationStore } from './authentication/authentication.store';
 import { AuthenticationService } from './authentication/authentication.service';
 
-import { ContextStore } from './context/context.store';
-import { ContextService } from './context/context.service';
-
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
 import { CtxStore } from './ctx/ctx.store';
@@ -21,9 +18,6 @@ import { NotificationsContextService } from './ctx/notifications/notifications.s
   providers: [
     AuthenticationStore,
     AuthenticationService,
-
-    ContextStore,
-    ContextService,
 
     CtxStore,
 
