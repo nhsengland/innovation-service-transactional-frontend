@@ -76,7 +76,7 @@ export class FormIRSelectableFiltersComponent implements OnInit, DoCheck {
     return this.parentFormGroup.get(this.id) as FormArray<FormGroup>;
   }
 
-  trackFiltersRowsChanges(index: number, item: { [key: string]: any }): number {
+  trackFiltersRowsChanges(index: number, item: Record<string, any>): number {
     return index;
   }
 

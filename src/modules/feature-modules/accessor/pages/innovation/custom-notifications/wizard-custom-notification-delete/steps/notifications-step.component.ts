@@ -34,7 +34,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<NotificationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<NotificationsStepOutputType>>();
 
-  errorMessage: string = `Select notifications to delete`;
+  errorMessage = `Select notifications to delete`;
 
   form = new FormGroup({
     notifications: new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray(this.errorMessage)])

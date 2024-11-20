@@ -26,12 +26,13 @@ type AdvancedReviewSortByKeys =
   | 'statusUpdatedAt'
   | 'relevance';
 
-type AdvancedReviewSortByKeysType = {
-  [key in AdvancedReviewSortByKeys]: {
+type AdvancedReviewSortByKeysType = Record<
+  AdvancedReviewSortByKeys,
+  {
     text: string;
     order: 'ascending' | 'descending';
-  };
-};
+  }
+>;
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -44,25 +45,25 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   isAccessorType: boolean;
   isAssessmentType: boolean;
 
-  pageSize: number = 20;
-  pageNumber: number = 1;
+  pageSize = 20;
+  pageNumber = 1;
   orderBy: AdvancedReviewSortByKeys = 'relevance';
   orderDir: 'ascending' | 'descending' = 'descending';
 
   paginationParams: {
     take: number;
     skip: number;
-    order: { [Property in AdvancedReviewSortByKeys]?: 'ASC' | 'DESC' };
+    order: Partial<Record<AdvancedReviewSortByKeys, 'ASC' | 'DESC'>>;
   } = {
     take: this.pageSize,
     skip: (this.pageNumber - 1) * this.pageSize,
     order: { [this.orderBy]: this.orderDir }
   };
 
-  filtersList: { [filter: string]: string } | {} = {};
+  filtersList: Record<string, string> | {} = {};
 
   innovationCardsData: InnovationCardData[] = [];
-  innovationsCount: number = 0;
+  innovationsCount = 0;
 
   sortByData: AdvancedReviewSortByKeysType;
   sortByComponentInputList: { key: AdvancedReviewSortByKeys; text: string }[] = [];
@@ -70,7 +71,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
-  currentPageTitle: string = '';
+  currentPageTitle = '';
   search?: string;
 
   constructor(

@@ -9,7 +9,7 @@ import { SUPPORT_SUMMARY_MILESTONES } from './wizard-support-summary-progress-up
   templateUrl: './support-summary-progress-update-wrapper.component.html'
 })
 export class PageInnovationSupportSummaryProgressUpdateWrapperComponent extends CoreComponent {
-  userOrgHasMilestones: boolean = false;
+  userOrgHasMilestones = false;
 
   constructor() {
     super();

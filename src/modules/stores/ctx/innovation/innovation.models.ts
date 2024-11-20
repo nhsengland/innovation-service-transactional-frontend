@@ -142,13 +142,14 @@ export type InnovationUnitSuggestionsType = {
 // End of Suggestions
 
 // Constants.
-export const ACTIVITY_LOG_ITEMS: {
-  [key in ActivityLogItemsEnum]: {
+export const ACTIVITY_LOG_ITEMS: Record<
+  ActivityLogItemsEnum,
+  {
     type: ActivityLogTypesEnum;
     details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
     link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'TASK' | 'THREAD' | 'NEEDS_REASSESSMENT';
-  };
-} = {
+  }
+> = {
   INNOVATION_CREATION: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
   OWNERSHIP_TRANSFER: { type: ActivityLogTypesEnum.INNOVATION_MANAGEMENT, details: null, link: null },
   SHARING_PREFERENCES_UPDATE: {

@@ -26,9 +26,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: null | InnovationInfoDTO = null;
 
-  isArchived: boolean = false;
-  showCards: boolean = true;
-  showAssessmentExemptionLink: boolean = false;
+  isArchived = false;
+  showCards = true;
+  showAssessmentExemptionLink = false;
   assessmentType = '';
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
@@ -107,8 +107,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                 .map(v =>
                   v === 'OTHER'
                     ? this.innovation?.otherCategoryDescription
-                    : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)
-                        ?.label
+                    : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
                 )
                 .join('\n')
             }

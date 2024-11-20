@@ -10,8 +10,8 @@ import { getCensoredPhoneNumber } from './mfa-edit.component';
 })
 export class AccountMFAListComponent extends CoreComponent implements OnInit {
   @Input({ required: true }) MFAInfo!: MFAInfoDTO;
-  isMFAOn: boolean = false;
-  currentCensoredPhoneNumber: string = '';
+  isMFAOn = false;
+  currentCensoredPhoneNumber = '';
   userEmail: string;
   description: string;
 

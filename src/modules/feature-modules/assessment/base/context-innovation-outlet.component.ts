@@ -15,7 +15,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   data: {
     innovation: null | { id: string; name: string; status: InnovationStatusEnum; assessmentId?: string };
-    links: { label: string; url: string; queryParams?: { [key: string]: undefined | string } }[];
+    links: { label: string; url: string; queryParams?: Record<string, undefined | string> }[];
   } = { innovation: null, links: [] };
 
   constructor(

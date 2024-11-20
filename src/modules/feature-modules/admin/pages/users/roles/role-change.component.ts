@@ -21,11 +21,11 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
     rolesDescription: []
   };
 
-  currentRole: string = '';
-  newRole: string = '';
+  currentRole = '';
+  newRole = '';
 
-  userHasActiveRoles: boolean = false;
-  userHasInactiveRoles: boolean = false;
+  userHasActiveRoles = false;
+  userHasInactiveRoles = false;
 
   submitButton = { isActive: true, label: 'Change role' };
 

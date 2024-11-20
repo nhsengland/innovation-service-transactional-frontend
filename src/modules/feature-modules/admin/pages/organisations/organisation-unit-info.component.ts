@@ -39,7 +39,7 @@ export class OrganisationUnitInfoComponent extends CoreComponent implements OnIn
   activeUsers: { id: string; name: string; email: string }[] = [];
   inactiveUsers: { id: string; name: string; email: string }[] = [];
 
-  innovationsLoading: boolean = false;
+  innovationsLoading = false;
   innovationsList = new TableModel<
     { id: string; name: string; support: { status: InnovationSupportStatusEnum } | null },
     { supportUnit: string; supportStatuses: InnovationSupportStatusEnum[] }

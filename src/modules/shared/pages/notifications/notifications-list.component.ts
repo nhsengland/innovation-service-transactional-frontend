@@ -31,7 +31,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
-  isAccessorType: boolean = false;
+  isAccessorType = false;
 
   constructor(private notificationsService: NotificationsService) {
     super();

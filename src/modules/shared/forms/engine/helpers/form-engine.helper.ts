@@ -17,7 +17,7 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 export class FormEngineHelper {
   static buildForm(
     parameters: FormEngineParameterModel[],
-    values: { [key: string]: any } = {},
+    values: Record<string, any> = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
     parameters = parameters.map(p => new FormEngineParameterModel(p)); // Making sure all defaults are present.
@@ -45,7 +45,7 @@ export class FormEngineHelper {
         case 'checkbox-group': // Creates an FormGroup with one FormControl per item. Form will be something like: ParameterId = { ItemValue1: boolean, ItemValue2: boolean, ... }
           form.addControl(parameter.id, new FormGroup({}, { updateOn: 'change' }));
           parameter.items?.forEach(item => {
-            const itemValue = parameterValue ? (parameterValue as { [key: string]: boolean })[item.value] : false;
+            const itemValue = parameterValue ? (parameterValue as Record<string, boolean>)[item.value] : false;
             (form.get(parameter.id) as FormGroup).addControl(
               item.value,
               FormEngineHelper.createParameterFormControl(parameter, itemValue)
@@ -61,9 +61,9 @@ export class FormEngineHelper {
         case 'fields-group':
           form.addControl(parameter.id, new FormArray([]));
 
-          let arrayValue: { [key: string]: any }[];
+          let arrayValue: Record<string, any>[];
           if (Array.isArray(parameterValue)) {
-            arrayValue = parameterValue as { [key: string]: any }[];
+            arrayValue = parameterValue as Record<string, any>[];
           } else {
             arrayValue = [];
           }
@@ -157,7 +157,7 @@ export class FormEngineHelper {
     return form;
   }
 
-  static addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): FormGroup {
+  static addFieldGroupRow(parameter: FormEngineParameterModel, value?: Record<string, any>): FormGroup {
     const formGroup = new FormGroup({});
 
     parameter.fieldsGroupConfig?.fields.forEach(field => {
@@ -177,8 +177,8 @@ export class FormEngineHelper {
   static getFormValues(
     form: FormGroup,
     parameters: FormEngineParameterModel[]
-  ): { valid: boolean; data: { [key: string]: any } } {
-    const returnForm: { valid: boolean; data: { [key: string]: any } } = { valid: form.valid, data: {} };
+  ): { valid: boolean; data: Record<string, any> } {
+    const returnForm: { valid: boolean; data: Record<string, any> } = { valid: form.valid, data: {} };
 
     Object.keys(form.getRawValue()).forEach(key => {
       // getRawValues is needed to return also disabled fields!
@@ -188,8 +188,8 @@ export class FormEngineHelper {
     return returnForm;
   }
 
-  static getErrors(form: FormGroup, translateErrorMessage?: boolean): { [key: string]: string | null } {
-    let result: { [key: string]: string | null } = {};
+  static getErrors(form: FormGroup, translateErrorMessage?: boolean): Record<string, string | null> {
+    let result: Record<string, string | null> = {};
 
     Object.keys(form.controls).forEach(key => {
       const formProperty = form.get(key) || null;
@@ -217,7 +217,7 @@ export class FormEngineHelper {
     return result;
   }
 
-  static getValidationMessage(error: ValidationErrors | null): { message: string; params: { [key: string]: string } } {
+  static getValidationMessage(error: ValidationErrors | null): { message: string; params: Record<string, string> } {
     if (!error || Object.keys(error).length === 0) {
       // if empty!
       return { message: '', params: {} };

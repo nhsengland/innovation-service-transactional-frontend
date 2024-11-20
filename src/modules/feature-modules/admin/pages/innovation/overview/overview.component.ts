@@ -32,7 +32,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     status: InnovationSupportStatusEnum;
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
-  isArchived: boolean = false;
+  isArchived = false;
 
   innovationSummary: { label: string; value: null | string }[] = [];
 
@@ -139,7 +139,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                 }),
             acc
           ),
-          {} as { [a in InnovationSupportStatusEnum]: { count: number; text: string } }
+          {} as Record<InnovationSupportStatusEnum, { count: number; text: string }>
         );
 
       this.innovation.organisationsStatusDescription = Object.entries(occurrences)

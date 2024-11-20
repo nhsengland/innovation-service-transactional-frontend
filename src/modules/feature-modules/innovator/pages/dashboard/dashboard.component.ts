@@ -217,7 +217,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
     const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
 
-    let description = [];
+    const description = [];
 
     if (tasks !== 0) {
       description.push(tasksStr);

@@ -46,16 +46,16 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   isAccessorType: boolean;
   isAssessmentType: boolean;
 
-  isInnovationInArchivedStatus: boolean = false;
+  isInnovationInArchivedStatus = false;
 
-  isAccessorTypeAndArchivedInnovation: boolean = false;
-  isAccessorTypeAndStoppedSharingInnovation: boolean = false;
+  isAccessorTypeAndArchivedInnovation = false;
+  isAccessorTypeAndStoppedSharingInnovation = false;
 
-  categoriesList: string = '';
-  careSettingsList: string = '';
-  diseasesAndConditionsList: string = '';
-  keyHealthInequalitiesList: string = '';
-  involvedAACProgrammesList: string = '';
+  categoriesList = '';
+  careSettingsList = '';
+  diseasesAndConditionsList = '';
+  keyHealthInequalitiesList = '';
+  involvedAACProgrammesList = '';
 
   highlightInfo?: {
     termsFound: string[];
@@ -155,7 +155,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     link: string;
     fragment?: string;
   } {
-    let linkInfo: { text: string; link: string; fragment?: string } = {
+    const linkInfo: { text: string; link: string; fragment?: string } = {
       text: '',
       link: ''
     };

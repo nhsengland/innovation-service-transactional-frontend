@@ -40,7 +40,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
   disabledCheckboxAccessors: string[] = [];
 
-  selectAccessorsStepLabel: string = '';
+  selectAccessorsStepLabel = '';
 
   availableSupportStatuses: string[];
 
@@ -79,7 +79,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private currentStatus: null | InnovationSupportStatusEnum = null;
 
-  private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusLabels: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]: 'Describe the support you plan to provide.',
     [InnovationSupportStatusEnum.WAITING]:
       'Explain the information or decisions you need, before you can support this innovation.',
@@ -89,7 +89,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       'Explain why your organisation has closed its engagement with this innovation.'
   };
 
-  private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusDescriptions: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]:
       "This message will be sent to the innovator and collaborators. It will also appear on the innovation's support summary.",
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
@@ -97,11 +97,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
   };
 
-  private messageStatusUpdated: {
-    [key in InnovationSupportStatusEnum]?:
-      | { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] }
-      | undefined;
-  };
+  private messageStatusUpdated: Partial<
+    Record<
+      InnovationSupportStatusEnum,
+      { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined
+    >
+  >;
 
   constructor(
     private activatedRoute: ActivatedRoute,

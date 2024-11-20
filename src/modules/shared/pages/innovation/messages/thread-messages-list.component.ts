@@ -65,7 +65,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   isAssessmentType: boolean;
   isAccessorType: boolean;
   isAdmin: boolean;
-  isFollower: boolean = false;
+  isFollower = false;
   isArchived: boolean;
   isInAssessment: boolean;
   canCreateMessage: boolean;

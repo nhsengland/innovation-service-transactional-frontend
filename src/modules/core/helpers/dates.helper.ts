@@ -11,7 +11,7 @@ export class DatesHelper {
   }
 
   static addDaysToDate(startDate: string, days: number): string {
-    let sDate = new Date(startDate);
+    const sDate = new Date(startDate);
 
     sDate.setDate(sDate.getDate() + days);
 

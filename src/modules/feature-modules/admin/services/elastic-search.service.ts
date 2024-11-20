@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
-import { CoreService } from "@app/base";
-import { UrlModel } from "@app/base/models";
-import { Observable, take } from "rxjs";
+import { Injectable } from '@angular/core';
+import { CoreService } from '@app/base';
+import { UrlModel } from '@app/base/models';
+import { Observable, take } from 'rxjs';
 
 @Injectable()
 export class ElasticSearchService extends CoreService {

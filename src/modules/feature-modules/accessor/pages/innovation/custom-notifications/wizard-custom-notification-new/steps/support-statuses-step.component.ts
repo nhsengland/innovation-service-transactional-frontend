@@ -24,7 +24,7 @@ export class WizardInnovationCustomNotificationNewSupportStatusesStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<SupportStatusesStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SupportStatusesStepOutputType>>();
 
-  errorMessage: string = "Select the support statuses you'd like to be notified about";
+  errorMessage = "Select the support statuses you'd like to be notified about";
 
   form = new FormGroup({
     supportStatuses: new FormArray<FormControl<InnovationSupportStatusEnum>>(

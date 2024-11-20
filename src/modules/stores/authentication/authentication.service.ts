@@ -24,7 +24,7 @@ type GetUserInfoDTO = {
   termsOfUseAccepted: boolean;
   hasInnovationTransfers: boolean;
   hasInnovationCollaborations: boolean;
-  hasLoginAnnouncements: { [k: string]: boolean };
+  hasLoginAnnouncements: Record<string, boolean>;
   passwordResetAt: null | DateISOType;
   firstTimeSignInAt: null | DateISOType;
   organisations: {

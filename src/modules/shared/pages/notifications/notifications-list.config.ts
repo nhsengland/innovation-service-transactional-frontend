@@ -20,5 +20,5 @@ export const NotificationsListFiltersConfig: FiltersConfig = {
 };
 
 export function getConfig(): { filters: FiltersConfig } {
-  return { filters: NotificationsListFiltersConfig }
+  return { filters: NotificationsListFiltersConfig };
 }

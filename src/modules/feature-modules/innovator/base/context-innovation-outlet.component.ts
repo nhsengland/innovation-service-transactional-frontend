@@ -21,7 +21,7 @@ export class ContextInnovationOutletComponent implements OnDestroy, OnInit {
 
   announcements: AnnouncementType[] = [];
 
-  displayAnnouncements: boolean = false;
+  displayAnnouncements = false;
 
   constructor(
     private router: Router,

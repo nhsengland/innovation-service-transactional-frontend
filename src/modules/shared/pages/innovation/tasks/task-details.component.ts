@@ -23,7 +23,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
   taskNumber = 0;
 
-  userUrlBase: string = '';
+  userUrlBase = '';
 
   // Flags
   isInnovatorType: boolean;

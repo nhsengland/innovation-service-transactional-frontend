@@ -29,7 +29,7 @@ export class WizardInnovationCustomNotificationNewNotificationStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<NotificationStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<NotificationStepOutputType>>();
 
-  errorMessage: string = "Select what you'd like to be notified about";
+  errorMessage = "Select what you'd like to be notified about";
 
   form = new FormGroup({
     notification: new FormControl<string | null>(null, [CustomValidators.required(this.errorMessage)])

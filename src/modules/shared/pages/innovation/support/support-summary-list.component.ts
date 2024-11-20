@@ -52,8 +52,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   isInnovatorType: boolean;
   isAccessorType: boolean;
 
-  isSuggestionsListEmpty: boolean = true;
-  showSuggestOrganisationsToSupportLink: boolean = false;
+  isSuggestionsListEmpty = true;
+  showSuggestOrganisationsToSupportLink = false;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
@@ -194,7 +194,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   }
 
   onOpenCloseUnit(sectionsListIndex: number, unitsListIndex: number): void {
-    let unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
+    const unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
     unitItem.isOpened = !unitItem.isOpened;
 
     if (!unitItem.isOpened) {
