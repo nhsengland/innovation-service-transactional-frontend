@@ -117,7 +117,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       return;
     }
 
-    this.stores.context.dismissUserNotification({ notificationIds: [notificationId] });
+    this.ctx.notifications.dismiss({ notificationIds: [notificationId] });
 
     if (url) {
       // Stop event propagation to avoid triggering the href link
@@ -135,10 +135,9 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.deleteNotification(notificationId).subscribe({
+    this.ctx.notifications.delete$(notificationId).subscribe({
       next: () => {
         this.setAlertSuccess('Notification successfully cleared');
-        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
       error: error => {
@@ -152,10 +151,9 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.dismissAllUserNotifications().subscribe({
+    this.ctx.notifications.dismissAll$().subscribe({
       next: response => {
         this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read`);
-        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
       error: () => {

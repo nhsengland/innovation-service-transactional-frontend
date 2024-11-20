@@ -132,7 +132,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
           // Throw notification read dismiss.
           if (this.innovationTransfers.length) {
-            this.stores.context.dismissUserNotification({
+            this.ctx.notifications.dismiss({
               contextDetails: [
                 NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER,
                 NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER
