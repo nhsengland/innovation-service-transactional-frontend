@@ -420,24 +420,6 @@ export class NotificationsService extends CoreService {
     );
   }
 
-  dismissAllUserNotifications(): Observable<{ affected: number }> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { dismissAll: true }).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
-  deleteNotification(notificationId: string): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/notifications/:notificationId')
-      .setPathParams({ notificationId });
-    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
   getEmailNotificationsPreferences(): Observable<EmailNotificationPreferencesDTO> {
     const url = new UrlModel(this.API_USERS_URL).addPath('v1/email-preferences');
     return this.http.get<EmailNotificationPreferencesDTO>(url.buildUrl()).pipe(

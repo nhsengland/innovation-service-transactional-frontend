@@ -97,8 +97,7 @@ const header: RoutesDataType['header'] = {
       { id: 'account', label: 'Training and resources', url: '/accessor/training-and-resources' }
     ],
     right: []
-  },
-  notifications: {}
+  }
 };
 
 const routes: Routes = [

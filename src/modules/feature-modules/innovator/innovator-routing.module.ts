@@ -109,8 +109,7 @@ const header: RoutesDataType['header'] = {
       { id: 'account', label: 'Your account', url: '/innovator/account/manage-details' }
     ],
     right: []
-  },
-  notifications: {}
+  }
 };
 
 const routes: Routes = [
