@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementParamsType } from '@modules/feature-modules/admin/services/announcements.service';
 import { AnnouncementsService } from '@modules/feature-modules/announcements/services/announcements.service';
-import { AuthenticationStore } from '@modules/stores';
-import { listenerCount } from 'process';
 
 export type AnnouncementCardDataType = {
   title: string;

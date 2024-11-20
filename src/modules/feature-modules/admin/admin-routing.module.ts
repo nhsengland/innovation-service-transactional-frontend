@@ -141,8 +141,7 @@ const header: RoutesDataType['header'] = {
       { id: 'innovations', label: 'Innovations', url: '/admin/innovations' }
     ],
     right: [{ id: 'account', label: 'My account', url: '/admin/account/manage-details' }]
-  },
-  notifications: {}
+  }
 };
 
 const routes: Routes = [

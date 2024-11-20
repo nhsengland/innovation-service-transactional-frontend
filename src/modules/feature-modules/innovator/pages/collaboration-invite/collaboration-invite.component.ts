@@ -37,12 +37,6 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
         invitedAt: DatesHelper.addDaysToDate(response.invitedAt ?? '', 30).toString()
       };
 
-      // Throw notification read dismiss.
-      this.stores.context.dismissUserNotification({
-        contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER],
-        contextIds: [this.collaboratorId]
-      });
-
       this.setPageStatus('READY');
     });
   }

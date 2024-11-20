@@ -27,3 +27,6 @@ export { ContextSchemaType } from './ctx/schema/schema.types';
 // // Layout
 export { LayoutContextStore } from './ctx/layout/layout.store';
 export { ContextLayoutType } from './ctx/layout/layout.types';
+// // Notifications
+export { NotificationsContextStore } from './ctx/notifications/notifications.store';
+export { NotificationsContextService } from './ctx/notifications/notifications.service';
