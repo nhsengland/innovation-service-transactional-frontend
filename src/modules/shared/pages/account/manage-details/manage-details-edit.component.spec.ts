@@ -22,7 +22,9 @@ import {
   AssessmentContextService,
   SchemaContextStore,
   SchemaContextService,
-  LayoutContextStore
+  LayoutContextStore,
+  NotificationsContextStore,
+  NotificationsContextService
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -54,6 +56,8 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
         SchemaContextStore,
         SchemaContextService,
         LayoutContextStore,
+        NotificationsContextStore,
+        NotificationsContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
