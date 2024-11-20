@@ -270,6 +270,6 @@ function outboundParsing(data: StepPayloadType): { mfaInfo: MFAInfoDTO; turnOff:
     mfaInfo: data.phoneNumber
       ? { type: 'phone', phoneNumber: parsedPhone }
       : { type: data.confirmationEmail ? 'email' : 'none' },
-    turnOff: data.turnOff === 'YES' ? true : (false ?? false)
+    turnOff: data.turnOff === 'YES' ? true : false
   };
 }
