@@ -13,8 +13,6 @@ import { SharedModule } from '@modules/shared/shared.module';
 import {
   AuthenticationService,
   AuthenticationStore,
-  ContextService,
-  ContextStore,
   CtxStore,
   InnovationContextService,
   InnovationContextStore,
@@ -46,8 +44,6 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       providers: [
         AuthenticationStore,
         AuthenticationService,
-        ContextStore,
-        ContextService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,

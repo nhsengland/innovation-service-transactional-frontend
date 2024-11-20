@@ -10,7 +10,7 @@ import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos
 import { InnovationTransferStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores';
 
 import { DatesHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
 import {
   GetInnovationCollaboratorInvitesDTO,
   GetInnovationTransfersDTO,

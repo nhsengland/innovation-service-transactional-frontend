@@ -7,7 +7,7 @@
           <dt class="nhsuk-summary-list__key">Name</dt>
           <dd class="nhsuk-summary-list__value">
             <ng-container *ngIf="!unit; else unitName">
-              <span>{{ pageTitle }}</span>
+              <span>{{ ctx.layout.pageTitle() }}</span>
             </ng-container>
             <ng-template #unitName>
               <span>{{ unit.name }}</span>
