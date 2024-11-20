@@ -43,14 +43,6 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
 
       this.isActiveInnovation = this.innovationTransfers.length === 0;
 
-      // Throw notification read dismiss.
-      this.ctx.notifications.dismiss({
-        contextDetails: [
-          NotificationContextDetailEnum.AU09_TRANSFER_EXPIRED,
-          NotificationContextDetailEnum.TO08_TRANSFER_OWNERSHIP_DECLINES_PREVIOUS_OWNER
-        ]
-      });
-
       this.setPageStatus('READY');
     });
   }
