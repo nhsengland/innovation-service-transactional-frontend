@@ -30,7 +30,7 @@ export type RoutesDataType = {
   selector: 'theme-transactional-layout',
   templateUrl: './transactional-layout.component.html'
 })
-export class TransactionalLayoutComponent implements OnInit, OnDestroy {
+export class TransactionalLayoutComponent implements OnDestroy {
   private subscriptions = new Subscription();
 
   header: RoutesDataType['header'] = {
@@ -44,7 +44,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private contextStore: ContextStore,
     protected ctx: CtxStore
   ) {
     this.subscriptions.add(
@@ -57,17 +56,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
-  }
-
-  ngOnInit() {
-    // this.subscriptions.add(
-    //   this.contextStore.innovation$().subscribe(e => {
-    //     Object.entries(e?.notifications || {}).forEach(([key, value]) => {
-    //       const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
-    //       if (leftSideMenu) { leftSideMenu.notifications = value; }
-    //     });
-    //   })
-    // );
   }
 
   ngOnDestroy(): void {
