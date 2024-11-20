@@ -131,11 +131,11 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     }
   }
 
-  onDeleteNotification(notificationId: string): void {
+  onDeleteNotification(notificationId: string, readAt: null | string): void {
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.ctx.notifications.delete$(notificationId).subscribe({
+    this.ctx.notifications.delete$(notificationId, !!readAt).subscribe({
       next: () => {
         this.setAlertSuccess('Notification successfully cleared');
         this.getNotificationsList();

@@ -72,7 +72,7 @@
               </td>
               <td class="nhsuk-table__cell nhsuk-body-s text-align-right">
                 <span class="nhsuk-table-responsive__heading">Action</span>
-                <a href="javascript:void(0)" (click)="onDeleteNotification(item.id)">
+                <a href="javascript:void(0)" (click)="onDeleteNotification(item.id, item.readAt)">
                   Clear
                   <span class="nhsuk-u-visually-hidden">
                     notification {{ "shared.catalog.innovation.notification_context_details." + item.contextDetail + ".title" | translate: item.params }}

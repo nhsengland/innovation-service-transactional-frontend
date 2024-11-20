@@ -76,8 +76,14 @@ export class NotificationsContextStore {
     return this.notificationCtxService.dismissAllNotifications().pipe(tap(() => this.update({ unread: 0 })));
   }
 
-  delete$(notificationId: string): Observable<void> {
-    return this.notificationCtxService.deleteNotification(notificationId).pipe(tap(() => this.decrementUnread()));
+  delete$(notificationId: string, isRead: boolean): Observable<void> {
+    return this.notificationCtxService.deleteNotification(notificationId).pipe(
+      tap(() => {
+        if (!isRead) {
+          this.decrementUnread();
+        }
+      })
+    );
   }
 
   private decrementUnread(decrement = 1): void {
