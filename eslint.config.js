@@ -7,10 +7,7 @@ const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommen
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
 module.exports = tseslint.config(
   {
-    ignores: ["dist/app/"]
-  },
-  {
-    files: ["main.ts"],
+    files: ["src/test.ts"],
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
@@ -54,7 +51,7 @@ module.exports = tseslint.config(
     }
   },
   {
-    files: ["index.html"],
+    files: ["src/app/app.component.html"],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {}
   }
