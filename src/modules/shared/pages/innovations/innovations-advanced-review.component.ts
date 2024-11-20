@@ -176,12 +176,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
         this.form = this.filtersModel.form;
 
-        this.currentPageTitle = this.pageTitle;
-
         this.subscriptions.push(
           this.activatedRoute.queryParams.subscribe(params => {
             // To keep the same page title when updating query params.
-            this.setPageTitle(this.currentPageTitle);
+            this.setPageTitle(this.ctx.layout.pageTitle());
             this.search = params.search;
             if (this.search && this.search !== this.form.value.search) {
               this.form.get('search')?.setValue(this.search);

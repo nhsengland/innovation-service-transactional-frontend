@@ -13,8 +13,6 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { ContextStore } from '@modules/stores/context/context.store';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
@@ -23,9 +21,9 @@ import { ContextLayoutType, CtxStore } from '@modules/stores';
 
 type AlertOptions = {
   message?: string;
-  listStyleType?: ContextPageLayoutType['alert']['listStyleType'];
-  itemsList?: ContextPageLayoutType['alert']['itemsList'];
-  width?: ContextPageLayoutType['alert']['width'];
+  listStyleType?: NonNullable<ContextLayoutType['alert']>['listStyleType'];
+  itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'];
+  width?: NonNullable<ContextLayoutType['alert']>['width'];
 };
 
 @Component({ template: '' })
@@ -54,7 +52,6 @@ export class CoreComponent implements OnDestroy {
 
   protected stores: {
     authentication: AuthenticationStore;
-    context: ContextStore;
   };
 
   protected ctx: CtxStore;
@@ -96,7 +93,6 @@ export class CoreComponent implements OnDestroy {
 
     this.stores = {
       authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore)
     };
 
     this.ctx = injector.get(CtxStore);
@@ -124,10 +120,6 @@ export class CoreComponent implements OnDestroy {
   get requestBody(): MappedObjectType {
     return this.serverRequest?.body || {};
   }
-  /* istanbul ignore next */
-  get pageTitle(): string {
-    return this.stores.context.state.pageLayoutBS.getValue().title.main ?? '';
-  } // Deprecated!
 
   isRunningOnBrowser(): boolean {
     return isPlatformBrowser(this.platformId);

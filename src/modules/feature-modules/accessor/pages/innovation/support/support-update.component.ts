@@ -9,7 +9,7 @@ import { CustomValidators, FileTypes } from '@app/base/forms';
 import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { UsersService } from '@modules/shared/services/users.service';
 
-import { ContextInnovationType, InnovationSupportStatusEnum } from '@modules/stores';
+import { ContextInnovationType, ContextLayoutType, InnovationSupportStatusEnum } from '@modules/stores';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
@@ -18,7 +18,6 @@ import { omit } from 'lodash';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -99,7 +98,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private messageStatusUpdated: {
     [key in InnovationSupportStatusEnum]?:
-      | { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] }
+      | { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] }
       | undefined;
   };
 
@@ -459,7 +458,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return status ? this.messageStatusDescriptions[status] : '';
   }
 
-  getMessageStatusUpdated(): { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined {
+  getMessageStatusUpdated(): { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] } | undefined {
     const status = this.form.get('status')?.value;
     return status ? this.messageStatusUpdated[status] : undefined;
   }
