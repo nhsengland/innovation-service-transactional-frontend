@@ -1,6 +1,6 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-
       <div *ngIf="isInnovatorType && innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
         <p>If you want to stop sharing your innovation with an organisation, <a routerLink="../support">update your data sharing preferences</a>.</p>
@@ -9,12 +9,10 @@
       <ng-container *ngIf="!isSuggestionsListEmpty; else noSupportYetMessage">
         <ng-container *ngFor="let sectionItem of sectionsList; let sectionIndex = index; let sectionIsFirst = first">
           <ng-container *ngIf="sectionItem.unitsList.length">
-
             <h2 [ngClass]="{ 'nhsuk-u-padding-top-3': !sectionIsFirst }">{{ sectionItem.title }}</h2>
 
             <ul class="nhsuk-list nhsuk-u-margin-0">
               <li *ngFor="let unitItem of sectionItem.unitsList; let unitIndex = index">
-
                 <div [ngClass]="{ 'bottom-border-separator nhsuk-u-margin-bottom-5': !unitItem.isOpened }">
                   <button
                     id="engaging-button-{{ unitItem.id }}"
@@ -28,7 +26,8 @@
                     <span class="nhsuk-u-margin-left-2"> {{ unitItem.sameOrganisation ? unitItem.name + " (your organisation)" : unitItem.name }}</span>
                   </button>
                   <div class="nhsuk-u-font-size-16 nhsuk-u-padding-left-5 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3">
-                    <span>Status:
+                    <span
+                      >Status:
                       <theme-tag
                         type="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.cssColorClass' | translate }}"
                         label="{{ 'shared.catalog.innovation.support_status.' + unitItem.support.status + '.name' | translate }}"
@@ -90,7 +89,7 @@
                               by
                               <span class="nhsuk-u-font-weight-bold">
                                 {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
-                                </span>
+                              </span>
                             </span>
                           </p>
                           <p *ngIf="historyItem.params.message" class="nhsuk-body-s">{{ historyItem.params.message }}</p>
@@ -107,7 +106,7 @@
                               by
                               <span class="nhsuk-u-font-weight-bold">
                                 {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
-                                </span>
+                              </span>
                             </span>
                           </p>
 
@@ -211,10 +210,8 @@
 
                   <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-3" />
                 </div>
-
               </li>
             </ul>
-
           </ng-container>
         </ng-container>
       </ng-container>
@@ -241,11 +238,14 @@
         </a>
       </div>
 
-      <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
-        <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+      <div *ngIf="isAccessorType">
+        <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
       </div>
 
+      <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <span class="nhsuk-u-visually-hidden">Information:</span>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
+      </div>
     </div>
   </div>
 </theme-content-wrapper>

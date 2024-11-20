@@ -9,6 +9,8 @@ import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -49,6 +51,8 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   allSectionsSubmitted = false;
   isAdminType: boolean;
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -136,6 +140,13 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         );
 
         this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
+
+        this.customNotificationLinks = [
+          {
+            label: 'Notify me when this innovation record is updated',
+            action: NotificationEnum.INNOVATION_RECORD_UPDATED
+          }
+        ];
 
         this.setPageStatus('READY');
       },

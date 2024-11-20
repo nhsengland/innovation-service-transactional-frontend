@@ -18,6 +18,8 @@ import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.en
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { ContextInnovationType } from '@modules/stores';
 import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -35,6 +37,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   // Flags
   isAdmin: boolean;
   isInnovatorType: boolean;
+  isAccessorType: boolean;
   isArchived: boolean;
 
   // Filter
@@ -58,6 +61,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   uploadedByUnitChips: ChipFilterInputType = [];
   selectedUploadedByUnitChips: string[] = [];
 
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+
   constructor(
     private innovationDocumentsService: InnovationDocumentsService,
     private statisticsService: StatisticsService
@@ -70,6 +75,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
 
     this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovatorType = this.stores.authentication.isInnovatorType();
+    this.isAccessorType = this.stores.authentication.isAccessorType();
 
     if (this.isAdmin) {
       this.setPageTitle('Documents', { hint: `Innovation ${this.innovation.name}` });
@@ -82,6 +88,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
         statistics: [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER]
       })
       .subscribe(({ DOCUMENTS_STATISTICS_COUNTER }) => {
+        this.customNotificationLinks = [
+          {
+            label: 'Notify me when a new document is uploaded',
+            action: NotificationEnum.DOCUMENT_UPLOADED
+          }
+        ];
+
         if (DOCUMENTS_STATISTICS_COUNTER.locations.length === 0) {
           this.setPageStatus('READY');
           return;

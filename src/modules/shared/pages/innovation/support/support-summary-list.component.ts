@@ -16,6 +16,8 @@ import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/serv
 import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { DateISOType } from '@app/base/types';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -60,6 +62,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
     { id: 'SUGGESTED', title: 'Other suggested support organisations', unitsList: [] }
   ];
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -183,6 +187,17 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
               engagingUnitsIds
             ).length;
         }
+
+        this.customNotificationLinks = [
+          {
+            label: 'Notify me when an organisation updates their support status',
+            action: NotificationEnum.SUPPORT_UPDATED
+          },
+          {
+            label: 'Notify me when an organisation adds a progress update to this support summary',
+            action: NotificationEnum.PROGRESS_UPDATE_CREATED
+          }
+        ];
 
         this.setPageStatus('READY');
       },
