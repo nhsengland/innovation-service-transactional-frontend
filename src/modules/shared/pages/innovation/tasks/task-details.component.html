@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row" *ngIf="task">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row" *ngIf="task">
     <div class="nhsuk-grid-column-two-thirds">
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
@@ -62,16 +63,16 @@
       <ng-container *ngIf="sectionId && tasksIds.length > 1">
         <nav class="nhsuk-pagination nhsuk-u-margin-top-3" role="navigation" aria-label="Pagination">
           <ul class="nhsuk-list nhsuk-pagination__list">
-            <li class="nhsuk-pagination-item--previous" *ngIf="taskNumber > 0">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="handlePagination('previous')">
+            <li class="nhsuk-pagination-item--previous" *ngIf="taskNumber > 0" href="javascript:void(0)">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="handlePagination('previous')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Previous</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">Requested task</span>
                 <theme-svg-icon type="arrow-left" />
               </a>
             </li>
-            <li class="nhsuk-pagination-item--next" *ngIf="taskNumber < tasksIds.length - 1">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="handlePagination('next')">
+            <li class="nhsuk-pagination-item--next" *ngIf="taskNumber < tasksIds.length - 1" href="javascript:void(0)">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="handlePagination('next')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Next</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">Requested task</span>

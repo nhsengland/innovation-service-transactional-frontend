@@ -62,7 +62,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     return this.state.user?.termsOfUseAccepted ?? false;
   }
   isFirstTimeSignInDone(): boolean {
-    return !!this.state.user?.firstTimeSignInAt ?? false;
+    return !!this.state.user?.firstTimeSignInAt;
   }
   hasInnovationTransfers(): boolean {
     return this.state.user?.hasInnovationTransfers ?? false;

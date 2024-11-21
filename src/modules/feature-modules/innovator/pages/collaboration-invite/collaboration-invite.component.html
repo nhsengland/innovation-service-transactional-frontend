@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds" *ngIf="collaborationInfo">
       <p class="nhsuk-u-margin-bottom-0">You have been invited to collaborate on this innovation by its owner.</p>
       <p>You have until {{ collaborationInfo.invitedAt | date: ("app.date_formats.medium_date" | translate) }} to respond to this invite.</p>
@@ -24,8 +25,8 @@
         </div>
       </dl>
 
-      <a class="nhsuk-button nhsuk-u-margin-right-3" (click)="onSubmit(status.ACTIVE)">Accept invitation</a>
-      <a class="nhsuk-button nhsuk-button--secondary" (click)="onSubmit(status.DECLINED)">Decline</a>
+      <a class="nhsuk-button nhsuk-u-margin-right-3" (click)="onSubmit(status.ACTIVE)" href="javascript:void(0)">Accept invitation</a>
+      <a class="nhsuk-button nhsuk-button--secondary" (click)="onSubmit(status.DECLINED)" href="javascript:void(0)">Decline</a>
     </div>
   </div>
 </theme-content-wrapper>

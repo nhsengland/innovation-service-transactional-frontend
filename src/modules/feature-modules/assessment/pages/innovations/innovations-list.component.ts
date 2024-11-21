@@ -41,7 +41,7 @@ type TabType = {
   templateUrl: './innovations-list.component.html'
 })
 export class InnovationsListComponent extends CoreComponent implements OnInit {
-  defaultStatus: 'ALL' = 'ALL';
+  defaultStatus = 'ALL' as const;
   tabs: TabType[] = [];
   currentTab: TabType;
 

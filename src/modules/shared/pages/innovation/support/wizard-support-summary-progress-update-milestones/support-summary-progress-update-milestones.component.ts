@@ -62,7 +62,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     this.innovation = this.ctx.innovation.info();
 
-    this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym!;
+    this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym ?? '';
 
     this.milestonesType = SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].some(org => org.subcategories !== undefined)
       ? 'TWO_LEVEL'
