@@ -68,22 +68,19 @@ export class WizardIRV3EngineModel {
       subsections: new Map([]),
       questions: new Map([])
     };
-    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap(this.schema.schema);
+    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap();
   }
 
-  getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
-    const mapEntries = this.schema?.schema.sections
-      .flatMap(s => s.subSections)
-      .find(s => s.id === this.sectionId)
-      ?.steps.flatMap(st => st.questions)
-      .filter(q => q.items?.some(i => i.itemsFromAnswer))
-      .map(i => {
-        const itemWithAnswer = i.items?.find(item => item.itemsFromAnswer);
-        return itemWithAnswer ? [i.id, itemWithAnswer.itemsFromAnswer] : undefined;
-      })
-      .filter((entry): entry is [string, string] => entry !== undefined); // Filter out undefined entries
-
-    return new Map(mapEntries);
+  getItemsFromAnswersListMap(): Map<string, string> {
+    return new Map(
+      this.schema?.schema.sections
+        .flatMap(s => s.subSections)
+        .find(s => s.id === this.sectionId)
+        ?.steps.flatMap(st => st.questions)
+        .filter(q => q.items?.some(i => i.itemsFromAnswer))
+        //eslint-disable-next-line
+        .map(i => [i.id, i.items?.find(item => item.itemsFromAnswer)!.itemsFromAnswer!])
+    );
   }
 
   isFirstStep(): boolean {
