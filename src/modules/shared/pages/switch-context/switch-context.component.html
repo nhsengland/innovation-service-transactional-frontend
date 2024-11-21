@@ -1,6 +1,6 @@
 <div class="nhsuk-grid-row">
   <div class="nhsuk-grid-column-two-thirds">
-    <h1>{{ pageTitle }}</h1>
+    <h1>{{ ctx.layout.pageTitle() }}</h1>
 
     <p *ngIf="currentRole">You're currently logged in as {{ currentRole.description }}.</p>
     <p *ngIf="user.roles.length > 1">You have more than one profile associated with your account.</p>

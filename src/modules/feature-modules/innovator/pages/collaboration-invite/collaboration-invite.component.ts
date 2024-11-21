@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
 import { InnovationCollaboratorStatusEnum } from '@modules/stores';
 import { catchError, EMPTY } from 'rxjs';
 
@@ -36,12 +36,6 @@ export class PageCollaborationInviteComponent extends CoreComponent implements O
         ...response,
         invitedAt: DatesHelper.addDaysToDate(response.invitedAt ?? '', 30).toString()
       };
-
-      // Throw notification read dismiss.
-      this.stores.context.dismissUserNotification({
-        contextDetails: [NotificationContextDetailEnum.MC01_COLLABORATOR_INVITE_EXISTING_USER],
-        contextIds: [this.collaboratorId]
-      });
 
       this.setPageStatus('READY');
     });

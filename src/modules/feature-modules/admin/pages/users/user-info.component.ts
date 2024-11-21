@@ -32,13 +32,13 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
     rolesDescription: []
   };
 
-  canAddRole: boolean = false;
-  userHasActiveRoles: boolean = false;
-  userHasInactiveRoles: boolean = false;
+  canAddRole = false;
+  userHasActiveRoles = false;
+  userHasInactiveRoles = false;
 
-  accessorRolesCount: number = 0;
-  hasActiveAccessorRole: boolean = false;
-  isActiveQualifyingAccessor: boolean = false;
+  accessorRolesCount = 0;
+  hasActiveAccessorRole = false;
+  isActiveQualifyingAccessor = false;
 
   action: { label: string; url: string } = { label: '', url: '' };
 

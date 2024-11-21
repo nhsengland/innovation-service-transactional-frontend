@@ -25,7 +25,7 @@ export class WizardInnovationCustomNotificationDeleteInnovationStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<InnovationStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<InnovationStepOutputType>>();
 
-  errorMessage: string = `Select an innovation's notifications to delete`;
+  errorMessage = `Select an innovation's notifications to delete`;
 
   form = new FormGroup({
     innovation: new FormControl<string | null>(null, [CustomValidators.required(this.errorMessage)])

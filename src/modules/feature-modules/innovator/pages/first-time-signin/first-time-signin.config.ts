@@ -379,7 +379,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
 }
 
 function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFindUsAnswersType {
-  let answers = {
+  const answers = {
     ...(data.howDidYouFindUsList.includes('EVENT')
       ? { event: true, eventComment: data.howDidYouFindUsEvent ?? '' }
       : null),
@@ -401,7 +401,7 @@ function howDidYouFindUsDataOutboundParsing(data: StepPayloadType): HowDidYouFin
 }
 
 function howDidYouFindUsDataSummaryParsing(data: StepPayloadType): string {
-  let summaryData: string = '';
+  let summaryData = '';
 
   summaryData += '<ul class="nhsuk-list">';
 

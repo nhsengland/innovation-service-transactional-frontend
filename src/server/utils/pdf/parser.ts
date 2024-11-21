@@ -64,7 +64,7 @@ export const getIRDocumentExportData = (
   allSectionsData: AllSectionsOutboundPayloadType,
   companyInfo?: { name: string; size: null | string; registrationNumber: null | string }
 ): InnovationRecordDocumentExportDataType => {
-  let sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
+  const sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
     sections: allSectionsData,
     startSectionIndex: companyInfo ? 0 : 1
   };

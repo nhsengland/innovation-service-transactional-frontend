@@ -3,10 +3,10 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-interface Breadcrumb {
+type Breadcrumb = {
   label: string;
   url: string;
-}
+};
 
 @Component({
   selector: 'theme-header-breadcrumbs-bar',
@@ -40,7 +40,7 @@ export class HeaderBreadcrumbsBarComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  private createBreadcrumbs(route: ActivatedRoute, url: string = '', breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
+  private createBreadcrumbs(route: ActivatedRoute, url = '', breadcrumbs: Breadcrumb[] = []): Breadcrumb[] {
     // console.log('route.firstChild', url, breadcrumbs);
     const children: ActivatedRoute[] = route.children;
 

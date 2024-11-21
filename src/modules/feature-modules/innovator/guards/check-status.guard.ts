@@ -4,7 +4,7 @@ import { ActivatedRouteSnapshot, CanActivateFn, Router } from '@angular/router';
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-export function checkStatusGuard(statusList: InnovationStatusEnum[], blockList: boolean = false): CanActivateFn {
+export function checkStatusGuard(statusList: InnovationStatusEnum[], blockList = false): CanActivateFn {
   return (route: ActivatedRouteSnapshot) => {
     const router: Router = inject(Router);
     const ctx: CtxStore = inject(CtxStore);

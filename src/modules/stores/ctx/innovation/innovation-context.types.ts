@@ -30,7 +30,7 @@ export type ContextInnovationType = {
   };
   assignedTo?: { id: string; userRoleId: string; name: string };
   support?: { id: string; status: InnovationSupportStatusEnum };
-  notifications?: { [key in NotificationCategoryTypeEnum]?: number };
+  notifications?: Partial<Record<NotificationCategoryTypeEnum, number>>;
   collaboratorId?: string;
   createdAt?: DateISOType;
   expiryAt: number;

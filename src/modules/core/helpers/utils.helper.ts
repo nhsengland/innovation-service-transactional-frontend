@@ -37,8 +37,8 @@ export class UtilsHelper {
   }
 
   static getContactPreferenceValue(
-    contactByEmail: boolean = false,
-    contactByPhone: boolean = false,
+    contactByEmail = false,
+    contactByPhone = false,
     contactByPhoneTimeframe: PhoneUserPreferenceEnum | null = null
   ): string {
     let value = '';
@@ -63,7 +63,7 @@ export class UtilsHelper {
     userUnitId: string,
     organisationsList: OrganisationsListDTO[],
     engagingUnitsIds: string[],
-    previousOrganisationsSuggestions?: { [key: string]: string[] }
+    previousOrganisationsSuggestions?: Record<string, string[]>
   ): (OrganisationsListDTO & { description: string | undefined })[] {
     const organisationsSuggestions =
       previousOrganisationsSuggestions ?? JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
@@ -145,7 +145,7 @@ export class UtilsHelper {
     return `Notify me on ${datePipe.transform(subscription.date, locale.data.app.date_formats.long_date)} for this reason:`;
   }
 
-  static getAssessmentVersion(majorVersion: number = 1, minorVersion: number = 0): string {
+  static getAssessmentVersion(majorVersion = 1, minorVersion = 0): string {
     return `${majorVersion}.${minorVersion}`;
   }
 }

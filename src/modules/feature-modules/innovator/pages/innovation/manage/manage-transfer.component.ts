@@ -19,8 +19,8 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  stayAsCollaborator: boolean = false;
-  redirectToDeleteAccount: boolean = false;
+  stayAsCollaborator = false;
+  redirectToDeleteAccount = false;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryList: WizardSummaryType[] = [];

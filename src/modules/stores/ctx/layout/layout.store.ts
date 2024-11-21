@@ -12,11 +12,12 @@ export class LayoutContextStore {
   // Selectors
   status = computed(() => this.state().status);
   title = computed(() => this.state().title);
+  pageTitle = computed(() => this.title()?.main ?? '');
   alert = computed(() => this.state().alert);
   backLink = computed(() => this.state().backLink);
   previousUrl = computed(() => this.state().previousUrl);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   update(info: DeepPartial<ContextLayoutType>): void {
     const dataToUpdate = omitBy<DeepPartial<ContextLayoutType>>(info, isNil);

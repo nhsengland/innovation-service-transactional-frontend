@@ -97,7 +97,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   subscription: GetNotifyMeInnovationSubscription;
 
   isEditMode: boolean;
-  currentEditModeEntryStep: string = '';
+  currentEditModeEntryStep = '';
 
   datasets: {
     organisations: Organisation[];
@@ -106,9 +106,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   wizard = new WizardModel<WizardData>({});
 
-  stepsDefinition: {
-    [stepId: string]: WizardStepModel;
-  };
+  stepsDefinition: Record<string, WizardStepModel>;
 
   entrypointAction: NotificationEnum | undefined = undefined;
 
@@ -526,7 +524,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     };
   }
 
-  onSummaryStepIn(displayEditMode: boolean = false): void {
+  onSummaryStepIn(displayEditMode = false): void {
     // If user access summary in edit mode, display the current subscription information
     if (displayEditMode) {
       this.setWizardDataWithCurrentSubscriptionInfo();

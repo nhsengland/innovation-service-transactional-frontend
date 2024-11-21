@@ -19,7 +19,7 @@ export type HeaderMenuBarItemType = {
   children?: { label: string; url: string; description?: string; fullReload?: boolean }[];
 };
 
-export type HeaderNotificationsType = { [key: string]: number };
+export type HeaderNotificationsType = Record<string, number>;
 
 @Component({
   selector: 'theme-header',
@@ -53,7 +53,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   URLS: typeof URLS;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private authenticationStore: AuthenticationStore,
     private coockiesService: CookiesService

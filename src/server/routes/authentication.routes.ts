@@ -47,7 +47,7 @@ const confidentialClientConfig: Configuration = {
             severity: getLogLevel(logLevel),
             message: message
           });
-        } catch (error) {
+        } catch {
           // Ignore error
         }
       },

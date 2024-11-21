@@ -14,11 +14,11 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string; url: string; children?: { label: string; url: string; id?: string }[] }[] = [];
-  navHeading: string = 'Innovation Record sections';
-  showHeading: boolean = false;
-  isAllSectionsDetailsPage: boolean = false;
-  isInnovationRecordPage: boolean = false;
-  isInnovationInArchivedStatus: boolean = false;
+  navHeading = 'Innovation Record sections';
+  showHeading = false;
+  isAllSectionsDetailsPage = false;
+  isInnovationRecordPage = false;
+  isInnovationInArchivedStatus = false;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];

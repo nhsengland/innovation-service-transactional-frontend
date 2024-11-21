@@ -6,7 +6,7 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/ctx/notifications/notifications.types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 
 export enum NotificationPreferenceEnum {
@@ -68,9 +68,7 @@ export type NotificationsListOutDTO = {
   })[];
 };
 
-export type EmailNotificationPreferencesDTO = {
-  [category: string]: NotificationPreferenceEnum;
-};
+export type EmailNotificationPreferencesDTO = Record<string, NotificationPreferenceEnum>;
 
 @Injectable()
 export class NotificationsService extends CoreService {
@@ -417,24 +415,6 @@ export class NotificationsService extends CoreService {
           };
         })
       }))
-    );
-  }
-
-  dismissAllUserNotifications(): Observable<{ affected: number }> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { dismissAll: true }).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
-  deleteNotification(notificationId: string): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/notifications/:notificationId')
-      .setPathParams({ notificationId });
-    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
     );
   }
 

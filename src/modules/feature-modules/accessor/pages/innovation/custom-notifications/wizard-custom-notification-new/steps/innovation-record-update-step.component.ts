@@ -27,7 +27,7 @@ export class WizardInnovationCustomNotificationNewInnovationRecordUpdateStepComp
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<InnovationRecordUpdateStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<InnovationRecordUpdateStepOutputType>>();
 
-  errorMessage: string = "Select one or more sections of the innovation record you'd like to be notified about";
+  errorMessage = "Select one or more sections of the innovation record you'd like to be notified about";
 
   form = new FormGroup({
     innovationRecordSections: new FormArray<FormControl<string>>(

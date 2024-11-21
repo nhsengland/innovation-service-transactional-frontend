@@ -1,19 +1,18 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, computed, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ContextStore, CtxStore } from '@modules/stores';
-import { HeaderMenuBarItemType, HeaderNotificationsType } from '@modules/theme/components/header/header.component';
+import { CtxStore } from '@modules/stores';
+import { HeaderMenuBarItemType } from '@modules/theme/components/header/header.component';
 
 export type RoutesDataType = {
   module?: string; // TODO: To remove.
   header: {
     menuBarItems: { left: HeaderMenuBarItemType[]; right: HeaderMenuBarItemType[] };
-    notifications: HeaderNotificationsType;
   };
   breadcrumb?: string;
   layout?: {
@@ -31,21 +30,20 @@ export type RoutesDataType = {
   selector: 'theme-transactional-layout',
   templateUrl: './transactional-layout.component.html'
 })
-export class TransactionalLayoutComponent implements OnInit, OnDestroy {
+export class TransactionalLayoutComponent implements OnDestroy {
   private subscriptions = new Subscription();
 
   header: RoutesDataType['header'] = {
-    menuBarItems: { left: [], right: [] },
-    notifications: {}
+    menuBarItems: { left: [], right: [] }
   };
+  headerNotifications = computed(() => ({ notifications: this.ctx.notifications.unread() }));
 
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private contextStore: ContextStore,
     protected ctx: CtxStore
   ) {
     this.subscriptions.add(
@@ -58,24 +56,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
         .subscribe(e => this.onRouteChange(e))
     );
-  }
-
-  ngOnInit() {
-    this.subscriptions.add(
-      // We need to reassign the variable so that the component reacts to it.
-      this.contextStore.notifications$().subscribe(item => {
-        this.header.notifications = { notifications: item.UNREAD };
-      })
-    );
-
-    // this.subscriptions.add(
-    //   this.contextStore.innovation$().subscribe(e => {
-    //     Object.entries(e?.notifications || {}).forEach(([key, value]) => {
-    //       const leftSideMenu = this.leftSideBar.find(item => item.notificationKey === key);
-    //       if (leftSideMenu) { leftSideMenu.notifications = value; }
-    //     });
-    //   })
-    // );
   }
 
   ngOnDestroy(): void {
@@ -97,7 +77,6 @@ export class TransactionalLayoutComponent implements OnInit, OnDestroy {
     // console.log('RouteLayoutData', this.routeLayoutInfo);
 
     // if (this.header.menuBarItems.left.length > 0 || this.header.menuBarItems.right.length > 0) {
-    this.contextStore.updateUserUnreadNotifications();
     // }
 
     // Always reset focus to body.

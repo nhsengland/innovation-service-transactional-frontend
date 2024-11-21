@@ -17,17 +17,17 @@ export class GoToTopComponent implements OnInit {
     this.checkForFooter();
   }
 
-  backToTopIsVisible: boolean = false;
+  backToTopIsVisible = false;
 
   documentTotalHeight: number = document.documentElement.getBoundingClientRect().height;
 
-  footerHeight: number = 0;
-  scrolledAmount: number = 0;
-  viewportHeight: number = 0;
+  footerHeight = 0;
+  scrolledAmount = 0;
+  viewportHeight = 0;
 
   constructor(private scroller: ViewportScroller) {}
 
-  isAllSectionsDetailsPage: boolean = false;
+  isAllSectionsDetailsPage = false;
 
   ngOnInit(): void {
     this.scroller.setOffset([0, 20]);

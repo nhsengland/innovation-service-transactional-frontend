@@ -13,8 +13,6 @@ import { SharedModule } from '@modules/shared/shared.module';
 import {
   AuthenticationService,
   AuthenticationStore,
-  ContextService,
-  ContextStore,
   CtxStore,
   InnovationContextService,
   InnovationContextStore,
@@ -22,7 +20,9 @@ import {
   AssessmentContextService,
   SchemaContextStore,
   SchemaContextService,
-  LayoutContextStore
+  LayoutContextStore,
+  NotificationsContextStore,
+  NotificationsContextService
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -44,8 +44,6 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
       providers: [
         AuthenticationStore,
         AuthenticationService,
-        ContextStore,
-        ContextService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,
@@ -54,6 +52,8 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
         SchemaContextStore,
         SchemaContextService,
         LayoutContextStore,
+        NotificationsContextStore,
+        NotificationsContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });

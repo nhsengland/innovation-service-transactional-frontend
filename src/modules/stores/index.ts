@@ -5,10 +5,6 @@ export { StoresModule } from './stores.module';
 export { AuthenticationStore } from './authentication/authentication.store';
 export { AuthenticationService } from './authentication/authentication.service';
 
-// // Context Store.
-export { ContextStore } from './context/context.store';
-export { ContextService } from './context/context.service';
-
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
 // // Assessment
@@ -27,3 +23,6 @@ export { ContextSchemaType } from './ctx/schema/schema.types';
 // // Layout
 export { LayoutContextStore } from './ctx/layout/layout.store';
 export { ContextLayoutType } from './ctx/layout/layout.types';
+// // Notifications
+export { NotificationsContextStore } from './ctx/notifications/notifications.store';
+export { NotificationsContextService } from './ctx/notifications/notifications.service';

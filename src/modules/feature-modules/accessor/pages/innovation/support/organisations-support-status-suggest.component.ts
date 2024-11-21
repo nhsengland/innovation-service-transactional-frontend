@@ -42,12 +42,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     'Describe why you think this innovation would benefit from support from this organisation and click continue';
   notifyErrorMessage = 'Select an option and click confirm';
 
-  form: FormGroup<{
+  form = new FormGroup<{
     organisation: FormControl<null | string>;
     units?: FormArray<FormControl<string>>;
     comment: FormControl<null | string>;
     notify: FormControl<null | string>;
-  }> = new FormGroup(
+  }>(
     {
       organisation: new FormControl<null | string>(null, CustomValidators.required(this.organisationErrorMessage)),
       comment: new FormControl<string>('', CustomValidators.required(this.commentErrorMessage)),
@@ -56,7 +56,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     { updateOn: 'blur' }
   );
 
-  previousOrganisationsSuggestions: { [key: string]: string[] } = {};
+  previousOrganisationsSuggestions: Record<string, string[]> = {};
 
   organisations: OrganisationsListDTO[] = [];
   organisationsToSuggest: (OrganisationsListDTO & { description: string | undefined })[] = [];

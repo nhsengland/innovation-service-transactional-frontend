@@ -23,11 +23,11 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesSte
     selectedCategories: []
   };
 
-  form: FormGroup<{
+  form = new FormGroup<{
     oneLevelMilestoneCategories?: FormArray<FormControl<string>>;
     twoLevelMilestoneCategory?: FormControl<string | null>;
     otherCategory: FormControl<string | null>;
-  }> = new FormGroup({ otherCategory: new FormControl<string>('') });
+  }>({ otherCategory: new FormControl<string>('') });
 
   @Output() cancelEvent = new EventEmitter<WizardStepEventType<CategoriesStepOutputType>>();
   @Output() previousStepEvent = new EventEmitter<WizardStepEventType<CategoriesStepOutputType>>();

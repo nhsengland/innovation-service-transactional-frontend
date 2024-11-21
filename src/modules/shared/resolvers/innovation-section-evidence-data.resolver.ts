@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
-
 import { irVersionsClinicalMainCategoryItems } from '@modules/stores/innovation/innovation-record/ir-versions.config';
 import { CtxStore } from '@modules/stores';
 

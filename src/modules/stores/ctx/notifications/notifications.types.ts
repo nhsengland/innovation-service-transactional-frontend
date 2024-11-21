@@ -1,3 +1,11 @@
+import { BaseContextType } from '../ctx.types';
+
+// Store Types
+export type NotificationsContextType = {
+  unread: number;
+} & BaseContextType;
+
+// Notifications Catalog
 export enum NotificationCategoryTypeEnum {
   //TO DO: check the order for side menu
   NEEDS_ASSESSMENT = 'NEEDS_ASSESSMENT', // QA, A, NA, Innovator

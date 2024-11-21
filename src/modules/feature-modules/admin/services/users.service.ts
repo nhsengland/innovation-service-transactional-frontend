@@ -62,7 +62,7 @@ export class AdminUsersService extends CoreService {
     super();
   }
 
-  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
+  createUser(body: Record<string, any>): Observable<{ id: string }> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
@@ -153,7 +153,7 @@ export class AdminUsersService extends CoreService {
     );
   }
 
-  createVersion(body: { [key: string]: any }): Observable<{ id: string }> {
+  createVersion(body: Record<string, any>): Observable<{ id: string }> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

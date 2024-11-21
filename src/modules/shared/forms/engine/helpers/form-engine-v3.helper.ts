@@ -16,7 +16,7 @@ import { InnovationRecordMinMaxValidationType } from '@modules/stores/innovation
 export class FormEngineHelperV3 {
   static buildForm(
     parameters: FormEngineParameterModelV3[],
-    values: { [key: string]: any } = {},
+    values: Record<string, any> = {},
     formValidations?: ValidatorFn[]
   ): FormGroup {
     const inputParameters = parameters;
@@ -69,9 +69,9 @@ export class FormEngineHelperV3 {
         case 'fields-group':
           form.addControl(parameter.id, new FormArray([]));
 
-          let arrayValue: { [key: string]: any }[];
+          let arrayValue: Record<string, any>[];
           if (Array.isArray(parameterValue)) {
-            arrayValue = parameterValue as { [key: string]: any }[];
+            arrayValue = parameterValue as Record<string, any>[];
           } else {
             arrayValue = [];
           }
@@ -154,7 +154,7 @@ export class FormEngineHelperV3 {
     return form;
   }
 
-  static addFieldGroupRow(parameter: FormEngineParameterModelV3, value?: { [key: string]: any }): FormGroup {
+  static addFieldGroupRow(parameter: FormEngineParameterModelV3, value?: Record<string, any>): FormGroup {
     const formGroup = new FormGroup({});
 
     if (parameter.field) {
@@ -185,8 +185,8 @@ export class FormEngineHelperV3 {
   static getFormValues(
     form: FormGroup,
     parameters: FormEngineParameterModelV3[]
-  ): { valid: boolean; data: { [key: string]: any } } {
-    const returnForm: { valid: boolean; data: { [key: string]: any } } = { valid: form.valid, data: {} };
+  ): { valid: boolean; data: Record<string, any> } {
+    const returnForm: { valid: boolean; data: Record<string, any> } = { valid: form.valid, data: {} };
 
     Object.keys(form.getRawValue()).forEach(key => {
       // getRawValues is needed to return also disabled fields!
@@ -196,8 +196,8 @@ export class FormEngineHelperV3 {
     return returnForm;
   }
 
-  static getErrors(form: FormGroup): { [key: string]: string | null } {
-    let result: { [key: string]: string | null } = {};
+  static getErrors(form: FormGroup): Record<string, string | null> {
+    let result: Record<string, string | null> = {};
 
     Object.keys(form.controls).forEach(key => {
       const formProperty = form.get(key) || null;
@@ -218,7 +218,7 @@ export class FormEngineHelperV3 {
     return result;
   }
 
-  static getValidationMessage(error: ValidationErrors | null): { message: string; params: { [key: string]: string } } {
+  static getValidationMessage(error: ValidationErrors | null): { message: string; params: Record<string, string> } {
     if (!error || Object.keys(error).length === 0) {
       // if empty!
       return { message: '', params: {} };

@@ -86,7 +86,7 @@ export class EnvironmentVariablesStore {
       } else {
         /* istanbul ignore next */
         const browserEnv: Omit<envVariablesType, 'LOG_LEVEL'> & { LOG_LEVEL: keyof typeof NgxLoggerLevel } =
-          window && (window as any).__env ? (window as { [key: string]: any }).__env : {};
+          window && (window as any).__env ? (window as Record<string, any>).__env : {};
 
         this.environment = {
           BASE_URL: browserEnv.BASE_URL,

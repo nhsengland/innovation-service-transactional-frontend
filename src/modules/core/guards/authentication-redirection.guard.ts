@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { ContextStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
@@ -11,7 +11,7 @@ export class AuthenticationRedirectionGuard {
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
     private authentication: AuthenticationStore,
-    private contextStore: ContextStore
+    private ctx: CtxStore
   ) {}
 
   canActivate(activatedRouteSnapshot: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
@@ -30,7 +30,7 @@ export class AuthenticationRedirectionGuard {
     }
 
     if (dismissNotification) {
-      this.contextStore.dismissUserNotification({ notificationIds: [dismissNotification] });
+      this.ctx.notifications.dismiss({ notificationIds: [dismissNotification] });
     }
 
     if (
@@ -71,6 +71,7 @@ export class AuthenticationRedirectionGuard {
     }
 
     if (pathSegment === this.authentication.userUrlBasePath()) {
+      this.ctx.notifications.fetchUnread$.next();
       return true;
     } else {
       this.router.navigateByUrl(this.authentication.userUrlBasePath());

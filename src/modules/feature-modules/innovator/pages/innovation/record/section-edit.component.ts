@@ -22,7 +22,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   @ViewChild(FormEngineV3Component) formEngineComponent?: FormEngineV3Component;
 
   alertErrorsList: { title: string; description: string }[] = [];
-  errorOnSubmitStep: boolean = false;
+  errorOnSubmitStep = false;
 
   innovation: ContextInnovationType;
   isArchived: boolean;
@@ -36,9 +36,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
-  isChangeMode: boolean = false;
+  isChangeMode = false;
 
-  sectionSubmittedText: string = '';
+  sectionSubmittedText = '';
 
   displayChangeButtonList: number[] = [];
 
@@ -167,7 +167,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       return;
     }
 
-    let currentStepIndex = this.wizard.currentStepId;
+    const currentStepIndex = this.wizard.currentStepId;
 
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {

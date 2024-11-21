@@ -32,7 +32,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   isAccessorType: boolean;
   isAdmin: boolean;
   isInnovationSubmitted: boolean;
-  canCreateThread: boolean = false;
+  canCreateThread = false;
   isArchived: boolean;
   isInAssessment: boolean;
 

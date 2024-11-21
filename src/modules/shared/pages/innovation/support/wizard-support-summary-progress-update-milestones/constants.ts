@@ -1,13 +1,14 @@
-export type Milestones = {
-  [orgAcronym: string]: {
+export type Milestones = Record<
+  string,
+  {
     name: string;
     description: string;
     subcategories?: {
       name: string;
       description: string;
     }[];
-  }[];
-};
+  }[]
+>;
 
 export const SUPPORT_SUMMARY_MILESTONES: Milestones = {
   'NHS-SC': [

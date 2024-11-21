@@ -30,7 +30,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       }) = null;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
 
-  isInnovatorSelected: boolean = false;
+  isInnovatorSelected = false;
 
   summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
 

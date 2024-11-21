@@ -32,7 +32,7 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   @Input() pageUniqueField = true;
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   cssClass = '';
 

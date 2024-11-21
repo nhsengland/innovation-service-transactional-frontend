@@ -24,7 +24,7 @@ export class WizardInnovationCustomNotificationNewOrganisationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
 
-  errorMessage: string = "Select organisations you'd like to be notified about";
+  errorMessage = "Select organisations you'd like to be notified about";
 
   form = new FormGroup({
     organisations: new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray(this.errorMessage)])

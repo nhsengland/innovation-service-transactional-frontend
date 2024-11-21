@@ -35,10 +35,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     engagingAccessors: { name: string }[];
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED, engagingAccessors: [] };
 
-  isInProgress: boolean = false;
-  isInAssessment: boolean = false;
-  isArchived: boolean = false;
-  showCards: boolean = false;
+  isInProgress = false;
+  isInAssessment = false;
+  isArchived = false;
+  showCards = false;
   showStartSupport = false;
   changeSupportUrlNewOrSupport: string | 'new' | undefined;
 

@@ -290,10 +290,7 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  getInnovationProgress(
-    innovationId: string,
-    filterInnovationId: boolean = false
-  ): Observable<KeyProgressAreasPayloadType> {
+  getInnovationProgress(innovationId: string, filterInnovationId = false): Observable<KeyProgressAreasPayloadType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/progress')
       .setPathParams({ innovationId });
@@ -332,9 +329,7 @@ export class InnovationsService extends CoreService {
   getInnovationRules(
     innovationId: string,
     operation: InnovationValidationRules,
-    inputData: {
-      [name: string]: string;
-    }
+    inputData: Record<string, string>
   ): Observable<InnovationRulesDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/validate')

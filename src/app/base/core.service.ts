@@ -8,7 +8,6 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { ContextStore } from '@modules/stores/context/context.store';
 import { ContextLayoutType, CtxStore } from '@modules/stores';
 
 @Injectable()
@@ -21,7 +20,6 @@ export class CoreService {
 
   protected stores: {
     authentication: AuthenticationStore;
-    context: ContextStore;
   };
 
   protected ctx: CtxStore;
@@ -42,7 +40,6 @@ export class CoreService {
 
     this.stores = {
       authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore)
     };
 
     this.ctx = injector.get(CtxStore);

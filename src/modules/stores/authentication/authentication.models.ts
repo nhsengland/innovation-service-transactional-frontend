@@ -5,7 +5,7 @@ import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEn
 import { PhoneUserPreferenceEnum } from './authentication.service';
 
 export class AuthenticationModel {
-  isSignIn: boolean = false;
+  isSignIn = false;
 
   userContext?: {
     id: string;
@@ -28,7 +28,7 @@ export class AuthenticationModel {
     termsOfUseAccepted: boolean;
     hasInnovationTransfers: boolean;
     hasInnovationCollaborations: boolean;
-    hasLoginAnnouncements: { [k: string]: boolean };
+    hasLoginAnnouncements: Record<string, boolean>;
     passwordResetAt: null | DateISOType;
     passwordChangeSinceLastSignIn?: boolean;
     firstTimeSignInAt: null | DateISOType;

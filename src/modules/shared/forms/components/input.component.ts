@@ -50,7 +50,7 @@ export class FormInputComponent extends ControlValueAccessorComponent implements
   private fieldChangeSubscription = new Subscription();
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   lengthLimitCharacters?: number;
   currentAvailableCharacters?: number;

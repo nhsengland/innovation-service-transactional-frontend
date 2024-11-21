@@ -11,7 +11,7 @@ import {
   NANotificationCategories,
   NotificationCategoryTypeEnum,
   QANotificationCategories
-} from '@modules/stores/context/context.enums';
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
@@ -31,7 +31,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
-  isAccessorType: boolean = false;
+  isAccessorType = false;
 
   constructor(private notificationsService: NotificationsService) {
     super();
@@ -117,7 +117,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
       return;
     }
 
-    this.stores.context.dismissUserNotification({ notificationIds: [notificationId] });
+    this.ctx.notifications.dismiss({ notificationIds: [notificationId] });
 
     if (url) {
       // Stop event propagation to avoid triggering the href link
@@ -131,14 +131,13 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     }
   }
 
-  onDeleteNotification(notificationId: string): void {
+  onDeleteNotification(notificationId: string, readAt: null | string): void {
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.deleteNotification(notificationId).subscribe({
+    this.ctx.notifications.delete$(notificationId, !!readAt).subscribe({
       next: () => {
         this.setAlertSuccess('Notification successfully cleared');
-        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
       error: error => {
@@ -152,10 +151,9 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.resetAlert();
     this.setPageStatus('LOADING');
 
-    this.notificationsService.dismissAllUserNotifications().subscribe({
+    this.ctx.notifications.dismissAll$().subscribe({
       next: response => {
         this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read`);
-        this.stores.context.updateUserUnreadNotifications();
         this.getNotificationsList();
       },
       error: () => {
