@@ -16,6 +16,8 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -71,6 +73,8 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       documentsList: InnovationDocumentsListOutDTO['data'];
     }
   > = {};
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -217,6 +221,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }
 
       this.setSectionsStatistics(summary);
+
+      this.customNotificationLinks = [
+        {
+          label: 'Notify me when this innovation record is updated',
+          action: NotificationEnum.INNOVATION_RECORD_UPDATED
+        }
+      ];
 
       this.setPageStatus('READY');
 

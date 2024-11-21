@@ -66,7 +66,7 @@ export const locale = {
         plural: 'documents'
       },
       notification: {
-        none: 'notification',
+        none: 'notifications',
         singular: 'notification',
         plural: 'notifications'
       },
