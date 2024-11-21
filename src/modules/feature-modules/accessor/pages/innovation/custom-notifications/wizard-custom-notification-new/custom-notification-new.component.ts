@@ -346,17 +346,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           this.manageWizardSteps(this.entrypointAction);
 
           // go to step according to selection
-          switch (this.entrypointAction) {
-            case NotificationEnum.SUPPORT_UPDATED:
-            case NotificationEnum.PROGRESS_UPDATE_CREATED:
-              this.onGoToStep('organisationsStep');
-              break;
-            case NotificationEnum.INNOVATION_RECORD_UPDATED:
-              this.onGoToStep('innovationRecordUpdateStep');
-              break;
-            case NotificationEnum.DOCUMENT_UPLOADED:
-              this.onGoToStep('documentStep');
-          }
+          this.goToEntryPointActionStep(this.entrypointAction);
         } else {
           // Add notification step if editMode is false
           this.wizard.addStep(this.stepsDefinition.notificationStep);
@@ -369,6 +359,20 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         this.setAlertUnknownError();
       }
     });
+  }
+
+  private goToEntryPointActionStep(action: NotificationEnum) {
+    switch (action) {
+      case NotificationEnum.SUPPORT_UPDATED:
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        this.onGoToStep('organisationsStep');
+        break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.onGoToStep('innovationRecordUpdateStep');
+        break;
+      case NotificationEnum.DOCUMENT_UPLOADED:
+        this.onGoToStep('documentStep');
+    }
   }
 
   setWizardDataWithCurrentSubscriptionInfo() {

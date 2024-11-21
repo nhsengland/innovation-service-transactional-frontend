@@ -105,9 +105,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="isAccessorType">
-      <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
-    </ng-container>
+    <theme-custom-notifications-entrypoint-component *ngIf="isAccessorType" [links]="customNotificationLinks" />
 
     <ng-container
       *ngIf="

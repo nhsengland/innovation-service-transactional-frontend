@@ -148,10 +148,6 @@
           </table>
         </div>
 
-        <ng-container *ngIf="isAccessorType">
-          <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
-        </ng-container>
-
         <div class="nhsuk-u-padding-bottom-4">
           <theme-pagination
             [currentPage]="tableList.page"
@@ -166,5 +162,9 @@
     <ng-template #noDocsEmptyState>
       <p>No documents were uploaded yet.</p>
     </ng-template>
+
+    <ng-container *ngIf="isAccessorType">
+      <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
+    </ng-container>
   </div>
 </div>

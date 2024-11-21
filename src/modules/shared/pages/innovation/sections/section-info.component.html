@@ -162,9 +162,7 @@
         </button>
       </ng-container>
 
-      <ng-container *ngIf="isAccessorType">
-        <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
-      </ng-container>
+      <theme-custom-notifications-entrypoint-component *ngIf="isAccessorType" [links]="customNotificationLinks" />
 
       <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
         <ul class="nhsuk-list nhsuk-pagination__list">
