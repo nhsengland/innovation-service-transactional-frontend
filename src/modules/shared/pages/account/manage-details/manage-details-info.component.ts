@@ -68,11 +68,6 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
         ...(organisation ? [{ label: 'Organisation', value: organisation }] : []),
         { label: 'Service roles', value: roles }
       ];
-    } else if (this.stores.authentication.isAssessmentType()) {
-      this.summaryList = [
-        { label: 'Name', value: user.displayName, editStepNumber: 1 },
-        { label: 'Email address', value: user.email }
-      ];
     } else if (this.stores.authentication.isAdminRole()) {
       this.summaryList = [
         { label: 'Name', value: user.displayName, editStepNumber: 1 },

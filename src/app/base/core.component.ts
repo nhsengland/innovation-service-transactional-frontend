@@ -333,14 +333,14 @@ export class CoreComponent implements OnDestroy {
   decodeQueryParams(queryParams: MappedObjectType): MappedObjectType {
     const o: MappedObjectType = {};
 
-    for (let [key, value] of Object.entries(queryParams)) {
-      value = decodeURIComponent(value);
-      value = this.decodeInfo(value);
+    for (const [key, value] of Object.entries(queryParams)) {
+      let decodedValue = decodeURIComponent(value);
+      decodedValue = this.decodeInfo(decodedValue);
 
       try {
-        o[key] = JSON.parse(value);
+        o[key] = JSON.parse(decodedValue);
       } catch {
-        o[key] = value;
+        o[key] = decodedValue;
       }
     }
 

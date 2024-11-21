@@ -72,14 +72,18 @@ export class WizardIRV3EngineModel {
   }
 
   getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
-    return new Map(
-      this.schema?.schema.sections
-        .flatMap(s => s.subSections)
-        .find(s => s.id === this.sectionId)
-        ?.steps.flatMap(st => st.questions)
-        .filter(q => q.items?.some(i => i.itemsFromAnswer))
-        .map(i => [i.id, i.items?.find(item => item.itemsFromAnswer)!.itemsFromAnswer!])
-    );
+    const mapEntries = this.schema?.schema.sections
+      .flatMap(s => s.subSections)
+      .find(s => s.id === this.sectionId)
+      ?.steps.flatMap(st => st.questions)
+      .filter(q => q.items?.some(i => i.itemsFromAnswer))
+      .map(i => {
+        const itemWithAnswer = i.items?.find(item => item.itemsFromAnswer);
+        return itemWithAnswer ? [i.id, itemWithAnswer.itemsFromAnswer] : undefined;
+      })
+      .filter((entry): entry is [string, string] => entry !== undefined); // Filter out undefined entries
+
+    return new Map(mapEntries);
   }
 
   isFirstStep(): boolean {
@@ -265,7 +269,7 @@ export class WizardIRV3EngineModel {
   }
 
   translateDescriptionUrls(description: string) {
-    const regex = new RegExp(/href=\"{{urls\.([^{}]*)}}\"/, 'g');
+    const regex = new RegExp(/href="{{urls\.([^{}]*)}}"/, 'g');
     const matches = description.matchAll(regex);
 
     for (const match of matches) {
@@ -465,9 +469,6 @@ export class WizardIRV3EngineModel {
           case 'radio-group':
             const stepAnswers = currentAnswers[stepParams.id];
             value = stepAnswers;
-
-            if (!stepParams.parentId) {
-            }
 
             // add if conditional field and answer is present
             const itemWithConditional = stepParams.items?.find(i => i.conditional);

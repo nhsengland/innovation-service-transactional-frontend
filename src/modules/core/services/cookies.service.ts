@@ -86,9 +86,7 @@ export class CookiesService {
     // Add analytics scripts to header.
 
     if (isPlatformBrowser(this.platformId)) {
-      let element: HTMLElement | null;
-
-      element = document.getElementById('hj-analytics');
+      const element = document.getElementById('hj-analytics');
       /* istanbul ignore next */
       element?.parentNode?.removeChild(element);
     }
