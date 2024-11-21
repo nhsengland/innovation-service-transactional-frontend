@@ -48,7 +48,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationProgress: KeyProgressAreasPayloadType | undefined = undefined;
 
-  customNotificationsAmount: number = 0;
+  customNotificationsAmount = 0;
 
   constructor(
     private activatedRoute: ActivatedRoute,
