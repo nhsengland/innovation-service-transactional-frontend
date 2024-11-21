@@ -97,10 +97,11 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
 
     this.resetAlert();
 
-    const dateString = `${this.form.value.date?.year!}-${this.form.value.date?.month!}-${this.form.value.date?.day!}`;
+    const date = this.form.value.date ?? { year: 0, month: 0, day: 0 };
+    const dateString = `${date.year}-${date.month}-${date.day}`;
 
     const data = {
-      unitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id!,
+      unitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '',
       date: dateString
     };
 

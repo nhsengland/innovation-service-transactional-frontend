@@ -26,7 +26,7 @@
       </div>
 
       <ng-container *ngIf="entryPointIsManageInnovation; else entryPointIsNotManageInnovation">
-        <a class="nhsuk-action-link__link" (click)="onNextStep()">
+        <a class="nhsuk-action-link__link" (click)="onNextStep()" href="javascript:void(0)">
           <theme-svg-icon type="arrow-right-circle"></theme-svg-icon>
           <span class="nhsuk-action-link__text">Archive this innovation</span>
         </a>

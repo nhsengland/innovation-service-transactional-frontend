@@ -97,7 +97,7 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
           this.user.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR
             ? AccessorOrganisationRoleEnum.ACCESSOR
             : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
-        organisationId: this.user.roles[0].organisation?.id!
+        organisationId: this.user.roles[0].organisation?.id ?? ''
       }
     };
 

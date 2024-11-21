@@ -39,7 +39,7 @@ export class CoreService {
     this.logger = injector.get(NGXLogger);
 
     this.stores = {
-      authentication: injector.get(AuthenticationStore),
+      authentication: injector.get(AuthenticationStore)
     };
 
     this.ctx = injector.get(CtxStore);

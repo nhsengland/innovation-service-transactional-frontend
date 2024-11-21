@@ -151,8 +151,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           });
           organisation?.markAsTouched();
         } else {
-          const chosenOrganisation = this.organisationsToSuggest.find(org => org.id === organisation?.value!)!;
+          const organisationValue = organisation.value;
+          const chosenOrganisation = this.organisationsToSuggest.find(org => org.id === organisationValue);
 
+          if (!chosenOrganisation) {
+            throw new Error('Chosen organisation not found in organisationsToSuggest.');
+          }
           this.chosenUnits.organisation = {
             name: chosenOrganisation.name,
             acronym: chosenOrganisation.acronym,
@@ -160,7 +164,13 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           };
 
           // Count total number of units inside organisation
-          const totalUnits = this.organisations.find(org => org.id === organisation?.value!)!.organisationUnits.length;
+          const organisationData = this.organisations.find(org => org.id === organisationValue);
+
+          if (!organisationData) {
+            throw new Error('Organisation not found in organisations list.');
+          }
+
+          const totalUnits = organisationData.organisationUnits?.length || 0;
 
           const units = this.form.get('units');
           if (totalUnits > 1) {
@@ -215,7 +225,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             .organisationUnits.filter(unit => units?.value?.includes(unit.id))
             .map(unit => unit.name);
 
-          this.chosenUnits.values = units?.value!;
+          this.chosenUnits.values = units?.value ?? [];
 
           this.stepNumber++;
         }

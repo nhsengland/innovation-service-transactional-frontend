@@ -7,7 +7,11 @@ const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommen
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
 module.exports = tseslint.config(
   {
-    files: ["src/test.ts"],
+    //This ignore is redudant when using npm run lint, but is necessary when running npx eslint --fix and other eslint direct commands
+    ignores: ["dist/app/"]
+  },
+  {
+    files: ["**/*.ts"],
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
@@ -43,15 +47,14 @@ module.exports = tseslint.config(
       "@angular-eslint/component-selector": "warn",
       "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
-      "max-statements": "warn",
-      complexity: "warn",
       "no-case-declarations": "warn",
       "@typescript-eslint/no-unused-expressions": "warn",
-      "@typescript-eslint/no-empty-object-type": "warn"
+      "@typescript-eslint/no-empty-object-type": "warn",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "warn"
     }
   },
   {
-    files: ["src/app/app.component.html"],
+    files: ["**/*.html"],
     extends: [...angular.configs.templateRecommended, ...angular.configs.templateAccessibility],
     rules: {}
   }

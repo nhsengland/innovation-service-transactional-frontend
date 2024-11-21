@@ -50,12 +50,16 @@ export class UrlModel {
           // If it is possibly an object
           try {
             this.queryParams[key] = JSON.parse(value) as Record<string, any>;
-          } catch (error) {}
+          } catch {
+            console.error(`Error parsing queryParam ${key} with value ${value}`);
+          }
         } else {
           this.queryParams[key] = value;
         }
       });
-    } catch (error) {}
+    } catch {
+      console.error(`Error parsing URL: ${s}`);
+    }
   }
 
   setProtocol(protocol: string): UrlModel {

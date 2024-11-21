@@ -108,6 +108,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   stepsDefinition: Record<string, WizardStepModel>;
 
+  entrypointAction: NotificationEnum | undefined = undefined;
+
   constructor(
     private organisationsService: OrganisationsService,
     private accessorService: AccessorService,
@@ -305,6 +307,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
     forkJoin(subscriptions).subscribe({
       next: response => {
+        this.entrypointAction = this.router.lastSuccessfulNavigation?.extras.state
+          ?.customNotificationAction as NotificationEnum;
+
         // Get organisations information
         this.datasets.organisations = response.organisationsList.map(o => {
           const org = {
@@ -331,6 +336,17 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
           this.manageWizardSteps(this.wizard.data.notificationStep.notification);
           this.onGoToStep('summaryStep');
+        } else if (this.entrypointAction) {
+          // set pre-selected option, from external entrypoint
+          this.wizard.data.notificationStep = {
+            notification: this.entrypointAction
+          };
+
+          // set steps according to selection
+          this.manageWizardSteps(this.entrypointAction);
+
+          // go to step according to selection
+          this.goToEntryPointActionStep(this.entrypointAction);
         } else {
           // Add notification step if editMode is false
           this.wizard.addStep(this.stepsDefinition.notificationStep);
@@ -343,6 +359,20 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         this.setAlertUnknownError();
       }
     });
+  }
+
+  private goToEntryPointActionStep(action: NotificationEnum) {
+    switch (action) {
+      case NotificationEnum.SUPPORT_UPDATED:
+      case NotificationEnum.PROGRESS_UPDATE_CREATED:
+        this.onGoToStep('organisationsStep');
+        break;
+      case NotificationEnum.INNOVATION_RECORD_UPDATED:
+        this.onGoToStep('innovationRecordUpdateStep');
+        break;
+      case NotificationEnum.DOCUMENT_UPLOADED:
+        this.onGoToStep('documentStep');
+    }
   }
 
   setWizardDataWithCurrentSubscriptionInfo() {
@@ -645,7 +675,10 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     // If some selected organisation has more than one unit, add units step.
     // Otherwise, remove
     if (selectedOrganisationsHaveUnits) {
-      this.wizard.addStep(this.stepsDefinition.unitsStep, 2 - Number(this.isEditMode));
+      this.wizard.addStep(
+        this.stepsDefinition.unitsStep,
+        2 - Number(this.isEditMode || this.entrypointAction !== undefined)
+      );
     } else {
       this.wizard.removeStep('unitsStep');
       this.wizard.data.unitsStep.units = [];
@@ -764,7 +797,8 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
   private redirectInnovationCustomNotifications(): void {
     this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`
+      this.ctx.layout.previousUrl() ??
+        `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`
     );
   }
 }

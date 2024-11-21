@@ -1,7 +1,19 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 
-import { debounceTime, filter, Observable, of, Subject, switchMap, take, tap } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  debounceTime,
+  filter,
+  Observable,
+  of,
+  Subject,
+  switchMap,
+  take,
+  tap,
+  throwError
+} from 'rxjs';
 import { ContextSchemaType, EMPTY_SCHEMA_CONTEXT, IrSchemaTranslatorMapType } from './schema.types';
 import { SchemaContextService } from './schema.service';
 import { SectionStepsList } from '@modules/shared/pages/innovation/sections/section-summary.component';
@@ -37,6 +49,8 @@ export class SchemaContextStore {
 
   isStateLoaded = computed(() => this.state().isStateLoaded);
   isStateLoaded$ = toObservable(this.isStateLoaded);
+  hasError = computed(() => this.state().error);
+  hasError$ = toObservable(this.hasError);
 
   // Actions
   fetch$ = new Subject<void>();
@@ -47,17 +61,26 @@ export class SchemaContextStore {
       .pipe(
         debounceTime(50),
         tap(() => {
-          this.state.update(state => ({ ...state, isStateLoaded: false }));
+          this.state.update(state => ({ ...state, isStateLoaded: false, error: undefined }));
         }),
-        switchMap(() => this.schemaService.getLatestSchema())
+        switchMap(() =>
+          this.schemaService.getLatestSchema().pipe(
+            catchError(error => {
+              this.state.update(state => ({ ...state, error }));
+              return of(null);
+            })
+          )
+        )
       )
       .subscribe(irSchema => {
-        this.state.set({ irSchema, expiresAt: Date.now() + EXPIRATION_IN_MS, isStateLoaded: true });
+        if (irSchema) {
+          this.state.set({ irSchema, expiresAt: Date.now() + EXPIRATION_IN_MS, isStateLoaded: true });
+        }
       });
   }
 
   clear(): void {
-    this.state.update(() => ({ irSchema: EMPTY_SCHEMA_CONTEXT, expiresAt: 0, isStateLoaded: false }));
+    this.state.update(() => ({ irSchema: EMPTY_SCHEMA_CONTEXT, expiresAt: 0, isStateLoaded: false, error: undefined }));
   }
 
   getOrLoad$(): Observable<ContextSchemaType['irSchema']> {
@@ -67,9 +90,14 @@ export class SchemaContextStore {
     }
 
     this.fetch$.next();
-    return this.isStateLoaded$.pipe(
-      filter(() => this.state().isStateLoaded),
-      switchMap(() => of(this.irSchemaInfo())),
+    return combineLatest([this.isStateLoaded$, this.hasError$]).pipe(
+      filter(() => this.isStateLoaded() || this.hasError() !== undefined),
+      switchMap(() => {
+        if (this.hasError()) {
+          return throwError(() => this.hasError());
+        }
+        return of(this.irSchemaInfo());
+      }),
       take(1)
     );
   }

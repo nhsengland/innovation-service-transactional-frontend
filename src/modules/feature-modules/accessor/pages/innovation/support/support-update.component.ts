@@ -96,11 +96,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
   };
 
-  private messageStatusUpdated: {
-    [key in InnovationSupportStatusEnum]?:
-      | { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] }
-      | undefined;
-  };
+  private messageStatusUpdated: Partial<
+    Record<
+      InnovationSupportStatusEnum,
+      { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] } | undefined
+    >
+  >;
 
   constructor(
     private activatedRoute: ActivatedRoute,

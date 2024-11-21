@@ -1,11 +1,11 @@
 <div class="nhsuk-form-group">
-  <label class="nhsuk-label">
+  <label class="nhsuk-label" [attr.for]="id">
     {{ label }}
   </label>
 
-  <select class="nhsuk-select" id="{{ id }}" [(ngModel)]="selectedField" (change)="this.onChangeSelect()" attr.aria-label="{{ label }}">
+  <select class="nhsuk-select" [id]="id" [(ngModel)]="selectedField" (change)="onChangeSelect()" [attr.aria-label]="label">
     <option *ngFor="let item of selectList" [ngValue]="item.key">
-      <span>{{ item.text }}</span>
+      {{ item.text }}
     </option>
   </select>
 </div>

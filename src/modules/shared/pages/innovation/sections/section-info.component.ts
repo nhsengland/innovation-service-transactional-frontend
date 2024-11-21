@@ -17,6 +17,8 @@ import {
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
 
 export type SectionInfoType = {
   id: string;
@@ -66,6 +68,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   shouldShowDocuments = false;
 
   search?: string;
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -221,6 +225,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.getPreviousAndNextPagination();
 
       this.sectionSummaryData.documentsList = documents?.data ?? [];
+
+      this.customNotificationLinks = [
+        {
+          label: 'Notify me when this section of the innovation record is updated',
+          action: NotificationEnum.INNOVATION_RECORD_UPDATED
+        }
+      ];
 
       this.setPageStatus('READY');
     });
