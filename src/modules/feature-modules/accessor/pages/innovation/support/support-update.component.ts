@@ -40,7 +40,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   disabledCheckboxAccessors: string[] = [];
 
   selectAccessorsStepLabel = '';
-  selectAccessorsStepLabel = '';
 
   availableSupportStatuses: string[];
 

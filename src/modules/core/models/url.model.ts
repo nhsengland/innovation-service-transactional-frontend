@@ -5,8 +5,6 @@ export class UrlModel {
   private path: string;
   private pathParams: Record<string, string | number>;
   private queryParams: Record<string, any>;
-  private pathParams: Record<string, string | number>;
-  private queryParams: Record<string, any>;
 
   constructor(url?: string) {
     this.protocol = 'http';
