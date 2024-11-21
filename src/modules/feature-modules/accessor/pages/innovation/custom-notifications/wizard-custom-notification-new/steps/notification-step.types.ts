@@ -27,11 +27,11 @@ export const NOTIFICATION_ITEMS: Notification[] = [
     category: CategoryEnum.NOTIFIY_ME_WHEN,
     label: 'the innovator updates their innovation record'
   },
-  /*   {
+  {
     type: NotificationEnum.DOCUMENT_UPLOADED,
     category: CategoryEnum.NOTIFIY_ME_WHEN,
     label: 'a new document is uploaded'
-  }, */
+  },
   {
     type: NotificationEnum.REMINDER,
     category: CategoryEnum.REMIND_ME,

@@ -153,14 +153,16 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data),
-          nextStepEvent: data =>
+          nextStepEvent: data => {
             this.onNextStep(
               data,
               this.onNotificationStepOut,
               this.onOrganisationsStepIn,
               this.onInnovationRecordUpdateStepIn,
               this.onReminderStepIn
-            )
+            );
+            this.onSummaryStepIn();
+          }
         }
       }),
       organisationsStep: new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
@@ -275,6 +277,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           previousStepEvent: data =>
             this.onPreviousStep(
               data,
+              this.onNotificationStepIn,
               this.onOrganisationsStepIn,
               this.onUnitsStepIn,
               this.onSupportStatusesStepIn,
@@ -554,7 +557,11 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
     if (this.wizard.isFirstStep()) {
       if (this.isEditMode) {
-        this.onGoToStep('summaryStep');
+        if (this.wizard.steps.length === 1) {
+          this.redirectInnovationCustomNotifications();
+        } else {
+          this.onGoToStep('summaryStep');
+        }
       } else {
         this.redirectInnovationCustomNotifications();
       }
@@ -640,6 +647,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         break;
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         this.setWizardSteps([this.stepsDefinition.innovationRecordUpdateStep, this.stepsDefinition.summaryStep]);
+        break;
+      case NotificationEnum.DOCUMENT_UPLOADED:
+        this.setWizardSteps([this.stepsDefinition.summaryStep]);
         break;
       case NotificationEnum.REMINDER:
         this.setWizardSteps([
@@ -746,6 +756,12 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           preConditions: {
             ...(!selectedSections.includes('ALL') && { sections: this.getSelectedSections() as string[] })
           }
+        };
+        break;
+      case NotificationEnum.DOCUMENT_UPLOADED:
+        body = {
+          eventType: NotificationEnum.DOCUMENT_UPLOADED,
+          subscriptionType: 'INSTANTLY'
         };
         break;
       case NotificationEnum.REMINDER:

@@ -933,7 +933,7 @@ export const locale = {
               link: `View this section of the innovation record.`
             },
             DOCUMENT_UPLOADED: {
-              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}.`,
+              title: `A new document, titled "{{ documentName }}", has been uploaded to innovation {{ innovationName }}.`,
               link: `View documents.`
             },
             REMINDER: {
