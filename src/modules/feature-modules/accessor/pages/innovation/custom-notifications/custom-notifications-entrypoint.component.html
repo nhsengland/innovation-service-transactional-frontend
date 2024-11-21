@@ -3,7 +3,9 @@
   <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-2">
     @for (item of links; track $index) {
       <li>
-        <a href="javascript:void(0)" (click)="onNotify(item.action)">{{ item.label }}</a>
+        <p>
+          <a href="javascript:void(0)" (click)="onNotify(item.action)">{{ item.label }}</a>
+        </p>
       </li>
     }
     <li>

@@ -105,6 +105,10 @@
       </div>
     </ng-container>
 
+    <ng-container *ngIf="isAccessorType">
+      <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
+    </ng-container>
+
     <ng-container
       *ngIf="
         (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
@@ -112,10 +116,6 @@
       "
     >
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
-    </ng-container>
-
-    <ng-container *ngIf="!isAccessorType">
-      <theme-custom-notifications-entrypoint-component [links]="customNotificationLinks" />
     </ng-container>
 
     <div
