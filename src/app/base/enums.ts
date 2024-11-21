@@ -9,7 +9,10 @@ export {
 export { TermsOfUseTypeEnum } from '@modules/stores/authentication/authentication.enums';
 
 // Environment store.
-export { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+export {
+  NotificationCategoryTypeEnum,
+  NotificationContextDetailEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 export { InnovationErrorsEnum } from '@modules/shared/enums/innovation-errors.enum';
 export { OrganisationErrorsEnum } from '@modules/shared/enums/organisation-errors.enum';

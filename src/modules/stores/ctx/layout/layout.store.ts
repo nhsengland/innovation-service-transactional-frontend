@@ -12,6 +12,7 @@ export class LayoutContextStore {
   // Selectors
   status = computed(() => this.state().status);
   title = computed(() => this.state().title);
+  pageTitle = computed(() => this.title()?.main ?? '');
   alert = computed(() => this.state().alert);
   backLink = computed(() => this.state().backLink);
   previousUrl = computed(() => this.state().previousUrl);

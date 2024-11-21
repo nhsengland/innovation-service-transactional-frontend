@@ -7,7 +7,10 @@ import { of } from 'rxjs';
 import { CoreModule, AppInjector } from '@modules/core';
 import { AuthenticationStore, StoresModule, InnovationStatusEnum } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import {
+  NotificationContextDetailEnum,
+  NotificationCategoryTypeEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 

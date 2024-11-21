@@ -11,7 +11,7 @@ import {
   NANotificationCategories,
   NotificationCategoryTypeEnum,
   QANotificationCategories
-} from '@modules/stores/context/context.enums';
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
 import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';

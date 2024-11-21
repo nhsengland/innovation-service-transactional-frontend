@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 
 import { RoutingHelper } from '@app/base/helpers';
 
-import { ContextStore, CtxStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 import { HeaderMenuBarItemType } from '@modules/theme/components/header/header.component';
 
 export type RoutesDataType = {
