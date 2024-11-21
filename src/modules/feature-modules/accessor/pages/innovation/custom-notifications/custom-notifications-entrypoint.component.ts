@@ -10,7 +10,7 @@ export type CustomNotificationEntrypointComponentLinksType = { label: string; ac
   selector: 'theme-custom-notifications-entrypoint-component',
   templateUrl: './custom-notifications-entrypoint.component.html'
 })
-export class CustomNotificationsEntrypointComponent extends CoreComponent implements OnInit {
+export class CustomNotificationsEntrypointComponent extends CoreComponent {
   @Input() links: CustomNotificationEntrypointComponentLinksType = [];
   innovationId: string;
 
@@ -21,8 +21,6 @@ export class CustomNotificationsEntrypointComponent extends CoreComponent implem
     super();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
   }
-
-  ngOnInit(): void {}
 
   onNotify(customNotificationAction: NotificationEnum) {
     const url = `/${this.authenticationStore.userUrlBasePath()}/innovations/${this.innovationId}/custom-notifications/new`;
