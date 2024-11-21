@@ -1,7 +1,7 @@
 <ul class="nhsuk-grid-row nhsuk-card-group">
   <li *ngFor="let item of cardsList" class="{{ gridClass }} nhsuk-card-group__item">
     <div class="nhsuk-card nhsuk-card">
-      <div class="nhsuk-card__content nhsuk-u-padding-4 height-100 d-flex flex-direction-column" [ngClass]="{ 'justify-content-space-between': item.count }">
+      <div class="nhsuk-card__content nhsuk-u-padding-4 height-100 d-flex flex-direction-column">
         <h2 class="nhsuk-card__heading nhsuk-heading-m">
           <a routerLink="{{ item.link }}" [queryParams]="item.queryParams" class="nhsuk-card__link"> <span class="nhsuk-u-visually-hidden"> Go to </span> {{ item.title }} </a>
         </h2>

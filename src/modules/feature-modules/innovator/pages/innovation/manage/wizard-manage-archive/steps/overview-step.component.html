@@ -20,7 +20,7 @@
         </ul>
       </ng-container>
 
-      <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+      <div class="nhsuk-inset-text nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-4">
         <span class="nhsuk-u-visually-hidden">Information: </span>
         <p>If you want support on your innovation in future, you can submit your record for a needs reassessment.</p>
       </div>
@@ -40,7 +40,7 @@
           </div>
         </ng-container>
         <ng-container *ngIf="!isOwner">
-          <button class="nhsuk-button" (click)="onGoToInnovation()">Go to innovation</button>
+          <p class="nhsuk-u-margin-bottom-6"><a href="javascript:void(0)" (click)="onGoToInnovation()">Return to innovation</a></p>
         </ng-container>
       </ng-template>
     </div>
