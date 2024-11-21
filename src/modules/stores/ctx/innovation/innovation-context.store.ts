@@ -1,5 +1,19 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { Observable, Subject, debounceTime, map, filter, finalize, of, switchMap, take, tap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  debounceTime,
+  map,
+  filter,
+  finalize,
+  of,
+  switchMap,
+  tap,
+  combineLatest,
+  throwError,
+  take,
+  catchError
+} from 'rxjs';
 import { isNil, omitBy, cloneDeep } from 'lodash';
 
 import { AuthenticationModel } from '../../authentication/authentication.models';
@@ -18,6 +32,7 @@ import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizar
 import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from '../../innovation/innovation-record/202405/evidences-config';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { SchemaContextStore } from '../schema/schema.store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable()
 export class InnovationContextStore {
@@ -25,6 +40,7 @@ export class InnovationContextStore {
   private state = signal<{
     innovation: ContextInnovationType;
     isStateLoaded: boolean;
+    error?: HttpErrorResponse;
   }>({ innovation: EMPTY_CONTEXT, isStateLoaded: false });
 
   // Selectors
@@ -34,6 +50,8 @@ export class InnovationContextStore {
 
   isStateLoaded = computed(() => this.state().isStateLoaded);
   isStateLoaded$ = toObservable(this.isStateLoaded);
+  hasError = computed(() => this.state().error);
+  hasError$ = toObservable(this.hasError);
 
   // Actions
   fetch$ = new Subject<{ innovationId: string; userContext: AuthenticationModel['userContext'] }>();
@@ -47,15 +65,22 @@ export class InnovationContextStore {
       .pipe(
         debounceTime(50),
         tap(() => {
-          this.state.update(state => ({ ...state, isStateLoaded: false }));
+          this.state.update(state => ({ ...state, isStateLoaded: false, error: undefined }));
         }),
-        switchMap(ctx => this.innovationService.getContextInfo(ctx.innovationId, ctx.userContext))
+        switchMap(ctx =>
+          this.innovationService.getContextInfo(ctx.innovationId, ctx.userContext).pipe(
+            catchError(error => {
+              this.state.update(state => ({ ...state, error }));
+              return of(null);
+            })
+          )
+        )
       )
       .subscribe(innovation => {
-        this.state.update(state => ({ ...state, innovation, isStateLoaded: true }));
+        if (innovation) {
+          this.state.update(state => ({ ...state, innovation, isStateLoaded: true }));
+        }
       });
-
-    // interval(60000).subscribe(() => this.logState('background refresh?'));
   }
 
   // Actions + Reducers
@@ -65,7 +90,7 @@ export class InnovationContextStore {
   }
 
   clear(): void {
-    this.state.update(() => ({ innovation: EMPTY_CONTEXT, isStateLoaded: false }));
+    this.state.update(() => ({ innovation: EMPTY_CONTEXT, isStateLoaded: false, error: undefined }));
   }
   // End Actions + Reducers
 
@@ -77,14 +102,19 @@ export class InnovationContextStore {
     if (innovation && innovation.id === innovationId && Date.now() < innovation.expiryAt) {
       return of(innovation);
     }
-    if (innovation.id !== innovationId) {
+    if (innovation.id !== innovationId || this.hasError()) {
       this.clear();
     }
 
     this.fetch$.next({ innovationId, userContext: context });
-    return this.isStateLoaded$.pipe(
-      filter(() => this.isStateLoaded()),
-      switchMap(() => of(this.state().innovation)),
+    return combineLatest([this.isStateLoaded$, this.hasError$]).pipe(
+      filter(() => this.isStateLoaded() || this.hasError() !== undefined),
+      switchMap(() => {
+        if (this.hasError()) {
+          return throwError(() => this.hasError());
+        }
+        return of(this.state().innovation);
+      }),
       take(1)
     );
   }
