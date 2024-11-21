@@ -21,7 +21,7 @@ export class IrV3TranslatePipe implements PipeTransform {
         if (typeof value === 'string' && questionId) {
           return translations['questions'].get(questionId.split('_')[0])?.items?.get(value)?.label ?? value;
         } else if (value instanceof Array && questionId) {
-          let translatedArr: string[] = [];
+          const translatedArr: string[] = [];
           value.forEach(v =>
             translatedArr.push(translations['questions'].get(questionId.split('_')[0])?.items?.get(v)?.label ?? v)
           );

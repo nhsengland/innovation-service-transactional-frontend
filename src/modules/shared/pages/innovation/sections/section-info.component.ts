@@ -43,7 +43,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   sectionId: string;
 
   assessmentType = '';
-  sectionSubmittedText: string = '';
+  sectionSubmittedText = '';
 
   sectionsIdsList: string[];
 

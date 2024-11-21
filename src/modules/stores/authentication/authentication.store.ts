@@ -197,7 +197,7 @@ export class AuthenticationStore extends Store<AuthenticationModel> {
     this.state.userContext = userContext;
   }
 
-  getRoleDescription(role: string, plural: boolean = false): string {
+  getRoleDescription(role: string, plural = false): string {
     switch (role) {
       case 'ADMIN':
         return !plural ? 'Administrator' : 'Administrators';

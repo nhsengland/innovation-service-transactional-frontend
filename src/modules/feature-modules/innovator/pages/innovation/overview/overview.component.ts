@@ -29,10 +29,10 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     daysSinceNoActiveSupport?: number;
   } = null;
 
-  isArchived: boolean = false;
+  isArchived = false;
 
-  showNextStepsBanner: boolean = false;
-  showNoSupportBanner: boolean = false;
+  showNextStepsBanner = false;
+  showNoSupportBanner = false;
 
   cardsList: StatisticsCardType[] = [];
 

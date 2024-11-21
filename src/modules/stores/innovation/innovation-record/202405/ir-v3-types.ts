@@ -54,7 +54,7 @@ export type InnovationRecordQuestionStepType = {
   isHidden?: boolean;
 };
 
-export type nestedObjectAnswer = [{ [key: string]: string }];
+export type nestedObjectAnswer = [Record<string, string>];
 
 export type arrStringAnswer = string[];
 
@@ -82,9 +82,7 @@ export type InnovationRecordStepValidationsType = {
   equalTo?: string | [string, string];
 };
 
-export type InnovationRecordFieldGroupAnswerType = {
-  [id: string]: string;
-}[];
+export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 
@@ -99,9 +97,10 @@ export type InnovationRecordItemsType = {
   itemsFromAnswer?: string;
 }[];
 
-export type InnovationRecordSectionAnswersType = {
-  [s: string]: string | string[] | { response: string; conditional: string };
-};
+export type InnovationRecordSectionAnswersType = Record<
+  string,
+  string | string[] | { response: string; conditional: string }
+>;
 
 export type SectionsSummaryModelV3Type = {
   id: string;

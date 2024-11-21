@@ -42,9 +42,7 @@ export class WizardInnovationCustomNotificationDeleteComponent extends CoreCompo
 
   wizard = new WizardModel<WizardData>({});
 
-  stepsDefinition: {
-    [stepId: string]: WizardStepModel;
-  };
+  stepsDefinition: Record<string, WizardStepModel>;
 
   constructor(
     private accessorService: AccessorService,

@@ -62,14 +62,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   assessmentQueryParam?: string;
   editPageQueryParam?: string;
 
-  allSectionsData: {
-    [key: string]: {
+  allSectionsData: Record<
+    string,
+    {
       sectionInfo: SectionInfoType;
       summaryList: WizardSummaryV3Type[];
       evidencesList: EvidenceV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
-    };
-  } = {};
+    }
+  > = {};
 
   constructor(
     private activatedRoute: ActivatedRoute,

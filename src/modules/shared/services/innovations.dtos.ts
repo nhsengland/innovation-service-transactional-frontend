@@ -238,8 +238,9 @@ export type InnovationSupportInfoDTO = {
 // Support summary.
 const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
 export type SupportSummarySectionType = (typeof SupportSummarySectionType)[number];
-export type SupportSummaryOrganisationsListDTO = {
-  [key in SupportSummarySectionType]: {
+export type SupportSummaryOrganisationsListDTO = Record<
+  SupportSummarySectionType,
+  {
     id: string;
     name: string;
     sameOrganisation: boolean;
@@ -254,8 +255,8 @@ export type SupportSummaryOrganisationsListDTO = {
       id: string;
       acronym: string;
     };
-  }[];
-};
+  }[]
+>;
 export type SupportSummaryOrganisationHistoryDTO = {
   id: string;
   type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE' | 'INNOVATION_ARCHIVED' | 'STOP_SHARE';

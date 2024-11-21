@@ -46,7 +46,7 @@ export class FormTextareaComponent extends ControlValueAccessorComponent impleme
   @Input() cssOverride?: string;
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   lengthLimitCharacters = 200;
   currentAvailableCharacters = 0;

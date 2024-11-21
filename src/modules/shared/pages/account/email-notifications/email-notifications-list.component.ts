@@ -15,8 +15,8 @@ import { AuthenticationModel } from '@modules/stores/authentication/authenticati
   templateUrl: './email-notifications-list.component.html'
 })
 export class PageAccountEmailNotificationsListComponent extends CoreComponent implements OnInit {
-  isAnyOn: boolean = false;
-  hasMultipleRoles: boolean = false;
+  isAnyOn = false;
+  hasMultipleRoles = false;
   currentRole: null | { id: string; description: string };
   displayName: string;
 

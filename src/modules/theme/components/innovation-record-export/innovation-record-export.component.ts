@@ -6,13 +6,13 @@ import { CoreComponent } from '@app/base';
   templateUrl: './innovation-record-export.component.html'
 })
 export class InnovationRecordExportComponent extends CoreComponent implements OnInit {
-  @Input() innovationId: string = '';
+  @Input() innovationId = '';
   @Input() fileType: 'csv' | 'pdf' = 'pdf';
   @Input() button?: boolean = false;
   @Input() customLabel?: string | undefined = undefined;
   @Input() btnStyle?: 'primary' | 'secondary' = 'primary';
 
-  exportDocumentUrl: string = '';
+  exportDocumentUrl = '';
 
   constructor() {
     super();

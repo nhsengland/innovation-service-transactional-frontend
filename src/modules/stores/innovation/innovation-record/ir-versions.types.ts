@@ -20,6 +20,7 @@ export type FormSelectableFieldV3Type<T> = {
   exclusive?: boolean;
 }[];
 
-export type InnovationSectionStepLabels = {
-  [q: string]: { label: string; description?: string; conditional?: boolean };
-};
+export type InnovationSectionStepLabels = Record<
+  string,
+  { label: string; description?: string; conditional?: boolean }
+>;

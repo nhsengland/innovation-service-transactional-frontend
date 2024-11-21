@@ -39,7 +39,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
   disabledCheckboxAccessors: string[] = [];
 
-  selectAccessorsStepLabel: string = '';
+  selectAccessorsStepLabel = '';
 
   availableSupportStatuses: string[];
 
@@ -78,7 +78,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private currentStatus: null | InnovationSupportStatusEnum = null;
 
-  private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusLabels: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]: 'Describe the support you plan to provide.',
     [InnovationSupportStatusEnum.WAITING]:
       'Explain the information or decisions you need, before you can support this innovation.',
@@ -88,7 +88,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       'Explain why your organisation has closed its engagement with this innovation.'
   };
 
-  private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusDescriptions: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]:
       "This message will be sent to the innovator and collaborators. It will also appear on the innovation's support summary.",
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
@@ -458,7 +458,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return status ? this.messageStatusDescriptions[status] : '';
   }
 
-  getMessageStatusUpdated(): { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] } | undefined {
+  getMessageStatusUpdated():
+    | { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] }
+    | undefined {
     const status = this.form.get('status')?.value;
     return status ? this.messageStatusUpdated[status] : undefined;
   }

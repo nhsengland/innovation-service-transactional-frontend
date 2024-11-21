@@ -311,7 +311,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 }
 
 function getContactPreferences(data: InboundPayloadType): ContactUserPreferenceEnum[] {
-  let contactPreferences: ContactUserPreferenceEnum[] = [];
+  const contactPreferences: ContactUserPreferenceEnum[] = [];
 
   if (data.contactByEmail) {
     contactPreferences.push(ContactUserPreferenceEnum.EMAIL);

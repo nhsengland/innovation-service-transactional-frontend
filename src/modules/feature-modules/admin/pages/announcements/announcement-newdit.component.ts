@@ -95,7 +95,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryData: SummaryDataItemType[] = [];
 
-  isChangeMode: boolean = false;
+  isChangeMode = false;
   submitButton = { isActive: true, label: 'Save announcement' };
 
   constructor(

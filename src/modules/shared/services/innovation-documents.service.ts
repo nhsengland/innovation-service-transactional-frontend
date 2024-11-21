@@ -103,8 +103,8 @@ export class InnovationDocumentsService extends CoreService {
           switch (item.context.type) {
             case 'INNOVATION_SECTION':
               description =
-                getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(s => s.value === item.context.id)
-                  ?.label ?? '[archived section]';
+                getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(s => s.value === item.context.id)?.label ??
+                '[archived section]';
               break;
             case 'INNOVATION_EVIDENCE':
               description = item.context.name ?? '';

@@ -20,13 +20,13 @@ export class AnnouncementCardComponent implements OnInit {
 
   @Output() clearedAnnouncement = new EventEmitter<string>();
 
-  isOverviewPage: boolean = false;
-  isDashboardPage: boolean = false;
-  isLoginAnnouncementPage: boolean = false;
+  isOverviewPage = false;
+  isDashboardPage = false;
+  isLoginAnnouncementPage = false;
 
   innovationId: string | undefined;
 
-  innovationsList: string = '';
+  innovationsList = '';
 
   constructor(
     private router: Router,
@@ -55,7 +55,7 @@ export class AnnouncementCardComponent implements OnInit {
     }
   }
 
-  formatListOfItemsFromArray(words: string[], lastItemJoinWord: string = 'and'): string {
+  formatListOfItemsFromArray(words: string[], lastItemJoinWord = 'and'): string {
     let toReturn = '';
 
     if (words.length == 1) {

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 type SvgPaletteColorsType = 'green' | 'yellow' | 'red' | 'grey';
-type SvgPaletteDataType = { [key in SvgPaletteColorsType]: { stroke: string; fill: string } };
+type SvgPaletteDataType = Record<SvgPaletteColorsType, { stroke: string; fill: string }>;
 
 @Component({
   selector: 'theme-svg-icon',

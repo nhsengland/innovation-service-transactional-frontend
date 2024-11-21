@@ -44,9 +44,9 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() parameters: FormEngineParameterModel[] = [];
   @Input() formValidations?: ValidatorFn[];
-  @Input() values?: { [key: string]: any } = {};
+  @Input() values?: Record<string, any> = {};
   @Input() showParamLabelAsTitle?: boolean;
-  @Output() formChanges: any = new EventEmitter<{ [key: string]: any }>();
+  @Output() formChanges: any = new EventEmitter<Record<string, any>>();
 
   private formChangeSubscription = new Subscription();
   private loggerContext = 'Catalog::FormsModule::EngineComponent::';
@@ -120,7 +120,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     this.cdr.detectChanges();
   }
 
-  addFieldGroupRow(parameter: FormEngineParameterModel, value?: { [key: string]: any }): void {
+  addFieldGroupRow(parameter: FormEngineParameterModel, value?: Record<string, any>): void {
     (this.form.get(parameter.id) as FormArray).push(FormEngineHelper.addFieldGroupRow(parameter, value));
   }
 
@@ -128,7 +128,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     (this.form.get(parameterId) as FormArray).removeAt(index);
   }
 
-  trackFieldGroupRowsChanges(index: number, item: { [key: string]: any }): number {
+  trackFieldGroupRowsChanges(index: number, item: Record<string, any>): number {
     return index;
   }
 
@@ -136,7 +136,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
     return this.form.pending;
   }
 
-  getFormValues(triggerFormChanges?: boolean): { valid: boolean; data: { [key: string]: any } } {
+  getFormValues(triggerFormChanges?: boolean): { valid: boolean; data: Record<string, any> } {
     const shouldTriggerChanges = triggerFormChanges !== undefined ? triggerFormChanges : true;
 
     if (shouldTriggerChanges && !this.form.valid) {

@@ -1,5 +1,5 @@
 export class LocalStorageHelper {
-  static getObjectItem<T = { [key: string]: any }>(key: string): null | T {
+  static getObjectItem<T = Record<string, any>>(key: string): null | T {
     try {
       const ls = localStorage.getItem(key);
       return ls ? JSON.parse(ls) : null;
@@ -9,7 +9,7 @@ export class LocalStorageHelper {
     }
   }
 
-  static setObjectItem(key: string, value: { [key: string]: any }): void {
+  static setObjectItem(key: string, value: Record<string, any>): void {
     localStorage.setItem(key, JSON.stringify(value));
   }
 

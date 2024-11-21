@@ -7,8 +7,8 @@ export type SelectComponentInputType = { key: string | undefined; text: string; 
   templateUrl: './select.component.html'
 })
 export class SelectComponent implements OnInit {
-  @Input({ required: true }) id: string = '';
-  @Input({ required: true }) label: string = '';
+  @Input({ required: true }) id = '';
+  @Input({ required: true }) label = '';
   @Input({ required: true }) selectList: SelectComponentInputType[] = [];
   @Input() defaultValueKey?: string;
   @Output() selectChanged = new EventEmitter<string>();

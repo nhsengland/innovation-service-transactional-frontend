@@ -50,7 +50,7 @@ export class CustomValidators {
 
   static requiredCheckboxGroup(message?: string | null): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null =>
-      Object.entries(control.value as { [key: string]: boolean }).filter(item => item[1]).length > 0
+      Object.entries(control.value as Record<string, boolean>).filter(item => item[1]).length > 0
         ? null
         : { required: message ? { message } : true };
   }

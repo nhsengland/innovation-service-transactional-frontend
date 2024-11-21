@@ -21,7 +21,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   innovationId: string;
   surveyId: string;
   baseUrl: string;
-  onlyOneSurveyToAnswer: boolean = false;
+  onlyOneSurveyToAnswer = false;
 
   unitName = signal<null | string>(null);
   pageButton = signal<string>('Continue');

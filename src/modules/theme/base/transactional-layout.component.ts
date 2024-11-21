@@ -41,7 +41,7 @@ export class TransactionalLayoutComponent implements OnDestroy {
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private activatedRoute: ActivatedRoute,
     private router: Router,
     protected ctx: CtxStore

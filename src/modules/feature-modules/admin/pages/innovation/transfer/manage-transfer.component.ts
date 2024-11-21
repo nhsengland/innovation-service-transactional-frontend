@@ -20,7 +20,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  stayAsCollaborator: boolean = false;
+  stayAsCollaborator = false;
   redirectToUrl: string;
 
   wizard: WizardEngineModel = new WizardEngineModel({});

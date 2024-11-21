@@ -17,7 +17,7 @@ export class LayoutContextStore {
   backLink = computed(() => this.state().backLink);
   previousUrl = computed(() => this.state().previousUrl);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   update(info: DeepPartial<ContextLayoutType>): void {
     const dataToUpdate = omitBy<DeepPartial<ContextLayoutType>>(info, isNil);

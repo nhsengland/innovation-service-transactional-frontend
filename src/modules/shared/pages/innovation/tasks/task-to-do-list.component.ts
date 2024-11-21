@@ -83,7 +83,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   processTaskList(taskList: InnovationTasksListDTO) {
-    for (let task of taskList.data) {
+    for (const task of taskList.data) {
       if (this.shouldBeOnTopTable(task)) {
         this.topList.data.push(task);
       } else {
@@ -119,7 +119,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
-    let tasksToDoTitle: string = '';
+    let tasksToDoTitle = '';
     switch (this.topList.count) {
       case 0:
         tasksToDoTitle = 'You have no tasks to do';

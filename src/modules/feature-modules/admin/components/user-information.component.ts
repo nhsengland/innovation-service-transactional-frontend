@@ -233,7 +233,7 @@ export class UserInformationComponent implements OnInit {
 
   private buildTitle(): void {
     let title = 'This user already exists on the service';
-    let displayTeam = this.getDisplayTeam();
+    const displayTeam = this.getDisplayTeam();
 
     if ((this.parentData?.flags.isUnitCreate && this.componentData.unitName) || this.parentData?.flags.isTeamCreate) {
       if (this.componentData.isAddRoleValid === false) {

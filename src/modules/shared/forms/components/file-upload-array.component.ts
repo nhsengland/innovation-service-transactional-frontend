@@ -30,7 +30,7 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
       | undefined
       | {
           httpUploadUrl: string;
-          httpUploadBody?: { [key: string]: any };
+          httpUploadBody?: Record<string, any>;
           acceptedFiles?: FileTypes[];
           maxFileSize?: number; // In Mb.
         }
@@ -52,12 +52,12 @@ export class FormFileUploadArrayComponent implements OnInit, DoCheck {
 
   hasError = false;
   hasUploadError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
   isLoadingFile = false;
 
   fileConfig: {
     httpUploadUrl: string;
-    httpUploadBody?: { [key: string]: any };
+    httpUploadBody?: Record<string, any>;
   } = { httpUploadUrl: '' };
 
   dzConfig: {

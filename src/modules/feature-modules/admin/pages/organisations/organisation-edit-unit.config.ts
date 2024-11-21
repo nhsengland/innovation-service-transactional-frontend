@@ -11,7 +11,7 @@ type OutboundPayloadType = InboundPayloadType;
 type StepPayloadType = InboundPayloadType;
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
-export let EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const EDIT_ORGANISATION_UNIT_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
     new FormEngineModel({

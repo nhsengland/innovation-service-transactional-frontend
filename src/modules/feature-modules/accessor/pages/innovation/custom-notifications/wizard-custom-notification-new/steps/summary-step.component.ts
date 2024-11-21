@@ -50,7 +50,7 @@ export class WizardInnovationCustomNotificationNewSummaryStepComponent
   @Output() goToStepEvent = new EventEmitter<string>();
 
   subscriptionId: string;
-  displayNotification: string = '';
+  displayNotification = '';
   displayOrganisations?: string[];
   displaySupportStatuses?: string[];
   displayInnovationRecordSections?: string[];

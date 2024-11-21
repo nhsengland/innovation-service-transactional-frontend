@@ -1,6 +1,6 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
-export type HeaderNavigationBarItemType = Array<{ key: string; label: string; link: string; fullReload?: boolean }>;
+export type HeaderNavigationBarItemType = { key: string; label: string; link: string; fullReload?: boolean }[];
 
 @Component({
   selector: 'theme-header-navigation-bar',
@@ -11,5 +11,5 @@ export type HeaderNavigationBarItemType = Array<{ key: string; label: string; li
 export class HeaderNavigationBarComponent {
   @Input() leftMenuItems: HeaderNavigationBarItemType = [];
   @Input() rightMenuItems: HeaderNavigationBarItemType = [];
-  @Input() notifications: { [key: string]: number } = {};
+  @Input() notifications: Record<string, number> = {};
 }

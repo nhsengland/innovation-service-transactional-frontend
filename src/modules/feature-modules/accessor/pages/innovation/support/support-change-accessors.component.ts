@@ -28,7 +28,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   selectedAccessors: typeof this.accessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
 
-  selectAccessorsStepLabel: string = '';
+  selectAccessorsStepLabel = '';
 
   innovationSupportStatus: InnovationSupportStatusEnum | undefined;
 

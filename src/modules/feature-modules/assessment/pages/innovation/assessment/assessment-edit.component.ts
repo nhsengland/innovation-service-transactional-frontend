@@ -26,7 +26,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   assessmentId: string;
   stepId: number;
 
-  entrypointUrl: string = '';
+  entrypointUrl = '';
 
   assessment?: InnovationNeedsAssessmentInfoDTO;
 
@@ -35,7 +35,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
       title: string;
       parameters: FormEngineParameterModel[];
     }[];
-    data: { [key: string]: any };
+    data: Record<string, any>;
   };
 
   assessmentHasBeenSubmitted: null | boolean;
@@ -43,7 +43,7 @@ export class InnovationAssessmentEditComponent extends CoreComponent implements 
   isReassessment = false;
   showAssessmentDetails = false;
 
-  currentAnswers: { [key: string]: any };
+  currentAnswers: Record<string, any>;
 
   saveButton: {
     disabled: boolean;

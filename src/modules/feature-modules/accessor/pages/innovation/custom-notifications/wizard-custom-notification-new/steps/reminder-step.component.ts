@@ -24,7 +24,7 @@ export class WizardInnovationCustomNotificationNewReminderStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<ReminderStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<ReminderStepOutputType>>();
 
-  errorMessage: string = 'Write your notification';
+  errorMessage = 'Write your notification';
 
   form = new FormGroup({
     reminder: new FormControl<string>('', CustomValidators.required(this.errorMessage))

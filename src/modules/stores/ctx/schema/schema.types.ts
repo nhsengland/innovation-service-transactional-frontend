@@ -17,7 +17,7 @@ export const EMPTY_SCHEMA_CONTEXT: ContextSchemaType['irSchema'] = {
   schema: { sections: [] }
 };
 
-export type InnovationRecordSectionUpdateType = { version: number; data: { [key: string]: any } };
+export type InnovationRecordSectionUpdateType = { version: number; data: Record<string, any> };
 
 export type IrSchemaTranslatorQuestionsMapType = Map<string, { label: string; items: IrSchemaTranslatorItemMapType }>;
 

@@ -44,7 +44,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   allSteps: SectionStepsList = [];
 
-  sectionSubmittedText: string = '';
+  sectionSubmittedText = '';
 
   baseUrl: string;
   isSectionDetailsPage: string | undefined;

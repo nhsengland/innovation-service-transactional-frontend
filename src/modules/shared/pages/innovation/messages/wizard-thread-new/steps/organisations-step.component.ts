@@ -32,8 +32,8 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
 
-  leadText: string = '';
-  formValidationMessage: string = '';
+  leadText = '';
+  formValidationMessage = '';
 
   form = new FormGroup(
     {

@@ -1,6 +1,4 @@
-export type MappedObjectType = {
-  [key: string]: any;
-};
+export type MappedObjectType = Record<string, any>;
 
 export type LinkType = {
   type: 'link' | 'button';

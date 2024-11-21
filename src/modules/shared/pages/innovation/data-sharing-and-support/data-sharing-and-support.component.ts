@@ -5,7 +5,12 @@ import { ObservableInput, forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 
-import { ContextInnovationType, InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
+import {
+  ContextInnovationType,
+  InnovationContextService,
+  InnovationStatusEnum,
+  InnovationSupportStatusEnum
+} from '@modules/stores';
 import { OrganisationSuggestionModel } from '@modules/stores/ctx/innovation/innovation.models';
 
 import { UtilsHelper } from '@app/base/helpers';
@@ -55,7 +60,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
   isAccessorType: boolean;
   isArchived: boolean;
 
-  showSuggestOrganisationsToSupportLink: boolean = false;
+  showSuggestOrganisationsToSupportLink = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,

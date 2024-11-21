@@ -21,7 +21,7 @@ type StepPayloadType = {
   organisationsList: organisationsListType;
   organisationNamesList: string[];
   organisationUnitNamesList: string[];
-} & { [key: string]: null | number | string | string[] | organisationsListType };
+} & Record<string, null | number | string | string[] | organisationsListType>;
 
 export type OutboundPayloadType = {
   name: string;
@@ -29,7 +29,7 @@ export type OutboundPayloadType = {
   units: { name: string; acronym: string }[];
 };
 
-export let CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
+export const CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEngineModel({
   showSummary: true,
   steps: [
     new FormEngineModel({

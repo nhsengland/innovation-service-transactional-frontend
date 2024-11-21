@@ -21,12 +21,12 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
 
   wizard = new WizardEngineModel({});
 
-  showItems: boolean = true;
+  showItems = true;
   formButton = { isActive: true, label: 'Continue' };
   wizardMode: MFAWizardModeType = 'set-mfa';
   userId: string | null = null;
   userEmail: string;
-  newPhoneNumber: string = '';
+  newPhoneNumber = '';
   manageAccountPageUrl: string;
 
   // Configurations

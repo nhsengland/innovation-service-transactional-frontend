@@ -24,7 +24,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
   // Flags
-  canDelete: boolean = false;
+  canDelete = false;
   isArchived: boolean;
 
   constructor(

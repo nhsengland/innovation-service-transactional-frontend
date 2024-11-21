@@ -54,10 +54,10 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
 
   @Output() removedFilter = new EventEmitter<number>();
 
-  canAddAnswerField: boolean = true;
+  canAddAnswerField = true;
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   sectionsList: { selectList: SelectComponentInputType[]; defaultKey?: string } = { selectList: [] };
   questionsList: { selectList: SelectComponentInputType[]; defaultKey?: string } = { selectList: [] };

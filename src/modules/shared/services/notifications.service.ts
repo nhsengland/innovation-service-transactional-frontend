@@ -68,9 +68,7 @@ export type NotificationsListOutDTO = {
   })[];
 };
 
-export type EmailNotificationPreferencesDTO = {
-  [category: string]: NotificationPreferenceEnum;
-};
+export type EmailNotificationPreferencesDTO = Record<string, NotificationPreferenceEnum>;
 
 @Injectable()
 export class NotificationsService extends CoreService {

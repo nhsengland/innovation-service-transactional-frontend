@@ -47,9 +47,9 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     { updateOn: 'blur' }
   );
 
-  hasUploadedDocuments: boolean = false;
+  hasUploadedDocuments = false;
 
-  filterCount: number = 0;
+  filterCount = 0;
 
   uploadedByChips: ChipFilterInputType = [];
   selectedUploadedByChips: string[] = [];

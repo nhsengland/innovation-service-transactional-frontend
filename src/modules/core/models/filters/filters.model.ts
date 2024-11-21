@@ -285,7 +285,7 @@ export class FiltersModel {
     const filters: Record<string, any> = {};
     let selected = 0;
 
-    for (let filter of this.filters) {
+    for (const filter of this.filters) {
       const handler = this.handlers.get(filter.key)!;
       const value = handler.value;
       switch (filter.type) {
