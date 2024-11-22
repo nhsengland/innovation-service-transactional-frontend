@@ -8,6 +8,7 @@ import { InnovatorService, SurveyAnswersType } from '@modules/feature-modules/in
 import { HttpErrorResponse } from '@angular/common/http';
 import { cloneDeep } from 'lodash';
 import { InnovationErrorsEnum } from '@app/base/enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-innovator-end-support-survey-journey',
@@ -101,7 +102,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   onSubmitWizard(): void {
     const data = this.wizard.runOutboundParsing();
     const body: SurveyAnswersType = {
-      comment: data.comment,
+      comment: !UtilsHelper.isEmpty(data.coment) ? data.comment : null,
       ideaOnHowToProceed: data.ideaOnHowToProceed,
       supportSatisfaction: data.supportSatisfaction,
       howLikelyWouldYouRecommendIS: data.howLikelyWouldYouRecommendIS
