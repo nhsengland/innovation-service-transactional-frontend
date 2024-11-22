@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, Input } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 import { AuthenticationStore } from '@modules/stores';
@@ -24,6 +24,6 @@ export class CustomNotificationsEntrypointComponent extends CoreComponent {
 
   onNotify(customNotificationAction: NotificationEnum) {
     const url = `/${this.authenticationStore.userUrlBasePath()}/innovations/${this.innovationId}/custom-notifications/new`;
-    this.redirectTo(url, { state: { customNotificationAction } });
+    this.router.navigateByUrl(url, { state: { customNotificationAction } });
   }
 }
