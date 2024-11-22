@@ -57,9 +57,15 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    this.resetAlert();
 
-    if (action === 'next' && !formData.valid) return;
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    const currentStepErrors = this.wizard.checkCurrentStepErrors(this.formEngineComponent?.form);
+    if (action === 'next' && currentStepErrors?.length) {
+      const itemsList = currentStepErrors.map(error => ({ title: error.message, fieldId: error.fieldId }));
+      this.setAlertError('', { itemsList });
+      return;
+    }
 
     this.wizard.addAnswers(formData.data).runRules();
 
@@ -81,6 +87,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
         break;
       case 'next':
         if (this.wizard.isLastStep()) {
+          if (!formData.valid) return;
           this.onSubmitWizard();
           return;
         }

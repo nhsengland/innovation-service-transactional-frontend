@@ -14,7 +14,7 @@ import {
   take,
   catchError
 } from 'rxjs';
-import { isNil, omitBy, cloneDeep } from 'lodash';
+import { omitBy, cloneDeep, isUndefined } from 'lodash';
 
 import { AuthenticationModel } from '../../authentication/authentication.models';
 import { InnovationContextService } from './innovation-context.service';
@@ -85,7 +85,7 @@ export class InnovationContextStore {
 
   // Actions + Reducers
   update(info: DeepPartial<ContextInnovationType>): void {
-    const dataToUpdate = omitBy<DeepPartial<ContextInnovationType>>(info, isNil);
+    const dataToUpdate = omitBy<DeepPartial<ContextInnovationType>>(info, isUndefined);
     this.state.update(state => ({ ...state, innovation: { ...state.innovation, ...dataToUpdate } }));
   }
 

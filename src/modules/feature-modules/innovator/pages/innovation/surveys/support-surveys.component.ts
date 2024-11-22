@@ -29,12 +29,9 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
     items: []
   });
 
-  form = new FormGroup(
-    {
-      survey: new FormControl<null | string>(null, { validators: CustomValidators.required('Please choose an option') })
-    },
-    { updateOn: 'blur' }
-  );
+  form = new FormGroup({
+    survey: new FormControl<null | string>(null, { validators: CustomValidators.required('Choose one option') })
+  });
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -72,8 +69,17 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
   }
 
   onSubmit(): void {
+    this.resetAlert();
+
     if (!this.form.valid) {
       this.form.markAllAsTouched();
+
+      const errors = this.form.get('survey')?.errors;
+      if (errors && Object.values(errors).length) {
+        this.setAlertError('', {
+          itemsList: Object.values(errors).map(({ message }) => ({ title: message, fieldId: 'survey' }))
+        });
+      }
       return;
     }
 
