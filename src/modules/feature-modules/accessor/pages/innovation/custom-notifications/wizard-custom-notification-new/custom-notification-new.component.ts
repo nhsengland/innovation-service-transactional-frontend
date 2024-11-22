@@ -374,7 +374,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         this.onGoToStep('innovationRecordUpdateStep');
         break;
       case NotificationEnum.DOCUMENT_UPLOADED:
-        this.onGoToStep('documentStep');
+        this.onGoToStep('summaryStep');
     }
   }
 
