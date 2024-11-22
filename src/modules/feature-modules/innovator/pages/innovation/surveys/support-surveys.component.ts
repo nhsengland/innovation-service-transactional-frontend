@@ -52,7 +52,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       this.isRedirectedFromSurvey.set(true);
     }
 
-    this.setBackLink('Go back');
+    this.setBackLink('Go back', this.baseUrl);
   }
 
   ngOnInit(): void {
