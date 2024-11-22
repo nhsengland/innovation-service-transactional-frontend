@@ -124,7 +124,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
     if (this.surveys.length === 1) {
       const [survey] = this.surveys;
       label = `Would you like to give feedback to ${survey.info?.supportUnit}?`;
-      description = `${survey.info?.supportUnit} closed support on ${this.datePipe.transform(survey.info!.supportFinishedAt, this.translate('app.date_formats.long_date'))}`;
+      description = `${survey.info?.supportUnit} closed support on ${this.datePipe.transform(survey.info!.supportFinishedAt, this.translate('app.date_formats.long_date'))}.`;
     }
 
     this.radioButtonInfo.set({
