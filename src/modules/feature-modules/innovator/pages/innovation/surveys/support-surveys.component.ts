@@ -99,6 +99,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
 
   private handleShowAllSurveysPage(): void {
     this.isRedirectedFromSurvey.set(false);
+    this.resetAlert();
 
     if (this.surveys.length === 0) {
       this.handleEmptyState();
