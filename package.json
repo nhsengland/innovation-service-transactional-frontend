@@ -13,7 +13,7 @@
     "build:ssr": "ng build --base-href /transactional/ --deploy-url /transactional/static/ && ng run app:server && npm run copyconfig",
     "prerender": "ng run app:prerender",
     "copyconfig": "cp web.config dist/app",
-    "lint": "ng lint",
+    "lint": "ng lint --quiet",
     "prettier:fix": "prettier --write src/",
     "prettier:check": "prettier --check src/"
   },
