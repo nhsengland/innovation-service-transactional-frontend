@@ -49,7 +49,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       this.isRedirectedFromSurvey.set(true);
     }
 
-    this.setBackLink('Go back', this.baseUrl);
+    this.setBackLink('Go back');
   }
 
   ngOnInit(): void {
@@ -105,6 +105,10 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       return;
     }
 
+    if (this.ctx.layout.previousUrl()?.includes('surveys')) {
+      this.setBackLink('Go back', this.baseUrl);
+    }
+
     // If we only have one survey we don't show anything, we redirect directly to the survey.
     if (this.surveys.length === 1) {
       const [survey] = this.surveys;
@@ -123,6 +127,9 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       this.redirectToOverview();
       return;
     }
+
+    // When it's redirected from a survey we don't have Go back.
+    this.resetBackLink();
 
     let label = 'Would you like to give feedback to other organisations?';
     let description: undefined | string = undefined;
