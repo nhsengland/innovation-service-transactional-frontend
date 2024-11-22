@@ -102,7 +102,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
 
     this.innovatorService.answerSurvey(this.innovationId, this.surveyId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully submitted your feedback.', {
+        this.setRedirectAlertSuccess('You have successfully submitted your feedback', {
           message:
             "Remember to update your innovation record with progress you've done while you were receiving support."
         });
