@@ -445,6 +445,7 @@ const routes: Routes = [
                   {
                     path: ':supportId/request-update',
                     pathMatch: 'full',
+                    data: { layout: { type: 'full' }, breadcrumb: null },
                     component: InnovationSupportRequestUpdateStatusComponent
                   },
                   {
