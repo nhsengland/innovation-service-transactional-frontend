@@ -53,17 +53,23 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    this.innovatorService.getUnansweredSurveys(this.innovationId).subscribe(surveys => {
-      this.surveys = surveys;
+    this.innovatorService.getUnansweredSurveys(this.innovationId).subscribe({
+      next: surveys => {
+        this.surveys = surveys;
 
-      if (this.isRedirectedFromSurvey()) {
-        this.handleRedirectedFromSurveyPage();
-      } else {
-        this.handleShowAllSurveysPage();
-      }
+        if (this.isRedirectedFromSurvey()) {
+          this.handleRedirectedFromSurveyPage();
+        } else {
+          this.handleShowAllSurveysPage();
+        }
 
-      if (!this.isCurrentlyBeingRedirected) {
-        this.setPageStatus('READY');
+        if (!this.isCurrentlyBeingRedirected) {
+          this.setPageStatus('READY');
+        }
+      },
+      error: () => {
+        this.setAlertUnknownError();
+        this.setPageStatus('ERROR');
       }
     });
   }
