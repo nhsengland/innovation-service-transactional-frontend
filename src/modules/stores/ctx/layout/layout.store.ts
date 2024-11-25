@@ -2,7 +2,7 @@ import { computed, Inject, Injectable, PLATFORM_ID, signal } from '@angular/core
 import { ContextLayoutType, EMPTY_PAGE_CONTEXT } from './layout.types';
 import { isPlatformServer } from '@angular/common';
 import { DeepPartial } from '@app/base/types';
-import { isNil, omitBy } from 'lodash';
+import { isUndefined, omitBy } from 'lodash';
 
 @Injectable()
 export class LayoutContextStore {
@@ -20,7 +20,7 @@ export class LayoutContextStore {
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   update(info: DeepPartial<ContextLayoutType>): void {
-    const dataToUpdate = omitBy<DeepPartial<ContextLayoutType>>(info, isNil);
+    const dataToUpdate = omitBy<DeepPartial<ContextLayoutType>>(info, isUndefined);
     if (isPlatformServer(this.platformId) && 'status' in dataToUpdate) {
       dataToUpdate.status = 'LOADING';
     }

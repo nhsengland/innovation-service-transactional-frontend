@@ -29,12 +29,9 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
     items: []
   });
 
-  form = new FormGroup(
-    {
-      survey: new FormControl<null | string>(null, { validators: CustomValidators.required('Please choose an option') })
-    },
-    { updateOn: 'blur' }
-  );
+  form = new FormGroup({
+    survey: new FormControl<null | string>(null, { validators: CustomValidators.required('Choose one option') })
+  });
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -72,8 +69,17 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
   }
 
   onSubmit(): void {
+    this.resetAlert();
+
     if (!this.form.valid) {
       this.form.markAllAsTouched();
+
+      const errors = this.form.get('survey')?.errors;
+      if (errors && Object.values(errors).length) {
+        this.setAlertError('', {
+          itemsList: Object.values(errors).map(({ message }) => ({ title: message, fieldId: 'survey' }))
+        });
+      }
       return;
     }
 
@@ -93,10 +99,15 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
 
   private handleShowAllSurveysPage(): void {
     this.isRedirectedFromSurvey.set(false);
+    this.resetAlert();
 
     if (this.surveys.length === 0) {
       this.handleEmptyState();
       return;
+    }
+
+    if (this.ctx.layout.previousUrl()?.includes('surveys')) {
+      this.setBackLink('Go back', this.baseUrl);
     }
 
     // If we only have one survey we don't show anything, we redirect directly to the survey.
@@ -118,13 +129,16 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       return;
     }
 
+    // When it's redirected from a survey we don't have Go back.
+    this.resetBackLink();
+
     let label = 'Would you like to give feedback to other organisations?';
     let description: undefined | string = undefined;
 
     if (this.surveys.length === 1) {
       const [survey] = this.surveys;
       label = `Would you like to give feedback to ${survey.info?.supportUnit}?`;
-      description = `${survey.info?.supportUnit} closed support on ${this.datePipe.transform(survey.info!.supportFinishedAt, this.translate('app.date_formats.long_date'))}`;
+      description = `${survey.info?.supportUnit} closed support on ${this.datePipe.transform(survey.info!.supportFinishedAt, this.translate('app.date_formats.long_date'))}.`;
     }
 
     this.radioButtonInfo.set({

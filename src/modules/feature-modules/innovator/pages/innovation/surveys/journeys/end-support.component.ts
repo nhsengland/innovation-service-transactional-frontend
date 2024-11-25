@@ -8,6 +8,7 @@ import { InnovatorService, SurveyAnswersType } from '@modules/feature-modules/in
 import { HttpErrorResponse } from '@angular/common/http';
 import { cloneDeep } from 'lodash';
 import { InnovationErrorsEnum } from '@app/base/enums';
+import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
   selector: 'app-innovator-end-support-survey-journey',
@@ -57,9 +58,15 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   }
 
   onSubmitStep(action: 'previous' | 'next'): void {
-    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    this.resetAlert();
 
-    if (action === 'next' && !formData.valid) return;
+    const formData = this.formEngineComponent?.getFormValues() ?? { valid: false, data: {} };
+    const currentStepErrors = this.wizard.checkCurrentStepErrors(this.formEngineComponent?.form);
+    if (action === 'next' && currentStepErrors?.length) {
+      const itemsList = currentStepErrors.map(error => ({ title: error.message, fieldId: error.fieldId }));
+      this.setAlertError('', { itemsList });
+      return;
+    }
 
     this.wizard.addAnswers(formData.data).runRules();
 
@@ -81,6 +88,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
         break;
       case 'next':
         if (this.wizard.isLastStep()) {
+          if (!formData.valid) return;
           this.onSubmitWizard();
           return;
         }
@@ -94,7 +102,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   onSubmitWizard(): void {
     const data = this.wizard.runOutboundParsing();
     const body: SurveyAnswersType = {
-      comment: data.comment,
+      comment: !UtilsHelper.isEmpty(data.coment) ? data.comment : null,
       ideaOnHowToProceed: data.ideaOnHowToProceed,
       supportSatisfaction: data.supportSatisfaction,
       howLikelyWouldYouRecommendIS: data.howLikelyWouldYouRecommendIS
@@ -102,7 +110,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
 
     this.innovatorService.answerSurvey(this.innovationId, this.surveyId, body).subscribe({
       next: () => {
-        this.setRedirectAlertSuccess('You have successfully submitted your feedback.', {
+        this.setRedirectAlertSuccess('You have successfully submitted your feedback', {
           message:
             "Remember to update your innovation record with progress you've done while you were receiving support."
         });
