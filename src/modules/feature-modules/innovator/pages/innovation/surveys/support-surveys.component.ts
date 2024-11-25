@@ -53,17 +53,27 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    this.innovatorService.getUnansweredSurveys(this.innovationId).subscribe(surveys => {
-      this.surveys = surveys;
+    this.innovatorService.getUnansweredSurveys(this.innovationId).subscribe({
+      next: surveys => {
+        this.surveys = surveys;
 
-      if (this.isRedirectedFromSurvey()) {
-        this.handleRedirectedFromSurveyPage();
-      } else {
-        this.handleShowAllSurveysPage();
-      }
+        if (this.isRedirectedFromSurvey()) {
+          this.handleRedirectedFromSurveyPage();
+        } else {
+          this.handleShowAllSurveysPage();
+        }
 
-      if (!this.isCurrentlyBeingRedirected) {
-        this.setPageStatus('READY');
+        if (!this.isCurrentlyBeingRedirected) {
+          this.setPageStatus('READY');
+        }
+      },
+      error: error => {
+        if (error.status === 403) {
+          this.ctx.innovation.clear();
+          this.router.navigateByUrl('error/forbidden-innovation');
+          return;
+        }
+        this.setAlertUnknownError();
       }
     });
   }
@@ -77,7 +87,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       const errors = this.form.get('survey')?.errors;
       if (errors && Object.values(errors).length) {
         this.setAlertError('', {
-          itemsList: Object.values(errors).map(({ message }) => ({ title: message, fieldId: 'survey' }))
+          itemsList: Object.values(errors).map(({ message }) => ({ title: message, fieldId: 'survey' + 0 }))
         });
       }
       return;
