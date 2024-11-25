@@ -18,7 +18,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
 
   form = new FormGroup(
     {
-      status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.CLOSED, {
+      status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(null, {
         validators: Validators.required,
         updateOn: 'change'
       }),
@@ -43,7 +43,6 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   ngOnInit(): void {
-    this.form.get('status')?.reset();
     this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(response => {
       this.availableSupportStatuses = response.availableStatus;
 
