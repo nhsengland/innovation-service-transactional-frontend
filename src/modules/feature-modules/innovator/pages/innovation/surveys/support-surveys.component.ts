@@ -70,7 +70,7 @@ export class PageInnovationSupportSurveysComponent extends CoreComponent impleme
       error: error => {
         if (error.status === 403) {
           this.ctx.innovation.clear();
-          this.router.navigateByUrl('error/forbidden-innovation');
+          this.redirectTo('error/forbidden-innovation');
           return;
         }
         this.setAlertUnknownError();
