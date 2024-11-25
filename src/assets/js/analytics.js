@@ -24,30 +24,37 @@ const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
   }
 
   // Google Analytics.
-  const node = document.createElement('script');
-  node.id = 'ga-analytics';
-  node.src = 'https://www.googletagmanager.com/gtag/js?id=' + tagMeasurementId;
-  node.type = 'text/javascript';
-  node.async = true;
-  document.getElementsByTagName('head')[0].appendChild(node);
+
+  // Google analytics is (in theory) being loaded trought Google Tag Manager.
+  // More tests are needed during next deployment, but if everything is OK
+  // this code can be removed!
+
+  // const node = document.createElement('script');
+  // node.id = 'ga-analytics';
+  // node.src = 'https://www.googletagmanager.com/gtag/js?id=' + tagMeasurementId;
+  // node.type = 'text/javascript';
+  // node.async = true;
+  // document.getElementsByTagName('head')[0].appendChild(node);
+
+  // window.dataLayer = window.dataLayer || [];
+  // function gtag() { dataLayer.push(arguments); }
+  // gtag('js', new Date());
+  // gtag('config', tagMeasurementId);
+
+  // window.gtag = gtag;
+
+  // // Set GA4 Consent Mode
+  // gtag('consent', 'default', {
+  //   ad_storage: 'denied',
+  //   ad_user_data: 'denied',
+  //   ad_personalization: 'denied',
+  //   functionality_storage: 'denied',
+  //   personalization_storage: 'denied',
+  //   security_storage: 'denied',
+  //   analytics_storage: getConsentCookie().analytics ? 'granted' : 'denied'
+  // });
 
   window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', tagMeasurementId);
-
-  window.gtag = gtag;
-
-  // Set GA4 Consent Mode
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'denied',
-    analytics_storage: getConsentCookie().analytics ? 'granted' : 'denied'
-  });
 
   // Google Tag Manager
   (function (w, d, s, l, i) {

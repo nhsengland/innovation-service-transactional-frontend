@@ -13,7 +13,7 @@ import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { GlobalErrorHandler } from './config/handlers/global-error.handler';
 import { locale as enLanguage } from './config/translations/en';
 
-declare let gtag: any;
+declare let window: any;
 
 @Component({
   selector: 'app-root',
@@ -76,12 +76,17 @@ export class AppComponent {
 
       this.router.events.pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd)).subscribe(e => {
         if (this.environmentStore.ENV.ENABLE_ANALYTICS) {
-          typeof gtag === 'function' &&
-            gtag('config', this.environmentStore.ENV.TAG_MEASUREMENT_ID, {
-              page_path: e.urlAfterRedirects
-            });
+          window.dataLayer.push({
+            page_path: e.urlAfterRedirects
+          });
+
+          // typeof gtag === 'function' &&
+          //   gtag('config', this.environmentStore.ENV.TAG_MEASUREMENT_ID, {
+          //     page_path: e.urlAfterRedirects
+          //   });
         }
       });
+
     }
   }
 }
