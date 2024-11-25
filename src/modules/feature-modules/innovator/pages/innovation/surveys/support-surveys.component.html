@@ -4,7 +4,7 @@
       @if (radioButtonInfo(); as info) {
         @if (info.items.length) {
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <theme-form-radio-group controlName="survey" [label]="info.label" [description]="info.description" [items]="info.items" />
+            <theme-form-radio-group id="survey" controlName="survey" [label]="info.label" [description]="info.description" [items]="info.items" [pageUniqueField]="true" />
             <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
 
             <div>
