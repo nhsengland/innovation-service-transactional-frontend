@@ -47,7 +47,7 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       this.availableSupportStatuses = response.availableStatus;
 
       this.setPageTitle('Request support status update', { showPage: false });
-      this.setBackLink('Go Back', this.handleGoBack.bind(this));
+      this.setBackLink('Go back', this.handleGoBack.bind(this));
       this.setPageStatus('READY');
     });
   }
