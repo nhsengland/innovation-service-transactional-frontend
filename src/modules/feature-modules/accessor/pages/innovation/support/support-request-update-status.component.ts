@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
@@ -15,15 +16,9 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   supportId: string;
   stepNumber: number;
 
-  availableSupportStatuses = [
-    InnovationSupportStatusEnum.WAITING,
-    InnovationSupportStatusEnum.CLOSED,
-    InnovationSupportStatusEnum.UNSUITABLE
-  ];
-
   form = new FormGroup(
     {
-      status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(InnovationSupportStatusEnum.CLOSED, {
+      status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(null, {
         validators: Validators.required,
         updateOn: 'change'
       }),
@@ -32,9 +27,12 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
     { updateOn: 'blur' }
   );
 
+  availableSupportStatuses: string[] = [];
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private accessorService: AccessorService
+    private accessorService: AccessorService,
+    private innovationsService: InnovationsService
   ) {
     super();
 
@@ -45,13 +43,13 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   ngOnInit(): void {
-    this.setPageTitle('Request support status update', { showPage: false });
-    this.setBackLink(
-      'Go Back',
-      `/accessor/innovations/${this.innovationId}/support`,
-      `to support status innovation page`
-    );
-    this.setPageStatus('READY');
+    this.innovationsService.getInnovationAvailableSupportStatuses(this.innovationId).subscribe(response => {
+      this.availableSupportStatuses = response.availableStatus;
+
+      this.setPageTitle('Request support status update', { showPage: false });
+      this.setBackLink('Go back', this.handleGoBack.bind(this));
+      this.setPageStatus('READY');
+    });
   }
 
   onSubmitStep(): void {
@@ -82,5 +80,13 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
       });
       this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
     });
+  }
+
+  private handleGoBack() {
+    if (this.stepNumber === 1) {
+      this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
+    } else {
+      this.stepNumber--;
+    }
   }
 }
