@@ -100,7 +100,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       next: ([organisations, innovationSupports]) => {
         this.organisations = organisations;
 
-        const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+        const userUnitId = this.ctx.user.getUserContext()?.organisationUnit?.id ?? '';
 
         this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
 

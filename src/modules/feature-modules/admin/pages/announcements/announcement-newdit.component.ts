@@ -237,9 +237,7 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
       content: outboundPayload.params.content,
       linkLabel: outboundPayload.params.link?.label ?? '',
       linkUrl: outboundPayload.params.link?.url ?? '',
-      userRoles: outboundPayload.userRoles
-        .map(item => this.stores.authentication.getRoleDescription(item, true))
-        .join('\n'),
+      userRoles: outboundPayload.userRoles.map(item => this.ctx.user.getRoleDescription(item, true)).join('\n'),
       showToWhom: outboundPayload.userRoles.includes(UserRoleEnum.INNOVATOR)
         ? outboundPayload.filters?.length
           ? 'Specific types of innovations'

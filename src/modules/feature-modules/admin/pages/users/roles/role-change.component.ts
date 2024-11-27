@@ -57,7 +57,7 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
         this.user = {
           ...userInfo,
           rolesDescription: userInfo.roles.map(r => {
-            let roleDescription = this.stores.authentication.getRoleDescription(r.role);
+            let roleDescription = this.ctx.user.getRoleDescription(r.role);
             if (r.displayTeam) {
               roleDescription += ` (${r.displayTeam})`;
             }

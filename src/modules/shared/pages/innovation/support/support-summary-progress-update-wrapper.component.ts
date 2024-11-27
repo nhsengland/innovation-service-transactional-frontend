@@ -15,7 +15,7 @@ export class PageInnovationSupportSummaryProgressUpdateWrapperComponent extends 
     super();
 
     this.userOrgHasMilestones = Object.keys(SUPPORT_SUMMARY_MILESTONES).includes(
-      this.stores.authentication.getUserContextInfo()?.organisation?.acronym || ''
+      this.ctx.user.getUserContext()?.organisation?.acronym || ''
     );
   }
 }

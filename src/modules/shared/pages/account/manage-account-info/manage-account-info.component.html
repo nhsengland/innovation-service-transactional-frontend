@@ -11,7 +11,7 @@
 
   <app-account-mfa-list *ngIf="MFAInfo" [MFAInfo]="MFAInfo" />
 
-  <div *ngIf="isInnovator" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+  <div *ngIf="ctx.user.isInnovator()" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-full">
       <h2 class="nhsuk-heading-l">Delete your account</h2>
       <p>You will need to confirm your email address to delete your account.</p>

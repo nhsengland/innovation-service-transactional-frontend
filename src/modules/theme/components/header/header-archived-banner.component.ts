@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { AuthenticationStore, CtxStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 import { filter } from 'rxjs';
 
 @Component({
@@ -13,17 +13,12 @@ export class HeaderArchivedBannerComponent implements OnInit {
   regEx = RegExp('');
 
   isOwner = signal(false);
-  isAdmin = signal(false);
-  isInnovator = signal(false);
   statusUpdatedAt = signal<null | string>(null);
 
   constructor(
     private router: Router,
-    private authentication: AuthenticationStore,
-    private ctx: CtxStore
+    protected ctx: CtxStore
   ) {
-    this.isInnovator.set(this.authentication.isInnovatorType());
-    this.isAdmin.set(this.authentication.isAdminRole());
     const innovation = this.ctx.innovation.info();
     this.statusUpdatedAt.set(innovation.statusUpdatedAt);
     this.isOwner.set(this.ctx.innovation.isOwner());

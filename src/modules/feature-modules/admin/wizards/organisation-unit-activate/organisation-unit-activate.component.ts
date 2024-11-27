@@ -137,7 +137,7 @@ export class WizardOrganisationUnitActivateComponent extends CoreComponent imple
         {
           label: 'Users',
           value: this.wizard.data.usersStep.users
-            .map(item => `${item.name} (${this.stores.authentication.getRoleDescription(item.organisationRole)})`)
+            .map(item => `${item.name} (${this.ctx.user.getRoleDescription(item.organisationRole)})`)
             .join('\n')
         }
       ],

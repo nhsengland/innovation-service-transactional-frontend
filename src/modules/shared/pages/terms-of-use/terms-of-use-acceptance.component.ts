@@ -29,7 +29,7 @@ export class PageTermsOfUseAcceptanceComponent extends CoreComponent implements 
       rightItems: [{ key: 'signOut', label: 'Sign out', link: `${this.appUrl}/signout`, fullReload: true }]
     };
 
-    if (this.stores.authentication.getUserType() === 'INNOVATOR') {
+    if (this.ctx.user.isInnovator()) {
       this.policyURL = this.CONSTANTS.URLS.TOU_INNOVATOR;
     } else {
       this.policyURL = this.CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION;

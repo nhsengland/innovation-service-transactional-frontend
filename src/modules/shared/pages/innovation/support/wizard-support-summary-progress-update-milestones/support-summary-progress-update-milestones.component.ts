@@ -62,7 +62,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     this.innovation = this.ctx.innovation.info();
 
-    this.userOrgAcronym = this.stores.authentication.getUserContextInfo()?.organisation?.acronym ?? '';
+    this.userOrgAcronym = this.ctx.user.getUserContext()?.organisation?.acronym ?? '';
 
     this.milestonesType = SUPPORT_SUMMARY_MILESTONES[this.userOrgAcronym].some(org => org.subcategories !== undefined)
       ? 'TWO_LEVEL'
@@ -414,7 +414,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     // If a file was provided, upload it and create a support summary progress update, otherwise, only create a support summary progress update
     const file = this.wizard.data.descriptionStep.file;
     if (file) {
-      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+      const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovation.id };
 
       this.fileUploadService
         .uploadFile(httpUploadBody, file)
@@ -462,8 +462,6 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   }
 
   private redirectToSupportSummaryList(): void {
-    this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`
-    );
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`);
   }
 }

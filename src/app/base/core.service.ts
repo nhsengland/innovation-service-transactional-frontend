@@ -60,7 +60,7 @@ export class CoreService {
   }
 
   apiUserBasePath(): string {
-    switch (this.stores.authentication.getUserType()) {
+    switch (this.ctx.user.getUserType()) {
       case UserRoleEnum.ADMIN:
         return 'user-admin';
       case UserRoleEnum.ASSESSMENT:
@@ -75,8 +75,9 @@ export class CoreService {
     }
   }
 
+  // TODO: could return a computed from the store
   userUrlBasePath(): string {
-    return this.stores.authentication.userUrlBasePath();
+    return this.ctx.user.userUrlBasePath();
   }
 
   translate(translation: string, params?: object): string {

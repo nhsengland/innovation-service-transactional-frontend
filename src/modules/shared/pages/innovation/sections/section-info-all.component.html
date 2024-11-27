@@ -6,7 +6,7 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
   <div class="nhsuk-grid-column-full nhsuk-u-padding-left-0">
-    <div class="nhsuk-u-margin-top-0" *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))">
+    <div class="nhsuk-u-margin-top-0" *ngIf="!(ctx.innovation.isArchived() && ctx.user.isAccessorOrAssessment())">
       <span class="nhsuk-u-visually-hidden">Information: </span>
 
       <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
@@ -34,7 +34,7 @@
         <ng-container *ngFor="let section of item.sections; let j = index; last as lastItem">
           <div [ngClass]="lastItem ? 'nhsuk-u-margin-bottom-8' : 'nhsuk-u-margin-bottom-2'">
             <h3 class="nhsuk-heading-m nhsuk-u-margin-top-7" [id]="section.id">
-              <ng-container *ngIf="isInnovationInArchivedStatus && !isInnovatorType; else innovationLink">
+              <ng-container *ngIf="ctx.innovation.isArchived() && !ctx.user.isInnovator(); else innovationLink">
                 {{ i + 1 }}.{{ j + 1 }} {{ section.id | irv3translate: "subsections" }}
               </ng-container>
               <ng-template #innovationLink>
@@ -43,7 +43,7 @@
             </h3>
             <ng-container *ngIf="pageStatus() === 'READY'">
               <ng-container *ngIf="allSectionsData[section.id] as sectionData">
-                <div *ngIf="!(isInnovationInArchivedStatus && (isAccessorType || isAssessmentType))" class="nhsuk-u-margin-top-0 font-color-secondary">
+                <div *ngIf="!(ctx.innovation.isArchived() && ctx.user.isAccessorOrAssessment())" class="nhsuk-u-margin-top-0 font-color-secondary">
                   <span class="nhsuk-u-visually-hidden">Information: </span>
                   <p class="d-flex nhsuk-u-margin-0">
                     <ng-container [ngSwitch]="sectionData.sectionInfo.status.id">
@@ -55,7 +55,7 @@
                       <ng-container *ngSwitchCase="'DRAFT'">
                         <ng-container *ngTemplateOutlet="icon; context: { type: 'edit' }" />
 
-                        <ng-container *ngIf="isInnovatorType">
+                        <ng-container *ngIf="ctx.user.isInnovator()">
                           <span *ngIf="innovation.status === 'CREATED'" class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">
                             This section is in draft. You need to complete the section before you can submit your record for needs assessment.
                           </span>
@@ -65,7 +65,7 @@
                           </span>
                         </ng-container>
 
-                        <ng-container *ngIf="!isInnovatorType">
+                        <ng-container *ngIf="!ctx.user.isInnovator()">
                           <span class="nhsuk-u-font-size-16 nhsuk-u-margin-bottom-4">This section is in draft.</span>
                         </ng-container>
                       </ng-container>
@@ -86,7 +86,7 @@
                   </p>
                 </div>
 
-                <div *ngIf="isInnovatorType && sectionData.sectionInfo!.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
+                <div *ngIf="ctx.user.isInnovator() && sectionData.sectionInfo!.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">
                   <p>
                     <theme-tag
                       type="{{ 'shared.catalog.innovation.task_status.OPEN.cssColorClass' | translate }}"
@@ -105,19 +105,19 @@
       </div>
     </ng-container>
 
-    <theme-custom-notifications-entrypoint-component *ngIf="isAccessorType" [links]="customNotificationLinks" />
+    <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
 
     <ng-container
       *ngIf="
-        (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && isAccessorType) ||
-        (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && isAssessmentType)
+        (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && ctx.user.isAccessorType()) ||
+        (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && ctx.user.isAssessment())
       "
     >
       <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
     </ng-container>
 
     <div
-      *ngIf="isAccessorType && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
+      *ngIf="ctx.user.isAccessorType() && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
       class="nhsuk-inset-text nhsuk-u-margin-top-0"
     >
       <span class="nhsuk-u-visually-hidden">Information:</span>

@@ -18,7 +18,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
-      this.stores.authentication.userPasswordSuccessfullyUpdated();
+      this.ctx.user.updateInfo({ passwordChangeSinceLastSignIn: true });
     }
 
     this.setPageStatus('READY');

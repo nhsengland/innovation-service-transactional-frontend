@@ -42,10 +42,6 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
   baseUrl: string;
 
-  isAdminType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-
   isInnovationInArchivedStatus = false;
 
   isAccessorTypeAndArchivedInnovation = false;
@@ -67,19 +63,15 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   constructor() {
     super();
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
-
-    this.isAdminType = this.stores.authentication.isAdminRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/`;
   }
 
   ngOnInit(): void {
     this.isInnovationInArchivedStatus = this.innovationCardData.status === InnovationStatusEnum.ARCHIVED;
 
-    this.isAccessorTypeAndArchivedInnovation = this.isAccessorType && this.isInnovationInArchivedStatus;
+    this.isAccessorTypeAndArchivedInnovation = this.ctx.user.isAccessorType() && this.isInnovationInArchivedStatus;
     this.isAccessorTypeAndStoppedSharingInnovation =
-      this.isAccessorType && this.innovationCardData.support?.closeReason === 'STOP_SHARE';
+      this.ctx.user.isAccessorType() && this.innovationCardData.support?.closeReason === 'STOP_SHARE';
 
     this.categoriesList = this.getFormattedList(this.innovationCardData.categories);
     this.careSettingsList = this.getFormattedList(this.innovationCardData.careSettings);

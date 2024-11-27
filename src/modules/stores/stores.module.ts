@@ -13,6 +13,8 @@ import { SchemaContextService } from './ctx/schema/schema.service';
 import { LayoutContextStore } from './ctx/layout/layout.store';
 import { NotificationsContextStore } from './ctx/notifications/notifications.store';
 import { NotificationsContextService } from './ctx/notifications/notifications.service';
+import { UserContextStore } from './ctx/user/user.store';
+import { UserContextService } from './ctx/user/user.service';
 
 @NgModule({
   providers: [
@@ -29,7 +31,9 @@ import { NotificationsContextService } from './ctx/notifications/notifications.s
     SchemaContextService,
     LayoutContextStore,
     NotificationsContextStore,
-    NotificationsContextService
+    NotificationsContextService,
+    UserContextStore,
+    UserContextService
   ]
 })
 export class StoresModule {

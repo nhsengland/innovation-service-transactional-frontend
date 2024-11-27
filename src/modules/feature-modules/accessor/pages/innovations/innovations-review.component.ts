@@ -94,7 +94,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
 
     this.setPageTitle('Innovations', { hint: `${this.userUnit}` });
 
-    if (this.stores.authentication.isAccessorRole()) {
+    if (this.ctx.user.isAccessor()) {
       this.defaultStatus = 'ENGAGING';
       this.tabs = [
         {
@@ -148,7 +148,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         }
       ];
-    } else if (this.stores.authentication.isQualifyingAccessorRole()) {
+    } else if (this.ctx.user.isQualifyingAccessor()) {
       this.defaultStatus = 'SUGGESTED';
       this.tabs = [
         {

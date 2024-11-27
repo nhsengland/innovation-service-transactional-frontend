@@ -1,17 +1,17 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterModule, RouterStateSnapshot } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { FirstTimeSigninGuard } from './first-time-signin.guard';
 
 describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
   let guard: FirstTimeSigninGuard;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let routerStateSnapshopMock: Partial<RouterStateSnapshot>;
 
@@ -24,7 +24,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     AppInjector.setInjector(TestBed.inject(Injector));
 
     guard = TestBed.inject(FirstTimeSigninGuard);
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
 
     routerStateSnapshopMock = { url: '' };
   });
@@ -62,7 +62,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
       const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
       let expected: null | boolean = null;
 
-      authenticationStore.hasInnovationTransfers = () => true;
+      ctx.user.hasInnovationTransfers = signal(true);
 
       guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => {
         expected = response;
@@ -76,7 +76,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
       const routeMock: Partial<ActivatedRouteSnapshot> = { routeConfig: { path: 'first-time-signin' } };
       let expected: null | boolean = null;
 
-      authenticationStore.hasInnovationTransfers = () => false;
+      ctx.user.hasInnovationTransfers = signal(false);
 
       guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => {
         expected = response;
@@ -89,7 +89,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
       const routerSpy = jest.spyOn(TestBed.inject(Router), 'navigate');
       let expected: null | boolean = null;
 
-      authenticationStore.hasInnovationTransfers = () => false;
+      ctx.user.hasInnovationTransfers = signal(false);
 
       guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => {
         expected = response;
@@ -105,7 +105,7 @@ describe('FeatureModules/Innovator/Guards/FirstTimeSigninGuard', () => {
     const routerStateSnapshopMock: Partial<RouterStateSnapshot> = { url: 'terms-of-use' };
     let expected: null | boolean = null;
 
-    authenticationStore.hasInnovationTransfers = () => false;
+    ctx.user.hasInnovationTransfers = signal(false);
 
     guard.canActivateChild(routeMock as any, routerStateSnapshopMock as any).subscribe(response => {
       expected = response;

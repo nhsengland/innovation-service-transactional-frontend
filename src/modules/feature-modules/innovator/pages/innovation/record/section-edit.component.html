@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <ng-container *ngIf="wizard.isQuestionStep()">
         <theme-form-engine-v3 formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" />
@@ -25,7 +26,7 @@
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a
-                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
+                      *ngIf="ctx.user.isInnovator() && item.editStepNumber && displayChangeButtonList.includes(i)"
                       href="javascript:void(0)"
                       (click)="onChangeStep(item.editStepNumber, item)"
                     >

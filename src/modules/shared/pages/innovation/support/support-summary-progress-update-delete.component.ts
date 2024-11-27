@@ -22,7 +22,7 @@ export class PageInnovationSupportSummaryProgressUpdateDeleteComponent extends C
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.supportSummaryHistoryId = this.activatedRoute.snapshot.params.supportSummaryHistoryId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/support-summary`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/support-summary`;
   }
 
   ngOnInit(): void {

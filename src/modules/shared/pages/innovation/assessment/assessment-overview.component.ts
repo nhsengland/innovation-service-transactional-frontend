@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -29,12 +29,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
   // Flags
-  isAdminType: boolean;
-  isAssessmentType: boolean;
-  isAccessorType: boolean;
-  isInnovatorType: boolean;
-  isQualifyingAccessorRole: boolean;
-
   isInProgress: boolean;
 
   assessmentHasBeenSubmitted = false;
@@ -57,12 +51,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
     this.innovation = this.ctx.innovation.info();
-
-    this.isAdminType = this.stores.authentication.isAdminRole();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isQualifyingAccessorRole = this.isAccessorType && this.stores.authentication.isQualifyingAccessorRole();
 
     this.isInProgress = this.innovation.status === 'IN_PROGRESS';
   }
@@ -128,7 +116,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
-      if (this.isAccessorType) {
+      if (this.ctx.user.isAccessorType()) {
         this.updateSupportUrlNewOrSupport =
           this.innovation.support &&
           [InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.ENGAGING].includes(
@@ -155,7 +143,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   }
 
   setGoBackLink(): void {
-    if (this.isAssessmentType) {
+    if (this.ctx.user.isAssessment()) {
       let goBackUrl = undefined;
       const assessmentEditUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}/edit`;
       switch (this.assessmentQueryParam) {

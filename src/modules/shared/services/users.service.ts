@@ -55,7 +55,7 @@ export class UsersService extends CoreService {
           lockedAt: item.lockedAt,
           role: item.roles[0].role,
           roleId: item.roles[0].id,
-          roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
+          roleDescription: this.ctx.user.getRoleDescription(item.roles[0].role),
           email: item.email ?? '',
           organisationUnitUserId: item.organisationUnitUserId ?? ''
         }))

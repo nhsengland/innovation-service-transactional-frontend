@@ -23,9 +23,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
-  isQualifyingAccessorRole = false;
-  isAccessorRole = false;
-
   innovationSummary: { label: string; value: null | string }[] = [];
   innovatorSummary: { label: string; value: string }[] = [];
   cardsList: StatisticsCardType[] = [];
@@ -63,8 +60,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-    this.isAccessorRole = this.stores.authentication.isAccessorRole();
     this.isInAssessment = [
       InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT,
       InnovationStatusEnum.NEEDS_ASSESSMENT,
@@ -90,7 +85,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ...(this.innovation.support?.id && {
         support: this.innovationsService.getInnovationSupportInfo(this.innovationId, this.innovation.support.id)
       }),
-      ...(this.isQualifyingAccessorRole && {
+      ...(this.ctx.user.isQualifyingAccessor() && {
         unitsSuggestions: this.innovationService.getInnovationQASuggestions(this.innovation.id)
       }),
       innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true),
@@ -102,7 +97,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         const innovationInfo = this.innovation;
 
         this.innovationSupport = {
-          organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
+          organisationUnit: this.ctx.user.getAccessorUnitName() ?? '',
           status: support?.status ?? InnovationSupportStatusEnum.UNASSIGNED,
           engagingAccessors: support?.engagingAccessors ?? []
         };

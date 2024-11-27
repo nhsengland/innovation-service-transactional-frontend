@@ -190,7 +190,7 @@ export class CoreComponent implements OnDestroy {
 
     // If no url is provided, use the previous url or default to the dashboard to avoid getting out of the app.
     if (!urlOrCallback) {
-      urlOrCallback = this.ctx.layout.previousUrl() ?? `/${this.stores.authentication.userUrlBasePath()}/dashboard`;
+      urlOrCallback = this.ctx.layout.previousUrl() ?? `/${this.ctx.user.userUrlBasePath()}/dashboard`;
     }
 
     this.ctx.layout.update({ backLink: { label, callback: urlOrCallback, hiddenLabel } });
@@ -264,8 +264,9 @@ export class CoreComponent implements OnDestroy {
   //   }
   // }
 
+  // TODO: this could return a signal or be a computed from the store
   userUrlBasePath(): string {
-    return this.stores.authentication.userUrlBasePath();
+    return this.ctx.user.userUrlBasePath();
   }
 
   redirectTo(url: string, queryParams: MappedObjectType = {}): void {

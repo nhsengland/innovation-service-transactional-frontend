@@ -48,12 +48,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   lsCache: Set<string>;
   innovationAssessmentsList: innovationAssessmentListType[] = [];
 
-  // Flags
-  isQualifyingAccessorRole: boolean;
-  isAdmin: boolean;
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-
   isSuggestionsListEmpty = true;
   showSuggestOrganisationsToSupportLink = false;
 
@@ -83,12 +77,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
       this.lsCache = new Set([]);
     }
 
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-
-    if (this.isAdmin) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
     }
   }
@@ -103,7 +92,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
       innovationAssessmentsObservable: this.innovationsService.getInnovationAssessmentsList(this.innovation.id)
     };
 
-    if (this.isQualifyingAccessorRole) {
+    if (this.ctx.user.isQualifyingAccessor()) {
       subscriptions.organisationsList = this.organisationsService.getOrganisationsList({ unitsInformation: true });
     }
 
@@ -173,8 +162,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
 
         // Check if there are organisations to be suggested by the qualifying accessor
-        if (this.isQualifyingAccessorRole) {
-          const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+        if (this.ctx.user.isQualifyingAccessor()) {
+          const userUnitId = this.ctx.user.getUserContext()?.organisationUnit?.id ?? '';
 
           const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
 
@@ -255,7 +244,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const minStart = new Date(minStartSupport).setHours(0, 0, 0, 0);
     const today = new Date().setHours(0, 0, 0, 0);
 
-    if (this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === unitId && today >= minStart) {
+    if (this.ctx.user.getUserContext()?.organisationUnit?.id === unitId && today >= minStart) {
       return true;
     } else {
       return false;

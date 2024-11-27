@@ -17,10 +17,6 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
   requestId: string;
   innovationRequest?: InnovationExportRequestInfoDTO;
 
-  // Flags
-  isInnovatorType: boolean;
-  isSupportTeamType: boolean;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
@@ -31,10 +27,6 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.requestId = this.activatedRoute.snapshot.params.requestId;
-
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isSupportTeamType =
-      this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
   }
 
   ngOnInit(): void {
@@ -69,9 +61,7 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
         }
 
         this.redirectTo(
-          `/${this.stores.authentication.userUrlBasePath()}/innovations/${
-            this.innovationId
-          }/record/export-requests/list`
+          `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/list`
         );
       },
       error: () => {
@@ -82,23 +72,22 @@ export class PageInnovationExportRequestInfoComponent extends CoreComponent impl
   }
 
   rejectRequestRedirect() {
-    if (!this.isInnovatorType) {
+    if (!this.ctx.user.isInnovator()) {
       return;
     }
     this.redirectTo(
-      `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/${
+      `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/${
         this.innovationRequest?.id
       }/reject`
     );
   }
 
   requestAgainRedirect() {
-    if (!this.isSupportTeamType) {
+    if (!this.ctx.user.isAccessorOrAssessment()) {
       return;
     }
-    this.redirectTo(
-      `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/new`,
-      { requestAgainId: this.innovationRequest?.id }
-    );
+    this.redirectTo(`/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests/new`, {
+      requestAgainId: this.innovationRequest?.id
+    });
   }
 }

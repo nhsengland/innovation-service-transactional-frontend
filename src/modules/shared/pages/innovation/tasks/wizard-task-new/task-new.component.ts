@@ -17,7 +17,6 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
   innovationId: string;
   sectionId: string;
 
-  baseUrl: string;
   taskUrl: string;
   sectionUrl: string;
 
@@ -38,11 +37,9 @@ export class PageInnovationTaskNewComponent extends CoreComponent implements OnI
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.section;
 
-    this.baseUrl = this.stores.authentication.userUrlBasePath();
+    this.taskUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/tasks`;
 
-    this.taskUrl = `/${this.baseUrl}/innovations/${this.innovationId}/tasks`;
-
-    this.sectionUrl = `/${this.baseUrl}/innovations/${this.innovationId}/record/sections/${this.sectionId}`;
+    this.sectionUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/sections/${this.sectionId}`;
 
     this.sections = this.ctx.schema.getIrSchemaNumberedSubSectionsList();
 

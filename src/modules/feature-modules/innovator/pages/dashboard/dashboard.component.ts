@@ -63,7 +63,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ) {
     super();
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.user = {
       displayName: user.displayName,
       innovationsOwner: [],
@@ -82,7 +82,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
-      this.stores.authentication.userPasswordSuccessfullyUpdated();
+      this.ctx.user.updateInfo({ passwordChangeSinceLastSignIn: true });
     }
 
     forkJoin([
@@ -162,7 +162,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           }
         }),
         concatMap(
-          () => this.stores.authentication.initializeAuthentication$() // Initialize authentication in order to update First Time SignIn information.
+          () => this.ctx.user.initializeAuthentication$() // Initialize authentication in order to update First Time SignIn information.
         ),
         concatMap(() =>
           forkJoin([

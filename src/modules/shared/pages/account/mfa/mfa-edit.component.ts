@@ -4,10 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { UsersService } from '@modules/shared/services/users.service';
-import { AuthenticationService } from '@modules/stores';
 import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { combineLatest, Observable } from 'rxjs';
 import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } from './mfa-edit.config';
+import { UserContextService } from '@modules/stores/ctx/user/user.service';
 
 export type CurrentMFAModeType = 'phone' | 'email' | 'none';
 
@@ -31,13 +31,13 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
 
   // Configurations
   getUserMFAInfo: () => Observable<MFAInfoDTO>;
-  updateUserMFAInfo: (mfaInfo: MFAInfoDTO) => Observable<any>;
+  updateUserMFAInfo: (mfaInfo: MFAInfoDTO) => Observable<void>;
 
-  isAdmin = this.stores.authentication.isAdminRole();
+  isAdmin = this.ctx.user.isAdmin();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authenticationService: AuthenticationService,
+    private userCtxService: UserContextService,
     private usersService: UsersService
   ) {
     super();
@@ -56,10 +56,10 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
       this.getUserMFAInfo = this.usersService.getUserMFAInfo(user.id).bind(this.usersService);
       this.updateUserMFAInfo = this.usersService.updateUserMFAInfo(user.id).bind(this.usersService);
     } else {
-      this.userEmail = this.stores.authentication.getUserInfo().email;
-      this.manageAccountPageUrl = `${this.stores.authentication.userUrlBasePath()}/account/manage-account`;
-      this.getUserMFAInfo = this.authenticationService.getUserMFAInfo.bind(this.authenticationService);
-      this.updateUserMFAInfo = this.authenticationService.updateUserMFAInfo.bind(this.authenticationService);
+      this.userEmail = this.ctx.user.getUserInfo().email;
+      this.manageAccountPageUrl = `${this.ctx.user.userUrlBasePath()}/account/manage-account`;
+      this.getUserMFAInfo = this.userCtxService.getUserMFAInfo.bind(this.userCtxService);
+      this.updateUserMFAInfo = this.userCtxService.updateUserMFAInfo.bind(this.userCtxService);
     }
   }
 

@@ -30,7 +30,6 @@ import { ActivatedRoute } from '@angular/router';
 export class WizardInnovationThreadNewComponent extends CoreComponent implements OnInit {
   sectionId?: string;
   innovation: ContextInnovationType;
-  isInnovatorType: boolean;
 
   wizard = new WizardModel<{
     innovationOwnerAndCollaborators: { name: string; role: string }[];
@@ -60,8 +59,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
 
     this.innovation = this.ctx.innovation.info();
 
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-
     this.wizard.data = {
       innovationOwnerAndCollaborators:
         this.innovation.owner && this.innovation.owner.isActive
@@ -85,13 +82,13 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
       empty: of(null)
     };
 
-    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+    if (this.ctx.user.isAccessorOrAssessment()) {
       subscriptions.collaborators = this.innovationsService.getInnovationCollaboratorsList(this.innovation.id, [
         'active'
       ]);
     }
 
-    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.ctx.user.isAdmin()) {
       subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
         this.innovation.id
       );
@@ -112,15 +109,14 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           this.datasets.organisationUnits = response.threadAvailableRecipients;
 
           // Filter out the user unit, if accessor.
-          if (this.stores.authentication.isAccessorType()) {
+          if (this.ctx.user.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
-              item =>
-                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+              item => item.organisation.unit.id !== this.ctx.user.getUserContext()?.organisationUnit?.id
             );
           }
 
           // Show warning step if there's no units to display.
-          if (this.isInnovatorType && this.datasets.organisationUnits.length === 0) {
+          if (this.ctx.user.isInnovator() && this.datasets.organisationUnits.length === 0) {
             this.wizard.addStep(
               new WizardStepModel<WarningStepInputType, WarningStepOutputType>({
                 id: 'WarningStep',
@@ -136,7 +132,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
             this.wizard.addStep(
               new WizardStepModel<OrganisationsStepInputType, OrganisationsStepOutputType>({
                 id: 'organisationsStep',
-                title: this.isInnovatorType
+                title: this.ctx.user.isInnovator()
                   ? 'Select the support organisations you want to message'
                   : 'Would you like to notify other support organisations about this message?',
                 component: WizardInnovationThreadNewOrganisationsStepComponent,
@@ -200,7 +196,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   getThreadSubject(): string {
     let subject = this.wizard.data.subjectMessageStep.subject;
 
-    if (this.isInnovatorType && this.sectionId && !subject) {
+    if (this.ctx.user.isInnovator() && this.sectionId && !subject) {
       const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
       subject = sectionIdentification ? `Innovation record update to section ${this.getSubmittedSectionText()}` : '';
     }
@@ -211,7 +207,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   getThreadMessage(): string {
     let message = this.wizard.data.subjectMessageStep.message;
 
-    if (this.isInnovatorType && this.sectionId && !message) {
+    if (this.ctx.user.isInnovator() && this.sectionId && !message) {
       message = `Please take a look at the changes I have made to section ${this.getSubmittedSectionText()}.  \n\nThe main changes I have made are: `;
     }
 
@@ -222,9 +218,9 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     this.resetAlert();
 
     if (this.wizard.currentStepNumber() === 1) {
-      if (this.isInnovatorType && this.sectionId) {
+      if (this.ctx.user.isInnovator() && this.sectionId) {
         this.redirectTo(
-          `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/${this.sectionId}/submitted`
+          `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/record/sections/${this.sectionId}/submitted`
         );
       } else {
         this.redirectToThreadsList();
@@ -297,7 +293,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     };
 
     if (file) {
-      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+      const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovation.id };
 
       this.fileUploadService
         .uploadFile(httpUploadBody, file)
@@ -348,7 +344,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
     followersUserRoleIds: string[];
     visibleList: SubjectMessageStepInputType['teams'];
   } {
-    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+    if (this.ctx.user.isAccessorOrAssessment()) {
       return {
         followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
           item.users.map(u => u.roleId)
@@ -363,7 +359,7 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
           ...this.wizard.data.organisationsStep.organisationUnits.map(item => ({ name: item.name, users: item.users }))
         ]
       };
-    } else if (this.stores.authentication.isInnovatorType()) {
+    } else if (this.ctx.user.isInnovator()) {
       if (
         [InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(
           this.innovation.status
@@ -399,6 +395,6 @@ export class WizardInnovationThreadNewComponent extends CoreComponent implements
   }
 
   private redirectToThreadsList(): void {
-    this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/threads`);
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/threads`);
   }
 }

@@ -85,7 +85,7 @@ export class InnovatorService extends CoreService {
   submitOrganisationSharing(innovationId: string, body: MappedObjectType): Observable<{ id: string }> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/shares')
-      .setPathParams({ userId: this.stores.authentication.getUserId(), innovationId });
+      .setPathParams({ userId: this.ctx.user.getUserId(), innovationId });
     return this.http.put<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
       map(response => response)

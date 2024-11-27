@@ -17,10 +17,8 @@ export class AccountMFAListComponent extends CoreComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
-    const isAdmin = this.stores.authentication.isAdminRole();
-    this.userEmail = isAdmin
-      ? this.activatedRoute.snapshot.data.user.email
-      : this.stores.authentication.getUserInfo().email;
+    const isAdmin = this.ctx.user.isAdmin();
+    this.userEmail = isAdmin ? this.activatedRoute.snapshot.data.user.email : this.ctx.user.getUserInfo().email;
     this.description = isAdmin
       ? 'Two-step verification adds a layer of security to the account.'
       : 'Two-step verification adds a layer of security to your account. We will send you a security code to your phone or email for you to use when logging in.';

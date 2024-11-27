@@ -61,8 +61,8 @@ export class PageUsersRoleInactivateComponent extends CoreComponent implements O
             .map(r => ({
               id: r.id,
               description: r.displayTeam
-                ? `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})`
-                : `${this.stores.authentication.getRoleDescription(r.role).toLowerCase()}`
+                ? `${this.ctx.user.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})`
+                : `${this.ctx.user.getRoleDescription(r.role).toLowerCase()}`
             }))[0] ?? { id: '', description: '' }
         };
 

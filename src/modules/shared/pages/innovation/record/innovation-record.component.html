@@ -9,7 +9,7 @@
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <div class="nhsuk-grid-row">
-    <ng-container *ngIf="isInnovatorType">
+    <ng-container *ngIf="ctx.user.isInnovator()">
       <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
         <div class="nhsuk-grid-column-full">
           <ng-container *ngIf="isInnovationInCreatedStatus">
@@ -53,7 +53,7 @@
         {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
       </p>
 
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="ctx.user.isInnovator()">
         <div *ngIf="sections.withOpenTasksCount > 0" class="nhsuk-inset-text nhsuk-u-margin-top-3">
           <span class="nhsuk-u-visually-hidden">Information: </span>
           <p>
@@ -97,7 +97,7 @@
       </ng-container>
 
       <h2 class="nhsuk-heading-l">All sections</h2>
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="ctx.user.isInnovator()">
         <p *ngIf="isInnovationInCreatedStatus">
           This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.
         </p>
@@ -126,7 +126,7 @@
                 </a>
               </span>
 
-              <ng-container *ngIf="isInnovatorType">
+              <ng-container *ngIf="ctx.user.isInnovator()">
                 <span *ngIf="section.openTasksCount >= 1" class="float-r">
                   <theme-tag
                     routerLink="{{ baseUrl }}/{{ section.id }}/tasks"
@@ -144,14 +144,14 @@
                   <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                   {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                 </span>
-                <ng-container *ngIf="!isAccessorType && !isAssessmentType">
+                <ng-container *ngIf="!ctx.user.isAccessorType() && !ctx.user.isAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
                     In draft - last submitted by {{ section.submittedBy?.name }}
                     <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                     {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                   </span>
                 </ng-container>
-                <ng-container *ngIf="isAccessorType || isAssessmentType">
+                <ng-container *ngIf="ctx.user.isAccessorOrAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
                     This section is in draft. You can view the last version submitted by the innovator.
                   </span>
@@ -162,7 +162,7 @@
         </li>
       </ol>
 
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="ctx.user.isInnovator()">
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
           <li><app-innovation-record-export [innovationId]="this.innovationId" [fileType]="'pdf'"></app-innovation-record-export></li>
@@ -184,7 +184,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="!isAdminType">
+      <ng-container *ngIf="!ctx.user.isAdmin()">
         <div class="nhsuk-action-link nhsuk-u-padding-top-5">
           <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
             <theme-svg-icon type="arrow-right-circle" />
@@ -193,7 +193,7 @@
         </div>
       </ng-container>
 
-      <theme-custom-notifications-entrypoint-component *ngIf="isAccessorType" [links]="customNotificationLinks" />
+      <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
     </div>
   </div>
 </theme-content-wrapper>

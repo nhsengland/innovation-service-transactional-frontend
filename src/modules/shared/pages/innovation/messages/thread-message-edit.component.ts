@@ -13,7 +13,6 @@ import { UntypedFormControl } from '@angular/forms';
   templateUrl: './thread-message-edit.component.html'
 })
 export class PageInnovationThreadMessageEditComponent extends CoreComponent implements OnInit {
-  selfUser: { id: string; urlBasePath: string };
   innovation: ContextInnovationType;
   threadId: string;
   messageId: string;
@@ -28,11 +27,6 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
   ) {
     super();
     this.setPageTitle('Edit message');
-
-    this.selfUser = {
-      id: this.stores.authentication.getUserId(),
-      urlBasePath: this.stores.authentication.userUrlBasePath()
-    };
 
     this.innovation = this.ctx.innovation.info();
     this.threadId = this.activatedRoute.snapshot.params.threadId;
@@ -61,7 +55,9 @@ export class PageInnovationThreadMessageEditComponent extends CoreComponent impl
     this.innovationsService.editThreadMessage(this.innovation.id, this.threadId, this.messageId, body).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('You have successfully updated a message');
-        this.redirectTo(`/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads/${this.threadId}`);
+        this.redirectTo(
+          `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/threads/${this.threadId}`
+        );
       },
       error: () => this.setAlertUnknownError()
     });

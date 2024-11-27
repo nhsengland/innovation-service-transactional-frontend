@@ -25,7 +25,6 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
 
   // Flags
   canDelete = false;
-  isArchived: boolean;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -36,9 +35,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovation = this.ctx.innovation.info();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
-
-    this.isArchived = this.ctx.innovation.isArchived();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
   }
 
   ngOnInit(): void {

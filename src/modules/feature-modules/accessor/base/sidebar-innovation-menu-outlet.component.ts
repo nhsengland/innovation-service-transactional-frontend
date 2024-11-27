@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { AuthenticationStore, CtxStore, InnovationStatusEnum } from '@modules/stores';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -18,8 +18,6 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   showHeading = false;
   isAllSectionsDetailsPage = false;
   isInnovationRecordPage = false;
-  isQualifyingAccessorRole: boolean;
-
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];
   private _sidebarItems: { label: string; url: string; id?: string }[] = [];
@@ -27,11 +25,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     readonly ctx: CtxStore,
-    private scroller: ViewportScroller,
-    private authenticationStore: AuthenticationStore
+    private scroller: ViewportScroller
   ) {
-    this.isQualifyingAccessorRole = this.authenticationStore.isQualifyingAccessorRole();
-
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -66,7 +61,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
           ? [{ label: 'Support summary', url: `/accessor/innovations/${innovation.id}/support-summary` }]
           : []),
         {
-          label: this.isQualifyingAccessorRole ? 'Suggest support' : 'Data sharing preferences',
+          label: this.ctx.user.isQualifyingAccessor() ? 'Suggest support' : 'Data sharing preferences',
           url: `/accessor/innovations/${innovation.id}/support`
         },
         { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` },

@@ -1,14 +1,14 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { SharedModule } from '@modules/shared/shared.module';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
-import { NotificationCategoryTypeEnum, NotificationsService } from '@modules/shared/services/notifications.service';
+import { NotificationCategoryTypeEnum } from '@modules/shared/services/notifications.service';
 
 import { PageAccountEmailNotificationsEditComponent } from './email-notifications-edit.component';
 
@@ -17,8 +17,7 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
-  let notificationsService: NotificationsService;
+  let ctx: CtxStore;
 
   let component: PageAccountEmailNotificationsEditComponent;
   let fixture: ComponentFixture<PageAccountEmailNotificationsEditComponent>;
@@ -34,10 +33,9 @@ describe('Shared/Pages/Account/EmailNotifications/PageAccountEmailNotificationsE
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    notificationsService = TestBed.inject(NotificationsService);
+    ctx = TestBed.inject(CtxStore);
 
-    authenticationStore.userUrlBasePath = () => 'innovator';
+    ctx.user.userUrlBasePath = signal('innovator');
     activatedRoute.snapshot.params = { notificationType: NotificationCategoryTypeEnum.SUPPORT };
   });
 

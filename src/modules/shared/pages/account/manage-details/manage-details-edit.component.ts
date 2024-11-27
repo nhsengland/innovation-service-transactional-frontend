@@ -40,15 +40,15 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    if (this.stores.authentication.isInnovatorType()) {
+    if (this.ctx.user.isInnovator()) {
       this.wizard = ACCOUNT_DETAILS_INNOVATOR;
-    } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
+    } else if (this.ctx.user.isAccessorOrAssessment()) {
       this.wizard = ACCOUNT_DETAILS_ACCESSOR;
-    } else if (this.stores.authentication.isAdminRole()) {
+    } else if (this.ctx.user.isAdmin()) {
       this.wizard = ACCOUNT_DETAILS_ADMIN;
     }
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.wizard.setAnswers(this.wizard.runInboundParsing(user)).runRules();
 
     this.subscriptions.push(
@@ -97,7 +97,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       displayName: wizardData.displayName
     };
 
-    if (this.stores.authentication.isInnovatorType()) {
+    if (this.ctx.user.isInnovator()) {
       body = {
         displayName: wizardData.displayName,
         contactByPhone: wizardData.contactByPhone,
@@ -110,10 +110,11 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       };
     }
 
-    this.stores.authentication
+    this.ctx.user
       .updateUserInfo$(body)
       .pipe(
-        concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
+        // TODO: try to remove this by updating the state when calling updateUserInfo$
+        concatMap(() => this.ctx.user.initializeAuthentication$())
       )
       .subscribe({
         next: () => {

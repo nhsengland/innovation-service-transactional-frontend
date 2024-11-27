@@ -3,7 +3,7 @@ import { AppInjector } from '@modules/core';
 import { UserRoleEnum } from '@app/base/enums';
 
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 // Labels.
 const stepsLabels = {
@@ -54,7 +54,7 @@ export type OutboundPayloadType = CreateRolesType;
 
 // consts.
 const injector = AppInjector.getInjector();
-const authenticationStore = injector?.get(AuthenticationStore);
+const ctx = injector?.get(CtxStore);
 
 export const WIZARD_ADD_ROLE: WizardEngineModel = new WizardEngineModel({
   steps: [],
@@ -77,7 +77,7 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
             dataType: 'radio-group',
             label: stepsLabels.l1.label,
             validations: { isRequired: [true, 'Choose one role'] },
-            items: data.availableRoles.map(r => ({ value: r, label: authenticationStore?.getRoleDescription(r) }))
+            items: data.availableRoles.map(r => ({ value: r, label: ctx.user?.getRoleDescription(r) }))
           }
         ]
       })
@@ -202,7 +202,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
 
   toReturn.push({ label: 'Email', value: data.email }, { label: 'Name', value: data.name });
 
-  const role = authenticationStore.getRoleDescription(data.role!); // Reaching this point role will be defined
+  const role = ctx.user.getRoleDescription(data.role!); // Reaching this point role will be defined
 
   if (data.role === UserRoleEnum.ASSESSMENT) {
     toReturn.push({ label: 'Role', value: role, editStepNumber: editStepNumber++ });

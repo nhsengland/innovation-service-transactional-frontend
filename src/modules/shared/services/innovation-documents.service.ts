@@ -116,9 +116,7 @@ export class InnovationDocumentsService extends CoreService {
               break;
           }
 
-          let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(
-            item.createdBy.role
-          )}`;
+          let userDescription = `${item.createdBy.name}, ${this.ctx.user.getRoleDescription(item.createdBy.role)}`;
           if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
             item.createdBy.name === '[deleted user]'
               ? userDescription
@@ -158,18 +156,18 @@ export class InnovationDocumentsService extends CoreService {
             description = section ?? '[archived section]';
             descriptionUrl =
               (section &&
-                `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}`) ??
+                `${this.ctx.user.userUrlBasePath()}/innovations/${innovationId}/record/sections/${item.context.id}`) ??
               null;
             break;
           case 'INNOVATION_EVIDENCE':
             description = item.context.name ?? '';
-            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${
+            descriptionUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${
               item.context.id
             }`;
             break;
           case 'INNOVATION_MESSAGE':
             description = item.context.name ?? '';
-            descriptionUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${innovationId}/threads/${
+            descriptionUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${innovationId}/threads/${
               item.context.threadId
             }`;
             break;
@@ -177,13 +175,15 @@ export class InnovationDocumentsService extends CoreService {
             break;
         }
 
-        let userDescription = `${item.createdBy.name}, ${this.stores.authentication.getRoleDescription(
-          item.createdBy.role
-        )}`;
+        let userDescription = `${item.createdBy.name}, ${this.ctx.user.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-          item.createdBy.name === '[deleted user]'
-            ? userDescription
-            : (userDescription += item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
+          // item.createdBy.name === '[deleted user]'
+          //   ? userDescription
+          //   : (userDescription += item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
+          //
+          if (item.createdBy.name !== '[deleted user]') {
+            userDescription += item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)';
+          }
         } else {
           userDescription += item.createdBy.orgUnitName ? ` at ${item.createdBy.orgUnitName}` : '';
         }

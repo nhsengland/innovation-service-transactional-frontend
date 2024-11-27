@@ -32,8 +32,6 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
 
   sectionId?: string;
 
-  isInnovatorType: boolean;
-
   form = new FormGroup(
     {
       subject: new FormControl<string>('', [
@@ -65,8 +63,6 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
     super();
 
     this.sectionId = this.activatedRoute.snapshot.queryParams.sectionId;
-
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
   ngOnInit(): void {
@@ -77,14 +73,14 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
     this.form.get('message')?.setValue(this.data.message);
     this.form.get('file')?.setValue(this.data.file);
     this.form.get('fileName')?.setValue(this.data.fileName);
-    if (!this.stores.authentication.isInnovatorType()) {
+    if (!this.ctx.user.isInnovator()) {
       this.form.get('confirmation')?.setValue(true);
     }
 
     this.formConfirmationField = {
       label:
         'I understand that for transparency reasons, this message can be seen and replied by everyone who has access to this innovation.',
-      description: `<a href="${this.stores.authentication.userUrlBasePath()}/innovations/${
+      description: `<a href="${this.ctx.user.userUrlBasePath()}/innovations/${
         this.data.innovation.id
       }/support" target="_blank" rel="noopener noreferrer">View a list of this innovation's data sharing preferences (opens in a new window).</a>`
     };

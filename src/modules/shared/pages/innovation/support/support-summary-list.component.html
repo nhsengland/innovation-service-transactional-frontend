@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div *ngIf="isInnovatorType && innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <div *ngIf="ctx.user.isInnovator() && innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information: </span>
         <p>If you want to stop sharing your innovation with an organisation, <a routerLink="../support">update your data sharing preferences</a>.</p>
       </div>
@@ -238,9 +238,9 @@
         </a>
       </div>
 
-      <theme-custom-notifications-entrypoint-component *ngIf="isAccessorType" [links]="customNotificationLinks" />
+      <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
 
-      <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <div *ngIf="ctx.user.isQualifyingAccessor() && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information:</span>
         <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
       </div>

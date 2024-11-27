@@ -23,12 +23,12 @@ export class InnovationRecordExportComponent extends CoreComponent implements On
       case 'pdf':
         this.exportDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
           this.innovationId
-        }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+        }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
         break;
       case 'csv':
         this.exportDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
           this.innovationId
-        }/csv?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+        }/csv?role=${this.ctx.user.getUserContext()?.roleId}`;
         break;
     }
   }

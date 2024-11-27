@@ -27,7 +27,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
   // Flags
   isClosedActionsLoading = false;
-  isInnovatorType: boolean;
   isArchived: boolean;
 
   constructor(
@@ -36,9 +35,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   ) {
     super();
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
-    this.setPageTitle(this.isInnovatorType ? 'Tasks to do' : 'Tasks');
+    this.setPageTitle(this.ctx.user.isInnovator() ? 'Tasks to do' : 'Tasks');
 
     this.tablesTitles = { topTableTitle: '', bottomTableTitle: '' };
 
@@ -113,9 +111,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   getUserType() {
-    return this.stores.authentication.isAccessorType()
-      ? UserRoleEnum.ACCESSOR
-      : this.stores.authentication.getUserType();
+    return this.ctx.user.isAccessorType() ? UserRoleEnum.ACCESSOR : this.ctx.user.getUserType();
   }
 
   getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {

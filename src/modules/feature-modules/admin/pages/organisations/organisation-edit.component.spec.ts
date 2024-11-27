@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { FormEngineComponent } from '@modules/shared/forms';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { AuthenticationStore, CtxStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 
@@ -22,7 +22,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   let router: Router;
   let routerSpy: jest.SpyInstance;
   let activatedRoute: ActivatedRoute;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
   let usersService: AdminUsersService;
   let organisationsService: OrganisationsService;
   let adminOrganisationsService: AdminOrganisationsService;
@@ -37,7 +37,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
     activatedRoute = TestBed.inject(ActivatedRoute);
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
     usersService = TestBed.inject(AdminUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
     adminOrganisationsService = TestBed.inject(AdminOrganisationsService);
@@ -144,7 +144,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
 
   it('should run onSubmitWizard() with API success when updating organisation', () => {
     activatedRoute.snapshot.data = { module: 'Organisation' };
-    authenticationStore.initializeAuthentication$ = () => of(true);
+    ctx.user.initializeAuthentication$ = () => of(true);
     adminOrganisationsService.updateOrganisation = () => of({ organisationId: 'Org01', status: 'OK' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);
@@ -159,7 +159,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationEditComponent
   it('should run onSubmitWizard() with API success when updating unit', () => {
     activatedRoute.snapshot.params = { organisationId: 'Org01', organisationUnitId: 'Unit01' };
     activatedRoute.snapshot.data = { module: 'Unit' };
-    authenticationStore.initializeAuthentication$ = () => of(true);
+    ctx.user.initializeAuthentication$ = () => of(true);
     adminOrganisationsService.updateUnit = () => of({ unitId: 'Unit01' });
 
     fixture = TestBed.createComponent(PageOrganisationEditComponent);

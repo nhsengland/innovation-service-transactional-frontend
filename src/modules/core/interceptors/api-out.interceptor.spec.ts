@@ -1,21 +1,21 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { PLATFORM_ID } from '@angular/core';
+import { PLATFORM_ID, signal } from '@angular/core';
 import { REQUEST, RESPONSE } from '../../../express.tokens';
 
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationService, AuthenticationStore, StoresModule } from '@modules/stores';
+import { AuthenticationService, CtxStore, StoresModule } from '@modules/stores';
 import { RouterModule } from '@angular/router';
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
   let authenticationService: AuthenticationService;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,7 +31,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
     authenticationService = TestBed.inject(AuthenticationService);
   });
 
@@ -43,7 +43,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     const responseMock = true;
     let response: any = null;
 
-    authenticationStore.getUserContextInfo = () => ({
+    ctx.user.getUserContext = signal({
       id: 'userId',
       roleId: '123',
       type: UserRoleEnum.ADMIN

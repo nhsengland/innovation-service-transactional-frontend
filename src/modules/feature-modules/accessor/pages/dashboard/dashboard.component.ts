@@ -28,8 +28,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
 
   cardsList: StatisticsCardType[] = [];
 
-  isQualifyingAccessorRole = false;
-
   announcements: AnnouncementType[] = [];
 
   constructor(
@@ -38,14 +36,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
   ) {
     super();
 
-    this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
+    this.setPageTitle('Home', { hint: `Hello ${this.ctx.user.getDisplayName()}` });
 
     this.user = {
-      displayName: this.stores.authentication.getUserInfo().displayName,
-      organisation: this.stores.authentication.getUserContextInfo()?.organisationUnit?.name || '',
-      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt,
-      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
+      displayName: this.ctx.user.getDisplayName(),
+      organisation: this.ctx.user.getUserContext()?.organisationUnit?.name || '',
+      passwordResetAt: this.ctx.user.getUserInfo().passwordResetAt,
+      firstTimeSignInAt: this.ctx.user.getUserInfo().firstTimeSignInAt
     };
   }
 
@@ -55,7 +52,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
-      this.stores.authentication.userPasswordSuccessfullyUpdated();
+      this.ctx.user.updateInfo({ passwordChangeSinceLastSignIn: true });
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = {
@@ -95,7 +92,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         }
       ];
 
-      if (this.isQualifyingAccessorRole) {
+      if (this.ctx.user.isQualifyingAccessor()) {
         this.cardsList.unshift({
           title: 'Review innovations',
           label: `Suggested innovations awaiting status assignment from your organisation unit`,

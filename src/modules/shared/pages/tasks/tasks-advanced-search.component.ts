@@ -18,8 +18,6 @@ import { getConfig } from './task-advanced-search.config';
 export class PageTasksAdvancedSearchComponent extends CoreComponent implements OnInit {
   tasksList = new TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>({});
 
-  pageInformation: { leadText: string };
-
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
@@ -36,12 +34,6 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
         status: { label: 'Status', align: 'right', orderable: true }
       })
       .setOrderBy('updatedAt', 'descending');
-
-    this.pageInformation = {
-      leadText: this.stores.authentication.isAssessmentType()
-        ? 'Tasks assigned by needs assessment team'
-        : `Tasks assigned by ${this.stores.authentication.getAccessorOrganisationUnitName()}`
-    };
   }
 
   ngOnInit(): void {

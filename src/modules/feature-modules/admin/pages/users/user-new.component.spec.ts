@@ -1,17 +1,18 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { AdminUsersService } from '@modules/feature-modules/admin/services/users.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { PageUserNewComponent } from './user-new.component';
+import { UserContextStore } from '@modules/stores/ctx/user/user.store';
 
 describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () => {
   let component: PageUserNewComponent;
@@ -19,7 +20,8 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
+  let userCtx: UserContextStore;
   let usersService: AdminUsersService;
   let organisationsService: OrganisationsService;
 
@@ -33,9 +35,12 @@ describe('FeatureModules/Admin/Pages/AdminUsers/PageAdminUserNewComponent', () =
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     usersService = TestBed.inject(AdminUsersService);
     organisationsService = TestBed.inject(OrganisationsService);
+    ctx = TestBed.inject(CtxStore);
+    userCtx = TestBed.inject(UserContextStore);
+    userCtx.getRoleDescription = signal('ADMIN');
+    ctx.user.getRoleDescription = userCtx.getRoleDescription;
 
     organisationsService.getOrganisationsList = () =>
       of([

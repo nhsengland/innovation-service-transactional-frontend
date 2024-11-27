@@ -26,11 +26,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   userUrlBase = '';
 
   // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-  isAdmin: boolean;
-  isArchived: boolean;
   canCancel = false;
   canReopen = false;
   canSendMessage = false;
@@ -49,13 +44,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.userUrlBase = this.userUrlBasePath();
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {
@@ -144,21 +132,23 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   private setAllowedActions() {
     this.canReopen =
       !!this.task &&
-      !this.isArchived &&
+      !this.ctx.innovation.isArchived() &&
       ['DONE', 'DECLINED'].includes(this.task.status) &&
       this.task.sameOrganisation &&
-      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      (this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
 
     this.canCancel =
       !!this.task &&
       this.task.status === 'OPEN' &&
       this.task.sameOrganisation &&
-      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      (this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
 
     this.canSendMessage =
-      !this.isArchived &&
-      (this.isInnovatorType ||
-        this.isAssessmentType ||
-        (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      !this.ctx.innovation.isArchived() &&
+      (this.ctx.user.isInnovator() ||
+        this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessor() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }

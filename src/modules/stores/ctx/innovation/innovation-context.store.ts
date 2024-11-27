@@ -16,7 +16,6 @@ import {
 } from 'rxjs';
 import { omitBy, cloneDeep, isUndefined } from 'lodash';
 
-import { AuthenticationModel } from '../../authentication/authentication.models';
 import { InnovationContextService } from './innovation-context.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from './innovation.enums';
 import { ContextInnovationType, EMPTY_CONTEXT } from './innovation-context.types';
@@ -33,6 +32,7 @@ import { INNOVATION_SECTIONS_EVIDENCES_WIZARD } from '../../innovation/innovatio
 import { toObservable } from '@angular/core/rxjs-interop';
 import { SchemaContextStore } from '../schema/schema.store';
 import { HttpErrorResponse } from '@angular/common/http';
+import { UserContextType } from '../user/user.types';
 
 @Injectable()
 export class InnovationContextStore {
@@ -54,7 +54,7 @@ export class InnovationContextStore {
   hasError$ = toObservable(this.hasError);
 
   // Actions
-  fetch$ = new Subject<{ innovationId: string; userContext: AuthenticationModel['userContext'] }>();
+  fetch$ = new Subject<{ innovationId: string; userContext: UserContextType['domainContext'] }>();
 
   constructor(
     private innovationService: InnovationContextService,
@@ -96,7 +96,7 @@ export class InnovationContextStore {
 
   getOrLoadInnovation$(
     innovationId: string,
-    context: AuthenticationModel['userContext']
+    context: UserContextType['domainContext']
   ): Observable<ContextInnovationType> {
     const innovation = this.state().innovation;
     if (innovation && innovation.id === innovationId && Date.now() < innovation.expiryAt) {

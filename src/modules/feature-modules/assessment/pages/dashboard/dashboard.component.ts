@@ -39,13 +39,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
     private announcementsService: AnnouncementsService
   ) {
     super();
-    this.setPageTitle('Home', { hint: `Hello ${this.stores.authentication.getUserInfo().displayName}` });
+    this.setPageTitle('Home', { hint: `Hello ${this.ctx.user.getDisplayName()}` });
 
     this.user = {
-      displayName: this.stores.authentication.getUserInfo().displayName,
+      displayName: this.ctx.user.getDisplayName(),
       organisation: 'Needs assessment team',
-      passwordResetAt: this.stores.authentication.getUserInfo().passwordResetAt || '',
-      firstTimeSignInAt: this.stores.authentication.getUserInfo().firstTimeSignInAt
+      passwordResetAt: this.ctx.user.getUserInfo().passwordResetAt ?? '',
+      firstTimeSignInAt: this.ctx.user.getUserInfo().firstTimeSignInAt
     };
 
     this.latestInnovations = new TableModel({ pageSize: 5 });
@@ -57,7 +57,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
-      this.stores.authentication.userPasswordSuccessfullyUpdated();
+      this.ctx.user.updateInfo({ passwordChangeSinceLastSignIn: true });
     }
 
     const qp: { statistics: UserStatisticsTypeEnum[] } = {

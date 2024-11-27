@@ -9,8 +9,7 @@ import {
   NotificationPreferenceEnum,
   NotificationsService
 } from '@modules/shared/services/notifications.service';
-import { AuthenticationStore } from '@modules/stores';
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
+import { UserContextType } from '@modules/stores/ctx/user/user.types';
 
 @Component({
   selector: 'shared-pages-account-email-notifications-edit',
@@ -19,11 +18,7 @@ import { AuthenticationModel } from '@modules/stores/authentication/authenticati
 export class PageAccountEmailNotificationsEditComponent extends CoreComponent implements OnInit {
   notificationListLink: string;
 
-  // Flags
-  isAssessmentType: boolean;
-  isQualifyingAccessorRole: boolean;
-
-  currentUserContext: AuthenticationModel['userContext'];
+  currentUserContext: UserContextType['domainContext'];
 
   formPreferencesList: { value: string; label: string; description: string }[] = [];
   preferencesResponse: EmailNotificationPreferencesDTO = {};
@@ -35,18 +30,12 @@ export class PageAccountEmailNotificationsEditComponent extends CoreComponent im
     { updateOn: 'blur' }
   );
 
-  constructor(
-    private notificationsService: NotificationsService,
-    private authenticationStore: AuthenticationStore
-  ) {
+  constructor(private notificationsService: NotificationsService) {
     super();
 
-    this.notificationListLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    this.notificationListLink = `/${this.ctx.user.userUrlBasePath()}/account/email-notifications`;
 
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-
-    this.currentUserContext = this.authenticationStore.getUserContextInfo();
+    this.currentUserContext = this.ctx.user.getUserContext();
 
     this.setPageTitle('Select the email notifications you want to receive', { width: '2.thirds', size: 'l' });
 

@@ -32,7 +32,7 @@ export class InnovationAssessmentExemptionUpsertComponent extends CoreComponent 
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/overview`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/overview`;
 
     this.setBackLink();
     this.setPageTitle('Exempt this innovation from KPI reports');
