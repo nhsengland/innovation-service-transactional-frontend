@@ -58,7 +58,7 @@ export class UserContextStore {
   isAccessor = computed(() => this.getUserType() === UserRoleEnum.ACCESSOR);
   isQualifyingAccessor = computed(() => this.getUserType() === UserRoleEnum.QUALIFYING_ACCESSOR);
   isAdmin = computed(() => this.getUserType() === UserRoleEnum.ADMIN);
-  isAccessorOrAssessment = computed(() => this.isAccessor() || this.isAssessment());
+  isAccessorOrAssessment = computed(() => this.isAccessorType() || this.isAssessment());
 
   userUrlBasePath = computed(() => this.mapUserUrlBasePath(this.getUserType()));
 
