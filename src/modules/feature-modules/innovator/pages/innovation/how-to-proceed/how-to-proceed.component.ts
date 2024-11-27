@@ -85,7 +85,15 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
       next: response => {
         this.formfieldAction.description = `If you do not make a decision your innovation will be archived automatically on ${this.datePipe.transform(response.expectedArchiveDate, this.translate('app.date_formats.long_date'))}. You can continue to edit and update your innovation record when it is archived.`;
 
-        this.setPageStatus('READY');
+        // Redirect to overview if user should not have access to this page
+        if (
+          !response.daysSinceNoActiveSupport ||
+          (response.daysSinceNoActiveSupport && response.daysSinceNoActiveSupport < 7)
+        ) {
+          this.redirectTo(this.baseUrl);
+        } else {
+          this.setPageStatus('READY');
+        }
       },
       error: () => {
         this.setAlertUnknownError();
