@@ -9,10 +9,10 @@ import { InnovationsService } from '@modules/shared/services/innovations.service
 
 export enum FormFieldActionsEnum {
   NEED_MORE_SUPPORT_NOW = 'NEED_MORE_SUPPORT_NOW',
-  WILL_DEVELOP_AND_COME_BACK = 'WILL_DEVELOP_AND_COME_BACK',
-  HAVE_ALL_I_NEED = 'HAVE_ALL_I_NEED',
+  DEVELOP_FURTHER = 'DEVELOP_FURTHER',
+  HAVE_ALL_SUPPORT = 'HAVE_ALL_SUPPORT',
   DECIDED_NOT_TO_PURSUE = 'DECIDED_NOT_TO_PURSUE',
-  INNOVATION_IS_ALREADY_LIVE = 'INNOVATION_IS_ALREADY_LIVE'
+  ALREADY_LIVE_NHS = 'ALREADY_LIVE_NHS'
 }
 
 @Component({
@@ -24,10 +24,12 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
   baseUrl: string;
   action: FormFieldActionsEnum;
 
+  errorMessage = 'Choose one option';
+
   form = new FormGroup(
     {
       action: new FormControl<null | FormFieldActionsEnum>(null, {
-        validators: CustomValidators.required('Please choose an option')
+        validators: CustomValidators.required(this.errorMessage)
       })
     },
     { updateOn: 'blur' }
@@ -42,11 +44,11 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
         label: `Yes, I need more support now`
       },
       {
-        value: FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK,
+        value: FormFieldActionsEnum.DEVELOP_FURTHER,
         label: `Yes, but I will develop it further and come back`
       },
       {
-        value: FormFieldActionsEnum.HAVE_ALL_I_NEED,
+        value: FormFieldActionsEnum.HAVE_ALL_SUPPORT,
         label: `No, I have all I need for now`
       },
       {
@@ -54,7 +56,7 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
         label: `No, I have decided not to pursue this innovation`
       },
       {
-        value: FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE,
+        value: FormFieldActionsEnum.ALREADY_LIVE_NHS,
         label: `No, my innovation is already live in the NHS`
       }
     ]
@@ -85,7 +87,15 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
       next: response => {
         this.formfieldAction.description = `If you do not make a decision your innovation will be archived automatically on ${this.datePipe.transform(response.expectedArchiveDate, this.translate('app.date_formats.long_date'))}. You can continue to edit and update your innovation record when it is archived.`;
 
-        this.setPageStatus('READY');
+        // Redirect to overview if user should not have access to this page
+        if (
+          !response.daysSinceNoActiveSupport ||
+          (response.daysSinceNoActiveSupport && response.daysSinceNoActiveSupport < 7)
+        ) {
+          this.redirectTo(this.baseUrl);
+        } else {
+          this.setPageStatus('READY');
+        }
       },
       error: () => {
         this.setAlertUnknownError();
@@ -95,7 +105,12 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
   }
 
   onSubmit(): void {
+    this.resetAlert();
     if (!this.form.valid) {
+      this.setAlertError('', {
+        itemsList: [{ title: this.errorMessage, fieldId: 'action0' }],
+        width: '2.thirds'
+      });
       this.form.markAllAsTouched();
       return;
     }
@@ -104,10 +119,10 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
       case FormFieldActionsEnum.NEED_MORE_SUPPORT_NOW:
         this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/recommend-needs-reassessment`);
         break;
-      case FormFieldActionsEnum.WILL_DEVELOP_AND_COME_BACK:
-      case FormFieldActionsEnum.HAVE_ALL_I_NEED:
+      case FormFieldActionsEnum.DEVELOP_FURTHER:
+      case FormFieldActionsEnum.HAVE_ALL_SUPPORT:
       case FormFieldActionsEnum.DECIDED_NOT_TO_PURSUE:
-      case FormFieldActionsEnum.INNOVATION_IS_ALREADY_LIVE:
+      case FormFieldActionsEnum.ALREADY_LIVE_NHS:
         this.redirectTo(`/innovator/innovations/${this.innovationId}/how-to-proceed/archive`, {
           action: this.form.get('action')?.value
         });
