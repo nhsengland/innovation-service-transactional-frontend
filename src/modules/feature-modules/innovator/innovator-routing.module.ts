@@ -359,7 +359,8 @@ const routes: Routes = [
                   {
                     path: 'recommend-needs-reassessment',
                     pathMatch: 'full',
-                    component: PageInnovationRecommendNeedsReassessmentComponent
+                    component: PageInnovationRecommendNeedsReassessmentComponent,
+                    data: { breadcrumb: null }
                   },
                   {
                     path: 'needs-reassessment-send',
