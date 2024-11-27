@@ -149,6 +149,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
       !this.ctx.innovation.isArchived() &&
       (this.ctx.user.isInnovator() ||
         this.ctx.user.isAssessment() ||
-        (this.ctx.user.isAccessor() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }

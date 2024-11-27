@@ -104,7 +104,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     // Flags
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
-    this.canCreateMessage = !this.ctx.user.isAdmin() && (!this.ctx.user.isAssessment() || !this.isInAssessment);
+    this.canCreateMessage = !this.ctx.user.isAdmin() && (!this.ctx.user.isAccessorType() || !this.isInAssessment);
   }
 
   ngOnInit(): void {

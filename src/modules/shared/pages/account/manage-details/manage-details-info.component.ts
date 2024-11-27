@@ -55,7 +55,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent impleme
           editStepNumber: 8
         });
       }
-    } else if (this.ctx.user.isAccessorType() || this.ctx.user.isAssessment()) {
+    } else if (this.ctx.user.isAccessorOrAssessment()) {
       // this assumes that the user only has one organisation as it's currently the business case
       const organisation = user.roles.find(
         (r): r is UserRoleType & { organisation: { name: string } } => r.organisation !== undefined

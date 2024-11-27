@@ -72,7 +72,7 @@
                 <div class="d-flex flex-direction-column">
                   <div>{{ organisation.info.name }}</div>
                   <div
-                    *ngIf="ctx.user.isAccessor() && organisation.info.suggestedByPhrase && organisation.info.organisationUnits.length === 0"
+                    *ngIf="ctx.user.isAccessorType() && organisation.info.suggestedByPhrase && organisation.info.organisationUnits.length === 0"
                     class="nhsuk-u-margin-top-2 font-color-secondary"
                   >
                     {{ organisation.info.suggestedByPhrase }}
@@ -110,7 +110,7 @@
                     <dt>
                       <div class="d-flex flex-direction-column">
                         <div>{{ organisationUnit.name }}</div>
-                        <div *ngIf="ctx.user.isAccessor() && organisationUnit.suggestedByPhrase" class="nhsuk-u-margin-top-2 font-color-secondary">
+                        <div *ngIf="ctx.user.isAccessorType() && organisationUnit.suggestedByPhrase" class="nhsuk-u-margin-top-2 font-color-secondary">
                           {{ organisationUnit.suggestedByPhrase }}
                         </div>
                       </div>

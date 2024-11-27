@@ -168,7 +168,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
   }
 
   private getNotifiableTeamsList(): { followersUserRoleIds: string[] } {
-    if (this.ctx.user.isAssessment() || this.ctx.user.isAccessorType()) {
+    if (this.ctx.user.isAccessorOrAssessment()) {
       return {
         followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
           item.users.map(u => u.roleId)

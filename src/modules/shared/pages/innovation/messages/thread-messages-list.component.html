@@ -12,7 +12,7 @@
           <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
         </div>
 
-        <ng-container *ngIf="(ctx.user.isAssessment() || ctx.user.isAccessorType()) && !ctx.innovation.isArchived()">
+        <ng-container *ngIf="ctx.user.isAccessorOrAssessment() && !ctx.innovation.isArchived()">
           <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
             <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
           </p>

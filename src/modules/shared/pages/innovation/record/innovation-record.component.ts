@@ -69,7 +69,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
-    this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorType() || this.ctx.user.isAssessment();
+    this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorOrAssessment();
     this.showInnovatorShareRequestSection = this.ctx.user.isInnovator() && !this.isInnovationInCreatedStatus;
     this.isArchiveBeforeShare = this.isInnovationInArchivedStatus && !this.innovation.assessment;
   }

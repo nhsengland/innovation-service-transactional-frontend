@@ -177,10 +177,6 @@ export class InnovationDocumentsService extends CoreService {
 
         let userDescription = `${item.createdBy.name}, ${this.ctx.user.getRoleDescription(item.createdBy.role)}`;
         if (item.createdBy.role === UserRoleEnum.INNOVATOR) {
-          // item.createdBy.name === '[deleted user]'
-          //   ? userDescription
-          //   : (userDescription += item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)');
-          //
           if (item.createdBy.name !== '[deleted user]') {
             userDescription += item.createdBy.isOwner ? ' (Owner)' : ' (Collaborator)';
           }
