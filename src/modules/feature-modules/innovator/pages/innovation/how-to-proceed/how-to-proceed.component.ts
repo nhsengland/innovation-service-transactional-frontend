@@ -24,10 +24,12 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
   baseUrl: string;
   action: FormFieldActionsEnum;
 
+  errorMessage = 'Choose one option';
+
   form = new FormGroup(
     {
       action: new FormControl<null | FormFieldActionsEnum>(null, {
-        validators: CustomValidators.required('Please choose an option')
+        validators: CustomValidators.required(this.errorMessage)
       })
     },
     { updateOn: 'blur' }
@@ -103,7 +105,12 @@ export class PageInnovationHowToProceedComponent extends CoreComponent implement
   }
 
   onSubmit(): void {
+    this.resetAlert();
     if (!this.form.valid) {
+      this.setAlertError('', {
+        itemsList: [{ title: this.errorMessage, fieldId: 'action0' }],
+        width: '2.thirds'
+      });
       this.form.markAllAsTouched();
       return;
     }
