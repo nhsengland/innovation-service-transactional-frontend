@@ -105,7 +105,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
         if (this.wizard.isQuestionStep()) {
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
         } else {
-          this.setPageTitle('Check your answers', { size: 'l' });
+          this.setPageTitle('Check your answers', { width: '2.thirds', size: 'l' });
         }
         break;
 
