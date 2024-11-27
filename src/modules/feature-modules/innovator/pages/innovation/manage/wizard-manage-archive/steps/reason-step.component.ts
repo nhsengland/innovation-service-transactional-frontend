@@ -25,8 +25,10 @@ export class WizardInnovationManageArchiveReasonStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<ReasonStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<ReasonStepOutputType>>();
 
+  errorMessage = 'Choose one option';
+
   form = new FormGroup({
-    reason: new FormControl<InnovationArchiveReasonEnum | null>(null, [CustomValidators.required('Choose one option')])
+    reason: new FormControl<InnovationArchiveReasonEnum | null>(null, [CustomValidators.required(this.errorMessage)])
   });
 
   reasonItems: Required<FormEngineParameterModel>['items'] = [
@@ -65,8 +67,15 @@ export class WizardInnovationManageArchiveReasonStepComponent
   }
 
   onNextStep(): void {
+    this.resetAlert();
     if (!this.form.valid) {
+      this.setAlertError('', {
+        itemsList: [{ title: this.errorMessage, fieldId: 'reason0' }],
+        width: '2.thirds'
+      });
+
       this.form.markAllAsTouched();
+
       return;
     }
 

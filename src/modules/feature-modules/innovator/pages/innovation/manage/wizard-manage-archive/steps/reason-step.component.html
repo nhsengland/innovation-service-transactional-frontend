@@ -2,7 +2,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
-        <theme-form-radio-group controlName="reason" [label]="title" [items]="reasonItems"></theme-form-radio-group>
+        <theme-form-radio-group id="reason" controlName="reason" [label]="title" [items]="reasonItems"></theme-form-radio-group>
 
         <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
       </form>
