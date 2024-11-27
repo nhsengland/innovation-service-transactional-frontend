@@ -1,10 +1,6 @@
 // Module.
 export { StoresModule } from './stores.module';
 
-// // Authentication Store.
-export { AuthenticationStore } from './authentication/authentication.store';
-export { AuthenticationService } from './authentication/authentication.service';
-
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
 // // Assessment
@@ -26,3 +22,7 @@ export { ContextLayoutType } from './ctx/layout/layout.types';
 // // Notifications
 export { NotificationsContextStore } from './ctx/notifications/notifications.store';
 export { NotificationsContextService } from './ctx/notifications/notifications.service';
+// // User
+export { UserContextStore } from './ctx/user/user.store';
+export { UserContextService } from './ctx/user/user.service';
+export * from './ctx/user/user.types';

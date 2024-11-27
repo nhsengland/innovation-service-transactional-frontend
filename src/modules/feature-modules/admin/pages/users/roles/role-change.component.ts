@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { AccessorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { AdminUsersService, changeUserRoleDTO, GetInnovationsByInnovatorIdDTO } from '../../../services/users.service';
@@ -95,8 +95,8 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
       role: {
         name:
           this.user.roles[0].role === UserRoleEnum.QUALIFYING_ACCESSOR
-            ? AccessorOrganisationRoleEnum.ACCESSOR
-            : AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
+            ? UserRoleEnum.ACCESSOR
+            : UserRoleEnum.QUALIFYING_ACCESSOR,
         organisationId: this.user.roles[0].organisation?.id ?? ''
       }
     };

@@ -5,8 +5,7 @@ import { Observable, catchError, take, map, concatMap, throwError } from 'rxjs';
 import { EnvironmentVariablesStore } from '@modules/core';
 
 import { UrlModel } from '@app/base/models';
-import { UserInfo } from './user.types';
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { PhoneUserPreferenceEnum, UserInfo } from './user.types';
 import { HowDidYouFindUsAnswersType } from '@modules/feature-modules/innovator/pages/first-time-signin/first-time-signin.config';
 
 export type MFAInfo = { type: 'none' } | { type: 'email' } | { type: 'phone'; phoneNumber: string | undefined };
@@ -31,12 +30,21 @@ export type UpdateUserInfo = {
 
 @Injectable()
 export class UserContextService {
+  private APP_URL = this.envVariablesStore.APP_URL;
   private API_USERS_URL = this.envVariablesStore.API_USERS_URL;
 
   constructor(
     private http: HttpClient,
     private envVariablesStore: EnvironmentVariablesStore
   ) {}
+
+  verifyUserSession(): Observable<boolean> {
+    const url = new UrlModel(this.APP_URL).addPath('session').buildUrl();
+    return this.http.head(url).pipe(
+      take(1),
+      map(() => true)
+    );
+  }
 
   getUserInfo(forceRefresh?: boolean): Observable<UserInfo> {
     const qp = forceRefresh ? { forceRefresh: true } : {};

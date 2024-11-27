@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
-import { UserContextService } from '@modules/stores/ctx/user/user.service';
+import { MFAInfo, UserContextService } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'shared-pages-account-manage-account-info',
@@ -16,7 +15,7 @@ export class PageSharedAccountManageAccountInfoComponent extends CoreComponent i
     passwordResetAt: null | DateISOType;
   };
 
-  MFAInfo: MFAInfoDTO | null = null;
+  MFAInfo: MFAInfo | null = null;
 
   constructor(private userCtxService: UserContextService) {
     super();

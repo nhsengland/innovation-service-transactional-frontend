@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
-import { AuthenticationStore, StoresModule, InnovationSupportStatusEnum, CtxStore } from '@modules/stores';
+import { StoresModule, InnovationSupportStatusEnum, CtxStore } from '@modules/stores';
 import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
 import { InnovationSupportRequestUpdateStatusComponent } from './support-request-update-status.component';

@@ -12,7 +12,6 @@ import { REQUEST, RESPONSE } from '../../express.tokens';
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 
 import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
@@ -50,10 +49,6 @@ export class CoreComponent implements OnDestroy {
     URLS: typeof URLS;
   };
 
-  protected stores: {
-    authentication: AuthenticationStore;
-  };
-
   protected ctx: CtxStore;
 
   protected subscriptions: Subscription[] = [];
@@ -89,10 +84,6 @@ export class CoreComponent implements OnDestroy {
       BASE_URL: this.envVariablesStore.BASE_URL,
       BASE_PATH: this.envVariablesStore.BASE_PATH,
       URLS: URLS
-    };
-
-    this.stores = {
-      authentication: injector.get(AuthenticationStore)
     };
 
     this.ctx = injector.get(CtxStore);

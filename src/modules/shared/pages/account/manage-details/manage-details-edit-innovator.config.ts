@@ -1,11 +1,6 @@
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-
 import { UtilsHelper } from '@app/base/helpers';
 import { FormEngineModel, FormEngineParameterModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
-import {
-  ContactUserPreferenceEnum,
-  PhoneUserPreferenceEnum
-} from '@modules/stores/authentication/authentication.service';
+import { ContactUserPreferenceEnum, PhoneUserPreferenceEnum, UserContextType } from '@modules/stores';
 
 const organisationDescriptions = [
   'Sole trader',
@@ -22,7 +17,7 @@ const organisationDescriptions = [
 ] as const;
 
 // Types.
-type InboundPayloadType = Required<AuthenticationModel>['user'];
+type InboundPayloadType = Required<UserContextType>['user'];
 
 type StepPayloadType = {
   displayName: string;

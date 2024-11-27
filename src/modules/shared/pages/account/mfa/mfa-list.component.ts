@@ -1,15 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { getCensoredPhoneNumber } from './mfa-edit.component';
+import { MFAInfo } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'app-account-mfa-list',
   templateUrl: './mfa-list.component.html'
 })
 export class AccountMFAListComponent extends CoreComponent implements OnInit {
-  @Input({ required: true }) MFAInfo!: MFAInfoDTO;
+  @Input({ required: true }) MFAInfo!: MFAInfo;
   isMFAOn = false;
   currentCensoredPhoneNumber = '';
   userEmail: string;

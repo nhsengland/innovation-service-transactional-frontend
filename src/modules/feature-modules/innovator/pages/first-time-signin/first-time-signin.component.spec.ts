@@ -6,7 +6,7 @@ import { Router, RouterModule } from '@angular/router';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 
 import { FirstTimeSigninComponent } from './first-time-signin.component';
 
@@ -16,7 +16,6 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
   let innovatorService: InnovatorService;
 
   let component: FirstTimeSigninComponent;
@@ -32,7 +31,6 @@ describe('FeatureModules/Innovator/Pages/FirstTimeSignin/FirstTimeSigninComponen
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     innovatorService = TestBed.inject(InnovatorService);
   });
 

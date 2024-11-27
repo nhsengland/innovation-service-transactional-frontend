@@ -4,10 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@modules/shared/forms';
 import { UsersService } from '@modules/shared/services/users.service';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { combineLatest, Observable } from 'rxjs';
 import { MFA_EMAIL, MFA_PHONE, MFA_SET_UP, MFA_TURN_OFF, MFAWizardModeType } from './mfa-edit.config';
-import { UserContextService } from '@modules/stores/ctx/user/user.service';
+import { MFAInfo, UserContextService } from '@modules/stores/ctx/user/user.service';
 
 export type CurrentMFAModeType = 'phone' | 'email' | 'none';
 
@@ -30,8 +29,8 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   manageAccountPageUrl: string;
 
   // Configurations
-  getUserMFAInfo: () => Observable<MFAInfoDTO>;
-  updateUserMFAInfo: (mfaInfo: MFAInfoDTO) => Observable<void>;
+  getUserMFAInfo: () => Observable<MFAInfo>;
+  updateUserMFAInfo: (mfaInfo: MFAInfo) => Observable<void>;
 
   isAdmin = this.ctx.user.isAdmin();
 
@@ -150,7 +149,7 @@ export class PageAccountMFAEditComponent extends CoreComponent implements OnInit
   }
 
   onSubmitWizard() {
-    const wizardData = this.wizard.runOutboundParsing() as { mfaInfo: MFAInfoDTO; turnOff: boolean };
+    const wizardData = this.wizard.runOutboundParsing() as { mfaInfo: MFAInfo; turnOff: boolean };
 
     this.formButton.isActive = false;
 

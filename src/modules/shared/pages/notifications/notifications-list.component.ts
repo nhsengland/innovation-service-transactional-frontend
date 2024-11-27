@@ -14,9 +14,9 @@ import {
 } from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './notifications-list.config';
+import { UserRoleEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-notifications-list',

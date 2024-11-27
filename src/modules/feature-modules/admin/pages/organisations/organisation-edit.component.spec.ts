@@ -8,7 +8,7 @@ import { of, throwError } from 'rxjs';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 import { FormEngineComponent } from '@modules/shared/forms';
-import { AuthenticationStore, CtxStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { PageOrganisationEditComponent } from './organisation-edit.component';
 

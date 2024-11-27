@@ -29,10 +29,7 @@ describe('Shared/Pages/Innovation/PageInnovationActivityLogComponent', () => {
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    // authenticationStore = TestBed.inject(AuthenticationStore);
     organisationsService = TestBed.inject(OrganisationsService);
-
-    // authenticationStore.getUserInfo = () => USER_INFO_INNOVATOR;
 
     // activatedRoute.snapshot.params = { innovationId: 'Inno01' };
     activatedRoute.snapshot.data = { innovationData: { id: 'Inno01', name: 'Innovation 01', assessment: {} } };

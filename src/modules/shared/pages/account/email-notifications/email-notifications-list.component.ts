@@ -7,7 +7,6 @@ import {
   NotificationPreferenceEnum,
   NotificationsService
 } from '@modules/shared/services/notifications.service';
-import { AuthenticationStore } from '@modules/stores';
 import { UserContextType } from '@modules/stores/ctx/user/user.types';
 
 @Component({

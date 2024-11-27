@@ -89,8 +89,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     private innovationsService: InnovationsService
   ) {
     super();
-    this.userUnitAcronym = this.stores.authentication.state.userContext?.organisationUnit?.acronym ?? '';
-    this.userUnit = this.stores.authentication.state.userContext?.organisationUnit?.name ?? '';
+    this.userUnitAcronym = this.ctx.user.getUserContext()?.organisationUnit?.acronym ?? '';
+    this.userUnit = this.ctx.user.getAccessorUnitName() ?? '';
 
     this.setPageTitle('Innovations', { hint: `${this.userUnit}` });
 

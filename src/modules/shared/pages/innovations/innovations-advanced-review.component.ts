@@ -14,7 +14,6 @@ import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
-import { UserRoleEnum } from '@app/base/enums';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 
 type AdvancedReviewSortByKeys =
@@ -123,12 +122,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ngOnInit(): void {
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
-        const { filters, datasets } = getConfig(
-          this.ctx.schema.irSchemaInfo(),
-          this.stores.authentication.state.userContext?.type
-        );
+        const { filters, datasets } = getConfig(this.ctx.schema.irSchemaInfo(), this.ctx.user.getUserType());
 
-        const isAccessor = this.stores.authentication.state.userContext?.type === UserRoleEnum.ACCESSOR;
+        const isAccessor = this.ctx.user.isAccessor();
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
         datasets.supportStatuses = Object.keys(InnovationSupportStatusEnum)
           .filter(

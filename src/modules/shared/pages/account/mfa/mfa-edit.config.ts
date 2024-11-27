@@ -1,9 +1,9 @@
 import { FormEngineModel, WizardEngineModel } from '@modules/shared/forms';
 import { CustomFormGroupValidators } from '@modules/shared/forms/validators/custom-validators';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 import { fullCountryCodeList } from './mfa-country-lists';
 import { CurrentMFAModeType } from './mfa-edit.component';
+import { MFAInfo } from '@modules/stores/ctx/user/user.service';
 
 // Payloads definitions
 
@@ -263,7 +263,7 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   };
 }
 
-function outboundParsing(data: StepPayloadType): { mfaInfo: MFAInfoDTO; turnOff: boolean } {
+function outboundParsing(data: StepPayloadType): { mfaInfo: MFAInfo; turnOff: boolean } {
   const parsedPhone = `${data.countryCode} ${data.phoneNumber}`;
 
   return {

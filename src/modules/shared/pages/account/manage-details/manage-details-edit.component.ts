@@ -11,7 +11,7 @@ import { WizardSummaryType } from '@modules/shared/forms';
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 import { ACCOUNT_DETAILS_ADMIN } from './manage-details-edit-admin.config';
-import { UpdateUserInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { UpdateUserInfo } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'shared-pages-account-manage-details-edit',
@@ -93,7 +93,7 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
   onSubmitWizard(): void {
     const wizardData = this.wizard.runOutboundParsing();
 
-    let body: UpdateUserInfoDTO = {
+    let body: UpdateUserInfo = {
       displayName: wizardData.displayName
     };
 

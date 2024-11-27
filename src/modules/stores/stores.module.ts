@@ -1,8 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-import { AuthenticationStore } from './authentication/authentication.store';
-import { AuthenticationService } from './authentication/authentication.service';
-
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
 import { CtxStore } from './ctx/ctx.store';
@@ -18,9 +15,6 @@ import { UserContextService } from './ctx/user/user.service';
 
 @NgModule({
   providers: [
-    AuthenticationStore,
-    AuthenticationService,
-
     CtxStore,
 
     InnovationContextStore,

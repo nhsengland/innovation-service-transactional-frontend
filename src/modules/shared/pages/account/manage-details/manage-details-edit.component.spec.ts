@@ -20,9 +20,7 @@ import {
   SchemaContextService,
   LayoutContextStore,
   NotificationsContextStore,
-  NotificationsContextService,
-  AuthenticationStore,
-  AuthenticationService
+  NotificationsContextService
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -44,8 +42,6 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, SharedModule],
       providers: [
-        AuthenticationStore,
-        AuthenticationService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,

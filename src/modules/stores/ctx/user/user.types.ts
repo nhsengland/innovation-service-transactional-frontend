@@ -1,7 +1,5 @@
-import { AccessorOrganisationRoleEnum, InnovatorOrganisationRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 import { UserRoleType } from '@modules/shared/dtos/roles.dto';
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
 import { BaseContextType } from '../ctx.types';
 
 export type UserContextType = {
@@ -38,7 +36,6 @@ export type UserInfo = {
     id: string;
     name: string;
     acronym: string;
-    role: InnovatorOrganisationRoleEnum | AccessorOrganisationRoleEnum;
     isShadow: boolean;
     size: null | string;
     registrationNumber: null | string;
@@ -65,3 +62,30 @@ export const EMPTY_USER_INFO: UserInfo = {
   firstTimeSignInAt: null,
   organisations: []
 };
+
+/**
+ * ENUM
+ */
+export enum UserRoleEnum {
+  ADMIN = 'ADMIN',
+  INNOVATOR = 'INNOVATOR',
+  ACCESSOR = 'ACCESSOR',
+  ASSESSMENT = 'ASSESSMENT',
+  QUALIFYING_ACCESSOR = 'QUALIFYING_ACCESSOR'
+}
+
+export enum ContactUserPreferenceEnum {
+  PHONE = 'PHONE',
+  EMAIL = 'EMAIL'
+}
+
+export enum PhoneUserPreferenceEnum {
+  MORNING = 'MORNING',
+  AFTERNOON = 'AFTERNOON',
+  DAILY = 'DAILY'
+}
+
+export enum TermsOfUseTypeEnum {
+  INNOVATOR = 'INNOVATOR',
+  SUPPORT_ORGANISATION = 'SUPPORT_ORGANISATION'
+}

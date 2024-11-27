@@ -118,14 +118,18 @@ export class UserContextStore {
     );
   }
 
-  updateInfo(info: DeepPartial<UserContextType['user']>): void {
-    const dataToUpdate = omitBy<DeepPartial<UserContextType>>(info, isUndefined);
-    this.state.update(state => ({ ...state, user: { ...state.user, ...dataToUpdate } }));
-  }
-
   // TODO: try to make this payload match the UserContextType so we don't need to make a new initializeAuth on call.
   updateUserInfo$(body: UpdateUserInfo): Observable<{ id: string }> {
     return this.userCtxService.updateUserInfo(body);
+  }
+
+  verifyUserSession$(): Observable<boolean> {
+    return this.userCtxService.verifyUserSession();
+  }
+
+  updateInfo(info: DeepPartial<UserContextType['user']>): void {
+    const dataToUpdate = omitBy<DeepPartial<UserContextType>>(info, isUndefined);
+    this.state.update(state => ({ ...state, user: { ...state.user, ...dataToUpdate } }));
   }
 
   clear(): void {

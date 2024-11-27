@@ -2,8 +2,6 @@ import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-
 import {
   ActivityLogItemsEnum,
   InnovationCollaboratorStatusEnum,
@@ -12,7 +10,8 @@ import {
   InnovationStatusEnum,
   InnovationSupportCloseReasonEnum,
   InnovationSupportStatusEnum,
-  InnovationTaskStatusEnum
+  InnovationTaskStatusEnum,
+  PhoneUserPreferenceEnum
 } from '@modules/stores';
 
 // Innovations.

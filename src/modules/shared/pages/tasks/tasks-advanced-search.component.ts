@@ -37,7 +37,7 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
   }
 
   ngOnInit(): void {
-    const userType = this.stores.authentication.state.userContext?.type;
+    const userType = this.ctx.user.getUserType();
     if (!userType) {
       return;
     }

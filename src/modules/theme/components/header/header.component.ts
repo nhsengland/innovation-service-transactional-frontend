@@ -6,7 +6,6 @@ import { filter } from 'rxjs/operators';
 
 import { CookiesService } from '@modules/core/services/cookies.service';
 
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { URLS } from '@app/base/constants';
 import { CtxStore } from '@modules/stores';
 
@@ -56,7 +55,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
-    private authenticationStore: AuthenticationStore,
     private ctx: CtxStore,
     private coockiesService: CookiesService
   ) {

@@ -8,8 +8,7 @@ import {
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
-import { SchemaContextStore } from '@modules/stores';
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
