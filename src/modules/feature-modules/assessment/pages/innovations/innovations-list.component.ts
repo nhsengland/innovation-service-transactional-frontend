@@ -349,7 +349,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       return 'EXEMPT' as const;
     }
 
-    // Only the reassessments requests from the innovator counts for KPIs.
+    // Only the (re)assessments requests from the innovator counts for KPIs. (minor versions = 0)
     if (needsKPIVerification) {
       const daysFromSubmittedAtToToday = this.getOverdueDays(isExempted, submittedAt, needsKPIVerification) ?? 0;
       return daysFromSubmittedAtToToday >= 15
