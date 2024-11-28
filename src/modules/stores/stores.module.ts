@@ -1,8 +1,5 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
-import { AuthenticationStore } from './authentication/authentication.store';
-import { AuthenticationService } from './authentication/authentication.service';
-
 import { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 import { InnovationContextService } from './ctx/innovation/innovation-context.service';
 import { CtxStore } from './ctx/ctx.store';
@@ -13,12 +10,11 @@ import { SchemaContextService } from './ctx/schema/schema.service';
 import { LayoutContextStore } from './ctx/layout/layout.store';
 import { NotificationsContextStore } from './ctx/notifications/notifications.store';
 import { NotificationsContextService } from './ctx/notifications/notifications.service';
+import { UserContextStore } from './ctx/user/user.store';
+import { UserContextService } from './ctx/user/user.service';
 
 @NgModule({
   providers: [
-    AuthenticationStore,
-    AuthenticationService,
-
     CtxStore,
 
     InnovationContextStore,
@@ -29,7 +25,9 @@ import { NotificationsContextService } from './ctx/notifications/notifications.s
     SchemaContextService,
     LayoutContextStore,
     NotificationsContextStore,
-    NotificationsContextService
+    NotificationsContextService,
+    UserContextStore,
+    UserContextService
   ]
 })
 export class StoresModule {

@@ -14,7 +14,6 @@ import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
-import { UserRoleEnum } from '@app/base/enums';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 
 type AdvancedReviewSortByKeys =
@@ -40,10 +39,6 @@ type AdvancedReviewSortByKeysType = Record<
 })
 export class PageInnovationsAdvancedReviewComponent extends CoreComponent implements OnInit {
   baseUrl: string;
-
-  isAdminType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
 
   pageSize = 20;
   pageNumber = 1;
@@ -81,16 +76,12 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ) {
     super();
 
-    this.isAdminType = this.stores.authentication.isAdminRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-
     // Force reload if running on server because of SSR and session storage
     if (this.isRunningOnServer()) {
       this.router.navigate([]);
     }
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations`;
 
     this.setPageTitle('Advanced search');
 
@@ -112,15 +103,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     ];
 
     this.orderBy = 'relevance';
-    if (this.isAdminType) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Innovations');
       this.sortByComponentInputList.splice(1, 0, { key: 'updatedAt', text: this.sortByData.updatedAt.text });
-    } else if (this.isAccessorType) {
+    } else if (this.ctx.user.isAccessorType()) {
       this.sortByComponentInputList.splice(1, 0, {
         key: 'support.updatedAt',
         text: this.sortByData['support.updatedAt'].text
       });
-    } else if (this.isAssessmentType) {
+    } else if (this.ctx.user.isAssessment()) {
       this.sortByComponentInputList.splice(1, 0, {
         key: 'statusUpdatedAt',
         text: this.sortByData['statusUpdatedAt'].text
@@ -131,12 +122,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   ngOnInit(): void {
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
-        const { filters, datasets } = getConfig(
-          this.ctx.schema.irSchemaInfo(),
-          this.stores.authentication.state.userContext?.type
-        );
+        const { filters, datasets } = getConfig(this.ctx.schema.irSchemaInfo(), this.ctx.user.getUserType());
 
-        const isAccessor = this.stores.authentication.state.userContext?.type === UserRoleEnum.ACCESSOR;
+        const isAccessor = this.ctx.user.isAccessor();
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
         datasets.supportStatuses = Object.keys(InnovationSupportStatusEnum)
           .filter(
@@ -149,13 +137,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             value: status
           }));
 
-        if (this.isAdminType) {
+        if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
             label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
             value: status
           }));
-        } else if (this.isAssessmentType) {
+        } else if (this.ctx.user.isAssessment()) {
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
             .filter(
@@ -235,15 +223,15 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.closeReason'
     ];
 
-    if (this.isAdminType) {
+    if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
         item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
       );
-    } else if (this.isAccessorType) {
+    } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
       queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
-    } else if (this.isAssessmentType) {
+    } else if (this.ctx.user.isAssessment()) {
       // filter out unavailable fields for Assessment
       queryFields = queryFields.filter(
         item =>
@@ -380,7 +368,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.location.replaceState(url);
 
     // To update 'search' query param.
-    if (this.isAdminType) {
+    if (this.ctx.user.isAdmin()) {
       this.redirectTo(`${this.baseUrl}`, { search: currentSearch });
     } else {
       this.redirectTo(`${this.baseUrl}/advanced-search`, {

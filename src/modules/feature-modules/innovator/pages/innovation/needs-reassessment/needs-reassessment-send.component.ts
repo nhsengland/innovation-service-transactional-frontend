@@ -91,7 +91,7 @@ export class PageInnovationNeedsReassessmentSendComponent extends CoreComponent 
           if (previousUrl) {
             this.redirectTo(previousUrl);
           } else {
-            this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
+            this.redirectTo(`/${this.ctx.user.userUrlBasePath()}/dashboard`);
           }
         } else {
           this.wizard.previousStep();

@@ -56,7 +56,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   ngOnInit(): void {
     if (this.pageData.isCreation) {
-      if (this.stores.authentication.isInnovatorType()) {
+      if (this.ctx.user.isInnovator()) {
         if (this.pageData.queryParams.sectionId) {
           this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
           this.wizard.setInboundParsedAnswers({
@@ -112,7 +112,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     if (this.wizard.currentStep().parameters[0].dataType === 'file-upload') {
       this.wizard.currentStep().parameters[0].fileUploadConfig = {
         httpUploadUrl: new UrlModel(this.CONSTANTS.APP_URL).addPath('upload-file').buildUrl(),
-        httpUploadBody: { innovatorId: this.stores.authentication.getUserId(), innovationId: this.innovationId },
+        httpUploadBody: { innovatorId: this.ctx.user.getUserId(), innovationId: this.innovationId },
         maxFileSize: 20,
         acceptedFiles: [FileTypes.CSV, FileTypes.DOCX, FileTypes.XLSX, FileTypes.PDF]
       };
@@ -197,7 +197,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   }
 
   redirectUrl(data?: { documentId?: string; sectionId?: string; evidenceId?: string }): string {
-    const baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
+    const baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
 
     if (data?.evidenceId) {
       return `${baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${data.evidenceId}`;

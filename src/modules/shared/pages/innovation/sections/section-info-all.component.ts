@@ -47,13 +47,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-  isAdmin: boolean;
-
   isInnovationInCreatedStatus: boolean;
-  isInnovationInArchivedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
 
@@ -90,24 +84,17 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
-    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
-    }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
     this.assessmentUrl = `${this.baseUrl}/assessments/${this.innovation.assessment?.id}`;
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
-    this.showSupportingTeamsShareRequestSection =
-      this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
-    this.showInnovatorShareRequestSection =
-      this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;
+    this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorOrAssessment();
+    this.showInnovatorShareRequestSection = this.ctx.user.isInnovator() && !this.isInnovationInCreatedStatus;
   }
 
   ngOnInit(): void {
@@ -291,7 +278,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   }
 
   setGoBackLink(): void {
-    if (this.isAssessmentType && this.assessmentQueryParam) {
+    if (this.ctx.user.isAssessment() && this.assessmentQueryParam) {
       let goBackUrl = undefined;
       switch (this.assessmentQueryParam) {
         case 'editReason':
@@ -308,7 +295,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       if (goBackUrl) {
         this.setBackLink('Back to needs (re)assessment', goBackUrl);
       }
-    } else if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
+    } else if (this.ctx.user.isInnovator() || !this.ctx.innovation.isArchived()) {
       this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
     }
   }

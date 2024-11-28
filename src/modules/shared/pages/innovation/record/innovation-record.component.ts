@@ -38,9 +38,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
   isLoggedUserOwner: boolean;
   isInnovationInCreatedStatus: boolean;
   isInnovationInArchivedStatus: boolean;
@@ -50,7 +47,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   isArchiveBeforeShare: boolean;
 
   allSectionsSubmitted = false;
-  isAdminType: boolean;
 
   customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
 
@@ -62,25 +58,19 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
-    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/sections`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/sections`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
-    }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
 
     this.innovation = this.ctx.innovation.info();
 
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAdminType = this.stores.authentication.isAdminRole();
     this.isLoggedUserOwner = this.innovation.loggedUser.isOwner;
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
-    this.showSupportingTeamsShareRequestSection =
-      this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
-    this.showInnovatorShareRequestSection =
-      this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;
+    this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorOrAssessment();
+    this.showInnovatorShareRequestSection = this.ctx.user.isInnovator() && !this.isInnovationInCreatedStatus;
     this.isArchiveBeforeShare = this.isInnovationInArchivedStatus && !this.innovation.assessment;
   }
 
@@ -89,7 +79,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
     forkJoin([
       this.ctx.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId),
-      ...(this.isInnovatorType
+      ...(this.ctx.user.isInnovator()
         ? [
             this.statisticsService.getInnovationStatisticsInfo(this.innovationId, {
               statistics: [InnovationStatisticsEnum.PENDING_EXPORT_REQUESTS_COUNTER]
@@ -99,7 +89,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     ]).subscribe({
       next: ([response, statistics]) => {
         this.innovationSections = response;
-        this.pendingExportRequests = this.isInnovatorType ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
+        this.pendingExportRequests = this.ctx.user.isInnovator() ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
         this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
           return [

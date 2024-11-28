@@ -2,17 +2,17 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { UserRoleEnum } from './enums';
 
 import { CoreService } from './core.service';
 
 describe('App/Base/CoreService', () => {
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let service: CoreService;
 
@@ -24,7 +24,7 @@ describe('App/Base/CoreService', () => {
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
 
     service = TestBed.inject(CoreService);
   });
@@ -34,28 +34,28 @@ describe('App/Base/CoreService', () => {
   });
 
   it(`should run apiUserBasePath() as Admin`, () => {
-    authenticationStore.getUserType = () => UserRoleEnum.ADMIN;
+    ctx.user.getUserType = signal(UserRoleEnum.ADMIN);
     expect(service.apiUserBasePath()).toBe('user-admin');
   });
   it(`should run apiUserBasePath() as NA`, () => {
-    authenticationStore.getUserType = () => UserRoleEnum.ASSESSMENT;
+    ctx.user.getUserType = signal(UserRoleEnum.ASSESSMENT);
     expect(service.apiUserBasePath()).toBe('assessments');
   });
   it(`should run apiUserBasePath() as Accessor`, () => {
-    authenticationStore.getUserType = () => UserRoleEnum.ACCESSOR;
+    ctx.user.getUserType = signal(UserRoleEnum.ACCESSOR);
     expect(service.apiUserBasePath()).toBe('accessors');
   });
   it(`should run apiUserBasePath() as Innovator`, () => {
-    authenticationStore.getUserType = () => UserRoleEnum.INNOVATOR;
+    ctx.user.getUserType = signal(UserRoleEnum.INNOVATOR);
     expect(service.apiUserBasePath()).toBe('innovators');
   });
   it(`should run apiUserBasePath() as nothing`, () => {
-    authenticationStore.getUserType = () => undefined;
+    ctx.user.getUserType = signal(undefined);
     expect(service.apiUserBasePath()).toBe('');
   });
 
   it(`should run userUrlBasePath()`, () => {
-    authenticationStore.userUrlBasePath = () => 'innovator';
+    ctx.user.userUrlBasePath = signal('innovator');
 
     expect(service.userUrlBasePath()).toBe('innovator');
   });

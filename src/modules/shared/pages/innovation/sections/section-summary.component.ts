@@ -53,11 +53,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   displayChangeButtonList: number[] = [];
 
-  // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-
   search?: string;
 
   constructor(private activatedRoute: ActivatedRoute) {
@@ -73,12 +68,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' }
     };
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
   }
 
   ngOnInit(): void {

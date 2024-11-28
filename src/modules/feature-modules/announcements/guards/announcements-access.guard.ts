@@ -1,31 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
+import { CtxStore } from '@modules/stores';
 
 @Injectable()
 export class AnnouncementsAccessGuard {
   constructor(
     private router: Router,
-    private authentication: AuthenticationStore
+    private ctx: CtxStore
   ) {}
 
   canActivate(): boolean {
-    const userContext = this.authentication.getUserContextInfo();
+    const userContext = this.ctx.user.getUserContext();
 
     if (!userContext) {
       this.router.navigate(['/switch-user-context']);
       return false;
     }
 
-    if (!this.authentication.isTermsOfUseAccepted()) {
-      const path = this.authentication.userUrlBasePath() + '/terms-of-use';
+    if (!this.ctx.user.isTermsOfUseAccepted()) {
+      const path = this.ctx.user.userUrlBasePath() + '/terms-of-use';
       this.router.navigateByUrl(path);
       return false;
     }
 
-    if (!this.authentication.hasAnnouncements()) {
-      this.router.navigateByUrl(this.authentication.userUrlBasePath());
+    if (!this.ctx.user.hasAnnouncements()) {
+      this.router.navigateByUrl(this.ctx.user.userUrlBasePath());
       return false;
     }
 

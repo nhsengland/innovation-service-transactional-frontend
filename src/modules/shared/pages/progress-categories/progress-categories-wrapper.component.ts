@@ -38,7 +38,7 @@ export class PageProgressCategoriesWrapperComponent extends CoreComponent implem
         const userOrgHasMilestones = Object.keys(SUPPORT_SUMMARY_MILESTONES).includes(organisation.acronym);
 
         if (!userOrgHasMilestones) {
-          this.redirectTo(this.previousUrl || `/${this.stores.authentication.userUrlBasePath()}/dashboard`);
+          this.redirectTo(this.previousUrl || `/${this.ctx.user.userUrlBasePath()}/dashboard`);
         }
 
         this.milestoneType = SUPPORT_SUMMARY_MILESTONES[organisation.acronym].some(

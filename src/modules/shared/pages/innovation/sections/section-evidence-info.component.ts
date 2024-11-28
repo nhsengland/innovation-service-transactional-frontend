@@ -25,9 +25,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   summaryList: WizardSummaryType[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-  // Flags
-  isInnovatorType: boolean;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -37,7 +34,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.wizard =
       this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
@@ -46,8 +43,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     if (this.wizard.steps.length === 0) {
       this.redirectTo(`${this.baseUrl}/record/sections/${this.sectionId}`);
     }
-
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
   ngOnInit(): void {

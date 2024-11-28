@@ -3,10 +3,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { ENV } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule, CtxStore } from '@modules/stores';
 import { AssessmentModule } from '@modules/feature-modules/assessment/assessment.module';
 
 import { AssessmentService } from './assessment.service';
@@ -15,7 +15,7 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
   let httpMock: HttpTestingController;
 
   let envVariablesStore: EnvironmentVariablesStore;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let service: AssessmentService;
 
@@ -30,11 +30,11 @@ describe('FeatureModules/Assessment/Services/AssessmentService', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
 
     service = TestBed.inject(AssessmentService);
 
-    authenticationStore.getUserId = () => 'UserId01';
+    ctx.user.getUserId = signal('UserId01');
   });
 
   afterEach(() => {

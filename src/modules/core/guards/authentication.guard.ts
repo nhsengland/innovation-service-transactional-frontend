@@ -8,9 +8,9 @@ import { catchError, map } from 'rxjs/operators';
 import { RESPONSE } from '../../../express.tokens';
 import { Response } from 'express';
 
-import { AuthenticationStore } from '../../stores/authentication/authentication.store';
 import { LoggerService, Severity } from '../services/logger.service';
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
+import { CtxStore } from '@modules/stores';
 
 @Injectable()
 export class AuthenticationGuard {
@@ -18,12 +18,12 @@ export class AuthenticationGuard {
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(RESPONSE) private serverResponse: Response,
     private environmentStore: EnvironmentVariablesStore,
-    private authentication: AuthenticationStore,
+    private ctx: CtxStore,
     private loggerService: LoggerService
   ) {}
 
   canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    return this.authentication.initializeAuthentication$().pipe(
+    return this.ctx.user.initializeAuthentication$().pipe(
       map(response => response),
       catchError((e: HttpErrorResponse) => {
         this.loggerService.trackTrace(

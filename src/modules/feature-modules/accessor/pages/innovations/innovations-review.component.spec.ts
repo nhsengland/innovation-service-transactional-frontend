@@ -5,7 +5,7 @@ import { Injector } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationsReviewComponent } from './innovations-review.component';
@@ -16,7 +16,6 @@ import { NotificationsService } from '@modules/shared/services/notifications.ser
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
   let activatedRoute: ActivatedRoute;
 
-  let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
   let notificationsService: NotificationsService;
 
@@ -32,7 +31,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
     notificationsService = TestBed.inject(NotificationsService);
   });

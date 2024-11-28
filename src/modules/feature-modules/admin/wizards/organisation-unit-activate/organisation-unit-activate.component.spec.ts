@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserDynamicTestingModule } from '@angular/platform-browser-dynamic/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
@@ -7,14 +6,14 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
 
 import { WizardOrganisationUnitActivateComponent } from './organisation-unit-activate.component';
-import { WizardOrganisationUnitActivateUsersStepComponent } from './steps/users-step.component';
-import { WizardSummaryWithConfirmStepComponent } from '@modules/shared/wizards/steps/summary-with-confirm-step.component';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { UserContextStore } from '@modules/stores/ctx/user/user.store';
+import { UserContextService } from '@modules/stores/ctx/user/user.service';
 
 describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent', () => {
   let activatedRoute: ActivatedRoute;
@@ -28,7 +27,8 @@ describe('FeatureModules/Admin/Wizards//WizardOrganisationUnitActivateComponent'
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, AdminModule]
+      imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, StoresModule, AdminModule],
+      providers: [CtxStore, UserContextStore, UserContextService]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 import { InnovationStatusEnum } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/ctx/innovation/innovation.models';
 
@@ -12,9 +12,5 @@ export class SuggestionsCardsComponent {
   @Input({ required: true }) innovationStatus!: InnovationStatusEnum;
   @Input({ required: true }) suggestions!: InnovationUnitSuggestionsType;
 
-  baseUrl: string;
-
-  constructor(authenticationStore: AuthenticationStore) {
-    this.baseUrl = `${authenticationStore.userUrlBasePath()}`;
-  }
+  constructor(protected ctx: CtxStore) {}
 }

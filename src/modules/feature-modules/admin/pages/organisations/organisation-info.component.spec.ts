@@ -7,13 +7,12 @@ import { of, throwError } from 'rxjs';
 
 import { AppInjector, CoreModule } from '@modules/core';
 import { AdminModule } from '@modules/feature-modules/admin/admin.module';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 
 import { PageOrganisationInfoComponent } from './organisation-info.component';
 
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { UsersService } from '@modules/shared/services/users.service';
-import { USER_INFO_ADMIN } from '@tests/data.mocks';
 
 describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent', () => {
   let component: PageOrganisationInfoComponent;
@@ -21,7 +20,6 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
   let activatedRoute: ActivatedRoute;
   let organisationsService: OrganisationsService;
   let usersService: UsersService;
-  let authenticationStore: AuthenticationStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,12 +28,9 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
     organisationsService = TestBed.inject(OrganisationsService);
     usersService = TestBed.inject(UsersService);
-
-    authenticationStore.getUserInfo = () => USER_INFO_ADMIN;
   });
 
   it('should create the component', () => {

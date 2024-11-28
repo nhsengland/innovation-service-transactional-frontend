@@ -44,7 +44,7 @@ export class WizardInnovationManageArchiveConfirmationStepComponent
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.userEmail = this.stores.authentication.getUserInfo().email;
+    this.userEmail = this.ctx.user.getUserInfo().email;
 
     this.form.controls.email.addValidators(CustomValidators.equalTo(this.userEmail));
 

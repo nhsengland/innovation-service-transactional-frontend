@@ -61,12 +61,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   };
 
   // Flags
-  isInnovatorType: boolean;
-  isAssessmentType: boolean;
-  isAccessorType: boolean;
-  isAdmin: boolean;
   isFollower = false;
-  isArchived: boolean;
   isInAssessment: boolean;
   canCreateMessage: boolean;
 
@@ -79,10 +74,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.setPageTitle('Messages', { showPage: false });
 
     this.selfUser = {
-      id: this.stores.authentication.getUserId(),
-      urlBasePath: this.stores.authentication.userUrlBasePath(),
-      roleId: this.stores.authentication.getUserContextInfo()?.roleId ?? '',
-      role: this.stores.authentication.getUserContextInfo()?.type ?? ''
+      id: this.ctx.user.getUserId(),
+      urlBasePath: this.ctx.user.userUrlBasePath(),
+      roleId: this.ctx.user.getUserContext()?.roleId ?? '',
+      role: this.ctx.user.getUserContext()?.type ?? ''
     };
 
     this.innovation = this.ctx.innovation.info();
@@ -107,14 +102,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.organisationUnits = [];
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
-    this.canCreateMessage = !this.isAdmin && (!this.isAccessorType || !this.isInAssessment);
+    this.canCreateMessage = !this.ctx.user.isAdmin() && (!this.ctx.user.isAccessorType() || !this.isInAssessment);
   }
 
   ngOnInit(): void {
@@ -140,7 +130,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       )
     };
 
-    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.ctx.user.isAdmin()) {
       subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
         this.innovation.id
       );
@@ -175,10 +165,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           this.organisationUnits = response.threadAvailableRecipients;
 
           // Filter out the user unit, if accessor.
-          if (this.stores.authentication.isAccessorType()) {
+          if (this.ctx.user.isAccessorType()) {
             this.organisationUnits = this.organisationUnits.filter(
-              item =>
-                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+              item => item.organisation.unit.id !== this.ctx.user.getUserContext()?.organisationUnit?.id
             );
           }
 
@@ -268,7 +257,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     let body: UploadThreadMessageDocumentType = { message: this.form.value.message! };
 
     if (file) {
-      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+      const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovation.id };
 
       this.fileUploadService
         .uploadFile(httpUploadBody, file)

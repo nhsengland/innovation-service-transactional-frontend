@@ -1,6 +1,7 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="isInnovatorType && !isArchived">
+      <ng-container *ngIf="ctx.user.isInnovator() && !ctx.innovation.isArchived()">
         <app-organisation-suggestions-card [suggestions]="organisationSuggestions" [shares]="shares"></app-organisation-suggestions-card>
 
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
@@ -9,7 +10,7 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="(isAssessmentType || isAccessorType) && !innovation.owner?.isActive">
+      <ng-container *ngIf="ctx.user.isAccessorOrAssessment() && !innovation.owner?.isActive">
         <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
           <div class="nhsuk-heading-m nhsuk-warning-callout__label">
             <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
@@ -20,7 +21,7 @@
         <!--TODO: Banner for owner with account delete (new US)-->
       </ng-container>
 
-      <p *ngIf="isQualifyingAccessorRole" class="nhsuk-u-margin-bottom-6">
+      <p *ngIf="ctx.user.isQualifyingAccessor()" class="nhsuk-u-margin-bottom-6">
         You can suggest organisations to help support this innovation. You cannot suggest your own organisation, or an organisation that is already engaging with this innovation.
       </p>
 
@@ -33,7 +34,7 @@
         Organisations that do not have access to the innovation.
       </p>
 
-      <ul *ngIf="!isQualifyingAccessorRole" class="nhsuk-list">
+      <ul *ngIf="!ctx.user.isQualifyingAccessor()" class="nhsuk-list">
         <li class="nhsuk-u-margin-bottom-4">
           <a href="{{ CONSTANTS.URLS.WHO_WE_ARE }}" target="_blank" rel="noopener noreferrer">What does each organisation do? (opens in a new window)</a>
         </li>
@@ -49,7 +50,7 @@
             <div class="nhsuk-u-text-align-right">Support status</div>
             <a
               class="nhsuk-u-font-weight-normal"
-              routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/support/statuses"
+              routerLink="/{{ ctx.user.userUrlBasePath() }}/innovations/{{ innovationId }}/support/statuses"
               arial-label="View support status keys information"
             >
               Support status key
@@ -71,7 +72,7 @@
                 <div class="d-flex flex-direction-column">
                   <div>{{ organisation.info.name }}</div>
                   <div
-                    *ngIf="isAccessorType && organisation.info.suggestedByPhrase && organisation.info.organisationUnits.length === 0"
+                    *ngIf="ctx.user.isAccessorType() && organisation.info.suggestedByPhrase && organisation.info.organisationUnits.length === 0"
                     class="nhsuk-u-margin-top-2 font-color-secondary"
                   >
                     {{ organisation.info.suggestedByPhrase }}
@@ -109,7 +110,7 @@
                     <dt>
                       <div class="d-flex flex-direction-column">
                         <div>{{ organisationUnit.name }}</div>
-                        <div *ngIf="isAccessorType && organisationUnit.suggestedByPhrase" class="nhsuk-u-margin-top-2 font-color-secondary">
+                        <div *ngIf="ctx.user.isAccessorType() && organisationUnit.suggestedByPhrase" class="nhsuk-u-margin-top-2 font-color-secondary">
                           {{ organisationUnit.suggestedByPhrase }}
                         </div>
                       </div>
@@ -133,21 +134,17 @@
         </dl>
       </div>
 
-      <ng-container *ngIf="!isArchived">
-        <button
-          *ngIf="userType === 'INNOVATOR'"
-          routerLink="/innovator/innovations/{{ innovationId }}/support/edit"
-          class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3"
-        >
+      <ng-container *ngIf="!ctx.innovation.isArchived()">
+        <button *ngIf="ctx.user.isInnovator()" routerLink="/innovator/innovations/{{ innovationId }}/support/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
           Change preferences
         </button>
 
-        <div *ngIf="isQualifyingAccessorRole && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <div *ngIf="ctx.user.isQualifyingAccessor() && innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
         </div>
 
-        <div *ngIf="isQualifyingAccessorRole && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link nhsuk-u-padding-top-5">
+        <div *ngIf="ctx.user.isQualifyingAccessor() && showSuggestOrganisationsToSupportLink" class="nhsuk-action-link nhsuk-u-padding-top-5">
           <a routerLink="/accessor/innovations/{{ innovationId }}/support/suggest" class="nhsuk-action-link__link">
             <theme-svg-icon type="arrow-right-circle" />
             <span class="nhsuk-action-link__text">Suggest other organisations to support this innovation</span>

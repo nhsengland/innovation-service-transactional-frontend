@@ -51,9 +51,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       next: response => {
         this.announcement = {
           ...response,
-          userGroupsLabels: response.userRoles
-            .map(item => this.stores.authentication.getRoleDescription(item, true))
-            .join('\n'),
+          userGroupsLabels: response.userRoles.map(item => this.ctx.user.getRoleDescription(item, true)).join('\n'),
 
           isScheduled: response.status === AnnouncementStatusEnum.SCHEDULED,
           isActive: response.status === AnnouncementStatusEnum.ACTIVE,

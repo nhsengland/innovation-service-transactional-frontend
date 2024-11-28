@@ -54,7 +54,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    const myEmail = this.stores.authentication.getUserInfo().email;
+    const myEmail = this.ctx.user.getUserInfo().email;
     this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS(myEmail));
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {

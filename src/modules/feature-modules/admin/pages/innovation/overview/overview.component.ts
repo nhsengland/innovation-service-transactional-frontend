@@ -73,8 +73,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true)
     }).subscribe(({ innovation, innovationCollaborators, innovationProgress }) => {
       this.innovationSupport = {
-        organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
+        organisationUnit: this.ctx.user.getAccessorUnitName() ?? '',
+        status: this.innovation.support?.status ?? InnovationSupportStatusEnum.UNASSIGNED
       };
 
       this.innovationSummary = [

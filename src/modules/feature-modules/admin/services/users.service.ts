@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
+import { TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
@@ -15,7 +15,7 @@ export type changeUserTypeDTO = {
 
 export type changeUserRoleDTO = {
   role: {
-    name: AccessorOrganisationRoleEnum;
+    name: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR;
     organisationId: string;
   };
 };

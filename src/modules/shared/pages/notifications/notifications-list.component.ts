@@ -14,9 +14,9 @@ import {
 } from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsListOutDTO, NotificationsService } from '@modules/shared/services/notifications.service';
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './notifications-list.config';
+import { UserRoleEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-notifications-list',
@@ -31,24 +31,16 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   filtersModel!: FiltersModel;
   form!: FormGroup;
 
-  isAccessorType = false;
-
   constructor(private notificationsService: NotificationsService) {
     super();
     this.setPageTitle('Notifications');
 
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-
-    if (
-      ['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(
-        this.stores.authentication.getUserType() ?? ''
-      )
-    ) {
-      this.emailNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/email-notifications`;
+    if (['QUALIFYING_ACCESSOR', 'ACCESSOR', 'INNOVATOR', 'ASSESSMENT'].includes(this.ctx.user.getUserType() ?? '')) {
+      this.emailNotificationPreferencesLink = `/${this.ctx.user.userUrlBasePath()}/account/email-notifications`;
     }
 
-    if (this.isAccessorType) {
-      this.customNotificationPreferencesLink = `/${this.stores.authentication.userUrlBasePath()}/account/manage-custom-notifications`;
+    if (this.ctx.user.isAccessorType()) {
+      this.customNotificationPreferencesLink = `/${this.ctx.user.userUrlBasePath()}/account/manage-custom-notifications`;
     }
 
     this.notificationsList
@@ -61,7 +53,7 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const role = this.stores.authentication.getUserType();
+    const role = this.ctx.user.getUserType();
 
     let categories: NotificationCategoryTypeEnum[] = [];
     switch (role) {

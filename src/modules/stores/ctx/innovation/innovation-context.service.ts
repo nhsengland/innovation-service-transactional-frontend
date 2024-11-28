@@ -9,7 +9,6 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 import { UserRoleEnum } from '@app/base/enums';
 import { MappedObjectType } from '@app/base/types';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { AuthenticationModel } from '../../authentication/authentication.models';
 import { ContextInnovationType } from './innovation-context.types';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
@@ -20,6 +19,7 @@ import {
   InnovationUnitSuggestionsType,
   OrganisationSuggestionModel
 } from './innovation.models';
+import { UserContextType } from '../user/user.types';
 
 @Injectable()
 export class InnovationContextService {
@@ -33,7 +33,7 @@ export class InnovationContextService {
   // TODO: Think about having an endpoint on BE that contains this logic.
   getContextInfo(
     innovationId: string,
-    userContext: AuthenticationModel['userContext']
+    userContext: UserContextType['domainContext']
   ): Observable<ContextInnovationType> {
     const qp: { fields: ('assessment' | 'supports')[] } = { fields: [] };
 

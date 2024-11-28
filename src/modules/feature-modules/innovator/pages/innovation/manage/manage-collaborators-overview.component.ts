@@ -31,7 +31,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
 
     this.innovation = this.ctx.innovation.info();
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.user = { id: user.id, name: user.displayName, email: user.email };
 
     this.setPageTitle('Invite or manage collaborators');

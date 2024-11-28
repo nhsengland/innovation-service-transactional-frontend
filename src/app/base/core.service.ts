@@ -6,9 +6,7 @@ import { NGXLogger } from 'ngx-logger';
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { ContextLayoutType, CtxStore } from '@modules/stores';
+import { ContextLayoutType, CtxStore, UserRoleEnum } from '@modules/stores';
 
 @Injectable()
 export class CoreService {
@@ -17,10 +15,6 @@ export class CoreService {
   protected http: HttpClient;
   protected translateService: TranslateService;
   protected logger: NGXLogger;
-
-  protected stores: {
-    authentication: AuthenticationStore;
-  };
 
   protected ctx: CtxStore;
 
@@ -37,10 +31,6 @@ export class CoreService {
     this.http = injector.get(HttpClient);
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
-
-    this.stores = {
-      authentication: injector.get(AuthenticationStore)
-    };
 
     this.ctx = injector.get(CtxStore);
     this.APP_URL = this.envVariablesStore.APP_URL;
@@ -60,7 +50,7 @@ export class CoreService {
   }
 
   apiUserBasePath(): string {
-    switch (this.stores.authentication.getUserType()) {
+    switch (this.ctx.user.getUserType()) {
       case UserRoleEnum.ADMIN:
         return 'user-admin';
       case UserRoleEnum.ASSESSMENT:
@@ -75,8 +65,9 @@ export class CoreService {
     }
   }
 
+  // TODO: could return a computed from the store
   userUrlBasePath(): string {
-    return this.stores.authentication.userUrlBasePath();
+    return this.ctx.user.userUrlBasePath();
   }
 
   translate(translation: string, params?: object): string {

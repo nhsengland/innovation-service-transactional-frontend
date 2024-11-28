@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div class="bg-color-white nhsuk-u-padding-4 nhsuk-u-margin-bottom-5">
         <h1 class="nhsuk-heading-m nhsuk-u-margin-bottom-3">Subject: {{ threadInfo?.subject }}</h1>
@@ -6,12 +7,12 @@
           <a routerLink="/{{ selfUser.urlBasePath }}/innovations/{{ innovation.id }}/tasks/{{ threadInfo?.context?.id }}">Go to task</a>
         </p>
 
-        <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+        <div *ngIf="ctx.user.isAccessorType() && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
         </div>
 
-        <ng-container *ngIf="(isAssessmentType || isAccessorType) && !isArchived">
+        <ng-container *ngIf="ctx.user.isAccessorOrAssessment() && !ctx.innovation.isArchived()">
           <p *ngIf="isFollower" class="nhsuk-u-font-size-16">
             <a href="javascript:void(0)" (click)="onUnfollowMessageThreadClick()">Unfollow this message thread</a> if you do not want to be notified about new replies.
           </p>
@@ -21,7 +22,7 @@
           </p>
         </ng-container>
 
-        <ng-container *ngIf="!isArchived">
+        <ng-container *ngIf="!ctx.innovation.isArchived()">
           <p class="nhsuk-u-margin-0 nhsuk-u-font-size-16">
             {{ threadFollowers?.length?.toLocaleString() }} {{ followerNumberText }}.
             <a href="javascript:void(0)" (click)="onShowParticipantsClick()"> {{ showFollowersText }} <span class="nhsuk-u-visually-hidden"> of recipients </span> </a>
@@ -35,7 +36,7 @@
               >
                 <span *ngIf="follower.role.role === 'INNOVATOR'; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? "Owner" : "Collaborator" }})</span>
                 <ng-template #notInnovator>
-                  <span>{{ follower.name }}, {{ follower.organisationUnit?.name ?? stores.authentication.getRoleDescription(follower.role.role) }}</span>
+                  <span>{{ follower.name }}, {{ follower.organisationUnit?.name ?? ctx.user.getRoleDescription(follower.role.role) }}</span>
                 </ng-template>
               </dt>
               <dt
@@ -107,7 +108,7 @@
             </p>
 
             <div
-              *ngIf="!isArchived && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
+              *ngIf="!ctx.innovation.isArchived() && message.isEditable && message.createdBy.id === this.selfUser.id && message.createdBy.role === this.selfUser.role"
               [ngClass]="{
                 'nhsuk-body-s': true,
                 'nhsuk-u-margin-bottom-0': true,

@@ -11,7 +11,7 @@ import { WizardSummaryType } from '@modules/shared/forms';
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 import { ACCOUNT_DETAILS_ADMIN } from './manage-details-edit-admin.config';
-import { UpdateUserInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { UpdateUserInfo } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'shared-pages-account-manage-details-edit',
@@ -40,15 +40,15 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
   }
 
   ngOnInit(): void {
-    if (this.stores.authentication.isInnovatorType()) {
+    if (this.ctx.user.isInnovator()) {
       this.wizard = ACCOUNT_DETAILS_INNOVATOR;
-    } else if (this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType()) {
+    } else if (this.ctx.user.isAccessorOrAssessment()) {
       this.wizard = ACCOUNT_DETAILS_ACCESSOR;
-    } else if (this.stores.authentication.isAdminRole()) {
+    } else if (this.ctx.user.isAdmin()) {
       this.wizard = ACCOUNT_DETAILS_ADMIN;
     }
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.wizard.setAnswers(this.wizard.runInboundParsing(user)).runRules();
 
     this.subscriptions.push(
@@ -93,11 +93,11 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
   onSubmitWizard(): void {
     const wizardData = this.wizard.runOutboundParsing();
 
-    let body: UpdateUserInfoDTO = {
+    let body: UpdateUserInfo = {
       displayName: wizardData.displayName
     };
 
-    if (this.stores.authentication.isInnovatorType()) {
+    if (this.ctx.user.isInnovator()) {
       body = {
         displayName: wizardData.displayName,
         contactByPhone: wizardData.contactByPhone,
@@ -110,10 +110,11 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       };
     }
 
-    this.stores.authentication
+    this.ctx.user
       .updateUserInfo$(body)
       .pipe(
-        concatMap(() => this.stores.authentication.initializeAuthentication$()) // Fetch all new information.
+        // TODO: try to remove this by updating the state when calling updateUserInfo$
+        concatMap(() => this.ctx.user.initializeAuthentication$())
       )
       .subscribe({
         next: () => {

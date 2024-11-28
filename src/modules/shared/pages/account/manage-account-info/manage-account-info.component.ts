@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { AuthenticationService } from '@modules/stores';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { MFAInfo, UserContextService } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'shared-pages-account-manage-account-info',
@@ -16,22 +15,21 @@ export class PageSharedAccountManageAccountInfoComponent extends CoreComponent i
     passwordResetAt: null | DateISOType;
   };
 
-  MFAInfo: MFAInfoDTO | null = null;
+  MFAInfo: MFAInfo | null = null;
 
-  isInnovator: boolean = this.stores.authentication.isInnovatorType();
-
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private userCtxService: UserContextService) {
     super();
     this.setPageTitle('Manage account');
 
-    const user = this.stores.authentication.getUserInfo();
+    // TODO: Check this component, can problem remove all of this calls and just use the state.
+    const user = this.ctx.user.getUserInfo();
 
     this.user = {
       passwordResetAt: user.passwordResetAt
     };
 
     if (user.passwordChangeSinceLastSignIn) {
-      this.authenticationService.getUserInfo(true).subscribe({
+      this.userCtxService.getUserInfo(true).subscribe({
         next: updatedUser => {
           this.user = {
             passwordResetAt: updatedUser.passwordResetAt
@@ -45,7 +43,7 @@ export class PageSharedAccountManageAccountInfoComponent extends CoreComponent i
   }
 
   ngOnInit(): void {
-    this.authenticationService.getUserMFAInfo().subscribe({
+    this.userCtxService.getUserMFAInfo().subscribe({
       next: response => {
         this.MFAInfo = response;
         this.setPageStatus('READY');

@@ -23,7 +23,7 @@ export class PageInnovationRecordDownloadComponent extends CoreComponent impleme
 
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
-    }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
 
     this.setPageTitle(`Download ${this.innovation.name} innovation record`);
     this.setBackLink();

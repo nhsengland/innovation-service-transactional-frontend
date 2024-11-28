@@ -32,7 +32,6 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<OrganisationsStepOutputType>>();
 
-  leadText = '';
   formValidationMessage = '';
 
   form = new FormGroup(
@@ -44,28 +43,14 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
 
   formOrganisationUnitsItems: Required<FormEngineParameterModel>['items'] = [];
 
-  // Flags
-  isInnovatorType: boolean;
-  isAssessmentType: boolean;
-  isAccessorType: boolean;
-
   constructor() {
     super();
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
 
     this.setBackLink('Go back', this.onPreviousStep.bind(this));
   }
 
   ngOnInit(): void {
-    this.leadText = this.isInnovatorType
-      ? 'These organisations are either currently supporting your innovation, have been suggested or are waiting to support, or have supported you in the past.'
-      : `You can select other organisations that are either currently supporting this innovation, have been suggested or are waiting to support, or have supported this innovation in the past.`;
-
-    if (this.isInnovatorType || !(this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType))) {
+    if (this.ctx.user.isInnovator() || !(this.data.activeInnovators && this.ctx.user.isAccessorOrAssessment())) {
       this.formValidationMessage = 'Select the organisations you want to notify about this message';
     } else {
       this.formValidationMessage = `Select other organisations, or select 'No, I only want to notify the innovator about this message'`;
@@ -135,7 +120,7 @@ export class WizardInnovationThreadNewOrganisationsStepComponent
       );
     }
 
-    if (this.data.activeInnovators && (this.isAssessmentType || this.isAccessorType)) {
+    if (this.data.activeInnovators && this.ctx.user.isAccessorOrAssessment()) {
       this.formOrganisationUnitsItems.push(
         { value: 'SEPARATOR', label: 'SEPARATOR' },
         { value: 'NO_CHOICE', label: 'No, I only want to notify the innovator about this message' }

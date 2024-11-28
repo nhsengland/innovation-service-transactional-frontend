@@ -28,12 +28,8 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
   });
 
   // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAdmin: boolean;
   isInnovationSubmitted: boolean;
   canCreateThread = false;
-  isArchived: boolean;
   isInAssessment: boolean;
 
   constructor(private innovationsService: InnovationsService) {
@@ -41,26 +37,22 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
     this.setPageTitle('Messages');
 
     this.selfUser = {
-      id: this.stores.authentication.getUserId(),
-      organisationUnitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+      id: this.ctx.user.getUserId(),
+      organisationUnitId: this.ctx.user.getUserContext()?.organisationUnit?.id
     };
 
     this.innovation = this.ctx.innovation.info();
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
     this.isInnovationSubmitted = this.innovation.status !== InnovationStatusEnum.CREATED;
-    this.isArchived = this.ctx.innovation.isArchived();
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
-    if (this.stores.authentication.isAssessmentType()) {
+    if (this.ctx.user.isAssessment()) {
       this.canCreateThread = this.innovation.owner != null;
-    } else if (this.stores.authentication.isAccessorType()) {
+    } else if (this.ctx.user.isAccessorType()) {
       this.canCreateThread =
         this.innovation.owner != null && this.innovation.status === InnovationStatusEnum.IN_PROGRESS;
-    } else if (this.stores.authentication.isInnovatorType()) {
+    } else if (this.ctx.user.isInnovator()) {
       if (
         this.innovation.status === InnovationStatusEnum.IN_PROGRESS ||
         ([InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(
@@ -74,7 +66,7 @@ export class PageInnovationThreadsListComponent extends CoreComponent implements
       }
     }
 
-    if (this.isAdmin) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Messages', { hint: `Innovation ${this.innovation.name}` });
     }
 

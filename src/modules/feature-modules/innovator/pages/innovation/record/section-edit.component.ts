@@ -42,9 +42,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   displayChangeButtonList: number[] = [];
 
-  // Flags
-  isInnovatorType: boolean;
-
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
@@ -59,9 +56,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.ctx.innovation.isArchived();
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }

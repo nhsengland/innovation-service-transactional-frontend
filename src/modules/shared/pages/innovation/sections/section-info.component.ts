@@ -41,7 +41,6 @@ export type SectionInfoType = {
 })
 export class PageInnovationSectionInfoComponent extends CoreComponent implements OnInit {
   innovation: ContextInnovationType;
-  isArchived: boolean;
   sectionId: string;
 
   assessmentType = '';
@@ -62,9 +61,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   baseUrl: string;
 
   // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
   shouldShowDocuments = false;
 
   search?: string;
@@ -81,18 +77,12 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
-    this.isArchived = this.ctx.innovation.isArchived();
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
     this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.sectionSummaryData = {
       sectionInfo: {
@@ -134,7 +124,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
-    const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
+    const savedOrSubmitted = !this.ctx.innovation.isArchived() ? 'submitted' : 'saved';
 
     this.sectionSubmittedText = sectionIdentification
       ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
@@ -212,7 +202,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.innovation.status !== InnovationStatusEnum.CREATED &&
           this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.sectionSummaryData.sectionInfo.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+          this.sectionSummaryData.sectionInfo.submitButton.label = !this.ctx.innovation.isArchived()
+            ? 'Submit updates'
+            : 'Save updates';
         }
       } else {
         this.sectionSummaryData.sectionInfo.submitButton.show = false;

@@ -101,7 +101,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepCompo
     const dateString = `${date.year}-${date.month}-${date.day}`;
 
     const data = {
-      unitId: this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '',
+      unitId: this.ctx.user.getUserContext()?.organisationUnit?.id ?? '',
       date: dateString
     };
 

@@ -3,10 +3,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
@@ -17,7 +16,6 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
   let innovationsService: InnovationsService;
   let innovatorService: InnovatorService;
 
@@ -34,7 +32,6 @@ describe('FeatureModules/Innovator/Pages/Account/ManageInnovations/PageAccountIn
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     innovationsService = TestBed.inject(InnovationsService);
     innovatorService = TestBed.inject(InnovatorService);
   });

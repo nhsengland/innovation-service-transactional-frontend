@@ -34,12 +34,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     pageSize: 10
   });
 
-  // Flags
-  isAdmin: boolean;
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isArchived: boolean;
-
   // Filter
   form = new FormGroup(
     {
@@ -71,13 +65,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.setPageTitle('Documents');
 
     this.innovation = this.ctx.innovation.info();
-    this.isArchived = this.ctx.innovation.isArchived();
 
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-
-    if (this.isAdmin) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Documents', { hint: `Innovation ${this.innovation.name}` });
     }
   }

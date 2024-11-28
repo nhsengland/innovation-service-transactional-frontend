@@ -31,16 +31,14 @@ export class PageInnovationExportRequestNewComponent extends CoreComponent imple
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${
-      this.innovationId
-    }/record/export-requests`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`;
 
     this.requestAgainId = this.activatedRoute.snapshot.queryParams.requestAgainId;
 
     this.setPageTitle('Explain why you want to share this innovation record', { showPage: false });
     this.setBackLink(
       'Go back',
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`
+      `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/export-requests`
     );
   }
 

@@ -1,7 +1,7 @@
 import { isPlatformServer } from '@angular/common';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpXsrfTokenExtractor } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { REQUEST } from '../../../express.tokens';
@@ -13,13 +13,13 @@ export class ApiOutInterceptor implements HttpInterceptor {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     @Optional() @Inject(REQUEST) private serverRequest: Request,
-    private authentication: AuthenticationStore,
+    private ctx: CtxStore,
     private envVariablesStore: EnvironmentVariablesStore,
     private tokenExtractor: HttpXsrfTokenExtractor
   ) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const userContext = this.authentication.getUserContextInfo();
+    const userContext = this.ctx.user.getUserContext();
 
     if (isPlatformServer(this.platformId)) {
       request = request.clone({

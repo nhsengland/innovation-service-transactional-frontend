@@ -50,7 +50,7 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
     switch (action) {
       case 'previous':
         if (this.wizard.isFirstStep()) {
-          this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/organisations/${this.organisationId}`);
+          this.redirectTo(`${this.ctx.user.userUrlBasePath()}/organisations/${this.organisationId}`);
         } else {
           this.wizard.previousStep();
           this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
@@ -91,7 +91,7 @@ export class PageOrganisationUnitNewComponent extends CoreComponent implements O
         this.setRedirectAlertSuccess(
           'You have successfully created a new organisation unit attached to this organisation'
         );
-        this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/organisations/${this.organisationId}`);
+        this.redirectTo(`${this.ctx.user.userUrlBasePath()}/organisations/${this.organisationId}`);
       },
       error: () => {
         this.submitButton = { isActive: true, label: 'Submit' };

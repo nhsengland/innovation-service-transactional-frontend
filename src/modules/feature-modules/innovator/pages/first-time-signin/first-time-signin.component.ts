@@ -68,13 +68,13 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
     of(true)
       .pipe(
         concatMap(() =>
-          this.stores.authentication.updateUserInfo$({
+          this.ctx.user.updateUserInfo$({
             displayName: wizardData.innovatorName,
             mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
 
             organisation: wizardData.organisation
               ? {
-                  id: this.stores.authentication.getUserInfo().organisations[0].id,
+                  id: this.ctx.user.getUserInfo().organisations[0].id,
                   isShadow: false,
                   name: wizardData.organisation.name,
                   size: wizardData.organisation.size,
@@ -82,7 +82,7 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
                   registrationNumber: wizardData.organisation.registrationNumber
                 }
               : {
-                  id: this.stores.authentication.getUserInfo().organisations[0].id,
+                  id: this.ctx.user.getUserInfo().organisations[0].id,
                   isShadow: true
                 },
             howDidYouFindUsAnswers: wizardData.howDidYouFindUsAnswers
@@ -90,7 +90,8 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
         ),
 
         // Initialize authentication in order to update First Time SignIn information.
-        concatMap(() => this.stores.authentication.initializeAuthentication$())
+        // TODO: try to remove this by updating the state when calling updateUserInfo$
+        concatMap(() => this.ctx.user.initializeAuthentication$())
       )
       .subscribe({
         next: () => {

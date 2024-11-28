@@ -1,12 +1,5 @@
-// Authentication store.
-export {
-  UserRoleEnum,
-  InnovatorOrganisationRoleEnum,
-  AccessorOrganisationRoleEnum
-} from '@modules/stores/authentication/authentication.enums';
-
-// Authentication store.
-export { TermsOfUseTypeEnum } from '@modules/stores/authentication/authentication.enums';
+// Stores
+export { UserRoleEnum, TermsOfUseTypeEnum } from '@modules/stores';
 
 // Environment store.
 export {

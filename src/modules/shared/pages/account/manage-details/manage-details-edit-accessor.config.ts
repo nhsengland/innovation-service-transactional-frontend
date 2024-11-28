@@ -1,9 +1,8 @@
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-
 import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { UserContextType } from '@modules/stores';
 
 // Types.
-type InboundPayloadType = Required<AuthenticationModel>['user'];
+type InboundPayloadType = Required<UserContextType>['user'];
 
 type StepPayloadType = {
   displayName: string;

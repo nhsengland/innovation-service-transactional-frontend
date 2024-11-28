@@ -121,7 +121,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
+    this.userOrganisationUnit = this.ctx.user.getUserContext()?.organisationUnit || null;
 
     this.messageStatusUpdated = {
       [InnovationSupportStatusEnum.ENGAGING]: {
@@ -291,7 +291,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
               this.formAccessorsList = this.qualifyingAccessorsList.map(i => ({ value: i.id, label: i.name }));
 
               // add this user by default, and disable input
-              const userId = this.stores.authentication.getUserId();
+              const userId = this.ctx.user.getUserId();
               formSelectedAcessorsList.clear();
               formSelectedAcessorsList.push(new FormControl<string>(userId));
 
@@ -377,7 +377,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   private uploadFileAndSaveStatus(file: any, body: ChangeSupportStatusDocumentType): void {
-    const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovationId };
+    const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovationId };
 
     this.fileUploadService
       .uploadFile(httpUploadBody, file)

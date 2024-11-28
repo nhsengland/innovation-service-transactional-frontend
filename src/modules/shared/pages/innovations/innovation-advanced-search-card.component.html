@@ -44,7 +44,7 @@
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ diseasesAndConditionsList }}</span>
       </li>
 
-      <ng-container *ngIf="isAdminType">
+      <ng-container *ngIf="ctx.user.isAdmin()">
         <li class="nhsuk-u-margin-bottom-1">
           <span class="nhsuk-u-font-weight-bold">Health inequalities: </span>
           <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ keyHealthInequalitiesList }}</span>
@@ -66,7 +66,7 @@
       </li>
     </ng-container>
 
-    <li *ngIf="isAccessorType">
+    <li *ngIf="ctx.user.isAccessorType()">
       <span class="nhsuk-u-font-weight-bold"
         >Support status:
         <theme-tag
@@ -79,7 +79,7 @@
       >
     </li>
 
-    <li *ngIf="isAdminType || isAssessmentType">
+    <li *ngIf="ctx.user.isAdmin() || ctx.user.isAssessment()">
       <span class="nhsuk-u-font-weight-bold"
         >Innovation status:
         <theme-tag
@@ -87,10 +87,10 @@
           label="{{ 'shared.catalog.innovation.grouped_status.' + innovationCardData.groupedStatus + '.name' | translate }}"
         />
       </span>
-      <span *ngIf="isAdminType && innovationCardData.updatedAt" class="font-color-secondary">
+      <span *ngIf="ctx.user.isAdmin() && innovationCardData.updatedAt" class="font-color-secondary">
         Record last updated on {{ innovationCardData.updatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
-      <span *ngIf="isAssessmentType && innovationCardData.updatedAt" class="font-color-secondary">
+      <span *ngIf="ctx.user.isAssessment() && innovationCardData.updatedAt" class="font-color-secondary">
         Status updated on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
     </li>

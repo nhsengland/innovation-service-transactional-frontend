@@ -1,11 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { AppInjector, CoreModule } from '@modules/core';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
-import { AuthenticationStore, StoresModule, InnovationSupportStatusEnum } from '@modules/stores';
+import { StoresModule, InnovationSupportStatusEnum, CtxStore } from '@modules/stores';
 import { USER_INFO_ACCESSOR } from '@tests/data.mocks';
 
 import { InnovationSupportRequestUpdateStatusComponent } from './support-request-update-status.component';
@@ -18,7 +18,7 @@ describe('SupportUpdateStatusComponent', () => {
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
   let accessorService: AccessorService;
 
   beforeEach(async () => {
@@ -33,12 +33,12 @@ describe('SupportUpdateStatusComponent', () => {
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
     accessorService = TestBed.inject(AccessorService);
 
     activatedRoute.snapshot.params = { innovationId: 'Inno01', supportId: 'SupportId01' };
 
-    authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
+    ctx.user.getUserInfo = signal(USER_INFO_ACCESSOR);
 
     fixture = TestBed.createComponent(InnovationSupportRequestUpdateStatusComponent);
     component = fixture.componentInstance;

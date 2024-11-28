@@ -64,7 +64,7 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
       threadFollowers: this.innovationsService.getThreadFollowers(this.innovation.id, this.threadId)
     };
 
-    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.ctx.user.isAdmin()) {
       subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
         this.innovation.id
       );
@@ -78,10 +78,9 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
           this.datasets.organisationUnits = response.threadAvailableRecipients;
 
           // Filter out the user unit, if accessor.
-          if (this.stores.authentication.isAccessorType()) {
+          if (this.ctx.user.isAccessorType()) {
             this.datasets.organisationUnits = this.datasets.organisationUnits.filter(
-              item =>
-                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+              item => item.organisation.unit.id !== this.ctx.user.getUserContext()?.organisationUnit?.id
             );
           }
 
@@ -165,19 +164,17 @@ export class PageInnovationThreadRecipientsComponent extends CoreComponent imple
   }
 
   private redirectToThread(): void {
-    this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/threads/${this.threadId}`
-    );
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/threads/${this.threadId}`);
   }
 
   private getNotifiableTeamsList(): { followersUserRoleIds: string[] } {
-    if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
+    if (this.ctx.user.isAccessorOrAssessment()) {
       return {
         followersUserRoleIds: this.wizard.data.organisationsStep.organisationUnits.flatMap(item =>
           item.users.map(u => u.roleId)
         )
       };
-    } else if (this.stores.authentication.isInnovatorType()) {
+    } else if (this.ctx.user.isInnovator()) {
       if (
         [InnovationStatusEnum.NEEDS_ASSESSMENT, InnovationStatusEnum.AWAITING_NEEDS_REASSESSMENT].includes(
           this.innovation.status

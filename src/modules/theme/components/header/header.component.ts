@@ -6,8 +6,8 @@ import { filter } from 'rxjs/operators';
 
 import { CookiesService } from '@modules/core/services/cookies.service';
 
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { URLS } from '@app/base/constants';
+import { CtxStore } from '@modules/stores';
 
 export type HeaderMenuBarItemType = {
   id: string;
@@ -55,7 +55,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
-    private authenticationStore: AuthenticationStore,
+    private ctx: CtxStore,
     private coockiesService: CookiesService
   ) {
     this.subscriptions.add(
@@ -74,14 +74,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       isChildrenOpened: false
     };
 
-    this.authenticationStore.state$.subscribe(state => {
-      const hasMultipleRoles = (state.user && state.user?.roles.length > 1) ?? false;
-      const userRole = this.authenticationStore.getUserRole();
-      const orgUnitName = state.userContext?.organisationUnit?.name;
+    // TODO: change this entire component.
+    this.ctx.user.isStateLoaded$.pipe(filter(isLoaded => isLoaded)).subscribe(() => {
+      const hasMultipleRoles = this.ctx.user.hasMultipleRoles();
+      const userRole = this.ctx.user.getUserRoleTranslation();
+      const orgUnitName = this.ctx.user.getUserContext()?.organisationUnit?.name;
 
       this.user = {
-        displayName: state.user?.displayName ?? '',
-        description: this.authenticationStore.isAccessorType()
+        displayName: this.ctx.user.getUserInfo().displayName ?? '',
+        description: this.ctx.user.isAccessorType()
           ? `Logged in as ${userRole}, ${orgUnitName}`
           : `Logged in as ${userRole}`,
         showSwitchProfile: hasMultipleRoles
@@ -155,7 +156,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signOut(): void {
-    this.authenticationStore.signOut();
+    this.ctx.user.signOut();
   }
 
   ngOnDestroy(): void {

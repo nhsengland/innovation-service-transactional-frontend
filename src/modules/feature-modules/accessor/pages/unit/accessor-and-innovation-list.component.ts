@@ -35,11 +35,11 @@ export class AccessorAndInnovationListComponent extends CoreComponent implements
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    const ctx = this.stores.authentication.getUserContextInfo();
+    const ctx = this.ctx.user.getUserContext();
     const unit = ctx?.organisationUnit;
     const org = ctx?.organisation;
     if (!unit || !org) {
-      this.redirectTo(this.stores.authentication.userUrlBasePath());
+      this.redirectTo(this.ctx.user.userUrlBasePath());
       return;
     }
 
@@ -50,7 +50,7 @@ export class AccessorAndInnovationListComponent extends CoreComponent implements
         this.onPageChange({ pageNumber: 1 });
 
         this.setPageTitle('List of accessors and supported innovations', {
-          hint: this.stores.authentication.getAccessorOrganisationUnitName()
+          hint: this.ctx.user.getAccessorUnitName()
         });
 
         this.setBackLink();

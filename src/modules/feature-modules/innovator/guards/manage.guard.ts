@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { catchError, map, Observable, of } from 'rxjs';
 
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 @Injectable()
 export class ManageGuard {
   constructor(
     private router: Router,
-    private authenticationStore: AuthenticationStore,
+    private ctx: CtxStore,
     private innovationsService: InnovationsService
   ) {}
 
@@ -19,7 +19,7 @@ export class ManageGuard {
     // For now, it must be like this as guards run always before resolvers on refresh (even if on children like this one)
     return this.innovationsService.getInnovationInfo(route.params.innovationId).pipe(
       map(response => {
-        const userContext = this.authenticationStore.getUserContextInfo();
+        const userContext = this.ctx.user.getUserContext();
         const loggedUser = { isOwner: response.owner ? response.owner.id === userContext?.id : false };
 
         if (state.url.includes('manage/innovation')) {

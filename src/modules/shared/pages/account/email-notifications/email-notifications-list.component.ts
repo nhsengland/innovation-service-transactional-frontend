@@ -7,8 +7,7 @@ import {
   NotificationPreferenceEnum,
   NotificationsService
 } from '@modules/shared/services/notifications.service';
-import { AuthenticationStore } from '@modules/stores';
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
+import { UserContextType } from '@modules/stores/ctx/user/user.types';
 
 @Component({
   selector: 'app-assessment-account-email-notifications-list',
@@ -20,34 +19,29 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
   currentRole: null | { id: string; description: string };
   displayName: string;
 
-  currentUserContext: AuthenticationModel['userContext'];
+  currentUserContext: UserContextType['domainContext'];
 
   formPreferencesList: { value: string; cssClass: string; preference: string; title: string; description: string }[] =
     [];
 
   preferencesResponse: EmailNotificationPreferencesDTO;
 
-  constructor(
-    private notificationsService: NotificationsService,
-    private authenticationStore: AuthenticationStore
-  ) {
+  constructor(private notificationsService: NotificationsService) {
     super();
 
     this.setPageTitle('Email preferences');
 
-    this.displayName = this.authenticationStore.getUserInfo().displayName;
+    this.displayName = this.ctx.user.getDisplayName();
 
-    this.currentUserContext = this.authenticationStore.getUserContextInfo();
+    this.currentUserContext = this.ctx.user.getUserContext();
 
     if (!this.currentUserContext) {
       this.currentRole = null;
     } else {
       this.currentRole = {
         id: this.currentUserContext.roleId,
-        description: `${this.authenticationStore.getRoleDescription(this.currentUserContext.type)}${
-          this.authenticationStore.isAccessorType()
-            ? ` (${this.currentUserContext.organisationUnit?.name.trimEnd()})`
-            : ''
+        description: `${this.ctx.user.getRoleDescription(this.currentUserContext.type)}${
+          this.ctx.user.isAccessorType() ? ` (${this.currentUserContext.organisationUnit?.name.trimEnd()})` : ''
         }`
       };
     }
@@ -57,7 +51,6 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
 
   ngOnInit(): void {
     this.getEmailNotificationTypes();
-    this.checkMultipleRoles();
   }
 
   private getEmailNotificationTypes(): void {
@@ -102,14 +95,6 @@ export class PageAccountEmailNotificationsListComponent extends CoreComponent im
         );
       }
     });
-  }
-
-  private checkMultipleRoles(): void {
-    this.setPageStatus('LOADING');
-
-    const user = this.authenticationStore.getUserInfo();
-
-    this.hasMultipleRoles = user.roles.length > 1;
   }
 
   private getCategoryMessages(category: string): { title: string; description: string } {
