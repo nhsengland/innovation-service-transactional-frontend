@@ -1,14 +1,27 @@
 import { Inject, Injectable, PLATFORM_ID, computed, signal } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime, filter, interval, map, Observable, Subject, switchMap, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import {
+  filter,
+  fromEvent,
+  interval,
+  map,
+  Observable,
+  shareReplay,
+  startWith,
+  switchMap,
+  tap,
+  withLatestFrom
+} from 'rxjs';
 import { NotificationsContextType } from './notifications.types';
 import { NotificationDismissConditions, NotificationsContextService } from './notifications.service';
 import { isPlatformBrowser } from '@angular/common';
 import { DeepPartial } from '@app/base/types';
 import { isNil, omitBy } from 'lodash';
 import { NGXLogger } from 'ngx-logger';
+import { UserContextStore } from '../user/user.store';
 
 const NOTIFICATIONS_POLLING_FREQUENCY = 60000;
+const NOTIFICATIONS_EXPIRES_AT = 50000;
 
 @Injectable()
 export class NotificationsContextStore {
@@ -21,42 +34,35 @@ export class NotificationsContextStore {
   // Selectors
   unread = computed(() => this.state().unread);
 
-  // Actions
-  fetchUnread$ = new Subject<void>();
-
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private notificationCtxService: NotificationsContextService,
-    private logger: NGXLogger
+    private logger: NGXLogger,
+    private userCtx: UserContextStore
   ) {
-    // NOTE: when the user/auth store is migrated this will be removed and will react to the isStateLoaded from user store.
-    this.fetchUnread$
+    this.userCtx.isStateLoaded$
       .pipe(
-        debounceTime(1000),
+        filter(isLoaded => isLoaded),
         switchMap(() => this.notificationCtxService.getUnread())
       )
-      .subscribe(unread => {
-        this.state.update(state => ({
-          ...state,
-          unread,
-          expiresAt: Date.now() + NOTIFICATIONS_POLLING_FREQUENCY
-        }));
-      });
+      .subscribe(unread => this.loadState(unread));
 
     if (isPlatformBrowser(this.platformId)) {
+      // NOTE: if this is useful elsewhere in the future we can move it to layout store.
+      const isTabVisible$ = fromEvent(document, 'visibilitychange').pipe(
+        map(() => document.visibilityState === 'visible'),
+        startWith(true),
+        shareReplay(1)
+      );
+
       interval(NOTIFICATIONS_POLLING_FREQUENCY)
         .pipe(
           takeUntilDestroyed(),
-          filter(() => Date.now() >= this.state().expiresAt),
+          withLatestFrom(isTabVisible$),
+          filter(([_, isTabVisible]) => isTabVisible && Date.now() >= this.state().expiresAt),
           switchMap(() => this.notificationCtxService.getUnread())
         )
-        .subscribe(unread => {
-          this.state.update(state => ({
-            ...state,
-            unread,
-            expiresAt: Date.now() + NOTIFICATIONS_POLLING_FREQUENCY
-          }));
-        });
+        .subscribe(unread => this.loadState(unread));
     }
   }
 
@@ -88,5 +94,13 @@ export class NotificationsContextStore {
 
   private decrementUnread(decrement = 1): void {
     this.state.update(state => ({ ...state, unread: state.unread - decrement > 0 ? state.unread - decrement : 0 }));
+  }
+
+  private loadState(unread: number): void {
+    this.state.update(state => ({
+      ...state,
+      unread,
+      expiresAt: Date.now() + NOTIFICATIONS_EXPIRES_AT
+    }));
   }
 }
