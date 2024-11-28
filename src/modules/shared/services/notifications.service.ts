@@ -6,11 +6,11 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import {
-  NotificationContextDetailEnum,
-  NotificationCategoryTypeEnum
-} from '@modules/stores/ctx/notifications/notifications.types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
+import {
+  NotificationCategoryTypeEnum,
+  NotificationContextDetailEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',
@@ -21,7 +21,7 @@ export type NotificationsListInDTO = {
   count: number;
   data: {
     id: string;
-    innovation: { id: string; name: string; status: InnovationStatusEnum; ownerName: string };
+    innovation: { id: string; name: string; status: InnovationStatusEnum };
     contextType: NotificationCategoryTypeEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
@@ -62,7 +62,6 @@ export type NotificationsListOutDTO = {
       | ({
           innovationId: string;
           innovationName: string;
-          innovationOwnerName: string;
           innovationStatus: string;
           sectionNumber?: string;
           taskStatusName?: string;
@@ -405,7 +404,6 @@ export class NotificationsService extends CoreService {
               innovationId: item.innovation.id,
               innovationName: item.innovation.name,
               innovationStatus: item.innovation.status,
-              innovationOwnerName: item.innovation.ownerName,
               sectionNumber: section ? `${section.group.number}.${section.section.number}` : undefined,
               taskStatusName: item.params?.taskStatus
                 ? this.translate(`shared.catalog.innovation.task_status.${item.params?.taskStatus}.name`)
