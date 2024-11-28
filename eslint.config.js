@@ -46,7 +46,15 @@ module.exports = tseslint.config(
       "@typescript-eslint/no-explicit-any": "warn",
       "@angular-eslint/component-selector": "warn",
       "@typescript-eslint/no-empty-function": "warn",
-      "@typescript-eslint/no-unused-vars": "warn",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          vars: "all",
+          ignoreRestSiblings: false,
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_"
+        }
+      ],
       "no-case-declarations": "warn",
       "@typescript-eslint/no-unused-expressions": "warn",
       "@typescript-eslint/no-empty-object-type": "warn",
