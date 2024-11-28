@@ -4,7 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 
 import { EnvironmentVariablesStore } from '../stores/environment-variables.store';
 
-declare let gtag: any;
+declare let updateGTAGConsent: any;
 
 type CookiesConsentType = {
   consented: boolean;
@@ -55,18 +55,9 @@ export class CookiesService {
       this.cookiesOptions
     );
 
-    if (this.environment.ENV.ENABLE_ANALYTICS && analytics) {
-      typeof gtag === 'function' &&
-        gtag('consent', 'update', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          functionality_storage: 'denied',
-          personalization_storage: 'denied',
-          security_storage: 'denied',
-          analytics_storage: 'granted'
-        });
-    } else {
+    updateGTAGConsent(analytics); // Method from /assets/js/analytics.js
+
+    if (!analytics) {
       this.deleteAnalyticsCookies();
       this.removeAnalyticsScripts();
     }
@@ -75,16 +66,14 @@ export class CookiesService {
   deleteAnalyticsCookies(): void {
     const cookies = this.coockieService.getAll();
 
-    Object.entries(cookies).forEach(([key, value]) => {
-      if (key.startsWith('_hj') || key.startsWith('_ga')) {
-        this.coockieService.delete(key);
+    Object.entries(cookies).forEach(([name, value]) => {
+      if (name.startsWith('_hj') || name.startsWith('_ga')) {
+        this.coockieService.delete(name, this.cookiesOptions.path);
       }
     });
   }
 
   removeAnalyticsScripts(): void {
-    // Add analytics scripts to header.
-
     if (isPlatformBrowser(this.platformId)) {
       const element = document.getElementById('hj-analytics');
       /* istanbul ignore next */
