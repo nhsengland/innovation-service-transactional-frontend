@@ -64,7 +64,6 @@ export class AuthenticationRedirectionGuard {
     }
 
     if (pathSegment === this.ctx.user.userUrlBasePath()) {
-      this.ctx.notifications.fetchUnread$.next();
       return true;
     } else {
       this.router.navigateByUrl(this.ctx.user.userUrlBasePath());
