@@ -107,7 +107,7 @@ export class UtilsHelper {
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         return 'Notify me when the innovator updates their innovation record';
       case NotificationEnum.DOCUMENT_UPLOADED:
-        return 'Notify me when a document is uploaded';
+        return 'Notify me when a new document is uploaded';
       case NotificationEnum.REMINDER:
         return 'Notify me on a date in future';
       default:
