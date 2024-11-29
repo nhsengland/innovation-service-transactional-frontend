@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, computed } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -38,11 +38,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
 
-  user: { displayName: string; description: string; showSwitchProfile: boolean } = {
-    displayName: '',
-    description: '',
-    showSwitchProfile: false
-  };
+  userDescription = computed(() =>
+    this.ctx.user.isAccessorType()
+      ? `Logged in as ${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
+      : `Logged in as ${this.ctx.user.getUserRoleTranslation()}`
+  );
 
   menuBarItems: {
     isChildrenOpened: boolean;
@@ -55,8 +55,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
-    private ctx: CtxStore,
-    private coockiesService: CookiesService
+    private coockiesService: CookiesService,
+    protected ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -73,21 +73,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
-
-    // TODO: change this entire component.
-    this.ctx.user.isStateLoaded$.pipe(filter(isLoaded => isLoaded)).subscribe(() => {
-      const hasMultipleRoles = this.ctx.user.hasMultipleRoles();
-      const userRole = this.ctx.user.getUserRoleTranslation();
-      const orgUnitName = this.ctx.user.getUserContext()?.organisationUnit?.name;
-
-      this.user = {
-        displayName: this.ctx.user.getUserInfo().displayName ?? '',
-        description: this.ctx.user.isAccessorType()
-          ? `Logged in as ${userRole}, ${orgUnitName}`
-          : `Logged in as ${userRole}`,
-        showSwitchProfile: hasMultipleRoles
-      };
-    });
   }
 
   ngAfterViewInit(): void {
