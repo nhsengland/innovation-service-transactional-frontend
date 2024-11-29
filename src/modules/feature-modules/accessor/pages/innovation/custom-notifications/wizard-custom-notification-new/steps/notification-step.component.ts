@@ -82,7 +82,7 @@ export class WizardInnovationCustomNotificationNewNotificationStepComponent
     this.resetAlert();
     if (!this.form.valid) {
       this.setAlertError('', {
-        itemsList: [{ title: this.errorMessage, fieldId: 'notification' }],
+        itemsList: [{ title: this.errorMessage, fieldId: 'notification1' }],
         width: '2.thirds'
       });
 
