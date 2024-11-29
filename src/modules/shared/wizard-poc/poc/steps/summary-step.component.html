@@ -1,0 +1,39 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <dl class="nhsuk-summary-list">
+        <div *ngIf="displayOrganisations?.length" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Organisation</dt>
+          <dd class="nhsuk-summary-list__value">
+            <div *ngFor="let organisation of displayOrganisations">
+              <p class="nhsuk-u-margin-bottom-2">{{ organisation }}</p>
+            </div>
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGoToStep('organisationsStep')">Change<span class="nhsuk-u-visually-hidden"> organisation </span></a>
+          </dd>
+        </div>
+        <div *ngIf="answers.reminder" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Reminder</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ answers.reminder }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGoToStep('reminderStep')">Change<span class="nhsuk-u-visually-hidden"> reminder </span></a>
+          </dd>
+        </div>
+        <div *ngIf="displayDate" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Date to be sent</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ displayDate | date: ("app.date_formats.long_date" | translate) }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGoToStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date </span></a>
+          </dd>
+        </div>
+      </dl>
+
+      <button type="button" class="nhsuk-button" (click)="onSubmit()">Confirm and save notification</button>
+    </div>
+  </div>
+</theme-content-wrapper>

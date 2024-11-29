@@ -44,6 +44,13 @@ import { TrainingAndResourcesComponent } from './pages/training-and-resources/tr
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
+import { VizardComponent } from '@modules/shared/wizard-poc/vizard.component';
+import { PageWithWizardComponent } from '@modules/shared/wizard-poc/poc/page-with-vizard';
+import { OrganisationsStepComponent } from '@modules/shared/wizard-poc/poc/steps/organisations-step.component';
+import { UnitsStepComponent } from '@modules/shared/wizard-poc/poc/steps/units-step.component';
+import { ReminderStepComponent } from '@modules/shared/wizard-poc/poc/steps/reminder-step.component';
+import { DateStepComponent } from '@modules/shared/wizard-poc/poc/steps/date-step.component';
+import { SummaryStepComponent } from '@modules/shared/wizard-poc/poc/steps/summary-step.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, AccessorRoutingModule],
@@ -84,7 +91,14 @@ import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-in
     // // Training.
     TrainingAndResourcesComponent,
     // // Unit
-    AccessorAndInnovationListComponent
+    AccessorAndInnovationListComponent,
+    VizardComponent,
+    PageWithWizardComponent,
+    OrganisationsStepComponent,
+    UnitsStepComponent,
+    ReminderStepComponent,
+    DateStepComponent,
+    SummaryStepComponent
   ],
   providers: [
     // Services.

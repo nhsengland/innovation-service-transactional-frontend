@@ -1,0 +1,5 @@
+<div *ngFor="let step of steps; let stepIndex = index">
+  <ng-container *ngIf="stepIndex + 1 === getCurrentStepNumber()">
+    <ng-container [ngComponentOutlet]="step.component" [ngComponentOutletInputs]="getCurrentStepInputs()"> </ng-container>
+  </ng-container>
+</div>

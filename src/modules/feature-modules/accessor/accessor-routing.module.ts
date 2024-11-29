@@ -86,6 +86,7 @@ import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innov
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
+import { PageWithWizardComponent } from '@modules/shared/wizard-poc/poc/page-with-vizard';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -511,7 +512,7 @@ const routes: Routes = [
                   {
                     path: 'new',
                     pathMatch: 'full',
-                    component: WizardInnovationCustomNotificationNewComponent,
+                    component: PageWithWizardComponent,
                     data: { layout: { type: 'full' } }
                   },
                   {
