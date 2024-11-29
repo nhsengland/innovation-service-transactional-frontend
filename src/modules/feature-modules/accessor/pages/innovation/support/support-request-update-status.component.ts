@@ -16,6 +16,9 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   supportId: string;
   stepNumber: number;
 
+  statusErrorMessage = 'Please, choose one of the available statuses';
+  messageErrorMessage = 'A comment is required';
+
   form = new FormGroup(
     {
       status: new FormControl<null | Partial<InnovationSupportStatusEnum>>(null, {
@@ -53,10 +56,19 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   onSubmitStep(): void {
+    this.resetAlert();
+
     const formStatusField = this.form.get('status');
     if (!formStatusField?.valid) {
       formStatusField?.markAsTouched();
-      formStatusField?.setErrors({ customError: true, message: 'Please, choose one of the available statuses' });
+      formStatusField?.setErrors({ customError: true, message: this.statusErrorMessage });
+
+      if (this.form.controls.status.errors) {
+        this.setAlertError('', {
+          itemsList: [{ title: this.statusErrorMessage, fieldId: 'status-0' }],
+          width: '2.thirds'
+        });
+      }
       return;
     }
 
@@ -64,8 +76,15 @@ export class InnovationSupportRequestUpdateStatusComponent extends CoreComponent
   }
 
   onSubmit(): void {
+    this.resetAlert();
     if (!this.form.valid) {
       this.form.markAllAsTouched();
+      if (this.form.controls.message.errors) {
+        this.setAlertError('', {
+          itemsList: [{ title: this.messageErrorMessage, fieldId: 'comment' }],
+          width: '2.thirds'
+        });
+      }
       return;
     }
 
