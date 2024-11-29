@@ -1,0 +1,9 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <form [formGroup]="form" (ngSubmit)="onNextStep()">
+        <theme-form-radio-group controlName="reason" [items]="reasonItems"></theme-form-radio-group>
+      </form>
+    </div>
+  </div>
+</theme-content-wrapper>

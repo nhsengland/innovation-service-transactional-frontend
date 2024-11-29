@@ -54,6 +54,10 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 // Services.
 import { InnovatorService } from './services/innovator.service';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
+import { WizardBaseComponent } from '@modules/shared/wizards/wizard-POC/wizard-base-component';
+import { WizardInnovationManageArchiveOverviewStepPOCComponent } from '@modules/shared/wizards/steps-POC/overview-step.component';
+import { WizardInnovationManageArchiveReasonStepPOCComponent } from '@modules/shared/wizards/steps-POC/reason-step.component';
+import { WizardInnovationManageArchiveConfirmationStepPOCComponent } from '@modules/shared/wizards/steps-POC/confirmation-step.component';
 
 @NgModule({
   imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
@@ -74,6 +78,7 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     // // First time signin.
     FirstTimeSigninComponent,
     // // Innovation.
+    WizardBaseComponent,
     InnovationDataSharingChangeComponent,
     PageInnovationExportRequestRejectComponent,
     PageInnovationHowToProceedComponent,
@@ -94,8 +99,11 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
     PageInnovationRecommendNeedsReassessmentComponent,
     WizardInnovationManageArchiveComponent,
     WizardInnovationManageArchiveOverviewStepComponent,
+    WizardInnovationManageArchiveOverviewStepPOCComponent,
     WizardInnovationManageArchiveReasonStepComponent,
+    WizardInnovationManageArchiveReasonStepPOCComponent,
     WizardInnovationManageArchiveConfirmationStepComponent,
+    WizardInnovationManageArchiveConfirmationStepPOCComponent,
     WizardInnovationHowToProceedArchiveComponent,
     PageInnovationSupportSurveysComponent,
     EndSupportSurveyJourneyComponent

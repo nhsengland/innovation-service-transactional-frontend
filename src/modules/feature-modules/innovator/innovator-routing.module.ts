@@ -100,6 +100,7 @@ import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
+import { WizardBaseComponent } from '@modules/shared/wizards/wizard-POC/wizard-base-component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -188,7 +189,13 @@ const routes: Routes = [
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
               },
-
+              {
+                path: 'test',
+                pathMatch: 'full',
+                // component: WizardInheritanceTestComponent,
+                component: WizardBaseComponent,
+                data: { breadcrumb: null, layout: { type: 'full' } }
+              },
               {
                 path: 'assessments/:assessmentId',
                 resolve: {

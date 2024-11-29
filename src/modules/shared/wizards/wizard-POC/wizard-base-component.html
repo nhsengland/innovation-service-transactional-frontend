@@ -1,0 +1,21 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div>
+        <ng-container
+          [ngComponentOutlet]="wizard.currentStep().component"
+          [ngComponentOutletInputs]="{
+            changing: this.changingValue,
+            title: this.wizard.currentStep().title,
+            data: this.wizard.data[this.wizard.currentStepId()']
+          }"
+          [ndcDynamicOutputs]="wizard.currentStep().outputs"
+          #placeToRender
+        >
+        </ng-container>
+        <a *ngIf="!this.wizard.isLastStep()" href="javascript:void(0)" class="nhsuk-button nhsuk-u-margin-top-5" (click)="onNextStep()">Continue</a>
+      </div>
+      <a href="javascript:void()" (click)="onCancel()">Cancel</a>
+    </div>
+  </div>
+</theme-content-wrapper>
