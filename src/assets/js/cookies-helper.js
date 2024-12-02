@@ -1,9 +1,6 @@
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + encodeURI(cvalue) + ";" + expires + ";path=/";
-}
+/**
+ * Cookies management.
+ */
 
 function getCookie(cname) {
   const name = cname + "=";
@@ -29,32 +26,5 @@ function getConsentCookie() {
   } catch (error) {
     console.log("Error parsing consent cookies", error);
     return {};
-  }
-}
-
-function setConsentCookie(agreed) {
-  setCookie("cookies-consent", JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
-
-  (typeof gtag === 'function') &&
-    gtag('consent', 'default', {
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      functionality_storage: 'denied',
-      personalization_storage: 'denied',
-      security_storage: 'denied',
-      analytics_storage: agreed ? 'granted' : 'denied'
-    });
-}
-
-function deleteAnalyticsCookies() {
-  const cookieArray = document.cookie.split(";");
-
-  for (let item of cookieArray) {
-    const equalIndex = item.indexOf("=");
-    const name = equalIndex > -1 ? item.substr(0, equalIndex) : item;
-    if (key.startsWith("_hj") || key.startsWith("_ga")) {
-      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-    }
   }
 }

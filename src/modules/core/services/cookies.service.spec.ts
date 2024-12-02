@@ -10,6 +10,8 @@ import { CoreModule } from '@modules/core';
 
 import { CookiesService } from './cookies.service';
 
+declare let updateGTAGConsent: any;
+
 describe('Core/Services/CookiesService running SERVER side', () => {
   let cookieService: CookieService;
   let service: CookiesService;
@@ -73,6 +75,7 @@ describe('Core/Services/CookiesService running CLIENT side', () => {
   it('should run setConsentCookie(false) and remove analytics scripts', () => {
     cookieService.get = () => '{ "consented": true, "necessary": true, "analytics": false }';
     cookieService.getAll = () => ({ _hjCookie: '', _gaCookie: '', otherCookie: '' });
+    updateGTAGConsent = () => null;
 
     service.setConsentCookie(false);
     expect(document.getElementById('hj-analytics')).toBeFalsy();
