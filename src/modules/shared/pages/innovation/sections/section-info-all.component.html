@@ -105,16 +105,16 @@
       </div>
     </ng-container>
 
-    <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
-
     <ng-container
       *ngIf="
         (innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING') && ctx.user.isAccessorType()) ||
         (['NEEDS_ASSESSMENT', 'IN_PROGRESS'].includes(innovation.status) && ctx.user.isAssessment())
       "
     >
-      <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-8">Assign a task for a section</button>
+      <button routerLink="/{{ baseUrl }}/tasks/new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3 nhsuk-u-margin-bottom-2">Assign a task for a section</button>
     </ng-container>
+
+    <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
 
     <div
       *ngIf="ctx.user.isAccessorType() && innovation.status.includes('ASSESSMENT') && ['ENGAGING', 'WAITING'].includes(innovation.support?.status ?? '')"
