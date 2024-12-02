@@ -12,7 +12,6 @@ import { CookiesService } from './cookies.service';
 
 declare let updateGTAGConsent: any;
 
-
 describe('Core/Services/CookiesService running SERVER side', () => {
   let cookieService: CookieService;
   let service: CookiesService;
