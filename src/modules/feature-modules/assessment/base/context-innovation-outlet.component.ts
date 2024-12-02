@@ -20,7 +20,7 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   constructor(
     private router: Router,
-    private ctx: CtxStore
+    protected ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events

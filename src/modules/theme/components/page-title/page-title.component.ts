@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { LinkType } from '@app/base/types';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'theme-page-title',
@@ -11,5 +12,5 @@ export class PageTitleComponent {
   @Input() size?: 'xl' | 'l' = 'xl';
   @Input() actions?: LinkType[] = [];
 
-  constructor() {}
+  constructor(protected ctx: CtxStore) {}
 }

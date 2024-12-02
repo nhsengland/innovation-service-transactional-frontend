@@ -92,8 +92,12 @@ export class NotificationsContextStore {
     );
   }
 
-  private decrementUnread(decrement = 1): void {
+  decrementUnread(decrement = 1): void {
     this.state.update(state => ({ ...state, unread: state.unread - decrement > 0 ? state.unread - decrement : 0 }));
+  }
+
+  incrementUnread(): void {
+    this.state.update(state => ({ ...state, unread: state.unread + 1 }));
   }
 
   private loadState(unread: number): void {
