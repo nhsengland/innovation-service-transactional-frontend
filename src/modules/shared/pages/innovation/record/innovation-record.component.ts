@@ -48,7 +48,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   allSectionsSubmitted = false;
 
-  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,

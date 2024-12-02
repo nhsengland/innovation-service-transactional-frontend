@@ -109,6 +109,7 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
   stepsDefinition: Record<string, WizardStepModel>;
 
   entrypointAction: NotificationEnum | undefined = undefined;
+  entrypointSection: string | undefined = undefined;
 
   constructor(
     private organisationsService: OrganisationsService,
@@ -116,6 +117,9 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
     private activatedRoute: ActivatedRoute
   ) {
     super();
+
+    this.entrypointAction = this.activatedRoute.snapshot.queryParams.action;
+    this.entrypointSection = this.activatedRoute.snapshot.queryParams.section;
 
     this.subscriptionId = this.activatedRoute.snapshot.params.subscriptionId;
     this.innovation = this.ctx.innovation.info();
@@ -310,9 +314,6 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
 
     forkJoin(subscriptions).subscribe({
       next: response => {
-        this.entrypointAction = this.router.lastSuccessfulNavigation?.extras.state
-          ?.customNotificationAction as NotificationEnum;
-
         // Get organisations information
         this.datasets.organisations = response.organisationsList.map(o => {
           const org = {
@@ -340,13 +341,18 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
           this.manageWizardSteps(this.wizard.data.notificationStep.notification);
           this.onGoToStep('summaryStep');
         } else if (this.entrypointAction) {
-          // set pre-selected option, from external entrypoint
+          // set pre-selected notification option, from external entrypoint
           this.wizard.data.notificationStep = {
             notification: this.entrypointAction
           };
 
           // set steps according to selection
           this.manageWizardSteps(this.entrypointAction);
+
+          // add pre-selected data for all steps other than type of notification
+          if (this.entrypointSection) {
+            this.wizard.data.innovationRecordUpdateStep = { innovationRecordSections: [this.entrypointSection] };
+          }
 
           // go to step according to selection
           this.goToEntryPointActionStep(this.entrypointAction);
@@ -371,7 +377,11 @@ export class WizardInnovationCustomNotificationNewComponent extends CoreComponen
         this.onGoToStep('organisationsStep');
         break;
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
-        this.onGoToStep('innovationRecordUpdateStep');
+        if (this.entrypointSection) {
+          this.onGoToStep('summaryStep');
+        } else {
+          this.onGoToStep('innovationRecordUpdateStep');
+        }
         break;
       case NotificationEnum.DOCUMENT_UPLOADED:
         this.onGoToStep('summaryStep');
