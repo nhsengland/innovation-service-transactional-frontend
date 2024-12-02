@@ -57,7 +57,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     { id: 'SUGGESTED', title: 'Other suggested support organisations', unitsList: [] }
   ];
 
-  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,

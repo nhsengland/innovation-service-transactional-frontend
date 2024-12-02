@@ -68,7 +68,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     }
   > = {};
 
-  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,

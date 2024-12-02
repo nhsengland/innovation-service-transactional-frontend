@@ -55,7 +55,7 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   uploadedByUnitChips: ChipFilterInputType = [];
   selectedUploadedByUnitChips: string[] = [];
 
-  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService,

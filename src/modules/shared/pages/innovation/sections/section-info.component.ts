@@ -65,7 +65,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   search?: string;
 
-  customNotificationLinks: CustomNotificationEntrypointComponentLinksType = [];
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -221,7 +221,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.customNotificationLinks = [
         {
           label: 'Notify me when this section of the innovation record is updated',
-          action: NotificationEnum.INNOVATION_RECORD_UPDATED
+          action: NotificationEnum.INNOVATION_RECORD_UPDATED,
+          section: this.sectionId
         }
       ];
 

@@ -4,7 +4,9 @@
     @for (item of links; track $index) {
       <li>
         <p>
-          <a href="javascript:void(0)" (click)="onNotify(item.action)">{{ item.label }}</a>
+          <a routerLink="/{{ this.ctx.user.userUrlBasePath() }}/innovations/{{ this.innovationId }}/custom-notifications/new" [queryParams]="getItemParams(item)">
+            {{ item.label }}</a
+          >
         </p>
       </li>
     }
