@@ -597,15 +597,39 @@ const routes: Routes = [
                   layout: { type: 'full', backgroundColor: 'bg-color-white' }
                 }
               },
-
               {
                 path: 'manage',
                 data: { breadcrumb: null },
                 canActivate: mapToCanActivate([ManageGuard]),
                 children: [
                   {
+                    path: 'access',
+                    data: { breadcrumb: 'Manage access' },
+                    children: [
+                      {
+                        path: '',
+                        pathMatch: 'full',
+                        component: PageInnovationManageAccessOverviewComponent,
+                        data: { breadcrumb: null }
+                      },
+                      {
+                        path: 'leave',
+                        pathMatch: 'full',
+                        component: PageInnovationManageAccessLeaveInnovationComponent,
+                        data: { breadcrumb: 'Leave innovation', layout: { type: 'full' } }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                path: 'settings',
+                data: { breadcrumb: null },
+                canActivate: mapToCanActivate([ManageGuard]),
+                children: [
+                  {
                     path: 'innovation',
-                    data: { breadcrumb: 'Manage innovation' },
+                    data: { breadcrumb: 'Innovation settings' },
                     children: [
                       {
                         path: '',
@@ -683,24 +707,15 @@ const routes: Routes = [
                             data: { breadcrumb: null }
                           }
                         ]
-                      }
-                    ]
-                  },
-                  {
-                    path: 'access',
-                    data: { breadcrumb: 'Manage access' },
-                    children: [
-                      {
-                        path: '',
-                        pathMatch: 'full',
-                        component: PageInnovationManageAccessOverviewComponent,
-                        data: { breadcrumb: null }
                       },
                       {
-                        path: 'leave',
+                        path: 'activity-log',
                         pathMatch: 'full',
-                        component: PageInnovationManageAccessLeaveInnovationComponent,
-                        data: { breadcrumb: 'Leave innovation', layout: { type: 'full' } }
+                        component: PageInnovationActivityLogComponent,
+                        data: {
+                          breadcrumb: 'Activity Log',
+                          layout: { type: 'full', backgroundColor: 'bg-color-white' }
+                        }
                       }
                     ]
                   }

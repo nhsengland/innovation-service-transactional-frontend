@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <div *ngFor="let item of innovationTransfers" class="nhsuk-error-summary border-color-primary nhsuk-u-margin-bottom-5" role="alert" tabindex="-1">
         <h2 class="nhsuk-error-summary__title">You have requested to transfer ownership of '{{ item.innovation.name }}'</h2>
@@ -15,15 +16,15 @@
 
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2>Invite or manage users</h2>
+      <h2 class="nhsuk-u-margin-bottom-3">Invite or manage collaborators</h2>
       <p class="nhsuk-u-margin-bottom-3">To invite someone to collaborate on your innovation, you will need their email address.</p>
-      <a routerLink="collaborators" class="nhsuk-link nhsuk-link--no-visited-state">Invite or manage users</a>
+      <a routerLink="collaborators" class="nhsuk-link nhsuk-link--no-visited-state">Invite or manage collaborators</a>
     </div>
   </div>
 
   <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2>Transfer ownership</h2>
+      <h2 class="nhsuk-u-margin-bottom-3">Transfer ownership</h2>
       <p *ngIf="!isActiveInnovation" class="nhsuk-u-margin-bottom-3">You have already requested to transfer ownership of this innovation.</p>
       <p *ngIf="isActiveInnovation" class="nhsuk-u-margin-bottom-3">To transfer the ownership of an innovation to someone else, you will need their email address.</p>
       <a *ngIf="isActiveInnovation" routerLink="transfer" class="nhsuk-link nhsuk-link--no-visited-state"> Transfer innovation ownership </a>
@@ -32,11 +33,21 @@
 
   <div *ngIf="innovation.status !== 'ARCHIVED'" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-two-thirds">
-      <h2>Archive innovation</h2>
+      <h2 class="nhsuk-u-margin-bottom-3">Archive innovation</h2>
       <p class="nhsuk-u-margin-bottom-3">
         All support will end when you archive your innovation. If you want support on your innovation in future, you can submit your record for a needs reassessment.
       </p>
       <a routerLink="archive" class="nhsuk-link nhsuk-link--no-visited-state">Archive this innovation</a>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+    <div class="nhsuk-grid-column-two-thirds">
+      <h2 class="nhsuk-u-margin-bottom-3">Activity log</h2>
+      <p class="nhsuk-u-margin-bottom-3">
+        View a log of activity on your innovation. For example, when your needs assessment started or when you updated your data sharing preferences.
+      </p>
+      <a *ngIf="isActiveInnovation" routerLink="activity-log" class="nhsuk-link nhsuk-link--no-visited-state"> View activity log </a>
     </div>
   </div>
 </theme-content-wrapper>

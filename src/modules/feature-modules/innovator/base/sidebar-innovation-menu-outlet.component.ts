@@ -60,9 +60,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
           ? [{ label: 'Support summary', url: `/innovator/innovations/${innovation.id}/support-summary` }]
           : []),
         { label: 'Data sharing preferences', url: `/innovator/innovations/${innovation.id}/support` },
-        { label: 'Activity log', url: `/innovator/innovations/${innovation.id}/activity-log` },
         ...(innovation.loggedUser.isOwner
-          ? [{ label: 'Manage innovation', url: `/innovator/innovations/${innovation.id}/manage/innovation` }]
+          ? [{ label: 'Innovation settings', url: `/innovator/innovations/${innovation.id}/settings/innovation` }]
           : [{ label: 'Manage access', url: `/innovator/innovations/${innovation.id}/manage/access` }])
       ];
     }

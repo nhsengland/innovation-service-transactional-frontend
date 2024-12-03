@@ -10,7 +10,6 @@ import {
   GetInnovationTransfersDTO,
   InnovatorService
 } from '@modules/feature-modules/innovator/services/innovator.service';
-import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
 
 @Component({
   selector: 'app-innovator-pages-innovation-manage-overview',
@@ -25,7 +24,7 @@ export class PageInnovationManageOverviewComponent extends CoreComponent impleme
 
   constructor(private innovatorService: InnovatorService) {
     super();
-    this.setPageTitle('Manage innovation');
+    this.setPageTitle('Innovation settings', { width: '2.thirds' });
 
     this.innovation = this.ctx.innovation.info();
     this.isArchived = this.ctx.innovation.isArchived();
