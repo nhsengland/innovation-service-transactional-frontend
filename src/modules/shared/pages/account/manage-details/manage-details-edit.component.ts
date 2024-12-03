@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent, WizardEngineModel } from '@app/base/forms';
@@ -110,23 +109,17 @@ export class PageAccountManageDetailsEditComponent extends CoreComponent impleme
       };
     }
 
-    this.ctx.user
-      .updateUserInfo$(body)
-      .pipe(
-        // TODO: try to remove this by updating the state when calling updateUserInfo$
-        concatMap(() => this.ctx.user.initializeAuthentication$())
-      )
-      .subscribe({
-        next: () => {
-          this.setRedirectAlertSuccess('Your information has been saved');
-          this.redirectTo(`${this.module}/account/manage-details`);
-        },
-        error: () => {
-          this.setAlertError(
-            'An error occurred while updating information. Please try again or contact us for further help'
-          );
-        }
-      });
+    this.ctx.user.updateUserInfo$(body).subscribe({
+      next: () => {
+        this.setRedirectAlertSuccess('Your information has been saved');
+        this.redirectTo(`${this.module}/account/manage-details`);
+      },
+      error: () => {
+        this.setAlertError(
+          'An error occurred while updating information. Please try again or contact us for further help'
+        );
+      }
+    });
   }
 
   getStepUrl(stepNumber: number | undefined): string {

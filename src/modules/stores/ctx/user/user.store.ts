@@ -118,9 +118,8 @@ export class UserContextStore {
     );
   }
 
-  // TODO: try to make this payload match the UserContextType so we don't need to make a new initializeAuth on call.
   updateUserInfo$(body: UpdateUserInfo): Observable<{ id: string }> {
-    return this.userCtxService.updateUserInfo(body);
+    return this.userCtxService.updateUserInfo(body).pipe(tap(() => this.updateStateOnUserInfoUpdate(body)));
   }
 
   verifyUserSession$(): Observable<boolean> {
@@ -219,5 +218,24 @@ export class UserContextStore {
       return hasLoginAnnouncements[role] ?? false;
     }
     return false;
+  }
+
+  private updateStateOnUserInfoUpdate(body: UpdateUserInfo): void {
+    let organisation: undefined | UserInfo['organisations'][0];
+    if (body.organisation) {
+      const orgToUpdate = this.getUserInfo().organisations.find(o => o.id === body.organisation?.id);
+      if (orgToUpdate) {
+        organisation = { ...orgToUpdate, ...body.organisation };
+      }
+    }
+    this.updateInfo({
+      displayName: body.displayName,
+      contactByPhone: body.contactByPhone,
+      contactByEmail: body.contactByEmail,
+      contactByPhoneTimeframe: body.contactByPhoneTimeframe,
+      phone: body.mobilePhone,
+      contactDetails: body.contactDetails,
+      organisations: body.organisation && this.isInnovator() ? [organisation] : undefined
+    });
   }
 }
