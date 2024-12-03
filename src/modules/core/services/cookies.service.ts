@@ -67,7 +67,7 @@ export class CookiesService {
     const cookies = this.coockieService.getAll();
 
     Object.entries(cookies).forEach(([name, value]) => {
-      if (name.startsWith('_hj') || name.startsWith('_ga')) {
+      if (name.startsWith('_hj') || name.startsWith('_ga') || name.startsWith('ai_')) {
         this.coockieService.delete(name, this.cookiesOptions.path);
       }
     });
