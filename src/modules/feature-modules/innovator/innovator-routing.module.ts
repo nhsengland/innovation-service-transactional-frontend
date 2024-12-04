@@ -24,11 +24,11 @@ import { InnovationNewComponent } from './pages/innovation-new/innovation-new.co
 import { InnovationDataSharingChangeComponent } from './pages/innovation/data-sharing/data-sharing-change.component';
 import { PageInnovationExportRequestRejectComponent } from './pages/innovation/export-requests/export-request-reject.component';
 import { PageInnovationHowToProceedComponent } from './pages/innovation/how-to-proceed/how-to-proceed.component';
-import { PageInnovationManageCollaboratorsInfoComponent } from './pages/innovation/manage/manage-collaborators-info.component';
-import { PageInnovationManageCollaboratorsOverviewComponent } from './pages/innovation/manage/manage-collaborators-overview.component';
-import { PageInnovationManageCollaboratorsWizardComponent } from './pages/innovation/manage/manage-collaborators-wizard.component';
-import { PageInnovationManageOverviewComponent } from './pages/innovation/manage/manage-overview.component';
-import { PageInnovationManageTransferComponent } from './pages/innovation/manage/manage-transfer.component';
+import { PageInnovationManageCollaboratorsInfoComponent } from './pages/innovation/settings/manage-collaborators-info.component';
+import { PageInnovationManageCollaboratorsOverviewComponent } from './pages/innovation/settings/manage-collaborators-overview.component';
+import { PageInnovationManageCollaboratorsWizardComponent } from './pages/innovation/settings/manage-collaborators-wizard.component';
+import { PageInnovationManageOverviewComponent } from './pages/innovation/settings/manage-overview.component';
+import { PageInnovationManageTransferComponent } from './pages/innovation/settings/manage-transfer.component';
 import { PageInnovationNeedsReassessmentSendComponent } from './pages/innovation/needs-reassessment/needs-reassessment-send.component';
 import { InnovationOverviewComponent } from './pages/innovation/overview/overview.component';
 import { InnovationDataSharingEditComponent } from './pages/innovation/record/data-sharing-edit.component';
@@ -67,7 +67,7 @@ import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
-import { WizardInnovationManageArchiveComponent } from './pages/innovation/manage/wizard-manage-archive/manage-archive.component';
+import { WizardInnovationManageArchiveComponent } from './pages/innovation/settings/wizard-manage-archive/manage-archive.component';
 import { WizardInnovationHowToProceedArchiveComponent } from './pages/innovation/how-to-proceed/wizard-how-to-proceed-archive/how-to-proceed-archive.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';

@@ -12,13 +12,13 @@ import {
 import {
   ConfirmationStepInputType,
   ConfirmationStepOutputType
-} from '../../manage/wizard-manage-archive/steps/confirmation-step.types';
-import { WizardInnovationManageArchiveConfirmationStepComponent } from '../../manage/wizard-manage-archive/steps/confirmation-step.component';
+} from '../../settings/wizard-manage-archive/steps/confirmation-step.types';
+import { WizardInnovationManageArchiveConfirmationStepComponent } from '../../settings/wizard-manage-archive/steps/confirmation-step.component';
 import {
   OverviewStepInputType,
   OverviewStepOutputType
-} from '../../manage/wizard-manage-archive/steps/overview-step.types';
-import { WizardInnovationManageArchiveOverviewStepComponent } from '../../manage/wizard-manage-archive/steps/overview-step.component';
+} from '../../settings/wizard-manage-archive/steps/overview-step.types';
+import { WizardInnovationManageArchiveOverviewStepComponent } from '../../settings/wizard-manage-archive/steps/overview-step.component';
 import { ActivatedRoute } from '@angular/router';
 
 type WizardData = {
