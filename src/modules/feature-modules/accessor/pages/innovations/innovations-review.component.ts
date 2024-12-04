@@ -412,7 +412,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .setFilters({
             supportStatuses: filteredArr,
             assignedToMe:
-              this.ctx.user.isAccessor() || (this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? true),
+              this.ctx.user.isAccessor() || (this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false),
             suggestedOnly: false,
             closedByMyOrganisation: false
           })
