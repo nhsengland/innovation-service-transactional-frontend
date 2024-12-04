@@ -411,7 +411,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .clearData()
           .setFilters({
             supportStatuses: filteredArr,
-            assignedToMe: this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false,
+            assignedToMe:
+              this.ctx.user.isAccessor() || (this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false),
             suggestedOnly: false,
             closedByMyOrganisation: false
           })
