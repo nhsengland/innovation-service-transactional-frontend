@@ -22,7 +22,7 @@ export class ManageGuard {
         const userContext = this.ctx.user.getUserContext();
         const loggedUser = { isOwner: response.owner ? response.owner.id === userContext?.id : false };
 
-        if (state.url.includes('manage/innovation')) {
+        if (state.url.includes('settings/innovation')) {
           if (loggedUser.isOwner) {
             return true;
           } else {
