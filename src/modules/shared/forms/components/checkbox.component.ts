@@ -37,7 +37,7 @@ export class FormCheckboxComponent extends ControlValueAccessorComponent impleme
   @Input() size?: 'small' | 'normal';
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
   cssClass = '';
 
   isRunningOnBrowser: boolean;

@@ -4,7 +4,7 @@ import { CoreComponent } from '@app/base';
 import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 import { CustomValidators, FormEngineHelper } from '@modules/shared/forms';
 import { SupportStatusesStepInputType, SupportStatusesStepOutputType } from './support-statuses-step.types';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-accessor-innovation-custom-notifications-wizard-custom-notification-new-support-statuses-step',
@@ -24,7 +24,7 @@ export class WizardInnovationCustomNotificationNewSupportStatusesStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<SupportStatusesStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<SupportStatusesStepOutputType>>();
 
-  errorMessage: string = "Select the support statuses you'd like to be notified about";
+  errorMessage = "Select the support statuses you'd like to be notified about";
 
   form = new FormGroup({
     supportStatuses: new FormArray<FormControl<InnovationSupportStatusEnum>>(

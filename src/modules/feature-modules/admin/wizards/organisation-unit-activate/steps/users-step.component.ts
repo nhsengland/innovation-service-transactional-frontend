@@ -8,9 +8,9 @@ import { MappedObjectType, WizardStepComponentType, WizardStepEventType } from '
 
 import { UsersStepInputType, UsersStepOutputType } from './users-step.types';
 
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
 import { UserListFiltersType, UsersService } from '@modules/shared/services/users.service';
 import { UsersListDTO } from '@modules/shared/dtos/users.dto';
+import { UserRoleEnum } from '@app/base/enums';
 
 @Component({
   selector: 'app-admin-wizards-organisation-unit-activate-users-step',

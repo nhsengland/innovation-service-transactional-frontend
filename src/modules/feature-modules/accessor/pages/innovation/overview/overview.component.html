@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div *ngIf="innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
@@ -6,7 +6,7 @@
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
-  <app-suggestions-cards *ngIf="isQualifyingAccessorRole" [innovationId]="innovation.id" [innovationStatus]="innovation.status" [suggestions]="qaSuggestions" />
+  <app-suggestions-cards *ngIf="ctx.user.isQualifyingAccessor()" [innovationId]="innovation.id" [innovationStatus]="innovation.status" [suggestions]="qaSuggestions" />
 
   <p class="nhsuk-heading-s nhsuk-u-margin-bottom-4">{{ innovationSupport.organisationUnit }}</p>
   <div class="nhsuk-u-margin-bottom-8">
@@ -20,7 +20,7 @@
           ></theme-tag>
         </dd>
         <dd *ngIf="isInProgress" class="nhsuk-summary-list__actions width-25">
-          <a *ngIf="!showStartSupport && isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ changeSupportUrlNewOrSupport }}"
+          <a *ngIf="!showStartSupport && ctx.user.isQualifyingAccessor()" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ changeSupportUrlNewOrSupport }}"
             >Change support status</a
           >
         </dd>
@@ -37,7 +37,9 @@
           </ul>
         </dd>
         <dd class="nhsuk-summary-list__actions">
-          <a *ngIf="!showStartSupport && isQualifyingAccessorRole" routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/change-accessors"
+          <a
+            *ngIf="!showStartSupport && ctx.user.isQualifyingAccessor()"
+            routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/change-accessors"
             >Change accessors</a
           >
         </dd>
@@ -50,7 +52,7 @@
   </div>
 
   <a
-    *ngIf="showStartSupport && isQualifyingAccessorRole"
+    *ngIf="showStartSupport && ctx.user.isQualifyingAccessor()"
     routerLink="/accessor/innovations/{{ innovationId }}/support/new"
     class="nhsuk-button nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-5"
   >
@@ -62,7 +64,7 @@
     <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
   </div>
 
-  <ng-container *ngIf="isAccessorRole && isInProgress">
+  <ng-container *ngIf="ctx.user.isAccessor() && isInProgress">
     <a routerLink="/accessor/innovations/{{ innovationId }}/support/{{ innovation.support?.id }}/request-update" class="nhsuk-button nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-3"
       >Request status update</a
     >
@@ -120,4 +122,18 @@
       </table>
     </div>
   </details>
+
+  <div>
+    <h2 class="nhsuk-heading-l nhsuk-u-margin-top-9">Custom notifications</h2>
+    <p>You can create custom notifications for this innovation to alert you about updates or remind you to review it on a date in future.</p>
+    <p class="nhsuk-u-font-weight-bold">
+      You have {{ customNotificationsAmount }} active {{ "dictionary.notification" | pluralTranslate: customNotificationsAmount | translate }} for this innovation.
+    </p>
+    <p>
+      <a routerLink="/accessor/innovations/{{ this.innovationId }}/custom-notifications">
+        {{ customNotificationsAmount === 0 ? "Find out more about custom notifications" : "View custom notifications for this innovation" }}</a
+      >
+    </p>
+    <button class="nhsuk-button nhsuk-u-margin-top-3" (click)="onCreateCustomNotification()">{{ "Create custom notification" }}</button>
+  </div>
 </theme-content-wrapper>

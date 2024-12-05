@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import {
+  InnovationStatusEnum,
+  InnovationSupportStatusEnum,
   InnovationGroupedStatusEnum,
   InnovationSupportCloseReasonEnum
-} from '@modules/stores/innovation/innovation.enums';
+} from '@modules/stores';
 
 export type InnovationCardData = {
   id: string;
@@ -42,20 +42,16 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
 
   baseUrl: string;
 
-  isAdminType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
+  isInnovationInArchivedStatus = false;
 
-  isInnovationInArchivedStatus: boolean = false;
+  isAccessorTypeAndArchivedInnovation = false;
+  isAccessorTypeAndStoppedSharingInnovation = false;
 
-  isAccessorTypeAndArchivedInnovation: boolean = false;
-  isAccessorTypeAndStoppedSharingInnovation: boolean = false;
-
-  categoriesList: string = '';
-  careSettingsList: string = '';
-  diseasesAndConditionsList: string = '';
-  keyHealthInequalitiesList: string = '';
-  involvedAACProgrammesList: string = '';
+  categoriesList = '';
+  careSettingsList = '';
+  diseasesAndConditionsList = '';
+  keyHealthInequalitiesList = '';
+  involvedAACProgrammesList = '';
 
   highlightInfo?: {
     termsFound: string[];
@@ -67,19 +63,15 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   constructor() {
     super();
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/`;
-
-    this.isAdminType = this.stores.authentication.isAdminRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/`;
   }
 
   ngOnInit(): void {
     this.isInnovationInArchivedStatus = this.innovationCardData.status === InnovationStatusEnum.ARCHIVED;
 
-    this.isAccessorTypeAndArchivedInnovation = this.isAccessorType && this.isInnovationInArchivedStatus;
+    this.isAccessorTypeAndArchivedInnovation = this.ctx.user.isAccessorType() && this.isInnovationInArchivedStatus;
     this.isAccessorTypeAndStoppedSharingInnovation =
-      this.isAccessorType && this.innovationCardData.support?.closeReason === 'STOP_SHARE';
+      this.ctx.user.isAccessorType() && this.innovationCardData.support?.closeReason === 'STOP_SHARE';
 
     this.categoriesList = this.getFormattedList(this.innovationCardData.categories);
     this.careSettingsList = this.getFormattedList(this.innovationCardData.careSettings);
@@ -155,7 +147,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     link: string;
     fragment?: string;
   } {
-    let linkInfo: { text: string; link: string; fragment?: string } = {
+    const linkInfo: { text: string; link: string; fragment?: string } = {
       text: '',
       link: ''
     };
@@ -171,7 +163,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
         // Set
         sectionId = 'EVIDENCE_OF_EFFECTIVENESS';
       }
-      const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(sectionId);
+      const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
       linkInfo.text = `Go to section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} ${sectionIdentification?.section.title}`;
 
       if (this.isInnovationInArchivedStatus) {

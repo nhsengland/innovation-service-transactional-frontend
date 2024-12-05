@@ -1,14 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorHandler, Injectable, Injector } from '@angular/core';
-
-import { ContextStore } from '@modules/stores/context/context.store';
+import { CtxStore } from '@modules/stores';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
-  private contextStore: ContextStore;
+  private ctx: CtxStore;
 
   constructor(private injector: Injector) {
-    this.contextStore = this.injector.get(ContextStore);
+    this.ctx = this.injector.get(CtxStore);
   }
 
   handleError(error: Error | HttpErrorResponse) {
@@ -16,13 +15,15 @@ export class GlobalErrorHandler implements ErrorHandler {
       // Server error.
 
       console.error('SERVER ERROR: ', error);
-      this.contextStore.setPageAlert({
-        type: 'ERROR',
-        title: 'There is a problem',
-        message: 'An error has occured while fetching information. Please, try again or contact us for further help',
-        setFocus: true
+      this.ctx.layout.update({
+        alert: {
+          type: 'ERROR',
+          title: 'There is a problem',
+          message: 'An error has occured while fetching information. Please, try again or contact us for further help',
+          setFocus: true
+        }
       });
-      this.contextStore.setPageStatus('ERROR');
+      this.ctx.layout.update({ status: 'ERROR' });
     } else {
       // Client Error.
 

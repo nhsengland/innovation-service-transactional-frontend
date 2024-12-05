@@ -2,10 +2,10 @@
   <p>{{ alert.message }}</p>
 </theme-alert>
 
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+<theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
 <div *ngFor="let step of wizard.steps; let stepIndex = index">
-  <ng-container *ngIf="pageStatus === 'READY' && stepIndex + 1 === wizard.currentStepNumber()">
+  <ng-container *ngIf="pageStatus() === 'READY' && stepIndex + 1 === wizard.currentStepNumber()">
     <ng-template [ngComponentOutlet]="step.component" [ndcDynamicInputs]="{ title: step.title, data: step.data }" [ndcDynamicOutputs]="step.outputs"> </ng-template>
   </ng-container>
 </div>

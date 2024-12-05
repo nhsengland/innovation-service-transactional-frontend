@@ -45,6 +45,7 @@ import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-l
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
 import { KeyProgressAreasCardComponent } from './components/key-progress-areas-card/key-progress-areas-card.component';
+import { CustomNotificationsEntrypointComponent } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
 
 @NgModule({
   imports: [
@@ -102,7 +103,9 @@ import { KeyProgressAreasCardComponent } from './components/key-progress-areas-c
     HeaderArchivedBannerComponent,
     AccountMFAListComponent,
 
-    HighlightDirective
+    HighlightDirective,
+
+    CustomNotificationsEntrypointComponent
   ],
   providers: [],
   exports: [
@@ -153,7 +156,9 @@ import { KeyProgressAreasCardComponent } from './components/key-progress-areas-c
 
     AccountMFAListComponent,
 
-    HighlightDirective
+    HighlightDirective,
+
+    CustomNotificationsEntrypointComponent
   ]
 })
 export class ThemeModule {}

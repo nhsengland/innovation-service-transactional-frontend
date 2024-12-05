@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { forkJoin, of } from 'rxjs';
-import { catchError, concatMap, map } from 'rxjs/operators';
+import { catchError, concatMap, map, tap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTransferStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores';
 
 import { DatesHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
 import {
   GetInnovationCollaboratorInvitesDTO,
   GetInnovationTransfersDTO,
@@ -64,7 +63,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
   ) {
     super();
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.user = {
       displayName: user.displayName,
       innovationsOwner: [],
@@ -83,7 +82,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       const newState = history.state;
       delete newState.alert;
       history.replaceState(newState, '');
-      this.stores.authentication.updateUserPasswordResetDate();
+      this.ctx.user.updateInfo({ passwordChangeSinceLastSignIn: true });
     }
 
     forkJoin([
@@ -130,16 +129,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
 
         if (innovationsTransfers) {
           this.innovationTransfers = innovationsTransfers;
-
-          // Throw notification read dismiss.
-          if (this.innovationTransfers.length) {
-            this.stores.context.dismissUserNotification({
-              contextDetails: [
-                NotificationContextDetailEnum.AU08_TRANSFER_ONE_WEEK_REMINDER_EXISTING_USER,
-                NotificationContextDetailEnum.TO02_TRANSFER_OWNERSHIP_EXISTING_USER
-              ]
-            });
-          }
         } else {
           this.setAlertUnknownError();
         }
@@ -160,18 +149,23 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     );
   }
 
-  onSubmitTransferResponse(transferId: string, accept: boolean): void {
+  onSubmitTransferResponse(transferId: string, innovationId: string, accept: boolean): void {
     this.innovatorService
       .updateTransferInnovation(
         transferId,
         accept ? InnovationTransferStatusEnum.COMPLETED : InnovationTransferStatusEnum.DECLINED
       )
       .pipe(
+        tap(() => {
+          if (this.ctx.innovation.info().id === innovationId) {
+            this.ctx.innovation.clear();
+          }
+        }),
+        concatMap(
+          () => this.ctx.user.initializeAuthentication$() // Initialize authentication in order to update First Time SignIn information.
+        ),
         concatMap(() =>
           forkJoin([
-            this.stores.authentication.initializeAuthentication$(), // Initialize authentication in order to update First Time SignIn information.
-            this.innovatorService.getInnovationTransfers(true),
-
             this.innovationsService.getInnovationsList(
               ['id', 'name', 'groupedStatus', 'statistics.tasks', 'statistics.messages'],
               { hasAccessThrough: ['owner'] },
@@ -185,8 +179,8 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
           ])
         )
       )
-      .subscribe(([_authentication, innovationsTransfers, innovationsListOwner, innovationsListCollaborator]) => {
-        this.innovationTransfers = innovationsTransfers;
+      .subscribe(([innovationsListOwner, innovationsListCollaborator]) => {
+        this.innovationTransfers = this.innovationTransfers.filter(t => t.id !== transferId);
         this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );
@@ -218,7 +212,7 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
     const tasksStr = `${tasks} ${tasks > 1 ? 'updates' : 'update'} on tasks`;
     const messagesStr = `${messages} new ${messages > 1 ? 'messages' : 'message'}`;
 
-    let description = [];
+    const description = [];
 
     if (tasks !== 0) {
       description.push(tasksStr);

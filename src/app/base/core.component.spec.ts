@@ -2,14 +2,14 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoggerTestingModule } from 'ngx-logger/testing';
 
-import { Injector, PLATFORM_ID } from '@angular/core';
+import { Injector, PLATFORM_ID, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { REQUEST, RESPONSE } from '../../express.tokens';
 
 import { EmptyMockComponent, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { AppInjector, CoreModule } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { CoreComponent } from './core.component';
 
@@ -72,7 +72,7 @@ describe('App/Base/CoreComponent running SERVER side', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     component.setPageStatus('LOADING');
-    expect(component.pageStatus).toBe('LOADING');
+    expect(component.pageStatus()).toBe('LOADING');
   });
 
   // it(`should run focusBody()`, fakeAsync(() => {
@@ -108,7 +108,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
   let router: Router;
   let routerSpy: jest.SpyInstance;
 
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let component: CoreComponent;
   let fixture: ComponentFixture<CoreComponent>;
@@ -131,7 +131,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     router = TestBed.inject(Router);
     routerSpy = jest.spyOn(router, 'navigate');
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
   });
 
   it('should create the component', () => {
@@ -175,7 +175,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;
     component.setPageStatus('LOADING');
-    expect(component.pageStatus).toBe('LOADING');
+    expect(component.pageStatus()).toBe('LOADING');
   });
 
   it(`should run clearAlert()`, () => {
@@ -231,7 +231,7 @@ describe('App/Base/CoreComponent running CLIENT side', () => {
   // }));
 
   it(`should run userUrlBasePath()`, () => {
-    authenticationStore.userUrlBasePath = () => 'innovator';
+    ctx.user.userUrlBasePath = signal('innovator');
 
     fixture = TestBed.createComponent(CoreComponent);
     component = fixture.componentInstance;

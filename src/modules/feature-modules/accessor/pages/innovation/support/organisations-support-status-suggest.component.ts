@@ -6,14 +6,12 @@ import { CustomValidators, FormArray, FormControl, FormEngineParameterModel, For
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { AccessorService, NotificationEnum, NotifyMeConfig } from '../../../services/accessor.service';
 
 import { ActivatedRoute } from '@angular/router';
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 import { UtilsHelper } from '@app/base/helpers';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 import { ORGANISATIONS_INFORMATION } from './organisations-information/organisations-information';
 
 export type OrganisationInformation = {
@@ -44,12 +42,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     'Describe why you think this innovation would benefit from support from this organisation and click continue';
   notifyErrorMessage = 'Select an option and click confirm';
 
-  form: FormGroup<{
+  form = new FormGroup<{
     organisation: FormControl<null | string>;
     units?: FormArray<FormControl<string>>;
     comment: FormControl<null | string>;
     notify: FormControl<null | string>;
-  }> = new FormGroup(
+  }>(
     {
       organisation: new FormControl<null | string>(null, CustomValidators.required(this.organisationErrorMessage)),
       comment: new FormControl<string>('', CustomValidators.required(this.commentErrorMessage)),
@@ -58,7 +56,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     { updateOn: 'blur' }
   );
 
-  previousOrganisationsSuggestions: { [key: string]: string[] } = {};
+  previousOrganisationsSuggestions: Record<string, string[]> = {};
 
   organisations: OrganisationsListDTO[] = [];
   organisationsToSuggest: (OrganisationsListDTO & { description: string | undefined })[] = [];
@@ -102,7 +100,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
       next: ([organisations, innovationSupports]) => {
         this.organisations = organisations;
 
-        const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+        const userUnitId = this.ctx.user.getUserContext()?.organisationUnit?.id ?? '';
 
         this.previousOrganisationsSuggestions = JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
 
@@ -153,8 +151,12 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           });
           organisation?.markAsTouched();
         } else {
-          const chosenOrganisation = this.organisationsToSuggest.find(org => org.id === organisation?.value!)!;
+          const organisationValue = organisation.value;
+          const chosenOrganisation = this.organisationsToSuggest.find(org => org.id === organisationValue);
 
+          if (!chosenOrganisation) {
+            throw new Error('Chosen organisation not found in organisationsToSuggest.');
+          }
           this.chosenUnits.organisation = {
             name: chosenOrganisation.name,
             acronym: chosenOrganisation.acronym,
@@ -162,7 +164,13 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
           };
 
           // Count total number of units inside organisation
-          const totalUnits = this.organisations.find(org => org.id === organisation?.value!)!.organisationUnits.length;
+          const organisationData = this.organisations.find(org => org.id === organisationValue);
+
+          if (!organisationData) {
+            throw new Error('Organisation not found in organisations list.');
+          }
+
+          const totalUnits = organisationData.organisationUnits?.length || 0;
 
           const units = this.form.get('units');
           if (totalUnits > 1) {
@@ -217,7 +225,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
             .organisationUnits.filter(unit => units?.value?.includes(unit.id))
             .map(unit => unit.name);
 
-          this.chosenUnits.values = units?.value!;
+          this.chosenUnits.values = units?.value ?? [];
 
           this.stepNumber++;
         }
@@ -322,7 +330,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
     this.form.markAsUntouched();
 
     if (this.stepNumber === 1) {
-      this.redirectTo(this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`);
+      this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`);
     } else {
       if (this.stepNumber === 3 && this.chosenUnits.unitsNames.length === 0) {
         this.stepNumber = 1;
@@ -334,7 +342,7 @@ export class InnovationSupportOrganisationsSupportStatusSuggestComponent extends
   }
 
   handleCancelOrSubmit() {
-    let cancelUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
+    let cancelUrl = this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovation.id}/support`;
     if (this.supportUpdateSideEffect) {
       cancelUrl = `/accessor/innovations/${this.innovation.id}/overview`;
     }

@@ -1,18 +1,15 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum } from '@app/base/enums';
 import { DatesHelper, UtilsHelper } from '@app/base/helpers';
 
 import { NEEDS_ASSESSMENT_QUESTIONS } from '@modules/stores/innovation/config/needs-assessment-constants.config';
 
 import { InnovationNeedsAssessmentInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextInnovationType } from '@modules/stores';
 import { maturityLevelItems, yesPartiallyNoItems } from '@modules/stores/innovation/config/innovation-catalog.config';
-
+import { ContextInnovationType, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-assessment-overview',
@@ -32,12 +29,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   innovatorSummary: { label?: string; value: null | string; comment: string }[] = [];
 
   // Flags
-  isAdminType: boolean;
-  isAssessmentType: boolean;
-  isAccessorType: boolean;
-  isInnovatorType: boolean;
-  isQualifyingAccessorRole: boolean;
-
   isInProgress: boolean;
 
   assessmentHasBeenSubmitted = false;
@@ -60,12 +51,6 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
     this.innovation = this.ctx.innovation.info();
-
-    this.isAdminType = this.stores.authentication.isAdminRole();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isQualifyingAccessorRole = this.isAccessorType && this.stores.authentication.isQualifyingAccessorRole();
 
     this.isInProgress = this.innovation.status === 'IN_PROGRESS';
   }
@@ -131,14 +116,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
         }
       ];
 
-      // Throw notification read dismiss.
-      if (this.isInnovatorType) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.NA04_NEEDS_ASSESSMENT_COMPLETE_TO_INNOVATOR]
-        });
-      }
-
-      if (this.isAccessorType) {
+      if (this.ctx.user.isAccessorType()) {
         this.updateSupportUrlNewOrSupport =
           this.innovation.support &&
           [InnovationSupportStatusEnum.WAITING, InnovationSupportStatusEnum.ENGAGING].includes(
@@ -165,7 +143,7 @@ export class PageInnovationAssessmentOverviewComponent extends CoreComponent imp
   }
 
   setGoBackLink(): void {
-    if (this.isAssessmentType) {
+    if (this.ctx.user.isAssessment()) {
       let goBackUrl = undefined;
       const assessmentEditUrl = `/assessment/innovations/${this.innovationId}/assessments/${this.innovation.assessment?.id}/edit`;
       switch (this.assessmentQueryParam) {

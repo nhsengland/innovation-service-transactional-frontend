@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { finalize, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
-
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { ACTIVITY_LOG_ITEMS } from '@modules/stores/innovation';
 
 import { KeysUnion } from '@modules/core/helpers/types.helper';
 import { APIListResponse, Paginated } from '@modules/core/models/api.model';
@@ -18,9 +15,10 @@ import {
   InnovationExportRequestStatusEnum,
   InnovationStatusEnum,
   InnovationSupportStatusEnum,
-  InnovationTaskStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
-import { InnovationSectionInfoDTO } from '@modules/stores/innovation/innovation.models';
+  InnovationTaskStatusEnum,
+  UserRoleEnum
+} from '@modules/stores';
+import { ACTIVITY_LOG_ITEMS, InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
   CreateSupportSummaryProgressUpdateType,
@@ -260,7 +258,7 @@ export class InnovationsService extends CoreService {
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
-    const requestUserType = this.stores.authentication.getUserType();
+    const requestUserType = this.ctx.user.getUserType();
     const qp: { fields: ('assessment' | 'supports')[] } = { fields: [] };
 
     switch (requestUserType) {
@@ -291,10 +289,7 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  getInnovationProgress(
-    innovationId: string,
-    filterInnovationId: boolean = false
-  ): Observable<KeyProgressAreasPayloadType> {
+  getInnovationProgress(innovationId: string, filterInnovationId = false): Observable<KeyProgressAreasPayloadType> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/progress')
       .setPathParams({ innovationId });
@@ -333,9 +328,7 @@ export class InnovationsService extends CoreService {
   getInnovationRules(
     innovationId: string,
     operation: InnovationValidationRules,
-    inputData: {
-      [name: string]: string;
-    }
+    inputData: Record<string, string>
   ): Observable<InnovationRulesDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/validate')
@@ -554,7 +547,7 @@ export class InnovationsService extends CoreService {
       map(response => ({
         count: response.count,
         data: response.data.map(item => {
-          const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(item.section);
+          const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(item.section);
 
           return {
             ...item,
@@ -576,7 +569,7 @@ export class InnovationsService extends CoreService {
     return this.http.get<Omit<InnovationTaskInfoDTO, 'name'>>(url.buildUrl()).pipe(
       take(1),
       map(response => {
-        const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
+        const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(response.section);
 
         return {
           id: response.id,
@@ -701,7 +694,7 @@ export class InnovationsService extends CoreService {
                 ? message.createdBy.isOwner
                   ? 'Owner'
                   : 'Collaborator'
-                : this.stores.authentication.getRoleDescription(message.createdBy.role)
+                : this.ctx.user.getRoleDescription(message.createdBy.role)
           }
         }))
       }))
@@ -754,7 +747,7 @@ export class InnovationsService extends CoreService {
     }>
   ): Observable<InnovationActivityLogListDTO> {
     const { filters, ...qParams } = queryParams;
-    const userUrlBasePath = this.stores.authentication.userUrlBasePath();
+    const userUrlBasePath = this.ctx.user.userUrlBasePath();
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/activities')
       .setPathParams({ innovationId })
@@ -767,7 +760,7 @@ export class InnovationsService extends CoreService {
         data: response.data.map(i => {
           let link: null | { label: string; url: string } = null;
           const sectionIdentification = i.params.sectionId
-            ? this.stores.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
+            ? this.ctx.schema.getIrSchemaSectionIdentificationV3(i.params.sectionId)
             : '';
 
           // Handle sections from previous innovation record versions
@@ -847,7 +840,7 @@ export class InnovationsService extends CoreService {
               innovationName: response.innovation.name,
               sectionTitle: sectionIdentification ? `${sectionIdentification.section.title}` : '',
               actionUserRole: i.params.actionUserRole
-                ? `(${this.stores.authentication.getRoleDescription(i.params.actionUserRole)})`
+                ? `(${this.ctx.user.getRoleDescription(i.params.actionUserRole)})`
                 : ''
             },
             link

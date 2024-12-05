@@ -1,27 +1,30 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { PLATFORM_ID } from '@angular/core';
+import { PLATFORM_ID, signal } from '@angular/core';
 import { REQUEST, RESPONSE } from '../../../express.tokens';
 
 import { ENV, SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationService, AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 import { RouterModule } from '@angular/router';
+import { UserContextStore } from '@modules/stores/ctx/user/user.store';
+import { UserContextService } from '@modules/stores/ctx/user/user.service';
 
 describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
   let httpMock: HttpTestingController;
   let envVariablesStore: EnvironmentVariablesStore;
-  let authenticationService: AuthenticationService;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       providers: [
-        AuthenticationService,
+        CtxStore,
+        UserContextStore,
+        UserContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
         { provide: PLATFORM_ID, useValue: 'server' },
         { provide: REQUEST, useValue: SERVER_REQUEST },
@@ -31,8 +34,7 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    authenticationService = TestBed.inject(AuthenticationService);
+    ctx = TestBed.inject(CtxStore);
   });
 
   afterEach(() => {
@@ -43,13 +45,13 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
     const responseMock = true;
     let response: any = null;
 
-    authenticationStore.getUserContextInfo = () => ({
+    ctx.user.getUserContext = signal({
       id: 'userId',
       roleId: '123',
       type: UserRoleEnum.ADMIN
     });
-    authenticationService
-      .verifyUserSession()
+    ctx.user
+      .verifyUserSession$()
       .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     const httpRequest = httpMock.expectOne(`${envVariablesStore.APP_URL}/session`);
@@ -63,13 +65,15 @@ describe('Core/Interceptors/ApiOutInterceptor running SERVER side', () => {
 describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
   let httpMock: HttpTestingController;
   let environmentStore: EnvironmentVariablesStore;
-  let authenticationService: AuthenticationService;
+  let ctx: CtxStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
       providers: [
-        AuthenticationService,
+        CtxStore,
+        UserContextStore,
+        UserContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV },
 
         { provide: PLATFORM_ID, useValue: 'browser' }
@@ -78,7 +82,7 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
 
     httpMock = TestBed.inject(HttpTestingController);
     environmentStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationService = TestBed.inject(AuthenticationService);
+    ctx = TestBed.inject(CtxStore);
   });
 
   afterEach(() => {
@@ -89,8 +93,8 @@ describe('Core/Interceptors/ApiOutInterceptor running CLIENT side', () => {
     const responseMock = true;
     let response: any = null;
 
-    authenticationService
-      .verifyUserSession()
+    ctx.user
+      .verifyUserSession$()
       .subscribe({ next: success => (response = success), error: error => (response = error) });
 
     const httpRequest = httpMock.expectOne(`${environmentStore.APP_URL}/session`);

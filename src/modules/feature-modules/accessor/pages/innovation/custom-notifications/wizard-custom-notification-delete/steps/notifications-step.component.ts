@@ -34,7 +34,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
   @Output() nextStepEvent = new EventEmitter<WizardStepEventType<NotificationsStepOutputType>>();
   @Output() submitEvent = new EventEmitter<WizardStepEventType<NotificationsStepOutputType>>();
 
-  errorMessage: string = `Select notifications to delete`;
+  errorMessage = `Select notifications to delete`;
 
   form = new FormGroup({
     notifications: new FormArray<FormControl<string>>([], [CustomValidators.requiredCheckboxArray(this.errorMessage)])
@@ -67,6 +67,12 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
             return {
               value: subscription.id,
               label: `<span class="d-block nhsuk-u-margin-bottom-3">${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}</span>${this.buildSectionsSelectedList(subscription)}`,
+              description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
+            };
+          case NotificationEnum.DOCUMENT_UPLOADED:
+            return {
+              value: subscription.id,
+              label: `${UtilsHelper.getNotifyMeSubscriptionTitleText(subscription)}`,
               description: `Last edited ${this.datePipe.transform(subscription.updatedAt, this.translate('app.date_formats.long_date'))}`
             };
           case NotificationEnum.REMINDER:
@@ -186,7 +192,7 @@ export class WizardInnovationCustomNotificationDeleteNotificationsStepComponent
 
     outputInnerHtml += '<ul class="nhsuk-list nhsuk-u-font-size-19 nhsuk-u-margin-bottom-1">';
 
-    const displaySections = UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.stores.schema);
+    const displaySections = UtilsHelper.getNotifyMeSubscriptionSectionsText(subscription, this.ctx.schema);
 
     displaySections.forEach(section => {
       outputInnerHtml += `<li class="nhsuk-u-margin-0">${section}</li>`;

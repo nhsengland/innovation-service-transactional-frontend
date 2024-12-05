@@ -4,11 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, forkJoin, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
 import {
@@ -19,7 +18,6 @@ import {
   ThreadAvailableRecipientsDTO,
   UploadThreadMessageDocumentType
 } from '@modules/shared/services/innovations.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
 import { omit } from 'lodash';
 
 @Component({
@@ -63,12 +61,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
   };
 
   // Flags
-  isInnovatorType: boolean;
-  isAssessmentType: boolean;
-  isAccessorType: boolean;
-  isAdmin: boolean;
-  isFollower: boolean = false;
-  isArchived: boolean;
+  isFollower = false;
   isInAssessment: boolean;
   canCreateMessage: boolean;
 
@@ -81,10 +74,10 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.setPageTitle('Messages', { showPage: false });
 
     this.selfUser = {
-      id: this.stores.authentication.getUserId(),
-      urlBasePath: this.stores.authentication.userUrlBasePath(),
-      roleId: this.stores.authentication.getUserContextInfo()?.roleId ?? '',
-      role: this.stores.authentication.getUserContextInfo()?.type ?? ''
+      id: this.ctx.user.getUserId(),
+      urlBasePath: this.ctx.user.userUrlBasePath(),
+      roleId: this.ctx.user.getUserContext()?.roleId ?? '',
+      role: this.ctx.user.getUserContext()?.type ?? ''
     };
 
     this.innovation = this.ctx.innovation.info();
@@ -93,7 +86,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
 
     this.threadsLink = `/${this.selfUser.urlBasePath}/innovations/${this.innovation.id}/threads`;
 
-    const previousUrl = this.stores.context.getPreviousUrl();
+    const previousUrl = this.ctx.layout.previousUrl();
 
     this.setBackLink(
       'Go back',
@@ -109,14 +102,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     this.organisationUnits = [];
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.innovation.status === InnovationStatusEnum.ARCHIVED;
     this.isInAssessment = this.innovation.status.includes('ASSESSMENT');
 
-    this.canCreateMessage = !this.isAdmin && (!this.isAccessorType || !this.isInAssessment);
+    this.canCreateMessage = !this.ctx.user.isAdmin() && (!this.ctx.user.isAccessorType() || !this.isInAssessment);
   }
 
   ngOnInit(): void {
@@ -142,7 +130,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
       )
     };
 
-    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.stores.authentication.isAdminRole()) {
+    if (this.innovation.status === InnovationStatusEnum.IN_PROGRESS && !this.ctx.user.isAdmin()) {
       subscriptions.threadAvailableRecipients = this.innovationsService.getThreadAvailableRecipients(
         this.innovation.id
       );
@@ -177,10 +165,9 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           this.organisationUnits = response.threadAvailableRecipients;
 
           // Filter out the user unit, if accessor.
-          if (this.stores.authentication.isAccessorType()) {
+          if (this.ctx.user.isAccessorType()) {
             this.organisationUnits = this.organisationUnits.filter(
-              item =>
-                item.organisation.unit.id !== this.stores.authentication.getUserContextInfo()?.organisationUnit?.id
+              item => item.organisation.unit.id !== this.ctx.user.getUserContext()?.organisationUnit?.id
             );
           }
 
@@ -188,54 +175,6 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
           this.showAddRecipientsLink = this.organisationUnits
             .reduce((acc: string[], item) => [...acc, ...item.recipients.map(a => a.roleId)], [])
             .some(roleId => !this.threadFollowers?.map(follower => follower.role.id).includes(roleId));
-        }
-
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovation.id, {
-          contextTypes: [NotificationCategoryTypeEnum.MESSAGES],
-          contextIds: [this.threadInfo.id]
-        });
-
-        switch (this.threadInfo.context?.type) {
-          case 'TASK':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.TA02_TASK_RESPONDED_TO_OTHER_INNOVATORS,
-                  NotificationContextDetailEnum.TA05_TASK_CANCELLED_TO_INNOVATOR,
-                  NotificationContextDetailEnum.TA06_TASK_REOPEN_TO_INNOVATOR
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            } else if (this.isAssessmentType || this.isAccessorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT,
-                  NotificationContextDetailEnum.TA04_TASK_DECLINED_TO_ACCESSOR_OR_ASSESSMENT
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
-          case 'SUPPORT':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [
-                  NotificationContextDetailEnum.ST01_SUPPORT_STATUS_TO_ENGAGING,
-                  NotificationContextDetailEnum.ST04_SUPPORT_NEW_ASSIGNED_ACCESSORS_TO_INNOVATOR
-                ],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
-          case 'NEEDS_ASSESSMENT':
-            if (this.isInnovatorType) {
-              this.stores.context.dismissNotification(this.innovation.id, {
-                contextDetails: [NotificationContextDetailEnum.NA03_NEEDS_ASSESSMENT_STARTED_TO_INNOVATOR],
-                contextIds: [this.threadInfo.context!.id]
-              });
-            }
-            break;
         }
 
         this.setPageStatus('READY');
@@ -318,7 +257,7 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
     let body: UploadThreadMessageDocumentType = { message: this.form.value.message! };
 
     if (file) {
-      const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovation.id };
+      const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovation.id };
 
       this.fileUploadService
         .uploadFile(httpUploadBody, file)

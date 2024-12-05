@@ -7,9 +7,9 @@
 
 <h1 class="nhsuk-heading-l">{{ title }}</h1>
 
-<theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+<theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-<div *ngIf="pageStatus === 'READY'" class="nhsuk-grid-row" aria-live="polite">
+<div *ngIf="pageStatus() === 'READY'" class="nhsuk-grid-row" aria-live="polite">
   <div class="nhsuk-grid-column-three-quarters">
     <dl class="nhsuk-summary-list">
       <div *ngFor="let item of data.summary" class="nhsuk-summary-list__row">

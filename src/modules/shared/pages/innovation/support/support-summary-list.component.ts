@@ -4,7 +4,6 @@ import { Component, OnInit } from '@angular/core';
 import { CoreComponent } from '@app/base';
 
 import { ActivatedRoute } from '@angular/router';
-import { NotificationContextDetailEnum } from '@app/base/enums';
 import { LocalStorageHelper, UtilsHelper } from '@app/base/helpers';
 import {
   InnovationAssessmentListDTO,
@@ -14,10 +13,11 @@ import {
 } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { DateISOType } from '@app/base/types';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 type sectionsListType = {
   id: SupportSummarySectionType;
@@ -48,20 +48,16 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   lsCache: Set<string>;
   innovationAssessmentsList: innovationAssessmentListType[] = [];
 
-  // Flags
-  isQualifyingAccessorRole: boolean;
-  isAdmin: boolean;
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-
-  isSuggestionsListEmpty: boolean = true;
-  showSuggestOrganisationsToSupportLink: boolean = false;
+  isSuggestionsListEmpty = true;
+  showSuggestOrganisationsToSupportLink = false;
 
   sectionsList: sectionsListType[] = [
     { id: 'ENGAGING', title: 'Organisations currently supporting this innovation', unitsList: [] },
     { id: 'BEEN_ENGAGED', title: 'Organisations that have supported this innovation in the past', unitsList: [] },
     { id: 'SUGGESTED', title: 'Other suggested support organisations', unitsList: [] }
   ];
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -81,12 +77,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
       this.lsCache = new Set([]);
     }
 
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isQualifyingAccessorRole = this.stores.authentication.isQualifyingAccessorRole();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-
-    if (this.isAdmin) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Support summary', { hint: `Innovation ${this.innovation.name}` });
     }
   }
@@ -101,7 +92,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
       innovationAssessmentsObservable: this.innovationsService.getInnovationAssessmentsList(this.innovation.id)
     };
 
-    if (this.isQualifyingAccessorRole) {
+    if (this.ctx.user.isQualifyingAccessor()) {
       subscriptions.organisationsList = this.organisationsService.getOrganisationsList({ unitsInformation: true });
     }
 
@@ -171,8 +162,8 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
         LocalStorageHelper.setObjectItem(lsCacheId, Array.from(this.lsCache));
 
         // Check if there are organisations to be suggested by the qualifying accessor
-        if (this.isQualifyingAccessorRole) {
-          const userUnitId = this.stores.authentication.getUserContextInfo()?.organisationUnit?.id ?? '';
+        if (this.ctx.user.isQualifyingAccessor()) {
+          const userUnitId = this.ctx.user.getUserContext()?.organisationUnit?.id ?? '';
 
           const engagingUnitsIds = this.sectionsList[1].unitsList.map(unit => unit.id);
 
@@ -186,16 +177,16 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             ).length;
         }
 
-        // Throw notification read dismiss.
-        if (this.isAccessorType) {
-          this.stores.context.dismissNotification(this.innovation.id, {
-            contextDetails: [
-              NotificationContextDetailEnum.SUPPORT_UPDATED,
-              NotificationContextDetailEnum.PROGRESS_UPDATE_CREATED,
-              NotificationContextDetailEnum.SUGGESTED_SUPPORT_UPDATED
-            ]
-          });
-        }
+        this.customNotificationLinks = [
+          {
+            label: 'Notify me when an organisation updates their support status',
+            action: NotificationEnum.SUPPORT_UPDATED
+          },
+          {
+            label: 'Notify me when an organisation adds a progress update to this support summary',
+            action: NotificationEnum.PROGRESS_UPDATE_CREATED
+          }
+        ];
 
         this.setPageStatus('READY');
       },
@@ -207,7 +198,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
   }
 
   onOpenCloseUnit(sectionsListIndex: number, unitsListIndex: number): void {
-    let unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
+    const unitItem = this.sectionsList[sectionsListIndex].unitsList[unitsListIndex];
     unitItem.isOpened = !unitItem.isOpened;
 
     if (!unitItem.isOpened) {
@@ -223,28 +214,6 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
             unitItem.historyList = response;
             unitItem.isLoading = false;
             this.lsCache.add(`${sectionsListIndex},${unitItem.id}`);
-
-            // Throw notification read dismiss.
-            if (unitItem.support?.id) {
-              if (this.isInnovatorType) {
-                this.stores.context.dismissNotification(this.innovation.id, {
-                  contextDetails: [
-                    NotificationContextDetailEnum.ST02_SUPPORT_STATUS_TO_OTHER,
-                    NotificationContextDetailEnum.ST03_SUPPORT_STATUS_TO_WAITING,
-                    NotificationContextDetailEnum.SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS
-                  ],
-                  contextIds: [unitItem.support.id]
-                });
-              } else if (this.isAccessorType) {
-                this.stores.context.dismissNotification(this.innovation.id, {
-                  contextDetails: [
-                    NotificationContextDetailEnum.SS02_SUPPORT_SUMMARY_UPDATE_TO_OTHER_ENGAGING_ACCESSORS,
-                    NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT
-                  ],
-                  contextIds: [unitItem.support.id]
-                });
-              }
-            }
           },
           error: () => {
             unitItem.isOpened = false;
@@ -275,7 +244,7 @@ export class PageInnovationSupportSummaryListComponent extends CoreComponent imp
     const minStart = new Date(minStartSupport).setHours(0, 0, 0, 0);
     const today = new Date().setHours(0, 0, 0, 0);
 
-    if (this.stores.authentication.getUserContextInfo()?.organisationUnit?.id === unitId && today >= minStart) {
+    if (this.ctx.user.getUserContext()?.organisationUnit?.id === unitId && today >= minStart) {
       return true;
     } else {
       return false;

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { CustomValidators } from '@app/base/forms';
 
-import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationExportRequestStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationExportRequestInfoDTO } from '@modules/shared/services/innovations.dtos';

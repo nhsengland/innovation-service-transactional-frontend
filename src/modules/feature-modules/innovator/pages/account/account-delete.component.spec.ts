@@ -4,15 +4,13 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { InnovatorModule } from '@modules/feature-modules/innovator/innovator.module';
 
 import { PageAccountDeleteComponent } from './account-delete.component';
 import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', () => {
-  let authenticationStore: AuthenticationStore;
-
   let component: PageAccountDeleteComponent;
   let fixture: ComponentFixture<PageAccountDeleteComponent>;
 
@@ -22,8 +20,6 @@ describe('FeatureModules/Innovator/Pages/Account/PageAccountDeleteComponent', ()
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
-    authenticationStore = TestBed.inject(AuthenticationStore);
   });
 
   it('should create the component', () => {

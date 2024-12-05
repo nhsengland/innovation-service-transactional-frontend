@@ -1,9 +1,8 @@
 import { UserRoleEnum } from '@app/base/enums';
 import { CheckboxesFilter, Dataset, FiltersConfig } from '@modules/core/models/filters/filters.model';
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { locationItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 export const InnovationsListFiltersConfig: FiltersConfig = {
   search: { key: 'search', label: 'Search all innovations', placeholder: 'Search', maxLength: 200 },
@@ -90,12 +89,7 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
   return {
     locations: locationItems.filter(i => i.label !== 'SEPARATOR').map(i => ({ label: i.label, value: i.value })),
     engagingOrganisations: [],
-    supportStatuses: Object.entries(INNOVATION_SUPPORT_STATUS)
-      .filter(s => s[0] != 'SUGGESTED') // Remove the SUGGESTED status as it's "UNASSIGNED"
-      .map(([key, item]) => ({
-        value: key,
-        label: item.label
-      })),
+    supportStatuses: [],
     groupedStatuses: [],
     diseasesAndConditions: getIrSchemaQuestionItemsValueAndLabel(schema, 'diseasesConditionsImpact'),
     categories: [...getIrSchemaQuestionItemsValueAndLabel(schema, 'categories')],
@@ -178,11 +172,5 @@ export function getConfig(
     }
   }
 
-  // Datasets changes
-  const datasets = innovationListDatasets;
-  if (role === UserRoleEnum.ACCESSOR) {
-    datasets.supportStatuses = datasets.supportStatuses.filter(s => ['ENGAGING', 'CLOSED'].includes(s.value));
-  }
-
-  return { filters: config, datasets };
+  return { filters: config, datasets: innovationListDatasets };
 }

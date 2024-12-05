@@ -10,7 +10,7 @@ import { UsersService } from '@modules/shared/services/users.service';
 
 import { AccessorService } from '../../../services/accessor.service';
 import { CustomValidators } from '@modules/shared/forms';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { forkJoin } from 'rxjs';
 
 @Component({
@@ -28,7 +28,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   selectedAccessors: typeof this.accessorsList = [];
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
 
-  selectAccessorsStepLabel: string = '';
+  selectAccessorsStepLabel = '';
 
   innovationSupportStatus: InnovationSupportStatusEnum | undefined;
 
@@ -55,7 +55,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
     this.stepNumber = 1;
 
-    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
+    this.userOrganisationUnit = this.ctx.user.getUserContext()?.organisationUnit || null;
   }
 
   ngOnInit(): void {
@@ -94,7 +94,7 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
         if (this.innovationSupportStatus === InnovationSupportStatusEnum.WAITING) {
           // add this user by default, and disable input
-          const userId = this.stores.authentication.getUserId();
+          const userId = this.ctx.user.getUserId();
           (this.form.get('accessors') as FormArray).push(new FormControl<string>(userId));
           this.disabledCheckboxAccessors = [userId];
         }

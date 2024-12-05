@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div *ngIf="!assessmentHasBeenSubmitted" class="full-width-section nhsuk-u-margin-bottom-5">
@@ -54,7 +54,7 @@
         <nav class="nhsuk-pagination" role="navigation" aria-label="Pagination">
           <ul class="nhsuk-list nhsuk-pagination__list">
             <li *ngIf="stepId === 2" class="nhsuk-pagination-item--previous">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="onSubmit('saveAsDraftSecondSection')">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="onSubmit('saveAsDraftSecondSection')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Previous</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">1 of 2</span>
@@ -62,7 +62,7 @@
               </a>
             </li>
             <li *ngIf="stepId === 1" class="nhsuk-pagination-item--next">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="onSubmit('saveAsDraftFirstSection')">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="onSubmit('saveAsDraftFirstSection')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Next</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">2 of 2</span>

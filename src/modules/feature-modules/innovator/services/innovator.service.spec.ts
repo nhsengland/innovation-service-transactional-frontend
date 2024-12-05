@@ -3,11 +3,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { ENV } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
-import { InnovationTransferStatusEnum } from '@modules/stores/innovation';
+import { StoresModule, InnovationTransferStatusEnum, CtxStore } from '@modules/stores';
 
 import { InnovatorService } from './innovator.service';
 
@@ -15,7 +14,7 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
   let httpMock: HttpTestingController;
 
   let envVariablesStore: EnvironmentVariablesStore;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
   let service: InnovatorService;
 
   beforeEach(() => {
@@ -29,10 +28,10 @@ describe('FeatureModules/Innovator/InnovatorService', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
     service = TestBed.inject(InnovatorService);
 
-    authenticationStore.getUserId = () => 'UserId01';
+    ctx.user.getUserId = signal('UserId01');
   });
 
   afterEach(() => {

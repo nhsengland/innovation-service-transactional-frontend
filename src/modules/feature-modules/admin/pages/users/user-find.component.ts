@@ -49,9 +49,7 @@ export class PageUserFindComponent extends CoreComponent implements OnInit {
       next: response => {
         this.searchUser = {
           ...response,
-          rolesDescription: [...new Set(response.roles.map(r => r.role))].map(r =>
-            this.stores.authentication.getRoleDescription(r)
-          )
+          rolesDescription: [...new Set(response.roles.map(r => r.role))].map(r => this.ctx.user.getRoleDescription(r))
         };
         this.setPageStatus('READY');
       },

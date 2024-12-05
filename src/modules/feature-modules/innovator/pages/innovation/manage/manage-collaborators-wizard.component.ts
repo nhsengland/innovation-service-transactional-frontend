@@ -94,7 +94,7 @@ export class PageInnovationManageCollaboratorsWizardComponent extends CoreCompon
     if (action === 'previous') {
       this.wizard.addAnswers(formData?.data || {}).runRules();
       if (this.wizard.isFirstStep()) {
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? this.baseUrl);
+        this.redirectTo(this.ctx.layout.previousUrl() ?? this.baseUrl);
       } else {
         this.wizard.previousStep();
       }

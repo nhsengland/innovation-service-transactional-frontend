@@ -2,8 +2,6 @@ import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
-
 import {
   ActivityLogItemsEnum,
   InnovationCollaboratorStatusEnum,
@@ -12,8 +10,9 @@ import {
   InnovationStatusEnum,
   InnovationSupportCloseReasonEnum,
   InnovationSupportStatusEnum,
-  InnovationTaskStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
+  InnovationTaskStatusEnum,
+  PhoneUserPreferenceEnum
+} from '@modules/stores';
 
 // Innovations.
 export type InnovationsListFiltersType = Partial<{
@@ -146,7 +145,6 @@ export type InnovationInfoDTO = {
   name: string;
   description: null | string;
   status: InnovationStatusEnum;
-  archivedStatus?: InnovationStatusEnum;
   groupedStatus: InnovationGroupedStatusEnum;
   hasBeenAssessed: boolean;
   submittedAt: null | DateISOType;
@@ -167,7 +165,8 @@ export type InnovationInfoDTO = {
     organisation?: { name: string; size: null | string; registrationNumber: null | string };
     lastLoginAt?: DateISOType;
   };
-  lastEndSupportAt: null | DateISOType;
+  daysSinceNoActiveSupport?: number;
+  expectedArchiveDate?: Date;
   assessment?: null | {
     id: string;
     currentMajorAssessmentId: null | string;
@@ -238,8 +237,9 @@ export type InnovationSupportInfoDTO = {
 // Support summary.
 const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
 export type SupportSummarySectionType = (typeof SupportSummarySectionType)[number];
-export type SupportSummaryOrganisationsListDTO = {
-  [key in SupportSummarySectionType]: {
+export type SupportSummaryOrganisationsListDTO = Record<
+  SupportSummarySectionType,
+  {
     id: string;
     name: string;
     sameOrganisation: boolean;
@@ -254,8 +254,8 @@ export type SupportSummaryOrganisationsListDTO = {
       id: string;
       acronym: string;
     };
-  }[];
-};
+  }[]
+>;
 export type SupportSummaryOrganisationHistoryDTO = {
   id: string;
   type: 'SUPPORT_UPDATE' | 'SUGGESTED_ORGANISATION' | 'PROGRESS_UPDATE' | 'INNOVATION_ARCHIVED' | 'STOP_SHARE';

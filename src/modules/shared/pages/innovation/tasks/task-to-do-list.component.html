@@ -1,5 +1,5 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="innovation.owner && !innovation.owner?.isActive && !isInnovatorType" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+<theme-content-wrapper [status]="pageStatus()">
+  <div *ngIf="innovation.owner && !innovation.owner?.isActive && !ctx.user.isInnovator()" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
@@ -26,12 +26,14 @@
     </ng-container>
 
     <ng-container *ngSwitchCase="'ACCESSOR'">
-      <ng-container *ngIf="innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'); then requestActionBtn"></ng-container>
+      <ng-container
+        *ngIf="innovation.status === 'IN_PROGRESS' && (innovation.support?.status === 'ENGAGING' || innovation.support?.status === 'WAITING'); then requestActionBtn"
+      ></ng-container>
       <div *ngIf="innovation.status.includes('ASSESSMENT')" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
       </div>
-        
+
       <ng-container *ngTemplateOutlet="actionTrackerList"></ng-container>
     </ng-container>
 

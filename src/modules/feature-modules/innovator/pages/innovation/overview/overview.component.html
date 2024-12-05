@@ -1,10 +1,51 @@
-<theme-content-wrapper [status]="pageStatus">
-  <ng-container *ngIf="innovation?.status === 'IN_PROGRESS' && innovation?.lastEndSupportAt">
+<theme-content-wrapper [status]="pageStatus()">
+  <ng-container *ngIf="showNextStepsBanner">
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content nhsuk-u-padding-4">
+        <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Your next steps</h3>
+        <ol class="nhsuk-list nhsuk-list--number">
+          <li>
+            <p class="nhsuk-u-margin-bottom-3">
+              Review the last <a routerLink="/innovator/innovations/{{ innovationId }}/threads">messages</a> from the organisations that supported your innovation to understand
+              what to do next.
+            </p>
+          </li>
+          <li>
+            <p class="nhsuk-u-margin-bottom-3">
+              Update your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a> with the progress you've made so far.
+            </p>
+          </li>
+          <li>
+            <p class="nhsuk-u-margin-bottom-0">
+              Learn more about the innovation pathways on our <a href="{{ CONSTANTS.URLS.INNOVATION_GUIDES }}" target="_blank" rel="noopener noreferrer">innovation guides.</a>
+            </p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="showNoSupportBanner">
     <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
       <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> There is no active support for your innovation</h3>
       <ul class="nhsuk-list" role="list">
-        <li><p>There are no organisations currently providing support to your innovation.</p></li>
-        <li>Find out what options are available to you and <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed">decide what to do next.</a></li>
+        <li>
+          <p class="nhsuk-u-margin-bottom-3">
+            There are no organisations currently providing support to your innovation.
+            <a routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed">Tell us if you need more support.</a>
+          </p>
+        </li>
+        <li>
+          <p class="nhsuk-u-margin-bottom-3">
+            If you're unsure about next steps, review the last <a routerLink="/innovator/innovations/{{ innovationId }}/threads">messages</a> from the organisations that supported
+            your innovation to understand what to do next.
+          </p>
+        </li>
+        <li>
+          <p class="nhsuk-u-margin-bottom-0">
+            Or learn more about the innovation process into the NHS by viewing our
+            <a href="{{ CONSTANTS.URLS.INNOVATION_GUIDES }}" target="_blank" rel="noopener noreferrer"> innovation guides.</a>
+          </p>
+        </li>
       </ul>
     </div>
   </ng-container>

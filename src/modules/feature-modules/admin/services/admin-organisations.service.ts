@@ -6,8 +6,6 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { AccessorOrganisationRoleEnum } from '@modules/stores/authentication/authentication.enums';
-
 export type updateOrganisationDTO = {
   organisationId: string;
 };
@@ -15,13 +13,6 @@ export type updateOrganisationDTO = {
 export type updateOrganisationUnitDTO = {
   unitId: string;
 };
-
-export type organisationUsersInDTO = {
-  id: string;
-  name: string;
-  role: AccessorOrganisationRoleEnum;
-};
-export type organisationUsersOutDTO = organisationUsersInDTO & { roleDescription: string };
 
 export type CreateOrganisationBodyDTO = {
   name: string;

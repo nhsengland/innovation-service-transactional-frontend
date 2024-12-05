@@ -3,8 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map, startWith } from 'rxjs/operators';
 
-import { ContextStore, CtxStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 import { UtilsHelper } from '@app/base/helpers';
 
 @Component({
@@ -16,12 +15,11 @@ export class ContextInnovationOutletComponent implements OnDestroy {
 
   data: {
     innovation: null | { id: string; name: string; status: InnovationStatusEnum; assessmentId?: string };
-    links: { label: string; url: string; queryParams?: { [key: string]: undefined | string } }[];
+    links: { label: string; url: string; queryParams?: Record<string, undefined | string> }[];
   } = { innovation: null, links: [] };
 
   constructor(
     private router: Router,
-    private contextStore: ContextStore,
     private ctx: CtxStore
   ) {
     this.subscriptions.add(

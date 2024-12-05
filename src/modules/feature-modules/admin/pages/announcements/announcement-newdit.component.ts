@@ -20,7 +20,6 @@ import {
 import { DatePipe, ViewportScroller } from '@angular/common';
 import { UserRoleEnum } from '@app/base/enums';
 import { AnnouncementCardDataType } from '@modules/theme/components/announcements/announcement-card.component';
-import { InnovationRecordSchemaStore } from '@modules/stores';
 import { combineLatest } from 'rxjs';
 
 export enum SummaryDataItemTypeEnum {
@@ -96,14 +95,13 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryData: SummaryDataItemType[] = [];
 
-  isChangeMode: boolean = false;
+  isChangeMode = false;
   submitButton = { isActive: true, label: 'Save announcement' };
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private announcementsService: AnnouncementsService,
     private datePipe: DatePipe,
-    private irSchemaStore: InnovationRecordSchemaStore,
     private scroller: ViewportScroller
   ) {
     super();
@@ -225,23 +223,21 @@ export class PageAnnouncementNewditComponent extends CoreComponent implements On
   }
 
   formatSectionLabel(sectionId: string) {
-    const sectionIdentification = this.irSchemaStore.getIrSchemaSectionIdentificationV3(sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
     return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
   }
 
   summaryParsing(): SummaryPayloadType {
     const outboundPayload = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    const irSchemaTranslations = this.irSchemaStore.getIrSchemaTranslationsMap();
+    const irSchemaTranslations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     return {
       title: outboundPayload.title,
       content: outboundPayload.params.content,
       linkLabel: outboundPayload.params.link?.label ?? '',
       linkUrl: outboundPayload.params.link?.url ?? '',
-      userRoles: outboundPayload.userRoles
-        .map(item => this.stores.authentication.getRoleDescription(item, true))
-        .join('\n'),
+      userRoles: outboundPayload.userRoles.map(item => this.ctx.user.getRoleDescription(item, true)).join('\n'),
       showToWhom: outboundPayload.userRoles.includes(UserRoleEnum.INNOVATOR)
         ? outboundPayload.filters?.length
           ? 'Specific types of innovations'

@@ -6,8 +6,8 @@ import {
   WizardSummaryType
 } from '@modules/shared/forms';
 import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 import { getIrSchemaQuestionItemsValueAndLabel } from '@modules/stores/innovation/innovation-record/202405/ir-v3-schema-translation.helper';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 
 const stepsLabels = {
   q1: {

@@ -42,9 +42,7 @@ export class WizardInnovationCustomNotificationDeleteComponent extends CoreCompo
 
   wizard = new WizardModel<WizardData>({});
 
-  stepsDefinition: {
-    [stepId: string]: WizardStepModel;
-  };
+  stepsDefinition: Record<string, WizardStepModel>;
 
   constructor(
     private accessorService: AccessorService,
@@ -386,18 +384,16 @@ export class WizardInnovationCustomNotificationDeleteComponent extends CoreCompo
   }
 
   private redirectToManageCustomNotifications(): void {
-    this.redirectTo(`${this.stores.authentication.userUrlBasePath()}/account/manage-custom-notifications`);
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/account/manage-custom-notifications`);
   }
 
   private redirectToInnovationCustomNotifications(): void {
-    this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`
-    );
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications`);
   }
 
   private redirectToEditCustomNotification(): void {
     this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications/${this.subscriptionId}/edit`
+      `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/custom-notifications/${this.subscriptionId}/edit`
     );
   }
 }

@@ -1,7 +1,7 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <h2>{{ isInnovatorType ? "Your" : "Submitted" }} answers</h2>
+      <h2>{{ ctx.user.isInnovator() ? "Your" : "Submitted" }} answers</h2>
       <dl class="nhsuk-summary-list">
         <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
@@ -9,7 +9,7 @@
             <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
             <span *ngIf="!item.allowHTML">{{ item.value }}</span>
           </dd>
-          <dd *ngIf="isInnovatorType" class="nhsuk-summary-list__actions">
+          <dd *ngIf="ctx.user.isInnovator()" class="nhsuk-summary-list__actions">
             <a routerLink="edit/{{ item.editStepNumber }}">
               Change <span class="nhsuk-u-visually-hidden">{{ item.label | lowercase }}</span></a
             >
@@ -18,7 +18,7 @@
       </dl>
 
       <h2>Documents</h2>
-      <button *ngIf="isInnovatorType" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ evidenceId: evidenceId }" class="nhsuk-button nhsuk-button--secondary">
+      <button *ngIf="ctx.user.isInnovator()" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ evidenceId: evidenceId }" class="nhsuk-button nhsuk-button--secondary">
         Upload a new document
       </button>
       <p *ngIf="documentsList.length === 0">There are no documents uploaded to this evidence.</p>
@@ -37,7 +37,7 @@
         </div>
       </dl>
 
-      <button *ngIf="isInnovatorType" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onDeleteEvidence()">Delete this entry</button>
+      <button *ngIf="ctx.user.isInnovator()" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-5" (click)="onDeleteEvidence()">Delete this entry</button>
     </div>
   </div>
 </theme-content-wrapper>

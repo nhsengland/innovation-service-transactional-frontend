@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <dl class="nhsuk-summary-list">
@@ -33,12 +33,12 @@
         </div>
       </dl>
 
-      <ng-container *ngIf="isSupportTeamType">
+      <ng-container *ngIf="ctx.user.isAccessorOrAssessment()">
         <button *ngIf="innovationRequest?.status === 'PENDING'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('CANCELLED')">Cancel request</button>
         <button *ngIf="innovationRequest?.status === 'REJECTED'" class="nhsuk-button nhsuk-u-margin-top-3" (click)="requestAgainRedirect()">Request again</button>
       </ng-container>
 
-      <ng-container *ngIf="isInnovatorType && innovationRequest?.status === 'PENDING'">
+      <ng-container *ngIf="ctx.user.isInnovator() && innovationRequest?.status === 'PENDING'">
         <button class="nhsuk-button nhsuk-u-margin-right-3 nhsuk-u-margin-top-3" (click)="updateExportRequestStatus('APPROVED')">Approve request</button>
         <button class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-top-3" (click)="rejectRequestRedirect()">Reject request</button>
       </ng-container>

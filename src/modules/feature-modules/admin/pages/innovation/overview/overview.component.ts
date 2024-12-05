@@ -4,15 +4,15 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores';
+import {
+  ContextInnovationType,
+  InnovationSupportStatusEnum,
+  InnovationCollaboratorStatusEnum,
+  InnovationGroupedStatusEnum
+} from '@modules/stores';
 
 import { DatePipe } from '@angular/common';
 import { UtilsHelper } from '@app/base/helpers';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
-import {
-  InnovationCollaboratorStatusEnum,
-  InnovationGroupedStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { forkJoin } from 'rxjs';
 
@@ -32,13 +32,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     status: InnovationSupportStatusEnum;
   } = { organisationUnit: '', status: InnovationSupportStatusEnum.UNASSIGNED };
 
-  isArchived: boolean = false;
+  isArchived = false;
 
   innovationSummary: { label: string; value: null | string }[] = [];
 
   innovatorDetails: { label: string; value: null | string }[] = [];
-
-  innovationSupportStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
 
   innovationCollaborators: {
     id: string;
@@ -75,8 +73,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       innovationProgress: this.innovationsService.getInnovationProgress(this.innovationId, true)
     }).subscribe(({ innovation, innovationCollaborators, innovationProgress }) => {
       this.innovationSupport = {
-        organisationUnit: this.stores.authentication.getAccessorOrganisationUnitName(),
-        status: this.innovation.support?.status || InnovationSupportStatusEnum.UNASSIGNED
+        organisationUnit: this.ctx.user.getAccessorUnitName() ?? '',
+        status: this.innovation.support?.status ?? InnovationSupportStatusEnum.UNASSIGNED
       };
 
       this.innovationSummary = [
@@ -99,7 +97,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             .map(v =>
               v === 'OTHER'
                 ? innovation.otherCategoryDescription
-                : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
+                : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
             )
             .join('\n')
         }
@@ -141,7 +139,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                 }),
             acc
           ),
-          {} as { [a in InnovationSupportStatusEnum]: { count: number; text: string } }
+          {} as Record<InnovationSupportStatusEnum, { count: number; text: string }>
         );
 
       this.innovation.organisationsStatusDescription = Object.entries(occurrences)

@@ -4,18 +4,16 @@ type AlignType = 'left' | 'right' | 'center';
 
 type OrderDirectionType = 'none' | 'ascending' | 'descending';
 
-export type APIQueryParamsType<F = { [key: string]: string | number | boolean | string[] }> = {
+export type APIQueryParamsType<F = Record<string, string | number | boolean | string[]>> = {
   take: number;
   skip: number;
-  order?: { [key: string]: 'ASC' | 'DESC' };
+  order?: Record<string, 'ASC' | 'DESC'>;
   filters: Partial<F>;
 };
 
-export class TableModel<T = { [key: string]: string | number | boolean }, F = APIQueryParamsType['filters']> {
+export class TableModel<T = Record<string, string | number | boolean>, F = APIQueryParamsType['filters']> {
   dataSource: T[];
-  visibleColumns: {
-    [key: string]: { label: string; align?: AlignType; orderable?: boolean };
-  };
+  visibleColumns: Record<string, { label: string; align?: AlignType; orderable?: boolean }>;
 
   totalRows: number;
 
@@ -39,7 +37,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
 
   constructor(
     data?: Omit<Partial<TableModel<T, F>>, 'visibleColumns'> & {
-      visibleColumns?: { [key: string]: string | { label: string; align?: AlignType; orderable?: boolean } };
+      visibleColumns?: Record<string, string | { label: string; align?: AlignType; orderable?: boolean }>;
     }
   ) {
     this.dataSource = data?.dataSource || [];
@@ -90,9 +88,9 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     });
   }
 
-  setVisibleColumns(visibleColumns: {
-    [key: string]: string | { label: string; align?: AlignType; orderable?: boolean };
-  }): this {
+  setVisibleColumns(
+    visibleColumns: Record<string, string | { label: string; align?: AlignType; orderable?: boolean }>
+  ): this {
     this.visibleColumns = {};
 
     for (const [key, item] of Object.entries(visibleColumns)) {
@@ -139,7 +137,7 @@ export class TableModel<T = { [key: string]: string | number | boolean }, F = AP
     return this;
   }
 
-  setData(data: Array<T>, totalRows?: number): this {
+  setData(data: T[], totalRows?: number): this {
     this.dataSource = data;
     this.totalRows = totalRows ? totalRows : data.length;
     return this;

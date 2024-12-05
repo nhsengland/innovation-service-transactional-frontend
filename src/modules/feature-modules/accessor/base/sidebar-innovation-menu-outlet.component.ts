@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { ViewportScroller } from '@angular/common';
-import { AuthenticationStore, InnovationRecordSchemaStore, CtxStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -15,12 +14,10 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string; url: string; children?: { label: string; url: string; id?: string }[] }[] = [];
-  navHeading: string = 'Innovation Record sections';
-  showHeading: boolean = false;
-  isAllSectionsDetailsPage: boolean = false;
-  isInnovationRecordPage: boolean = false;
-  isQualifyingAccessorRole: boolean;
-
+  navHeading = 'Innovation Record sections';
+  showHeading = false;
+  isAllSectionsDetailsPage = false;
+  isInnovationRecordPage = false;
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];
   private _sidebarItems: { label: string; url: string; id?: string }[] = [];
@@ -28,12 +25,8 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     readonly ctx: CtxStore,
-    private scroller: ViewportScroller,
-    private authenticationStore: AuthenticationStore,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private scroller: ViewportScroller
   ) {
-    this.isQualifyingAccessorRole = this.authenticationStore.isQualifyingAccessorRole();
-
     this.subscriptions.add(
       this.router.events
         .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
@@ -55,7 +48,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.ctx.innovation.info();
 
-      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('accessor', innovation.id);
+      this.sectionsSidebar = this.ctx.schema.getIrSchemaSectionsTreeV3('accessor', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
@@ -68,7 +61,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
           ? [{ label: 'Support summary', url: `/accessor/innovations/${innovation.id}/support-summary` }]
           : []),
         {
-          label: this.isQualifyingAccessorRole ? 'Suggest support' : 'Data sharing preferences',
+          label: this.ctx.user.isQualifyingAccessor() ? 'Suggest support' : 'Data sharing preferences',
           url: `/accessor/innovations/${innovation.id}/support`
         },
         { label: 'Activity log', url: `/accessor/innovations/${innovation.id}/activity-log` },

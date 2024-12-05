@@ -3,10 +3,9 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { of, throwError } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { InnovationsReviewComponent } from './innovations-review.component';
@@ -14,12 +13,9 @@ import { InnovationsReviewComponent } from './innovations-review.component';
 import { AccessorService } from '../../services/accessor.service';
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
-import { INNOVATION_SUPPORT_STATUS } from '@modules/stores/innovation/innovation.models';
-
 describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () => {
   let activatedRoute: ActivatedRoute;
 
-  let authenticationStore: AuthenticationStore;
   let accessorService: AccessorService;
   let notificationsService: NotificationsService;
 
@@ -35,7 +31,6 @@ describe('FeatureModules/Accessor/Innovations/ReviewInnovationsComponent', () =>
 
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
     accessorService = TestBed.inject(AccessorService);
     notificationsService = TestBed.inject(NotificationsService);
   });

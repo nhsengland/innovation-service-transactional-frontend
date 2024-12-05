@@ -7,7 +7,7 @@ import { TableModel } from '@app/base/models';
 
 import { InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 import { getConfig } from './task-advanced-search.config';
 
@@ -17,8 +17,6 @@ import { getConfig } from './task-advanced-search.config';
 })
 export class PageTasksAdvancedSearchComponent extends CoreComponent implements OnInit {
   tasksList = new TableModel<InnovationTasksListDTO['data'][0], InnovationsTasksListFilterType>({});
-
-  pageInformation: { leadText: string };
 
   filtersModel!: FiltersModel;
   form!: FormGroup;
@@ -36,21 +34,15 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
         status: { label: 'Status', align: 'right', orderable: true }
       })
       .setOrderBy('updatedAt', 'descending');
-
-    this.pageInformation = {
-      leadText: this.stores.authentication.isAssessmentType()
-        ? 'Tasks assigned by needs assessment team'
-        : `Tasks assigned by ${this.stores.authentication.getAccessorOrganisationUnitName()}`
-    };
   }
 
   ngOnInit(): void {
-    const userType = this.stores.authentication.state.userContext?.type;
+    const userType = this.ctx.user.getUserType();
     if (!userType) {
       return;
     }
 
-    const { filters, datasets } = getConfig(userType, this.stores.context.getIrSchema());
+    const { filters, datasets } = getConfig(userType, this.ctx.schema.irSchemaInfo());
 
     datasets.status = [
       InnovationTaskStatusEnum.OPEN,

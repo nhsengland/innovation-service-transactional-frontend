@@ -1,13 +1,13 @@
 import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum, InnovationSupportStatusEnum } from '../../innovation/innovation.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 
 export type ContextInnovationType = {
   id: string;
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: null | DateISOType;
-  archivedStatus?: InnovationStatusEnum;
+  submittedAt?: null | DateISOType;
   hasBeenAssessed: boolean;
   countryName: string | null;
   description: string | null;
@@ -30,7 +30,7 @@ export type ContextInnovationType = {
   };
   assignedTo?: { id: string; userRoleId: string; name: string };
   support?: { id: string; status: InnovationSupportStatusEnum };
-  notifications?: { [key in NotificationCategoryTypeEnum]?: number };
+  notifications?: Partial<Record<NotificationCategoryTypeEnum, number>>;
   collaboratorId?: string;
   createdAt?: DateISOType;
   expiryAt: number;

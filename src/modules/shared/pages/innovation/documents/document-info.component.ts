@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationCategoryTypeEnum } from '@app/base/enums';
 
 import {
   InnovationDocumentInfoOutDTO,
@@ -25,8 +24,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   documentInfo: null | (InnovationDocumentInfoOutDTO & { locationLink: null | string }) = null;
 
   // Flags
-  canDelete: boolean = false;
-  isArchived: boolean;
+  canDelete = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -37,9 +35,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovation = this.ctx.innovation.info();
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.documentId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
-
-    this.isArchived = this.ctx.innovation.isArchived();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
   }
 
   ngOnInit(): void {
@@ -51,21 +47,12 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
           ...response,
           locationLink:
             response.context.type === 'INNOVATION_SECTION'
-              ? (getAllSectionsListV3(this.stores.context?.getIrSchema()).find(
-                  item => item.value === response.context.id
-                )?.label ?? '[Archived section]')
+              ? (getAllSectionsListV3(this.ctx.schema.irSchemaInfo()).find(item => item.value === response.context.id)
+                  ?.label ?? '[Archived section]')
               : null
         };
 
         this.canDelete = response.canDelete;
-
-        // Throw notification read dismiss.
-        if (this.stores.authentication.isInnovatorType()) {
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextTypes: [NotificationCategoryTypeEnum.DOCUMENTS],
-            contextIds: [this.documentInfo.id]
-          });
-        }
 
         this.setPageStatus('READY');
       },
@@ -77,7 +64,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
   }
 
   gotoInfoPage() {
-    if (['/sections', '/support-summary'].some(i => this.stores.context.getPreviousUrl()?.includes(i))) {
+    if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
       this.setBackLink('Go back');
     } else {
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
@@ -98,7 +85,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
     this.innovationDocumentsService.deleteDocument(this.innovationId, this.documentId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('The document was deleted');
-        this.redirectTo(this.stores.context.getPreviousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
+        this.redirectTo(this.ctx.layout.previousUrl() ?? `${this.baseUrl}/documents`, { action: 'deleted' });
       },
       error: () => {
         this.setPageStatus('ERROR');

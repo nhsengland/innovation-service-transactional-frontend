@@ -1,7 +1,14 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds font-color-secondary">
-      <p>{{ leadText }}</p>
+      @if (ctx.user.isInnovator()) {
+        <p>These organisations are either currently supporting your innovation, have been suggested or are waiting to support, or have supported you in the past.</p>
+      } @else {
+        <p>
+          You can select other organisations that are either currently supporting this innovation, have been suggested or are waiting to support, or have supported this innovation
+          in the past.
+        </p>
+      }
     </div>
   </div>
 

@@ -46,7 +46,7 @@ describe('FeatureModules/Admin/Pages/TermsOfUse/PageTermsOfUseNewComponent', () 
     component = fixture.componentInstance;
     fixture.detectChanges();
 
-    expect(component.pageStatus).toBe('READY');
+    expect(component.pageStatus()).toBe('READY');
   });
 
   it('should NOT have default information loaded when editing version', () => {

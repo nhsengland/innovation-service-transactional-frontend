@@ -1,3 +1,5 @@
-<shared-pages-innovation-record *ngIf="!showAllSectionsInfo" />
-
-<shared-pages-innovation-all-sections-info *ngIf="showAllSectionsInfo" />
+@if (showAllSectionsInfo()) {
+  <shared-pages-innovation-all-sections-info />
+} @else {
+  <shared-pages-innovation-record />
+}

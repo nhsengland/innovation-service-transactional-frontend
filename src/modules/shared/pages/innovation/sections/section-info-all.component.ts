@@ -6,12 +6,8 @@ import {
   InnovationDocumentsService
 } from '@modules/shared/services/innovation-documents.service';
 import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import {
-  INNOVATION_SECTION_STATUS,
-  InnovationAllSectionsInfoDTO,
-  SectionsSummaryModel
-} from '@modules/stores/innovation/innovation.models';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
+import { InnovationAllSectionsInfoDTO, SectionsSummaryModel } from '@modules/stores/ctx/innovation/innovation.models';
 import { forkJoin } from 'rxjs';
 import { SectionInfoType } from './section-info.component';
 import { ViewportScroller } from '@angular/common';
@@ -20,6 +16,8 @@ import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
@@ -28,9 +26,7 @@ type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
   templateUrl: './section-info-all.component.html'
 })
 export class PageInnovationAllSectionsInfoComponent extends CoreComponent implements OnInit {
-  innovationsSectionsList = this.stores.schema.getIrSchemaSectionsListV3();
-
-  innovationsSubSectionsList: string[] = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
+  innovationsSubSectionsList: string[] = this.ctx.schema.getSubSectionsIds();
 
   innovationId: string;
 
@@ -51,13 +47,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-  isAdmin: boolean;
-
   isInnovationInCreatedStatus: boolean;
-  isInnovationInArchivedStatus: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
 
@@ -68,14 +58,17 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   assessmentQueryParam?: string;
   editPageQueryParam?: string;
 
-  allSectionsData: {
-    [key: string]: {
+  allSectionsData: Record<
+    string,
+    {
       sectionInfo: SectionInfoType;
       summaryList: WizardSummaryV3Type[];
       evidencesList: EvidenceV3Type[];
       documentsList: InnovationDocumentsListOutDTO['data'];
-    };
-  } = {};
+    }
+  > = {};
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -91,24 +84,17 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     this.assessmentQueryParam = this.activatedRoute.snapshot.queryParams.assessment;
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
-    this.baseUrl = `/${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}`;
+    this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
     this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
-    }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+    }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
     this.assessmentUrl = `${this.baseUrl}/assessments/${this.innovation.assessment?.id}`;
 
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
     this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
-    this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
-    this.showSupportingTeamsShareRequestSection =
-      this.stores.authentication.isAccessorType() || this.stores.authentication.isAssessmentType();
-    this.showInnovatorShareRequestSection =
-      this.stores.authentication.isInnovatorType() && !this.isInnovationInCreatedStatus;
+    this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorOrAssessment();
+    this.showInnovatorShareRequestSection = this.ctx.user.isInnovator() && !this.isInnovationInCreatedStatus;
   }
 
   ngOnInit(): void {
@@ -126,30 +112,30 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     let documentsList: InnovationDocumentsListOutDTO['data'];
 
     forkJoin([
-      this.stores.innovation.getAllSectionsInfo$(this.innovation.id),
+      this.ctx.innovation.getAllSectionsInfo$(this.innovation.id),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 100,
         order: { createdAt: 'ASC' },
         filters: { contextTypes: ['INNOVATION_SECTION'], fields: ['description'] }
       }),
-      this.stores.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
+      this.ctx.innovation.getSectionsSummary$(this.activatedRoute.snapshot.params.innovationId)
     ]).subscribe(([sectionsResponse, documentsResponse, summary]) => {
-      const allSections = this.stores.schema.getIrSchemaNumberedSubSectionsList();
+      const allSections = this.ctx.schema.getIrSchemaNumberedSubSectionsList();
 
       for (const curSection of allSections) {
         const responseItem: InnovationAllSectionsInfoDTO[number] = sectionsResponse.find(
           s => s.section.section === curSection.value
         ) ?? {
           data: {},
-          section: { section: curSection.value, status: 'NOT_STARTED', openTasksCount: 0 }
+          section: { section: curSection.value, status: InnovationSectionStatusEnum.NOT_STARTED, openTasksCount: 0 }
         };
 
         const sectionInfo: SectionInfoType = {
           id: '',
           nextSectionId: null,
           title: '',
-          status: { id: 'UNKNOWN', label: '' },
+          status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
           submitButton: { show: false, label: 'Confirm section answers' },
           isNotStarted: false,
           hasEvidences: false,
@@ -166,17 +152,15 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
               value: item.summary
             }))
           : [];
-        const section = this.stores.schema.getIrSchemaSectionV3(responseItem.section.section);
+        const section = this.ctx.schema.getIrSchemaSectionV3(responseItem.section.section);
 
         sectionInfo.id = section.id;
         sectionInfo.title = section.title;
         sectionInfo.wizard = section.wizard;
 
         sectionInfo.status = {
-          id: responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS,
-          label:
-            INNOVATION_SECTION_STATUS[responseItem.section.status as keyof typeof INNOVATION_SECTION_STATUS]?.label ||
-            ''
+          id: responseItem.section.status,
+          label: this.translate(`shared.catalog.innovation.support_status.${responseItem.section.status}.name`)
         };
         sectionInfo.isNotStarted = ['NOT_STARTED', 'UNKNOWN'].includes(sectionInfo.status.id);
         sectionInfo.date = responseItem.section.submittedAt ?? '';
@@ -224,6 +208,13 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       }
 
       this.setSectionsStatistics(summary);
+
+      this.customNotificationLinks = [
+        {
+          label: 'Notify me when this innovation record is updated',
+          action: NotificationEnum.INNOVATION_RECORD_UPDATED
+        }
+      ];
 
       this.setPageStatus('READY');
 
@@ -287,7 +278,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   }
 
   setGoBackLink(): void {
-    if (this.isAssessmentType && this.assessmentQueryParam) {
+    if (this.ctx.user.isAssessment() && this.assessmentQueryParam) {
       let goBackUrl = undefined;
       switch (this.assessmentQueryParam) {
         case 'editReason':
@@ -304,7 +295,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
       if (goBackUrl) {
         this.setBackLink('Back to needs (re)assessment', goBackUrl);
       }
-    } else if (this.isInnovatorType || !this.isInnovationInArchivedStatus) {
+    } else if (this.ctx.user.isInnovator() || !this.ctx.innovation.isArchived()) {
       this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
     }
   }

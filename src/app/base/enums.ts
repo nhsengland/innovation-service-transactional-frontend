@@ -1,15 +1,11 @@
-// Authentication store.
-export {
-  UserRoleEnum,
-  InnovatorOrganisationRoleEnum,
-  AccessorOrganisationRoleEnum
-} from '@modules/stores/authentication/authentication.enums';
-
-// Authentication store.
-export { TermsOfUseTypeEnum } from '@modules/stores/authentication/authentication.enums';
+// Stores
+export { UserRoleEnum, TermsOfUseTypeEnum } from '@modules/stores';
 
 // Environment store.
-export { NotificationCategoryTypeEnum, NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
+export {
+  NotificationCategoryTypeEnum,
+  NotificationContextDetailEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 export { InnovationErrorsEnum } from '@modules/shared/enums/innovation-errors.enum';
 export { OrganisationErrorsEnum } from '@modules/shared/enums/organisation-errors.enum';

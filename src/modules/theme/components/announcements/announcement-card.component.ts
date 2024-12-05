@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnnouncementParamsType } from '@modules/feature-modules/admin/services/announcements.service';
 import { AnnouncementsService } from '@modules/feature-modules/announcements/services/announcements.service';
-import { AuthenticationStore } from '@modules/stores';
-import { listenerCount } from 'process';
 
 export type AnnouncementCardDataType = {
   title: string;
@@ -22,13 +20,13 @@ export class AnnouncementCardComponent implements OnInit {
 
   @Output() clearedAnnouncement = new EventEmitter<string>();
 
-  isOverviewPage: boolean = false;
-  isDashboardPage: boolean = false;
-  isLoginAnnouncementPage: boolean = false;
+  isOverviewPage = false;
+  isDashboardPage = false;
+  isLoginAnnouncementPage = false;
 
   innovationId: string | undefined;
 
-  innovationsList: string = '';
+  innovationsList = '';
 
   constructor(
     private router: Router,
@@ -57,7 +55,7 @@ export class AnnouncementCardComponent implements OnInit {
     }
   }
 
-  formatListOfItemsFromArray(words: string[], lastItemJoinWord: string = 'and'): string {
+  formatListOfItemsFromArray(words: string[], lastItemJoinWord = 'and'): string {
     let toReturn = '';
 
     if (words.length == 1) {

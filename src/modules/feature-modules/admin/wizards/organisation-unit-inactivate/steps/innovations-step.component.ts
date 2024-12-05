@@ -7,7 +7,7 @@ import { CustomValidators, FormGroup } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { WizardStepComponentType, WizardStepEventType } from '@app/base/types';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { OrganisationUnitStatisticsEnum } from '@modules/shared/services/statistics.enum';

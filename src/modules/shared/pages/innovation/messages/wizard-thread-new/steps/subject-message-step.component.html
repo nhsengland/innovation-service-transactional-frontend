@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div *ngIf="data.teams.length === 0" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
@@ -33,7 +33,7 @@
           controlName="subject"
           label="Enter a subject for your thread"
           width="full"
-          [isEditable]="isInnovatorType && sectionId ? false : true"
+          [isEditable]="ctx.user.isInnovator() && sectionId ? false : true"
           [pageUniqueField]="false"
         ></theme-form-input>
 
@@ -47,7 +47,7 @@
           [config]="configInputFile"
         ></theme-form-file-upload-descriptive>
 
-        <div *ngIf="stores.authentication.isInnovatorType()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
+        <div *ngIf="ctx.user.isInnovator()" class="nhsuk-u-margin-top-8 nhsuk-u-margin-bottom-5">
           <theme-form-checkbox
             controlName="confirmation"
             [label]="formConfirmationField.label"

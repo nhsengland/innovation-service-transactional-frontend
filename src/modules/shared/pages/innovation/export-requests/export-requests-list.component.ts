@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 import { TableModel } from '@app/base/models';
 
-import { InnovationExportRequestStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationExportRequestStatusEnum } from '@modules/stores';
 
 import { InnovationExportRequestsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
@@ -40,8 +40,6 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
 
   pageInformation: { title: string; leadText: string; historyTableTitle: string };
 
-  isInnovatorType: boolean;
-  isSupportTeamType: boolean;
   isHistoryLoading = false;
 
   constructor(
@@ -51,17 +49,13 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/record`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record`;
 
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isSupportTeamType =
-      this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType();
-
-    this.touUrl = this.isInnovatorType
+    this.touUrl = this.ctx.user.isInnovator()
       ? this.CONSTANTS.URLS.TOU_INNOVATOR
       : this.CONSTANTS.URLS.TOU_SUPPORT_ORGANISATION;
 
-    switch (this.stores.authentication.getUserType()) {
+    switch (this.ctx.user.getUserType()) {
       case UserRoleEnum.ASSESSMENT:
         this.pageInformation = {
           title: 'Request permission to use the data in this innovation record',
@@ -94,7 +88,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
     this.setPageTitle(this.pageInformation.title);
     this.setBackLink('Innovation Record', this.baseUrl);
 
-    if (this.isInnovatorType) {
+    if (this.ctx.user.isInnovator()) {
       const queryParams = { ...this.pendingTable.getAPIQueryParams() };
       queryParams.filters = { statuses: [InnovationExportRequestStatusEnum.PENDING] };
 
@@ -111,7 +105,7 @@ export class PageInnovationExportRequestsListComponent extends CoreComponent imp
 
     const queryParams = { ...this.historyTable.getAPIQueryParams() };
 
-    if (this.stores.authentication.isInnovatorType()) {
+    if (this.ctx.user.isInnovator()) {
       queryParams.filters = {
         statuses: [
           InnovationExportRequestStatusEnum.APPROVED,

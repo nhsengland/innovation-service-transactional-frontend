@@ -17,7 +17,7 @@ export class InnovationAssessmentNewComponent extends CoreComponent implements O
   innovationName: string;
 
   formParameters: FormEngineParameterModel[];
-  formAnswers: { [key: string]: any };
+  formAnswers: Record<string, any>;
 
   disableCreateButton = false;
 

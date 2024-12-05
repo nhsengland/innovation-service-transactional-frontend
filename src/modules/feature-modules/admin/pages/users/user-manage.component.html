@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="isActive" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
+<theme-content-wrapper [status]="pageStatus()">  <div *ngIf="isActive" class="nhsuk-grid-row nhsuk-u-margin-bottom-5">
     <div class="nhsuk-grid-column-full">
       <h2 class="nhsuk-heading-l">Lock account</h2>
       <p>Accounts should only be locked in exceptional circumstances, for example if the user has breached the term of use.</p>
@@ -8,7 +7,7 @@
         <li><a routerLink="lock"> Lock account </a></li>
       </ul>
       <ul>
-        
+
       </ul>
     </div>
   </div>

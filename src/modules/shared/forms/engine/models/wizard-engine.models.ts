@@ -2,8 +2,8 @@ import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
 import { FormEngineHelper } from '../helpers/form-engine.helper';
 import { FormEngineModel, FormEngineParameterModel } from './form-engine.models';
 import { ValidatorFn } from '@angular/forms';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
 import { FormGroup } from '@app/base/forms';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 
@@ -18,9 +18,7 @@ export type WizardSummaryType = {
   isNotMandatory?: boolean;
 };
 
-export type StepsParentalRelationsType = {
-  [child: string]: string;
-};
+export type StepsParentalRelationsType = Record<string, string>;
 
 export class WizardEngineModel {
   schema: InnovationRecordSchemaInfoType | undefined;
@@ -30,7 +28,7 @@ export class WizardEngineModel {
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
-  currentAnswers: { [key: string]: any };
+  currentAnswers: Record<string, any>;
   showSummary: boolean;
   runtimeRules: ((
     steps: FormEngineModel[],
@@ -239,14 +237,14 @@ export class WizardEngineModel {
     return this.getStepObjId(this.currentStep());
   }
 
-  getAnswers(): { [key: string]: any } {
+  getAnswers(): Record<string, any> {
     return this.currentAnswers;
   }
-  addAnswers(data: { [key: string]: any }): this {
+  addAnswers(data: Record<string, any>): this {
     this.currentAnswers = { ...this.currentAnswers, ...data };
     return this;
   }
-  setAnswers(data: { [key: string]: any }): this {
+  setAnswers(data: Record<string, any>): this {
     this.currentAnswers = data;
     return this;
   }

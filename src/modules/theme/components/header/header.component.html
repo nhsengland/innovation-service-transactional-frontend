@@ -57,10 +57,12 @@
       </div>
     </ng-container>
 
-    <div *ngIf="showUserInformation" class="user-information">
-      <p>{{ user.displayName }}</p>
-      <p>{{ user.description }} <a routerLink="/switch-user-context" *ngIf="user.showSwitchProfile">Switch profile</a></p>
-    </div>
+    @if (showUserInformation && ctx.user.isStateLoaded()) {
+      <div class="user-information">
+        <p>{{ ctx.user.getDisplayName() }}</p>
+        <p>{{ userDescription() }} <a routerLink="/switch-user-context" *ngIf="ctx.user.hasMultipleRoles()">Switch profile</a></p>
+      </div>
+    }
   </div>
 
   <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0 || showSignOut">

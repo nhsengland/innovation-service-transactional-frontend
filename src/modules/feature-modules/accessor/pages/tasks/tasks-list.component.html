@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <p>If you are looking for specific task, use the <a routerLink="advanced-filter">tasks advanced search</a>.</p>
+<theme-content-wrapper [status]="pageStatus()">  <p>If you are looking for specific task, use the <a routerLink="advanced-filter">tasks advanced search</a>.</p>
 
   <div class="app-tabs">
     <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
@@ -20,13 +19,13 @@
 
   <div class="nhsuk-grid-row">
     <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
-      <theme-spinner *ngIf="pageStatus === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
+      <theme-spinner *ngIf="pageStatus() === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
 
-      <ng-container *ngIf="pageStatus === 'READY' && tasksList.getTotalRowsNumber() === 0">
+      <ng-container *ngIf="pageStatus() === 'READY' && tasksList.getTotalRowsNumber() === 0">
         <p>There are no tasks</p>
       </ng-container>
 
-      <ng-container *ngIf="pageStatus === 'READY' && tasksList.getTotalRowsNumber() > 0">
+      <ng-container *ngIf="pageStatus() === 'READY' && tasksList.getTotalRowsNumber() > 0">
         <p class="d-flex align-items-center nhsuk-u-margin-bottom-2">
           <span class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0 mr-auto">{{ currentTab.description }}</span>
           <span><a routerLink="statuses" class="nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View status keys information">Status key</a></span>

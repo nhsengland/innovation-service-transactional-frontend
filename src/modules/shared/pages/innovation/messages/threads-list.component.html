@@ -1,12 +1,12 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div *ngIf="!isInnovatorType && innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+<theme-content-wrapper [status]="pageStatus()">
+  <div *ngIf="!ctx.user.isInnovator() && innovation.owner && !innovation.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span> User Locked </span>
     </div>
     <p>Please note that the innovator {{ innovation.owner.name }} is currently locked.</p>
   </div>
 
-  <ng-container *ngIf="!canCreateThread && !isAdmin && !isArchived">
+  <ng-container *ngIf="!canCreateThread && !ctx.user.isAdmin() && !ctx.innovation.isArchived()">
     <div *ngIf="innovation.owner; else missingOwner" class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
         <p>Once you submit your innovation record, and the needs assessment starts, you can use this space to talk about your innovation with those who are supporting you.</p>
@@ -22,15 +22,18 @@
     </ng-template>
   </ng-container>
 
-  <ng-container *ngIf="!isAdmin && isArchived">
+  <ng-container *ngIf="!ctx.user.isAdmin() && ctx.innovation.isArchived()">
     <p class="nhsuk-u-margin-bottom-6">You cannot send or reply to messages about this innovation as it is archived.</p>
   </ng-container>
 
   <div *ngIf="isInnovationSubmitted" class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="canCreateThread && !isAdmin && !isArchived">
-        <p *ngIf="isInnovatorType">Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
-        <p *ngIf="!isInnovatorType">Use messages to talk to the innovator and other organisations supporting this innovation.</p>
+      <ng-container *ngIf="canCreateThread && !ctx.user.isAdmin() && !ctx.innovation.isArchived()">
+        @if (ctx.user.isInnovator()) {
+          <p>Messages is your space to ask questions and discuss your innovation with the organisations that are supporting you.</p>
+        } @else {
+          <p>Use messages to talk to the innovator and other organisations supporting this innovation.</p>
+        }
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>
@@ -41,9 +44,9 @@
         <button type="button" routerLink="new" class="nhsuk-button">Start a new thread</button>
       </ng-container>
 
-      <div *ngIf="isAccessorType && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
+      <div *ngIf="ctx.user.isAccessorType() && isInAssessment" class="nhsuk-inset-text nhsuk-u-margin-top-0">
         <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate}}</p>
+        <p>{{ "features.accessor.cant_do_while_in_assessment" | translate }}</p>
       </div>
     </div>
 
@@ -60,7 +63,7 @@
               </ng-container>
             </theme-form-input>
 
-            <div *ngIf="!(isAdmin || isInnovatorType)" class="nhsuk-u-margin-bottom-5">
+            <div *ngIf="!(ctx.user.isAdmin() || ctx.user.isInnovator())" class="nhsuk-u-margin-bottom-5">
               <theme-form-checkbox controlName="following" label="Only show threads I am following" size="small"></theme-form-checkbox>
             </div>
           </form>

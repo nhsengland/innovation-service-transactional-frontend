@@ -9,7 +9,7 @@ import { UtilsHelper } from '@app/base/helpers';
 import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-task-action',
@@ -60,7 +60,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
           return forkJoin([
             of(task),
             this.status === InnovationTaskStatusEnum.DONE
-              ? this.stores.innovation.getSectionInfo$(this.innovationId, task.section)
+              ? this.ctx.innovation.getSectionInfo$(this.innovationId, task.section)
               : of(null)
           ]);
         })
@@ -106,7 +106,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
               break;
           }
 
-          const sectionInfo = this.stores.schema.getIrSchemaSectionIdentificationV3(task.section);
+          const sectionInfo = this.ctx.schema.getIrSchemaSectionIdentificationV3(task.section);
           this.pageInformation.title += ` for section ${sectionInfo?.group.number}.${sectionInfo?.section.number} '${sectionInfo?.section.title}'`;
 
           if (section?.status === 'DRAFT') {

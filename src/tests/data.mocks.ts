@@ -1,13 +1,6 @@
-import {
-  AccessorOrganisationRoleEnum,
-  InnovatorOrganisationRoleEnum,
-  UserRoleEnum
-} from '@modules/stores/authentication/authentication.enums';
-import { AuthenticationModel } from '@modules/stores/authentication/authentication.models';
-import { ContextInnovationType } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { ContextInnovationType, InnovationStatusEnum, UserContextType, UserRoleEnum } from '@modules/stores';
 
-export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
+export const USER_INFO_ACCESSOR: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'tqa@email.com',
   displayName: 'Test qualifying Accessor',
@@ -32,13 +25,12 @@ export const USER_INFO_ACCESSOR: Required<AuthenticationModel>['user'] = {
       size: '',
       description: 'Sole trader',
       registrationNumber: null,
-      role: AccessorOrganisationRoleEnum.QUALIFYING_ACCESSOR,
       organisationUnits: [{ id: '_unit_id', name: 'ORG_UNIT', acronym: 'ORG' }]
     }
   ]
 };
 
-export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
+export const USER_INFO_INNOVATOR: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'some@email.com',
   displayName: 'Test innovator',
@@ -63,13 +55,12 @@ export const USER_INFO_INNOVATOR: Required<AuthenticationModel>['user'] = {
       acronym: 'O1',
       description: null,
       registrationNumber: null,
-      role: InnovatorOrganisationRoleEnum.INNOVATOR_OWNER,
       organisationUnits: []
     }
   ]
 };
 
-export const USER_INFO_ADMIN: Required<AuthenticationModel>['user'] = {
+export const USER_INFO_ADMIN: Required<UserContextType>['user'] = {
   id: '_id',
   email: 'a@gmail.com',
   displayName: 'Test admin  ',

@@ -3,21 +3,19 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { ENV } from '@tests/app.mocks';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 
 import { AppInjector, CoreModule, EnvironmentVariablesStore } from '@modules/core';
-import { StoresModule, AuthenticationStore, InnovationStore } from '@modules/stores';
+import { StoresModule, CtxStore } from '@modules/stores';
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
 import { AccessorService } from './accessor.service';
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
 
 describe('FeatureModules/Accessor/Services/AccessorService', () => {
   let httpMock: HttpTestingController;
 
   let envVariablesStore: EnvironmentVariablesStore;
-  let authenticationStore: AuthenticationStore;
-  let innovationStore: InnovationStore;
+  let ctx: CtxStore;
 
   let service: AccessorService;
 
@@ -32,12 +30,11 @@ describe('FeatureModules/Accessor/Services/AccessorService', () => {
     httpMock = TestBed.inject(HttpTestingController);
 
     envVariablesStore = TestBed.inject(EnvironmentVariablesStore);
-    authenticationStore = TestBed.inject(AuthenticationStore);
-    innovationStore = TestBed.inject(InnovationStore);
+    ctx = TestBed.inject(CtxStore);
 
     service = TestBed.inject(AccessorService);
 
-    authenticationStore.getUserId = () => 'UserId01';
+    ctx.user.getUserId = signal('UserId01');
   });
 
   afterEach(() => {

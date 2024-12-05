@@ -23,5 +23,5 @@ export type StatisticsCardType = {
 })
 export class StatisticsCardsComponent {
   @Input() cardsList: StatisticsCardType[] = [];
-  @Input() gridClass: string = '';
+  @Input() gridClass = '';
 }

@@ -3,7 +3,9 @@ import { AppInjector } from '@modules/core';
 import { UserRoleEnum } from '@app/base/enums';
 
 import { FormEngineModel, WizardEngineModel, WizardStepType, WizardSummaryType } from '@modules/shared/forms';
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
+import { inject } from '@angular/core';
+import { UserContextStore } from '@modules/stores/ctx/user/user.store';
 
 // Labels.
 const stepsLabels = {
@@ -55,10 +57,10 @@ export type OutboundPayloadType = CreateUserType;
 
 // consts.
 const injector = AppInjector.getInjector();
-const authenticationStore = injector?.get(AuthenticationStore);
+const userCtx = injector?.get(UserContextStore);
 
 const roles = [UserRoleEnum.QUALIFYING_ACCESSOR, UserRoleEnum.ACCESSOR, UserRoleEnum.ASSESSMENT, UserRoleEnum.ADMIN];
-const roleItems = roles.map(r => ({ value: r, label: authenticationStore?.getRoleDescription(r) }));
+const roleItems = roles.map(r => ({ value: r, label: userCtx?.getRoleDescription(r) }));
 
 export const WIZARD_CREATE_USER: WizardEngineModel = new WizardEngineModel({
   steps: [
@@ -204,7 +206,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     { label: 'Name', value: data.name, editStepNumber: editStepNumber++ }
   );
 
-  const role = authenticationStore.getRoleDescription(data.role ?? UserRoleEnum.ASSESSMENT); // Reaching this point role will be defined
+  const role = userCtx.getRoleDescription(data.role ?? UserRoleEnum.ASSESSMENT); // Reaching this point role will be defined
 
   if (data.role === UserRoleEnum.ADMIN || data.role === UserRoleEnum.ASSESSMENT) {
     toReturn.push({

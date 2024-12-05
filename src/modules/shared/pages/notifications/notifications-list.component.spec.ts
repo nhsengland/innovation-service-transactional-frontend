@@ -5,10 +5,12 @@ import { Injector } from '@angular/core';
 import { of } from 'rxjs';
 
 import { CoreModule, AppInjector } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { StoresModule, InnovationStatusEnum } from '@modules/stores';
 import { SharedModule } from '@modules/shared/shared.module';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import {
+  NotificationContextDetailEnum,
+  NotificationCategoryTypeEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 import { NotificationsService } from '@modules/shared/services/notifications.service';
 
@@ -16,8 +18,6 @@ import { PageNotificationsListComponent } from './notifications-list.component';
 import { RouterModule } from '@angular/router';
 
 describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
-  let authenticationStore: AuthenticationStore;
-
   let notificationsService: NotificationsService;
 
   let component: PageNotificationsListComponent;
@@ -29,8 +29,6 @@ describe('Shared/Pages/Notifications/PageNotificationsListComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
-    authenticationStore = TestBed.inject(AuthenticationStore);
 
     notificationsService = TestBed.inject(NotificationsService);
 

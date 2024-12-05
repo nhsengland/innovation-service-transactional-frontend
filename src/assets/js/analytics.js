@@ -1,7 +1,30 @@
-
 const tagMeasurementId = window.__env.TAG_MEASUREMENT_ID;
 const gtmId = window.__env.GTM_ID;
 const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
+
+
+// GA4 specific methods.
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+
+// Send an update consent for GA4.
+function updateGTAGConsent(agreed) {
+
+  if (!enableAnalytics || !tagMeasurementId || !gtmId) {
+    return;
+  }
+
+  gtag('consent', 'update', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    functionality_storage: 'denied',
+    personalization_storage: 'denied',
+    security_storage: 'denied',
+    analytics_storage: agreed ? 'granted' : 'denied'
+  });
+}
+
 
 (function () {
 
@@ -10,7 +33,7 @@ const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
   }
 
   // Hotjar tracking Code.
-  if (getConsentCookie().analytics) {
+  if (getConsentCookie().analytics) { // Only if user accepted cookies!
     (function (h, o, t, j, a, r) {
       h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
       h._hjSettings = { hjid: 2499228, hjsv: 6 };
@@ -24,21 +47,9 @@ const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
   }
 
   // Google Analytics.
-  const node = document.createElement('script');
-  node.id = 'ga-analytics';
-  node.src = 'https://www.googletagmanager.com/gtag/js?id=' + tagMeasurementId;
-  node.type = 'text/javascript';
-  node.async = true;
-  document.getElementsByTagName('head')[0].appendChild(node);
+  // GA4 is being loaded trought Google Tag Manager.
 
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', tagMeasurementId);
-
-  window.gtag = gtag;
-
-  // Set GA4 Consent Mode
+  // // Set GA4 default Consent Mode. Needs to be declared before scripts injection.
   gtag('consent', 'default', {
     ad_storage: 'denied',
     ad_user_data: 'denied',
@@ -46,10 +57,10 @@ const enableAnalytics = window.__env.ENABLE_ANALYTICS === true;
     functionality_storage: 'denied',
     personalization_storage: 'denied',
     security_storage: 'denied',
-    analytics_storage: getConsentCookie().analytics ? 'granted' : 'denied'
+    analytics_storage: getConsentCookie().analytics ? 'granted' : 'denied' // Only if user accepted cookies!
   });
 
-  // Google Tag Manager
+  // // Google Tag Manager.
   (function (w, d, s, l, i) {
     w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     var f = d.getElementsByTagName(s)[0],

@@ -3,8 +3,8 @@ export class UrlModel {
   private host: string;
   private port: number | null;
   private path: string;
-  private pathParams: { [key: string]: string | number };
-  private queryParams: { [key: string]: any };
+  private pathParams: Record<string, string | number>;
+  private queryParams: Record<string, any>;
 
   constructor(url?: string) {
     this.protocol = 'http';
@@ -49,13 +49,17 @@ export class UrlModel {
         if ((value as string).charAt(0) === '{') {
           // If it is possibly an object
           try {
-            this.queryParams[key] = JSON.parse(value) as { [key: string]: any };
-          } catch (error) {}
+            this.queryParams[key] = JSON.parse(value) as Record<string, any>;
+          } catch {
+            console.error(`Error parsing queryParam ${key} with value ${value}`);
+          }
         } else {
           this.queryParams[key] = value;
         }
       });
-    } catch (error) {}
+    } catch {
+      console.error(`Error parsing URL: ${s}`);
+    }
   }
 
   setProtocol(protocol: string): UrlModel {
@@ -87,12 +91,12 @@ export class UrlModel {
     return this;
   }
 
-  setPathParams(params: { [key: string]: string | number }): UrlModel {
+  setPathParams(params: Record<string, string | number>): UrlModel {
     this.pathParams = params;
     return this;
   }
 
-  setQueryParams(queryParams: { [key: string]: any }): UrlModel {
+  setQueryParams(queryParams: Record<string, any>): UrlModel {
     this.queryParams = queryParams;
     return this;
   }

@@ -4,11 +4,9 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationCollaboratorStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationCollaboratorStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
 
 type TableListsType = {
   id: string;
@@ -33,7 +31,7 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
 
     this.innovation = this.ctx.innovation.info();
 
-    const user = this.stores.authentication.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
     this.user = { id: user.id, name: user.displayName, email: user.email };
 
     this.setPageTitle('Invite or manage collaborators');
@@ -99,14 +97,6 @@ export class PageInnovationManageCollaboratorsOverviewComponent extends CoreComp
           action: { label: 'Invite again', url: `${item.id}/invite-again` }
         }))
       );
-
-      // Throw notification read dismiss.
-      this.stores.context.dismissNotification(this.innovation.id, {
-        contextDetails: [
-          NotificationContextDetailEnum.MC04_COLLABORATOR_UPDATE_ACCEPTS_INVITE,
-          NotificationContextDetailEnum.MC05_COLLABORATOR_UPDATE_DECLINES_INVITE
-        ]
-      });
 
       this.setPageStatus('READY');
     });

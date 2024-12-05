@@ -30,7 +30,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       }) = null;
   pageStep: 'INFO' | 'DELETE' = 'INFO';
 
-  isInnovatorSelected: boolean = false;
+  isInnovatorSelected = false;
 
   summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
 
@@ -51,9 +51,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
       next: response => {
         this.announcement = {
           ...response,
-          userGroupsLabels: response.userRoles
-            .map(item => this.stores.authentication.getRoleDescription(item, true))
-            .join('\n'),
+          userGroupsLabels: response.userRoles.map(item => this.ctx.user.getRoleDescription(item, true)).join('\n'),
 
           isScheduled: response.status === AnnouncementStatusEnum.SCHEDULED,
           isActive: response.status === AnnouncementStatusEnum.ACTIVE,
@@ -72,7 +70,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
 
   getSummaryData(): SummaryDataItemType[] {
     const summaryData: (SummaryDataItemType & { canChangeOnStatus?: AnnouncementStatusEnum[] })[] = [];
-    const irSchemaTranslations = this.stores.schema.getIrSchemaTranslationsMap();
+    const irSchemaTranslations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     let editStepNumber = 1;
 
@@ -206,7 +204,7 @@ export class PageAnnouncementDetailsComponent extends CoreComponent implements O
   }
 
   formatSectionLabel(sectionId: string) {
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
     return `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
   }
 

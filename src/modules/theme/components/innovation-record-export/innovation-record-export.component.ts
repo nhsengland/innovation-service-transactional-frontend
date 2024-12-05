@@ -6,13 +6,13 @@ import { CoreComponent } from '@app/base';
   templateUrl: './innovation-record-export.component.html'
 })
 export class InnovationRecordExportComponent extends CoreComponent implements OnInit {
-  @Input() innovationId: string = '';
+  @Input() innovationId = '';
   @Input() fileType: 'csv' | 'pdf' = 'pdf';
   @Input() button?: boolean = false;
   @Input() customLabel?: string | undefined = undefined;
   @Input() btnStyle?: 'primary' | 'secondary' = 'primary';
 
-  exportDocumentUrl: string = '';
+  exportDocumentUrl = '';
 
   constructor() {
     super();
@@ -23,12 +23,12 @@ export class InnovationRecordExportComponent extends CoreComponent implements On
       case 'pdf':
         this.exportDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
           this.innovationId
-        }/pdf?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+        }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
         break;
       case 'csv':
         this.exportDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
           this.innovationId
-        }/csv?role=${this.stores.authentication.getUserContextInfo()?.roleId}`;
+        }/csv?role=${this.ctx.user.getUserContext()?.roleId}`;
         break;
     }
   }

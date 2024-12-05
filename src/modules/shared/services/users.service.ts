@@ -7,8 +7,8 @@ import { UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType } from '@app/base/types';
 
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
 import { GetUsersRequestDTO, UsersListDTO } from '../dtos/users.dto';
+import { MFAInfo } from '@modules/stores/ctx/user/user.service';
 
 export type UserListFiltersType = {
   onlyActive: boolean;
@@ -55,7 +55,7 @@ export class UsersService extends CoreService {
           lockedAt: item.lockedAt,
           role: item.roles[0].role,
           roleId: item.roles[0].id,
-          roleDescription: this.stores.authentication.getRoleDescription(item.roles[0].role),
+          roleDescription: this.ctx.user.getRoleDescription(item.roles[0].role),
           email: item.email ?? '',
           organisationUnitUserId: item.organisationUnitUserId ?? ''
         }))
@@ -64,18 +64,18 @@ export class UsersService extends CoreService {
   }
 
   // these are only used by the admin module but are used by admin module but are used in a share component
-  getUserMFAInfo(userId: string): () => Observable<MFAInfoDTO> {
+  getUserMFAInfo(userId: string): () => Observable<MFAInfo> {
     return () => {
       const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/${userId}/mfa`);
-      return this.http.get<MFAInfoDTO>(url.buildUrl()).pipe(
+      return this.http.get<MFAInfo>(url.buildUrl()).pipe(
         take(1),
         map(response => response)
       );
     };
   }
 
-  updateUserMFAInfo(userId: string): (body: MFAInfoDTO) => Observable<void> {
-    return (body: MFAInfoDTO) => {
+  updateUserMFAInfo(userId: string): (body: MFAInfo) => Observable<void> {
+    return (body: MFAInfo) => {
       const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/${userId}/mfa`);
       return this.http.put<void>(url.buildUrl(), body).pipe(take(1));
     };

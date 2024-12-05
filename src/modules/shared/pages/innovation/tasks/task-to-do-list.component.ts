@@ -5,11 +5,10 @@ import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
 
 import { InnovationsService, InnovationsTasksListFilterType } from '@modules/shared/services/innovations.service';
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, InnovationTaskStatusEnum } from '@modules/stores';
 
 import { UserRoleEnum } from '@app/base/enums';
 import { InnovationTaskData, InnovationTasksListDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores/innovation';
 
 @Component({
   selector: 'shared-pages-innovation-task-to-do-list',
@@ -28,7 +27,6 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
 
   // Flags
   isClosedActionsLoading = false;
-  isInnovatorType: boolean;
   isArchived: boolean;
 
   constructor(
@@ -37,9 +35,8 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   ) {
     super();
     // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
-    this.setPageTitle(this.isInnovatorType ? 'Tasks to do' : 'Tasks');
+    this.setPageTitle(this.ctx.user.isInnovator() ? 'Tasks to do' : 'Tasks');
 
     this.tablesTitles = { topTableTitle: '', bottomTableTitle: '' };
 
@@ -84,7 +81,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   processTaskList(taskList: InnovationTasksListDTO) {
-    for (let task of taskList.data) {
+    for (const task of taskList.data) {
       if (this.shouldBeOnTopTable(task)) {
         this.topList.data.push(task);
       } else {
@@ -114,13 +111,11 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
   }
 
   getUserType() {
-    return this.stores.authentication.isAccessorType()
-      ? UserRoleEnum.ACCESSOR
-      : this.stores.authentication.getUserType();
+    return this.ctx.user.isAccessorType() ? UserRoleEnum.ACCESSOR : this.ctx.user.getUserType();
   }
 
   getTablesTitles(): { topTableTitle: string; bottomTableTitle: string } {
-    let tasksToDoTitle: string = '';
+    let tasksToDoTitle = '';
     switch (this.topList.count) {
       case 0:
         tasksToDoTitle = 'You have no tasks to do';

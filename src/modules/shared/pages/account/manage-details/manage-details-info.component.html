@@ -1,8 +1,8 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <dl class="nhsuk-summary-list">
-        <div *ngFor="let item of summaryList" class="nhsuk-summary-list__row">
+        <div *ngFor="let item of summary()" class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
           <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
           <dd class="nhsuk-summary-list__actions">

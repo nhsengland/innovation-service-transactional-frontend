@@ -80,7 +80,7 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
       .submitOrganisationSharing(this.innovationId, this.form.value)
       .pipe(
         concatMap(() => {
-          return this.stores.innovation.submitInnovation$(this.innovationId);
+          return this.ctx.innovation.submitInnovation$(this.innovationId);
         })
       )
       .subscribe({

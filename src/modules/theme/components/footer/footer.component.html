@@ -14,4 +14,4 @@
   </div>
 </footer>
 
-<theme-activity-timeout *ngIf="applySignOutTimeout" (timeoutEvent)="onTimeout()"></theme-activity-timeout>
+<theme-activity-timeout *ngIf="ctx.user.isStateLoaded()" (timeoutEvent)="onTimeout()"></theme-activity-timeout>

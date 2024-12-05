@@ -494,8 +494,6 @@ export class WizardInnovationSupportSummaryProgressUpdateComponent extends CoreC
   }
 
   private redirectToSupportSummaryList(): void {
-    this.redirectTo(
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`
-    );
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}/support-summary`);
   }
 }

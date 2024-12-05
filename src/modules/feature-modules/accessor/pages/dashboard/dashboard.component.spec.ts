@@ -3,10 +3,8 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { Injector } from '@angular/core';
 
-import { USER_INFO_INNOVATOR } from '@tests/data.mocks';
-
 import { CoreModule, AppInjector } from '@modules/core';
-import { StoresModule, AuthenticationStore } from '@modules/stores';
+import { StoresModule } from '@modules/stores';
 
 import { AccessorModule } from '@modules/feature-modules/accessor/accessor.module';
 
@@ -14,8 +12,6 @@ import { DashboardComponent } from './dashboard.component';
 import { RouterModule } from '@angular/router';
 
 describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
-  let authenticationStore: AuthenticationStore;
-
   let component: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;
 
@@ -25,8 +21,6 @@ describe('FeatureModules/Accessor/Dashboard/DashboardComponent', () => {
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
-
-    authenticationStore = TestBed.inject(AuthenticationStore);
   });
 
   it('should create the component', () => {

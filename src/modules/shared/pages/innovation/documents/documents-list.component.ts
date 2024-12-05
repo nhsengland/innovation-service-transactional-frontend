@@ -18,6 +18,8 @@ import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.en
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { ContextInnovationType } from '@modules/stores';
 import { ChipFilterInputType, ChipsFilterComponent } from '@modules/theme/components/chips/chips-filter-component';
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'shared-pages-innovation-documents-documents-list',
@@ -32,11 +34,6 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     pageSize: 10
   });
 
-  // Flags
-  isAdmin: boolean;
-  isInnovatorType: boolean;
-  isArchived: boolean;
-
   // Filter
   form = new FormGroup(
     {
@@ -47,9 +44,9 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     { updateOn: 'blur' }
   );
 
-  hasUploadedDocuments: boolean = false;
+  hasUploadedDocuments = false;
 
-  filterCount: number = 0;
+  filterCount = 0;
 
   uploadedByChips: ChipFilterInputType = [];
   selectedUploadedByChips: string[] = [];
@@ -57,6 +54,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
   selectedLocationFilters: string[] = [];
   uploadedByUnitChips: ChipFilterInputType = [];
   selectedUploadedByUnitChips: string[] = [];
+
+  customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
   constructor(
     private innovationDocumentsService: InnovationDocumentsService,
@@ -66,12 +65,8 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
     this.setPageTitle('Documents');
 
     this.innovation = this.ctx.innovation.info();
-    this.isArchived = this.ctx.innovation.isArchived();
 
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-
-    if (this.isAdmin) {
+    if (this.ctx.user.isAdmin()) {
       this.setPageTitle('Documents', { hint: `Innovation ${this.innovation.name}` });
     }
   }
@@ -82,6 +77,13 @@ export class PageInnovationDocumentsListComponent extends CoreComponent implemen
         statistics: [InnovationStatisticsEnum.DOCUMENTS_STATISTICS_COUNTER]
       })
       .subscribe(({ DOCUMENTS_STATISTICS_COUNTER }) => {
+        this.customNotificationLinks = [
+          {
+            label: 'Notify me when a new document is uploaded',
+            action: NotificationEnum.DOCUMENT_UPLOADED
+          }
+        ];
+
         if (DOCUMENTS_STATISTICS_COUNTER.locations.length === 0) {
           this.setPageStatus('READY');
           return;

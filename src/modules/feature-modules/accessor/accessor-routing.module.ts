@@ -81,7 +81,7 @@ import { InnovationDocumentDataResolver } from '@modules/shared/resolvers/innova
 import { innovationRecordSchemaResolver } from '@modules/shared/resolvers/innovation-record-schema.resolver';
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
-import { InnovationTaskStatusEnum } from '@modules/stores/innovation';
+import { InnovationTaskStatusEnum } from '@modules/stores';
 import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-delete/custom-notification-delete.component';
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
@@ -97,8 +97,7 @@ const header: RoutesDataType['header'] = {
       { id: 'account', label: 'Training and resources', url: '/accessor/training-and-resources' }
     ],
     right: []
-  },
-  notifications: {}
+  }
 };
 
 const routes: Routes = [
@@ -446,6 +445,7 @@ const routes: Routes = [
                   {
                     path: ':supportId/request-update',
                     pathMatch: 'full',
+                    data: { layout: { type: 'full' }, breadcrumb: null },
                     component: InnovationSupportRequestUpdateStatusComponent
                   },
                   {

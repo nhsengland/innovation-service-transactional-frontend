@@ -5,12 +5,11 @@ import { CoreComponent } from '@app/base';
 import { FormControl, FormGroup, Validators } from '@app/base/forms';
 import { TableModel } from '@app/base/models';
 import { DateISOType, NotificationValueType } from '@app/base/types';
-import { InnovationSupportCloseReasonEnum } from '@modules/stores/innovation/innovation.enums';
 
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum, InnovationSupportCloseReasonEnum } from '@modules/stores';
 
 type TabType = {
   key: InnovationSupportStatusEnum | 'ALL';
@@ -85,19 +84,17 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     InnovationsListFiltersType
   >;
 
-  innovationStatus = this.stores.innovation.INNOVATION_SUPPORT_STATUS;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationsService: InnovationsService
   ) {
     super();
-    this.userUnitAcronym = this.stores.authentication.state.userContext?.organisationUnit?.acronym ?? '';
-    this.userUnit = this.stores.authentication.state.userContext?.organisationUnit?.name ?? '';
+    this.userUnitAcronym = this.ctx.user.getUserContext()?.organisationUnit?.acronym ?? '';
+    this.userUnit = this.ctx.user.getAccessorUnitName() ?? '';
 
     this.setPageTitle('Innovations', { hint: `${this.userUnit}` });
 
-    if (this.stores.authentication.isAccessorRole()) {
+    if (this.ctx.user.isAccessor()) {
       this.defaultStatus = 'ENGAGING';
       this.tabs = [
         {
@@ -151,7 +148,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           notifications: null
         }
       ];
-    } else if (this.stores.authentication.isQualifyingAccessorRole()) {
+    } else if (this.ctx.user.isQualifyingAccessor()) {
       this.defaultStatus = 'SUGGESTED';
       this.tabs = [
         {
@@ -343,7 +340,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
               mainCategory: item.mainCategory
                 ? item.mainCategory === 'OTHER'
                   ? 'Other'
-                  : (this.stores.schema
+                  : (this.ctx.schema
                       .getIrSchemaTranslationsMap()
                       ['questions'].get('categories')
                       ?.items.get(item.mainCategory)?.label ?? item.mainCategory)
@@ -414,7 +411,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           .clearData()
           .setFilters({
             supportStatuses: filteredArr,
-            assignedToMe: this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false,
+            assignedToMe:
+              this.ctx.user.isAccessor() || (this.form.get('tabsFilters')?.get('assignedToMe')?.value ?? false),
             suggestedOnly: false,
             closedByMyOrganisation: false
           })

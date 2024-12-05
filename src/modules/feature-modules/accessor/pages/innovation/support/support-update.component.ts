@@ -3,14 +3,13 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum, UserRoleEnum } from '@app/base/enums';
+import { UserRoleEnum } from '@app/base/enums';
 import { CustomValidators, FileTypes } from '@app/base/forms';
 
 import { ChangeSupportStatusDocumentType, InnovationsService } from '@modules/shared/services/innovations.service';
 import { UsersService } from '@modules/shared/services/users.service';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
 
-import { ContextInnovationType } from '@modules/stores';
+import { ContextInnovationType, ContextLayoutType, InnovationSupportStatusEnum } from '@modules/stores';
 import { AccessorService } from '../../../services/accessor.service';
 
 import { FileUploadService } from '@modules/shared/services/file-upload.service';
@@ -19,7 +18,6 @@ import { omit } from 'lodash';
 import { ObservableInput, forkJoin } from 'rxjs';
 import { UsersListDTO } from '@modules/shared/dtos/users.dto';
 import { InnovationSupportInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
 
 @Component({
   selector: 'app-accessor-pages-innovation-support-update',
@@ -41,15 +39,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   userOrganisationUnit: null | { id: string; name: string; acronym: string };
   disabledCheckboxAccessors: string[] = [];
 
-  selectAccessorsStepLabel: string = '';
-
-  supportStatus = Object.entries(this.stores.innovation.INNOVATION_SUPPORT_STATUS)
-    .map(([key, item]) => ({
-      key,
-      checked: false,
-      ...item
-    }))
-    .filter(x => !x.hidden);
+  selectAccessorsStepLabel = '';
 
   availableSupportStatuses: string[];
 
@@ -88,7 +78,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
   private currentStatus: null | InnovationSupportStatusEnum = null;
 
-  private messageStatusLabels: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusLabels: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]: 'Describe the support you plan to provide.',
     [InnovationSupportStatusEnum.WAITING]:
       'Explain the information or decisions you need, before you can support this innovation.',
@@ -98,7 +88,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
       'Explain why your organisation has closed its engagement with this innovation.'
   };
 
-  private messageStatusDescriptions: { [key in InnovationSupportStatusEnum]?: string } = {
+  private messageStatusDescriptions: Partial<Record<InnovationSupportStatusEnum, string>> = {
     [InnovationSupportStatusEnum.ENGAGING]:
       "This message will be sent to the innovator and collaborators. It will also appear on the innovation's support summary.",
     [InnovationSupportStatusEnum.WAITING]: 'The innovator and collaborators will be notified.',
@@ -106,11 +96,12 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     [InnovationSupportStatusEnum.CLOSED]: 'The innovator and collaborators will be notified.'
   };
 
-  private messageStatusUpdated: {
-    [key in InnovationSupportStatusEnum]?:
-      | { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] }
-      | undefined;
-  };
+  private messageStatusUpdated: Partial<
+    Record<
+      InnovationSupportStatusEnum,
+      { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] } | undefined
+    >
+  >;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -130,7 +121,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
 
     this.stepNumber = 1;
 
-    this.userOrganisationUnit = this.stores.authentication.getUserContextInfo()?.organisationUnit || null;
+    this.userOrganisationUnit = this.ctx.user.getUserContext()?.organisationUnit || null;
 
     this.messageStatusUpdated = {
       [InnovationSupportStatusEnum.ENGAGING]: {
@@ -147,7 +138,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   ngOnInit(): void {
-    if (this.stores.context.getPreviousUrl()?.includes('support/suggest')) {
+    if (this.ctx.layout.previousUrl()?.includes('support/suggest')) {
       this.stepNumber = 4;
       this.onSubmitStep();
       this.setPageStatus('READY');
@@ -230,12 +221,6 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
           response.innovationSupportInfo.engagingAccessors.forEach(accessor => {
             (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
           });
-
-          // Throw notification read dismiss.
-          this.stores.context.dismissNotification(this.innovationId, {
-            contextDetails: [NotificationContextDetailEnum.AU02_ACCESSOR_IDLE_ENGAGING_SUPPORT],
-            contextIds: [this.supportId]
-          });
         }
 
         this.setPageStatus('READY');
@@ -306,7 +291,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
               this.formAccessorsList = this.qualifyingAccessorsList.map(i => ({ value: i.id, label: i.name }));
 
               // add this user by default, and disable input
-              const userId = this.stores.authentication.getUserId();
+              const userId = this.ctx.user.getUserId();
               formSelectedAcessorsList.clear();
               formSelectedAcessorsList.push(new FormControl<string>(userId));
 
@@ -392,7 +377,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
   }
 
   private uploadFileAndSaveStatus(file: any, body: ChangeSupportStatusDocumentType): void {
-    const httpUploadBody = { userId: this.stores.authentication.getUserId(), innovationId: this.innovationId };
+    const httpUploadBody = { userId: this.ctx.user.getUserId(), innovationId: this.innovationId };
 
     this.fileUploadService
       .uploadFile(httpUploadBody, file)
@@ -441,9 +426,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
             message: this.getMessageStatusUpdated()?.message,
             itemsList: this.getMessageStatusUpdated()?.itemsList
           });
-          this.redirectTo(
-            this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`
-          );
+          this.redirectTo(this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`);
         }
       },
       error: () => {
@@ -476,7 +459,9 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     return status ? this.messageStatusDescriptions[status] : '';
   }
 
-  getMessageStatusUpdated(): { message: string; itemsList?: ContextPageLayoutType['alert']['itemsList'] } | undefined {
+  getMessageStatusUpdated():
+    | { message: string; itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'] }
+    | undefined {
     const status = this.form.get('status')?.value;
     return status ? this.messageStatusUpdated[status] : undefined;
   }
@@ -500,7 +485,7 @@ export class InnovationSupportUpdateComponent extends CoreComponent implements O
     }
 
     if (this.stepNumber === 0) {
-      const previousUrl = this.stores.context.getPreviousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
+      const previousUrl = this.ctx.layout.previousUrl() ?? `/accessor/innovations/${this.innovationId}/overview`;
       this.router.navigateByUrl(previousUrl);
     }
 

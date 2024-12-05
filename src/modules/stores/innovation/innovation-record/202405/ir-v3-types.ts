@@ -1,9 +1,9 @@
 import { TextareaLengthLimitType } from '@modules/shared/forms/engine/config/form-engine.config';
-import { INNOVATION_SECTION_STATUS } from '../../innovation.models';
 import { DateISOType, MappedObjectType } from '@app/base/types';
 import { AsyncValidatorFn } from '@angular/forms';
 import { FormEngineParameterModelV3 } from '@modules/shared/forms';
 import { FormatUrlValidatorType } from '@modules/shared/forms/engine/models/form-engine.models';
+import { InnovationSectionStatusEnum } from '../../../ctx/innovation/innovation.enums';
 
 export type InnovationRecordSchemaV3Type = {
   sections: {
@@ -54,7 +54,7 @@ export type InnovationRecordQuestionStepType = {
   isHidden?: boolean;
 };
 
-export type nestedObjectAnswer = [{ [key: string]: string }];
+export type nestedObjectAnswer = [Record<string, string>];
 
 export type arrStringAnswer = string[];
 
@@ -82,9 +82,7 @@ export type InnovationRecordStepValidationsType = {
   equalTo?: string | [string, string];
 };
 
-export type InnovationRecordFieldGroupAnswerType = {
-  [id: string]: string;
-}[];
+export type InnovationRecordFieldGroupAnswerType = Record<string, string>[];
 
 export type InnovationRecordMinMaxValidationType = { length: number; errorMessage: string };
 
@@ -99,9 +97,10 @@ export type InnovationRecordItemsType = {
   itemsFromAnswer?: string;
 }[];
 
-export type InnovationRecordSectionAnswersType = {
-  [s: string]: string | string[] | { response: string; conditional: string };
-};
+export type InnovationRecordSectionAnswersType = Record<
+  string,
+  string | string[] | { response: string; conditional: string }
+>;
 
 export type SectionsSummaryModelV3Type = {
   id: string;
@@ -109,7 +108,7 @@ export type SectionsSummaryModelV3Type = {
   sections: {
     id: string;
     title: string;
-    status: keyof typeof INNOVATION_SECTION_STATUS;
+    status: InnovationSectionStatusEnum;
     submittedAt: null | DateISOType;
     submittedBy: null | {
       name: string;
@@ -123,7 +122,7 @@ export type SectionsSummaryModelV3Type = {
 export type InnovationSectionInfoDTOV3Type = {
   id: null | string;
   section: string;
-  status: keyof typeof INNOVATION_SECTION_STATUS;
+  status: InnovationSectionStatusEnum;
   updatedAt: string;
   data: MappedObjectType;
   submittedAt: string;

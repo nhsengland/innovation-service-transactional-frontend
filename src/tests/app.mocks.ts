@@ -11,12 +11,12 @@ export const SERVER_REQUEST = { method: 'get', headers: {} };
 export const SERVER_RESPONSE = { status: jest.fn(), setHeader: jest.fn() };
 
 export class LocalStorageMock {
-  store: { [key: string]: any } = {};
+  store: Record<string, any> = {};
 
   clear(): void {
     this.store = {};
   }
-  getItem(key: string): null | { [key: string]: any } {
+  getItem(key: string): null | Record<string, any> {
     return this.store[key] || null;
   }
   setItem(key: string, value: any): void {

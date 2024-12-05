@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { UsersService } from '@modules/shared/services/users.service';
-import { MFAInfoDTO } from '@modules/stores/authentication/authentication.service';
+import { MFAInfo } from '@modules/stores/ctx/user/user.service';
 
 @Component({
   selector: 'app-admin-pages-users-user-manage',
@@ -13,7 +13,7 @@ export class PageUserManageComponent extends CoreComponent implements OnInit {
   isInnovator: boolean;
   userId: string;
 
-  MFAInfo: MFAInfoDTO | null = null;
+  MFAInfo: MFAInfo | null = null;
 
   constructor(
     private route: ActivatedRoute,

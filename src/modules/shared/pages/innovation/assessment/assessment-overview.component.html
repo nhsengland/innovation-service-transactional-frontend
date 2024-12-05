@@ -1,10 +1,10 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <ng-container *ngIf="!isAdminType; else assessmentOverview">
+      <ng-container *ngIf="!ctx.user.isAdmin(); else assessmentOverview">
         <div class="app-pane">
           <div class="app-pane__side-bar">
-            <div *ngIf="isAssessmentType" class="nhsuk-u-padding-top-8">
+            <div *ngIf="ctx.user.isAssessment()" class="nhsuk-u-padding-top-8">
               <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
                 <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
                 <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
@@ -16,13 +16,13 @@
               <p *ngIf="assessment?.assignTo" class="nhsuk-body-s nhsuk-u-margin-bottom-5">Needs assessment team</p>
             </div>
 
-            <ng-container *ngIf="isAccessorType">
+            <ng-container *ngIf="ctx.user.isAccessorType()">
               <p class="nhsuk-heading-xs">{{ assessment?.finishedAt | date: ("app.date_formats.long_date" | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.assignTo?.name }}</p>
               <p *ngIf="assessment?.assignTo" class="nhsuk-hint">Needs assessment team</p>
             </ng-container>
 
-            <ng-container *ngIf="isInnovatorType">
+            <ng-container *ngIf="ctx.user.isInnovator()">
               <p class="nhsuk-heading-xs">Updated: {{ assessment?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
               <p class="nhsuk-hint nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
               <p *ngIf="assessment?.assignTo" class="nhsuk-hint">Needs assessment team</p>
@@ -49,7 +49,7 @@
     <div class="nhsuk-grid-column-full">
       <shared-innovation-assessment-details *ngIf="showAssessmentDetails" [assessment]="assessment" />
 
-      <div *ngIf="isAdminType">
+      <div *ngIf="ctx.user.isAdmin()">
         <ng-container *ngIf="assessmentHasBeenSubmitted && shouldShowUpdatedAt">
           <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">Updated: {{ assessment?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</p>
           <p class="nhsuk-body-s nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-0">{{ assessment?.updatedBy?.name }}</p>
@@ -114,7 +114,7 @@
         </li>
       </ul>
 
-      <ng-container *ngIf="isAssessmentType && assessment && assessment.isLatest" [ngSwitch]="innovation.status">
+      <ng-container *ngIf="ctx.user.isAssessment() && assessment && assessment.isLatest" [ngSwitch]="innovation.status">
         <ng-container *ngSwitchCase="'NEEDS_ASSESSMENT'">
           <a routerLink="/assessment/innovations/{{ innovationId }}/assessments/{{ assessmentId }}/edit" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">
             {{ assessment.minorVersion ? "Continue editing" : "Continue needs " + assessmentType }}
@@ -141,10 +141,10 @@
         </ng-container>
       </ng-container>
 
-      <ng-container *ngIf="isAccessorType">
+      <ng-container *ngIf="ctx.user.isAccessorType()">
         <a routerLink="/accessor/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Go to innovation</a>
         <a
-          *ngIf="isInProgress && isQualifyingAccessorRole && assessment?.isLatest"
+          *ngIf="isInProgress && ctx.user.isQualifyingAccessor() && assessment?.isLatest"
           routerLink="/accessor/innovations/{{ innovationId }}/support/{{ updateSupportUrlNewOrSupport }}"
           class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-button--secondary"
         >
@@ -152,7 +152,7 @@
         </a>
       </ng-container>
 
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="ctx.user.isInnovator()">
         <a routerLink="/innovator/innovations/{{ innovationId }}" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-right-3">Go to innovation</a>
       </ng-container>
     </div>

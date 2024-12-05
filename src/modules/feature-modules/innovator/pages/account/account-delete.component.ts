@@ -48,13 +48,13 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
 
-    const email = this.stores.authentication.getUserInfo().email;
-    const roleId = this.stores.authentication.getUserContextInfo()?.roleId;
+    const email = this.ctx.user.getUserInfo().email;
+    const roleId = this.ctx.user.getUserContext()?.roleId;
     this.innovator = {
       email: email,
       roleId: roleId,
       isOwner: false,
-      isCollaborator: this.stores.authentication.hasInnovationCollaborations(),
+      isCollaborator: this.ctx.user.hasInnovationCollaborations(),
       hasCollaborators: false,
       hasPendingTransfer: false,
       hasOnlyPendingTransfers: false,
@@ -111,7 +111,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
   onSubmitStep(action: 'previous' | 'next'): void {
     if (action === 'previous') {
       if (this.stepNumber === this.firstStep) {
-        const previousUrl = this.stores.context.getPreviousUrl();
+        const previousUrl = this.ctx.layout.previousUrl();
         if (previousUrl) {
           if (previousUrl.includes('how-to-proceed')) {
             const howToProceedUrl = previousUrl.split('?')[0];
@@ -125,7 +125,7 @@ export class PageAccountDeleteComponent extends CoreComponent implements OnInit 
             this.redirectTo(previousUrl);
           }
         } else {
-          this.redirectTo(`/${this.stores.authentication.userUrlBasePath()}/dashboard`);
+          this.redirectTo(`/${this.ctx.user.userUrlBasePath()}/dashboard`);
         }
         return;
       } else if (this.stepNumber === 3 && !this.innovator.hasPendingTransfer) {

@@ -1,0 +1,17 @@
+<div>
+  <p class="nhsuk-heading-s nhsuk-u-margin-top-9">You can create custom notifications for this innovation</p>
+  <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-2">
+    @for (item of links; track $index) {
+      <li>
+        <p>
+          <a routerLink="/{{ this.ctx.user.userUrlBasePath() }}/innovations/{{ this.innovationId }}/custom-notifications/new" [queryParams]="getItemParams(item)">
+            {{ item.label }}</a
+          >
+        </p>
+      </li>
+    }
+    <li>
+      <a routerLink="/accessor/innovations/{{ this.innovationId }}/custom-notifications">Find out more about custom notifications</a>
+    </li>
+  </ul>
+</div>

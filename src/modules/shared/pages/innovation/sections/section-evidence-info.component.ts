@@ -25,9 +25,6 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   summaryList: WizardSummaryType[] = [];
   documentsList: InnovationDocumentsListOutDTO['data'] = [];
 
-  // Flags
-  isInnovatorType: boolean;
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -37,22 +34,20 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
     this.innovation = this.ctx.innovation.info();
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.evidenceId = this.activatedRoute.snapshot.params.evidenceId;
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
     this.wizard =
-      this.stores.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
+      this.ctx.innovation.getInnovationRecordSectionEvidencesWizard(this.sectionId) ?? new WizardEngineModel({});
 
     // Protection from direct url access.
     if (this.wizard.steps.length === 0) {
       this.redirectTo(`${this.baseUrl}/record/sections/${this.sectionId}`);
     }
-
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
   }
 
   ngOnInit(): void {
     forkJoin([
-      this.stores.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
+      this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
         skip: 0,
         take: 50,
@@ -73,7 +68,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   onDeleteEvidence(): void {
-    this.stores.innovation.deleteEvidence$(this.innovation.id, this.evidenceId).subscribe({
+    this.ctx.innovation.deleteEvidence$(this.innovation.id, this.evidenceId).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Your evidence has been deleted');
         this.redirectTo(`innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`, {

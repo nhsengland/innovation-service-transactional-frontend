@@ -8,8 +8,7 @@ import {
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
-import { InnovationRecordSchemaStore, InnovationStore } from '@modules/stores';
-import { PhoneUserPreferenceEnum } from '@modules/stores/authentication/authentication.service';
+import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
@@ -37,8 +36,8 @@ export class UtilsHelper {
   }
 
   static getContactPreferenceValue(
-    contactByEmail: boolean = false,
-    contactByPhone: boolean = false,
+    contactByEmail = false,
+    contactByPhone = false,
     contactByPhoneTimeframe: PhoneUserPreferenceEnum | null = null
   ): string {
     let value = '';
@@ -63,7 +62,7 @@ export class UtilsHelper {
     userUnitId: string,
     organisationsList: OrganisationsListDTO[],
     engagingUnitsIds: string[],
-    previousOrganisationsSuggestions?: { [key: string]: string[] }
+    previousOrganisationsSuggestions?: Record<string, string[]>
   ): (OrganisationsListDTO & { description: string | undefined })[] {
     const organisationsSuggestions =
       previousOrganisationsSuggestions ?? JSON.parse(sessionStorage.getItem('organisationsSuggestions') ?? '{}');
@@ -107,6 +106,8 @@ export class UtilsHelper {
         return 'Notify me when an organisation adds a progress update to the support summary';
       case NotificationEnum.INNOVATION_RECORD_UPDATED:
         return 'Notify me when the innovator updates their innovation record';
+      case NotificationEnum.DOCUMENT_UPLOADED:
+        return 'Notify me when a new document is uploaded';
       case NotificationEnum.REMINDER:
         return 'Notify me on a date in future';
       default:
@@ -124,7 +125,7 @@ export class UtilsHelper {
 
   static getNotifyMeSubscriptionSectionsText(
     subscription: NotifyMeResponseTypes[NotificationEnum.INNOVATION_RECORD_UPDATED],
-    schemaStore: InnovationRecordSchemaStore
+    schemaStore: SchemaContextStore
   ): string[] {
     if (subscription.sections) {
       return subscription.sections
@@ -145,7 +146,7 @@ export class UtilsHelper {
     return `Notify me on ${datePipe.transform(subscription.date, locale.data.app.date_formats.long_date)} for this reason:`;
   }
 
-  static getAssessmentVersion(majorVersion: number = 1, minorVersion: number = 0): string {
+  static getAssessmentVersion(majorVersion = 1, minorVersion = 0): string {
     return `${majorVersion}.${minorVersion}`;
   }
 }

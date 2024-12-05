@@ -1,5 +1,4 @@
 import { DateISOType } from '@app/base/types';
-import { InnovationStatusEnum } from '../../innovation/innovation.enums';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 
 export type ContextAssessmentType = {

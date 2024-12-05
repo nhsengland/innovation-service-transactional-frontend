@@ -9,13 +9,13 @@ import { SUPPORT_SUMMARY_MILESTONES } from './wizard-support-summary-progress-up
   templateUrl: './support-summary-progress-update-wrapper.component.html'
 })
 export class PageInnovationSupportSummaryProgressUpdateWrapperComponent extends CoreComponent {
-  userOrgHasMilestones: boolean = false;
+  userOrgHasMilestones = false;
 
   constructor() {
     super();
 
     this.userOrgHasMilestones = Object.keys(SUPPORT_SUMMARY_MILESTONES).includes(
-      this.stores.authentication.getUserContextInfo()?.organisation?.acronym || ''
+      this.ctx.user.getUserContext()?.organisation?.acronym || ''
     );
   }
 }

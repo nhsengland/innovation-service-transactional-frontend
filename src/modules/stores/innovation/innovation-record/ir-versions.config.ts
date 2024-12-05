@@ -1,11 +1,11 @@
 import { MappedObjectType } from '@modules/core/interfaces/base.interfaces';
-import { sectionType } from '../innovation.models';
+import { sectionType } from '../../ctx/innovation/innovation.models';
 
 import { evidenceTypeItems as SECTIONS_202405_evidenceTypeItems } from './202405/evidences-forms.config';
-import { InnovationRecordSchemaInfoType } from './innovation-record-schema/innovation-record-schema.models';
 
 import { irSchemaTranslationsMap } from './202405/ir-v3-schema-translation.helper';
 import { WizardIRV3EngineModel } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { InnovationRecordSchemaInfoType } from '../../ctx/schema/schema.types';
 
 export type AllSectionsOutboundPayloadType = {
   title: string;

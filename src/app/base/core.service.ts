@@ -6,12 +6,7 @@ import { NGXLogger } from 'ngx-logger';
 import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
-import { UserRoleEnum } from '@modules/stores/authentication/authentication.enums';
-import { ContextStore } from '@modules/stores/context/context.store';
-import { ContextPageLayoutType } from '@modules/stores/context/context.types';
-import { InnovationStore } from '@modules/stores/innovation/innovation.store';
-import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
+import { ContextLayoutType, CtxStore, UserRoleEnum } from '@modules/stores';
 
 @Injectable()
 export class CoreService {
@@ -20,13 +15,6 @@ export class CoreService {
   protected http: HttpClient;
   protected translateService: TranslateService;
   protected logger: NGXLogger;
-
-  protected stores: {
-    authentication: AuthenticationStore;
-    context: ContextStore;
-    innovation: InnovationStore;
-    schema: InnovationRecordSchemaStore;
-  };
 
   protected ctx: CtxStore;
 
@@ -44,13 +32,6 @@ export class CoreService {
     this.translateService = injector.get(TranslateService);
     this.logger = injector.get(NGXLogger);
 
-    this.stores = {
-      authentication: injector.get(AuthenticationStore),
-      context: injector.get(ContextStore),
-      innovation: injector.get(InnovationStore),
-      schema: injector.get(InnovationRecordSchemaStore)
-    };
-
     this.ctx = injector.get(CtxStore);
     this.APP_URL = this.envVariablesStore.APP_URL;
     this.API_URL = this.envVariablesStore.API_URL;
@@ -59,12 +40,17 @@ export class CoreService {
     this.API_USERS_URL = this.envVariablesStore.API_USERS_URL;
   }
 
-  setAlert(type: ContextPageLayoutType['alert']['type'], title: string, message?: string, setFocus?: boolean): void {
-    this.stores.context.setPageAlert({ type, title, message, setFocus: !!setFocus, persistOneRedirect: false });
+  setAlert(
+    type: NonNullable<ContextLayoutType['alert']>['type'],
+    title: string,
+    message?: string,
+    setFocus?: boolean
+  ): void {
+    this.ctx.layout.update({ alert: { type, title, message, setFocus: !!setFocus, persistOneRedirect: false } });
   }
 
   apiUserBasePath(): string {
-    switch (this.stores.authentication.getUserType()) {
+    switch (this.ctx.user.getUserType()) {
       case UserRoleEnum.ADMIN:
         return 'user-admin';
       case UserRoleEnum.ASSESSMENT:
@@ -79,8 +65,9 @@ export class CoreService {
     }
   }
 
+  // TODO: could return a computed from the store
   userUrlBasePath(): string {
-    return this.stores.authentication.userUrlBasePath();
+    return this.ctx.user.userUrlBasePath();
   }
 
   translate(translation: string, params?: object): string {

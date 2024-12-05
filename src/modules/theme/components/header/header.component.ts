@@ -1,13 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
-import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { AfterViewInit, Component, Inject, Input, OnDestroy, OnInit, PLATFORM_ID, computed } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { CookiesService } from '@modules/core/services/cookies.service';
 
-import { AuthenticationStore } from '@modules/stores/authentication/authentication.store';
 import { URLS } from '@app/base/constants';
+import { CtxStore } from '@modules/stores';
 
 export type HeaderMenuBarItemType = {
   id: string;
@@ -19,7 +19,7 @@ export type HeaderMenuBarItemType = {
   children?: { label: string; url: string; description?: string; fullReload?: boolean }[];
 };
 
-export type HeaderNotificationsType = { [key: string]: number };
+export type HeaderNotificationsType = Record<string, number>;
 
 @Component({
   selector: 'theme-header',
@@ -38,11 +38,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   showCookiesBanner = false;
   showCookiesSaveSuccess = false;
 
-  user: { displayName: string; description: string; showSwitchProfile: boolean } = {
-    displayName: '',
-    description: '',
-    showSwitchProfile: false
-  };
+  userDescription = computed(() =>
+    this.ctx.user.isAccessorType()
+      ? `Logged in as ${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
+      : `Logged in as ${this.ctx.user.getUserRoleTranslation()}`
+  );
 
   menuBarItems: {
     isChildrenOpened: boolean;
@@ -53,10 +53,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   URLS: typeof URLS;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
     private router: Router,
-    private authenticationStore: AuthenticationStore,
-    private coockiesService: CookiesService
+    private coockiesService: CookiesService,
+    protected ctx: CtxStore
   ) {
     this.subscriptions.add(
       this.router.events
@@ -73,20 +73,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
-
-    this.authenticationStore.state$.subscribe(state => {
-      const hasMultipleRoles = (state.user && state.user?.roles.length > 1) ?? false;
-      const userRole = this.authenticationStore.getUserRole();
-      const orgUnitName = state.userContext?.organisationUnit?.name;
-
-      this.user = {
-        displayName: state.user?.displayName ?? '',
-        description: this.authenticationStore.isAccessorType()
-          ? `Logged in as ${userRole}, ${orgUnitName}`
-          : `Logged in as ${userRole}`,
-        showSwitchProfile: hasMultipleRoles
-      };
-    });
   }
 
   ngAfterViewInit(): void {
@@ -155,7 +141,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   signOut(): void {
-    this.authenticationStore.signOut();
+    this.ctx.user.signOut();
   }
 
   ngOnDestroy(): void {

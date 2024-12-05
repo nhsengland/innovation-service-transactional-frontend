@@ -1,7 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Injector } from '@angular/core';
+import { Injector, signal } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -11,19 +11,16 @@ import { AppInjector, CoreModule } from '@modules/core';
 import { FormEngineComponent } from '@modules/shared/forms';
 import { SharedModule } from '@modules/shared/shared.module';
 import {
-  AuthenticationService,
-  AuthenticationStore,
-  ContextService,
-  ContextStore,
   CtxStore,
   InnovationContextService,
   InnovationContextStore,
   AssessmentContextStore,
   AssessmentContextService,
-  InnovationRecordSchemaService,
-  InnovationRecordSchemaStore,
-  InnovationService,
-  InnovationStore
+  SchemaContextStore,
+  SchemaContextService,
+  LayoutContextStore,
+  NotificationsContextStore,
+  NotificationsContextService
 } from '@modules/stores';
 
 import { PageAccountManageDetailsEditComponent } from './manage-details-edit.component';
@@ -31,10 +28,12 @@ import { PageAccountManageDetailsEditComponent } from './manage-details-edit.com
 import { ACCOUNT_DETAILS_ACCESSOR } from './manage-details-edit-accessor.config';
 import { ACCOUNT_DETAILS_INNOVATOR } from './manage-details-edit-innovator.config';
 import { ENV } from '@tests/app.mocks';
+import { UserContextService } from '@modules/stores/ctx/user/user.service';
+import { UserContextStore } from '@modules/stores/ctx/user/user.store';
 
 describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditComponent', () => {
   let activatedRoute: ActivatedRoute;
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let component: PageAccountManageDetailsEditComponent;
   let fixture: ComponentFixture<PageAccountManageDetailsEditComponent>;
@@ -43,29 +42,28 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule.forRoot([]), CoreModule, SharedModule],
       providers: [
-        AuthenticationStore,
-        AuthenticationService,
-        InnovationStore,
-        InnovationRecordSchemaStore,
-        ContextStore,
-        ContextService,
-        InnovationRecordSchemaService,
-        InnovationService,
         CtxStore,
         InnovationContextStore,
         InnovationContextService,
         AssessmentContextStore,
         AssessmentContextService,
+        SchemaContextStore,
+        SchemaContextService,
+        LayoutContextStore,
+        NotificationsContextStore,
+        NotificationsContextService,
+        UserContextStore,
+        UserContextService,
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }
       ]
     });
 
     AppInjector.setInjector(TestBed.inject(Injector));
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
     activatedRoute = TestBed.inject(ActivatedRoute);
 
-    authenticationStore.getUserInfo = () => USER_INFO_ACCESSOR;
+    ctx.user.getUserInfo = signal(USER_INFO_ACCESSOR);
   });
 
   it('should create the component', () => {
@@ -77,7 +75,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
 
   it('should be a question step', () => {
     activatedRoute.snapshot.params = { stepId: 1 };
-    authenticationStore.isInnovatorType = () => true;
+    ctx.user.isInnovator = signal(true);
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);
     component = fixture.componentInstance;
@@ -89,7 +87,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   it('should be summary step', () => {
     activatedRoute.snapshot.params = { stepId: 'summary' };
     activatedRoute.params = of({ stepId: 'summary' }); // Simulate activatedRoute.params subscription.
-    authenticationStore.isInnovatorType = () => true;
+    ctx.user.isInnovator = signal(true);
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);
     component = fixture.componentInstance;
@@ -101,7 +99,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   it('should load innovator information', () => {
     activatedRoute.snapshot.params = { stepId: 1 };
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
-    authenticationStore.isInnovatorType = () => true;
+    ctx.user.isInnovator = signal(true);
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);
     component = fixture.componentInstance;
@@ -113,7 +111,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   it('should load accessor information', () => {
     activatedRoute.snapshot.params = { stepId: 1 };
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
-    authenticationStore.isAccessorType = () => true;
+    ctx.user.isAccessorOrAssessment = signal(true);
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);
     component = fixture.componentInstance;
@@ -125,7 +123,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   it('should load assessment information', () => {
     activatedRoute.snapshot.params = { stepId: 1 };
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
-    authenticationStore.isAssessmentType = () => true;
+    ctx.user.isAccessorOrAssessment = signal(true);
 
     fixture = TestBed.createComponent(PageAccountManageDetailsEditComponent);
     component = fixture.componentInstance;
@@ -137,7 +135,7 @@ describe('Shared/Pages/Account/ManageDetails/PageAccountManageDetailsEditCompone
   it('should do nothing when submitting a step and form not is valid', () => {
     activatedRoute.snapshot.params = { stepId: 1 };
     activatedRoute.params = of({ stepId: 1 }); // Simulate activatedRoute.params subscription.
-    authenticationStore.isInnovatorType = () => true;
+    ctx.user.isInnovator = signal(true);
 
     const expected = {
       displayName: 'Test qualifying Accessor',

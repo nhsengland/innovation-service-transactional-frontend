@@ -26,10 +26,7 @@ export class InnovationAssessmentExemptionInfoComponent extends CoreComponent im
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.assessmentId = this.activatedRoute.snapshot.params.assessmentId;
 
-    this.setBackLink(
-      'Go back',
-      `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovationId}/overview`
-    );
+    this.setBackLink('Go back', `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/overview`);
     this.setPageTitle('Innovation exempt from key performance indicator (KPI) reports');
   }
 

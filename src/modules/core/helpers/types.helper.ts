@@ -24,14 +24,8 @@ export type FullDictTemp<T extends object, S extends KeysUnion<T>> = {
   [K in S as K extends `${infer U}.${infer _R}` ? U : K]: K extends `${infer K}.${infer R}`
     ? K extends keyof T
       ? Extract<T[K], null> extends never
-        ? {
-            [key in R]: R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never;
-          }
-        :
-            | null
-            | {
-                [key in R]: R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never;
-              }
+        ? Record<R, R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never>
+        : null | Record<R, R extends keyof NonNullable<T[K]> ? NonNullable<T[K]>[R] : never>
       : never
     : S extends keyof T
       ? T[K]

@@ -19,7 +19,7 @@ import { getNewInnovationQuestionsWizard } from './innovation-new.config';
 export class InnovationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.stores.context.getIrSchema()));
+  wizard = cloneDeep(getNewInnovationQuestionsWizard(this.ctx.schema.irSchemaInfo()));
 
   isCreatingInnovation = false;
 
@@ -65,7 +65,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       .createInnovation(body)
       .pipe(
         concatMap(response => {
-          this.stores.authentication.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
+          this.ctx.user.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
           return of(response);
         })
       )

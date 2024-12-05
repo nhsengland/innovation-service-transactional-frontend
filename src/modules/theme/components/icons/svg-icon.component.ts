@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 type SvgPaletteColorsType = 'green' | 'yellow' | 'red' | 'grey';
-type SvgPaletteDataType = { [key in SvgPaletteColorsType]: { stroke: string; fill: string } };
+type SvgPaletteDataType = Record<SvgPaletteColorsType, { stroke: string; fill: string }>;
 
 @Component({
   selector: 'theme-svg-icon',
@@ -23,7 +23,8 @@ export class SvgIconComponent implements OnInit {
     | 'minus'
     | 'notification-tag'
     | 'back-to-top'
-    | 'logo';
+    | 'logo'
+    | 'not-started';
 
   @Input({ required: false }) customColor?: SvgPaletteColorsType;
 

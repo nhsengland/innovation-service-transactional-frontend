@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row" *ngIf="filtersModel && filtersModel.search as search">
     <div class="nhsuk-grid-column-full">
       <form [formGroup]="form">

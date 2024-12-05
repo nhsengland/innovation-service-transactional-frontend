@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { NotificationContextDetailEnum } from '@app/base/enums';
 import { UtilsHelper } from '@app/base/helpers';
 import { StatisticsCardType } from '@app/base/types';
 
@@ -16,7 +15,7 @@ import {
   AssessmentExemptionTypeDTO,
   AssessmentService
 } from '@modules/feature-modules/assessment/services/assessment.service';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 @Component({
@@ -27,9 +26,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
   innovation: null | InnovationInfoDTO = null;
 
-  isArchived: boolean = false;
-  showCards: boolean = true;
-  showAssessmentExemptionLink: boolean = false;
+  isArchived = false;
+  showCards = true;
+  showAssessmentExemptionLink = false;
   assessmentType = '';
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
@@ -108,8 +107,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                 .map(v =>
                   v === 'OTHER'
                     ? this.innovation?.otherCategoryDescription
-                    : this.stores.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)
-                        ?.label
+                    : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
                 )
                 .join('\n')
             }
@@ -180,16 +178,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             emptyMessage: 'No replies to read'
           }
         ];
-
-        // Throw notification read dismiss.
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.NA02_INNOVATOR_SUBMITS_FOR_NEEDS_ASSESSMENT_TO_ASSESSMENT,
-            NotificationContextDetailEnum.NA06_NEEDS_ASSESSOR_REMOVED,
-            NotificationContextDetailEnum.NA07_NEEDS_ASSESSOR_ASSIGNED,
-            NotificationContextDetailEnum.AI04_INNOVATION_ARCHIVED_TO_NA_DURING_NEEDS_ASSESSMENT
-          ]
-        });
 
         this.innovationProgress = Object.keys(innovationProgress).length ? innovationProgress : undefined;
 

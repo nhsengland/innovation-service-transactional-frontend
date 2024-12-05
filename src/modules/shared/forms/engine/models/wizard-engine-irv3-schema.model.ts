@@ -7,13 +7,13 @@ import {
   arrStringAnswer,
   nestedObjectAnswer
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { MappedObjectType } from '@app/base/types';
+import { URLS } from '@app/base/constants';
 import {
   InnovationRecordSchemaInfoType,
   InnovationRecordSectionUpdateType,
   IrSchemaTranslatorMapType
-} from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
-import { MappedObjectType } from '@app/base/types';
-import { URLS } from '@app/base/constants';
+} from '@modules/stores/ctx/schema/schema.types';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -36,13 +36,11 @@ export type EvidenceV3Type = {
   value: string;
 };
 
-export type StepsParentalRelationsType = {
-  [child: string]: string;
-};
+export type StepsParentalRelationsType = Record<string, string>;
 
 export class WizardIRV3EngineModel {
   sectionId: string;
-  isChangingMode: boolean = false;
+  isChangingMode = false;
   visitedSteps: Set<string> = new Set<string>();
   steps: WizardStepTypeV3[];
   schema: InnovationRecordSchemaInfoType | null;
@@ -50,7 +48,7 @@ export class WizardIRV3EngineModel {
   formValidations: ValidatorFn[];
   stepsChildParentRelations: StepsParentalRelationsType;
   currentStepId: number | 'summary';
-  currentAnswers: { [key: string]: any };
+  currentAnswers: Record<string, any>;
   showSummary: boolean;
   translations: IrSchemaTranslatorMapType;
 
@@ -70,16 +68,17 @@ export class WizardIRV3EngineModel {
       subsections: new Map([]),
       questions: new Map([])
     };
-    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap(this.schema.schema);
+    this.itemsWithItemsFromAnswer = this.getItemsFromAnswersListMap();
   }
 
-  getItemsFromAnswersListMap(schema: InnovationRecordSchemaV3Type): Map<string, string> {
+  getItemsFromAnswersListMap(): Map<string, string> {
     return new Map(
       this.schema?.schema.sections
         .flatMap(s => s.subSections)
         .find(s => s.id === this.sectionId)
         ?.steps.flatMap(st => st.questions)
         .filter(q => q.items?.some(i => i.itemsFromAnswer))
+        //eslint-disable-next-line
         .map(i => [i.id, i.items?.find(item => item.itemsFromAnswer)!.itemsFromAnswer!])
     );
   }
@@ -129,7 +128,7 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  gotoStep(stepId: number | 'summary', isChangeMode: boolean = false): this {
+  gotoStep(stepId: number | 'summary', isChangeMode = false): this {
     this.currentStepId = parseInt(stepId as string, 10);
 
     this.isChangingMode = isChangeMode;
@@ -139,7 +138,7 @@ export class WizardIRV3EngineModel {
     return this;
   }
 
-  getPreviousStep(isChangeMode: boolean = false): number | 'summary' {
+  getPreviousStep(isChangeMode = false): number | 'summary' {
     let previousStepId = this.currentStepId;
     if (this.isFirstStep() || (!isChangeMode && this.visitedSteps.size === 1)) {
       return -1;
@@ -151,7 +150,7 @@ export class WizardIRV3EngineModel {
     return previousStepId;
   }
 
-  getNextStep(isChangeMode: boolean = false): number | 'summary' {
+  getNextStep(isChangeMode = false): number | 'summary' {
     let nextStepId = this.currentStepId;
 
     if ((this.showSummary && typeof this.currentStepId === 'number') || this.isLastStep()) {
@@ -203,17 +202,17 @@ export class WizardIRV3EngineModel {
     return this.currentStep()?.parameters[0].id.split('_')[0] ?? '';
   }
 
-  getAnswers(): { [key: string]: any } {
+  getAnswers(): Record<string, any> {
     return this.currentAnswers;
   }
 
-  addAnswers(data: { [key: string]: any }): this {
+  addAnswers(data: Record<string, any>): this {
     this.currentAnswers = { ...this.currentAnswers, ...data };
 
     return this;
   }
 
-  setAnswers(data: { [key: string]: any }): this {
+  setAnswers(data: Record<string, any>): this {
     this.currentAnswers = data;
     return this;
   }
@@ -267,7 +266,7 @@ export class WizardIRV3EngineModel {
   }
 
   translateDescriptionUrls(description: string) {
-    const regex = new RegExp(/href=\"{{urls\.([^{}]*)}}\"/, 'g');
+    const regex = new RegExp(/href="{{urls\.([^{}]*)}}"/, 'g');
     const matches = description.matchAll(regex);
 
     for (const match of matches) {
@@ -423,11 +422,11 @@ export class WizardIRV3EngineModel {
 
     // Parse condition step's answers
     for (const [i, step] of this.steps.entries()) {
-      let stepParams = step.parameters[0];
+      const stepParams = step.parameters[0];
       let stepId = stepParams.id;
       let label = stepId.split('|')[0];
       let value: string | string[] | undefined = currentAnswers[stepParams.id];
-      let isNotMandatory = !stepParams.validations?.isRequired;
+      const isNotMandatory = !stepParams.validations?.isRequired;
       editStepNumber++;
 
       if (!stepParams.parentId && !stepParams.isHidden) {
@@ -465,11 +464,8 @@ export class WizardIRV3EngineModel {
             break;
 
           case 'radio-group':
-            let stepAnswers = currentAnswers[stepParams.id];
+            const stepAnswers = currentAnswers[stepParams.id];
             value = stepAnswers;
-
-            if (!stepParams.parentId) {
-            }
 
             // add if conditional field and answer is present
             const itemWithConditional = stepParams.items?.find(i => i.conditional);
@@ -485,7 +481,7 @@ export class WizardIRV3EngineModel {
           case 'autocomplete-array':
             {
               value = [];
-              let stepAnswers = currentAnswers[stepParams.id];
+              const stepAnswers = currentAnswers[stepParams.id];
               if (stepAnswers) {
                 value = typeof stepAnswers === 'string' ? stepAnswers : (stepAnswers as string[]);
               }
@@ -604,7 +600,7 @@ export class WizardIRV3EngineModel {
   }
 
   runOutboundParsing(): InnovationRecordSectionUpdateType {
-    let toReturn: { [key: string]: any } = {};
+    const toReturn: Record<string, any> = {};
 
     // Filter out steps containing values from nested objects, as these will be already calculated by their parent
     for (const step of this.steps.filter(s => !s.parameters[0].isNestedField).values()) {
@@ -739,7 +735,7 @@ export class WizardIRV3EngineModel {
         // translate item
         value = this.translations.questions.get(item.stepId.split('_')[0])?.items.get(item.value)?.label ?? item.value;
       } else if (item.value instanceof Array) {
-        let translatedArr: string[] = [];
+        const translatedArr: string[] = [];
 
         // translate each item of Array
         item.value.forEach(v =>

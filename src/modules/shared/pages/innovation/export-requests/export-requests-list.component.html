@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <p innerHTML="{{ pageInformation.leadText }}"></p>
@@ -20,9 +20,9 @@
         </div>
       </details>
 
-      <a *ngIf="isSupportTeamType" routerLink="../new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-7"> Request permission </a>
+      <a *ngIf="ctx.user.isAccessorOrAssessment()" routerLink="../new" class="nhsuk-button nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-7"> Request permission </a>
 
-      <ng-container *ngIf="isInnovatorType">
+      <ng-container *ngIf="ctx.user.isInnovator()">
         <h2>Pending requests</h2>
         <p *ngIf="pendingTable.getTotalRowsNumber() === 0">No new requests.</p>
         <table *ngIf="pendingTable.getTotalRowsNumber() > 0" class="nhsuk-table-responsive nhsuk-u-padding-bottom-7">

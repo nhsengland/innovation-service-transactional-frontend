@@ -20,7 +20,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  stayAsCollaborator: boolean = false;
+  stayAsCollaborator = false;
   redirectToUrl: string;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
@@ -51,7 +51,7 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.redirectToUrl = this.stores.context.getPreviousUrl() || `/admin/innovations/${this.innovationId}`;
+    this.redirectToUrl = this.ctx.layout.previousUrl() || `/admin/innovations/${this.innovationId}`;
   }
 
   ngOnInit(): void {

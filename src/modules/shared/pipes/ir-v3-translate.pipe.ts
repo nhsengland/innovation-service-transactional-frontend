@@ -1,15 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { InnovationRecordSchemaStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 @Pipe({ name: 'irv3translate' })
 export class IrV3TranslatePipe implements PipeTransform {
-  constructor(private irSchemaStore: InnovationRecordSchemaStore) {}
+  constructor(private ctx: CtxStore) {}
   transform(
     value: string | string[] | undefined,
     type: 'sections' | 'subsections' | 'questions' | 'items',
     questionId?: string
   ): string {
-    const translations = this.irSchemaStore.getIrSchemaTranslationsMap();
+    const translations = this.ctx.schema.getIrSchemaTranslationsMap();
 
     switch (type) {
       case 'sections':
@@ -21,7 +21,7 @@ export class IrV3TranslatePipe implements PipeTransform {
         if (typeof value === 'string' && questionId) {
           return translations['questions'].get(questionId.split('_')[0])?.items?.get(value)?.label ?? value;
         } else if (value instanceof Array && questionId) {
-          let translatedArr: string[] = [];
+          const translatedArr: string[] = [];
           value.forEach(v =>
             translatedArr.push(translations['questions'].get(questionId.split('_')[0])?.items?.get(v)?.label ?? v)
           );

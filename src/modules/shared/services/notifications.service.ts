@@ -6,13 +6,11 @@ import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
-import { NotificationContextDetailEnum, NotificationCategoryTypeEnum } from '@modules/stores/context/context.enums';
+import { InnovationStatusEnum, InnovationSupportStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
 import {
-
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum,
-  InnovationTaskStatusEnum
-} from '@modules/stores/innovation';
+  NotificationCategoryTypeEnum,
+  NotificationContextDetailEnum
+} from '@modules/stores/ctx/notifications/notifications.types';
 
 export enum NotificationPreferenceEnum {
   YES = 'YES',
@@ -23,7 +21,7 @@ export type NotificationsListInDTO = {
   count: number;
   data: {
     id: string;
-    innovation: { id: string; name: string; status: InnovationStatusEnum; ownerName: string };
+    innovation: { id: string; name: string; status: InnovationStatusEnum };
     contextType: NotificationCategoryTypeEnum;
     contextDetail: NotificationContextDetailEnum;
     contextId: string;
@@ -64,7 +62,6 @@ export type NotificationsListOutDTO = {
       | ({
           innovationId: string;
           innovationName: string;
-          innovationOwnerName: string;
           innovationStatus: string;
           sectionNumber?: string;
           taskStatusName?: string;
@@ -73,9 +70,7 @@ export type NotificationsListOutDTO = {
   })[];
 };
 
-export type EmailNotificationPreferencesDTO = {
-  [category: string]: NotificationPreferenceEnum;
-};
+export type EmailNotificationPreferencesDTO = Record<string, NotificationPreferenceEnum>;
 
 @Injectable()
 export class NotificationsService extends CoreService {
@@ -164,6 +159,13 @@ export class NotificationsService extends CoreService {
                   link = {
                     label: 'Click to go to innovation overview',
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/overview`
+                  };
+                  break;
+                case NotificationContextDetailEnum.ST09_SUPPORT_STATUS_TO_CLOSED:
+                  link = {
+                    label: 'Give us your feedback on the support',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/surveys`,
+                    queryParams: { unitId: item.params?.unitId ?? '' }
                   };
                   break;
               }
@@ -313,11 +315,6 @@ export class NotificationsService extends CoreService {
                   };
                   break;
                 case NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT:
-                  link = {
-                    label: 'Click to go to how to proceed',
-                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/how-to-proceed`
-                  };
-                  break;
                 case NotificationContextDetailEnum.AU04_SUPPORT_KPI_REMINDER:
                 case NotificationContextDetailEnum.AU05_SUPPORT_KPI_OVERDUE:
                 case NotificationContextDetailEnum.AU06_ACCESSOR_IDLE_WAITING:
@@ -334,6 +331,12 @@ export class NotificationsService extends CoreService {
                   link = {
                     label: 'Click to go to dashboard',
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/manage/innovation`
+                  };
+                  break;
+                case NotificationContextDetailEnum.AU12_INNOVATOR_SURVEY_END_SUPPORT_TWO_MONTHS_REMINDER:
+                  link = {
+                    label: 'Click to go to satisfaction survey',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/surveys`
                   };
                   break;
               }
@@ -362,12 +365,12 @@ export class NotificationsService extends CoreService {
                     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/record/sections/${item.params?.section}`
                   };
                   break;
-                // case NotificationContextDetailEnum.DOCUMENT_UPLOADED:
-                //   link = {
-                //     label: 'Click to go to documents.',
-                //     url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents`
-                //   };
-                //   break;
+                case NotificationContextDetailEnum.DOCUMENT_UPLOADED:
+                  link = {
+                    label: 'Click to go to documents.',
+                    url: `/${this.userUrlBasePath()}/innovations/${item.innovation.id}/documents`
+                  };
+                  break;
                 case NotificationContextDetailEnum.REMINDER:
                   link = {
                     label: 'Click to go to innovation.',
@@ -385,7 +388,7 @@ export class NotificationsService extends CoreService {
           }
 
           const section = item.params?.section
-            ? this.stores.schema.getIrSchemaSectionIdentificationV3(item.params.section)
+            ? this.ctx.schema.getIrSchemaSectionIdentificationV3(item.params.section)
             : undefined;
 
           return {
@@ -401,7 +404,6 @@ export class NotificationsService extends CoreService {
               innovationId: item.innovation.id,
               innovationName: item.innovation.name,
               innovationStatus: item.innovation.status,
-              innovationOwnerName: item.innovation.ownerName,
               sectionNumber: section ? `${section.group.number}.${section.section.number}` : undefined,
               taskStatusName: item.params?.taskStatus
                 ? this.translate(`shared.catalog.innovation.task_status.${item.params?.taskStatus}.name`)
@@ -414,24 +416,6 @@ export class NotificationsService extends CoreService {
           };
         })
       }))
-    );
-  }
-
-  dismissAllUserNotifications(): Observable<{ affected: number }> {
-    const url = new UrlModel(this.API_USERS_URL).addPath('v1/notifications/dismiss');
-    return this.http.patch<{ affected: number }>(url.buildUrl(), { dismissAll: true }).pipe(
-      take(1),
-      map(response => response)
-    );
-  }
-
-  deleteNotification(notificationId: string): Observable<{ id: string }> {
-    const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/notifications/:notificationId')
-      .setPathParams({ notificationId });
-    return this.http.delete<{ id: string }>(url.buildUrl()).pipe(
-      take(1),
-      map(response => response)
     );
   }
 

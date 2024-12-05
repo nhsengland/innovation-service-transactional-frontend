@@ -66,7 +66,7 @@ export const locale = {
         plural: 'documents'
       },
       notification: {
-        none: 'notification',
+        none: 'notifications',
         singular: 'notification',
         plural: 'notifications'
       },
@@ -738,6 +738,10 @@ export const locale = {
             ST08_SUPPORT_NEW_ASSIGNED_WAITING_INNOVATION_TO_QA: {
               title: `You have been assigned to innovation {{innovationName}}. You will receive notifications for this innovation while it is in the waiting status.`
             },
+            ST09_SUPPORT_STATUS_TO_CLOSED: {
+              title: `{{unitName}} has updated their support status to closed for {{innovationName}}. `,
+              link: `Give us your feedback on the support.`
+            },
             SS01_SUPPORT_SUMMARY_UPDATE_TO_INNOVATORS: {
               title: `{{unitName}} added a progress update for innovation {{innovationName}}. `,
               link: `View this update in support summary.`
@@ -881,8 +885,8 @@ export const locale = {
               link: `add a progress update to their support summary.`
             },
             AU03_INNOVATOR_IDLE_SUPPORT: {
-              title: `Your innovation {{innovationName}} is not receiving any active support on the service. `,
-              link: `Find out more about your options and decide how you want to progress.`
+              title: `Your innovation {{innovationName}} is not receiving any support on the service. If you don't, your innovation will be automatically archived on {{expectedArchiveDate}}. `,
+              link: `Tell us if you need more support.`
             },
             AU04_SUPPORT_KPI_REMINDER: {
               title: `Innovation {{innovationName}} is waiting to be reviewed. Review the innovation and `,
@@ -911,6 +915,10 @@ export const locale = {
               title: `{{innovationName}} has been waiting for 6 weeks. `,
               link: `View innovation and update support status within the next 5 weeks.`
             },
+            AU12_INNOVATOR_SURVEY_END_SUPPORT_TWO_MONTHS_REMINDER: {
+              title: `To understand your satisfaction with the support given to your innovation {{innovationName}}, `,
+              link: `give us your feedback.`
+            },
             // NOTIFY ME
             SUPPORT_UPDATED: {
               title: `{{ organisation }} has updated their support status to {{ supportStatus }} for innovation {{ innovation }}.`,
@@ -925,7 +933,7 @@ export const locale = {
               link: `View this section of the innovation record.`
             },
             DOCUMENT_UPLOADED: {
-              title: `A new document, titled {{ documentName }}, has been uplodaded to innovation {{ innovation }}.`,
+              title: `A new document, titled "{{ documentName }}", has been uploaded to innovation {{ innovationName }}.`,
               link: `View documents.`
             },
             REMINDER: {
@@ -1016,13 +1024,13 @@ export const locale = {
             RECEIVING_SUPPORT: {
               name: 'Receiving support',
               cssColorClass: 'nhsuk-tag--green',
-              description: 'At least one organisation unit is engaging with this organisation.'
+              description: 'At least one organisation unit is engaging or waiting to engage with this organisation.'
             },
             NO_ACTIVE_SUPPORT: {
               name: 'No active support',
               cssColorClass: 'nhsuk-tag--white',
               description:
-                'There are no organisation units engaging with this innovation right now. Their support statuses are either waiting, unsuitable or closed.'
+                'There are no organisation units engaging with this innovation right now. Their support statuses are either unsuitable or closed.'
             },
             AWAITING_NEEDS_REASSESSMENT: {
               name: 'Awaiting needs reassessment',

@@ -1,5 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
-  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <form [formGroup]="form">
         <theme-form-input [id]="'searchInnovation'" controlName="search" label="Search all innovations" [pageUniqueField]="false" placeholder="Search" width="one-third">
@@ -155,8 +154,8 @@
               <td *ngIf="innovationsList.getColumnLabel('support.status')" class="nhsuk-table__cell text-align-right">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
                 <theme-tag
-                  type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED' ) + '.cssColorClass' | translate }}"
-                  label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED' ) + '.name' | translate }}"
+                  type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.name' | translate }}"
                 ></theme-tag>
               </td>
 

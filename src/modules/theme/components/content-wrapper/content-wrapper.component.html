@@ -1,18 +1,24 @@
-<theme-spinner *ngIf="status === 'LOADING'" cssClass="nhsuk-u-margin-9"></theme-spinner>
-
-<div *ngIf="status === 'READY'" aria-live="polite">
-  <ng-content></ng-content>
-</div>
-
-<div *ngIf="status === 'ERROR'" aria-live="polite">
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
-      <p>It appears that something went wrong! Give us time while we investigate what happened that took you to here.</p>
-
-      <a href="/" class="nhsuk-action-link__link">
-        <theme-svg-icon type="arrow-right-circle" />
-        <span class="nhsuk-action-link__text">Go to home</span>
-      </a>
+@switch (status()) {
+  @case ("LOADING") {
+    <theme-spinner cssClass="nhsuk-u-margin-9"></theme-spinner>
+  }
+  @case ("READY") {
+    <div aria-live="polite">
+      <ng-content></ng-content>
     </div>
-  </div>
-</div>
+  }
+  @case ("ERROR") {
+    <div aria-live="polite">
+      <div class="nhsuk-grid-row">
+        <div class="nhsuk-grid-column-two-thirds">
+          <p>It appears that something went wrong! Give us time while we investigate what happened that took you to here.</p>
+
+          <a href="/" class="nhsuk-action-link__link">
+            <theme-svg-icon type="arrow-right-circle" />
+            <span class="nhsuk-action-link__text">Go to home</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  }
+}

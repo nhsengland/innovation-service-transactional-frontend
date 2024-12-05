@@ -5,8 +5,7 @@ import { finalize, map, take } from 'rxjs/operators';
 import { CoreService } from '@app/base';
 import { UrlModel } from '@app/base/models';
 
-import { SupportLogType } from '@modules/shared/services/innovations.dtos';
-import { InnovationSupportStatusEnum } from '@modules/stores/innovation';
+import { InnovationSupportStatusEnum } from '@modules/stores';
 import { DateISOType } from '@app/base/types';
 import { UserRoleEnum } from '@app/base/enums';
 
@@ -48,6 +47,11 @@ export type InnovationRecordUpdated = {
   };
 };
 
+export type DocumentUploaded = {
+  eventType: NotificationEnum.DOCUMENT_UPLOADED;
+  subscriptionType: 'INSTANTLY';
+};
+
 export type Reminder = {
   eventType: NotificationEnum.REMINDER;
   subscriptionType: 'SCHEDULED';
@@ -55,7 +59,12 @@ export type Reminder = {
   customMessage: string;
 };
 
-export type NotifyMeConfig = SupportUpdated | ProgressUpdateCreated | InnovationRecordUpdated | Reminder;
+export type NotifyMeConfig =
+  | SupportUpdated
+  | ProgressUpdateCreated
+  | InnovationRecordUpdated
+  | DocumentUploaded
+  | Reminder;
 
 export type SubscriptionConfigType<T extends EventType> = NotifyMeConfig & { eventType: T };
 type PreconditionsOptions<T extends EventType> = 'preConditions' extends keyof (NotifyMeConfig & {
@@ -135,6 +144,7 @@ export type NotifyMeResponseTypes = {
   SUPPORT_UPDATED: SupportUpdatedResponseDTO;
   PROGRESS_UPDATE_CREATED: ProgressUpdateCreatedResponseDTO;
   INNOVATION_RECORD_UPDATED: DefaultResponseDTO<NotificationEnum.INNOVATION_RECORD_UPDATED, 'sections'>;
+  DOCUMENT_UPLOADED: DefaultResponseDTO<NotificationEnum.DOCUMENT_UPLOADED, never>;
   REMINDER: DefaultResponseDTO<NotificationEnum.REMINDER, 'customMessage' | 'date'>;
 };
 

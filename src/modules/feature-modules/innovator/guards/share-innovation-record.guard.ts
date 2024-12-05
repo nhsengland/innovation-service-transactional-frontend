@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { InnovationStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
 @Injectable()
@@ -10,7 +9,7 @@ export class ShareInnovationRecordGuard {
   constructor(
     private router: Router,
     private innovationsService: InnovationsService,
-    private innovationStore: InnovationStore
+    private ctx: CtxStore
   ) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -18,7 +17,7 @@ export class ShareInnovationRecordGuard {
 
     return forkJoin([
       this.innovationsService.getInnovationInfo(innovationId),
-      this.innovationStore.getSectionsSummary$(innovationId)
+      this.ctx.innovation.getSectionsSummary$(innovationId)
     ]).pipe(
       map(([innovation, sections]) => {
         const allSectionsSubmitted = sections.reduce(

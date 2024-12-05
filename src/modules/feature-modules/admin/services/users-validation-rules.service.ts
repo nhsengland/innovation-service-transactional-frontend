@@ -90,12 +90,12 @@ export type getLockUserRulesInDTO = {
 export type getLockUserRulesOutDTO = {
   key: string;
   valid: boolean;
-  meta: { [key: string]: any };
+  meta: Record<string, any>;
 };
 export type getOrganisationRoleRulesOutDTO = {
   key: keyof getOrgnisationRoleRulesInDTO;
   valid: boolean;
-  meta: { [key: string]: any };
+  meta: Record<string, any>;
 };
 export type getOrgnisationRoleRulesInDTO = {
   lastAccessorUserOnOrganisationUnit: {

@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <p>You can create custom notifications for this innovation to alert you about updates or remind you to review it on a date in future.</p>
@@ -13,7 +13,7 @@
             <li>an organisation updates their support status</li>
             <li>an organisation adds a progress update to the support summary</li>
             <li>an innovator updates their innovation record</li>
-            <!--  <li>a new document is uploaded</li> -->
+            <li>a new document is uploaded</li>
           </ul>
           <p class="nhsuk-u-font-weight-bold nhsuk-u-margin-0">Remind me:</p>
           <ul class="nhsuk-list nhsuk-list--bullet nhsuk-u-margin-left-2">
@@ -61,7 +61,7 @@
           </div>
         </div>
 
-        <button class="nhsuk-button" routerLink="new" type="submit">Create custom notifications</button>
+        <button class="nhsuk-button" routerLink="new" type="submit">Create custom notification</button>
 
         <div *ngIf="subscriptionsList.length > 0" class="nhsuk-u-font-size-19">
           <a routerLink="delete">Delete notifications</a>

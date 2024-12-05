@@ -49,7 +49,7 @@ export class FormFileUploadDescriptiveComponent implements OnInit, DoCheck, OnDe
 
   hasError = false;
   hasUploadError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   private fieldChangeSubscription = new Subscription();
 

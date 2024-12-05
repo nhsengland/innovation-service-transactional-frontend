@@ -5,8 +5,7 @@ import { CoreComponent } from '@app/base';
 import { InnovationDescription, InnovationTaskInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'shared-pages-innovation-task-section-info',
@@ -24,14 +23,9 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
 
   taskNumber = 0;
 
-  userUrlBase: string = '';
+  userUrlBase = '';
 
   // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
-  isAdmin: boolean;
-  isArchived: boolean;
   canCancel = false;
   canReopen = false;
   canSendMessage = false;
@@ -50,19 +44,12 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.taskId = this.activatedRoute.snapshot.params.taskId;
 
     this.userUrlBase = this.userUrlBasePath();
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
-    this.isAdmin = this.stores.authentication.isAdminRole();
-    this.isArchived = this.ctx.innovation.isArchived();
   }
 
   ngOnInit(): void {
     const taskAction = this.activatedRoute.snapshot.queryParams?.action;
 
-    if (!(this.stores.context.getPreviousUrl() && taskAction)) {
+    if (!(this.ctx.layout.previousUrl() && taskAction)) {
       this.setBackLink('Go back');
     }
 
@@ -119,7 +106,7 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
     this.innovationsService.getTaskInfo(this.innovationId, this.taskId).subscribe(response => {
       this.task = response;
       this.task.descriptions = this.sortDescriptionsByDateDesc(this.task.descriptions);
-      const section = this.stores.schema.getIrSchemaSectionIdentificationV3(response.section);
+      const section = this.ctx.schema.getIrSchemaSectionIdentificationV3(response.section);
       this.sectionTitle = section
         ? `${section.group.number}.${section.section.number} ${section.section.title}`
         : 'Section no longer available';
@@ -136,19 +123,6 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
         );
       }
 
-      // Throw notification read dismiss.
-      if (this.isInnovatorType) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.TA01_TASK_CREATION_TO_INNOVATOR],
-          contextIds: [this.taskId]
-        });
-      } else if (this.stores.authentication.isAssessmentType() || this.stores.authentication.isAccessorType()) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.TA03_TASK_DONE_TO_ACCESSOR_OR_ASSESSMENT],
-          contextIds: [this.task.id]
-        });
-      }
-
       this.setAllowedActions();
 
       this.setPageStatus('READY');
@@ -158,21 +132,23 @@ export class PageInnovationTaskDetailsComponent extends CoreComponent implements
   private setAllowedActions() {
     this.canReopen =
       !!this.task &&
-      !this.isArchived &&
+      !this.ctx.innovation.isArchived() &&
       ['DONE', 'DECLINED'].includes(this.task.status) &&
       this.task.sameOrganisation &&
-      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      (this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
 
     this.canCancel =
       !!this.task &&
       this.task.status === 'OPEN' &&
       this.task.sameOrganisation &&
-      (this.isAssessmentType || (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      (this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
 
     this.canSendMessage =
-      !this.isArchived &&
-      (this.isInnovatorType ||
-        this.isAssessmentType ||
-        (this.isAccessorType && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
+      !this.ctx.innovation.isArchived() &&
+      (this.ctx.user.isInnovator() ||
+        this.ctx.user.isAssessment() ||
+        (this.ctx.user.isAccessorType() && this.innovation.status === InnovationStatusEnum.IN_PROGRESS));
   }
 }

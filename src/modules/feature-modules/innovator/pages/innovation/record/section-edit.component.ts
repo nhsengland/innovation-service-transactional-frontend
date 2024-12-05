@@ -4,7 +4,7 @@ import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { INNOVATION_SECTION_STATUS, InnovationStatusEnum } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
@@ -22,7 +22,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   @ViewChild(FormEngineV3Component) formEngineComponent?: FormEngineV3Component;
 
   alertErrorsList: { title: string; description: string }[] = [];
-  errorOnSubmitStep: boolean = false;
+  errorOnSubmitStep = false;
 
   innovation: ContextInnovationType;
   isArchived: boolean;
@@ -32,18 +32,15 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
   wizard: WizardIRV3EngineModel;
-  sectionStatus: keyof typeof INNOVATION_SECTION_STATUS = 'UNKNOWN';
+  sectionStatus = InnovationSectionStatusEnum.NOT_STARTED;
   saveButton = { isActive: true, label: 'Save and continue' };
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
-  isChangeMode: boolean = false;
+  isChangeMode = false;
 
-  sectionSubmittedText: string = '';
+  sectionSubmittedText = '';
 
   displayChangeButtonList: number[] = [];
-
-  // Flags
-  isInnovatorType: boolean;
 
   constructor(private activatedRoute: ActivatedRoute) {
     super();
@@ -52,16 +49,13 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
     this.baseUrl = `/innovator/innovations/${this.innovation.id}/record/sections/${this.sectionId}`;
 
-    this.sectionsIdsList = this.stores.schema.getIrSchemaSubSectionsIdsListV3();
-    this.sectionQuestionsIdList = this.stores.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
+    this.sectionsIdsList = this.ctx.schema.getSubSectionsIds();
+    this.sectionQuestionsIdList = this.ctx.schema.getIrSchemaSectionQuestionsIdsList(this.sectionId);
 
-    this.wizard = this.stores.innovation.getInnovationRecordSectionWizard(this.sectionId);
+    this.wizard = this.ctx.innovation.getInnovationRecordSectionWizard(this.sectionId);
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.ctx.innovation.isArchived();
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -72,7 +66,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const sectionIdentification = this.stores.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
     const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
 
@@ -84,7 +78,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       next: ([queryParams, params]) => {
         this.isChangeMode = queryParams.isChangeMode ?? false;
 
-        this.stores.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
+        this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
           next: sectionInfoResponse => {
             this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
             this.sectionStatus = sectionInfoResponse.status;
@@ -167,7 +161,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
       return;
     }
 
-    let currentStepIndex = this.wizard.currentStepId;
+    const currentStepIndex = this.wizard.currentStepId;
 
     if (typeof currentStepIndex === 'number') {
       if (action === 'previous') {
@@ -197,7 +191,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           .pipe(
             concatMap(() => {
               if (shouldUpdateInformation || this.errorOnSubmitStep) {
-                return this.stores.innovation.updateSectionInfo$(
+                return this.ctx.innovation.updateSectionInfo$(
                   this.innovation.id,
                   this.sectionId,
                   this.wizard.runOutboundParsing()
@@ -230,7 +224,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
               this.alertErrorsList = [];
               this.setAlertUnknownError();
               if (err.error === IRSchemaErrors.INNOVATION_RECORD_SCHEMA_VERSION_MISMATCH) {
-                this.stores.context.clearIrSchema();
+                this.ctx.schema.clear();
                 this.setAlertError('This section of the innovation record has been updated.', {
                   itemsList: [
                     {
@@ -251,7 +245,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
-    this.stores.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
+    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||

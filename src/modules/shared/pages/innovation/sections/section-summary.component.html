@@ -10,7 +10,7 @@
             </dt>
             <dd class="nhsuk-summary-list__value text-pre-wrap"></dd>
             <dd class="nhsuk-summary-list__actions">
-              <a href="javascript:void(0);" routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="isInnovatorType && firstItem">
+              <a href="javascript:void(0);" routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit" *ngIf="ctx.user.isInnovator() && firstItem">
                 Start <span class="nhsuk-u-visually-hidden"> section</span></a
               >
             </dd>
@@ -20,7 +20,7 @@
     </ng-container>
 
     <ng-container *ngIf="!sectionInfo.isNotStarted">
-      <ng-container *ngIf="(isAccessorType || isAssessmentType) && sectionInfo.status.id === 'DRAFT'">
+      <ng-container *ngIf="ctx.user.isAccessorOrAssessment() && sectionInfo.status.id === 'DRAFT'">
         <div *ngIf="innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>This is the last submitted version of this section. You cannot see any updates the innovator makes to the section, while it is in draft.</p>
@@ -35,7 +35,7 @@
           <ng-container *ngFor="let item of summaryList; index as i" class="nhsuk-summary-list__row">
             <ng-container [ngSwitch]="item.type">
               <ng-container *ngSwitchCase="'button'">
-                <div *ngIf="isInnovatorType" class="width-max-content">
+                <div *ngIf="ctx.user.isInnovator()" class="width-max-content">
                   <dt class="nhsuk-u-margin-top-5">
                     <a routerLink="edit/{{ item.editStepNumber }}" class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-0">{{ item.label | irv3translate: "questions" }}</a>
                   </dt>
@@ -53,7 +53,7 @@
                       href="javascript:void(0);"
                       routerLink="/{{ baseUrl }}/record/sections/{{ sectionInfo.id }}/edit/{{ item.editStepNumber }}"
                       [queryParams]="!item.value && !item.isNotMandatory ? {} : { isChangeMode: true }"
-                      *ngIf="isInnovatorType && item.editStepNumber && displayChangeButtonList.includes(i)"
+                      *ngIf="ctx.user.isInnovator() && item.editStepNumber && displayChangeButtonList.includes(i)"
                     >
                       Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
                     </a>

@@ -8,13 +8,13 @@ import { of, throwError } from 'rxjs';
 import { SERVER_REQUEST, SERVER_RESPONSE } from '@tests/app.mocks';
 
 import { CoreModule } from '@modules/core';
-import { AuthenticationStore, StoresModule } from '@modules/stores';
+import { CtxStore, StoresModule } from '@modules/stores';
 
 import { ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot } from '@angular/router';
 import { AuthenticationGuard } from './authentication.guard';
 
 describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let guard: AuthenticationGuard;
 
@@ -30,7 +30,7 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
       ]
     });
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
 
     guard = TestBed.inject(AuthenticationGuard);
 
@@ -42,7 +42,7 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
-    authenticationStore.initializeAuthentication$ = () => throwError('error');
+    ctx.user.initializeAuthentication$ = () => throwError('error');
 
     guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
       expected = response;
@@ -53,7 +53,7 @@ describe('Core/Guards/AuthenticationGuard running SERVER side', () => {
 });
 
 describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
-  let authenticationStore: AuthenticationStore;
+  let ctx: CtxStore;
 
   let guard: AuthenticationGuard;
 
@@ -65,7 +65,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
       providers: [{ provide: PLATFORM_ID, useValue: 'browser' }]
     });
 
-    authenticationStore = TestBed.inject(AuthenticationStore);
+    ctx = TestBed.inject(CtxStore);
 
     guard = TestBed.inject(AuthenticationGuard);
 
@@ -77,7 +77,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
 
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
-    authenticationStore.initializeAuthentication$ = () => of(true);
+    ctx.user.initializeAuthentication$ = () => of(true);
 
     guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
       expected = response;
@@ -93,7 +93,7 @@ describe('Core/Guards/AuthenticationGuard running CLIENT side', () => {
 
     const activatedRouteSnapshotMock: Partial<ActivatedRouteSnapshot> = {};
 
-    authenticationStore.initializeAuthentication$ = () => throwError('error');
+    ctx.user.initializeAuthentication$ = () => throwError('error');
     guard.canActivate(activatedRouteSnapshotMock as any, routerStateSnapshopMock as any).subscribe(response => {
       expected = response;
     });

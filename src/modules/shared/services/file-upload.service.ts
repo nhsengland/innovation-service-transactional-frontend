@@ -10,7 +10,7 @@ export class FileUploadService extends CoreService {
     super();
   }
 
-  uploadFile(httpUploadBody: { [key: string]: string }, file: File): Observable<FileUploadType> {
+  uploadFile(httpUploadBody: Record<string, string>, file: File): Observable<FileUploadType> {
     const httpUploadUrl = new UrlModel(this.APP_URL).addPath('upload-file').buildUrl();
 
     const formData = new FormData();

@@ -32,13 +32,13 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
     rolesDescription: []
   };
 
-  canAddRole: boolean = false;
-  userHasActiveRoles: boolean = false;
-  userHasInactiveRoles: boolean = false;
+  canAddRole = false;
+  userHasActiveRoles = false;
+  userHasInactiveRoles = false;
 
-  accessorRolesCount: number = 0;
-  hasActiveAccessorRole: boolean = false;
-  isActiveQualifyingAccessor: boolean = false;
+  accessorRolesCount = 0;
+  hasActiveAccessorRole = false;
+  isActiveQualifyingAccessor = false;
 
   action: { label: string; url: string } = { label: '', url: '' };
 
@@ -84,7 +84,7 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
           this.user = {
             ...userInfo,
             rolesDescription: userInfo.roles.map(r => {
-              let roleDescription = this.stores.authentication.getRoleDescription(r.role);
+              let roleDescription = this.ctx.user.getRoleDescription(r.role);
               if (r.displayTeam) {
                 roleDescription += ` (${r.displayTeam})`;
               }

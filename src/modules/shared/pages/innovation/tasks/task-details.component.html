@@ -1,4 +1,4 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row" *ngIf="task">
     <div class="nhsuk-grid-column-two-thirds">
       <dl class="nhsuk-summary-list">
@@ -9,11 +9,7 @@
               type="{{ 'shared.catalog.innovation.task_status.' + task.status + '.cssColorClass' | translate }}"
               label="{{ 'shared.catalog.innovation.task_status.' + task.status + '.name' | translate }}"
             ></theme-tag>
-            <a
-              routerLink="/{{ stores.authentication.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses"
-              class="float-r"
-              arial-label="View task status keys information"
-            >
+            <a routerLink="/{{ ctx.user.userUrlBasePath() }}/innovations/{{ innovationId }}/tasks/statuses" class="float-r" arial-label="View task status keys information">
               What does this mean?
             </a>
           </dd>
@@ -63,16 +59,16 @@
       <ng-container *ngIf="sectionId && tasksIds.length > 1">
         <nav class="nhsuk-pagination nhsuk-u-margin-top-3" role="navigation" aria-label="Pagination">
           <ul class="nhsuk-list nhsuk-pagination__list">
-            <li class="nhsuk-pagination-item--previous" *ngIf="taskNumber > 0">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="handlePagination('previous')">
+            <li class="nhsuk-pagination-item--previous" *ngIf="taskNumber > 0" href="javascript:void(0)">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev cursor-pointer" (click)="handlePagination('previous')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Previous</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">Requested task</span>
                 <theme-svg-icon type="arrow-left" />
               </a>
             </li>
-            <li class="nhsuk-pagination-item--next" *ngIf="taskNumber < tasksIds.length - 1">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="handlePagination('next')">
+            <li class="nhsuk-pagination-item--next" *ngIf="taskNumber < tasksIds.length - 1" href="javascript:void(0)">
+              <a class="nhsuk-pagination__link nhsuk-pagination__link--next cursor-pointer" (click)="handlePagination('next')" href="javascript:void(0)">
                 <span class="nhsuk-pagination__title">Next</span>
                 <span class="nhsuk-u-visually-hidden">:</span>
                 <span class="nhsuk-pagination__page">Requested task</span>
@@ -84,11 +80,11 @@
       </ng-container>
     </div>
 
-    <div class="nhsuk-grid-column-one-third" *ngIf="!isAdmin">
+    <div class="nhsuk-grid-column-one-third" *ngIf="!ctx.user.isAdmin()">
       <div class="nhsuk-card x-card-top-border">
         <div class="nhsuk-card__content">
           <h2 class="nhsuk-card__heading nhsuk-heading-m">What you can do</h2>
-          <ng-container *ngIf="isInnovatorType">
+          <ng-container *ngIf="ctx.user.isInnovator()">
             <ul class="nhsuk-list">
               <li>
                 <a
@@ -114,13 +110,13 @@
               <li *ngIf="task.status === 'OPEN'">
                 <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to complete this task</a>
               </li>
-              <li *ngIf="!isArchived && task.status !== 'OPEN'">
+              <li *ngIf="!ctx.innovation.isArchived() && task.status !== 'OPEN'">
                 <a routerLink="/innovator/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
               </li>
             </ul>
           </ng-container>
 
-          <ng-container *ngIf="isAccessorType || isAssessmentType">
+          <ng-container *ngIf="ctx.user.isAccessorType() || ctx.user.isAssessment()">
             <ul class="nhsuk-list">
               <li>
                 <a
@@ -145,7 +141,7 @@
                   >View messages about this task<ng-container *ngIf="canSendMessage"> and send a reply</ng-container></a
                 >
               </li>
-              <li *ngIf="!isArchived && task.status === 'DONE'">
+              <li *ngIf="!ctx.innovation.isArchived() && task.status === 'DONE'">
                 <a routerLink="/{{ userUrlBase }}/innovations/{{ innovationId }}/record/sections/{{ task.section }}">Go to section to review</a>
               </li>
             </ul>

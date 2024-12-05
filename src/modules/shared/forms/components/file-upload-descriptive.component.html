@@ -33,7 +33,9 @@
   <ng-container *ngIf="fieldControl[0].value && fieldControl[0].valid">
     <hr class="nhsuk-section-break nhsuk-section-break--visible" />
 
-    <div id="file-uploaded" class="nhsuk-label nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0" aria-label="File uploaded" role="heading" tabindex="0">Uploaded file</div>
+    <div id="file-uploaded" class="nhsuk-label nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-0" aria-label="File uploaded" role="heading" aria-level="2" tabindex="0">
+      Uploaded file
+    </div>
 
     <div class="d-flex align-items-center justify-content-space-between">
       <a href="javascript:void(0)" class="nhsuk-u-font-size-19" (click)="downloadFile(fieldControl[0].value)"> {{ fieldControl[0].value.name }} </a>

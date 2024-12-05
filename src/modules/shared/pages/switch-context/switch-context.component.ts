@@ -5,8 +5,6 @@ import { Component } from '@angular/core';
 import { CoreComponent } from '@app/base';
 import { UserRoleEnum } from '@app/base/enums';
 
-import { AuthenticationStore } from '@modules/stores';
-
 @Component({
   selector: 'shared-pages-switch-context',
   templateUrl: './switch-context.component.html'
@@ -25,28 +23,28 @@ export class PageSwitchContextComponent extends CoreComponent {
     }[];
   };
 
-  constructor(private authenticationStore: AuthenticationStore) {
+  constructor() {
     super();
 
-    const currentUserContext = this.authenticationStore.getUserContextInfo();
+    const currentUserContext = this.ctx.user.getUserContext();
 
     if (!currentUserContext) {
       this.currentRole = null;
     } else {
       this.currentRole = {
         id: currentUserContext.roleId,
-        description: `${this.authenticationStore.getRoleDescription(currentUserContext.type)}${
-          this.authenticationStore.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''
+        description: `${this.ctx.user.getRoleDescription(currentUserContext.type)}${
+          this.ctx.user.isAccessorType() ? ` (${currentUserContext.organisationUnit?.name.trimEnd()})` : ''
         }`
       };
     }
 
-    const user = this.authenticationStore.getUserInfo();
+    const user = this.ctx.user.getUserInfo();
 
     this.user = {
       id: user.id,
       roles: sortBy(user.roles, ['organisation', 'organisationUnit']).map(role => {
-        let label = `${this.authenticationStore.getRoleDescription(role.role)}${
+        let label = `${this.ctx.user.getRoleDescription(role.role)}${
           role.organisationUnit
             ? ` (${this.displayNameOrAcronym(role.organisationUnit.name, role.organisationUnit.acronym)})`
             : ''
@@ -80,7 +78,7 @@ export class PageSwitchContextComponent extends CoreComponent {
     if (this.currentRole?.id !== role.id) {
       sessionStorage.clear();
 
-      this.authenticationStore.setUserContext({
+      this.ctx.user.setUserContext({
         id: this.user.id,
         roleId: role.id,
         type: role.type,
@@ -88,22 +86,22 @@ export class PageSwitchContextComponent extends CoreComponent {
         organisationUnit: role.organisationUnit
       });
 
-      const roleDescription = `${this.authenticationStore.getRoleDescription(role.type).toLowerCase()}${
+      const roleDescription = `${this.ctx.user.getRoleDescription(role.type).toLowerCase()}${
         role.organisationUnit ? `, ${role.organisationUnit.name}` : ''
       }`;
       this.setRedirectAlertSuccess(`You are now logged in as ${roleDescription}`);
 
-      this.stores.authentication.initializeAuthentication$().subscribe(() => {
-        if (this.stores.authentication.hasAnnouncements()) {
+      this.ctx.user.initializeAuthentication$().subscribe(() => {
+        if (this.ctx.user.hasAnnouncements()) {
           this.redirectTo('announcements');
         }
-        this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
+        this.redirectTo(`${this.ctx.user.userUrlBasePath()}/dashboard`);
       });
 
       return;
     }
 
-    this.redirectTo(`${this.authenticationStore.userUrlBasePath()}/dashboard`);
+    this.redirectTo(`${this.ctx.user.userUrlBasePath()}/dashboard`);
   }
 
   displayNameOrAcronym(name: string, acronym: string): string {

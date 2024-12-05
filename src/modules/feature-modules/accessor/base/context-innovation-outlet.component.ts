@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { UtilsHelper } from '@app/base/helpers';
-import { InnovationStatusEnum } from '@modules/stores/innovation/innovation.enums';
-import { CtxStore } from '@modules/stores';
+import { CtxStore, InnovationStatusEnum } from '@modules/stores';
 
 @Component({
   selector: 'app-base-context-innovation-outlet',

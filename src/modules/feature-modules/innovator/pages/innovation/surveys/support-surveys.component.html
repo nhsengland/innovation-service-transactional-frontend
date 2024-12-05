@@ -1,0 +1,20 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      @if (radioButtonInfo(); as info) {
+        @if (info.items.length) {
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <theme-form-radio-group id="survey" controlName="survey" [label]="info.label" [description]="info.description" [items]="info.items" [pageUniqueField]="true" />
+            <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3">Continue</button>
+
+            <div>
+              <a [routerLink]="baseUrl">Cancel</a>
+            </div>
+          </form>
+        } @else {
+          <button class="nhsuk-button" [routerLink]="baseUrl">Go to innovation</button>
+        }
+      }
+    </div>
+  </div>
+</theme-content-wrapper>

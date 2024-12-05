@@ -20,8 +20,7 @@ import {
 } from '@angular/forms';
 import { SelectComponentEmitType } from '@modules/shared/forms/components/select.component';
 import { CustomValidators } from '@modules/shared/forms/validators/custom-validators';
-import { ContextStore, InnovationRecordSchemaStore } from '@modules/stores';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { CtxStore } from '@modules/stores';
 import { SelectComponentInputType } from '@modules/theme/components/search/select.component';
 
 export type announcementInnovationFiltersItem = {
@@ -55,11 +54,10 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
 
   @Output() removedFilter = new EventEmitter<number>();
 
-  canAddAnswerField: boolean = true;
-  schema: InnovationRecordSchemaInfoType;
+  canAddAnswerField = true;
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   sectionsList: { selectList: SelectComponentInputType[]; defaultKey?: string } = { selectList: [] };
   questionsList: { selectList: SelectComponentInputType[]; defaultKey?: string } = { selectList: [] };
@@ -97,15 +95,11 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   constructor(
     private injector: Injector,
     private cdr: ChangeDetectorRef,
-    private contextStore: ContextStore,
-    private schemaStore: InnovationRecordSchemaStore
+    private ctx: CtxStore
   ) {
-    this.schema = this.contextStore.getIrSchema();
     this.sectionsList.selectList = [
       { key: undefined, text: 'Select section' },
-      ...this.schemaStore
-        .getIrSchemaSubSectionsIdsListV3()
-        .map(section => ({ key: section, text: this.formatSectionLabel(section) }))
+      ...this.ctx.schema.getSubSectionsIds().map(section => ({ key: section, text: this.formatSectionLabel(section) }))
     ];
   }
 
@@ -141,7 +135,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       this.addAnswerField();
     } else {
       // Add one for each existing filter
-      this.previousData.answers.forEach(a => {
+      this.previousData.answers.forEach(() => {
         const newAnswerControl = new FormControl<string | undefined>(undefined);
         newAnswerControl.setValidators(CustomValidators.required('Select an answer'));
         newAnswerControl.updateValueAndValidity();
@@ -190,7 +184,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   }
 
   formatSectionLabel(sectionId: string) {
-    const sectionIdentification = this.schemaStore.getIrSchemaSectionIdentificationV3(sectionId);
+    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(sectionId);
     return `Section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} - ${sectionIdentification?.section.title}`;
   }
 
@@ -199,8 +193,8 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       defaultKey: this.sectionFormControl.value,
       selectList: [
         { key: undefined, text: 'Select section', disabled: true },
-        ...this.schemaStore
-          .getIrSchemaSubSectionsIdsListV3()
+        ...this.ctx.schema
+          .getSubSectionsIds()
           .map(section => ({ key: section, text: this.formatSectionLabel(section) }))
       ]
     };
@@ -211,7 +205,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       defaultKey: this.questionFormControl.value,
       selectList: [
         { key: undefined, text: 'Select question', disabled: true },
-        ...this.schemaStore
+        ...this.ctx.schema
           .getIrSchemaSectionQuestions(sectionId)
           .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
           .filter(q => !['mainCategory'].includes(q.id))
@@ -228,7 +222,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       defaultKey: this.answersFormArrayControl.value[answerIndex],
       selectList: [
         { key: undefined, text: 'Select answer', disabled: true },
-        ...(this.schemaStore
+        ...(this.ctx.schema
           .getIrSchemaSectionQuestions(this.sectionFormControl.value)
           .find(q => q.id === questionId)
           ?.items?.filter(i => i.id && i.label && !i.itemsFromAnswer)

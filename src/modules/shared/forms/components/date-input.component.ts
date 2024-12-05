@@ -46,7 +46,7 @@ export class FormDateInputComponent implements OnInit, DoCheck, OnDestroy {
   private fieldChangeSubscription = new Subscription();
 
   hasError = false;
-  error: { message: string; params: { [key: string]: string } } = { message: '', params: {} };
+  error: { message: string; params: Record<string, string> } = { message: '', params: {} };
 
   inputCssClass = '';
   divCssOverride = '';

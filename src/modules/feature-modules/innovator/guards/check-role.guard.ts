@@ -1,14 +1,14 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { UserRoleEnum } from '@app/base/enums';
-import { AuthenticationStore } from '@modules/stores';
+import { CtxStore } from '@modules/stores';
 
 export function checkRoleGuard(roles: UserRoleEnum[]): CanActivateFn {
   return () => {
     const router: Router = inject(Router);
-    const authenticationStore: AuthenticationStore = inject(AuthenticationStore);
+    const ctx: CtxStore = inject(CtxStore);
 
-    const userType: UserRoleEnum | undefined = authenticationStore.getUserType();
+    const userType: UserRoleEnum | undefined = ctx.user.getUserType();
 
     if (userType !== undefined && roles.includes(userType)) {
       return true;

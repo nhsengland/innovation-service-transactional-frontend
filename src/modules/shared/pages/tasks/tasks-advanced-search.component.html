@@ -1,7 +1,11 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full nhsuk-u-margin-bottom-3">
-      <p>{{ pageInformation.leadText }}</p>
+      @if (ctx.user.isAssessment()) {
+        <p>Tasks assigned by needs assessment team</p>
+      } @else {
+        <p>Tasks assigned by {{ ctx.user.getAccessorUnitName() }}</p>
+      }
     </div>
 
     <div class="nhsuk-grid-column-one-half" *ngIf="filtersModel && filtersModel.search as search">

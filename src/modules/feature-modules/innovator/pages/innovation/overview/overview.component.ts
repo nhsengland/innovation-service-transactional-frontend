@@ -5,12 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { DateISOType, StatisticsCardType } from '@app/base/types';
 
-import { NotificationContextDetailEnum } from '@modules/stores/context/context.enums';
-import {
-  InnovationGroupedStatusEnum,
-  InnovationStatusEnum,
-  InnovationSupportStatusEnum
-} from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
@@ -31,10 +26,13 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     groupedStatus: InnovationGroupedStatusEnum;
     engagingOrganisationsCount: number;
     statusUpdatedAt: null | DateISOType;
-    lastEndSupportAt: null | DateISOType;
+    daysSinceNoActiveSupport?: number;
   } = null;
 
-  isArchived: boolean = false;
+  isArchived = false;
+
+  showNextStepsBanner = false;
+  showNoSupportBanner = false;
 
   cardsList: StatisticsCardType[] = [];
 
@@ -64,7 +62,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         statistics: [
           InnovationStatisticsEnum.TASKS_OPEN_COUNTER,
           InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER,
-          InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER
+          InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER,
+          InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER
         ]
       }),
       this.innovationsService.getInnovationSubmission(this.innovationId)
@@ -85,10 +84,15 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         groupedStatus: innovationInfo.groupedStatus,
         engagingOrganisationsCount: engagingOrganisationsCount,
         statusUpdatedAt: innovationInfo.statusUpdatedAt,
-        lastEndSupportAt: innovationInfo.lastEndSupportAt
+        daysSinceNoActiveSupport: innovationInfo.daysSinceNoActiveSupport
       };
 
       this.isArchived = this.innovation.status === 'ARCHIVED';
+
+      if (this.innovation.status === 'IN_PROGRESS' && typeof innovationInfo.daysSinceNoActiveSupport === 'number') {
+        this.showNextStepsBanner = innovationInfo.daysSinceNoActiveSupport <= 6;
+        this.showNoSupportBanner = innovationInfo.daysSinceNoActiveSupport > 6;
+      }
 
       this.isSubmitted = {
         submittedAllSections: submit.submittedAllSections,
@@ -137,33 +141,17 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         }
       ];
 
+      if (statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count) {
+        this.cardsList.unshift({
+          title: 'Give us your feedback',
+          label: 'organisations needing feedback',
+          link: `/innovator/innovations/${this.innovationId}/surveys`,
+          count: statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count
+        });
+      }
+
       if (this.innovation.groupedStatus === 'RECORD_NOT_SHARED') {
         this.cardsList = this.cardsList.filter(i => i.title !== 'Actions requested');
-      }
-
-      // Throw notification read dismiss.
-      if (this.innovation.status === 'IN_PROGRESS' && this.innovation.lastEndSupportAt) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [NotificationContextDetailEnum.AU03_INNOVATOR_IDLE_SUPPORT]
-        });
-      }
-
-      if (this.innovation.loggedUser.isOwner && this.isArchived) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.SH04_INNOVATION_STOPPED_SHARING_WITH_INDIVIDUAL_ORG_TO_OWNER,
-            NotificationContextDetailEnum.AI01_INNOVATION_ARCHIVED_TO_SELF
-          ]
-        });
-      }
-
-      if (!this.innovation.loggedUser.isOwner) {
-        this.stores.context.dismissNotification(this.innovationId, {
-          contextDetails: [
-            NotificationContextDetailEnum.DA01_OWNER_DELETED_ACCOUNT_WITH_PENDING_TRANSFER_TO_COLLABORATOR,
-            NotificationContextDetailEnum.AI02_INNOVATION_ARCHIVED_TO_COLLABORATORS
-          ]
-        });
       }
 
       this.setPageStatus('READY');

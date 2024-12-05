@@ -1,9 +1,9 @@
-<theme-content-wrapper [status]="pageStatus">
+<theme-content-wrapper [status]="pageStatus()">
   <p class="nhsuk-heading-m">Email notification preferences by category</p>
 
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div *ngIf="hasMultipleRoles && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
+      <div *ngIf="ctx.user.hasMultipleRoles() && currentRole" class="nhsuk-inset-text nhsuk-u-margin-0 nhsuk-u-margin-bottom-5">
         <p>If you update your email preferences they will only apply to the profile you are logged in with.</p>
         <p>You are logged in as {{ this.displayName }}, {{ currentRole.description }}.</p>
       </div>

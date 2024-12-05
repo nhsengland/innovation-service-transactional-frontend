@@ -7,12 +7,12 @@ import { CoreComponent } from '@app/base';
 import { DatesHelper } from '@app/base/helpers';
 import { TableModel } from '@app/base/models';
 
-import { InnovationGroupedStatusEnum } from '@modules/stores/innovation/innovation.enums';
+import { InnovationGroupedStatusEnum } from '@modules/stores';
 
 import { DateISOType, NotificationValueType } from '@app/base/types';
 import { InnovationsListFiltersType } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/innovation/innovation.models';
+import { ASSESSMENT_COMPLETED_STATUSES } from '@modules/stores/ctx/innovation/innovation.models';
 
 export enum InnovationAssessmentStatusEnum {
   WAITING_NEEDS_ASSESSMENT = 'WAITING_NEEDS_ASSESSMENT',
@@ -41,7 +41,7 @@ type TabType = {
   templateUrl: './innovations-list.component.html'
 })
 export class InnovationsListComponent extends CoreComponent implements OnInit {
-  defaultStatus: 'ALL' = 'ALL';
+  defaultStatus = 'ALL' as const;
   tabs: TabType[] = [];
   currentTab: TabType;
 
@@ -349,7 +349,7 @@ export class InnovationsListComponent extends CoreComponent implements OnInit {
       return 'EXEMPT' as const;
     }
 
-    // Only the reassessments requests from the innovator counts for KPIs.
+    // Only the (re)assessments requests from the innovator counts for KPIs. (minor versions = 0)
     if (needsKPIVerification) {
       const daysFromSubmittedAtToToday = this.getOverdueDays(isExempted, submittedAt, needsKPIVerification) ?? 0;
       return daysFromSubmittedAtToToday >= 15

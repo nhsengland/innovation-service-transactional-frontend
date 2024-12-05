@@ -1,22 +1,6 @@
 // Module.
 export { StoresModule } from './stores.module';
 
-// // Authentication Store.
-export { AuthenticationStore } from './authentication/authentication.store';
-export { AuthenticationService } from './authentication/authentication.service';
-
-// // Context Store.
-export { ContextStore } from './context/context.store';
-export { ContextService } from './context/context.service';
-
-// // Innovation Store.
-export { InnovationStore } from './innovation/innovation.store';
-export { InnovationService } from './innovation/innovation.service';
-
-// // IR Schema Store.
-export { InnovationRecordSchemaStore } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.store';
-export { InnovationRecordSchemaService } from './innovation/innovation-record/innovation-record-schema/innovation-record-schema.service';
-
 // Ctx
 export { CtxStore } from './ctx/ctx.store';
 // // Assessment
@@ -27,3 +11,18 @@ export { ContextAssessmentType } from './ctx/assessment/assessment-context.types
 export { InnovationContextService } from './ctx/innovation/innovation-context.service';
 export { InnovationContextStore } from './ctx/innovation/innovation-context.store';
 export { ContextInnovationType } from './ctx/innovation/innovation-context.types';
+export * from './ctx/innovation/innovation.enums';
+// // Schema
+export { SchemaContextStore } from './ctx/schema/schema.store';
+export { SchemaContextService } from './ctx/schema/schema.service';
+export { ContextSchemaType } from './ctx/schema/schema.types';
+// // Layout
+export { LayoutContextStore } from './ctx/layout/layout.store';
+export { ContextLayoutType } from './ctx/layout/layout.types';
+// // Notifications
+export { NotificationsContextStore } from './ctx/notifications/notifications.store';
+export { NotificationsContextService } from './ctx/notifications/notifications.service';
+// // User
+export { UserContextStore } from './ctx/user/user.store';
+export { UserContextService } from './ctx/user/user.service';
+export * from './ctx/user/user.types';

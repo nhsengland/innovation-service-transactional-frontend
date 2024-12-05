@@ -5,7 +5,7 @@ import {
   AllSectionsOutboundPayloadType,
   getAllSectionsSummaryV3
 } from '@modules/stores/innovation/innovation-record/ir-versions.config';
-import { sectionType } from '@modules/stores/innovation/innovation.models';
+import { sectionType } from '@modules/stores/ctx/innovation/innovation.models';
 
 import { ENVIRONMENT } from '../../config/constants.config';
 
@@ -16,7 +16,7 @@ import {
   PDFGeneratorSectionsNotFoundError
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationRecordSchemaInfoType } from '@modules/stores/innovation/innovation-record/innovation-record-schema/innovation-record-schema.models';
+import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
 
 export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;
@@ -64,7 +64,7 @@ export const getIRDocumentExportData = (
   allSectionsData: AllSectionsOutboundPayloadType,
   companyInfo?: { name: string; size: null | string; registrationNumber: null | string }
 ): InnovationRecordDocumentExportDataType => {
-  let sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
+  const sectionDataWithCompany: InnovationRecordDocumentExportDataType = {
     sections: allSectionsData,
     startSectionIndex: companyInfo ? 0 : 1
   };

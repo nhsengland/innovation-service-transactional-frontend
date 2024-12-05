@@ -5,7 +5,7 @@ import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
 import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { INNOVATION_SECTION_STATUS } from '@modules/stores/innovation';
+import { InnovationSectionStatusEnum } from '@modules/stores';
 import { SectionInfoType } from './section-info.component';
 import {
   EvidenceV3Type,
@@ -36,10 +36,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   sectionInfo: Partial<SectionInfoType> & {
     id: string;
     openTasksCount: number;
-    status: {
-      id: keyof typeof INNOVATION_SECTION_STATUS;
-      label: string;
-    };
+    status: { id: InnovationSectionStatusEnum; label: string };
   };
   summaryList: WizardSummaryV3Type[] = [];
   evidencesList: EvidenceV3Type[] = [];
@@ -47,7 +44,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   allSteps: SectionStepsList = [];
 
-  sectionSubmittedText: string = '';
+  sectionSubmittedText = '';
 
   baseUrl: string;
   isSectionDetailsPage: string | undefined;
@@ -55,11 +52,6 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
   innovation: ContextInnovationType;
 
   displayChangeButtonList: number[] = [];
-
-  // Flags
-  isInnovatorType: boolean;
-  isAccessorType: boolean;
-  isAssessmentType: boolean;
 
   search?: string;
 
@@ -73,15 +65,10 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
     this.sectionInfo = {
       id: '',
       openTasksCount: 0,
-      status: { id: 'UNKNOWN', label: '' }
+      status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' }
     };
 
-    this.baseUrl = `${this.stores.authentication.userUrlBasePath()}/innovations/${this.innovation.id}`;
-
-    // Flags
-    this.isInnovatorType = this.stores.authentication.isInnovatorType();
-    this.isAccessorType = this.stores.authentication.isAccessorType();
-    this.isAssessmentType = this.stores.authentication.isAssessmentType();
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
   }
 
   ngOnInit(): void {
@@ -99,7 +86,7 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
       }
     }
 
-    this.allSteps = this.stores.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
+    this.allSteps = this.ctx.schema.getIrSchemaSectionAllStepsList(this.sectionInfo.id);
 
     this.setPageStatus('READY');
   }

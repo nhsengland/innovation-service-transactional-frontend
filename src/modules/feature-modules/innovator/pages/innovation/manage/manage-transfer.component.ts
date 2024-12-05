@@ -19,8 +19,8 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
   innovationId: string;
-  stayAsCollaborator: boolean = false;
-  redirectToDeleteAccount: boolean = false;
+  stayAsCollaborator = false;
+  redirectToDeleteAccount = false;
 
   wizard: WizardEngineModel = new WizardEngineModel({});
   summaryList: WizardSummaryType[] = [];
@@ -50,11 +50,11 @@ export class PageInnovationManageTransferComponent extends CoreComponent impleme
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
-    this.redirectToDeleteAccount = this.stores.context.getPreviousUrl()?.includes('/manage-account/delete') ?? false;
+    this.redirectToDeleteAccount = this.ctx.layout.previousUrl()?.includes('/manage-account/delete') ?? false;
   }
 
   ngOnInit(): void {
-    const myEmail = this.stores.authentication.getUserInfo().email;
+    const myEmail = this.ctx.user.getUserInfo().email;
     this.wizard = cloneDeep(NO_COLLABORATORS_TRANSFERS(myEmail));
 
     this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']).subscribe(response => {

@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { AccessorOrganisationRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
+import { TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
@@ -15,7 +15,7 @@ export type changeUserTypeDTO = {
 
 export type changeUserRoleDTO = {
   role: {
-    name: AccessorOrganisationRoleEnum;
+    name: UserRoleEnum.ACCESSOR | UserRoleEnum.QUALIFYING_ACCESSOR;
     organisationId: string;
   };
 };
@@ -62,7 +62,7 @@ export class AdminUsersService extends CoreService {
     super();
   }
 
-  createUser(body: { [key: string]: any }): Observable<{ id: string }> {
+  createUser(body: Record<string, any>): Observable<{ id: string }> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),
@@ -153,7 +153,7 @@ export class AdminUsersService extends CoreService {
     );
   }
 
-  createVersion(body: { [key: string]: any }): Observable<{ id: string }> {
+  createVersion(body: Record<string, any>): Observable<{ id: string }> {
     const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/tou');
     return this.http.post<{ id: string }>(url.buildUrl(), body).pipe(
       take(1),

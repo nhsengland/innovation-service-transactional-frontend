@@ -3,8 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { Subscription, filter } from 'rxjs';
 
 import { ViewportScroller } from '@angular/common';
-import { CtxStore, InnovationRecordSchemaStore } from '@modules/stores';
-import { InnovationStatusEnum } from '@modules/stores/innovation';
+import { CtxStore } from '@modules/stores';
 
 @Component({
   selector: 'app-base-sidebar-innovation-menu-outlet',
@@ -14,9 +13,9 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   sidebarItems: { label: string; url: string; children?: { label: string; url: string; id?: string }[] }[] = [];
-  navHeading: string = 'Innovation Record sections';
-  showHeading: boolean = false;
-  isAllSectionsDetailsPage: boolean = false;
+  navHeading = 'Innovation Record sections';
+  showHeading = false;
+  isAllSectionsDetailsPage = false;
 
   private sectionsSidebar: { label: string; url: string; children?: { label: string; id: string; url: string }[] }[] =
     [];
@@ -25,8 +24,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private ctx: CtxStore,
-    private scroller: ViewportScroller,
-    private irSchemaStore: InnovationRecordSchemaStore
+    private scroller: ViewportScroller
   ) {
     this.subscriptions.add(
       this.router.events
@@ -49,14 +47,13 @@ export class SidebarInnovationMenuOutletComponent implements OnInit, OnDestroy {
     if (this.sidebarItems.length === 0) {
       const innovation = this.ctx.innovation.info();
 
-      this.sectionsSidebar = this.irSchemaStore.getIrSchemaSectionsTreeV3('innovator', innovation.id);
+      this.sectionsSidebar = this.ctx.schema.getIrSchemaSectionsTreeV3('innovator', innovation.id);
       this._sidebarItems = [
         { label: 'Overview', url: `/innovator/innovations/${innovation.id}/overview` },
         { label: 'Innovation record', url: `/innovator/innovations/${innovation.id}/record` },
         { label: 'Tasks to do', url: `/innovator/innovations/${innovation.id}/tasks` },
         { label: 'Messages', url: `/innovator/innovations/${innovation.id}/threads` },
-        ...(innovation.status !== InnovationStatusEnum.CREATED &&
-        innovation.archivedStatus !== InnovationStatusEnum.CREATED
+        ...(innovation.submittedAt
           ? [{ label: 'Documents', url: `/innovator/innovations/${innovation.id}/documents` }]
           : []),
         ...(innovation.hasBeenAssessed
