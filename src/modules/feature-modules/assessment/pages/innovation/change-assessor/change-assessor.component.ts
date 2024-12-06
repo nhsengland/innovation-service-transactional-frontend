@@ -40,7 +40,7 @@ export class InnovationChangeAssessorComponent extends CoreComponent implements 
       const innovation = this.ctx.innovation.info();
       this.needsAssessorList = userList.data.filter(i => i.id !== innovation.assignedTo?.id);
 
-      this.setBackLink('Go Back', `/assessment/innovations/${this.innovationId}/overview`, `Innovation Overview page`);
+      this.setBackLink('Go back', `/assessment/innovations/${this.innovationId}/overview`, `Innovation Overview page`);
       this.setPageStatus('READY');
     });
   }
