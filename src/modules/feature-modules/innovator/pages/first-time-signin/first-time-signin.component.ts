@@ -68,29 +68,31 @@ export class FirstTimeSigninComponent extends CoreComponent implements OnInit {
     of(true)
       .pipe(
         concatMap(() =>
-          this.ctx.user.updateUserInfo$({
-            displayName: wizardData.innovatorName,
-            mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
+          this.ctx.user.updateUserInfo$(
+            {
+              displayName: wizardData.innovatorName,
+              mobilePhone: UtilsHelper.isEmpty(wizardData.mobilePhone) ? null : wizardData.mobilePhone,
 
-            organisation: wizardData.organisation
-              ? {
-                  id: this.ctx.user.getUserInfo().organisations[0].id,
-                  isShadow: false,
-                  name: wizardData.organisation.name,
-                  size: wizardData.organisation.size,
-                  description: wizardData.organisation.description,
-                  registrationNumber: wizardData.organisation.registrationNumber
-                }
-              : {
-                  id: this.ctx.user.getUserInfo().organisations[0].id,
-                  isShadow: true
-                },
-            howDidYouFindUsAnswers: wizardData.howDidYouFindUsAnswers
-          })
+              organisation: wizardData.organisation
+                ? {
+                    id: this.ctx.user.getUserInfo().organisations[0].id,
+                    isShadow: false,
+                    name: wizardData.organisation.name,
+                    size: wizardData.organisation.size,
+                    description: wizardData.organisation.description,
+                    registrationNumber: wizardData.organisation.registrationNumber
+                  }
+                : {
+                    id: this.ctx.user.getUserInfo().organisations[0].id,
+                    isShadow: true
+                  },
+              howDidYouFindUsAnswers: wizardData.howDidYouFindUsAnswers
+            },
+            false
+          )
         ),
 
         // Initialize authentication in order to update First Time SignIn information.
-        // TODO: try to remove this by updating the state when calling updateUserInfo$
         concatMap(() => this.ctx.user.initializeAuthentication$())
       )
       .subscribe({
