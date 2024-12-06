@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div *ngIf="innovation?.owner && !innovation?.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
+<theme-content-wrapper [status]="pageStatus()">
+  <div *ngIf="innovation?.owner && !innovation?.owner?.isActive" class="nhsuk-warning-callout nhsuk-u-margin-top-0">
     <div class="nhsuk-heading-m nhsuk-warning-callout__label">
       <span role="text"> <span class="nhsuk-u-visually-hidden">Important: </span>User Locked</span>
     </div>
@@ -73,6 +74,7 @@
         <div class="nhsuk-summary-list__row">
           <dt class="nhsuk-summary-list__key">Assessor</dt>
           <dd class="nhsuk-summary-list__value">{{ innovation?.assessment?.assignedTo?.name }}</dd>
+          <dd class="nhsuk-summary-list__actions"></dd>
         </div>
       </dl>
     </ng-container>
