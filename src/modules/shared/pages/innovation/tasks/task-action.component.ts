@@ -49,7 +49,7 @@ export class PageInnovationTaskActionComponent extends CoreComponent implements 
     this.submitBtn = { label: '', isDisabled: true };
     this.sectionInDraft = false;
 
-    this.setBackLink('Go Back');
+    this.setBackLink('Go back');
   }
 
   ngOnInit(): void {
