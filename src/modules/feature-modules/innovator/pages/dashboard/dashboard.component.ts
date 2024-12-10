@@ -7,20 +7,19 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 import { InnovationListFullDTO } from '@modules/shared/services/innovations.dtos';
-import { InnovationTransferStatusEnum, InnovationGroupedStatusEnum } from '@modules/stores';
+import { InnovationGroupedStatusEnum, InnovationTransferStatusEnum } from '@modules/stores';
 
 import { DatesHelper } from '@app/base/helpers';
-import { NotificationContextDetailEnum } from '@modules/stores/ctx/notifications/notifications.types';
+import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
+import {
+  AnnouncementType,
+  AnnouncementsService
+} from '@modules/feature-modules/announcements/services/announcements.service';
 import {
   GetInnovationCollaboratorInvitesDTO,
   GetInnovationTransfersDTO,
   InnovatorService
 } from '../../services/innovator.service';
-import {
-  AnnouncementType,
-  AnnouncementsService
-} from '@modules/feature-modules/announcements/services/announcements.service';
-import { AnnouncementTypeEnum } from '@modules/feature-modules/admin/services/announcements.service';
 
 @Component({
   selector: 'app-innovator-pages-dashboard',
@@ -161,9 +160,6 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
             this.ctx.innovation.clear();
           }
         }),
-        concatMap(
-          () => this.ctx.user.initializeAuthentication$() // Initialize authentication in order to update First Time SignIn information.
-        ),
         concatMap(() =>
           forkJoin([
             this.innovationsService.getInnovationsList(
@@ -181,6 +177,9 @@ export class PageDashboardComponent extends CoreComponent implements OnInit {
       )
       .subscribe(([innovationsListOwner, innovationsListCollaborator]) => {
         this.innovationTransfers = this.innovationTransfers.filter(t => t.id !== transferId);
+        if (this.innovationTransfers.length === 0) {
+          this.ctx.user.updateInfo({ hasInnovationTransfers: false });
+        }
         this.user.innovationsOwner = this.getInnovationsListInformation(innovationsListOwner.data).filter(
           item => item.groupedStatus !== 'ARCHIVED'
         );

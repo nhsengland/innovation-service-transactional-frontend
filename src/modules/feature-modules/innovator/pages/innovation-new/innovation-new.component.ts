@@ -1,7 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { of } from 'rxjs';
-import { concatMap } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 import { FormEngineComponent } from '@app/base/forms';
@@ -61,30 +59,22 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
       officeLocation: data.officeLocation
     };
 
-    this.innovatorService
-      .createInnovation(body)
-      .pipe(
-        concatMap(response => {
-          this.ctx.user.initializeAuthentication$(); // Initialize authentication in order to update innovations information.
-          return of(response);
-        })
-      )
-      .subscribe({
-        next: response => {
-          this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
-          this.redirectTo(`innovator/innovations/${response.id}`);
-        },
-        error: ({ error: err }: HttpErrorResponse) => {
-          if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
-            this.setAlertError('An innovation with that name already exists. Try again with a new name');
-          } else {
-            this.setAlertError(
-              'An error occurred when creating the innovation. Please try again or contact us for further help'
-            );
-          }
-          this.isCreatingInnovation = false;
+    this.innovatorService.createInnovation(body).subscribe({
+      next: response => {
+        this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
+        this.redirectTo(`innovator/innovations/${response.id}`);
+      },
+      error: ({ error: err }: HttpErrorResponse) => {
+        if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {
+          this.setAlertError('An innovation with that name already exists. Try again with a new name');
+        } else {
+          this.setAlertError(
+            'An error occurred when creating the innovation. Please try again or contact us for further help'
+          );
         }
-      });
+        this.isCreatingInnovation = false;
+      }
+    });
   }
 
   private navigateTo(action: 'previous' | 'next'): void {
