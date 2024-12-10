@@ -702,7 +702,9 @@ const routes: Routes = [
           breadcrumb: 'Training and resources',
           layout: { type: 'full' }
         },
-        children: [{ path: '', pathMatch: 'full', component: TrainingAndResourcesComponent }]
+        children: [
+          { path: '', data: { breadcrumb: null }, pathMatch: 'full', component: TrainingAndResourcesComponent }
+        ]
       },
 
       {
