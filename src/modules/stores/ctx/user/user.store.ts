@@ -105,6 +105,7 @@ export class UserContextStore {
   }
 
   initializeAuthentication$(): Observable<boolean> {
+    this.clear();
     this.fetch$.next();
     return combineLatest([this.isStateLoaded$, this.hasError$]).pipe(
       filter(() => this.isStateLoaded() || this.hasError() !== undefined),
@@ -118,8 +119,14 @@ export class UserContextStore {
     );
   }
 
-  updateUserInfo$(body: UpdateUserInfo): Observable<{ id: string }> {
-    return this.userCtxService.updateUserInfo(body).pipe(tap(() => this.updateStateOnUserInfoUpdate(body)));
+  updateUserInfo$(body: UpdateUserInfo, updateState = true): Observable<{ id: string }> {
+    return this.userCtxService.updateUserInfo(body).pipe(
+      tap(() => {
+        if (updateState) {
+          this.updateStateOnUserInfoUpdate(body);
+        }
+      })
+    );
   }
 
   verifyUserSession$(): Observable<boolean> {

@@ -146,9 +146,13 @@ export class PageNotificationsListComponent extends CoreComponent implements OnI
     this.ctx.notifications.dismissAll$().subscribe({
       next: response => {
         this.setAlertSuccess(`${response.affected || 'All'} notifications have been marked as read`);
-        this.getNotificationsList();
+        for (const notification of this.notificationsList.getRecords()) {
+          notification.readAt = new Date().toISOString();
+        }
+        this.setPageStatus('READY');
       },
       error: () => {
+        this.setPageStatus('ERROR');
         this.setAlertUnknownError();
       }
     });
