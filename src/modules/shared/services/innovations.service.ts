@@ -57,6 +57,7 @@ export type InnovationsTasksListFilterType = {
   status?: InnovationTaskStatusEnum[];
   innovationStatus?: InnovationStatusEnum[];
   createdByMe?: boolean;
+  createdByMyUnit?: boolean;
   allTasks?: boolean;
   fields?: 'notifications'[];
 };
@@ -529,17 +530,7 @@ export class InnovationsService extends CoreService {
   getTasksList(queryParams: APIQueryParamsType<InnovationsTasksListFilterType>): Observable<InnovationTasksListDTO> {
     const { filters, ...qParams } = queryParams;
 
-    const qp = {
-      ...qParams,
-      ...(filters.innovationId ? { innovationId: filters.innovationId } : {}),
-      ...(filters.innovationName ? { innovationName: filters.innovationName } : {}),
-      ...(filters.sections ? { sections: filters.sections } : {}),
-      ...(filters.status ? { status: filters.status } : {}),
-      ...(filters.innovationStatus ? { innovationStatus: filters.innovationStatus } : {}),
-      ...(filters.createdByMe ? { createdByMe: filters.createdByMe } : {}),
-      ...(filters.allTasks ? { allTasks: filters.allTasks } : {}),
-      ...(filters.fields ? { fields: filters.fields } : {})
-    };
+    const qp = { ...qParams, ...filters };
 
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/tasks').setQueryParams(qp);
     return this.http.get<InnovationActionsListInDTO>(url.buildUrl()).pipe(
