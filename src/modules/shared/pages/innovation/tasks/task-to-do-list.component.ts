@@ -69,8 +69,7 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
         InnovationTaskStatusEnum.DONE,
         InnovationTaskStatusEnum.DECLINED,
         InnovationTaskStatusEnum.CANCELLED
-      ],
-      allTasks: true
+      ]
     });
 
     this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe(allTasksResponse => {
