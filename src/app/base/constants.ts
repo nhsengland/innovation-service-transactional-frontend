@@ -45,16 +45,16 @@ export const URLS = {
   DELIVERING_A_NET_ZERO_NHS:
     'https://www.england.nhs.uk/greenernhs/wp-content/uploads/sites/51/2022/07/B1728-delivering-a-net-zero-nhs-july-2022.pdf',
   MEDICAL_DEVICES_INTENDED_PURPOSE_STATEMENT:
-    'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/medical-devices-intended-purpose-statement',
+    'https://www.digitalregulations.innovation.nhs.uk/regulations-and-guidance-for-developers/all-developers-guidance/writing-the-intended-purpose-statement-for-software-medical-devices',
   MY_RESEARCH_PROJECT: 'https://www.myresearchproject.org.uk',
   NHS_DIGITAL_TECHNOLOGY_ASSESSMENT_CRITERIA:
-    'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/nhs-digital-technology-assessment-criteria-dtac/?triage_system=Medical%20device',
+    'https://www.digitalregulations.innovation.nhs.uk/regulations-and-guidance-for-developers/all-developers-guidance/using-the-digital-technology-assessment-criteria-dtac',
   ORGANISATIONS_BEHIND_THE_SERVICE: `${PROD_DOMAIN}/about-the-service/who-we-are#The%20organisations%20behind%20the%20service`,
   SUPPLIERS: 'https://www.england.nhs.uk/greenernhs/get-involved/suppliers/',
   UNDERSTANDING_CQC_REGULATIONS:
-    'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/understanding-cqc-regulations/?triage_system=Medical%20device',
+    'https://www.digitalregulations.innovation.nhs.uk/regulations-and-guidance-for-developers/all-developers-guidance/regulated-activities-check-if-you-need-to-register-with-the-care-quality-commission-cqc',
   UNDERSTANDING_REGULATIONS_MEDICAL_DEVICES:
-    'https://www.digitalregulations.innovation.nhs.uk/developers-guidance/all-developers-guidance/uk-mdr-2002-understanding-regulations-medical-devices/?triage_system=Medical%20device',
+    'https://www.digitalregulations.innovation.nhs.uk/regulations-and-guidance-for-developers/all-developers-guidance/getting-a-ukca-mark-regulations-for-placing-medical-devices-on-the-market',
   EQUALITY_AND_HEALTH_INEQUALITIES_IMPACT_ASSESSMENT_EHIA:
     'https://www.england.nhs.uk/long-read/nhs-england-equality-and-health-inequalities-impact-assessment-ehia/',
 

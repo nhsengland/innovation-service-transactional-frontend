@@ -73,7 +73,11 @@ export class PageTasksAdvancedSearchComponent extends CoreComponent implements O
     this.setPageStatus('LOADING');
 
     this.filtersModel.handleStateChanges();
-    this.tasksList.setFilters({ ...this.filtersModel.getAPIQueryParams(), fields: ['notifications'] });
+    this.tasksList.setFilters({
+      ...this.filtersModel.getAPIQueryParams(),
+      createdByMyUnit: this.ctx.user.isAccessorType(),
+      fields: ['notifications']
+    });
 
     this.tasksList.setPage(1);
     this.getTasksList();
