@@ -57,6 +57,7 @@ export type InnovationsTasksListFilterType = {
   status?: InnovationTaskStatusEnum[];
   innovationStatus?: InnovationStatusEnum[];
   createdByMe?: boolean;
+  // @default true in the BE
   createdByMyUnit?: boolean;
   fields?: 'notifications'[];
 };
