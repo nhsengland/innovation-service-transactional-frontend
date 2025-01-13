@@ -1,18 +1,19 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Directive, HostListener, Input } from '@angular/core';
+import { Directive, HostListener, input } from '@angular/core';
 
 @Directive({
   selector: '[appCopyToClipboard]'
 })
 export class CopyToClipboardDirective {
-  @Input('appCopyToClipboard') copy: string | null | undefined;
+  copy = input.required<string | null | undefined>({ alias: 'appCopyToClipboard' });
 
   constructor(private clipboard: Clipboard) {}
 
   @HostListener('click', ['$event'])
   onClick(): void {
-    if (this.copy) {
-      this.clipboard.copy(this.copy);
+    const value = this.copy();
+    if (value) {
+      this.clipboard.copy(value);
     }
   }
 }
