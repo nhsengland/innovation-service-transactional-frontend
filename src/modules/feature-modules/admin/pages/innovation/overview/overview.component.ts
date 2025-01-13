@@ -6,9 +6,9 @@ import { CoreComponent } from '@app/base';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import {
   ContextInnovationType,
-  InnovationSupportStatusEnum,
   InnovationCollaboratorStatusEnum,
-  InnovationGroupedStatusEnum
+  InnovationGroupedStatusEnum,
+  InnovationSupportStatusEnum
 } from '@modules/stores';
 
 import { DatePipe } from '@angular/common';
@@ -34,7 +34,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   isArchived = false;
 
-  innovationSummary: { label: string; value: null | string }[] = [];
+  innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
 
   innovatorDetails: { label: string; value: null | string }[] = [];
 
@@ -78,6 +78,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
+        { label: 'ID', value: innovation.uniqueId, copy: true },
         { label: 'Company', value: innovation.owner?.organisation?.name ?? 'No company' },
         ...(innovation.owner?.organisation?.size
           ? [{ label: 'Company size', value: innovation.owner.organisation.size }]

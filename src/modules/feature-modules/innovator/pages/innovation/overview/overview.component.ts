@@ -19,6 +19,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovationId: string;
 
   innovation: null | {
+    uniqueId: string;
     owner: { name: string };
     loggedUser: { isOwner: boolean };
     collaborators: { nameOrEmail: string }[];
@@ -75,6 +76,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       ).length;
 
       this.innovation = {
+        uniqueId: innovationInfo.uniqueId,
         owner: { name: innovationInfo.owner?.name ?? '' },
         loggedUser: { isOwner: innovationContext.loggedUser.isOwner },
         collaborators: innovationCollaborators.data.map(item => ({

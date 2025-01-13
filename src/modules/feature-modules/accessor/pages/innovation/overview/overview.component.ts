@@ -4,14 +4,14 @@ import { forkJoin } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType, StatisticsCardType } from '@app/base/types';
+import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 import { InnovationCollaboratorsListDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import { InnovationStatisticsEnum, UserStatisticsTypeEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
+import { InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/ctx/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
-import { InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
-import { AccessorService } from '@modules/feature-modules/accessor/services/accessor.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -23,7 +23,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
-  innovationSummary: { label: string; value: null | string }[] = [];
+  innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
   innovatorSummary: { label: string; value: string }[] = [];
   cardsList: StatisticsCardType[] = [];
   innovationSupport: {
@@ -108,6 +108,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
         this.innovationSummary = [
+          { label: 'ID', value: innovationInfo.uniqueId, copy: true },
           { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
           ...(this.innovation.owner?.organisation?.size
             ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]

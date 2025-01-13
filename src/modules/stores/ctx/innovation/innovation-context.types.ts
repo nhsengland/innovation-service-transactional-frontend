@@ -4,6 +4,7 @@ import { InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.
 
 export type ContextInnovationType = {
   id: string;
+  uniqueId: string;
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: null | DateISOType;
@@ -38,6 +39,7 @@ export type ContextInnovationType = {
 
 export const EMPTY_CONTEXT: ContextInnovationType = {
   id: '',
+  uniqueId: '',
   name: '',
   status: InnovationStatusEnum.CREATED,
   statusUpdatedAt: null,

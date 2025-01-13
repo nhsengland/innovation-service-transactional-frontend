@@ -26,26 +26,27 @@ import { ActionLinkComponent } from './components/navigation/action-link.compone
 import { BackLinkComponent } from './components/navigation/back-link.component';
 import { PrintLinkComponent } from './components/navigation/print-link.component';
 
+import { FormsModule } from '@angular/forms';
+import { CustomNotificationsEntrypointComponent } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { CopyToClipboardDirective } from '@modules/shared/directives/copyToClipboard.directive';
+import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
+import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
+import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
 import { ChipsFilterComponent } from './components/chips/chips-filter-component';
 import { CollapsibleFilterComponent } from './components/collapsible-filter/collapsible-filter.component';
+import { HeaderArchivedBannerComponent } from './components/header/header-archived-banner.component';
 import { InnovationRecordExportComponent } from './components/innovation-record-export/innovation-record-export.component';
+import { KeyProgressAreasCardComponent } from './components/key-progress-areas-card/key-progress-areas-card.component';
 import { GoToTopComponent } from './components/navigation/go-to-top-link.component';
 import { NotificationTagComponent } from './components/notification-tag/notification-tag.component';
+import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component';
 import { PageTitleComponent } from './components/page-title/page-title.component';
 import { PaginationComponent } from './components/pagination/pagination.component';
+import { SelectComponent } from './components/search/select.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
-import { TagComponent } from './components/tag/tag.component';
-import { InnovationAdvancedSearchCardComponent } from '@modules/shared/pages/innovations/innovation-advanced-search-card.component';
-import { SelectComponent } from './components/search/select.component';
-import { FormsModule } from '@angular/forms';
-import { HeaderArchivedBannerComponent } from './components/header/header-archived-banner.component';
-import { OnOffTagComponent } from './components/on-off-tag/on-off-tag.component';
-import { AccountMFAListComponent } from '@modules/shared/pages/account/mfa/mfa-list.component';
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
-import { HighlightDirective } from '@modules/shared/directives/highlight.directive';
-import { KeyProgressAreasCardComponent } from './components/key-progress-areas-card/key-progress-areas-card.component';
-import { CustomNotificationsEntrypointComponent } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { TagComponent } from './components/tag/tag.component';
 
 @NgModule({
   imports: [
@@ -103,6 +104,7 @@ import { CustomNotificationsEntrypointComponent } from '@modules/feature-modules
     HeaderArchivedBannerComponent,
     AccountMFAListComponent,
 
+    CopyToClipboardDirective,
     HighlightDirective,
 
     CustomNotificationsEntrypointComponent
@@ -156,6 +158,7 @@ import { CustomNotificationsEntrypointComponent } from '@modules/feature-modules
 
     AccountMFAListComponent,
 
+    CopyToClipboardDirective,
     HighlightDirective,
 
     CustomNotificationsEntrypointComponent
