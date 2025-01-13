@@ -142,6 +142,7 @@ export type InnovationSearchFullDTO = InnovationListFullDTO & {
 
 export type InnovationInfoDTO = {
   id: string;
+  uniqueId: string;
   name: string;
   description: null | string;
   status: InnovationStatusEnum;

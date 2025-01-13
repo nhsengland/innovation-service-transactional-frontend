@@ -100,6 +100,13 @@
         <a *ngIf="innovation?.loggedUser?.isOwner" routerLink="../manage/innovation/collaborators">Manage collaborators</a>
       </dd>
     </div>
+    <div class="nhsuk-summary-list__row">
+      <dt class="nhsuk-summary-list__key">ID</dt>
+      <dd class="nhsuk-summary-list__value">{{ innovation?.uniqueId}}</dd>
+      <dd class="nhsuk-summary-list__actions width-30 nhsuk-u-font-size-16">
+        <a href="javascript:void(0)" [appCopyToClipboard]="innovation?.uniqueId" arial-label="Copy ID to clipboard">Copy</a>
+      </dd>
+    </div>
   </dl>
 
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>

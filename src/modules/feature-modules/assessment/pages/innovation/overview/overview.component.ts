@@ -32,7 +32,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   assessmentType = '';
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
-  innovationSummary: { label: string; value: null | string }[] = [];
+  innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
   innovatorSummary: { label: string; value: string }[] = [];
   cardsList: StatisticsCardType[] = [];
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
@@ -84,6 +84,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
           this.innovationSummary = [
+            { label: 'ID', value: innovationInfo.uniqueId, copy: true },
             { label: 'Company', value: this.innovation.owner?.organisation?.name ?? 'No company' },
             ...(this.innovation.owner?.organisation?.size
               ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]
