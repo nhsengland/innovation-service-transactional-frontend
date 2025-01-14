@@ -30,6 +30,11 @@
       </li>
 
       <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">ID: </span>
+        <span>{{ innovationCardData.uniqueId }}</span>
+      </li>
+
+      <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Categories: </span>
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ categoriesList }}</span>
       </li>
