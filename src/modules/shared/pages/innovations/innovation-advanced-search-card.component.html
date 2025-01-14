@@ -15,7 +15,13 @@
       Innovation archived on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}
     </li>
 
-    <li *ngIf="isAccessorTypeAndStoppedSharingInnovation" class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">Innovation has stopped sharing their data with your organisation</li>
+    @if (isAccessorTypeAndStoppedSharingInnovation) {
+      <li class="nhsuk-u-margin-bottom-2 nhsuk-u-font-size-19">Innovation has stopped sharing their data with your organisation</li>
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">ID: </span>
+        <span>{{ innovationCardData.uniqueId }}</span>
+      </li>
+    }
 
     <ng-container *ngIf="!isAccessorTypeAndStoppedSharingInnovation">
       <li class="nhsuk-u-margin-bottom-0" [ngClass]="{ 'nhsuk-u-margin-top-2': !isAccessorTypeAndArchivedInnovation }" appHighlight [searchTerm]="highlightInfo?.termsFound">
@@ -27,6 +33,11 @@
         <span *ngIf="innovationCardData.submittedAt" class="font-color-secondary">
           Submitted on {{ innovationCardData.submittedAt | date: ("app.date_formats.long_date" | translate) }}
         </span>
+      </li>
+
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">ID: </span>
+        <span>{{ innovationCardData.uniqueId }}</span>
       </li>
 
       <li class="nhsuk-u-margin-bottom-1">

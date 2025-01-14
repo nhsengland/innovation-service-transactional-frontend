@@ -10,6 +10,7 @@ import {
 
 export type InnovationCardData = {
   id: string;
+  uniqueId: string;
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: DateISOType;

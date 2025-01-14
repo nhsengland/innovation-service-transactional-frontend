@@ -199,6 +199,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
       'id',
+      'uniqueId',
       'name',
       'status',
       'statusUpdatedAt',
@@ -258,6 +259,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           const translations = this.ctx.schema.getIrSchemaTranslationsMap();
           const innovationData: InnovationCardData = {
             id: result.id,
+            uniqueId: result.uniqueId,
             name: result.name,
             status: result.status,
             statusUpdatedAt: result.statusUpdatedAt,
