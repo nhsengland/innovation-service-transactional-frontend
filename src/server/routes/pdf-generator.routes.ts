@@ -20,6 +20,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, 
       }
     };
     const version = req.query.version && typeof req.query.version === 'string' ? req.query.version : undefined;
+    const uniqueId = 'uniqueId' in req.query && req.query.uniqueId;
 
     generatePDF(req.params.innovationId, config, version)
       .then((response: any) => {
@@ -41,7 +42,7 @@ pdfRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/pdf`, async (req, 
           .writeHead(200, {
             'Content-Length': Buffer.byteLength(response),
             'Content-Type': 'application/pdf',
-            'Content-disposition': `attachment;filename=innovation_record_${innovationId}.pdf`
+            'Content-disposition': `attachment;filename=innovation_record_${uniqueId ?? innovationId}.pdf`
           })
           .end(response);
       })
