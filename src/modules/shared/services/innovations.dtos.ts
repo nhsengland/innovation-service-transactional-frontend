@@ -43,6 +43,7 @@ export type InnovationsListDTO<T extends Partial<InnovationListFullDTO>> = {
 
 export type InnovationListSelectType =
   | 'id'
+  | 'uniqueId'
   | 'name'
   | 'status'
   | 'statusUpdatedAt'
@@ -90,6 +91,7 @@ export type InnovationSearchSelectType = InnovationListSelectType | 'highlights'
 
 export type InnovationListFullDTO = {
   id: string;
+  uniqueId: string;
   name: string;
   status: InnovationStatusEnum;
   statusUpdatedAt: DateISOType;
@@ -142,6 +144,7 @@ export type InnovationSearchFullDTO = InnovationListFullDTO & {
 
 export type InnovationInfoDTO = {
   id: string;
+  uniqueId: string;
   name: string;
   description: null | string;
   status: InnovationStatusEnum;

@@ -73,11 +73,13 @@ export class PageInnovationTaskToDoListComponent extends CoreComponent implement
       createdByMyUnit: false
     });
 
-    this.innovationsService.getTasksList(this.allTasksList.getAPIQueryParams()).subscribe(allTasksResponse => {
-      this.processTaskList(allTasksResponse);
-      this.tablesTitles = this.getTablesTitles();
-      this.setPageStatus('READY');
-    });
+    this.innovationsService
+      .getTasksList(this.allTasksList.getAPIQueryParams({ keepEmptyFilters: true }))
+      .subscribe(allTasksResponse => {
+        this.processTaskList(allTasksResponse);
+        this.tablesTitles = this.getTablesTitles();
+        this.setPageStatus('READY');
+      });
   }
 
   processTaskList(taskList: InnovationTasksListDTO) {

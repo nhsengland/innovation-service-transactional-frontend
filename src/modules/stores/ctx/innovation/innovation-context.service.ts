@@ -9,6 +9,7 @@ import { EnvironmentVariablesStore } from '@modules/core/stores/environment-vari
 import { UserRoleEnum } from '@app/base/enums';
 import { MappedObjectType } from '@app/base/types';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
+import { UserContextType } from '../user/user.types';
 import { ContextInnovationType } from './innovation-context.types';
 import { InnovationGroupedStatusEnum, InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 import {
@@ -19,7 +20,6 @@ import {
   InnovationUnitSuggestionsType,
   OrganisationSuggestionModel
 } from './innovation.models';
-import { UserContextType } from '../user/user.types';
 
 @Injectable()
 export class InnovationContextService {
@@ -68,6 +68,7 @@ export class InnovationContextService {
 
         return {
           id: response.id,
+          uniqueId: response.uniqueId,
           name: response.name,
           status:
             response.groupedStatus === InnovationGroupedStatusEnum.AWAITING_NEEDS_REASSESSMENT

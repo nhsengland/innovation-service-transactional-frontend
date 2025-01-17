@@ -19,7 +19,9 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
         ...(req.query.role && { 'x-is-role': req.query.role })
       }
     };
+
     const version = req.query.version && typeof req.query.version === 'string' ? req.query.version : undefined;
+    const uniqueId = 'uniqueId' in req.query && req.query.uniqueId;
 
     generateCSV(req.params.innovationId, config, version)
       .then((response: any) => {
@@ -41,7 +43,7 @@ csvRouter.get(`${ENVIRONMENT.BASE_PATH}/exports/:innovationId/csv`, async (req, 
           .writeHead(200, {
             'Content-Length': Buffer.byteLength(response),
             'Content-Type': 'text/csv',
-            'Content-disposition': `attachment;filename=innovation_record_${innovationId}.csv`
+            'Content-disposition': `attachment;filename=innovation_record_${uniqueId ?? innovationId}.csv`
           })
           .end(response);
       })

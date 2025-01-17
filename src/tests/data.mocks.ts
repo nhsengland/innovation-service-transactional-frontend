@@ -86,6 +86,7 @@ export const USER_INFO_ADMIN: Required<UserContextType>['user'] = {
 
 export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   id: 'innovationId01',
+  uniqueId: 'uniqueId01',
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
   statusUpdatedAt: '2020-01-01T00:00:00.000Z',
