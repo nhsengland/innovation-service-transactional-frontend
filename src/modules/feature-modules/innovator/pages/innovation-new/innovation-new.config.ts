@@ -58,7 +58,6 @@ export function getNewInnovationQuestionsWizard(currentSchema: InnovationRecordS
     steps: [
       new FormEngineModel({
         label: 'Register a new innovation',
-        description: "We'll ask you for the name and a brief description of the innovation.",
         parameters: []
       }),
 
