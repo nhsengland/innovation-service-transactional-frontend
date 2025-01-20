@@ -144,7 +144,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         );
 
       this.innovation.organisationsStatusDescription = Object.entries(occurrences)
-        .map(([status, item]) => `${item.count} ${item.text}`)
+        .map(([_status, item]) => `${item.count} ${item.text}`)
         .join(', ');
 
       this.innovation = {

@@ -1,4 +1,15 @@
 <theme-content-wrapper [status]="pageStatus()">
+  @if (!isSubmitted) {
+    <div class="nhsuk-card nhsuk-u-margin-top-2">
+      <div class="nhsuk-card__content">
+        <h2 class="nhsuk-heading-m">Your next steps</h2>
+        <ol class="nhsuk-list nhsuk-list--number">
+          <li>Complete each section of your <a routerLink="/innovator/innovations/{{ innovationId }}/record">innovation record</a></li>
+          <li>Submit your record for needs assessment</li>
+        </ol>
+      </div>
+    </div>
+  }
   <ng-container *ngIf="showNextStepsBanner">
     <div class="nhsuk-card">
       <div class="nhsuk-card__content nhsuk-u-padding-4">
@@ -27,7 +38,7 @@
   <ng-container *ngIf="showNoSupportBanner">
     <div class="nhsuk-do-dont-list nhsuk-u-margin-top-0">
       <h3 class="nhsuk-do-dont-list__label"><span class="nhsuk-u-visually-hidden">Non-urgent advice: </span> There is no active support for your innovation</h3>
-      <ul class="nhsuk-list" role="list">
+      <ul class="nhsuk-list">
         <li>
           <p class="nhsuk-u-margin-bottom-3">
             There are no organisations currently providing support to your innovation.
@@ -102,7 +113,7 @@
     </div>
     <div class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">ID</dt>
-      <dd class="nhsuk-summary-list__value">{{ innovation?.uniqueId}}</dd>
+      <dd class="nhsuk-summary-list__value">{{ innovation?.uniqueId }}</dd>
       <dd class="nhsuk-summary-list__actions width-30 nhsuk-u-font-size-16">
         <a href="javascript:void(0)" [appCopyToClipboard]="innovation?.uniqueId" arial-label="Copy ID to clipboard">Copy</a>
       </dd>
@@ -111,29 +122,7 @@
 
   <app-statistics-cards [cardsList]="cardsList" [gridClass]="'nhsuk-grid-column-one-half'"></app-statistics-cards>
 
-  <ng-container *ngIf="showBanner">
-    <div class="nhsuk-card nhsuk-u-margin-top-2">
-      <div class="nhsuk-card__content">
-        <h2 class="nhsuk-heading-m">Your next steps</h2>
-        <ul class="nhsuk-list" [ngClass]="{ 'nhsuk-list--bullet': isArchived, 'nhsuk-u-margin-left-2': isArchived }">
-          <li [ngClass]="{ 'd-flex': !isArchived }">
-            <ng-container *ngIf="!isArchived">
-              <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedAllSections }"></ng-container>
-            </ng-container>
-            <div [ngClass]="{ 'nhsuk-u-margin-left-2': !isArchived }">
-              Submit all sections of your <a routerLink="/innovator/innovations/{{ innovationId }}/record"> innovation record </a>
-            </div>
-          </li>
-          <li [ngClass]="{ 'd-flex': !isArchived }">
-            <ng-container *ngIf="!isArchived">
-              <ng-container *ngTemplateOutlet="icon; context: { completed: isSubmitted?.submittedForNeedsAssessment }"></ng-container>
-            </ng-container>
-            <div [ngClass]="{ 'nhsuk-u-margin-left-2': !isArchived }">Share the record for the needs assessment</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </ng-container>
+  <app-innovator-data-sharing-info [isSubmitted]="isSubmitted"></app-innovator-data-sharing-info>
 </theme-content-wrapper>
 
 <ng-template #icon let-completed="completed">

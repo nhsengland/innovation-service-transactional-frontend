@@ -34,13 +34,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   showNextStepsBanner = false;
   showNoSupportBanner = false;
+  isSubmitted = false; // Show submit next steps banner
 
   cardsList: StatisticsCardType[] = [];
-
-  isSubmitted = {
-    submittedAllSections: false,
-    submittedForNeedsAssessment: false
-  };
 
   showBanner = true;
 
@@ -96,11 +92,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.showNoSupportBanner = innovationInfo.daysSinceNoActiveSupport > 6;
       }
 
-      this.isSubmitted = {
-        submittedAllSections: submit.submittedAllSections,
-        submittedForNeedsAssessment: submit.submittedForNeedsAssessment
-      };
-      this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
+      this.isSubmitted = innovationInfo.submittedAt !== null;
 
       const lastTaskSubmitted: string = statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!;
 
@@ -120,27 +112,32 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
           emptyMessage: "You haven't submitted any section of your innovation record yet"
         },
-        {
-          title: 'Tasks assigned to you',
-          label: `tasks to do`,
-          link: `/innovator/innovations/${this.innovationId}/tasks`,
-          count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
-          lastMessage: `Most recent assigned task: "Update '${this.translate(
-            'shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted
-          )}'"`,
-          date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No tasks assigned to you yet',
-          emptyMessage: 'We might send a request to add more information to your innovation record here'
-        },
-        {
-          title: 'Messages',
-          label: `Unread messages`,
-          link: `/innovator/innovations/${this.innovationId}/threads`,
-          count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
-          lastMessage: `Last received message`,
-          date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No messages yet'
-        }
+        // only show these cards after submission
+        ...(this.isSubmitted
+          ? [
+              {
+                title: 'Tasks assigned to you',
+                label: `tasks to do`,
+                link: `/innovator/innovations/${this.innovationId}/tasks`,
+                count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
+                lastMessage: `Most recent assigned task: "Update '${this.translate(
+                  'shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted
+                )}'"`,
+                date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
+                emptyMessageTitle: 'No tasks assigned to you yet',
+                emptyMessage: 'We might send a request to add more information to your innovation record here'
+              },
+              {
+                title: 'Messages',
+                label: `Unread messages`,
+                link: `/innovator/innovations/${this.innovationId}/threads`,
+                count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
+                lastMessage: `Last received message`,
+                date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
+                emptyMessage: 'No messages yet'
+              }
+            ]
+          : [])
       ];
 
       if (statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count) {

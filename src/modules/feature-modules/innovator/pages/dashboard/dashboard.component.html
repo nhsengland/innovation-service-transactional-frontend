@@ -68,17 +68,9 @@
         >
       </div>
 
-      @if(user.innovationsOwner.length === 0) {
+      @if (user.innovationsOwner.length === 0) {
         <p>You have no innovations.</p>
-          <div class="nhsuk-inset-text">
-          <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>
-            You control which support organisations can access your innovation through your data sharing preferences. You select your preferences for each innovation when you submit your record for needs assessment. You can change your preferences at any time. 
-          </p>
-          <p>
-            To protect your data, all support organisations on the service have to agree to our <a href="{{ this.CONSTANTS.URLS.TOU_INNOVATOR }}" target="_blank" rel="noopener noreferrer">terms of use (opens in a new window)</a>.
-          </p>
-        </div>
+        <app-innovator-data-sharing-info></app-innovator-data-sharing-info>
       }
       <ul *ngIf="user.innovationsOwner.length > 0" class="nhsuk-grid-row nhsuk-card-group">
         <li *ngFor="let innovation of user.innovationsOwner" class="nhsuk-grid-column-full nhsuk-card-group__item">
