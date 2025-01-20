@@ -10,11 +10,8 @@ import { ThemeModule } from '@modules/theme/theme.module';
   standalone: true
 })
 export class InnovationRegisteredComponent extends CoreComponent implements OnInit {
-  public innovationId: string;
-
   constructor(private activatedRoute: ActivatedRoute) {
     super();
-    this.innovationId = this.activatedRoute.snapshot.params.innovationId;
   }
 
   ngOnInit(): void {
