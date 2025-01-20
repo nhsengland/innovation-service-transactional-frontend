@@ -63,5 +63,7 @@ export const URLS = {
     'https://support.microsoft.com/en-us/office/enable-javascript-7bb9ee74-6a9e-4dd1-babf-b0a1bb136361',
   HOTJAR_SURVEY: 'https://surveys.hotjar.com/8e2b12c2-150d-4704-9b09-4df3a791e51b',
   SAFARI_SUPPORT: 'https://support.apple.com/en-gb/guide/safari/ibrw1074/14.0/mac/11.0',
-  NHS_PRIVACY_NOTICE: 'https://www.england.nhs.uk/contact-us/privacy-notice'
+  NHS_PRIVACY_NOTICE: 'https://www.england.nhs.uk/contact-us/privacy-notice',
+  GOV_UK_REGIMES_UNDER_SANCTIONS:
+    'https://www.gov.uk/government/collections/uk-sanctions-regimes-under-the-sanctions-act'
 };
