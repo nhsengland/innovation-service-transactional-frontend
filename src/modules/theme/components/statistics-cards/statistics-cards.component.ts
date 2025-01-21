@@ -15,6 +15,7 @@ export type StatisticsCardType = {
   date?: DateISOType | null;
   emptyMessageTitle?: string;
   emptyMessage?: string;
+  emptyLastMessage?: boolean;
 };
 
 @Component({
