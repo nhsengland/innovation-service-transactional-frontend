@@ -143,8 +143,8 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           {} as Record<InnovationSupportStatusEnum, { count: number; text: string }>
         );
 
-      this.innovation.organisationsStatusDescription = Object.entries(occurrences)
-        .map(([_status, item]) => `${item.count} ${item.text}`)
+      this.innovation.organisationsStatusDescription = Object.values(occurrences)
+        .map(item => `${item.count} ${item.text}`)
         .join(', ');
 
       this.innovation = {
