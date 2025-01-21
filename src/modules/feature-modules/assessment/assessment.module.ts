@@ -29,8 +29,10 @@ import { InnovationsListComponent } from './pages/innovations/innovations-list.c
 import { AssessmentService } from './services/assessment.service';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
 
+import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+
 @NgModule({
-  imports: [ThemeModule, SharedModule, AssessmentRoutingModule],
+  imports: [ThemeModule, SharedModule, AssessmentRoutingModule, InnovationRecordSidebarComponent],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,

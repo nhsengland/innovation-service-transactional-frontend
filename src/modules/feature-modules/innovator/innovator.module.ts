@@ -55,8 +55,10 @@ import { ShareInnovationRecordGuard } from './guards/share-innovation-record.gua
 import { InnovatorService } from './services/innovator.service';
 import { AnnouncementsService } from '../announcements/services/announcements.service';
 
+import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+
 @NgModule({
-  imports: [ThemeModule, SharedModule, InnovatorRoutingModule],
+  imports: [ThemeModule, SharedModule, InnovatorRoutingModule, InnovationRecordSidebarComponent],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,
