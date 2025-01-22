@@ -17,7 +17,7 @@
 
               <ng-container *ngIf="ctx.user.isInnovator()">
                 <ng-container *ngIf="innovation.status !== 'CREATED'">
-                  <span>This section is in draft. Any changes you make to this section will not be visible to others until you submit updates.</span>
+                  <span>This section is in draft. Any changes you make will not be visible to others until you save them.</span>
                 </ng-container>
                 <ng-container *ngIf="innovation.status === 'CREATED'">
                   <div>

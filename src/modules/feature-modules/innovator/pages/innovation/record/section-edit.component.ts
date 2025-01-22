@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
+import { combineLatest, concatMap, of } from 'rxjs';
 
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
+import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
-import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
@@ -38,8 +38,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
   isChangeMode = false;
 
-  sectionSubmittedText = '';
-
   displayChangeButtonList: number[] = [];
 
   constructor(private activatedRoute: ActivatedRoute) {
@@ -66,16 +64,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
-
-    const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
-
-    this.sectionSubmittedText = sectionIdentification
-      ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
-      : '';
-
     combineLatest([this.activatedRoute.queryParams, this.activatedRoute.params]).subscribe({
-      next: ([queryParams, params]) => {
+      next: ([queryParams]) => {
         this.isChangeMode = queryParams.isChangeMode ?? false;
 
         this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
@@ -120,7 +110,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.innovation.status !== InnovationStatusEnum.CREATED &&
           this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+          this.submitButton.label = 'Save updates';
         }
       }
 
@@ -256,7 +246,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           });
           this.redirectTo(this.baseUrl);
         } else {
-          this.setRedirectAlertSuccess(this.sectionSubmittedText);
+          this.setRedirectAlertSuccess('Your updates have been saved');
           this.redirectTo(`${this.baseUrl}/submitted`);
         }
       },
