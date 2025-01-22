@@ -34,13 +34,9 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   showNextStepsBanner = false;
   showNoSupportBanner = false;
+  isSubmitted = false; // Show submit next steps banner
 
   cardsList: StatisticsCardType[] = [];
-
-  isSubmitted = {
-    submittedAllSections: false,
-    submittedForNeedsAssessment: false
-  };
 
   showBanner = true;
 
@@ -96,52 +92,72 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
         this.showNoSupportBanner = innovationInfo.daysSinceNoActiveSupport > 6;
       }
 
-      this.isSubmitted = {
-        submittedAllSections: submit.submittedAllSections,
-        submittedForNeedsAssessment: submit.submittedForNeedsAssessment
-      };
-      this.showBanner = !(submit.submittedAllSections && submit.submittedForNeedsAssessment);
+      this.isSubmitted = innovationInfo.submittedAt !== null;
 
       const lastTaskSubmitted: string = statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].lastSubmittedSection!;
 
-      this.cardsList = [
-        {
-          title: 'Innovation record',
-          label: `Sections were submitted`,
-          link: `/innovator/innovations/${this.innovationId}/record`,
-          count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
-          total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
-          lastMessage: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
-            ? `Last submitted section: "${this.translate(
-                'shared.catalog.innovation.innovation_sections.' +
-                  statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
-              )}"`
-            : '',
-          date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
-          emptyMessage: "You haven't submitted any section of your innovation record yet"
-        },
-        {
-          title: 'Tasks assigned to you',
-          label: `tasks to do`,
-          link: `/innovator/innovations/${this.innovationId}/tasks`,
-          count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
-          lastMessage: `Most recent assigned task: "Update '${this.translate(
-            'shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted
-          )}'"`,
-          date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No tasks assigned to you yet',
-          emptyMessage: 'We might send a request to add more information to your innovation record here'
-        },
-        {
-          title: 'Messages',
-          label: `Unread messages`,
-          link: `/innovator/innovations/${this.innovationId}/threads`,
-          count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
-          lastMessage: `Last received message`,
-          date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No messages yet'
-        }
-      ];
+      if (this.isSubmitted) {
+        this.cardsList = [
+          // Sections in draft
+          {
+            title: 'Innovation record',
+            label: `sections in draft`,
+            link: `/innovator/innovations/${this.innovationId}/record`,
+            count:
+              statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total -
+              statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
+            total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
+            lastMessage: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
+              ? `Last saved section: "${this.translate(
+                  'shared.catalog.innovation.innovation_sections.' +
+                    statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
+                )}"`
+              : '',
+            date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
+            emptyMessage: 'All sections saved',
+            emptyLastMessage: true
+          },
+          {
+            title: 'Tasks assigned to you',
+            label: `tasks to do`,
+            link: `/innovator/innovations/${this.innovationId}/tasks`,
+            count: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER].count,
+            lastMessage: `Most recent assigned task: "Update '${this.translate(
+              'shared.catalog.innovation.innovation_sections.' + lastTaskSubmitted
+            )}'"`,
+            date: statistics[InnovationStatisticsEnum.TASKS_OPEN_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No tasks assigned to you yet',
+            emptyMessage: 'We might send a request to add more information to your innovation record here'
+          },
+          {
+            title: 'Messages',
+            label: `Unread messages`,
+            link: `/innovator/innovations/${this.innovationId}/threads`,
+            count: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER].count,
+            lastMessage: `Last received message`,
+            date: statistics[InnovationStatisticsEnum.UNREAD_MESSAGES_COUNTER]?.lastSubmittedAt,
+            emptyMessage: 'No messages yet'
+          }
+        ];
+      } else {
+        this.cardsList = [
+          {
+            title: 'Innovation record',
+            label: `sections complete`,
+            link: `/innovator/innovations/${this.innovationId}/record`,
+            count: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].count,
+            total: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].total,
+            lastMessage: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
+              ? `Last completed section: "${this.translate(
+                  'shared.catalog.innovation.innovation_sections.' +
+                    statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER].lastSubmittedSection
+                )}"`
+              : '',
+            date: statistics[InnovationStatisticsEnum.SECTIONS_SUBMITTED_COUNTER]?.lastSubmittedAt,
+            emptyMessage: 'You have not completed any section of your innovation record yet'
+          }
+        ];
+      }
 
       if (statistics[InnovationStatisticsEnum.UNANSWERED_SURVEYS_BY_UNIT_COUNTER].count) {
         this.cardsList.unshift({
