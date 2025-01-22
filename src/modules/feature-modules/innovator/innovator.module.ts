@@ -59,7 +59,13 @@ import { InnovatorService } from './services/innovator.service';
 import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
 
 @NgModule({
-  imports: [ThemeModule, SharedModule, InnovatorRoutingModule, InnovationRecordSidebarComponent, InnovatorDataSharingInfoComponent],
+  imports: [
+    ThemeModule,
+    SharedModule,
+    InnovatorRoutingModule,
+    InnovationRecordSidebarComponent,
+    InnovatorDataSharingInfoComponent
+  ],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,
