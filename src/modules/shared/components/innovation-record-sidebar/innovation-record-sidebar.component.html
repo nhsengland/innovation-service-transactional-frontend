@@ -1,0 +1,43 @@
+<h2 class="app-side-nav__heading">Innovation Record sections</h2>
+
+<ul class="nhsuk-list app-side-nav__list">
+  @for (item of sidebar(); track item.label; let firstItem = $first) {
+    <li [ngClass]="firstItem ? 'nhsuk-u-padding-top-1' : 'nhsuk-u-padding-top-2'">
+      <p class="nhsuk-u-font-size-16 nhsuk-u-font-weight-bold font-color-secondary nhsuk-u-margin-bottom-1">
+        <span class="app-side-nav__section nhsuk-u-padding-right-1">{{ item.label }}</span>
+      </p>
+
+      @if ((item.children ?? []).length > 0) {
+        <ul class="app-side-nav__list--expanded nhsuk-u-margin-0">
+          <li
+            *ngFor="let nestedItem of item.children"
+            class="d-flex gap-2/4 app-side-nav__item nhsuk-u-padding-top-1 nhsuk-u-padding-bottom-0"
+            [routerLinkActive]="'nhsuk-u-font-weight-bold'"
+          >
+            @switch (nestedItem.status) {
+              @case ("submitted") {
+                <theme-svg-icon type="success" customColor="green" />
+              }
+              @case ("draft") {
+                <theme-svg-icon type="edit" customColor="yellow" />
+              }
+              @default {
+                <theme-svg-icon type="not-started" customColor="grey" />
+              }
+            }
+
+            @if (isAllSections()) {
+              <a href="javascript:void(0)" (click)="onScrollToSection(nestedItem.id!, $event)" class="app-side-nav__link--all nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
+            } @else {
+              <a [routerLink]="nestedItem.url" class="app-side-nav__link--nested">{{ nestedItem.label }}</a>
+            }
+          </li>
+        </ul>
+      }
+    </li>
+  }
+</ul>
+
+@if (isAllSections()) {
+  <theme-go-to-top-link />
+}

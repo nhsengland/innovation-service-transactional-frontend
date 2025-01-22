@@ -56,8 +56,16 @@ import { AnnouncementsService } from '../announcements/services/announcements.se
 import { InnovatorDataSharingInfoComponent } from './base/data-sharing-info.component';
 import { InnovatorService } from './services/innovator.service';
 
+import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+
 @NgModule({
-  imports: [ThemeModule, SharedModule, InnovatorRoutingModule, InnovatorDataSharingInfoComponent],
+  imports: [
+    ThemeModule,
+    SharedModule,
+    InnovatorRoutingModule,
+    InnovationRecordSidebarComponent,
+    InnovatorDataSharingInfoComponent
+  ],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,

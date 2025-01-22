@@ -1,15 +1,17 @@
-<h2 *ngIf="showHeading" class="app-side-nav__heading">{{ navHeading }}</h2>
-
-<ul class="nhsuk-list app-side-nav__list">
-  <li *ngFor="let item of sidebarItems" class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
-    <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url">{{ item.label }}</a>
-
-    <ul *ngIf="(item.children ?? []).length > 0" class="app-side-nav__list--nested">
-      <li *ngFor="let nestedItem of item.children" [routerLinkActive]="'app-side-nav__item--nested-current'" class="app-side-nav__item">
-        <a [routerLink]="nestedItem.url" class="app-side-nav__link--nested nhsuk-u-padding-right-1">{{ nestedItem.label }}</a>
+@if (!isSectionsPage()) {
+  <ul class="nhsuk-list app-side-nav__list">
+    @for (item of sidebarItems(); track item.url) {
+      <li class="app-side-nav__item" [routerLinkActive]="'app-side-nav__item--current'">
+        <a class="app-side-nav__link nhsuk-u-padding-right-1" [routerLink]="item.url">{{ item.label }}</a>
       </li>
-    </ul>
-  </li>
-</ul>
+    }
+  </ul>
+}
 
-<theme-go-to-top-link *ngIf="isInnovationRecordPage && isInnovationInArchivedStatus" />
+@if (isSectionsPage() && !ctx.innovation.isArchived()) {
+  <shared-innovation-record-sidebar-component />
+}
+
+@if (isInnovationRecordPage() && ctx.innovation.isArchived()) {
+  <theme-go-to-top-link />
+}
