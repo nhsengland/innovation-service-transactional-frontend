@@ -56,6 +56,8 @@ export class InnovationContextStore {
   // Actions
   fetch$ = new Subject<{ innovationId: string; userContext: UserContextType['domainContext'] }>();
 
+  sectionSubmitted$ = new Subject<{ sectionId: string }>();
+
   constructor(
     private innovationService: InnovationContextService,
     private schemaStore: SchemaContextStore
@@ -171,7 +173,9 @@ export class InnovationContextStore {
   }
 
   submitSections$(innovationId: string, sectionKey: string): Observable<MappedObjectType> {
-    return this.innovationService.submitSections(innovationId, sectionKey);
+    return this.innovationService
+      .submitSections(innovationId, sectionKey)
+      .pipe(tap(() => this.sectionSubmitted$.next({ sectionId: sectionKey })));
   }
 
   getSectionEvidence$(innovationId: string, evidenceId: string): Observable<GetInnovationEvidenceDTO> {

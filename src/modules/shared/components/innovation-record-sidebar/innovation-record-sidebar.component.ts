@@ -26,6 +26,19 @@ export class InnovationRecordSidebarComponent extends CoreComponent implements O
 
   constructor(private scroller: ViewportScroller) {
     super();
+
+    this.ctx.innovation.sectionSubmitted$.subscribe(({ sectionId }) => {
+      this.sidebar.update(sections => {
+        for (const section of sections) {
+          const subsection = section.children?.find(sub => sub.id === sectionId);
+          if (subsection) {
+            subsection.status = 'submitted';
+            break;
+          }
+        }
+        return [...sections];
+      });
+    });
   }
 
   ngOnInit(): void {
