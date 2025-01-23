@@ -37,6 +37,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   submitButton = { isActive: false, label: 'Confirm section answers' };
 
   isChangeMode = false;
+  lastSection = false;
 
   displayChangeButtonList: number[] = [];
 
@@ -80,6 +81,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             this.logger.error('Error fetching data');
           }
         });
+
+        if (this.innovation.status === InnovationStatusEnum.CREATED) {
+          this.ctx.innovation.getSectionsSummary$(this.innovation.id).subscribe({
+            next: data => {
+              this.lastSection = !data
+                .flatMap(s => s.sections)
+                .some(s => s.status != InnovationSectionStatusEnum.SUBMITTED && s.id !== this.sectionId);
+            }
+            // no error handling assuming it was not the last section as a fallback
+          });
+        }
       }
     });
   }
@@ -244,7 +256,9 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.setRedirectAlertSuccess('Your answers have been confirmed for this section', {
             message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined
           });
-          this.redirectTo(this.baseUrl);
+          this.redirectTo(
+            this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
+          );
         } else {
           this.setRedirectAlertSuccess('Your updates have been saved');
           this.redirectTo(`${this.baseUrl}/submitted`);
