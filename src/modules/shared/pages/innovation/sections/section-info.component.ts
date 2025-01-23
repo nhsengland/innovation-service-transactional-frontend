@@ -204,9 +204,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           this.innovation.status !== InnovationStatusEnum.CREATED &&
           this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.sectionSummaryData.sectionInfo.submitButton.label = !this.ctx.innovation.isArchived()
-            ? 'Submit updates'
-            : 'Save updates';
+          this.sectionSummaryData.sectionInfo.submitButton.label = 'Save updates';
         }
       } else {
         this.sectionSummaryData.sectionInfo.submitButton.show = false;
