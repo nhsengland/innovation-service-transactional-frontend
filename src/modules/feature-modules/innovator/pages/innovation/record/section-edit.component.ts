@@ -34,7 +34,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   wizard: WizardIRV3EngineModel;
   sectionStatus = InnovationSectionStatusEnum.NOT_STARTED;
   saveButton = { isActive: true, label: 'Save and continue' };
-  submitButton = { isActive: false, label: 'Confirm section answers' };
+  submitButton = { isActive: false, label: 'Mark section complete' };
 
   isChangeMode = false;
 
@@ -237,16 +237,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onSubmitSection(): void {
     this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
+        const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
+        const sectionId = `${group.number}.${section.number}. ${section.title}`;
+        this.setRedirectAlertSuccess(`You have completed section ${sectionId}`);
+
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||
           this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.setRedirectAlertSuccess('Your answers have been confirmed for this section', {
-            message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined
-          });
           this.redirectTo(this.baseUrl);
         } else {
-          this.setRedirectAlertSuccess('Your updates have been saved');
+          this.setRedirectAlertSuccess(`You have completed section ${sectionId}`);
           this.redirectTo(`${this.baseUrl}/submitted`);
         }
       },
