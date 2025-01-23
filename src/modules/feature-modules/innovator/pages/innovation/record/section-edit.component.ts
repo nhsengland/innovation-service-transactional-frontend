@@ -250,8 +250,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
         const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
-        const sectionId = `${group.number}.${section.number}. ${section.title}`;
-        this.setRedirectAlertSuccess(`You have completed section ${sectionId}`);
+        const sectionLabel = `${group.number}.${section.number}. ${section.title}`;
+        this.setRedirectAlertSuccess(`You have completed section '${sectionLabel}'`);
 
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||
