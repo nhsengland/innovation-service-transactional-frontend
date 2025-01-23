@@ -247,7 +247,6 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
         ) {
           this.redirectTo(this.baseUrl);
         } else {
-          this.setRedirectAlertSuccess(`You have completed section ${sectionId}`);
           this.redirectTo(`${this.baseUrl}/submitted`);
         }
       },
