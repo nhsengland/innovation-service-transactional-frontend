@@ -55,7 +55,12 @@
                       [queryParams]="!item.value && !item.isNotMandatory ? {} : { isChangeMode: true }"
                       *ngIf="ctx.user.isInnovator() && item.editStepNumber && displayChangeButtonList.includes(i)"
                     >
-                      Change <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
+                      @if (displayChangeButtonList.indexOf(i) !== displayChangeButtonList.length - 1 || item.value) {
+                        Change
+                      } @else {
+                        Continue
+                      }
+                      <span class="nhsuk-u-visually-hidden"> {{ item.label | lowercase }} </span>
                     </a>
                   </dd>
                 </div>

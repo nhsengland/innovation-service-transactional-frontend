@@ -136,7 +136,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           nextSectionId: null,
           title: '',
           status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
-          submitButton: { show: false, label: 'Confirm section answers' },
+          submitButton: { show: false, label: 'Mark section complete' },
           isNotStarted: false,
           hasEvidences: false,
           wizard: new WizardIRV3EngineModel({}),
