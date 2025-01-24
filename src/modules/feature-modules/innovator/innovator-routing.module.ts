@@ -99,6 +99,7 @@ import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innov
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
 import { InnovationRegisteredComponent } from './pages/innovation/registered/innovation-registered.component';
+import { InnovationSubmissionReadyComponent } from './pages/innovation/submission-ready/innovation-submission-ready.component';
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 
@@ -188,6 +189,13 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
+              },
+
+              {
+                path: 'submission-ready',
+                pathMatch: 'full',
+                component: InnovationSubmissionReadyComponent,
+                data: { breadcrumb: null, layout: { type: 'journey' } }
               },
 
               {
