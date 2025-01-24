@@ -26,14 +26,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovation: ContextInnovationType;
   pendingExportRequests = 0;
   innovationSections: SectionsSummaryModelV3Type = [];
-  sections: {
-    total: number;
-    submitted: number;
-    draft: number;
-    notStarted: number;
-    withOpenTasksCount: number;
-    openTasksCount: number;
-  } = { total: 0, submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
+  sections = { total: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
   isInnovationInCreatedStatus: boolean;
@@ -100,21 +93,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.innovationSections = response;
         this.pendingExportRequests = this.ctx.user.isInnovator() ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
-        this.sections.notStarted = this.innovationSections.reduce(
-          (acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length,
-          0
-        );
-        this.sections.draft = this.innovationSections.reduce(
-          (acc: number, item) => acc + item.sections.filter(s => s.status === 'DRAFT').length,
-          0
-        );
-        this.sections.submitted = this.innovationSections.reduce(
-          (acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length,
-          0
-        );
-
-        this.sections.total = this.sections.notStarted + this.sections.draft + this.sections.submitted;
-        this.allSectionsSubmitted = this.sections.total === this.sections.submitted;
+        const sections = this.innovationSections.flatMap(s => s.sections);
+        this.allSectionsSubmitted = !sections.some(s => s.status !== 'SUBMITTED');
+        this.sections.total = sections.length;
 
         this.sections.withOpenTasksCount = this.innovationSections.reduce(
           (acc: number, item) => acc + item.sections.filter(s => s.openTasksCount > 0).length,

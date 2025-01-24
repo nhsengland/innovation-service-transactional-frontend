@@ -1,0 +1,19 @@
+<p class="d-flex nhsuk-u-margin-0">
+  <theme-svg-icon type="success"></theme-svg-icon>
+  <span class="nhsuk-u-margin-right-2"></span>
+  {{ sectionsComplete() }} of {{ sectionsTotal() }} {{ "dictionary.section" | pluralTranslate: sectionsTotal() | translate }} completed
+</p>
+@if (sectionsDraft() > 0) {
+  <p class="d-flex nhsuk-u-margin-0">
+    <theme-svg-icon type="edit"></theme-svg-icon>
+    <span class="nhsuk-u-margin-right-2"></span>
+    {{ sectionsDraft() }} {{ "dictionary.section" | pluralTranslate: sectionsDraft() | translate }} in draft
+  </p>
+}
+@if (sectionsNotStarted() > 0) {
+  <p class="d-flex">
+    <theme-svg-icon type="not-started" customColor="grey"></theme-svg-icon>
+    <span class="nhsuk-u-margin-right-2"></span>
+    {{ sectionsNotStarted() }} {{ "dictionary.section" | pluralTranslate: sectionsNotStarted() | translate }} not started
+  </p>
+}

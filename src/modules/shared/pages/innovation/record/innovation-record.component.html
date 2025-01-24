@@ -33,24 +33,14 @@
             <h2 class="nhsuk-card__heading nhsuk-heading-m">
               {{ sections.total }} sections to complete until you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
             </h2>
-            <shared-innovation-record-progress
-              [sectionsComplete]="sections.submitted"
-              [sectionsDraft]="sections.draft"
-              [sectionsNotStarted]="sections.notStarted"
-              [sectionsTotal]="sections.total"
-            ></shared-innovation-record-progress>
+            <shared-innovation-record-progress [sections]="innovationSections" />
             <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">
               Submit record for needs {{ isReassessment ? "reassessment" : "assessment" }}
             </button>
           </div>
         </div>
       } @else {
-        <shared-innovation-record-progress
-          [sectionsComplete]="sections.submitted"
-          [sectionsDraft]="sections.draft"
-          [sectionsNotStarted]="sections.notStarted"
-          [sectionsTotal]="sections.total"
-        ></shared-innovation-record-progress>
+        <shared-innovation-record-progress [sections]="innovationSections" class="nhsuk-u-margin-bottom-6" />
       }
 
       @if (ctx.user.isInnovator() && sections.withOpenTasksCount > 0) {
