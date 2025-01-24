@@ -6,13 +6,11 @@ import { CoreComponent } from '@app/base';
 
 import { ContextInnovationType, InnovationStatusEnum } from '@modules/stores';
 
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
-import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
-import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
-
-type ProgressBarType = '1:active' | '2:warning' | '3:inactive';
 
 @Component({
   selector: 'shared-pages-innovation-record',
@@ -29,24 +27,25 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   pendingExportRequests = 0;
   innovationSections: SectionsSummaryModelV3Type = [];
   sections: {
-    progressBar: ProgressBarType[];
+    total: number;
     submitted: number;
     draft: number;
     notStarted: number;
     withOpenTasksCount: number;
     openTasksCount: number;
-  } = { progressBar: [], submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
+  } = { total: 0, submitted: 0, draft: 0, notStarted: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
-  isLoggedUserOwner: boolean;
   isInnovationInCreatedStatus: boolean;
   isInnovationInArchivedStatus: boolean;
+  isLoggedUserOwner: boolean;
+  isReassessment: boolean;
   showSupportingTeamsShareRequestSection: boolean;
   showInnovatorShareRequestSection: boolean;
-  // This flag is to differ archivals that happened while innovation was not shared.
-  isArchiveBeforeShare: boolean;
-
+  showSubmit = false;
   allSectionsSubmitted = false;
+
+  submitUrl = '';
 
   customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
@@ -71,7 +70,17 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     this.isInnovationInArchivedStatus = this.ctx.innovation.isArchived();
     this.showSupportingTeamsShareRequestSection = this.ctx.user.isAccessorOrAssessment();
     this.showInnovatorShareRequestSection = this.ctx.user.isInnovator() && !this.isInnovationInCreatedStatus;
-    this.isArchiveBeforeShare = this.isInnovationInArchivedStatus && !this.innovation.assessment;
+    this.isReassessment = !!this.innovation.assessment;
+
+    if (
+      (this.ctx.user.isInnovator() && this.innovation.status === InnovationStatusEnum.CREATED) ||
+      (this.isLoggedUserOwner && this.innovation.status === InnovationStatusEnum.ARCHIVED)
+    ) {
+      this.showSubmit = true;
+      this.submitUrl = this.isReassessment
+        ? `/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send`
+        : `/innovator/innovations/${this.innovationId}/record/support`;
+    }
   }
 
   ngOnInit(): void {
@@ -91,23 +100,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.innovationSections = response;
         this.pendingExportRequests = this.ctx.user.isInnovator() ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
-        this.sections.progressBar = this.innovationSections.reduce((acc: ProgressBarType[], item) => {
-          return [
-            ...acc,
-            ...item.sections.map(s => {
-              switch (s.status) {
-                case 'SUBMITTED':
-                  return '1:active';
-                case 'DRAFT':
-                  return '2:warning';
-                case 'NOT_STARTED':
-                default:
-                  return '3:inactive';
-              }
-            })
-          ];
-        }, []);
-
         this.sections.notStarted = this.innovationSections.reduce(
           (acc: number, item) => acc + item.sections.filter(s => s.status === 'NOT_STARTED').length,
           0
@@ -120,6 +112,10 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
           (acc: number, item) => acc + item.sections.filter(s => s.status === 'SUBMITTED').length,
           0
         );
+
+        this.sections.total = this.sections.notStarted + this.sections.draft + this.sections.submitted;
+        this.allSectionsSubmitted = this.sections.total === this.sections.submitted;
+
         this.sections.withOpenTasksCount = this.innovationSections.reduce(
           (acc: number, item) => acc + item.sections.filter(s => s.openTasksCount > 0).length,
           0
@@ -128,8 +124,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
           (acc: number, item) => acc + item.sections.reduce((acc: number, section) => acc + section.openTasksCount, 0),
           0
         );
-
-        this.allSectionsSubmitted = this.sections.submitted === this.sections.progressBar.length;
 
         this.customNotificationLinks = [
           {
