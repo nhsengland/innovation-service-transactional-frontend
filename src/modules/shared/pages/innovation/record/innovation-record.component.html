@@ -28,7 +28,7 @@
 
     <div class="nhsuk-grid-column-full">
       @if (showSubmit) {
-        @if (allSectionsSubmitted) {
+        @if (allSectionsSubmitted && !isReassessment) {
           <!-- This is very similar to the content on the innovation submission ready component -->
           <div class="nhsuk-card">
             <div class="nhsuk-card__content nhsuk-u-padding-4">
@@ -48,7 +48,8 @@
           <div class="nhsuk-card">
             <div class="nhsuk-card__content">
               <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                {{ sections.incompleteSections }} sections to complete until you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
+                {{ sections.incompleteSections }} {{ "dictionary.section" | pluralTranslate: sections.incompleteSections | translate }} to complete until you can submit for needs
+                {{ isReassessment ? "reassessment" : "assessment" }}
               </h2>
               <shared-innovation-record-progress [sections]="innovationSections" [firstSubmission]="!isReassessment" />
               <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">

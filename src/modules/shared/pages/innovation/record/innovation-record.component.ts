@@ -71,7 +71,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
     ) {
       this.showSubmit = true;
       this.submitUrl = this.isReassessment
-        ? `/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send`
+        ? `/innovator/innovations/${this.innovationId}/how-to-proceed/needs-reassessment-send`
         : `/innovator/innovations/${this.innovationId}/record/support`;
     }
   }
