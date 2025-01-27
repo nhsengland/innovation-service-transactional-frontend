@@ -9,10 +9,6 @@
     <div class="nhsuk-u-margin-top-0" *ngIf="!(ctx.innovation.isArchived() && ctx.user.isAccessorOrAssessment())">
       <span class="nhsuk-u-visually-hidden">Information: </span>
 
-      <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
-      </ul>
-
       <p class="d-flex nhsuk-u-margin-0">
         <ng-container *ngTemplateOutlet="icon; context: { type: 'success' }" />
         {{ sections.submitted }} of {{ sections.progressBar.length }} {{ "dictionary.section" | pluralTranslate: sections.progressBar.length | translate }} completed
