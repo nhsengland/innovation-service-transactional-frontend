@@ -127,6 +127,7 @@ import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
 
 // Standalone components
+import { InnovationSubmissionReadyComponent } from '@modules/feature-modules/innovator/pages/innovation/submission-ready/innovation-submission-ready.component';
 import { InnovationRecordProgressComponent } from './pages/innovation/record/innovation-record-progress.component';
 
 @NgModule({
@@ -143,7 +144,8 @@ import { InnovationRecordProgressComponent } from './pages/innovation/record/inn
 
     // Standalone
     PluralTranslatePipe,
-    InnovationRecordProgressComponent
+    InnovationRecordProgressComponent,
+    InnovationSubmissionReadyComponent
   ],
   declarations: [
     // Pages.

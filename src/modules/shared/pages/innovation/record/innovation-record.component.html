@@ -28,17 +28,35 @@
 
     <div class="nhsuk-grid-column-full">
       @if (showSubmit) {
-        <div class="nhsuk-card">
-          <div class="nhsuk-card__content">
-            <h2 class="nhsuk-card__heading nhsuk-heading-m">
-              {{ sections.total }} sections to complete until you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
-            </h2>
-            <shared-innovation-record-progress [sections]="innovationSections" />
-            <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">
-              Submit record for needs {{ isReassessment ? "reassessment" : "assessment" }}
-            </button>
+        @if (allSectionsSubmitted) {
+          <!-- This is very similar to the content on the innovation submission ready component -->
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content nhsuk-u-padding-4">
+              <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Innovation record ready to submit</h3>
+              <p>When you submit your innovation record the needs assessment team will:</p>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li>review your innovation record to assess your needs.</li>
+                <li>notify the appropriate support organisations.</li>
+                <li>contact you with next steps.</li>
+              </ul>
+              <p>This process usually takes 1 week.</p>
+              <p>The needs assessment team will get in touch with you if they need any additional information.</p>
+              <button type="submit" class="nhsuk-button" routerLink="support">Submit record for needs assessment</button>
+            </div>
           </div>
-        </div>
+        } @else {
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                {{ sections.incompleteSections }} sections to complete until you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
+              </h2>
+              <shared-innovation-record-progress [sections]="innovationSections" [firstSubmission]="!isReassessment" />
+              <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">
+                Submit record for needs {{ isReassessment ? "reassessment" : "assessment" }}
+              </button>
+            </div>
+          </div>
+        }
       } @else {
         <shared-innovation-record-progress [sections]="innovationSections" class="nhsuk-u-margin-bottom-6" />
       }

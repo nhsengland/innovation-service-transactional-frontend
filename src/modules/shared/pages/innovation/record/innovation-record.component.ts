@@ -26,7 +26,7 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovation: ContextInnovationType;
   pendingExportRequests = 0;
   innovationSections: SectionsSummaryModelV3Type = [];
-  sections = { total: 0, withOpenTasksCount: 0, openTasksCount: 0 };
+  sections = { incompleteSections: 0, withOpenTasksCount: 0, openTasksCount: 0 };
 
   // Flags.
   isInnovationInCreatedStatus: boolean;
@@ -94,8 +94,9 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
         this.pendingExportRequests = this.ctx.user.isInnovator() ? statistics.PENDING_EXPORT_REQUESTS_COUNTER.count : 0;
 
         const sections = this.innovationSections.flatMap(s => s.sections);
-        this.allSectionsSubmitted = !sections.some(s => s.status !== 'SUBMITTED');
-        this.sections.total = sections.length;
+        const incompleteSections = sections.filter(s => s.status !== 'SUBMITTED');
+        this.sections.incompleteSections = incompleteSections.length;
+        this.allSectionsSubmitted = incompleteSections.length === 0;
 
         this.sections.withOpenTasksCount = this.innovationSections.reduce(
           (acc: number, item) => acc + item.sections.filter(s => s.openTasksCount > 0).length,
