@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({ name: 'pluralTranslate' })
+@Pipe({ name: 'pluralTranslate', standalone: true })
 export class PluralTranslatePipe implements PipeTransform {
   transform(translation: string, count?: null | number): string {
     switch (count) {

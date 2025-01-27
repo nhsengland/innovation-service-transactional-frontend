@@ -5,9 +5,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DynamicModule } from 'ng-dynamic-component';
 
 // Modules.
+import { ReactiveFormsModule } from '@angular/forms';
 import { ThemeModule } from '@modules/theme/theme.module';
 import { FormsModule } from './forms/forms.module';
-import { ReactiveFormsModule } from '@angular/forms';
 
 // Pages.
 // // Account.
@@ -53,12 +53,12 @@ import { PageInnovationRecordDownloadComponent } from './pages/innovation/record
 import { PageInnovationRecordComponent } from './pages/innovation/record/innovation-record.component';
 import { PageInnovationSectionEvidenceInfoComponent } from './pages/innovation/sections/section-evidence-info.component';
 import { PageInnovationSectionInfoComponent } from './pages/innovation/sections/section-info.component';
+import { InnovationSectionSummaryComponent } from './pages/innovation/sections/section-summary.component';
 import { PageInnovationStatusListComponent } from './pages/innovation/status/innovation-status-list.component';
 import { PageInnovationSupportStatusListComponent } from './pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from './pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateWrapperComponent } from './pages/innovation/support/support-summary-progress-update-wrapper.component';
-import { InnovationSectionSummaryComponent } from './pages/innovation/sections/section-summary.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -73,12 +73,12 @@ import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-w
 
 // Pipes.
 import { BytesPrettyPrintPipe } from './pipes/bytes-pretty-print.pipe';
-import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
-import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
-import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
-import { JoinArrayPipe } from './pipes/join-array.pipe';
-import { ServiceRoleTranslatePipe } from './pipes/service-role-translate.pipe';
 import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
+import { JoinArrayPipe } from './pipes/join-array.pipe';
+import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
+import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
+import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
+import { ServiceRoleTranslatePipe } from './pipes/service-role-translate.pipe';
 
 // Components
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
@@ -93,6 +93,31 @@ import { InnovationTaskDataResolver } from './resolvers/innovation-task-data.res
 import { InnovationThreadDataResolver } from './resolvers/innovation-thread-data.resolver';
 
 // Services.
+import { FileUploadService } from '@modules/shared/services/file-upload.service';
+import { FiltersSelectionWrapperComponent } from './components/filters-selection-wrapper/filters-selection-wrapper.component';
+import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wrapper.component';
+import { PageSharedAccountManageAccountInfoComponent } from './pages/account/manage-account-info/manage-account-info.component';
+import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.component';
+import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessment/assessment-details.component';
+import { PageInnovationRecordWrapperComponent } from './pages/innovation/record/innovation-record-wrapper.component';
+import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/categories-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/date-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/subcategories-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/summary-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/support-summary-progress-update-milestones.component';
+import { WizardInnovationSupportSummaryProgressUpdateAddDocumentStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/add-document-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-description-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-file-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateDocumentNameStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-name-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/summary-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateTitleStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/title-step.component';
+import { WizardInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/wizard-support-summary-progress-update/support-summary-progress-update.component';
+import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
+import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
+import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
 import { InnovationDocumentsService } from './services/innovation-documents.service';
 import { InnovationsService } from './services/innovations.service';
 import { NotificationsService } from './services/notifications.service';
@@ -100,31 +125,10 @@ import { OrganisationsService } from './services/organisations.service';
 import { StatisticsService } from './services/statistics.service';
 import { TermsOfUseService } from './services/terms-of-use.service';
 import { UsersService } from './services/users.service';
-import { FileUploadService } from '@modules/shared/services/file-upload.service';
-import { PageInnovationAllSectionsInfoComponent } from './pages/innovation/sections/section-info-all.component';
-import { FiltersWrapperComponent } from './components/filters-wrapper/filters-wrapper.component';
-import { FiltersSelectionWrapperComponent } from './components/filters-selection-wrapper/filters-selection-wrapper.component';
-import { PageInnovationRecordWrapperComponent } from './pages/innovation/record/innovation-record-wrapper.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/support-summary-progress-update-milestones.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesCategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/categories-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/subcategories-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/description-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/date-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/summary-step.component';
-import { PageAccountMFAEditComponent } from './pages/account/mfa/mfa-edit.component';
-import { PageSharedAccountManageAccountInfoComponent } from './pages/account/manage-account-info/manage-account-info.component';
-import { PageProgressCategoriesWrapperComponent } from './pages/progress-categories/progress-categories-wrapper.component';
-import { PageProgressCategoriesOneLevelMilestoneComponent } from './pages/progress-categories/progress-categories-one-level-milestone.component';
-import { PageProgressCategoriesTwoLevelMilestoneComponent } from './pages/progress-categories/progress-categories-two-level-milestone.component';
-import { InnovationAssessmentDetailsComponent } from './pages/innovation/assessment/assessment-details.component';
-import { WizardInnovationSupportSummaryProgressUpdateComponent } from './pages/innovation/support/wizard-support-summary-progress-update/support-summary-progress-update.component';
-import { WizardInnovationSupportSummaryProgressUpdateTitleStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/title-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/description-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateAddDocumentStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/add-document-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateDocumentNameStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-name-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateDocumentDescriptionStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-description-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateDocumentFileStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/document-file-step.component';
-import { WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update/steps/summary-step.component';
+
+// Standalone components
+import { InnovationSubmissionReadyComponent } from '@modules/feature-modules/innovator/pages/innovation/submission-ready/innovation-submission-ready.component';
+import { InnovationRecordProgressComponent } from './pages/innovation/record/innovation-record-progress.component';
 
 @NgModule({
   imports: [
@@ -136,7 +140,12 @@ import { WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent } from
     // Modules.
     ThemeModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+
+    // Standalone
+    PluralTranslatePipe,
+    InnovationRecordProgressComponent,
+    InnovationSubmissionReadyComponent
   ],
   declarations: [
     // Pages.
@@ -226,7 +235,6 @@ import { WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent } from
 
     // Pipes.
     BytesPrettyPrintPipe,
-    PluralTranslatePipe,
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
