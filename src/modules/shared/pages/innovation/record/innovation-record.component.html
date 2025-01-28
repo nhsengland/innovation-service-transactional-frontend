@@ -48,8 +48,12 @@
           <div class="nhsuk-card">
             <div class="nhsuk-card__content">
               <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                {{ sections.incompleteSections }} {{ "dictionary.section" | pluralTranslate: sections.incompleteSections | translate }} to complete until you can submit for needs
-                {{ isReassessment ? "reassessment" : "assessment" }}
+                @if (sections.incompleteSections > 0) {
+                  {{ sections.incompleteSections }} {{ "dictionary.section" | pluralTranslate: sections.incompleteSections | translate }} to complete until you can submit for needs
+                  {{ isReassessment ? "reassessment" : "assessment" }}
+                } @else {
+                  All sections are complete you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
+                }
               </h2>
               <shared-innovation-record-progress [sections]="innovationSections" [firstSubmission]="!isReassessment" />
               <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">
