@@ -63,6 +63,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   // Flags
   shouldShowDocuments = false;
   lastSection = false;
+  isInnovationInCreatedStatus = false;
 
   search?: string;
 
@@ -78,6 +79,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
+    this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
