@@ -108,7 +108,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             (this.innovationSupport && this.innovationSupport.status === InnovationSupportStatusEnum.SUGGESTED));
 
         this.innovationSummary = [
-          { label: 'ID', value: innovationInfo.uniqueId, copy: true },
+          { label: 'Innovation ID', value: innovationInfo.uniqueId, copy: true },
           { label: 'Company', value: innovationInfo.owner?.organisation?.name ?? 'No company' },
           ...(this.innovation.owner?.organisation?.size
             ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]
