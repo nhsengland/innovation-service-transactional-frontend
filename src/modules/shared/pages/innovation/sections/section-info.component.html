@@ -7,7 +7,7 @@
           @switch (sectionSummaryData.sectionInfo.status.id) {
             @case ("NOT_STARTED") {
               <p class="d-flex">
-                <theme-svg-icon type="error" customColor="grey" />
+                <theme-svg-icon type="not-started" customColor="grey" />
                 <span class="nhsuk-u-margin-right-2">This section has not been started.</span>
               </p>
             }
@@ -42,7 +42,7 @@
                 <p class="d-flex">
                   <theme-svg-icon type="success" />
                   <span>
-                    This section was last submitted by {{ this.sectionSummaryData.sectionInfo.submittedBy.name }} on
+                    This section was last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} by {{ this.sectionSummaryData.sectionInfo.submittedBy.name }} on
                     {{ this.sectionSummaryData.sectionInfo.date | date: ("app.date_formats.long_date" | translate) }}.
                     @if (ctx.user.isInnovator()) {
                       You can update this section at any time.

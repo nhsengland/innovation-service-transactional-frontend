@@ -4,13 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
-import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
-import { InnovationSectionStatusEnum } from '@modules/stores';
-import { SectionInfoType } from './section-info.component';
 import {
   EvidenceV3Type,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
+import { InnovationSectionStatusEnum } from '@modules/stores';
+import { SectionInfoType } from './section-info.component';
 
 export type SectionSummaryInputData = {
   sectionInfo: SectionInfoType;
@@ -55,12 +55,15 @@ export class InnovationSectionSummaryComponent extends CoreComponent implements 
 
   search?: string;
 
+  isInnovationInCreatedStatus = false;
+
   constructor(private activatedRoute: ActivatedRoute) {
     super();
 
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
+    this.isInnovationInCreatedStatus = this.innovation.status === 'CREATED';
 
     this.sectionInfo = {
       id: '',

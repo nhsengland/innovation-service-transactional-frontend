@@ -23,7 +23,10 @@
       <ng-container *ngIf="ctx.user.isAccessorOrAssessment() && sectionInfo.status.id === 'DRAFT'">
         <div *ngIf="innovation.status !== 'ARCHIVED'" class="nhsuk-inset-text nhsuk-u-margin-top-2 nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p>This is the last submitted version of this section. You cannot see any updates the innovator makes to the section, while it is in draft.</p>
+          <p>
+            This is the last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} version of this section. You cannot see any updates the innovator makes to the section, while
+            it is in draft.
+          </p>
           <p>When they resubmit the section you'll be able to see any changes they have made.</p>
         </div>
       </ng-container>

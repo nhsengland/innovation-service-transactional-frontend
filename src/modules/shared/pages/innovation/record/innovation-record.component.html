@@ -131,20 +131,20 @@
 
               <ng-container *ngIf="section.submittedAt">
                 <span *ngIf="section.status === 'SUBMITTED'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                  Last submitted by {{ section.submittedBy?.name }}
+                  Last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} by {{ section.submittedBy?.name }}
                   <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                   {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                 </span>
                 <ng-container *ngIf="!ctx.user.isAccessorType() && !ctx.user.isAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                    In draft - last submitted by {{ section.submittedBy?.name }}
+                    In draft - last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} by {{ section.submittedBy?.name }}
                     <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                     {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                   </span>
                 </ng-container>
                 <ng-container *ngIf="ctx.user.isAccessorOrAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                    This section is in draft. You can view the last version submitted by the innovator.
+                    This section is in draft. You can view the last version saved by the innovator.
                   </span>
                 </ng-container>
               </ng-container>
