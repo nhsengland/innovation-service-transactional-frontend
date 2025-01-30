@@ -78,7 +78,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
       };
 
       this.innovationSummary = [
-        { label: 'ID', value: innovation.uniqueId, copy: true },
+        { label: 'Innovation ID', value: innovation.uniqueId, copy: true },
         { label: 'Company', value: innovation.owner?.organisation?.name ?? 'No company' },
         ...(innovation.owner?.organisation?.size
           ? [{ label: 'Company size', value: innovation.owner.organisation.size }]

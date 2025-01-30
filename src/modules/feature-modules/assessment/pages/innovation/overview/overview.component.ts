@@ -84,7 +84,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
           this.setPageTitle('Overview', { hint: `Innovation ${this.innovation.name}` });
 
           this.innovationSummary = [
-            { label: 'ID', value: innovationInfo.uniqueId, copy: true },
+            { label: 'Innovation ID', value: innovationInfo.uniqueId, copy: true },
             { label: 'Company', value: this.innovation.owner?.organisation?.name ?? 'No company' },
             ...(this.innovation.owner?.organisation?.size
               ? [{ label: 'Company size', value: this.innovation.owner.organisation.size }]
