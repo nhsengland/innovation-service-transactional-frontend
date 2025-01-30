@@ -6,11 +6,24 @@
       <h1 *ngIf="wizard.currentStep().label" class="nhsuk-heading-l">{{ wizard.currentStep().label }}</h1>
       <p *ngIf="wizard.currentStep().description">{{ wizard.currentStep().description }}</p>
 
-      <!-- TODO: This copy as to change with collaborators -->
-      <div *ngIf="wizard.isFirstStep()" class="nhsuk-inset-text">
-        <span class="nhsuk-u-visually-hidden">Information:</span>
-        <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
-      </div>
+      @if (wizard.isFirstStep()) {
+        <div>
+          <p>We’ll ask you for the name and a brief description of the innovation, as well as your head office location and website.</p>
+          <p>Once you’ve registered, we’ll ask you more detailed questions about your innovation in your innovation record.
+          This will help us match you with appropriate support organisations for your innovation stage and type. </p>
+          <p>The NHS Innovation Service is not suitable for innovations that are:</p>
+          <ul class="nhsuk-list nhsuk-list--bullet">
+            <li>not intended to be used in the NHS</li>
+            <li>not relevant for healthcare or social care</li>
+            <li>being developed by individuals or states subject to <a href="{{CONSTANTS.URLS.GOV_UK_REGIMES_UNDER_SANCTIONS}}" target="_blank" rel="noopener noreferrer">UK sanctions (opens in a new window)</a></li>
+          </ul>
+        </div>
+        <!-- TODO: This copy as to change with collaborators -->
+        <div class="nhsuk-inset-text">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
+        </div>
+      }
 
       <theme-form-engine formId="addInnovationForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()"></theme-form-engine>
       <button type="submit" form="addInnovationForm" class="nhsuk-button" (click)="onSubmitStep('next')">

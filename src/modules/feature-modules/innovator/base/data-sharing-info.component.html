@@ -1,0 +1,19 @@
+<div class="nhsuk-inset-text">
+  <span class="nhsuk-u-visually-hidden">Information:</span>
+  @if (isSubmitted()) {
+    <p>
+      You control which support organisations can access your innovation through your
+      <a routerLink="../support" href="javascript:void(0)" target="_blank" rel="noopener noreferrer">data sharing preferences (opens in a new window)</a>. You can change your
+      preferences at any time.
+    </p>
+  } @else {
+    <p>
+      You control which support organisations can access your innovation through your data sharing preferences. You select your preferences for each innovation when you submit your
+      record for needs assessment. You can change your preferences at any time.
+    </p>
+  }
+  <p>
+    To protect your data, all support organisations on the service have to agree to our
+    <a href="{{ this.CONSTANTS.URLS.TOU_INNOVATOR }}" target="_blank" rel="noopener noreferrer">terms of use (opens in a new window)</a>.
+  </p>
+</div>

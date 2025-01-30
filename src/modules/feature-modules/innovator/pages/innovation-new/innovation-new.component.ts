@@ -62,7 +62,7 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     this.innovatorService.createInnovation(body).subscribe({
       next: response => {
         this.setRedirectAlertSuccess(`You have successfully registered the innovation '${body.name}'`);
-        this.redirectTo(`innovator/innovations/${response.id}`);
+        this.redirectTo(`innovator/innovations/${response.id}/registered`);
       },
       error: ({ error: err }: HttpErrorResponse) => {
         if (err.error === InnovationErrorsEnum.INNOVATION_ALREADY_EXISTS) {

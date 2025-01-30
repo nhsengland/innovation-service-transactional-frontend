@@ -73,8 +73,10 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 
+import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+
 @NgModule({
-  imports: [ThemeModule, SharedModule, AdminRoutingModule],
+  imports: [ThemeModule, SharedModule, AdminRoutingModule, InnovationRecordSidebarComponent],
   declarations: [
     // Base
     ContextInnovationOutletComponent,

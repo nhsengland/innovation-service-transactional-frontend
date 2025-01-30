@@ -68,7 +68,10 @@
         >
       </div>
 
-      <p *ngIf="user.innovationsOwner.length === 0">You have no innovations.</p>
+      @if (user.innovationsOwner.length === 0) {
+        <p>You have no innovations.</p>
+        <app-innovator-data-sharing-info></app-innovator-data-sharing-info>
+      }
       <ul *ngIf="user.innovationsOwner.length > 0" class="nhsuk-grid-row nhsuk-card-group">
         <li *ngFor="let innovation of user.innovationsOwner" class="nhsuk-grid-column-full nhsuk-card-group__item">
           <ng-container *ngTemplateOutlet="innovationCard; context: { $implicit: innovation }"></ng-container>

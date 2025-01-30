@@ -1,53 +1,58 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
-      <div class="nhsuk-u-margin-top-0">
+      <div class="nhsuk-u-margin-top-0 nhsuk-u-margin-bottom-4">
         <span class="nhsuk-u-visually-hidden">Information: </span>
-        <ng-container *ngIf="!(ctx.innovation.isArchived() && ctx.user.isAccessorOrAssessment())" [ngSwitch]="this.sectionSummaryData.sectionInfo.status.id">
-          <p class="d-flex">
-            <ng-container *ngSwitchCase="'NOT_STARTED'">
-              <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
-              <span class="nhsuk-u-margin-right-2"></span>
-              <span>This section has not been started yet.</span>
-            </ng-container>
+        @if (!(ctx.innovation.isArchived() && ctx.user.isAccessorOrAssessment())) {
+          @switch (sectionSummaryData.sectionInfo.status.id) {
+            @case ("NOT_STARTED") {
+              <p class="d-flex">
+                <theme-svg-icon type="error" customColor="grey" />
+                <span class="nhsuk-u-margin-right-2">This section has not been started.</span>
+              </p>
+            }
 
-            <ng-container *ngSwitchCase="'DRAFT'">
-              <theme-svg-icon type="edit"></theme-svg-icon>
-              <span class="nhsuk-u-margin-right-2"></span>
+            @case ("DRAFT") {
+              @if (ctx.user.isInnovator()) {
+                @if (innovation.status === "CREATED") {
+                  <p class="d-flex">
+                    <theme-svg-icon type="edit" />
+                    <span class="nhsuk-u-margin-right-2">This section is in draft.</span>
+                  </p>
+                  <p class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
+                    Your answers help us match you with organisations that can support you in the areas you need. You can add more information or make changes to your innovation
+                    record at any time, even after submitting it for a needs assessment.
+                  </p>
+                } @else {
+                  <p class="d-flex">
+                    <theme-svg-icon type="edit" />
+                    <span class="nhsuk-u-margin-right-2">This section is in draft. Any changes you make will not be visible to others until you save them.</span>
+                  </p>
+                }
+              } @else {
+                <p class="d-flex">
+                  <theme-svg-icon type="edit" />
+                  <span class="nhsuk-u-margin-right-2">This section is in draft.</span>
+                </p>
+              }
+            }
 
-              <ng-container *ngIf="ctx.user.isInnovator()">
-                <ng-container *ngIf="innovation.status !== 'CREATED'">
-                  <span>This section is in draft. Any changes you make to this section will not be visible to others until you submit updates.</span>
-                </ng-container>
-                <ng-container *ngIf="innovation.status === 'CREATED'">
-                  <div>
-                    <p>This section is in draft. You need to complete the section before you can submit your record for needs assessment.</p>
-                    <p class="nhsuk-inset-text nhsuk-u-padding-top-0 nhsuk-u-padding-bottom-0 nhsuk-u-margin-top-2 nhsuk-u-margin-bottom-2">
-                      If you are unable to answer a question yet, you can still mark the section as complete. This will help us match you with organisations that can support you in
-                      these areas.
-                    </p>
-                  </div>
-                </ng-container>
-              </ng-container>
-
-              <ng-container *ngIf="!ctx.user.isInnovator()">
-                <span>This section is in draft.</span>
-              </ng-container>
-            </ng-container>
-
-            <ng-container *ngSwitchCase="'SUBMITTED'">
-              <ng-container *ngIf="this.sectionSummaryData.sectionInfo.date !== '' && this.sectionSummaryData.sectionInfo.submittedBy !== null">
-                <theme-svg-icon type="success"></theme-svg-icon>
-                <span class="nhsuk-u-margin-right-2"></span>
-                <span>
-                  This section was last submitted by {{ this.sectionSummaryData.sectionInfo.submittedBy.name }} on
-                  {{ this.sectionSummaryData.sectionInfo.date | date: ("app.date_formats.long_date" | translate) }}.
-                  <span class="d-inline-block" *ngIf="ctx.user.isInnovator()">You can update this section at any time.</span>
-                </span>
-              </ng-container>
-            </ng-container>
-          </p>
-        </ng-container>
+            @case ("SUBMITTED") {
+              @if (sectionSummaryData.sectionInfo.date !== "" && sectionSummaryData.sectionInfo.submittedBy !== null) {
+                <p class="d-flex">
+                  <theme-svg-icon type="success" />
+                  <span>
+                    This section was last submitted by {{ this.sectionSummaryData.sectionInfo.submittedBy.name }} on
+                    {{ this.sectionSummaryData.sectionInfo.date | date: ("app.date_formats.long_date" | translate) }}.
+                    @if (ctx.user.isInnovator()) {
+                      You can update this section at any time.
+                    }
+                  </span>
+                </p>
+              }
+            }
+          }
+        }
       </div>
 
       <div *ngIf="ctx.user.isInnovator() && this.sectionSummaryData.sectionInfo.openTasksCount > 0" class="nhsuk-u-margin-bottom-5">

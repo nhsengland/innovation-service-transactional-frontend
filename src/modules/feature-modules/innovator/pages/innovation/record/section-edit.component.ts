@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, concatMap, of } from 'rxjs';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
+import { combineLatest, concatMap, of } from 'rxjs';
 
-import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
+import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
 import {
   WizardIRV3EngineModel,
   WizardSummaryV3Type
 } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
-import { FormEngineV3Component } from '@modules/shared/forms/engine/form-engine-v3.component';
+import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
@@ -34,11 +34,10 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   wizard: WizardIRV3EngineModel;
   sectionStatus = InnovationSectionStatusEnum.NOT_STARTED;
   saveButton = { isActive: true, label: 'Save and continue' };
-  submitButton = { isActive: false, label: 'Confirm section answers' };
+  submitButton = { isActive: false, label: 'Mark section complete' };
 
   isChangeMode = false;
-
-  sectionSubmittedText = '';
+  lastSection = false;
 
   displayChangeButtonList: number[] = [];
 
@@ -66,16 +65,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   ngOnInit(): void {
-    const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
-
-    const savedOrSubmitted = !this.isArchived ? 'submitted' : 'saved';
-
-    this.sectionSubmittedText = sectionIdentification
-      ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
-      : '';
-
     combineLatest([this.activatedRoute.queryParams, this.activatedRoute.params]).subscribe({
-      next: ([queryParams, params]) => {
+      next: ([queryParams]) => {
         this.isChangeMode = queryParams.isChangeMode ?? false;
 
         this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
@@ -90,6 +81,17 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
             this.logger.error('Error fetching data');
           }
         });
+
+        if (this.innovation.status === InnovationStatusEnum.CREATED) {
+          this.ctx.innovation.getSectionsSummary$(this.innovation.id).subscribe({
+            next: data => {
+              this.lastSection = !data
+                .flatMap(s => s.sections)
+                .some(s => s.status != InnovationSectionStatusEnum.SUBMITTED && s.id !== this.sectionId);
+            }
+            // no error handling assuming it was not the last section as a fallback
+          });
+        }
       }
     });
   }
@@ -120,7 +122,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
           this.innovation.status !== InnovationStatusEnum.CREATED &&
           this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.submitButton.label = !this.isArchived ? 'Submit updates' : 'Save updates';
+          this.submitButton.label = 'Save updates';
         }
       }
 
@@ -247,16 +249,18 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   onSubmitSection(): void {
     this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
       next: () => {
+        const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
+        const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
+        this.setRedirectAlertSuccess(`You have completed section ${sectionLabel}`);
+
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||
           this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.setRedirectAlertSuccess('Your answers have been confirmed for this section', {
-            message: this.getNextSectionId() ? 'Go to next section or return to the full innovation record' : undefined
-          });
-          this.redirectTo(this.baseUrl);
+          this.redirectTo(
+            this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
+          );
         } else {
-          this.setRedirectAlertSuccess(this.sectionSubmittedText);
           this.redirectTo(`${this.baseUrl}/submitted`);
         }
       },

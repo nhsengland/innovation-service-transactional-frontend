@@ -1,0 +1,23 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-column-two-thirds">
+    <p>The next step to progress your innovation is to submit your record for needs assessment.</p>
+
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content nhsuk-u-padding-4">
+        <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">When you submit your innovation record</h3>
+        <p>The needs assessment team will:</p>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li>review your innovation record to assess your needs.</li>
+          <li>notify the appropriate support organisations.</li>
+          <li>contact you with next steps.</li>
+        </ul>
+        <p>This process usually takes 1 week.</p>
+        <p>If the needs assessment team needs any additional information, they'll get in touch with you to update your innovation record.</p>
+      </div>
+    </div>
+
+    <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="submitForNeedsAssessment()">Submit record for needs assessment</button>
+
+    <p><a routerLink="../record">Go to innovation record</a></p>
+  </div>
+</theme-content-wrapper>
