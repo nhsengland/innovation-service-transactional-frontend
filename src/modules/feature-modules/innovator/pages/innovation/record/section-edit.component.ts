@@ -118,10 +118,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
       if (this.sectionStatus === 'DRAFT') {
         this.submitButton.isActive = validInformation.valid;
-        if (
-          this.innovation.status !== InnovationStatusEnum.CREATED &&
-          this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-        ) {
+        if (this.innovation.status !== InnovationStatusEnum.CREATED) {
           this.submitButton.label = 'Save updates';
         }
       }

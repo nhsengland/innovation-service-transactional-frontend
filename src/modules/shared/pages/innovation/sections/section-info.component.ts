@@ -202,10 +202,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
         this.sectionSummaryData.sectionInfo.submitButton.show = true;
-        if (
-          this.innovation.status !== InnovationStatusEnum.CREATED &&
-          this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-        ) {
+        if (this.innovation.status !== InnovationStatusEnum.CREATED) {
           this.sectionSummaryData.sectionInfo.submitButton.label = 'Save updates';
         }
       } else {
