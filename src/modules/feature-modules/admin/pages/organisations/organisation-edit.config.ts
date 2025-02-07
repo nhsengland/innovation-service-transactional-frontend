@@ -1,9 +1,10 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
 
 // Types.
 type InboundPayloadType = {
   name: string;
   acronym: string;
+  summary: string;
 };
 
 type OutboundPayloadType = InboundPayloadType;
@@ -11,7 +12,8 @@ type StepPayloadType = InboundPayloadType;
 
 export const organisationStepsDescriptions = {
   l1: "If the organisation has an official acronym, write it in brackets next to the organisation's name. For example, National Institute for Health and Care Excellence (NICE).",
-  l2: 'This will be used for tags on the service. If the organisation does not have an official acronym you must create one. Before you create one, check that it could not be confused with an existing acronym for another support organisation.'
+  l2: 'This will be used for tags on the service. If the organisation does not have an official acronym you must create one. Before you create one, check that it could not be confused with an existing acronym for another support organisation.',
+  l3: 'This is a brief summary of the organisation. It will be used in the new organisation announcement.'
 };
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
@@ -48,6 +50,21 @@ export const EDIT_ORGANISATIONS_QUESTIONS: WizardEngineModel = new WizardEngineM
           }
         }
       ]
+    }),
+
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'summary',
+          dataType: 'textarea',
+          label: 'Organisation summary',
+          description: organisationStepsDescriptions.l3,
+          validations: {
+            isRequired: [true, 'Summary is required']
+          },
+          lengthLimit: 'xxl'
+        }
+      ]
     })
   ],
   runtimeRules: [
@@ -64,23 +81,26 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     name: data.name,
-    acronym: data.acronym
+    acronym: data.acronym,
+    summary: data.summary
   };
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name,
-    acronym: data.acronym
+    acronym: data.acronym,
+    summary: data.summary
   };
 }
 
-function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): WizardSummaryType[] {
+function summaryParsing(data: StepPayloadType, _steps: FormEngineModel[]): WizardSummaryType[] {
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push(
     { label: 'Name', value: data.name, editStepNumber: 1 },
-    { label: 'Acronym', value: data.acronym, editStepNumber: 2 }
+    { label: 'Acronym', value: data.acronym, editStepNumber: 2 },
+    { label: 'Summary', value: data.summary, editStepNumber: 3 }
   );
 
   return toReturn;

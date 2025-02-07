@@ -21,6 +21,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
   organisationId: string;
   unitId: string;
   submitBtnClicked = false;
+  stepId: number;
 
   module: 'Organisation' | 'Unit';
   pageStep: 'RULES_LIST' | 'SUCCESS' = 'RULES_LIST';
@@ -40,6 +41,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
     this.module = this.activatedRoute.snapshot.data.module;
     this.organisationId = this.activatedRoute.snapshot.params.organisationId;
     this.unitId = this.activatedRoute.snapshot.params.organisationUnitId;
+    this.stepId = Number(this.activatedRoute.snapshot.params.stepId ?? 1);
 
     switch (this.module) {
       case 'Organisation':
@@ -60,10 +62,11 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
       organisation => {
         const data =
           this.module === 'Organisation'
-            ? { name: organisation.name, acronym: organisation.acronym }
+            ? { name: organisation.name, acronym: organisation.acronym, summary: organisation.summary }
             : organisation.organisationUnits?.filter(unit => unit.id === this.unitId)[0];
+
         this.wizard
-          .gotoStep(1)
+          .gotoStep(this.stepId)
           .setAnswers(this.wizard.runInboundParsing({ ...data }))
           .runRules();
         this.setPageStatus('READY');
