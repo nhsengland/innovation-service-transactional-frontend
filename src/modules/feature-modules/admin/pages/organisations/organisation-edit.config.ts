@@ -13,7 +13,7 @@ type StepPayloadType = InboundPayloadType;
 export const organisationStepsDescriptions = {
   l1: "If the organisation has an official acronym, write it in brackets next to the organisation's name. For example, National Institute for Health and Care Excellence (NICE).",
   l2: 'This will be used for tags on the service. If the organisation does not have an official acronym you must create one. Before you create one, check that it could not be confused with an existing acronym for another support organisation.',
-  l3: 'This is a brief summary of the organisation. It will be used in the new organisation announcements.'
+  l3: 'This is a brief summary of the organisation. It will be used in the new organisation announcement.'
 };
 
 // This is a LET variable, because the organisations shares information is updated by the component that uses this variable.
