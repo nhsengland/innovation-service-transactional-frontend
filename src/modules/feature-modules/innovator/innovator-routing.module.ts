@@ -102,6 +102,7 @@ import { InnovationRegisteredComponent } from './pages/innovation/registered/inn
 import { InnovationSubmissionReadyComponent } from './pages/innovation/submission-ready/innovation-submission-ready.component';
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
+import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -139,6 +140,16 @@ const routes: Routes = [
         component: FirstTimeSigninComponent,
         data: {
           header: { menuBarItems: { left: [], right: [], notifications: {} } },
+          layout: { type: 'full' }
+        }
+      },
+
+      {
+        path: 'share-innovations-with-org',
+        pathMatch: 'full',
+        component: ShareInnovationsWithOrgComponent,
+        data: {
+          breadcrumb: null,
           layout: { type: 'full' }
         }
       },
@@ -190,12 +201,6 @@ const routes: Routes = [
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
               },
-
-              {
-                path: 'share-innovations-with-org',
-                pathMatch: 'full',
-                component: 
-              }
 
               {
                 path: 'submission-ready',
