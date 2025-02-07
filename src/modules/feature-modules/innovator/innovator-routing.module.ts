@@ -192,6 +192,12 @@ const routes: Routes = [
               },
 
               {
+                path: 'share-innovations-with-org',
+                pathMatch: 'full',
+                component: 
+              }
+
+              {
                 path: 'submission-ready',
                 pathMatch: 'full',
                 component: InnovationSubmissionReadyComponent,
