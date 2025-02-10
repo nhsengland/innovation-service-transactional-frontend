@@ -104,7 +104,8 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
     const body: CreateOrganisationBodyDTO = {
       name: data.name,
       acronym: data.acronym,
-      units: data.units
+      units: data.units,
+      summary: data.summary
     };
 
     this.adminOrganisationsService.createOrganisation(body).subscribe(
