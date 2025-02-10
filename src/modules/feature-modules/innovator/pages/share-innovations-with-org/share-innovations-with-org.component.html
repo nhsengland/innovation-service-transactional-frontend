@@ -1,0 +1,27 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>{{ organisation.name }} are now supporting innovations on the NHS Innovation Service</p>
+
+      @if (organisation.summary) {
+        <p class="text-pre-wrap">{{ organisation.summary }}</p>
+
+        <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
+          <span class="nhsuk-u-visually-hidden">Information:</span>
+          <p class="text-pre-wrap">{{ organisation.summary }}</p>
+        </div>
+
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content nhsuk-u-padding-4">
+            <p class="text-pre-wrap">{{ organisation.summary }}</p>
+          </div>
+        </div>
+      }
+
+      <p>You can share all your innovations with them now or change your preferences at any time by going to the "data sharing preferences" page for each innovation.</p>
+      <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response.</p>
+
+      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Share all your innovations</button>
+    </div>
+  </div>
+</theme-content-wrapper>

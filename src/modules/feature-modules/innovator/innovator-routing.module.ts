@@ -145,16 +145,6 @@ const routes: Routes = [
       },
 
       {
-        path: 'share-innovations-with-org',
-        pathMatch: 'full',
-        component: ShareInnovationsWithOrgComponent,
-        data: {
-          breadcrumb: null,
-          layout: { type: 'full' }
-        }
-      },
-
-      {
         path: 'innovations',
         children: [
           { path: '', pathMatch: 'full', redirectTo: '../dashboard' },
@@ -843,13 +833,27 @@ const routes: Routes = [
       },
 
       {
-        path: 'organisation/:organisationId/progress-categories',
-        pathMatch: 'full',
-        data: {
-          breadcrumb: 'Progress categories',
-          layout: { type: 'full' }
-        },
-        component: PageProgressCategoriesWrapperComponent
+        path: 'organisation/:organisationId',
+        children: [
+          {
+            path: 'progress-categories',
+            pathMatch: 'full',
+            data: {
+              breadcrumb: 'Progress categories',
+              layout: { type: 'full' }
+            },
+            component: PageProgressCategoriesWrapperComponent
+          },
+          {
+            path: 'share-innovations-with-org',
+            pathMatch: 'full',
+            component: ShareInnovationsWithOrgComponent,
+            data: {
+              breadcrumb: 'Share innovations',
+              layout: { type: 'full' }
+            }
+          }
+        ]
       }
     ]
   }
