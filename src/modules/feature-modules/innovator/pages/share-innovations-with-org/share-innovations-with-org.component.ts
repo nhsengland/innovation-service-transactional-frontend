@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ThemeModule } from '../../../../theme/theme.module';
+import { InnovatorService } from '../../services/innovator.service';
 
 @Component({
   selector: 'share-innovations-with-org',
@@ -19,7 +20,8 @@ export class ShareInnovationsWithOrgComponent extends CoreComponent implements O
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private organisationService: OrganisationsService
+    private organisationService: OrganisationsService,
+    private innovatorService: InnovatorService
   ) {
     super();
     this.setPageTitle('New support organisation sharing preferences');
@@ -35,6 +37,14 @@ export class ShareInnovationsWithOrgComponent extends CoreComponent implements O
   }
 
   onSubmit() {
-    console.log('Form submitted');
+    this.innovatorService.shareAllInnovationsWithOrg(this.organisation.id).subscribe({
+      next: () => {
+        this.setAlertSuccess('Innovations shared with ' + this.organisation.name);
+        this.router.navigateByUrl('/innovator/dashboard');
+      },
+      error: () => {
+        this.setAlertError('An error occurred while sharing innovations with ' + this.organisation.name);
+      }
+    });
   }
 }
