@@ -1,12 +1,12 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p>{{ organisation.name }} are now supporting innovations on the NHS Innovation Service</p>
+      <p>{{ organisation().name }} are now supporting innovations on the NHS Innovation Service</p>
 
-      @if (organisation.summary) {
+      @if (organisation().summary) {
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
           <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p class="text-pre-wrap">{{ organisation.summary }}</p>
+          <p class="text-pre-wrap">{{ organisation().summary }}</p>
         </div>
       }
 
