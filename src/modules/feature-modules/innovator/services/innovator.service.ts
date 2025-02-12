@@ -8,7 +8,7 @@ import { DateISOType } from '@app/base/types';
 import { UrlModel } from '@app/base/models';
 import { MappedObjectType } from '@app/base/types';
 
-import { InnovationTransferStatusEnum, InnovationCollaboratorStatusEnum } from '@modules/stores';
+import { InnovationCollaboratorStatusEnum, InnovationTransferStatusEnum } from '@modules/stores';
 
 export type GetInnovationTransfersDTO = {
   id: string;
@@ -213,5 +213,12 @@ export class InnovatorService extends CoreService {
       .addPath('v1/:innovationId/surveys/:surveyId')
       .setPathParams({ innovationId, surveyId });
     return this.http.patch<void>(url.buildUrl(), body).pipe(take(1));
+  }
+
+  shareAllInnovationsWithOrg(organisationId: string): Observable<never> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL)
+      .addPath('v1/share-with-organisation/:organisationId/')
+      .setPathParams({ organisationId });
+    return this.http.post<never>(url.buildUrl(), {}).pipe(take(1));
   }
 }
