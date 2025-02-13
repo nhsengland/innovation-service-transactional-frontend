@@ -1,5 +1,5 @@
 import { Component, OnInit, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CoreComponent } from '@app/base';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 import { ThemeModule } from '../../../../theme/theme.module';
@@ -9,7 +9,7 @@ import { InnovatorService } from '../../services/innovator.service';
   selector: 'share-innovations-with-org',
   templateUrl: './share-innovations-with-org.component.html',
   standalone: true,
-  imports: [ThemeModule]
+  imports: [ThemeModule, RouterLink]
 })
 export class ShareInnovationsWithOrgComponent extends CoreComponent implements OnInit {
   organisation: WritableSignal<{

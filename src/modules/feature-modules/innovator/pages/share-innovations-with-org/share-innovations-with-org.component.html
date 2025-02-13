@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p>{{ organisation().name }} are now supporting innovations on the NHS Innovation Service</p>
+      <p>{{ organisation().name }} are now supporting innovations on the NHS Innovation Service.</p>
 
       @if (organisation().summary) {
         <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
@@ -10,7 +10,7 @@
         </div>
       }
 
-      <p>You can share all your innovations with them now or change your preferences at any time by going to the "data sharing preferences" page for each innovation.</p>
+      <p>You can share all your submitted innovations with them now or change your preferences at any time by going to the "data sharing preferences" page for each innovation.</p>
       <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response.</p>
 
       <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Share all your submitted innovations</button>
