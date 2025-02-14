@@ -43,7 +43,7 @@ export class ShareInnovationsWithOrgComponent extends CoreComponent implements O
     this.innovatorService.shareAllInnovationsWithOrg(this.organisation().id).subscribe({
       next: () => {
         this.setRedirectAlertSuccess('Innovations shared with ' + this.organisation().name);
-        this.router.navigateByUrl('/innovator/dashboard');
+        this.redirectTo('/innovator/dashboard');
       },
       error: () => {
         this.setAlertError('An error occurred while sharing innovations with ' + this.organisation().name);
