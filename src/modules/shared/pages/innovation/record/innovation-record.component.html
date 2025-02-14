@@ -156,13 +156,13 @@
       @if (ctx.user.isInnovator()) {
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf"></app-innovation-record-export></li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv"></app-innovation-record-export></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv"/></li>
         </ul>
       } @else if (ctx.user.isAdmin()) {
         <ul class="nhsuk-u-margin-bottom-7">
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" customLabel="Export innovation record"></app-innovation-record-export></li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" customLabel="Export innovation record"></app-innovation-record-export></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" customLabel="Export innovation record"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" customLabel="Export innovation record"/></li>
         </ul>
       }
 
