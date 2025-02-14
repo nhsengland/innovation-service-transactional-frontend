@@ -3,5 +3,5 @@
     {{ customLabel() ? customLabel : "Download record" }} ({{ fileType() | uppercase }})
   </a>
 } @else {
-  <a [href]="exportDocumentUrl()">{{ customLabel() ? customLabel : "Export your current innovation record" }} ({{ fileType() | uppercase }})</a>
+  <a [href]="exportDocumentUrl()">{{ customLabel() ? customLabel() : "Export your current innovation record" }} ({{ fileType() | uppercase }})</a>
 }
