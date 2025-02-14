@@ -80,6 +80,10 @@ $service-manual-container-size: 1100px; // Container width variable.
   flex-direction: column;
 }
 
+.gap-2\/4 {
+  gap: 0.5rem;
+}
+
 .ml-auto {
   margin-left: auto;
 }

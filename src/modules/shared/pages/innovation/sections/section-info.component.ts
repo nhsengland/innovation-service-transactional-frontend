@@ -6,6 +6,8 @@ import { filter } from 'rxjs/operators';
 import { CoreComponent } from '@app/base';
 import { ContextInnovationType } from '@app/base/types';
 
+import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
+import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
 import {
   EvidenceV3Type,
   WizardIRV3EngineModel,
@@ -17,8 +19,6 @@ import {
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
-import { NotificationEnum } from '@modules/feature-modules/accessor/services/accessor.service';
-import { CustomNotificationEntrypointComponentLinksType } from '@modules/feature-modules/accessor/pages/innovation/custom-notifications/custom-notifications-entrypoint.component';
 
 export type SectionInfoType = {
   id: string;
@@ -44,7 +44,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   sectionId: string;
 
   assessmentType = '';
-  sectionSubmittedText = '';
+  sectionLabel = '';
 
   sectionsIdsList: string[];
 
@@ -62,6 +62,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   // Flags
   shouldShowDocuments = false;
+  lastSection = false;
+  isInnovationInCreatedStatus = false;
 
   search?: string;
 
@@ -77,6 +79,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
+    this.isInnovationInCreatedStatus = this.innovation.status === InnovationStatusEnum.CREATED;
     this.assessmentType =
       this.innovation.assessment && this.innovation.assessment.majorVersion > 1 ? 'reassessment' : 'assessment';
 
@@ -90,7 +93,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         nextSectionId: null,
         title: '',
         status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
-        submitButton: { show: false, label: 'Confirm section answers' },
+        submitButton: { show: false, label: 'Mark section complete' },
         isNotStarted: false,
         hasEvidences: false,
         wizard: new WizardIRV3EngineModel({}),
@@ -124,13 +127,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     const sectionIdentification = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId);
 
-    const savedOrSubmitted = !this.ctx.innovation.isArchived() ? 'submitted' : 'saved';
-
-    this.sectionSubmittedText = sectionIdentification
-      ? `You have ${savedOrSubmitted} section ${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
+    this.sectionLabel = sectionIdentification
+      ? `${sectionIdentification?.group.number}.${sectionIdentification?.section.number} '${sectionIdentification?.section.title}'`
       : '';
 
-    this.setPageTitle(this.translate(sectionIdentification!.section.title), {
+    this.setPageTitle(this.translate(sectionIdentification?.section.title ?? ''), {
       hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : ''
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
@@ -159,8 +160,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
               contextId: this.sectionSummaryData.sectionInfo.id,
               fields: ['description']
             }
-          })
-    ]).subscribe(([sectionInfo, documents]) => {
+          }),
+      this.ctx.user.isInnovator() && this.innovation.status === InnovationStatusEnum.CREATED
+        ? this.ctx.innovation.getSectionsSummary$(this.innovation.id)
+        : of(null)
+    ]).subscribe(([sectionInfo, documents, allSections]) => {
       this.sectionSummaryData.sectionInfo.status = {
         id: sectionInfo.status,
         label: this.translate(`shared.catalog.innovation.support_status.${sectionInfo.status}.name`)
@@ -198,13 +202,8 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
         this.sectionSummaryData.sectionInfo.submitButton.show = true;
-        if (
-          this.innovation.status !== InnovationStatusEnum.CREATED &&
-          this.innovation.status !== InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-        ) {
-          this.sectionSummaryData.sectionInfo.submitButton.label = !this.ctx.innovation.isArchived()
-            ? 'Submit updates'
-            : 'Save updates';
+        if (this.innovation.status !== InnovationStatusEnum.CREATED) {
+          this.sectionSummaryData.sectionInfo.submitButton.label = 'Save updates';
         }
       } else {
         this.sectionSummaryData.sectionInfo.submitButton.show = false;
@@ -225,6 +224,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           section: this.sectionId
         }
       ];
+
+      // If the user is an innovator and the innovation is in CREATED status, we need to check if all other sections are submitted.
+      this.lastSection = allSections
+        ? !allSections
+            .flatMap(s => s.sections)
+            .some(s => s.status != InnovationSectionStatusEnum.SUBMITTED && s.id !== this.sectionId)
+        : false;
 
       this.setPageStatus('READY');
     });
@@ -263,25 +269,24 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
   onSubmitSection(): void {
     this.ctx.innovation.submitSections$(this.innovation.id, this.sectionSummaryData.sectionInfo.id).subscribe({
       next: () => {
+        this.setRedirectAlertSuccess(`You have completed section ${this.sectionLabel}`);
         if (
           this.innovation.status === InnovationStatusEnum.CREATED ||
           this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
         ) {
-          this.sectionSummaryData.sectionInfo.status = {
-            id: InnovationSectionStatusEnum.SUBMITTED,
-            label: this.translate(
-              `shared.catalog.innovation.support_status.${InnovationSectionStatusEnum.SUBMITTED}.name`
-            )
-          };
-          this.sectionSummaryData.sectionInfo.submitButton.show = false;
-          this.sectionSummaryData.sectionInfo.nextSectionId = this.getNextSectionId();
-          this.setAlertSuccess('Your answers have been confirmed for this section', {
-            message: this.sectionSummaryData.sectionInfo.nextSectionId
-              ? 'Go to next section or return to the full innovation record'
-              : undefined
-          });
+          if (this.lastSection) {
+            this.redirectTo(`/innovator/innovations/${this.innovation.id}/submission-ready`);
+          } else {
+            this.sectionSummaryData.sectionInfo.status = {
+              id: InnovationSectionStatusEnum.SUBMITTED,
+              label: this.translate(
+                `shared.catalog.innovation.support_status.${InnovationSectionStatusEnum.SUBMITTED}.name`
+              )
+            };
+            this.sectionSummaryData.sectionInfo.submitButton.show = false;
+            this.sectionSummaryData.sectionInfo.nextSectionId = this.getNextSectionId();
+          }
         } else {
-          this.setRedirectAlertSuccess(this.sectionSubmittedText);
           this.redirectTo(`/${this.baseUrl}/record/sections/${this.sectionSummaryData.sectionInfo.id}/submitted`);
         }
       },

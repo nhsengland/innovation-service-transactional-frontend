@@ -9,52 +9,65 @@
   <!--TODO: Banner for owner with account delete (new US)-->
 
   <div class="nhsuk-grid-row">
-    <ng-container *ngIf="ctx.user.isInnovator()">
-      <ng-container *ngIf="sections.submitted > 0; else firstTimeBanner">
-        <div class="nhsuk-grid-column-full">
-          <ng-container *ngIf="isInnovationInCreatedStatus">
-            <p>You'll need to complete all 11 sections of your innovation record before you can submit your record for a needs assessment.</p>
-            <p>
-              If you are unable to answer a question yet, you can still mark the section as complete. This will help us match you with organisations that can support you in these
-              areas.
-            </p>
-          </ng-container>
-          <ng-container *ngIf="isInnovationInArchivedStatus && isLoggedUserOwner; else innovationSharedText">
-            <p>You archived this innovation on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. All support has ended.</p>
-          </ng-container>
-          <ng-template #innovationSharedText>
-            <p>
-              This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs
-              assessment.
-            </p>
-          </ng-template>
-        </div>
-      </ng-container>
-    </ng-container>
+    <div class="nhsuk-grid-column-full">
+      @if (ctx.user.isInnovator()) {
+        @if (isInnovationInCreatedStatus) {
+          <p>Your innovation record helps us match you with organisations that can support you in the areas you need.</p>
+        }
+
+        @if (isInnovationInArchivedStatus && isLoggedUserOwner) {
+          <p>You archived this innovation on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}. All support has ended.</p>
+        } @else {
+          <p>
+            This is a live document for you to update as you develop your innovation. You can make changes to your innovation record at any time, even after submitting it for a
+            needs assessment.
+          </p>
+        }
+      }
+    </div>
 
     <div class="nhsuk-grid-column-full">
-      <ul *ngIf="isInnovationInCreatedStatus" class="progressbar progressbar-justified nhsuk-u-padding-bottom-2">
-        <li *ngFor="let item of sections.progressBar" class="progressbar-item" [ngClass]="item.substring(2)"></li>
-      </ul>
+      @if (showSubmit) {
+        @if (allSectionsSubmitted && !isReassessment) {
+          <!-- This is very similar to the content on the innovation submission ready component -->
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content nhsuk-u-padding-4">
+              <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Innovation record ready to submit</h3>
+              <p>When you submit your innovation record the needs assessment team will:</p>
+              <ul class="nhsuk-list nhsuk-list--bullet">
+                <li>review your innovation record to assess your needs.</li>
+                <li>notify the appropriate support organisations.</li>
+                <li>contact you with next steps.</li>
+              </ul>
+              <p>This process usually takes 1 week.</p>
+              <p>The needs assessment team will get in touch with you if they need any additional information.</p>
+              <button type="submit" class="nhsuk-button" routerLink="support">Submit record for needs assessment</button>
+            </div>
+          </div>
+        } @else {
+          <div class="nhsuk-card">
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                @if (sections.incompleteSections > 0) {
+                  {{ sections.incompleteSections }} {{ "dictionary.section" | pluralTranslate: sections.incompleteSections | translate }} to complete until you can submit for needs
+                  {{ isReassessment ? "reassessment" : "assessment" }}
+                } @else {
+                  All sections are complete you can submit for needs {{ isReassessment ? "reassessment" : "assessment" }}
+                }
+              </h2>
+              <shared-innovation-record-progress [sections]="innovationSections" [firstSubmission]="!isReassessment" />
+              <button type="submit" [routerLink]="submitUrl" [disabled]="!allSectionsSubmitted" class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-2">
+                Submit record for needs {{ isReassessment ? "reassessment" : "assessment" }}
+              </button>
+            </div>
+          </div>
+        }
+      } @else {
+        <shared-innovation-record-progress [sections]="innovationSections" class="nhsuk-u-margin-bottom-6" />
+      }
 
-      <p class="d-flex nhsuk-u-margin-0">
-        <theme-svg-icon type="success"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
-        {{ sections.submitted }} of {{ sections.progressBar.length }} {{ "dictionary.section" | pluralTranslate: sections.progressBar.length | translate }} completed
-      </p>
-      <p *ngIf="sections.draft > 0" class="d-flex nhsuk-u-margin-0">
-        <theme-svg-icon type="edit"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
-        {{ sections.draft }} {{ "dictionary.section" | pluralTranslate: sections.draft | translate }} in draft
-      </p>
-      <p *ngIf="sections.notStarted > 0" class="d-flex">
-        <theme-svg-icon type="error" customColor="grey"></theme-svg-icon>
-        <span class="nhsuk-u-margin-right-2"></span>
-        {{ sections.notStarted }} {{ "dictionary.section" | pluralTranslate: sections.notStarted | translate }} not started
-      </p>
-
-      <ng-container *ngIf="ctx.user.isInnovator()">
-        <div *ngIf="sections.withOpenTasksCount > 0" class="nhsuk-inset-text nhsuk-u-margin-top-3">
+      @if (ctx.user.isInnovator() && sections.withOpenTasksCount > 0) {
+        <div class="nhsuk-inset-text nhsuk-u-margin-top-3">
           <span class="nhsuk-u-visually-hidden">Information: </span>
           <p>
             {{ sections.withOpenTasksCount }} {{ "dictionary.section" | pluralTranslate: sections.withOpenTasksCount | translate }} with
@@ -62,26 +75,9 @@
             <a class="nhsuk-link nhsuk-link--no-visited-state" routerLink="/innovator/innovations/{{ innovationId }}/tasks">Go to tasks.</a>
           </p>
         </div>
+      }
 
-        <button
-          *ngIf="isInnovationInCreatedStatus || (isArchiveBeforeShare && isLoggedUserOwner)"
-          routerLink="/innovator/innovations/{{ innovationId }}/record/support"
-          [disabled]="!allSectionsSubmitted"
-          class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"
-        >
-          Submit record for needs assessment
-        </button>
-        <button
-          *ngIf="isInnovationInArchivedStatus && !isArchiveBeforeShare && isLoggedUserOwner"
-          routerLink="/innovator/innovations/{{ innovationId }}/how-to-proceed/needs-reassessment-send"
-          [disabled]="!allSectionsSubmitted"
-          class="nhsuk-button nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-6"
-        >
-          Submit record for needs reassessment
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="showInnovatorShareRequestSection && pendingExportRequests">
+      @if (showInnovatorShareRequestSection && pendingExportRequests) {
         <div class="nhsuk-card">
           <div class="nhsuk-card__content">
             <h2 class="nhsuk-card__heading nhsuk-heading-m">
@@ -94,14 +90,9 @@
             </p>
           </div>
         </div>
-      </ng-container>
+      }
 
       <h2 class="nhsuk-heading-l">All sections</h2>
-      <ng-container *ngIf="ctx.user.isInnovator()">
-        <p *ngIf="isInnovationInCreatedStatus">
-          This is a live document for you to update as you develop your innovation. You can make changes to your innovation record even after submitting it for a needs assessment.
-        </p>
-      </ng-container>
 
       <ol class="app-task-list">
         <li *ngFor="let sectionGroup of innovationSections; let i = index">
@@ -140,20 +131,20 @@
 
               <ng-container *ngIf="section.submittedAt">
                 <span *ngIf="section.status === 'SUBMITTED'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                  Last submitted by {{ section.submittedBy?.name }}
+                  Last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} by {{ section.submittedBy?.name }}
                   <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                   {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                 </span>
                 <ng-container *ngIf="!ctx.user.isAccessorType() && !ctx.user.isAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                    In draft - last submitted by {{ section.submittedBy?.name }}
+                    In draft - last {{ isInnovationInCreatedStatus ? "completed" : "saved" }} by {{ section.submittedBy?.name }}
                     <ng-container *ngIf="section.submittedBy?.isOwner !== undefined">({{ section.submittedBy?.isOwner ? "Owner" : "Collaborator" }})</ng-container> on
                     {{ section.submittedAt | date: ("app.date_formats.long_date" | translate) }}
                   </span>
                 </ng-container>
                 <ng-container *ngIf="ctx.user.isAccessorOrAssessment()">
                   <span *ngIf="section.status === 'DRAFT'" class="app-task-list__task-info-submitted nhsuk-body-s font-color-secondary">
-                    This section is in draft. You can view the last version submitted by the innovator.
+                    This section is in draft. You can view the last version saved by the innovator.
                   </span>
                 </ng-container>
               </ng-container>
@@ -199,33 +190,7 @@
 </theme-content-wrapper>
 
 <ng-template #icon let-status="status">
-  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="error" customColor="grey"></theme-svg-icon>
+  <theme-svg-icon *ngIf="status === 'NOT_STARTED'" type="not-started" customColor="grey"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'DRAFT'" type="edit"></theme-svg-icon>
   <theme-svg-icon *ngIf="status === 'SUBMITTED'" type="success"></theme-svg-icon>
-</ng-template>
-
-<ng-template #firstTimeBanner>
-  <div class="nhsuk-grid-column-full">
-    <div class="nhsuk-card nhsuk-card--care nhsuk-card--care--non-urgent nhsuk-u-margin-top-0">
-      <div class="nhsuk-card--care__heading-container">
-        <h2 class="nhsuk-card--care__heading">
-          <span role="text"><span class="nhsuk-u-visually-hidden">Information: </span>Welcome to your innovation record</span>
-        </h2>
-      </div>
-      <div class="nhsuk-card__content">
-        <p>To help us match you with support organisations, you'll need to:</p>
-        <ul>
-          <li>answer questions across the 11 sections of your innovation record</li>
-          <li>mark each section as complete</li>
-          <li>submit your record for a needs assessment</li>
-        </ul>
-        <p>Then, within 1 week, our team:</p>
-        <ul>
-          <li>will review your innovation record to assess your needs</li>
-          <li>notify appropriate support organisations</li>
-          <li>contact you with next steps</li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </ng-template>

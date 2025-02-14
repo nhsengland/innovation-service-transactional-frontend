@@ -1,0 +1,36 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-column-two-thirds">
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content nhsuk-u-padding-4">
+        <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">Your next steps</h3>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li>Answer questions in each section of your innovation record</li>
+          <li>Mark each section as complete</li>
+          <li>Submit your innovation record for needs assessment</li>
+          <li>Select your data sharing preferences for support organisations</li>
+        </ul>
+        <p>
+          You can invite your colleagues to collaborate on your innovation. Add collaborators in your
+          <a routerLink="../manage/innovation" href="javascript:void(0)" target="_blank" rel="noopener noreferrer">innovation settings (opens in a new window)</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="nhsuk-card">
+      <div class="nhsuk-card__content nhsuk-u-padding-4">
+        <h3 class="nhsuk-card__heading nhsuk-u-margin-bottom-4">When you submit your innovation record</h3>
+        <p>The needs assessment team will:</p>
+        <ul class="nhsuk-list nhsuk-list--bullet">
+          <li>review your innovation record to assess your needs</li>
+          <li>notify the appropriate support organisations</li>
+          <li>contact you with next steps</li>
+        </ul>
+        <p>This process usually takes 1 week.</p>
+      </div>
+    </div>
+
+    <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="navigateToInnovationRecord()">Continue to fill in your innovation record</button>
+
+    <p><a routerLink="../overview">Go to innovation overview</a></p>
+  </div>
+</theme-content-wrapper>

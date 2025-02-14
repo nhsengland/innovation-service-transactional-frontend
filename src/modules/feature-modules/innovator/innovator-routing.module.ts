@@ -66,9 +66,9 @@ import { PageInnovationStatusListComponent } from '@modules/shared/pages/innovat
 import { PageInnovationSupportStatusListComponent } from '@modules/shared/pages/innovation/support/support-status-list.component';
 import { PageInnovationSupportSummaryListComponent } from '@modules/shared/pages/innovation/support/support-summary-list.component';
 import { InnovationStatusEnum, InnovationTaskStatusEnum } from '@modules/stores';
-import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
-import { WizardInnovationManageArchiveComponent } from './pages/innovation/manage/wizard-manage-archive/manage-archive.component';
 import { WizardInnovationHowToProceedArchiveComponent } from './pages/innovation/how-to-proceed/wizard-how-to-proceed-archive/how-to-proceed-archive.component';
+import { WizardInnovationManageArchiveComponent } from './pages/innovation/manage/wizard-manage-archive/manage-archive.component';
+import { InnovationSectionSubmittedComponent } from './pages/innovation/record/section-submitted.component';
 // // Notifications.
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
@@ -95,11 +95,13 @@ import { InnovationSectionEvidenceDataResolver } from '@modules/shared/resolvers
 import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation-task-data.resolver';
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { checkStatusGuard } from './guards/check-status.guard';
+import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
 import { PageInnovationManageAccessLeaveInnovationComponent } from './pages/innovation/manage-access/manage-access-leave-innovation.component';
 import { PageInnovationManageAccessOverviewComponent } from './pages/innovation/manage-access/manage-access-overview.component';
-import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
+import { InnovationRegisteredComponent } from './pages/innovation/registered/innovation-registered.component';
+import { InnovationSubmissionReadyComponent } from './pages/innovation/submission-ready/innovation-submission-ready.component';
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
-import { PageInnovationRecommendNeedsReassessmentComponent } from './pages/innovation/how-to-proceed/recommend-need-reassessment/recommend-needs-reassessment';
+import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -187,6 +189,20 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
+              },
+
+              {
+                path: 'submission-ready',
+                pathMatch: 'full',
+                component: InnovationSubmissionReadyComponent,
+                data: { breadcrumb: null, layout: { type: 'journey' } }
+              },
+
+              {
+                path: 'registered',
+                pathMatch: 'full',
+                component: InnovationRegisteredComponent,
+                data: { breadcrumb: null, layout: { type: 'journey' } }
               },
 
               {

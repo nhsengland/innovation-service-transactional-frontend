@@ -45,8 +45,10 @@ import { InnovationChangeAccessorsComponent } from './pages/innovation/support/s
 import { AnnouncementsService } from '../announcements/services/announcements.service';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
 
+import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+
 @NgModule({
-  imports: [ThemeModule, SharedModule, AccessorRoutingModule],
+  imports: [ThemeModule, SharedModule, AccessorRoutingModule, InnovationRecordSidebarComponent],
   declarations: [
     // Base.
     ContextInnovationOutletComponent,
