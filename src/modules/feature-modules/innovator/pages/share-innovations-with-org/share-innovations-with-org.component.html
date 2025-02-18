@@ -1,19 +1,21 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p>{{ organisation().name }} are now supporting innovations on the NHS Innovation Service.</p>
+      <p>The {{ organisation().name }} is now supporting innovations through the NHS Innovation Service.</p>
 
       @if (organisation().summary) {
-        <div class="nhsuk-inset-text nhsuk-u-margin-top-0">
-          <span class="nhsuk-u-visually-hidden">Information:</span>
-          <p class="text-pre-wrap">{{ organisation().summary }}</p>
-        </div>
+        <p class="text-pre-wrap">{{ organisation().summary }}</p>
       }
 
-      <p>You can share all your submitted innovations with them now or change your preferences at any time by going to the "data sharing preferences" page for each innovation.</p>
-      <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn't guarantee a response.</p>
+      <p>To share your innovations with the {{ organisation().name }} you can either:</p>
+      <ul>
+        <li>Share your submitted innovations at the bottom of this page.</li>
+        <li>Update your preferences later via the 'Data Sharing Preferences' page for each innovation.</li>
+      </ul>
 
-      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Share all your submitted innovations</button>
+      <p>By sharing your data with an organisation, they can view your innovation and may contact you if they believe it's a good fit.</p>
+
+      <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Share all submitted innovations</button>
       <div><a routerLink="/innovator/dashboard">Go to Home</a></div>
     </div>
   </div>
