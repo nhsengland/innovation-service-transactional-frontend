@@ -8,6 +8,7 @@ import { APIQueryParamsType, DateISOType } from '@app/base/types';
 
 import { KeysUnion } from '@modules/core/helpers/types.helper';
 import { APIListResponse, Paginated } from '@modules/core/models/api.model';
+import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
 import {
   ActivityLogItemsEnum,
   ActivityLogTypesEnum,
@@ -19,6 +20,7 @@ import {
   UserRoleEnum
 } from '@modules/stores';
 import { ACTIVITY_LOG_ITEMS, InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
+import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { FileUploadType } from '../forms/engine/config/form-engine.config';
 import {
   CreateSupportSummaryProgressUpdateType,
@@ -47,8 +49,6 @@ import {
   SupportSummaryOrganisationsListDTO,
   getInnovationCollaboratorInfoDTO
 } from './innovations.dtos';
-import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
-import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 
 export type InnovationsTasksListFilterType = {
   innovationId?: string;
@@ -256,6 +256,22 @@ export class InnovationsService extends CoreService {
       ...pagination
     });
     return this.http.get<APIListResponse<InnovationSearchFullDTO, S>>(url.buildUrl()).pipe(take(1));
+  }
+
+  getInnovationsSearchCSV<
+    F extends InnovationsListFiltersType,
+    S extends KeysUnion<InnovationSearchFullDTO> extends infer U
+      ? U extends InnovationSearchSelectType
+        ? U
+        : never
+      : never
+  >(fields: S[] = ['id', 'name'] as S[], filters: F = {} as F): Observable<string> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/search').setQueryParams({
+      fields,
+      ...filters,
+      type: 'csv'
+    });
+    return this.http.get(url.buildUrl(), { responseType: 'text' }).pipe(take(1));
   }
 
   getInnovationInfo(innovationId: string): Observable<InnovationInfoDTO> {
