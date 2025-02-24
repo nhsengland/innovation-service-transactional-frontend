@@ -11,10 +11,10 @@ import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modul
 
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 
-import { InnovationCardData } from './innovation-advanced-search-card.component';
-import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
+import { InnovationCardData } from './innovation-advanced-search-card.component';
+import { getConfig } from './innovations-advanced-review.config';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -304,6 +304,74 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         });
 
         this.setPageStatus('READY');
+      });
+  }
+
+  exportCSV(): void {
+    // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
+    this.filtersModel.handleStateChanges();
+
+    let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
+      'id',
+      'uniqueId',
+      'name',
+      'status',
+      'statusUpdatedAt',
+      'groupedStatus',
+      'submittedAt',
+      'updatedAt',
+      'careSettings',
+      'otherCareSetting',
+      'categories',
+      'countryName',
+      'diseasesAndConditions',
+      'involvedAACProgrammes',
+      'keyHealthInequalities',
+      'mainCategory',
+      'otherCategoryDescription',
+      'postcode',
+      'owner.name',
+      'owner.companyName',
+      'engagingUnits',
+      'support.status',
+      'support.updatedAt',
+      'support.closeReason'
+    ];
+
+    if (this.ctx.user.isAdmin()) {
+      // filter out unavailable fields if Admin
+      queryFields = queryFields.filter(
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+      );
+    } else if (this.ctx.user.isAccessorType()) {
+      // filter out unavailable fields for QA/A
+      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+    } else if (this.ctx.user.isAssessment()) {
+      // filter out unavailable fields for Assessment
+      queryFields = queryFields.filter(
+        item =>
+          ![
+            'support.status',
+            'support.updatedAt',
+            'support.closeReason',
+            'involvedAACProgrammes',
+            'keyHealthInequalities'
+          ].includes(item)
+      );
+    }
+
+    this.innovationsService
+      .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
+      .subscribe(response => {
+        const blob = new Blob([response], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
       });
   }
 
