@@ -16,6 +16,7 @@ export class ShareInnovationsWithOrgComponent extends CoreComponent implements O
     id: string;
     name: string;
     summary: string | null;
+    website: string | null;
   }>;
 
   constructor(
@@ -25,14 +26,20 @@ export class ShareInnovationsWithOrgComponent extends CoreComponent implements O
   ) {
     super();
     this.setPageTitle('New support organisation sharing preferences');
-    this.organisation = signal({ id: this.activatedRoute.snapshot.params.organisationId, name: '', summary: null });
+    this.organisation = signal({
+      id: this.activatedRoute.snapshot.params.organisationId,
+      name: '',
+      summary: null,
+      website: null
+    });
   }
   ngOnInit(): void {
     this.organisationService.getOrganisationInfo(this.organisation().id).subscribe(org => {
       this.organisation.set({
         id: org.id,
         name: org.name,
-        summary: org.summary
+        summary: org.summary,
+        website: org.website
       });
 
       this.setPageStatus('READY');
