@@ -5,8 +5,8 @@ import { CoreComponent } from '@app/base';
 import { FormEngineComponent, FormGroup, WizardEngineModel } from '@app/base/forms';
 
 import {
-  CreateOrganisationBodyDTO,
-  AdminOrganisationsService
+  AdminOrganisationsService,
+  CreateOrganisationBodyDTO
 } from '@modules/feature-modules/admin/services/admin-organisations.service';
 import { OrganisationsService } from '@modules/shared/services/organisations.service';
 
@@ -19,7 +19,7 @@ import { CREATE_NEW_ORGANISATION_QUESTIONS } from './organisation-new.config';
 export class PageOrganisationNewComponent extends CoreComponent implements OnInit {
   @ViewChild(FormEngineComponent) formEngineComponent?: FormEngineComponent;
 
-  wizard: WizardEngineModel = new WizardEngineModel(CREATE_NEW_ORGANISATION_QUESTIONS);
+  wizard = new WizardEngineModel(CREATE_NEW_ORGANISATION_QUESTIONS);
 
   submitBtnClicked = false;
 
@@ -105,7 +105,8 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
       name: data.name,
       acronym: data.acronym,
       units: data.units,
-      summary: data.summary
+      summary: data.summary,
+      url: data.url
     };
 
     this.adminOrganisationsService.createOrganisation(body).subscribe(

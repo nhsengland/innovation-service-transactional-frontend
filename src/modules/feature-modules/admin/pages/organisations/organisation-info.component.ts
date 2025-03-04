@@ -17,6 +17,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
     name: null | string;
     acronym: null | string;
     summary: null | string;
+    website: null | string;
     isActive: null | boolean;
     hasInactiveUnits: null | boolean;
     organisationUnits: {
@@ -30,6 +31,7 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
     id: '',
     name: null,
     acronym: null,
+    website: null,
     summary: null,
     isActive: null,
     hasInactiveUnits: null,
