@@ -313,6 +313,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
       'uniqueId',
+      'name',
       'owner.name',
       'owner.companyName',
       'owner.email',
@@ -332,6 +333,29 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.status',
       'support.closeReason'
     ];
+
+    const queryFieldsMap = {
+      uniqueId: 'Innovation ID',
+      name: 'Innovation name',
+      'owner.name': 'Owner name',
+      'owner.companyName': 'Owner Company',
+      'owner.email': 'Owner Email',
+      countryName: 'Country',
+      submittedAt: 'Date of innovation submission',
+      groupedStatus: 'Status',
+      statusUpdatedAt: 'Date of status update',
+      'suggestion.suggestedBy': 'Referral By',
+      careSettings: 'Care Settings',
+      otherCareSetting: 'Other Care Setting',
+      mainCategory: 'Main Category',
+      categories: 'Categories',
+      diseasesAndConditions: 'Diseases and Conditions',
+      keyHealthInequalities: 'Health Inequalities',
+      involvedAACProgrammes: 'AAC Involvement',
+      engagingOrganisations: 'Engaging Organisations',
+      'support.status': 'Support Status',
+      'support.closeReason': 'Support (close reason)'
+    } as const;
 
     if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
@@ -358,7 +382,14 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.innovationsService
       .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
       .subscribe(response => {
-        const blob = new Blob([response], { type: 'text/csv' });
+        // replace the CSV headers
+        const data = response.split('\n');
+        data[0] = data[0]
+          .split(',')
+          .map((header: string) => queryFieldsMap[header as keyof typeof queryFieldsMap])
+          .join(',');
+
+        const blob = new Blob([data.join('\n')], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
