@@ -57,6 +57,7 @@ describe('FeatureModules/Admin/Pages/Organisations/PageOrganisationInfoComponent
         name: 'Org name',
         acronym: 'ORG',
         summary: 'Org summary',
+        website: 'http://org.com',
         isActive: true,
         organisationUnits: [{ id: 'OrgUnitId', name: 'Org Unit name', acronym: 'ORGu', isActive: true, userCount: 10 }]
       });
