@@ -49,7 +49,7 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
     {
       type: 'CHECKBOX_GROUP',
       key: 'keyHealthInequalities',
-      title: 'Healthy inequalities',
+      title: 'Health inequalities',
       state: 'closed',
       items: [],
       scrollable: true
