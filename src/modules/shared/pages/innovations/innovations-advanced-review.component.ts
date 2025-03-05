@@ -320,7 +320,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'submittedAt',
       'groupedStatus',
       'statusUpdatedAt',
-      'referralBy',
+      'suggestion.suggestedBy',
       'careSettings',
       'otherCareSetting',
       'mainCategory',
