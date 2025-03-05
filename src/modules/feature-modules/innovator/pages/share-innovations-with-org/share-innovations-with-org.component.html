@@ -7,13 +7,22 @@
         <p class="text-pre-wrap">{{ organisation().summary }}</p>
       }
 
-      <p>To share your innovations with the {{ organisation().name }} you can either:</p>
-      <ul>
-        <li>Share your submitted innovations at the bottom of this page.</li>
-        <li>Update your preferences later via the 'Data Sharing Preferences' page for each innovation.</li>
-      </ul>
+      @if (organisation().website) {
+        <p>
+          Visit the <a [href]="organisation().website" target="_blank">{{ organisation().name }} website</a> for more information.
+        </p>
+      }
 
-      <p>By sharing your data with an organisation, they can view your innovation and may contact you if they believe it's a good fit.</p>
+      <div class="nhsuk-inset-text nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+        <span class="nhsuk-u-visually-hidden">Information: </span>
+        <p>To share your innovations with the {{ organisation().name }} you can either:</p>
+        <ul>
+          <li>Share your submitted innovations at the bottom of this page.</li>
+          <li>Update your preferences later via the 'Data Sharing Preferences' page for each innovation.</li>
+        </ul>
+      </div>
+
+      <p>Sharing your data with an organisation means that they can view your innovation and initiate contact. It doesn’t guarantee a response</p>
 
       <button type="submit" class="nhsuk-button nhsuk-u-margin-top-3" (click)="onSubmit()">Share all submitted innovations</button>
       <div><a routerLink="/innovator/dashboard">Go to Home</a></div>
