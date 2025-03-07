@@ -102,6 +102,7 @@ import { InnovationRegisteredComponent } from './pages/innovation/registered/inn
 import { InnovationSubmissionReadyComponent } from './pages/innovation/submission-ready/innovation-submission-ready.component';
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
+import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -832,13 +833,27 @@ const routes: Routes = [
       },
 
       {
-        path: 'organisation/:organisationId/progress-categories',
-        pathMatch: 'full',
-        data: {
-          breadcrumb: 'Progress categories',
-          layout: { type: 'full' }
-        },
-        component: PageProgressCategoriesWrapperComponent
+        path: 'organisation/:organisationId',
+        children: [
+          {
+            path: 'progress-categories',
+            pathMatch: 'full',
+            data: {
+              breadcrumb: 'Progress categories',
+              layout: { type: 'full' }
+            },
+            component: PageProgressCategoriesWrapperComponent
+          },
+          {
+            path: 'share-innovations-with-org',
+            pathMatch: 'full',
+            component: ShareInnovationsWithOrgComponent,
+            data: {
+              breadcrumb: 'Share innovations',
+              layout: { type: 'full' }
+            }
+          }
+        ]
       }
     ]
   }

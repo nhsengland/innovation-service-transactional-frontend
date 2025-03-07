@@ -17,6 +17,8 @@ export type updateOrganisationUnitDTO = {
 export type CreateOrganisationBodyDTO = {
   name: string;
   acronym: string;
+  summary: string;
+  url: string;
   units: { name: string; acronym: string }[];
 };
 
@@ -61,9 +63,9 @@ export class AdminOrganisationsService extends CoreService {
     const url = new UrlModel(this.API_ADMIN_URL)
       .addPath('v1/organisations/:organisationId/units/:organisationUnitId/activate')
       .setPathParams({ organisationId, organisationUnitId });
-    return this.http.patch<{}>(url.buildUrl(), { userIds }).pipe(
+    return this.http.patch<unknown>(url.buildUrl(), { userIds }).pipe(
       take(1),
-      map(response => true)
+      map(() => true)
     );
   }
 
@@ -71,9 +73,9 @@ export class AdminOrganisationsService extends CoreService {
     const url = new UrlModel(this.API_ADMIN_URL)
       .addPath('v1/organisations/:organisationId/units/:organisationUnitId/inactivate')
       .setPathParams({ organisationId, organisationUnitId });
-    return this.http.patch<{}>(url.buildUrl(), { organisationUnitId }).pipe(
+    return this.http.patch<unknown>(url.buildUrl(), { organisationUnitId }).pipe(
       take(1),
-      map(response => true)
+      map(() => true)
     );
   }
 

@@ -34,9 +34,9 @@ import { PageInnovationManageTransferComponent } from './pages/innovation/transf
 import { PageOrganisationEditComponent } from './pages/organisations/organisation-edit.component';
 import { PageOrganisationInfoComponent } from './pages/organisations/organisation-info.component';
 import { PageOrganisationNewComponent } from './pages/organisations/organisation-new.component';
+import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 import { PageOrganisationUnitNewComponent } from './pages/organisations/organisation-unit-new/organisation-unit-new.component';
 import { PageOrganisationsListComponent } from './pages/organisations/organisations-list.component';
-import { OrganisationUnitInfoComponent } from './pages/organisations/organisation-unit-info.component';
 // // Terms of use.
 import { PageTermsOfUseInfoComponent } from './pages/terms-of-use/terms-of-use-info.component';
 import { PageTermsOfUseListComponent } from './pages/terms-of-use/terms-of-use-list.component';
@@ -179,8 +179,9 @@ const routes: Routes = [
                 component: PageOrganisationInfoComponent,
                 data: { breadcrumb: null }
               },
+              { path: 'edit', pathMatch: 'full', redirectTo: 'edit/1' },
               {
-                path: 'edit',
+                path: 'edit/:stepId',
                 pathMatch: 'full',
                 component: PageOrganisationEditComponent,
                 data: { module: 'Organisation' }

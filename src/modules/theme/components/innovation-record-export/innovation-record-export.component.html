@@ -1,7 +1,7 @@
 @if (button()) {
   <a [href]="exportDocumentUrl()" class="nhsuk-button nhsuk-u-margin-bottom-0" [class.nhsuk-button--secondary]="btnStyle() === 'secondary'">
-    {{ customLabel() ? customLabel : "Download record" }} ({{ fileType() | uppercase }})
+    {{ customLabel() ? customLabel() : "Download record" }} ({{ fileType() | uppercase }})
   </a>
 } @else {
-  <a [href]="exportDocumentUrl()">{{ customLabel() ? customLabel : "Export your current innovation record" }} ({{ fileType() | uppercase }})</a>
+  <a [href]="exportDocumentUrl()">{{ customLabel() ? customLabel() : "Export your current innovation record" }} ({{ fileType() | uppercase }})</a>
 }

@@ -1,6 +1,7 @@
-import { FormEngineModel, WizardSummaryType, WizardEngineModel } from '@modules/shared/forms';
-import { organisationUnitStepsDescriptions } from './organisation-unit-new/organisation-unit-new.config';
+import { FormEngineModel, WizardEngineModel, WizardSummaryType } from '@modules/shared/forms';
+import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 import { organisationStepsDescriptions } from './organisation-edit.config';
+import { organisationUnitStepsDescriptions } from './organisation-unit-new/organisation-unit-new.config';
 
 // Types.
 type organisationsListType = {
@@ -16,6 +17,8 @@ export type InboundPayloadType = {
 type StepPayloadType = {
   name: string;
   acronym: string;
+  summary: string;
+  website: string;
   doAssociateUnits: 'YES' | 'NO';
   createUnitNumber: number;
   organisationsList: organisationsListType;
@@ -26,6 +29,8 @@ type StepPayloadType = {
 export type OutboundPayloadType = {
   name: string;
   acronym: string;
+  summary: string;
+  website: string;
   units: { name: string; acronym: string }[];
 };
 
@@ -67,6 +72,37 @@ export const CREATE_NEW_ORGANISATION_QUESTIONS: WizardEngineModel = new WizardEn
     new FormEngineModel({
       parameters: [
         {
+          id: 'website',
+          dataType: 'text',
+          label: 'Website',
+          description: organisationStepsDescriptions.l3,
+          validations: {
+            isRequired: [true, 'Website url is required'],
+            urlFormat: { maxLength: INPUT_LENGTH_LIMIT.xs }
+          },
+          lengthLimit: 'xs'
+        }
+      ]
+    }),
+
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'summary',
+          dataType: 'textarea',
+          label: 'Organisation summary',
+          description: organisationStepsDescriptions.l4,
+          validations: {
+            isRequired: [true, 'Summary is required']
+          },
+          lengthLimit: 'xxl'
+        }
+      ]
+    }),
+
+    new FormEngineModel({
+      parameters: [
+        {
           id: 'doAssociateUnits',
           dataType: 'radio-group',
           label: 'Do you want to associate units to this organisation?',
@@ -97,7 +133,7 @@ function runtimeRules(steps: FormEngineModel[], data: StepPayloadType, currentSt
     .map(([key, value]) => value as string);
   const unitsToCreate = Object.keys(data).filter(key => key.startsWith('unitName-'));
 
-  steps.splice(3);
+  steps.splice(5);
 
   if (data.doAssociateUnits === 'NO') {
     Object.keys(data)
@@ -182,6 +218,8 @@ function inboundParsing(data: InboundPayloadType): StepPayloadType {
   return {
     name: '',
     acronym: '',
+    summary: '',
+    website: '',
     doAssociateUnits: 'NO',
     createUnitNumber: 2,
     organisationsList: data.organisationsList,
@@ -194,6 +232,8 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
   return {
     name: data.name,
     acronym: data.acronym,
+    summary: data.summary,
+    website: data.website,
     units: Object.entries(data)
       .filter(([key]) => key.startsWith(`unitName-`))
       .map(([key, value]) => ({
@@ -207,6 +247,8 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
   const toReturn: WizardSummaryType[] = [];
 
   toReturn.push({ label: 'Organisation', value: `${data.name} (${data.acronym})`, editStepNumber: 1 });
+  toReturn.push({ label: 'Website', value: data.website, editStepNumber: 3 });
+  toReturn.push({ label: 'Summary', value: data.summary, editStepNumber: 4 });
 
   if (data.doAssociateUnits === 'YES') {
     Object.keys(data)
@@ -215,7 +257,7 @@ function summaryParsing(data: StepPayloadType, steps: FormEngineModel[]): Wizard
         toReturn.push({
           label: `Unit ${index + 1}`,
           value: `${data[key]} (${data[key.replace('unitName-', 'unitAcronym-')]})`,
-          editStepNumber: 5 + index * 2
+          editStepNumber: 7 + index * 2
         });
       });
   }

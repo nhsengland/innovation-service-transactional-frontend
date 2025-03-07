@@ -153,13 +153,18 @@
         </li>
       </ol>
 
-      <ng-container *ngIf="ctx.user.isInnovator()">
+      @if (ctx.user.isInnovator()) {
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" [fileType]="'pdf'"></app-innovation-record-export></li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" [fileType]="'csv'"></app-innovation-record-export></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv"/></li>
         </ul>
-      </ng-container>
+      } @else if (ctx.user.isAdmin()) {
+        <ul class="nhsuk-u-margin-bottom-7">
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" customLabel="Export innovation record"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" customLabel="Export innovation record"/></li>
+        </ul>
+      }
 
       <ng-container *ngIf="showSupportingTeamsShareRequestSection">
         <a routerLink="./download" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-u-font-size-19">Download innovation record (PDF or CSV)</a>

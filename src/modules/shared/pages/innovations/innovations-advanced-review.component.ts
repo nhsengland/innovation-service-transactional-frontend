@@ -11,10 +11,10 @@ import { InnovationGroupedStatusEnum, InnovationSupportStatusEnum } from '@modul
 
 import { FiltersModel } from '@modules/core/models/filters/filters.model';
 
-import { InnovationCardData } from './innovation-advanced-search-card.component';
-import { getConfig } from './innovations-advanced-review.config';
 import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
+import { InnovationCardData } from './innovation-advanced-search-card.component';
+import { getConfig } from './innovations-advanced-review.config';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -304,6 +304,100 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         });
 
         this.setPageStatus('READY');
+      });
+  }
+
+  exportCSV(): void {
+    // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
+    this.filtersModel.handleStateChanges();
+
+    let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
+      'uniqueId',
+      'name',
+      'owner.name',
+      'owner.companyName',
+      'owner.email',
+      'countryName',
+      'submittedAt',
+      'groupedStatus',
+      'statusUpdatedAt',
+      'suggestion.suggestedBy',
+      'careSettings',
+      'otherCareSetting',
+      'mainCategory',
+      'categories',
+      'diseasesAndConditions',
+      'keyHealthInequalities',
+      'involvedAACProgrammes',
+      'engagingOrganisations',
+      'support.status',
+      'support.closeReason'
+    ];
+
+    const queryFieldsMap = {
+      uniqueId: 'Innovation ID',
+      name: 'Innovation name',
+      'owner.name': 'Owner name',
+      'owner.companyName': 'Owner Company',
+      'owner.email': 'Owner Email',
+      countryName: 'Country',
+      submittedAt: 'Date of innovation submission',
+      groupedStatus: 'Status',
+      statusUpdatedAt: 'Date of status update',
+      'suggestion.suggestedBy': 'Referral By',
+      careSettings: 'Care Settings',
+      otherCareSetting: 'Other Care Setting',
+      mainCategory: 'Main Category',
+      categories: 'Categories',
+      diseasesAndConditions: 'Diseases and Conditions',
+      keyHealthInequalities: 'Health Inequalities',
+      involvedAACProgrammes: 'AAC Involvement',
+      engagingOrganisations: 'Engaging Organisations',
+      'support.status': 'Support Status',
+      'support.closeReason': 'Support (close reason)'
+    } as const;
+
+    if (this.ctx.user.isAdmin()) {
+      // filter out unavailable fields if Admin
+      queryFields = queryFields.filter(
+        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+      );
+    } else if (this.ctx.user.isAccessorType()) {
+      // filter out unavailable fields for QA/A
+      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+    } else if (this.ctx.user.isAssessment()) {
+      // filter out unavailable fields for Assessment
+      queryFields = queryFields.filter(
+        item =>
+          ![
+            'support.status',
+            'support.updatedAt',
+            'support.closeReason',
+            'involvedAACProgrammes',
+            'keyHealthInequalities'
+          ].includes(item)
+      );
+    }
+
+    this.innovationsService
+      .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
+      .subscribe(response => {
+        // replace the CSV headers
+        const data = response.split('\n');
+        data[0] = data[0]
+          .split(',')
+          .map((header: string) => queryFieldsMap[header as keyof typeof queryFieldsMap])
+          .join(',');
+
+        const blob = new Blob([data.join('\n')], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'export.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
       });
   }
 

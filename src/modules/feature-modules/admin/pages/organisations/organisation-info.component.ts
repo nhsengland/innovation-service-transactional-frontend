@@ -16,6 +16,8 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
     id: string;
     name: null | string;
     acronym: null | string;
+    summary: null | string;
+    website: null | string;
     isActive: null | boolean;
     hasInactiveUnits: null | boolean;
     organisationUnits: {
@@ -25,7 +27,16 @@ export class PageOrganisationInfoComponent extends CoreComponent implements OnIn
       isActive: boolean;
       userCount: number;
     }[];
-  } = { id: '', name: null, acronym: null, isActive: null, hasInactiveUnits: null, organisationUnits: [] };
+  } = {
+    id: '',
+    name: null,
+    acronym: null,
+    website: null,
+    summary: null,
+    isActive: null,
+    hasInactiveUnits: null,
+    organisationUnits: []
+  };
 
   constructor(
     private activatedRoute: ActivatedRoute,
