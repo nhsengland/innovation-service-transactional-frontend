@@ -106,6 +106,7 @@ export class PageOrganisationNewComponent extends CoreComponent implements OnIni
       acronym: data.acronym,
       units: data.units,
       summary: data.summary,
+      website: data.website,
       url: data.url
     };
 
