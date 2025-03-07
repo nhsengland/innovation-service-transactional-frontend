@@ -66,6 +66,7 @@ export type InnovationListSelectType =
   | 'owner.id'
   | 'owner.name'
   | 'owner.companyName'
+  | 'owner.email'
   | 'engagingOrganisations'
   | 'engagingUnits'
   | 'suggestedOrganisations'
@@ -117,7 +118,7 @@ export type InnovationListFullDTO = {
     | { unitId: string; name: string; acronym: string; assignedAccessors: { id: string; name: string }[] | null }[]
     | null;
   suggestedUnits: { unitId: string; name: string; acronym: string }[];
-  owner: { id: string; name: string | null; companyName: string | null } | null;
+  owner: { id: string; name: string | null; companyName: string | null; email: string | null } | null;
   support: {
     status: InnovationSupportStatusEnum;
     updatedAt: DateISOType | null;
