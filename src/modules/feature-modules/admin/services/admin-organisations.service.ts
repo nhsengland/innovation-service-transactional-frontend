@@ -19,6 +19,7 @@ export type CreateOrganisationBodyDTO = {
   acronym: string;
   summary: string;
   url: string;
+  website: string;
   units: { name: string; acronym: string }[];
 };
 
