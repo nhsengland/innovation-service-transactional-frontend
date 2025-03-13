@@ -1,0 +1,123 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <form [formGroup]="form">
+        <theme-form-input [id]="'searchInnovation'" controlName="search" label="Search all innovations" [pageUniqueField]="false" placeholder="Search" width="one-third">
+          <ng-container append>
+            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+              <theme-svg-icon type="search" />
+              <span class="nhsuk-u-visually-hidden">Search</span>
+            </button>
+          </ng-container>
+        </theme-form-input>
+      </form>
+
+      <a class="nhsuk-u-font-size-19 nhsuk-u-margin-bottom-0" routerLink="advanced-search">More search options</a>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--m nhsuk-section-break--visible nhsuk-u-margin-top-3" />
+    </div>
+  </div>
+
+  <div class="app-tabs nhsuk-u-margin-bottom-0">
+    <ul class="app-tabs__list" role="tablist" aria-label="Tabs">
+      <li *ngFor="let item of tabs" class="app-tabs__item" [routerLinkActive]="'selected'">
+        <div class="d-flex">
+          <a
+            id="tab-{{ item.key }}"
+            [routerLink]="item.link"
+            role="tab"
+            class="nhsuk-u-padding-right-1"
+            attr.aria-controls="content-{{ item.key }}"
+            attr.aria-selected="{{ currentTab.key === item.key ? 'true' : 'false' }}"
+          >
+            {{ item.title }}
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="nhsuk-grid-row">
+    <div id="content-{{ currentTab.key }}" role="tabpanel" attr.aria-labelledby="tab-{{ currentTab.key }}" class="nhsuk-grid-column-full">
+      <div class="nhsuk-u-margin-top-4 nhsuk-u-margin-bottom-4">
+        <p class="nhsuk-u-margin-bottom-0">{{ currentTab.mainDescription }}</p>
+        <p class="nhsuk-hint nhsuk-u-margin-bottom-0">{{ currentTab.secondaryDescription }}</p>
+      </div>
+
+      <p class="nhsuk-body-m nhsuk-u-font-weight-bold nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-3" aria-live="polite">
+        {{ innovationsNeedingActionList.getTotalRowsNumber() }} innovations
+      </p>
+
+      <hr class="nhsuk-section-break nhsuk-section-break--visible" />
+
+      <p *ngIf="innovationsNeedingActionList.getTotalRowsNumber() === 0" class="nhsuk-u-padding-top-3">There are no innovations to display.</p>
+
+      <ng-container *ngIf="innovationsNeedingActionList.getTotalRowsNumber() > 0">
+        <table class="nhsuk-table-responsive app-sortable-table nhsuk-u-margin-top-3">
+          <caption class="nhsuk-u-visually-hidden">
+            Innovations list
+            <span *ngIf="innovationsNeedingActionList.isSortable()" class="nhsuk-u-visually-hidden">Column headers with buttons are sortable.</span>
+          </caption>
+          <thead class="nhsuk-table__head">
+            <tr>
+              <th *ngFor="let item of innovationsNeedingActionList.getHeaderColumns(); let i = index" scope="col" [ngClass]="item.align" [attr.aria-sort]="item.orderDir">
+                <ng-container *ngIf="!item.orderable">{{ item.label }}</ng-container>
+                <button [id]="item.key" *ngIf="item.orderable" type="button" (click)="onTableOrder(item.key)">
+                  {{ item.label }}
+                  <span aria-hidden="true"></span>
+                </button>
+              </th>
+            </tr>
+          </thead>
+
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let innovation of innovationsNeedingActionList.getRecords()" class="nhsuk-table__row" role="row">
+              <td class="nhsuk-table__cell fixed-width-300 text-word-break">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("name") }}</span>
+
+                <a routerLink="/accessor/innovations/{{ innovation.id }}" attr.aria-label="View {{ innovation.name }} innovation"> {{ innovation.name }}</a>
+              </td>
+
+              <td class="nhsuk-table__cell fixed-width-125">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("dueDate") }}</span>
+                <span>{{ innovation.dueDate | date: ("app.date_formats.medium_date" | translate) }}</span>
+
+                <span *ngIf="innovation.dueDays > 0" class="nhsuk-body-s font-color-secondary nhsuk-u-margin-bottom-0">
+                  <span class="nhsuk-u-visually-hidden">Innovation last update: </span>
+                  {{ innovation.dueDays + " " + ("dictionary.day" | pluralTranslate: innovation.dueDays | translate) + " ago" }}
+                </span>
+              </td>
+
+              <td class="nhsuk-table__cell fixed-width-175">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("dueDays") }}</span>
+                <theme-tag
+                  type="{{ this.getActionColor(innovation.dueDays) }}"
+                  label="{{ this.getActionText(innovation.dueDays, innovation.supportStatus) }}"
+                  class="text-pre-wrap"
+                ></theme-tag>
+              </td>
+
+              <td class="nhsuk-table__cell text-align-right">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsNeedingActionList.getColumnLabel("supportStatus") }}</span>
+                <theme-tag
+                  type="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.cssColorClass' | translate }}"
+                  label="{{ 'shared.catalog.innovation.support_status.' + innovation.supportStatus + '.name' | translate }}"
+                  class="text-pre-wrap"
+                ></theme-tag>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="nhsuk-u-padding-bottom-4">
+          <theme-pagination
+            [currentPage]="innovationsNeedingActionList.page"
+            [pageSize]="innovationsNeedingActionList.pageSize"
+            [totalRows]="innovationsNeedingActionList.getTotalRowsNumber()"
+            (updatePageEvent)="onPageChange($event)"
+          ></theme-pagination>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</theme-content-wrapper>

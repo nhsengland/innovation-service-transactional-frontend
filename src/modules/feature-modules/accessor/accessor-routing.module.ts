@@ -24,6 +24,7 @@ import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovatio
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationsNeedingActionComponent } from './pages/innovations-needing-action/innovations-needing-action.component';
 
 // Shared module pages.
 // // Account.
@@ -554,7 +555,15 @@ const routes: Routes = [
         pathMatch: 'full',
         component: InnovationSupportOrganisationReferralCriteriaComponent
       },
-
+      {
+        path: 'needing-action',
+        pathMatch: 'full',
+        component: InnovationsNeedingActionComponent,
+        data: {
+          breadcrumb: 'Needing action',
+          layout: { type: 'full', backgroundColor: 'bg-color-white' }
+        }
+      },
       {
         path: 'tasks',
         data: {

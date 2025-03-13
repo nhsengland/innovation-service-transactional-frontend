@@ -24,6 +24,7 @@ export type UserStatisticsDTO = {
     total: number;
     lastSubmittedAt: null | DateISOType;
   };
+  [UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER]: { count: number };
 };
 
 export type InnovationStatisticsDTO = {
