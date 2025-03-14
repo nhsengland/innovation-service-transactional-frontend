@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
@@ -10,28 +9,11 @@ import { InnovationSupportStatusEnum } from '@modules/stores';
 import { DateISOType } from '@app/base/types';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 
-type TabType = {
-  key: 'innovations-needing-action';
-  title: string;
-  mainDescription: string;
-  secondaryDescription?: string;
-  showAssignedToMeFilter: boolean;
-  link: string;
-};
-
 @Component({
   selector: 'app-accessor-pages-innovations-needing-action',
   templateUrl: './innovations-needing-action.component.html'
 })
 export class InnovationsNeedingActionComponent extends CoreComponent implements OnInit {
-  tabs: TabType[] = [];
-  currentTab: TabType;
-
-  form = new FormGroup({
-    search: new FormControl('', { validators: [Validators.maxLength(200)], updateOn: 'blur' }),
-    assignedToMe: new FormControl(false, { updateOn: 'change' })
-  });
-
   innovationsNeedingActionList = new TableModel<{
     id: string;
     name: string;
@@ -48,23 +30,6 @@ export class InnovationsNeedingActionComponent extends CoreComponent implements 
 
     this.setPageTitle('Innovations Needing Action');
 
-    this.tabs = [
-      {
-        key: 'innovations-needing-action',
-        title: 'Innovations Needing Action',
-        mainDescription: 'All innovations needing action.',
-        showAssignedToMeFilter: true,
-        link: '/accessor/needing-action'
-      }
-    ];
-
-    this.currentTab = {
-      key: 'innovations-needing-action',
-      title: '',
-      mainDescription: '',
-      showAssignedToMeFilter: false,
-      link: ''
-    };
     this.innovationsNeedingActionList = new TableModel({
       visibleColumns: {
         name: { label: 'Innovation', orderable: true },
@@ -73,20 +38,17 @@ export class InnovationsNeedingActionComponent extends CoreComponent implements 
         supportStatus: { label: 'Support status', align: 'right', orderable: false }
       },
       orderBy: 'name',
-      orderDir: 'descending'
+      orderDir: 'ascending'
     });
   }
 
   ngOnInit(): void {
     this.setPageTitle('Innovations Needing Action');
     this.subscriptions.push(
-      this.activatedRoute.queryParams.subscribe(queryParams => {
-        this.router.navigate(['/accessor/needing-action']);
-        console.log(queryParams);
+      this.activatedRoute.queryParams.subscribe(() => {
         this.getInnovationsNeedingActionList();
       })
     );
-    this.form.controls.search.valueChanges.subscribe(() => this.onSearchChange());
   }
 
   getInnovationsNeedingActionList(column?: string): void {
@@ -105,18 +67,6 @@ export class InnovationsNeedingActionComponent extends CoreComponent implements 
     });
   }
 
-  onSearchChange(): void {
-    const searchControl = this.form.controls.search;
-    if (!searchControl.valid) {
-      searchControl.markAsTouched();
-      return;
-    }
-
-    this.redirectTo(`/${this.userUrlBasePath()}/innovations/advanced-search`, {
-      search: this.form.get('search')?.value
-    });
-  }
-
   onTableOrder(column: string): void {
     this.innovationsNeedingActionList.setOrderBy(column);
     this.getInnovationsNeedingActionList(column);
@@ -127,33 +77,17 @@ export class InnovationsNeedingActionComponent extends CoreComponent implements 
     this.getInnovationsNeedingActionList();
   }
 
-  onSearchClick(): void {
-    this.form.controls.search.updateValueAndValidity({ onlySelf: true });
-  }
-
   getActionText(dueDays: number, supportStatus: InnovationSupportStatusEnum) {
     if (supportStatus === 'ENGAGING' || supportStatus === 'WAITING') {
-      if (dueDays < 0) {
-        return 'awaiting update';
-      } else {
-        return 'overdue update';
-      }
+      return dueDays < 0 ? 'awaiting update' : 'overdue update';
     }
     if (supportStatus === 'SUGGESTED') {
-      if (dueDays < 0) {
-        return 'awaiting initial engagement';
-      } else {
-        return 'overdue initial engagement';
-      }
+      return dueDays < 0 ? 'awaiting initial engagement' : 'overdue initial engagement';
     }
     throw new Error('Invalid support status');
   }
 
   getActionColor(dueDays: number) {
-    if (dueDays < 0) {
-      return 'WARNING';
-    } else {
-      return 'ERROR';
-    }
+    return dueDays < 0 ? 'WARNING' : 'ERROR';
   }
 }

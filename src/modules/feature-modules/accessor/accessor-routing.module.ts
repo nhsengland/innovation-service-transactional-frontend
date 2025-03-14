@@ -142,7 +142,15 @@ const routes: Routes = [
             component: PageInnovationsAdvancedReviewComponent,
             data: { layout: { type: 'full', backgroundColor: 'bg-color-white' } }
           },
-
+          {
+            path: 'needing-action',
+            pathMatch: 'full',
+            component: InnovationsNeedingActionComponent,
+            data: {
+              breadcrumb: 'Needing action',
+              layout: { type: 'full', backgroundColor: 'bg-color-white' }
+            }
+          },
           {
             path: ':innovationId',
             resolve: {
@@ -554,15 +562,6 @@ const routes: Routes = [
         path: 'organisations/referral-criteria',
         pathMatch: 'full',
         component: InnovationSupportOrganisationReferralCriteriaComponent
-      },
-      {
-        path: 'needing-action',
-        pathMatch: 'full',
-        component: InnovationsNeedingActionComponent,
-        data: {
-          breadcrumb: 'Needing action',
-          layout: { type: 'full', backgroundColor: 'bg-color-white' }
-        }
       },
       {
         path: 'tasks',

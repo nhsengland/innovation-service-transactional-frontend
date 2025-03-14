@@ -110,7 +110,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           emptyMessage: 'No innovations awaiting action',
           count: statistics[UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER].count,
           label: `Innovations awaiting action`,
-          link: `/accessor/needing-action`
+          link: `/accessor/innovations/needing-action`
         });
 
         this.cardsList.push({
