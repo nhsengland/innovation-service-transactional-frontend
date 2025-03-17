@@ -232,6 +232,19 @@ export type InnovationSupportsListDTO = {
   engagingAccessors: { id: string; userRoleId: string; name: string; isActive: boolean }[];
 }[];
 
+export type InnovationNeedingActionDTO = {
+  innovations: InnovationNeedingAction[];
+  count: number;
+};
+
+export type InnovationNeedingAction = {
+  id: string;
+  name: string;
+  supportStatus: InnovationSupportStatusEnum;
+  dueDate: DateISOType;
+  dueDays: number;
+};
+
 export type InnovationSupportInfoDTO = {
   id: string;
   status: InnovationSupportStatusEnum;

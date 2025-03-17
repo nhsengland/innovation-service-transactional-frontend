@@ -59,7 +59,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       statistics: [
         UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER,
         UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER,
-        UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER
+        UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER,
+        UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER
       ]
     };
 
@@ -102,6 +103,14 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           lastMessage: `Last submitted:`,
           date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
           emptyMessageTitle: 'No innovations awaiting status assignment'
+        });
+
+        this.cardsList.push({
+          title: 'Your overdue actions',
+          emptyMessage: 'No innovations awaiting action',
+          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER].count,
+          label: `Innovations awaiting action`,
+          link: `/accessor/innovations/needing-action`
         });
 
         this.cardsList.push({

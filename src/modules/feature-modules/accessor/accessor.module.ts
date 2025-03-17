@@ -24,6 +24,7 @@ import { InnovationSupportRequestUpdateStatusComponent } from './pages/innovatio
 import { InnovationSupportUpdateComponent } from './pages/innovation/support/support-update.component';
 import { InnovationsReviewComponent } from './pages/innovations/innovations-review.component';
 import { InnovationSupportOrganisationReferralCriteriaComponent } from './pages/organisation-referral-criteria/organisation-referral-criteria.component';
+import { InnovationsNeedingActionComponent } from './pages/innovations-needing-action/innovations-needing-action.component';
 import { InnovationCustomNotificationsComponent } from './pages/innovation/custom-notifications/custom-notifications.component';
 import { WizardInnovationCustomNotificationNewComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/custom-notification-new.component';
 import { WizardInnovationCustomNotificationNewNotificationStepComponent } from './pages/innovation/custom-notifications/wizard-custom-notification-new/steps/notification-step.component';
@@ -69,6 +70,7 @@ import { InnovationRecordSidebarComponent } from '@modules/shared/components/inn
     InnovationChangeAccessorsComponent,
     InnovationsReviewComponent,
     InnovationSupportOrganisationReferralCriteriaComponent,
+    InnovationsNeedingActionComponent,
     InnovationCustomNotificationsComponent,
     WizardInnovationCustomNotificationNewComponent,
     WizardInnovationCustomNotificationNewNotificationStepComponent,

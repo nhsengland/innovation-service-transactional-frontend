@@ -34,6 +34,7 @@ import {
   InnovationInfoDTO,
   InnovationListFullDTO,
   InnovationListSelectType,
+  InnovationNeedingActionDTO,
   InnovationNeedsAssessmentInfoDTO,
   InnovationRulesDTO,
   InnovationSearchFullDTO,
@@ -340,6 +341,15 @@ export class InnovationsService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getInnovationsNeedingActionsList(
+    pagination: Paginated<('name' | 'dueDate')[]> = { take: 100, skip: 0 }
+  ): Observable<InnovationNeedingActionDTO> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/needing-action').setQueryParams({
+      ...pagination
+    });
+    return this.http.get<InnovationNeedingActionDTO>(url.buildUrl()).pipe(take(1));
   }
 
   getInnovationRules(
