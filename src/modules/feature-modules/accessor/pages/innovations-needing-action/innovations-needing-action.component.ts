@@ -79,10 +79,10 @@ export class InnovationsNeedingActionComponent extends CoreComponent implements 
 
   getActionText(dueDays: number, supportStatus: InnovationSupportStatusEnum) {
     if (supportStatus === 'ENGAGING' || supportStatus === 'WAITING') {
-      return dueDays < 0 ? 'awaiting update' : 'overdue update';
+      return dueDays <= 0 ? 'Awaiting update' : 'Overdue update';
     }
     if (supportStatus === 'SUGGESTED') {
-      return dueDays < 0 ? 'awaiting initial engagement' : 'overdue initial engagement';
+      return dueDays <= 0 ? 'Awaiting initial engagement' : 'Overdue initial engagement';
     }
     throw new Error('Invalid support status');
   }
