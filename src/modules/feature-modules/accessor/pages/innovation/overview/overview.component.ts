@@ -24,7 +24,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
   innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
-  innovatorSummary: { label: string; value: string }[] = [];
   cardsList: StatisticsCardType[] = [];
   innovationSupport: {
     organisationUnit: string;
@@ -137,8 +136,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
               .join('\n')
           }
         ];
-
-        this.innovatorSummary = [{ label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' }];
 
         this.showCards =
           [InnovationSupportStatusEnum.ENGAGING, InnovationSupportStatusEnum.WAITING].includes(

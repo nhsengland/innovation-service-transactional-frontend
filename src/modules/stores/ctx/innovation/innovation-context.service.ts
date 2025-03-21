@@ -77,15 +77,7 @@ export class InnovationContextService {
           statusUpdatedAt: response.statusUpdatedAt,
           submittedAt: response.submittedAt,
           hasBeenAssessed: response.hasBeenAssessed,
-          ...(response.owner
-            ? {
-                owner: {
-                  isActive: response.owner.isActive,
-                  name: response.owner.name,
-                  organisation: response.owner.organisation
-                }
-              }
-            : {}),
+          ...(response.owner && { owner: response.owner }),
           loggedUser: { isOwner: response.owner ? response.owner?.id === userContext?.id : false },
           ...(response.assessment
             ? {

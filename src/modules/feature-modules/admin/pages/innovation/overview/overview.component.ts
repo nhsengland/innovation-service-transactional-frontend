@@ -11,8 +11,6 @@ import {
   InnovationSupportStatusEnum
 } from '@modules/stores';
 
-import { DatePipe } from '@angular/common';
-import { UtilsHelper } from '@app/base/helpers';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
 import { forkJoin } from 'rxjs';
 
@@ -36,8 +34,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
 
-  innovatorDetails: { label: string; value: null | string }[] = [];
-
   innovationCollaborators: {
     id: string;
     status: InnovationCollaboratorStatusEnum;
@@ -52,8 +48,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationsService: InnovationsService,
-    private datePipe: DatePipe
+    private innovationsService: InnovationsService
   ) {
     super();
 
@@ -102,29 +97,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             )
             .join('\n')
         }
-      ];
-
-      this.innovatorDetails = [
-        { label: 'Name', value: innovation.owner?.name ?? '[deleted account]' },
-        {
-          label: 'Last login',
-          value: this.datePipe.transform(
-            innovation.owner?.lastLoginAt ?? '',
-            this.translate('app.date_formats.long_date_time')
-          )
-        },
-        {
-          label: 'Contact preference',
-          value:
-            UtilsHelper.getContactPreferenceValue(
-              innovation.owner?.contactByEmail,
-              innovation.owner?.contactByPhone,
-              innovation.owner?.contactByPhoneTimeframe
-            ) || ''
-        },
-        { label: 'Contact details', value: innovation.owner?.contactDetails || '' },
-        { label: 'Email address', value: innovation.owner?.email ?? '' },
-        { label: 'Phone number', value: innovation.owner?.mobilePhone ?? '' }
       ];
 
       const occurrences = (innovation.supports ?? [])
