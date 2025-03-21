@@ -68,57 +68,69 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       this.statisticsService.getUserStatisticsInfo(qp),
       this.announcementsService.getAnnouncements({ type: [AnnouncementTypeEnum.HOMEPAGE] })
     ]).subscribe(([statistics, announcements]) => {
-      this.cardsList = [
+      // Define cards in the exact order you want them to appear:
+      const cardDefinitions = [
         {
-          title: 'Your innovations',
-          label: `Engaging innovations are assigned to you`,
-          link: '/accessor/innovations',
-          queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
-          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
-          total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
-          lastMessage: `Last submitted:`,
-          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No engaging innovations assigned to you'
+          condition: this.ctx.user.isQualifyingAccessor(),
+          card: {
+            title: 'Review innovations',
+            label: 'Suggested innovations awaiting status assignment from your organisation unit',
+            link: '/accessor/innovations',
+            queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
+            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
+            lastMessage: 'Last submitted:',
+            date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No innovations awaiting status assignment'
+          }
         },
         {
-          title: 'Tasks',
-          label: `Tasks assigned by you have been done or declined`,
-          link: `/accessor/tasks`,
-          queryParams: { openTasks: false },
-          count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
-          total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
-          lastMessage: 'Last task update:',
-          date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
-          emptyMessage: 'No tasks assigned by your organisation yet'
+          card: {
+            title: 'Your innovations',
+            label: 'Engaging innovations are assigned to you',
+            link: '/accessor/innovations',
+            queryParams: { status: InnovationSupportStatusEnum.ENGAGING, assignedToMe: true },
+            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER].total,
+            lastMessage: 'Last submitted:',
+            date: statistics[UserStatisticsTypeEnum.INNOVATIONS_ASSIGNED_TO_ME_COUNTER]?.lastSubmittedAt,
+            emptyMessageTitle: 'No engaging innovations assigned to you'
+          }
+        },
+        {
+          condition: this.ctx.user.isQualifyingAccessor(),
+          card: {
+            title: 'Your overdue actions',
+            emptyMessage: 'No innovations awaiting action',
+            count: statistics[UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER].count,
+            label: 'Innovations awaiting action',
+            link: '/accessor/innovations/needing-action'
+          }
+        },
+        {
+          card: {
+            title: 'Tasks',
+            label: 'Tasks assigned by you have been done or declined',
+            link: '/accessor/tasks',
+            queryParams: { openTasks: false },
+            count: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].count,
+            total: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER].total,
+            lastMessage: 'Last task update:',
+            date: statistics[UserStatisticsTypeEnum.TASKS_RESPONDED_COUNTER]?.lastSubmittedAt,
+            emptyMessage: 'No tasks assigned by your organisation yet'
+          }
+        },
+        {
+          condition: this.ctx.user.isQualifyingAccessor(),
+          card: {
+            title: 'List of accessors',
+            emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
+            link: '/accessor/accessor-list'
+          }
         }
       ];
 
-      if (this.ctx.user.isQualifyingAccessor()) {
-        this.cardsList.unshift({
-          title: 'Review innovations',
-          label: `Suggested innovations awaiting status assignment from your organisation unit`,
-          link: '/accessor/innovations',
-          queryParams: { status: InnovationSupportStatusEnum.UNASSIGNED },
-          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER].count,
-          lastMessage: `Last submitted:`,
-          date: statistics[UserStatisticsTypeEnum.INNOVATIONS_TO_REVIEW_COUNTER]?.lastSubmittedAt,
-          emptyMessageTitle: 'No innovations awaiting status assignment'
-        });
-
-        this.cardsList.push({
-          title: 'Your overdue actions',
-          emptyMessage: 'No innovations awaiting action',
-          count: statistics[UserStatisticsTypeEnum.INNOVATIONS_NEEDING_ACTION_COUNTER].count,
-          label: `Innovations awaiting action`,
-          link: `/accessor/innovations/needing-action`
-        });
-
-        this.cardsList.push({
-          title: 'List of accessors',
-          emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
-          link: `/accessor/accessor-list`
-        });
-      }
+      // Build the cardsList by filtering out cards whose conditions are false:
+      this.cardsList = cardDefinitions.filter(def => def.condition ?? true).map(def => def.card);
 
       this.announcements = announcements;
 
