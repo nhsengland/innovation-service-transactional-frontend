@@ -71,7 +71,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       // Define cards in the exact order you want them to appear:
       const cardDefinitions = [
         {
-          condition: () => this.ctx.user.isQualifyingAccessor(),
+          condition: this.ctx.user.isQualifyingAccessor(),
           card: {
             title: 'Review innovations',
             label: 'Suggested innovations awaiting status assignment from your organisation unit',
@@ -84,7 +84,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           }
         },
         {
-          condition: () => true,
           card: {
             title: 'Your innovations',
             label: 'Engaging innovations are assigned to you',
@@ -98,7 +97,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           }
         },
         {
-          condition: () => this.ctx.user.isQualifyingAccessor(),
+          condition: this.ctx.user.isQualifyingAccessor(),
           card: {
             title: 'Your overdue actions',
             emptyMessage: 'No innovations awaiting action',
@@ -108,7 +107,6 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           }
         },
         {
-          condition: () => true,
           card: {
             title: 'Tasks',
             label: 'Tasks assigned by you have been done or declined',
@@ -122,7 +120,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           }
         },
         {
-          condition: () => this.ctx.user.isQualifyingAccessor(),
+          condition: this.ctx.user.isQualifyingAccessor(),
           card: {
             title: 'List of accessors',
             emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
@@ -132,7 +130,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
       ];
 
       // Build the cardsList by filtering out cards whose conditions are false:
-      this.cardsList = cardDefinitions.filter(def => def.condition()).map(def => def.card);
+      this.cardsList = cardDefinitions.filter(def => def.condition ?? true).map(def => def.card);
 
       this.announcements = announcements;
 
