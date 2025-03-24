@@ -211,6 +211,9 @@ $service-manual-container-size: 1100px; // Container width variable.
 .font-color-text {
   color: $nhsuk-text-color;
 }
+.font-color-link {
+  color: var(--primary-color);
+}
 .font-color-secondary {
   color: $nhsuk-secondary-text-color;
 }

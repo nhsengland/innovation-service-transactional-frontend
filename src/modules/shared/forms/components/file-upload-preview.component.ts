@@ -4,8 +4,7 @@ import { NgxDropzonePreviewComponent } from 'ngx-dropzone';
 
 @Component({
   selector: 'theme-file-upload-preview',
-  template: ` <ng-content select="ngx-dropzone-label"></ng-content>
-    <ngx-dropzone-remove-badge *ngIf="removable" (click)="_remove($event)"></ngx-dropzone-remove-badge>`,
+  template: ` <ng-content select="ngx-dropzone-label"></ng-content>`,
   styleUrls: ['./file-upload-preview.component.scss'],
   providers: [
     {
