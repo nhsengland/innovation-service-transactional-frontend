@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, of, switchMap } from 'rxjs';
 
 import { CoreComponent } from '@app/base';
-import { UtilsHelper } from '@app/base/helpers';
 import { StatisticsCardType } from '@app/base/types';
 
 import { InnovationCollaboratorsListDTO, InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
@@ -33,7 +32,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
   assessmentExemption: null | Required<AssessmentExemptionTypeDTO>['exemption'] = null;
   innovationSummary: { label: string; value: null | string; copy?: boolean }[] = [];
-  innovatorSummary: { label: string; value: string }[] = [];
   cardsList: StatisticsCardType[] = [];
   innovationCollaborators: InnovationCollaboratorsListDTO['data'] = [];
 
@@ -111,29 +109,6 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
                     : this.ctx.schema.getIrSchemaTranslationsMap()['questions'].get('categories')?.items.get(v)?.label
                 )
                 .join('\n')
-            }
-          ];
-
-          this.innovatorSummary = [
-            { label: 'Name', value: this.innovation.owner?.name ?? '[deleted account]' },
-            {
-              label: 'Contact preference',
-              value: this.isArchived
-                ? 'Not available'
-                : UtilsHelper.getContactPreferenceValue(
-                    this.innovation.owner?.contactByEmail,
-                    this.innovation.owner?.contactByPhone,
-                    this.innovation.owner?.contactByPhoneTimeframe
-                  ) || ''
-            },
-            {
-              label: 'Contact details',
-              value: this.isArchived ? 'Not available' : this.innovation.owner?.contactDetails || ''
-            },
-            { label: 'Email address', value: this.isArchived ? 'Not available' : this.innovation.owner?.email || '' },
-            {
-              label: 'Phone number',
-              value: this.isArchived ? 'Not available' : this.innovation.owner?.mobilePhone || ''
             }
           ];
 
