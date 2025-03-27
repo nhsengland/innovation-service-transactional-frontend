@@ -307,7 +307,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       });
   }
 
+  exportingCSV = false;
   exportCSV(): void {
+    this.exportingCSV = true;
     // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
     this.filtersModel.handleStateChanges();
 
@@ -398,6 +400,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+        this.exportingCSV = false;
       });
   }
 

@@ -58,7 +58,9 @@
 
       <div class="nhsuk-u-padding-bottom-4">
         <p class="text-align-right nhsuk-u-margin-bottom-0">
-          <a href="javascript:void(0)" (click)="exportCSV()" class="nhsuk-u-font-size-14">Export all results (CSV)</a>
+          <a href="javascript:void(0)" (click)="exportCSV()" [class]="{ disabled: exportingCSV, 'nhsuk-u-font-size-14': true }">{{
+            exportingCSV ? "Exporting..." : "Export all results (CSV)"
+          }}</a>
         </p>
         <theme-pagination [currentPage]="pageNumber" [pageSize]="pageSize" [totalRows]="innovationsCount" (updatePageEvent)="onPageChange($event)"></theme-pagination>
       </div>
