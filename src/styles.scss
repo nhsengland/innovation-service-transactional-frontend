@@ -857,3 +857,8 @@ a.app-tag {
 .highlight {
   background-color: var(--warning-color);
 }
+
+a.disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
