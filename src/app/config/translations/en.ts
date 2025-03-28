@@ -541,23 +541,23 @@ export const locale = {
             areas: {
               deploymentCount: {
                 label: 'Deployed in an NHS or care setting',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               ukcaceCertification: {
                 label: 'UKCA / CE certification',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               dtacCertification: {
                 label: 'DTAC certification',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               evidenceClinicalOrCare: {
                 label: 'Evidence of clinical or care outcomes',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               evidenceRealWorld: {
                 label: 'Real world evidence',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               assessmentRealWorldValidation: {
                 label: 'Real world validation of organisational and financial benefit',
@@ -565,7 +565,7 @@ export const locale = {
               },
               evidenceOfImpact: {
                 label: 'Evidence of impact or benefit',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               assessmentEvidenceProveEfficacy: {
                 label: 'Evidence to prove efficacy',
@@ -573,15 +573,15 @@ export const locale = {
               },
               evidenceCostImpact: {
                 label: 'Evidence of cost impact, efficiency gains and/or economic modelling',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               workingProduct: {
                 label: 'Working product, service or prototype',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               carbonReductionPlan: {
                 label: 'Carbon reduction plan',
-                section: 'From innovation record'
+                section: 'Reported by innovator'
               },
               htwTerComplete: {
                 label: 'Topic Exploration Report (TER) completed',
