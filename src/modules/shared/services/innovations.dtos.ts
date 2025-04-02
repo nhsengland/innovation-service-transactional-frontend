@@ -62,6 +62,7 @@ export type InnovationListSelectType =
   | 'mainCategory'
   | 'otherCategoryDescription'
   | 'postcode'
+  | 'areas'
   // Relation fields
   | 'owner.id'
   | 'owner.name'
@@ -111,6 +112,7 @@ export type InnovationListFullDTO = {
   keyHealthInequalities: string[] | null;
   mainCategory: string | null;
   otherCategoryDescription: string | null;
+  areas: string[] | null;
 
   // Relation fields
   engagingOrganisations: { organisationId: string; name: string; acronym: string }[] | null;

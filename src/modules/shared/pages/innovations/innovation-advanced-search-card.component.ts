@@ -32,6 +32,7 @@ export type InnovationCardData = {
     closeReason: InnovationSupportCloseReasonEnum | null;
   } | null;
   highlights?: Record<string, string[]>;
+  areas: string[];
 };
 
 @Component({
@@ -53,6 +54,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
   diseasesAndConditionsList = '';
   keyHealthInequalitiesList = '';
   involvedAACProgrammesList = '';
+  areasList = '';
 
   highlightInfo?: {
     termsFound: string[];
@@ -79,6 +81,7 @@ export class InnovationAdvancedSearchCardComponent extends CoreComponent impleme
     this.diseasesAndConditionsList = this.getFormattedList(this.innovationCardData.diseasesAndConditions);
     this.keyHealthInequalitiesList = this.getFormattedList(this.innovationCardData.keyHealthInequalities);
     this.involvedAACProgrammesList = this.getFormattedList(this.innovationCardData.involvedAACProgrammes);
+    this.areasList = this.getFormattedList(this.innovationCardData.areas);
 
     if (this.innovationCardData.highlights && Object.keys(this.innovationCardData.highlights).length != 0) {
       const searchTermsFoundWithDuplicates = this.getSearchTermsFound(this.innovationCardData.highlights);

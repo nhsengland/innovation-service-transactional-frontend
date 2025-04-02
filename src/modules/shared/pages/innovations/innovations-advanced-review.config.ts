@@ -81,6 +81,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       state: 'closed',
       startDate: { key: 'startDate', label: 'Submitted after', description: 'For example, 2005 or 21/11/2014' },
       endDate: { key: 'endDate', label: 'Submitted before', description: 'For example, 2005 or 21/11/2014' }
+    },
+    {
+      type: 'CHECKBOX_GROUP',
+      key: 'areas',
+      title: 'Relevant areas',
+      state: 'closed',
+      items: [],
+      scrollable: true
     }
   ]
 };
@@ -99,7 +107,8 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
     ),
     involvedAACProgrammes: getIrSchemaQuestionItemsValueAndLabel(schema, 'involvedAACProgrammes').filter(
       i => i.label !== ''
-    )
+    ),
+    areas: getIrSchemaQuestionItemsValueAndLabel(schema, 'areas').filter(i => i.label !== '')
   };
 }
 
@@ -124,7 +133,8 @@ export function getConfig(
         'suggestedOnly',
         'submittedAt',
         'categories',
-        'careSettings'
+        'careSettings',
+        'areas'
       ];
       break;
     case UserRoleEnum.ASSESSMENT:
@@ -136,7 +146,8 @@ export function getConfig(
         'diseasesAndConditions',
         'engagingOrganisations',
         'groupedStatuses',
-        'submittedAt'
+        'submittedAt',
+        'areas'
       ];
 
       const assignedToMeFilter = (InnovationsListFiltersConfig?.filters?.[0] as CheckboxesFilter).checkboxes?.[0];
@@ -153,7 +164,8 @@ export function getConfig(
         'categories',
         'careSettings',
         'keyHealthInequalities',
-        'involvedAACProgrammes'
+        'involvedAACProgrammes',
+        'areas'
       ];
       break;
     default:

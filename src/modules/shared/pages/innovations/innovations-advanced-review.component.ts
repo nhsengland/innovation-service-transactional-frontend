@@ -221,7 +221,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'engagingUnits',
       'support.status',
       'support.updatedAt',
-      'support.closeReason'
+      'support.closeReason',
+      'areas'
     ];
 
     if (this.ctx.user.isAdmin()) {
@@ -289,6 +290,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
               'None'
             ),
+            areas: this.translateLists(result.areas, translations.questions.get('areas')?.items, 'None'),
             involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
             submittedAt: result.submittedAt,
             engagingUnits: engagingUnits,
