@@ -75,6 +75,11 @@
           </ng-container>
         </ng-container>
       </li>
+
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Relevant areas: </span>
+        <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ areasList }}</span>
+      </li>
     </ng-container>
 
     <li *ngIf="ctx.user.isAccessorType()">
