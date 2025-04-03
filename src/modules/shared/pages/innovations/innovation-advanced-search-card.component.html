@@ -45,6 +45,12 @@
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ categoriesList }}</span>
       </li>
 
+
+      <li class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold">Relevant areas: </span>
+        <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ areasList }}</span>
+      </li>
+
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Care settings: </span>
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ careSettingsList }}</span>
@@ -74,11 +80,6 @@
             <theme-tag [type]="'WHITE'" label="{{ unit }}" class="nhsuk-u-margin-left-1" />
           </ng-container>
         </ng-container>
-      </li>
-
-      <li class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">Relevant areas: </span>
-        <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ areasList }}</span>
       </li>
     </ng-container>
 

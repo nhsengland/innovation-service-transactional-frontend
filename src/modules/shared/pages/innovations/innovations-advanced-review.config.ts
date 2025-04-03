@@ -31,6 +31,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
     { type: 'CHECKBOX_GROUP', key: 'categories', title: 'Categories', state: 'closed', items: [], scrollable: true },
     {
       type: 'CHECKBOX_GROUP',
+      key: 'areas',
+      title: 'Relevant areas',
+      state: 'closed',
+      items: [],
+      scrollable: true
+    },
+    {
+      type: 'CHECKBOX_GROUP',
       key: 'careSettings',
       title: 'Care settings',
       state: 'closed',
@@ -81,14 +89,6 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       state: 'closed',
       startDate: { key: 'startDate', label: 'Submitted after', description: 'For example, 2005 or 21/11/2014' },
       endDate: { key: 'endDate', label: 'Submitted before', description: 'For example, 2005 or 21/11/2014' }
-    },
-    {
-      type: 'CHECKBOX_GROUP',
-      key: 'areas',
-      title: 'Relevant areas',
-      state: 'closed',
-      items: [],
-      scrollable: true
     }
   ]
 };
