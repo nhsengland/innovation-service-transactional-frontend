@@ -28,12 +28,12 @@ const stepsLabels = {
     id: 'description',
     label: 'Explain any significant changes to your innovation since your last needs assessment',
     description:
-      'In the text box below, describe any major developments or achievements since your previous assessment, such as clinical trials, regulatory approvals, or improvements to your innovation.'
+      'Describe any major developments or achievements since your previous assessment, such as clinical trials, regulatory approvals, or improvements to your innovation.'
   },
   q3: {
     id: 'whatSupportDoYouNeed',
     label: 'What support do you need next?',
-    description: `In the text box below, outline the specific support you need to progress your innovation, such as funding, technical expertise, or regulatory guidance.`
+    description: `Outline the specific support you need to progress your innovation, such as funding, technical expertise, or regulatory guidance.`
   }
 };
 
