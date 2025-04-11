@@ -52,6 +52,7 @@ export type InnovationListSelectType =
   | 'lastAssessmentRequestAt'
   | 'updatedAt'
   // Document fields
+  | 'description'
   | 'careSettings'
   | 'otherCareSetting'
   | 'categories'
@@ -102,6 +103,7 @@ export type InnovationListFullDTO = {
   lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
   // Document fields
+  description: string | null;
   careSettings: string[] | null;
   otherCareSetting: string | null;
   categories: string[] | null;

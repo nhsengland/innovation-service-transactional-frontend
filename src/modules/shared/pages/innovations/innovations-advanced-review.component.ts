@@ -318,6 +318,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
       'uniqueId',
       'name',
+      'description',
       'owner.name',
       'owner.companyName',
       'owner.email',
@@ -330,6 +331,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'otherCareSetting',
       'mainCategory',
       'categories',
+      'areas',
       'diseasesAndConditions',
       'keyHealthInequalities',
       'involvedAACProgrammes',
@@ -341,6 +343,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     const queryFieldsMap = {
       uniqueId: 'Innovation ID',
       name: 'Innovation name',
+      description: 'Innovation description',
       'owner.name': 'Owner name',
       'owner.companyName': 'Owner Company',
       'owner.email': 'Owner Email',
@@ -353,6 +356,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       otherCareSetting: 'Other Care Setting',
       mainCategory: 'Main Category',
       categories: 'Categories',
+      areas: 'Relevant areas',
       diseasesAndConditions: 'Diseases and Conditions',
       keyHealthInequalities: 'Health Inequalities',
       involvedAACProgrammes: 'AAC Involvement',
