@@ -156,13 +156,13 @@
       @if (ctx.user.isInnovator()) {
         <ul class="nhsuk-u-margin-bottom-7">
           <li><a [href]="documentUrl">Download all the questions (DOCX)</a> in your innovation record</li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf"/></li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" /></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" /></li>
         </ul>
       } @else if (ctx.user.isAdmin()) {
         <ul class="nhsuk-u-margin-bottom-7">
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" customLabel="Export innovation record"/></li>
-          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" customLabel="Export innovation record"/></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="pdf" customLabel="Export innovation record" /></li>
+          <li><app-innovation-record-export [innovationId]="this.innovationId" fileType="csv" customLabel="Export innovation record" /></li>
         </ul>
       }
 
@@ -180,14 +180,12 @@
         </div>
       </ng-container>
 
-      <ng-container *ngIf="!ctx.user.isAdmin()">
-        <div class="nhsuk-action-link nhsuk-u-padding-top-5">
-          <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
-            <theme-svg-icon type="arrow-right-circle" />
-            <span class="nhsuk-action-link__text"> View all the questions and answers </span>
-          </a>
-        </div>
-      </ng-container>
+      <div class="nhsuk-action-link nhsuk-u-padding-top-5">
+        <a routerLink="{{ baseUrl }}/all" class="nhsuk-action-link__link">
+          <theme-svg-icon type="arrow-right-circle" />
+          <span class="nhsuk-action-link__text"> View all the questions and answers </span>
+        </a>
+      </div>
 
       <theme-custom-notifications-entrypoint-component *ngIf="ctx.user.isAccessorType()" [links]="customNotificationLinks" />
     </div>

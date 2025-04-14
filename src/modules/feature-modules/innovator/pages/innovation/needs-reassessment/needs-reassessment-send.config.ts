@@ -1,9 +1,9 @@
 import {
   FormEngineModel,
-  WizardSummaryType,
+  FormEngineParameterModel,
   WizardEngineModel,
   WizardStepType,
-  FormEngineParameterModel
+  WizardSummaryType
 } from '@modules/shared/forms';
 import { InnovationStatusEnum } from '@modules/stores';
 
@@ -28,19 +28,12 @@ const stepsLabels = {
     id: 'description',
     label: 'Explain any significant changes to your innovation since your last needs assessment',
     description:
-      'For example, you have conducted clinical trials, or have obtained regulatory approval.<br><br>Explain changes'
+      'Describe any major developments or achievements since your previous assessment, such as clinical trials, regulatory approvals, or improvements to your innovation.'
   },
   q3: {
     id: 'whatSupportDoYouNeed',
     label: 'What support do you need next?',
-    description: `
-    For example, support with clinical trials, product development, real-world evidence, regulatory advice, or adoption.
-    <br>
-    <br>
-    This information will replace your previous answer to "What support are you seeking from the innovation service?" in section 1.1 of the innovation record.
-    <br>
-    <br>
-    Explain support required`
+    description: `Outline the specific support you need to progress your innovation, such as funding, technical expertise, or regulatory guidance.`
   }
 };
 

@@ -52,6 +52,7 @@ export type InnovationListSelectType =
   | 'lastAssessmentRequestAt'
   | 'updatedAt'
   // Document fields
+  | 'description'
   | 'careSettings'
   | 'otherCareSetting'
   | 'categories'
@@ -62,6 +63,7 @@ export type InnovationListSelectType =
   | 'mainCategory'
   | 'otherCategoryDescription'
   | 'postcode'
+  | 'areas'
   // Relation fields
   | 'owner.id'
   | 'owner.name'
@@ -101,6 +103,7 @@ export type InnovationListFullDTO = {
   lastAssessmentRequestAt: DateISOType | null;
   updatedAt: DateISOType;
   // Document fields
+  description: string | null;
   careSettings: string[] | null;
   otherCareSetting: string | null;
   categories: string[] | null;
@@ -111,6 +114,7 @@ export type InnovationListFullDTO = {
   keyHealthInequalities: string[] | null;
   mainCategory: string | null;
   otherCategoryDescription: string | null;
+  areas: string[] | null;
 
   // Relation fields
   engagingOrganisations: { organisationId: string; name: string; acronym: string }[] | null;
@@ -231,6 +235,19 @@ export type InnovationSupportsListDTO = {
   };
   engagingAccessors: { id: string; userRoleId: string; name: string; isActive: boolean }[];
 }[];
+
+export type InnovationNeedingActionDTO = {
+  innovations: InnovationNeedingAction[];
+  count: number;
+};
+
+export type InnovationNeedingAction = {
+  id: string;
+  name: string;
+  supportStatus: InnovationSupportStatusEnum;
+  dueDate: DateISOType;
+  dueDays: number;
+};
 
 export type InnovationSupportInfoDTO = {
   id: string;

@@ -1,0 +1,11 @@
+<h2 class="nhsuk-heading-m nhsuk-u-padding-top-5">Innovator contact details</h2>
+<dl class="nhsuk-summary-list">
+  @for (item of innovatorSummaryList(); track item.label) {
+    <div class="nhsuk-summary-list__row">
+      @if (item.value !== "") {
+        <dt class="nhsuk-summary-list__key">{{ item.label }}</dt>
+        <dd class="nhsuk-summary-list__value text-pre-wrap">{{ item.value }}</dd>
+      }
+    </div>
+  }
+</dl>

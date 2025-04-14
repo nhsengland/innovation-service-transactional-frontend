@@ -90,7 +90,7 @@ export const CONTEXT_INNOVATION_INFO: ContextInnovationType = {
   name: 'Test innovation',
   status: InnovationStatusEnum.IN_PROGRESS,
   statusUpdatedAt: '2020-01-01T00:00:00.000Z',
-  owner: { name: 'User name 01', isActive: true },
+  owner: { id: 'ID01', name: 'User name 01', isActive: true },
   loggedUser: { isOwner: true },
   hasBeenAssessed: false,
   assessment: {

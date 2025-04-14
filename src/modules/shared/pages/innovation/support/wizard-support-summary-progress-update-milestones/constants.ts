@@ -11,6 +11,104 @@ export type Milestones = Record<
 >;
 
 export const SUPPORT_SUMMARY_MILESTONES: Milestones = {
+  HIN: [
+    {
+      name: 'Initial research completed',
+      description:
+        'Initial informal search, such as reviewing existing academic literature and interviewing key opinion leaders.'
+    },
+    {
+      name: 'Initial research support provided',
+      description:
+        'Support provided for initial informal search, such as reviewing existing academic literature and interviewing key opinion leaders.'
+    },
+    {
+      name: 'Market analysis support provided',
+      description:
+        'Competitor analysis completed and understanding of at least Total Addressable Market, Serviceable Addressable Market, and Serviceable Obtainable Market.'
+    },
+    {
+      name: 'Intellectual property options explored',
+      description: 'Has an initial idea and has examined whether there is existing IP associated with their concept.'
+    },
+    { name: 'Intellectual property registered', description: 'IP has been registered.' },
+    {
+      name: 'Unmet needs explored',
+      description: 'Clear understanding of the unmet need in the NHS and how their product addresses this gap.'
+    },
+    {
+      name: 'Patient and public involvement element completed',
+      description:
+        'Has conducted a significant element of PPI, such as a workshop or onboarded a patient champion who has then contributed to product development.'
+    },
+    {
+      name: 'Value proposition completed',
+      description:
+        'Has developed either a PowerPoint slide deck or infographic that clearly outlines its value to its target market by bringing in a variety of data and evidence.'
+    },
+    {
+      name: 'Environmental sustainability support provided',
+      description: 'Has received support to complete a carbon reduction plan and calculate their carbon footprint.'
+    },
+    {
+      name: 'Carbon reduction plan completed',
+      description: 'Has completed a carbon reduction plan and calculated their carbon footprint.'
+    },
+    {
+      name: 'Prototype available',
+      description:
+        'Has an initial product that can be used/trialled but remains adaptable depending on results of initial testing.'
+    },
+    {
+      name: 'Clinical trial completed with positive results',
+      description: 'Has conducted a clinical trial in the UK with positive results.'
+    },
+    {
+      name: 'Pilot completed with positive results',
+      description: 'Conducted a pilot in an Integrated Care Board (ICB)/Trust with evaluated outcomes.'
+    },
+    {
+      name: 'Regulatory approvals completed',
+      description: 'Completed regulatory approval relevant to their product category.'
+    },
+    {
+      name: 'Budget impact model or health economic analysis completed',
+      description: 'Completed a budget impact model or health economic analysis covering their target patient cohort.'
+    },
+    {
+      name: 'Business case template completed',
+      description: 'Has completed an NHS business case template and has had it validated via an NHS trust.'
+    },
+    {
+      name: 'Business model plans completed',
+      description:
+        'Has a thorough understanding of their business model and how they will bring their product to market. Has business plans in place to show development over the next 3 years.'
+    },
+    {
+      name: 'Procurement route identified',
+      description:
+        'Understanding of their procurement route through NHS Supply Chain frameworks or knowing which NHS Tariffs they need to be a part of.'
+    },
+    {
+      name: 'Market access plan completed',
+      description:
+        'Has created a market access plan with clear steps to engage with the NHS and its procurement systems.'
+    },
+    {
+      name: 'Piloted in more than 1 ICB in a single region',
+      description: 'Has been piloted with positive evaluation outcomes in more than 1 ICB in a single region.'
+    },
+    {
+      name: 'Piloted in ICBs across multiple regions',
+      description: 'Innovation has pilot sites in multiple ICBs across multiple regions.'
+    },
+    {
+      name: 'Funding raised and funding plan completed',
+      description:
+        'Innovator has successfully raised funding and created a funding plan to show the progress/development over the next financial year.'
+    },
+    { name: 'Trading in other countries', description: 'Innovator has participated in trade in other countries.' }
+  ].sort((a, b) => a.name.localeCompare(b.name)),
   'NHS-SC': [
     {
       name: "Procurement portal advice given with 'Find a Tender' service",

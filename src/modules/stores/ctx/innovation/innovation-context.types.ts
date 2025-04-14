@@ -1,5 +1,6 @@
 import { NotificationCategoryTypeEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
+import { PhoneUserPreferenceEnum } from '../user/user.types';
 import { InnovationStatusEnum, InnovationSupportStatusEnum } from './innovation.enums';
 
 export type ContextInnovationType = {
@@ -16,9 +17,17 @@ export type ContextInnovationType = {
   categories: string[];
   otherCategoryDescription: string | null;
   owner?: {
+    id: string;
     name: string;
+    email?: string;
+    contactByEmail?: boolean;
+    contactByPhone?: boolean;
+    contactByPhoneTimeframe?: PhoneUserPreferenceEnum | null;
+    mobilePhone?: null | string;
+    contactDetails?: null | string;
     isActive: boolean;
     organisation?: { name: string; size: null | string; registrationNumber: null | string };
+    lastLoginAt?: DateISOType;
   };
   loggedUser: { isOwner: boolean };
   assessment?: {

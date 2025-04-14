@@ -221,7 +221,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'engagingUnits',
       'support.status',
       'support.updatedAt',
-      'support.closeReason'
+      'support.closeReason',
+      'areas'
     ];
 
     if (this.ctx.user.isAdmin()) {
@@ -289,6 +290,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
               'None'
             ),
+            areas: this.translateLists(result.areas, translations.questions.get('areas')?.items, 'None'),
             involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
             submittedAt: result.submittedAt,
             engagingUnits: engagingUnits,
@@ -307,13 +309,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       });
   }
 
+  exportingCSV = false;
   exportCSV(): void {
+    this.exportingCSV = true;
     // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
     this.filtersModel.handleStateChanges();
 
     let queryFields: Parameters<InnovationsService['getInnovationsSearch']>[0] = [
       'uniqueId',
       'name',
+      'description',
       'owner.name',
       'owner.companyName',
       'owner.email',
@@ -326,6 +331,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'otherCareSetting',
       'mainCategory',
       'categories',
+      'areas',
       'diseasesAndConditions',
       'keyHealthInequalities',
       'involvedAACProgrammes',
@@ -337,6 +343,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     const queryFieldsMap = {
       uniqueId: 'Innovation ID',
       name: 'Innovation name',
+      description: 'Innovation description',
       'owner.name': 'Owner name',
       'owner.companyName': 'Owner Company',
       'owner.email': 'Owner Email',
@@ -349,6 +356,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       otherCareSetting: 'Other Care Setting',
       mainCategory: 'Main Category',
       categories: 'Categories',
+      areas: 'Relevant areas',
       diseasesAndConditions: 'Diseases and Conditions',
       keyHealthInequalities: 'Health Inequalities',
       involvedAACProgrammes: 'AAC Involvement',
@@ -398,6 +406,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+        this.exportingCSV = false;
       });
   }
 
