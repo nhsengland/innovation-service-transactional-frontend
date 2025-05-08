@@ -1,43 +1,37 @@
-// Angular Material.
-@import "node_modules/@angular/material/prebuilt-themes/indigo-pink";
-
-// GOV.uk Design System (only necessary styles).
-@import "node_modules/govuk-frontend/govuk/settings/all";
-@import "node_modules/govuk-frontend/govuk/tools/all";
-@import "node_modules/govuk-frontend/govuk/helpers/clearfix";
-@import "node_modules/govuk-frontend/govuk/helpers/focused";
-@import "node_modules/govuk-frontend/govuk/helpers/spacing";
+@use "node_modules/govuk-frontend/dist/govuk" as govuk with (
+  $govuk-new-organisation-colours: true
+);
 
 // NHS Design System.
-@import "node_modules/nhsuk-frontend/packages/nhsuk";
+@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
 
 // Custom styles.
-@import "styles/left-menu-layout";
-@import "styles/panel";
-@import "styles/sortable-table";
-@import "styles/step-by-step-nav";
-@import "styles/task-list";
+@use "styles/left-menu-layout.scss" as left-menu-layout;
+@use "styles/panel.scss" as panel;
+@use "styles/sortable-table.scss" as sortable-table;
+@use "styles/step-by-step-nav.scss" as step-by-step-nav;
+@use "styles/task-list.scss" as task-list;
+
+// Angular Material.
+@import "node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
 // Variables. (https://service-manual.nhs.uk/design-system/styles)
 $service-manual-container-size: 1100px; // Container width variable.
 
 :root {
-  --primary-color: #{$color_nhsuk-blue};
-  --success-color: #{$color_nhsuk-green};
-  --warning-color: #{$color_nhsuk-yellow};
-  --error-color: #{$nhsuk-error-color};
-  --neutral-color: #{$color_nhsuk-blue};
-
-  --nhsuk-text-color: #{$nhsuk-text-color};
-
-  --white: #{$color_nhsuk-white};
-
-  --color_nhsuk-grey-1: #{$color_nhsuk-grey-1};
-  --color_nhsuk-grey-3: #{$color_nhsuk-grey-3};
-  --color_nhsuk-grey-4: #{$color_nhsuk-grey-4};
-  --color_nhsuk-grey-5: #{$color_nhsuk-grey-5};
-  --nhsuk-border-color: #{$nhsuk-border-color};
-  --nhsuk-button-color: #{$nhsuk-button-color};
+  --primary-color: #{nhsuk.$color_nhsuk-blue};
+  --success-color: #{nhsuk.$color_nhsuk-green};
+  --warning-color: #{nhsuk.$color_nhsuk-yellow};
+  --error-color: #{nhsuk.$nhsuk-error-color};
+  --neutral-color: #{nhsuk.$color_nhsuk-blue};
+  --nhsuk-text-color: #{nhsuk.$nhsuk-text-color};
+  --white: #{nhsuk.$color_nhsuk-white};
+  --color_nhsuk-grey-1: #{nhsuk.$color_nhsuk-grey-1};
+  --color_nhsuk-grey-3: #{nhsuk.$color_nhsuk-grey-3};
+  --color_nhsuk-grey-4: #{nhsuk.$color_nhsuk-grey-4};
+  --color_nhsuk-grey-5: #{nhsuk.$color_nhsuk-grey-5};
+  --nhsuk-border-color: #{nhsuk.$nhsuk-border-color};
+  --nhsuk-button-color: #{nhsuk.$nhsuk-button-color};
 
   // --spacing-3: 32px;
   // --mobile:  20em; /* 320px */
@@ -209,13 +203,13 @@ $service-manual-container-size: 1100px; // Container width variable.
 }
 
 .font-color-text {
-  color: $nhsuk-text-color;
+  color: nhsuk.$nhsuk-text-color;
 }
 .font-color-link {
   color: var(--primary-color);
 }
 .font-color-secondary {
-  color: $nhsuk-secondary-text-color;
+  color: nhsuk.$nhsuk-secondary-text-color;
 }
 .font-color-error {
   color: var(--error-color);
@@ -331,7 +325,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 .button-as-link {
   font-family: "Frutiger W01", Arial, sans-serif;
   border: 0;
-  color: $nhsuk-link-color;
+  color: nhsuk.$nhsuk-link-color;
   cursor: pointer;
   text-decoration: underline;
 
@@ -339,9 +333,9 @@ $service-manual-container-size: 1100px; // Container width variable.
     text-decoration: none;
   }
   &:visited {
-    color: $nhsuk-link-color;
+    color: nhsuk.$nhsuk-link-color;
     &:hover {
-      color: $nhsuk-link-hover-color;
+      color: nhsuk.$nhsuk-link-hover-color;
     }
   }
   // &:focus {
@@ -480,7 +474,7 @@ $service-manual-container-size: 1100px; // Container width variable.
 }
 
 .form-input-appended-button-search {
-  background-color: $nhsuk-button-color;
+  background-color: nhsuk.$nhsuk-button-color;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   box-shadow: none;
@@ -489,12 +483,12 @@ $service-manual-container-size: 1100px; // Container width variable.
   padding: 0;
 
   &:hover {
-    background-color: $nhsuk-button-hover-color;
+    background-color: nhsuk.$nhsuk-button-hover-color;
     border: 0;
   }
 
   .nhsuk-icon__search {
-    fill: $color_nhsuk-white;
+    fill: nhsuk.$color_nhsuk-white;
     height: 27px;
     width: 27px;
   }
@@ -605,7 +599,7 @@ $service-manual-container-size: 1100px; // Container width variable.
     border-top: 2px solid var(--primary-color);
 
     .nhsuk-card__content {
-      padding: govuk-spacing(3) 0 0 0;
+      padding: govuk.govuk-spacing(3) 0 0 0;
     }
   }
 
@@ -699,10 +693,10 @@ ul.list-vertical-line {
     padding: 0;
 
     .app-tabs__item {
-      @include nhsuk-font(16);
       display: inline-block;
       margin-bottom: 0;
       padding: 12px 15px 10px;
+      @include nhsuk.nhsuk-font(16);
 
       &.selected {
         border-bottom: solid 3px var(--primary-color);
@@ -712,14 +706,14 @@ ul.list-vertical-line {
         text-decoration: none;
 
         &:visited {
-          color: $nhsuk-link-color;
+          color: nhsuk.$nhsuk-link-color;
           &:hover {
-            color: $nhsuk-link-hover-color;
+            color: nhsuk.$nhsuk-link-hover-color;
           }
         }
         &:focus {
           &:hover {
-            color: $nhsuk-focus-text-color;
+            color: nhsuk.$nhsuk-focus-text-color;
           }
         }
       }
@@ -802,7 +796,7 @@ a.app-tag {
 
   &:link,
   &:visited {
-    color: var($nhsuk-link-color);
+    color: var(nhsuk.$nhsuk-link-color);
   }
 
   &:active,
@@ -832,7 +826,7 @@ a.app-tag {
 .tag-close .icon {
   display: inline;
   .nhsuk-icon__close {
-    fill: $color_nhsuk-black;
+    fill: nhsuk.$color_nhsuk-black;
     height: 20px;
     width: 20px;
   }
@@ -847,7 +841,7 @@ a.app-tag {
 }
 
 .recent-innovations-link .icon .nhsuk-icon__chevron-right {
-  fill: $color_nhsuk-grey-1;
+  fill: nhsuk.$color_nhsuk-grey-1;
 }
 
 .notification-tag .icon {

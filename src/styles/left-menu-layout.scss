@@ -1,4 +1,6 @@
 /* Left Menu Sidebar layout*/
+@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+
 .app-pane {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -64,7 +66,7 @@
         .app-side-nav__section {
           font-weight: 700;
           font-size: 16px;
-          color: $nhsuk-secondary-text-color;
+          color: nhsuk.$nhsuk-secondary-text-color;
           line-height: 1;
         }
 

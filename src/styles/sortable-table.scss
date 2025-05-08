@@ -1,5 +1,7 @@
 // Based on https://github.com/ministryofjustice/moj-frontend/blob/master/package/moj/components/sortable-table/_sortable-table.scss
 
+@use "node_modules/govuk-frontend/dist/govuk" as govuk;
+
 .app-sortable-table {
   [aria-sort] button,
   [aria-sort] button:hover {
@@ -21,11 +23,11 @@
   }
 
   [aria-sort] button:focus {
-    background-color: $govuk-focus-colour;
-    color: $govuk-focus-text-colour;
+    background-color: govuk.$govuk-focus-colour;
+    color: govuk.$govuk-focus-text-colour;
     box-shadow:
-      0 -2px $govuk-focus-colour,
-      0 4px $govuk-focus-text-colour;
+      0 -2px govuk.$govuk-focus-colour,
+      0 4px govuk.$govuk-focus-text-colour;
     outline: none;
   }
 
