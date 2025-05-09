@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-one-quarter">
       <shared-filters-wrapper-component title="Filters" [form]="form" [model]="filtersModel" />
     </div>
@@ -91,6 +92,12 @@
                       </theme-tag>
                       <p class="nhsuk-body-s nhsuk-u-padding-top-2 text-pre-wrap">{{ item.params.comment?.value }}</p>
                     </dd>
+                  </dl>
+                </ng-container>
+                <ng-container *ngSwitchCase="'SUPPORT_PROGRESS_UPDATE'">
+                  <dl class="nhsuk-summary-list nhsuk-u-margin-0 nhsuk-u-padding-top-2">
+                    <dt class="nhsuk-summary-list__key nhsuk-body-s">Progress update date</dt>
+                    <dd class="nhsuk-summary-list__value nhsuk-body-s">{{ item.params.progressUpdate?.createdAt | date }}</dd>
                   </dl>
                 </ng-container>
                 <ng-container *ngSwitchCase="'COMMENT'">
