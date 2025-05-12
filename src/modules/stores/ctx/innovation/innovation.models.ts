@@ -146,7 +146,7 @@ export const ACTIVITY_LOG_ITEMS: Record<
   ActivityLogItemsEnum,
   {
     type: ActivityLogTypesEnum;
-    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'COMMENT' | 'MESSAGE';
+    details: null | 'ORGANISATIONS_LIST' | 'SUPPORT_STATUS_UPDATE' | 'SUPPORT_PROGRESS_UPDATE' | 'COMMENT' | 'MESSAGE';
     link: null | 'NEEDS_ASSESSMENT' | 'SUPPORT_STATUS' | 'SECTION' | 'TASK' | 'THREAD' | 'NEEDS_REASSESSMENT';
   }
 > = {
@@ -178,6 +178,7 @@ export const ACTIVITY_LOG_ITEMS: Record<
     link: 'SUPPORT_STATUS'
   },
   SUPPORT_STATUS_UPDATE: { type: ActivityLogTypesEnum.SUPPORT, details: 'SUPPORT_STATUS_UPDATE', link: null },
+  SUPPORT_PROGRESS_UPDATE: { type: ActivityLogTypesEnum.SUPPORT, details: 'SUPPORT_PROGRESS_UPDATE', link: null },
   COMMENT_CREATION: { type: ActivityLogTypesEnum.COMMENTS, details: 'COMMENT', link: null },
   THREAD_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
   THREAD_MESSAGE_CREATION: { type: ActivityLogTypesEnum.THREADS, details: null, link: 'THREAD' },
