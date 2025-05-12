@@ -6,7 +6,6 @@
     "ng": "ng",
     "start:dev:spa": "ng serve --host 0.0.0.0",
     "start:dev:ssr": "ng run app:serve-ssr",
-
     "build:spa": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest --config ./jest.config.json --coverage --silent",
@@ -17,7 +16,6 @@
     "lint": "ng lint --quiet",
     "prettier:fix": "prettier --write src/",
     "prettier:check": "prettier --check src/"
-
   },
   "engines": {
     "node": ">=20.18.0 < 21.0.0",
@@ -56,7 +54,7 @@
     "ngx-cookie-service": "^18.0.0",
     "ngx-dropzone": "^3.1.0",
     "ngx-logger": "^5.0.12",
-    "nhsuk-frontend": "^9.4.1",
+    "nhsuk-frontend": "^7.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.8.1",
     "xhr2": "^0.2.1",

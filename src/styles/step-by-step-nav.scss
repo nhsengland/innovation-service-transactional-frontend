@@ -296,9 +296,12 @@ $top-border: solid 1px nhsuk.$nhsuk-border-color;
 }
 
 .app-step-nav__title {
-  margin: 0;
   @include govuk.govuk-text-colour;
   @include step-nav-font(19, $weight: bold, $line-height: 1.4);
+
+  & {
+    margin: 0;
+  }
 
   .app-step-nav--large & {
     @include step-nav-font(19, $tablet-size: 24, $weight: bold, $line-height: 1.4);
