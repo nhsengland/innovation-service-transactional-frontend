@@ -416,7 +416,7 @@ export type InnovationActivityLogListInDTO = {
       organisationUnit?: string;
       comment?: { id: string; value: string };
       thread?: { id: string; subject: string; messageId: string };
-      progressUpdate?: { id: string; createdAt: string };
+      progressUpdate?: { id: string; date: string };
       totalActions?: number;
 
       assessment?: { id: string };
