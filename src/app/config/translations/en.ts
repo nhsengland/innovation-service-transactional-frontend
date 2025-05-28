@@ -333,6 +333,10 @@ export const locale = {
               title: 'Support status update',
               message: `{{ actionUserName }} changed the support status of {{ organisationUnit }}`
             },
+            SUPPORT_PROGRESS_UPDATE: {
+              title: 'Support progress update',
+              message: `{{ actionUserName }} added a progress update for {{ organisationUnit }}`
+            },
             THREAD_CREATION: {
               title: 'New conversation',
               message: `{{ actionUserName }} created a new message with subject {{ thread.subject }}`
