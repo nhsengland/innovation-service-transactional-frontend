@@ -971,11 +971,6 @@ export class InnovationsService extends CoreService {
           // The response body is Base64 encoded
           const base64Content = response.body || '';
 
-          console.log('Received Base64 content:', {
-            length: base64Content.length,
-            preview: base64Content.substring(0, 50) + '...'
-          });
-
           // Convert Base64 to binary
           const binaryString = atob(base64Content);
           const bytes = new Uint8Array(binaryString.length);
@@ -987,11 +982,6 @@ export class InnovationsService extends CoreService {
           // Create blob with correct MIME type
           const blob = new Blob([bytes], {
             type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-          });
-
-          console.log('Created blob:', {
-            size: blob.size,
-            type: blob.type
           });
 
           return blob;
