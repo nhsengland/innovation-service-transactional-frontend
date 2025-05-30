@@ -11,6 +11,7 @@ import { NotificationEnum } from '@modules/feature-modules/accessor/services/acc
 import { InnovationStatisticsEnum } from '@modules/shared/services/statistics.enum';
 import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { SectionsSummaryModelV3Type } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { InnovationsService } from '@modules/shared/services/innovations.service';
 
 @Component({
   selector: 'shared-pages-innovation-record',
@@ -20,7 +21,6 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
   innovationId: string;
 
   baseUrl: string;
-  documentUrl: string;
   pdfDocumentUrl: string;
 
   innovation: ContextInnovationType;
@@ -44,14 +44,14 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private statisticsService: StatisticsService
+    private statisticsService: StatisticsService,
+    private innovationsService: InnovationsService
   ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
 
     this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/record/sections`;
-    this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
     }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
@@ -119,6 +119,22 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       error: () => {
         this.setPageStatus('ERROR');
         this.setAlertUnknownError();
+      }
+    });
+  }
+
+  downloadInnovationRecordDocument(): void {
+    this.innovationsService.getInnovationRecordDocument().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `innovation-record.docx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the document. Please try again.');
       }
     });
   }
