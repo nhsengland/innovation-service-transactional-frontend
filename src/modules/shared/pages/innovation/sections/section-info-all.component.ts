@@ -31,7 +31,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
   innovationId: string;
 
   baseUrl: string;
-  documentUrl: string;
   pdfDocumentUrl: string;
   assessmentUrl: string;
 
@@ -85,7 +84,6 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
     this.editPageQueryParam = this.activatedRoute.snapshot.queryParams.editPage;
 
     this.baseUrl = `/${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}`;
-    this.documentUrl = `${this.CONSTANTS.APP_ASSETS_URL}/NHS-innovation-service-record.docx`;
     this.pdfDocumentUrl = `${this.CONSTANTS.APP_URL}/exports/${
       this.innovationId
     }/pdf?role=${this.ctx.user.getUserContext()?.roleId}`;
