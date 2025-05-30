@@ -1,15 +1,18 @@
 // Based on https://github.com/alphagov/govuk-prototype-kit/blob/master/app/assets/sass/patterns/_step-by-step-nav.scss
+@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+
+@use "node_modules/govuk-frontend/dist/govuk" as govuk;
 
 $stroke-width: 2px;
 $stroke-width-large: 3px;
 $number-circle-size: 26px;
 $number-circle-size-large: 35px;
-$top-border: solid 1px $nhsuk-border-color;
+$top-border: solid 1px nhsuk.$nhsuk-border-color;
 
 @mixin govuk-text-colour {
-  color: $govuk-text-colour;
-  @include govuk-media-query($media-type: print) {
-    color: $govuk-print-text-colour;
+  color: govuk.$govuk-text-colour;
+  @include govuk.govuk-media-query($media-type: print) {
+    color: govuk.$govuk-print-text-colour;
   }
 }
 
@@ -45,11 +48,13 @@ $top-border: solid 1px $nhsuk-border-color;
   $tablet-line-height: $line-height
 ) {
   // @include govuk-typography-common();
-  font-size: $size + px;
-  font-weight: $weight;
-  line-height: $line-height;
+  & {
+    font-size: $size + px;
+    font-weight: $weight;
+    line-height: $line-height;
+  }
 
-  @include govuk-media-query($from: tablet) {
+  @include govuk.govuk-media-query($from: tablet) {
     font-size: $tablet-size + px;
     line-height: $tablet-line-height;
   }
@@ -82,7 +87,7 @@ $top-border: solid 1px $nhsuk-border-color;
   margin: 0;
 
   &:focus {
-    @include govuk-focused-text;
+    @include govuk.govuk-focused-text;
   }
 }
 
@@ -94,11 +99,12 @@ $top-border: solid 1px $nhsuk-border-color;
 
 .app-step-nav__button--title {
   @include step-nav-font(19, $weight: bold, $line-height: 1.4);
-  display: inline-block;
-  padding: 0;
-  text-align: left;
-  color: govuk-colour("black");
-
+  & {
+    display: inline-block;
+    padding: 0;
+    text-align: left;
+    color: govuk.govuk-colour("black");
+  }
   .app-step-nav--large & {
     @include step-nav-font(19, $tablet-size: 24, $weight: bold, $line-height: 1.4);
   }
@@ -106,11 +112,12 @@ $top-border: solid 1px $nhsuk-border-color;
 
 .app-step-nav__button--controls {
   @include step-nav-font(14, $line-height: 1);
-  position: relative;
-  z-index: 1; // this and relative position stops focus outline underlap with border of accordion
-  padding: 0.5em 0;
-  text-decoration: underline;
-
+  & {
+    position: relative;
+    z-index: 1; // this and relative position stops focus outline underlap with border of accordion
+    padding: 0.5em 0;
+    text-decoration: underline;
+  }
   .app-step-nav--large & {
     @include step-nav-font(14, $tablet-size: 16, $line-height: 1);
   }
@@ -123,23 +130,23 @@ $top-border: solid 1px $nhsuk-border-color;
 
 .app-step-nav__step {
   position: relative;
-  padding-left: govuk-spacing(6) + govuk-spacing(3);
+  padding-left: govuk.govuk-spacing(6) + govuk-spacing(3);
   list-style: none;
 
   // line down the side of a step
   &:after {
     @include step-nav-vertical-line;
     @include step-nav-line-position;
-    top: govuk-spacing(3);
+    top: govuk.govuk-spacing(3);
   }
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
-      padding-left: govuk-spacing(9);
+    @include govuk.govuk-media-query($from: tablet) {
+      padding-left: govuk.govuk-spacing(9);
 
       &:after {
         @include step-nav-line-position-large;
-        top: govuk-spacing(6);
+        top: govuk.govuk-spacing(6);
       }
     }
   }
@@ -170,7 +177,7 @@ $top-border: solid 1px $nhsuk-border-color;
   }
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       &:before {
         margin-left: $number-circle-size-large * 0.25;
         width: $number-circle-size-large * 0.5;
@@ -197,7 +204,7 @@ $top-border: solid 1px $nhsuk-border-color;
   box-sizing: border-box;
   position: absolute;
   z-index: 5;
-  top: govuk-spacing(3);
+  top: govuk.govuk-spacing(3);
   left: 0;
   width: $number-circle-size;
   height: $number-circle-size;
@@ -207,8 +214,8 @@ $top-border: solid 1px $nhsuk-border-color;
   text-align: center;
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
-      top: govuk-spacing(6);
+    @include govuk.govuk-media-query($from: tablet) {
+      top: govuk.govuk-spacing(6);
       width: $number-circle-size-large;
       height: $number-circle-size-large;
     }
@@ -217,12 +224,14 @@ $top-border: solid 1px $nhsuk-border-color;
 
 .app-step-nav__circle--number {
   @include step-nav-font(16, $weight: bold, $line-height: 23px);
-  border: solid $stroke-width var(--primary-color);
+  & {
+    border: solid $stroke-width var(--primary-color);
+  }
 
   .app-step-nav--large & {
     @include step-nav-font(16, $tablet-size: 19, $weight: bold, $line-height: 23px, $tablet-line-height: 30px);
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       border-width: $stroke-width-large;
     }
   }
@@ -251,7 +260,7 @@ $top-border: solid 1px $nhsuk-border-color;
 // }
 
 .app-step-nav__header {
-  padding: govuk-spacing(2) 0 0;
+  padding: govuk.govuk-spacing(2) 0 0;
   border-top: $top-border;
 
   // .app-step-nav--active & {
@@ -260,10 +269,10 @@ $top-border: solid 1px $nhsuk-border-color;
 
   .app-step-nav__button {
     &:focus {
-      @include govuk-focused-text;
+      @include govuk.govuk-focused-text;
 
       .app-step-nav__toggle-link {
-        @include govuk-focused-text;
+        @include govuk.govuk-focused-text;
       }
     }
   }
@@ -280,16 +289,19 @@ $top-border: solid 1px $nhsuk-border-color;
   // }
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
-      padding: govuk-spacing(6) 0 0;
+    @include govuk.govuk-media-query($from: tablet) {
+      padding: govuk.govuk-spacing(6) 0 0;
     }
   }
 }
 
 .app-step-nav__title {
-  @include govuk-text-colour;
+  @include govuk.govuk-text-colour;
   @include step-nav-font(19, $weight: bold, $line-height: 1.4);
-  margin: 0;
+
+  & {
+    margin: 0;
+  }
 
   .app-step-nav--large & {
     @include step-nav-font(19, $tablet-size: 24, $weight: bold, $line-height: 1.4);
@@ -298,9 +310,11 @@ $top-border: solid 1px $nhsuk-border-color;
 
 .app-step-nav__toggle-link {
   @include step-nav-font(14, $line-height: 1.2);
-  display: block;
-  color: $nhsuk-link-color;
-  text-transform: capitalize;
+  & {
+    display: block;
+    color: nhsuk.$nhsuk-link-color;
+    text-transform: capitalize;
+  }
 
   .app-step-nav--large & {
     @include step-nav-font(14, $tablet-size: 16, $line-height: 1.2);
@@ -308,7 +322,7 @@ $top-border: solid 1px $nhsuk-border-color;
 }
 
 .app-step-nav__panel {
-  @include govuk-text-colour;
+  @include govuk.govuk-text-colour;
   @include step-nav-font(16);
 
   .app-step-nav--large & {
@@ -323,7 +337,7 @@ $top-border: solid 1px $nhsuk-border-color;
 // contents of the steps, such as paragraphs and links
 
 .app-step-nav__paragraph {
-  padding-bottom: govuk-spacing(3);
+  padding-bottom: govuk.govuk-spacing(3);
   margin: 0;
   font-size: inherit;
 
@@ -331,14 +345,14 @@ $top-border: solid 1px $nhsuk-border-color;
     margin-top: -5px;
 
     .app-step-nav--large & {
-      @include govuk-media-query($from: tablet) {
+      @include govuk.govuk-media-query($from: tablet) {
         margin-top: -10px; // govuk-spacing(3);
       }
     }
   }
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       padding-bottom: 10px; // govuk-spacing(6);
     }
   }
@@ -350,7 +364,7 @@ $top-border: solid 1px $nhsuk-border-color;
   list-style: none;
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       padding-bottom: 20px;
     }
   }
@@ -367,7 +381,7 @@ $top-border: solid 1px $nhsuk-border-color;
   }
 
   .app-step-nav--large & {
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       .app-step-nav__list-item--active:before {
         left: -(10px) - $links-margin;
       }

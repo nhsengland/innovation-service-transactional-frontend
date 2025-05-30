@@ -1,4 +1,5 @@
 // Based on https://github.com/alphagov/govuk-prototype-kit/blob/master/app/assets/sass/patterns/_task-list.scss
+@use "node_modules/govuk-frontend/dist/govuk" as govuk;
 
 .app-task-list {
   list-style-type: none;
@@ -20,35 +21,36 @@
 
 .app-task-list__section-number {
   display: table-cell;
-  width: govuk-spacing(4);
+  width: govuk.govuk-spacing(4);
 
-  @include govuk-media-query($from: tablet) {
-    width: govuk-spacing(6);
+  @include govuk.govuk-media-query($from: tablet) {
+    width: govuk.govuk-spacing(6);
     padding-right: 0;
   }
 }
 
 .app-task-list__items {
-  @include govuk-responsive-margin(9, "bottom");
-  font-size: 19px;
-  list-style: none;
-  padding-left: 0;
-
-  @include govuk-media-query($from: tablet) {
-    padding-left: govuk-spacing(6);
+  @include govuk.govuk-responsive-margin(9, "bottom");
+  & {
+    font-size: 19px;
+    list-style: none;
+    padding-left: 0;
+  }
+  @include govuk.govuk-media-query($from: tablet) {
+    padding-left: govuk.govuk-spacing(6);
   }
 }
 
 .app-task-list__item {
-  border-bottom: 1px solid $govuk-border-colour;
+  border-bottom: 1px solid govuk.$govuk-border-colour;
   margin-bottom: 0 !important;
-  padding-top: govuk-spacing(2);
-  padding-bottom: govuk-spacing(2);
-  @include govuk-clearfix;
+  padding-top: govuk.govuk-spacing(2);
+  padding-bottom: govuk.govuk-spacing(2);
+  @include govuk.govuk-clearfix;
 }
 
 .app-task-list__item:first-child {
-  border-top: 1px solid $govuk-border-colour;
+  border-top: 1px solid govuk.$govuk-border-colour;
 }
 
 .app-task-list__task-icon {
@@ -59,11 +61,11 @@
     height: 26px;
   }
 
-  @include govuk-media-query($until: tablet) {
+  @include govuk.govuk-media-query($until: tablet) {
     display: none;
   }
 
-  @include govuk-media-query($from: 450px) {
+  @include govuk.govuk-media-query($from: 450px) {
     float: left;
   }
 }
@@ -71,7 +73,7 @@
 .app-task-list__task-name {
   display: block;
 
-  @include govuk-media-query($from: 450px) {
+  @include govuk.govuk-media-query($from: 450px) {
     float: left;
   }
 }
@@ -83,10 +85,10 @@
 }
 
 .app-task-list__tag {
-  margin-top: govuk-spacing(2);
-  margin-bottom: govuk-spacing(1);
+  margin-top: govuk.govuk-spacing(2);
+  margin-bottom: govuk.govuk-spacing(1);
 
-  @include govuk-media-query($from: 450px) {
+  @include govuk.govuk-media-query($from: 450px) {
     float: right;
     margin-top: 0;
     margin-bottom: 0;

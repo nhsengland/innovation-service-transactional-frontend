@@ -1,35 +1,37 @@
+@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+
+@use "node_modules/govuk-frontend/dist/govuk" as govuk;
+
 .app-panel {
-  @include nhsuk-font($size: 19);
+  @include nhsuk.nhsuk-font($size: 19);
 
-  box-sizing: border-box;
-
-  margin-bottom: govuk-spacing(3);
-  padding: govuk-spacing(7) - $govuk-border-width;
-
-  border: $govuk-border-width solid transparent;
-
-  text-align: center;
-
-  @include govuk-media-query($until: tablet) {
-    padding: govuk-spacing(6) - $govuk-border-width;
+  & {
+    box-sizing: border-box;
+    margin-bottom: govuk.govuk-spacing(3);
+    padding: govuk.govuk-spacing(7) - govuk.$govuk-border-width;
+    border: govuk.$govuk-border-width solid transparent;
+    text-align: center;
+  }
+  @include govuk.govuk-media-query($until: tablet) {
+    padding: govuk.govuk-spacing(6) - govuk.$govuk-border-width;
   }
 
   &.app-panel--confirmation {
     color: var(--white);
     background: var(--primary-color);
 
-    @include govuk-media-query($media-type: print) {
+    @include govuk.govuk-media-query($media-type: print) {
       border-color: currentColor;
-      color: $govuk-print-text-colour;
+      color: govuk.$govuk-print-text-colour;
       background: none;
     }
   }
 
   .app-panel__title {
     margin-top: 0;
-    margin-bottom: govuk-spacing(6);
+    margin-bottom: govuk.govuk-spacing(6);
 
-    @include nhsuk-font($size: 48, $weight: bold);
+    @include nhsuk.nhsuk-font($size: 48, $weight: bold);
   }
 
   .app-panel__title:last-child {
@@ -37,7 +39,7 @@
   }
 
   .app-panel__body {
-    @include nhsuk-font($size: 32);
+    @include nhsuk.nhsuk-font($size: 32);
   }
 }
 
