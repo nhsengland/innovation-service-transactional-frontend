@@ -151,7 +151,7 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
     }
   }
 
-  errorResponse(error: { id: string }): void {
+  errorResponse(error: { id: string; message?: string }): void {
     switch (error.id) {
       case OrganisationErrorsEnum.ORGANISATION_ALREADY_EXISTS:
         this.alert = { type: 'ERROR', title: 'Organisation name or acronym already in use' };
@@ -159,8 +159,11 @@ export class PageOrganisationEditComponent extends CoreComponent implements OnIn
       case OrganisationErrorsEnum.ORGANISATION_UNIT_ALREADY_EXISTS:
         this.alert = { type: 'ERROR', title: 'Organisation unit name or acronym already in use' };
         break;
+      case OrganisationErrorsEnum.ORGANISATION_NHSE_ACRONYM_CANNOT_BE_CHANGED:
+        this.alert = { type: 'ERROR', title: 'NHSE acronym cannot be changed' };
+        break;
       default:
-        this.alert = { type: 'ERROR', title: 'Error updating organisation' };
+        this.alert = { type: 'ERROR', title: error?.message || 'Error updating organisation' };
     }
     this.submitBtnClicked = false;
   }
