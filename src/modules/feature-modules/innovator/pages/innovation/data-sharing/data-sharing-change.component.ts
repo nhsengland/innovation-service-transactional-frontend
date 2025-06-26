@@ -67,9 +67,12 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
       this.innovationsService.getInnovationSharesList(this.innovationId)
     ]).subscribe(([organisationsList, innovationSharesList]) => {
       this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
-      this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name, acronym: o.acronym }));
+      this.organisationsList = organisationsList.map(o => ({
+        value: o.id,
+        label: this.formatOrganizationLabel(o.name, o.acronym),
+        acronym: o.acronym
+      }));
 
-      // Get Organisation NHSE
       this.addNHSEIfMissing(organisationsList, innovationSharesList);
 
       this.subscriptions.push(
@@ -78,6 +81,13 @@ export class InnovationDataSharingChangeComponent extends CoreComponent implemen
 
       this.setPageStatus('READY');
     });
+  }
+
+  private formatOrganizationLabel(name: string, acronym: string): string {
+    if (acronym === this.NHSE_ORG_ACRONYM && !name.includes('(necessary)')) {
+      return `${name} (necessary)`;
+    }
+    return name;
   }
 
   private addNHSEIfMissing(organisationsList: OrganisationsListDTO[], innovationSharesList: InnovationSharesListDTO) {

@@ -26,6 +26,8 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
   innovation: ContextInnovationType;
 
+  NHSE_ORG_ACRONYM = 'NHSE';
+
   organisations: {
     info: {
       id: string;
@@ -140,7 +142,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
           return {
             info: {
               id: organisation.id,
-              name: organisation.name,
+              name: this.formatOrganizationLabel(organisation.name, organisation.acronym),
               acronym: organisation.acronym,
               organisationUnits: [],
               status:
@@ -185,7 +187,7 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
           return {
             info: {
               id: organisation.id,
-              name: organisation.name,
+              name: this.formatOrganizationLabel(organisation.name, organisation.acronym),
               acronym: organisation.acronym,
               suggestedByPhrase: null,
               organisationUnits
@@ -221,6 +223,13 @@ export class PageInnovationDataSharingAndSupportComponent extends CoreComponent 
 
       this.setPageStatus('READY');
     });
+  }
+
+  private formatOrganizationLabel(name: string, acronym: string): string {
+    if (acronym === this.NHSE_ORG_ACRONYM && !name.includes('(necessary)')) {
+      return `${name} (necessary)`;
+    }
+    return name;
   }
 
   onShowHideClicked(organisationId: string): void {

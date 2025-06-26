@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start:dev:spa": "ng serve --host 0.0.0.0",
-    "start:dev:ssr": "ng run app:serve-ssr",
+    "start:dev:spa": "NODE_OPTIONS='--max-old-space-size=12196' ng serve --host 0.0.0.0",
+    "start:dev:ssr": "NODE_OPTIONS='--max-old-space-size=12196' ng run app:serve-ssr",
     "build:spa": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "jest --config ./jest.config.json --coverage --silent",
