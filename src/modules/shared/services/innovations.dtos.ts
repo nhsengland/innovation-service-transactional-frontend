@@ -301,6 +301,7 @@ type TwoLevelProgressUpdateParams = { category: string; subCategories: string[] 
 export type CreateSupportSummaryProgressUpdateType = {
   description: string;
   document?: { name: string; description?: string; file?: Omit<FileUploadType, 'url'> };
+  whetherToNotify?: string;
   createdAt: DateISOType;
 } & (SimpleProgressUpdateParams | OneLevelProgressUpdateParams | TwoLevelProgressUpdateParams);
 

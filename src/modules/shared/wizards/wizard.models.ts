@@ -30,6 +30,11 @@ export class WizardModel<T> {
     return this;
   }
 
+  getStepNumber(stepId: string): number | undefined {
+    const step = this.steps.find(step => step.id === stepId);
+    return step ? this.steps.indexOf(step) + 1 : undefined;
+  }
+
   setStepData<StepData>(stepId: string, data: StepData): this {
     const step = this.steps.find(s => s.id === stepId);
     if (step) {
