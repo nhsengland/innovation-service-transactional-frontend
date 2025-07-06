@@ -49,7 +49,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationS
   }
 
   ngOnInit(): void {
-    this.form.setValue({ toNotify: 'yes' });
+    this.form.setValue({ toNotify: this.data.toNotify });
     this.setPageTitle(this.title, { width: '2.thirds' });
     this.setPageStatus('READY');
   }

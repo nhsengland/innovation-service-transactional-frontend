@@ -186,7 +186,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
           date: ''
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data, this.onDateStepIn),
+          previousStepEvent: () => this.handlePreviousStepDate(),
           submitEvent: data => this.onSubmit(data),
           goToStepEvent: stepId => this.onGoToStep(stepId)
         }
@@ -505,9 +505,30 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 3);
     const notificationStepNumber = this.wizard.getStepNumber('whetherToNotifyOrNotStep');
     const shouldSkipNotificationStep = date > threeMonthsAgo && notificationStepNumber;
-    if (shouldSkipNotificationStep) this.wizard.gotoStep(notificationStepNumber + 1);
+    if (shouldSkipNotificationStep) {
+      this.wizard.gotoStep(notificationStepNumber + 1);
+      this.onDateStepOut(stepData);
+      this.onSummaryStepIn();
+      return this.onNotificationStepIn();
+    }
 
-    this.onNextStep(stepData, this.onDateStepOut, ...(shouldSkipNotificationStep ? [this.onSummaryStepIn] : []));
+    this.onNextStep(stepData, this.onDateStepOut, this.onNotificationStepIn);
+  }
+
+  handlePreviousStepDate(): void {
+    // If the date chosen is more than 3 months in the past, we will show the notification step otherwise we will skip it.
+    const stepDate = this.wizard.data.dateStep;
+    const date = new Date(DatesHelper.getDateString(stepDate.year, stepDate.month, stepDate.day)).getTime();
+    const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 3);
+    const notificationStepNumber = this.wizard.getStepNumber('whetherToNotifyOrNotStep');
+    const shouldSkipNotificationStep = date > threeMonthsAgo && notificationStepNumber;
+    if (shouldSkipNotificationStep) {
+      this.onDateStepIn();
+      this.onNotificationStepIn();
+      return this.wizard.gotoStep(notificationStepNumber - 1);
+    }
+
+    this.onPreviousStep({ data: stepDate, isComplete: true }, this.onDateStepIn, this.onNotificationStepIn);
   }
 
   private redirectToSupportSummaryList(): void {
