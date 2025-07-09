@@ -48,6 +48,7 @@ export type NotificationsListInDTO = {
       exportRequestId?: string;
 
       supportId?: string;
+      date?: string;
 
       collaboratorId?: string;
     };
@@ -410,7 +411,8 @@ export class NotificationsService extends CoreService {
                 : undefined,
               supportStatusName: item.params?.supportStatus
                 ? this.translate(`shared.catalog.innovation.support_status.${item.params?.supportStatus}.name`)
-                : undefined
+                : undefined,
+              date: item.params?.date
             },
             link
           };
