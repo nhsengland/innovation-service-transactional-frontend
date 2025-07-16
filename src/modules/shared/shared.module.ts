@@ -129,6 +129,7 @@ import { UsersService } from './services/users.service';
 // Standalone components
 import { InnovationSubmissionReadyComponent } from '@modules/feature-modules/innovator/pages/innovation/submission-ready/innovation-submission-ready.component';
 import { InnovationRecordProgressComponent } from './pages/innovation/record/innovation-record-progress.component';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/notification-step.component';
 
 @NgModule({
   imports: [
@@ -208,6 +209,7 @@ import { InnovationRecordProgressComponent } from './pages/innovation/record/inn
     WizardInnovationSupportSummaryProgressUpdateMilestonesDescriptionStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesDateStepComponent,
     WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent,
+    WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent,
     PageProgressCategoriesWrapperComponent,
     PageProgressCategoriesOneLevelMilestoneComponent,
     PageProgressCategoriesTwoLevelMilestoneComponent,

@@ -7,4 +7,5 @@ export type SummaryStepInputType = {
   subcategoriesStep: SubcategoriesStepOutputType;
   descriptionStep: DescriptionStepOutputType;
   date: string;
+  whetherToNotify?: string;
 };

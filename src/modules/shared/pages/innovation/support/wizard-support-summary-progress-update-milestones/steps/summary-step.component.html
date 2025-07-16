@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <dl class="nhsuk-summary-list">
         <div class="nhsuk-summary-list__row">
@@ -69,6 +70,15 @@
           </dd>
           <dd class="nhsuk-summary-list__actions">
             <a href="javascript:void(0)" (click)="onGotoStep('dateStep')">Change<span class="nhsuk-u-visually-hidden"> date of update </span></a>
+          </dd>
+        </div>
+        <div class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Do you want to notify the innovator?</dt>
+          <dd class="nhsuk-summary-list__value">
+            {{ data.whetherToNotify === 'yes' ? 'Yes' : 'No' }}
+          </dd>
+          <dd class="nhsuk-summary-list__actions">
+            <a href="javascript:void(0)" (click)="onGotoStep('whetherToNotifyOrNotStep')">Change<span class="nhsuk-u-visually-hidden"> notification preference </span></a>
           </dd>
         </div>
       </dl>

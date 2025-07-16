@@ -20,6 +20,7 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesSubcategoriesStep
 import { SubcategoriesStepInputType, SubcategoriesStepOutputType } from './steps/subcategories-step.types';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesSummaryStepComponent } from './steps/summary-step.component';
 import { SummaryStepInputType } from './steps/summary-step.types';
+import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent } from './steps/notification-step.component';
 
 type MilestoneData = {
   categoriesStep: {
@@ -38,6 +39,9 @@ type MilestoneData = {
     day: string;
     month: string;
     year: string;
+  };
+  whetherToNotifyOrNotStep?: {
+    toNotify: string;
   };
 };
 
@@ -143,7 +147,20 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         },
         outputs: {
           previousStepEvent: data => this.onPreviousStep(data, this.onDateStepOut, this.onDescriptionStepIn),
-          nextStepEvent: data => this.onNextStep(data, this.onDateStepOut, this.onSummaryStepIn)
+          nextStepEvent: data => this.handleNextStepDate(data)
+        }
+      })
+    );
+
+    this.wizard.addStep(
+      new WizardStepModel<{ toNotify: string }, { toNotify: string }>({
+        id: 'whetherToNotifyOrNotStep',
+        title: `Do you want to notify the innovator?`,
+        component: WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent,
+        data: { toNotify: 'yes' },
+        outputs: {
+          previousStepEvent: data => this.onPreviousStep(data, this.onNotificationStepOut),
+          nextStepEvent: data => this.onNextStep(data, this.onNotificationStepOut, this.onSummaryStepIn)
         }
       })
     );
@@ -169,7 +186,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
           date: ''
         },
         outputs: {
-          previousStepEvent: data => this.onPreviousStep(data, this.onDateStepIn),
+          previousStepEvent: () => this.handlePreviousStepDate(),
           submitEvent: data => this.onSubmit(data),
           goToStepEvent: stepId => this.onGoToStep(stepId)
         }
@@ -273,6 +290,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     });
   }
 
+  onNotificationStepIn(): void {
+    this.wizard.setStepData<{ toNotify: string }>('whetherToNotifyOrNotStep', {
+      toNotify: this.wizard.data.whetherToNotifyOrNotStep?.toNotify ?? 'yes'
+    });
+  }
+
   onDateStepOut(stepData: WizardStepEventType<DateStepOutputType>): void {
     this.wizard.data.dateStep = {
       day: stepData.data.day,
@@ -290,8 +313,13 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
         this.wizard.data.dateStep.year,
         this.wizard.data.dateStep.month,
         this.wizard.data.dateStep.day
-      )
+      ),
+      whetherToNotify: this.wizard.data.whetherToNotifyOrNotStep?.toNotify ?? 'yes'
     });
+  }
+
+  onNotificationStepOut(stepData: WizardStepEventType<{ toNotify: string }>): void {
+    this.wizard.data.whetherToNotifyOrNotStep = { ...stepData.data };
   }
 
   onPreviousStep<T extends WizardStepEventType<MappedObjectType | null>>(
@@ -338,6 +366,9 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
       case 'dateStep':
         this.onDateStepIn();
         break;
+      case 'whetherToNotifyOrNotStep':
+        this.onNotificationStepIn();
+        break;
       default:
         return;
     }
@@ -383,6 +414,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
 
     const initialData = {
       description: this.wizard.data.descriptionStep.description,
+      whetherToNotify: this.wizard.data.whetherToNotifyOrNotStep?.toNotify,
       createdAt: DatesHelper.getDateString(
         this.wizard.data.dateStep.year,
         this.wizard.data.dateStep.month,
@@ -450,8 +482,12 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   }
 
   onSubmitWizardSuccess(): void {
+    const toNotify = this.wizard.data.whetherToNotifyOrNotStep?.toNotify;
     this.setRedirectAlertSuccess('Your progress update has been added to the support summary', {
-      message: 'The innovator has been notified about your update.'
+      message:
+        toNotify === 'no'
+          ? 'The innovator has not been notified about your update.'
+          : 'The innovator has been notified about your update.'
     });
     this.redirectToSupportSummaryList();
   }
@@ -459,6 +495,40 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
   onSubmitWizardError(): void {
     this.setAlertUnknownError();
     this.setPageStatus('READY');
+  }
+
+  handleNextStepDate(stepData: WizardStepEventType<DateStepOutputType>): void {
+    // If the date chosen is more than 3 months in the past, we will show the notification step otherwise we will skip it.
+    const date = new Date(
+      DatesHelper.getDateString(stepData.data.year, stepData.data.month, stepData.data.day)
+    ).getTime();
+    const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 3);
+    const notificationStepNumber = this.wizard.getStepNumber('whetherToNotifyOrNotStep');
+    const shouldSkipNotificationStep = date > threeMonthsAgo && notificationStepNumber;
+    if (shouldSkipNotificationStep) {
+      this.wizard.gotoStep(notificationStepNumber + 1);
+      this.onDateStepOut(stepData);
+      this.onSummaryStepIn();
+      return this.onNotificationStepIn();
+    }
+
+    this.onNextStep(stepData, this.onDateStepOut, this.onNotificationStepIn);
+  }
+
+  handlePreviousStepDate(): void {
+    // If the date chosen is more than 3 months in the past, we will show the notification step otherwise we will skip it.
+    const stepDate = this.wizard.data.dateStep;
+    const date = new Date(DatesHelper.getDateString(stepDate.year, stepDate.month, stepDate.day)).getTime();
+    const threeMonthsAgo = new Date().setMonth(new Date().getMonth() - 3);
+    const notificationStepNumber = this.wizard.getStepNumber('whetherToNotifyOrNotStep');
+    const shouldSkipNotificationStep = date > threeMonthsAgo && notificationStepNumber;
+    if (shouldSkipNotificationStep) {
+      this.onDateStepIn();
+      this.onNotificationStepIn();
+      return this.wizard.gotoStep(notificationStepNumber - 1);
+    }
+
+    this.onPreviousStep({ data: stepDate, isComplete: true }, this.onDateStepIn, this.onNotificationStepIn);
   }
 
   private redirectToSupportSummaryList(): void {
