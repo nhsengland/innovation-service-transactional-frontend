@@ -155,7 +155,7 @@ export class WizardInnovationSupportSummaryProgressUpdateMilestonesComponent ext
     this.wizard.addStep(
       new WizardStepModel<{ toNotify: string }, { toNotify: string }>({
         id: 'whetherToNotifyOrNotStep',
-        title: `Do you want to notify the innovator?`,
+        title: `Do you want to notify the innovator by email ?`,
         component: WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent,
         data: { toNotify: 'yes' },
         outputs: {

@@ -1,7 +1,7 @@
 <theme-content-wrapper [status]="pageStatus()">
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
-      <p class="nhsuk-u-margin-bottom-7">This update relates to an event that took place over 3 months ago and is considered a historical update. You can choose whether or not to notify the innovator by email.</p>
+      <p class="nhsuk-u-margin-bottom-7">This update relates to an event that took place over 3 months ago and is considered a historical update. Do you want to notify the innovator by email ?</p>
 
       <form [formGroup]="form" (ngSubmit)="onNextStep()">
         <theme-form-radio-group id="notification1" controlName="toNotify" [items]="items"></theme-form-radio-group>
