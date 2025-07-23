@@ -200,18 +200,19 @@ export const ORGANISATIONS_INFORMATION: OrganisationInformation[] = [
     link: URLS.NIHR,
     supportInformation: [
       {
-        title: 'NIHR can support innovators with:',
+        title:
+          'NIHR can support innovators who are able to demonstrate a clear application of their technology to be used within a health and care setting and have measurable direct healthcare outcomes and are between TRL3 and TRL 8 with:',
         bulletPoints: [
-          { description: 'research and study design - not just clinical trials' },
+          { description: 'Collaboration in research and study design - not just clinical trials' },
           {
             description:
-              'clinical trial and evaluation - identifying and linking to suitable clinical partners, designing and costing research studies and protocols'
+              'Collaboration in clinical trial and evaluation – Identifying and linking to suitable clinical partners, designing and costing research studies & protocols'
           },
-          { description: 'real-world evidence gathering' },
+          { description: 'Collaboration in real-world evidence gathering' },
           { description: 'health economic analysis' },
-          { description: 'grant funding, and support to identify grant funds and apply for them' },
+          { description: 'funding, and support to identify funding programmes and apply for them' },
           { description: 'provision of patient and clinical data for research' },
-          { description: 'provision of patient samples for research' }
+          { description: 'Provision of patient samples for research' }
         ]
       }
     ]

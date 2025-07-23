@@ -5,7 +5,8 @@ import { CoreComponent } from '@app/base';
 import { InnovatorService } from '@modules/feature-modules/innovator/services/innovator.service';
 import { CustomValidators } from '@modules/shared/forms';
 import { InnovationsService } from '@modules/shared/services/innovations.service';
-import { OrganisationsService } from '@modules/shared/services/organisations.service';
+import { OrganisationsListDTO, OrganisationsService } from '@modules/shared/services/organisations.service';
+import { InnovationSharesListDTO } from '@modules/shared/services/innovations.dtos';
 import { concatMap, forkJoin } from 'rxjs';
 
 @Component({
@@ -15,7 +16,15 @@ import { concatMap, forkJoin } from 'rxjs';
 export class InnovationDataSharingEditComponent extends CoreComponent implements OnInit {
   innovationId: string;
   organisationInfoUrl: string;
-  organisationsList: { value: string; label: string }[] = [];
+
+  organisationsList: {
+    value: string;
+    label: string;
+    acronym: string;
+  }[] = [];
+  nhseOrganisation: OrganisationsListDTO | undefined;
+
+  NHSE_ORG_ACRONYM = 'NHSE';
 
   initialState: { organisations: { id: string }[] } = { organisations: [] };
 
@@ -30,6 +39,10 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
     },
     { updateOn: 'change' }
   );
+
+  get disabledItems(): string[] {
+    return this.nhseOrganisation?.id ? [this.nhseOrganisation.id] : [];
+  }
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -50,20 +63,61 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
       this.innovationsService.getInnovationSharesList(this.innovationId)
     ]).subscribe(([organisationsList, innovationSharesList]) => {
       this.initialState.organisations = innovationSharesList.map(item => ({ id: item.organisation.id }));
-      this.organisationsList = organisationsList.map(o => ({ value: o.id, label: o.name }));
+      this.organisationsList = organisationsList.map(o => ({
+        value: o.id,
+        label: this.formatOrganizationLabel(o.name, o.acronym),
+        acronym: o.acronym
+      }));
 
-      if (innovationSharesList.length > 0) {
-        innovationSharesList.forEach(item => {
-          (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
-        });
-      } else {
-        organisationsList.forEach(item => {
-          (this.form.get('organisations') as FormArray).push(new FormControl(item.id));
-        });
-      }
+      this.addNHSEIfMissing(organisationsList, innovationSharesList);
 
       this.setPageStatus('READY');
     });
+  }
+
+  private formatOrganizationLabel(name: string, acronym: string): string {
+    if (acronym === this.NHSE_ORG_ACRONYM && !name.includes('(necessary)')) {
+      return `${name} (necessary)`;
+    }
+    return name;
+  }
+
+  private addNHSEIfMissing(organisationsList: OrganisationsListDTO[], innovationSharesList: InnovationSharesListDTO) {
+    this.nhseOrganisation = organisationsList.find(o => o.acronym === this.NHSE_ORG_ACRONYM);
+
+    // Since NHSE needs to be always shared with, we can add it to the list if it's not already there
+    const innovationSharesListWithNHSE = [...innovationSharesList];
+    if (
+      this.nhseOrganisation &&
+      !innovationSharesList.find(item => item.organisation.acronym === this.NHSE_ORG_ACRONYM)
+    ) {
+      innovationSharesListWithNHSE.push({ organisation: this.nhseOrganisation });
+    }
+
+    const innovationSharesListWithoutNHSE = innovationSharesListWithNHSE.filter(
+      item => item.organisation.acronym !== this.NHSE_ORG_ACRONYM
+    );
+
+    if (innovationSharesListWithoutNHSE.length > 0) {
+      innovationSharesListWithNHSE.forEach(item => {
+        (this.form.get('organisations') as FormArray).push(new FormControl(item.organisation.id));
+      });
+    } else {
+      // when there are no organisations shared yet or NHSE is the only one shared add all organisations
+      organisationsList.forEach(item => {
+        (this.form.get('organisations') as FormArray).push(new FormControl(item.id));
+      });
+    }
+  }
+
+  private ensureNHSEOrganisationIncluded() {
+    if (
+      this.nhseOrganisation &&
+      this.form.value.organisations &&
+      !this.form.value.organisations.includes(this.nhseOrganisation.id)
+    ) {
+      (this.form.get('organisations') as FormArray).push(new FormControl(this.nhseOrganisation.id));
+    }
   }
 
   onSubmit(): void {
@@ -75,6 +129,9 @@ export class InnovationDataSharingEditComponent extends CoreComponent implements
     this.submitButton = { isActive: false, label: 'Saving...' };
 
     const redirectUrl = `/innovator/innovations/${this.innovationId}/record`;
+
+    // Check if NHSE is selected, then add it forcefully
+    this.ensureNHSEOrganisationIncluded();
 
     this.innovatorService
       .submitOrganisationSharing(this.innovationId, this.form.value)

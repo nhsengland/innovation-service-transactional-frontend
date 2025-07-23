@@ -956,4 +956,36 @@ export class InnovationsService extends CoreService {
       .setPathParams({ innovationId });
     return this.http.get<InnovationAssessmentListDTO[]>(url.buildUrl()).pipe(take(1));
   }
+
+  getInnovationRecordDocument(): Observable<Blob> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovation-record/docx');
+
+    return this.http
+      .get(url.buildUrl(), {
+        responseType: 'text',
+        observe: 'response'
+      })
+      .pipe(
+        take(1),
+        map(response => {
+          // The response body is Base64 encoded
+          const base64Content = response.body || '';
+
+          // Convert Base64 to binary
+          const binaryString = atob(base64Content);
+          const bytes = new Uint8Array(binaryString.length);
+
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+
+          // Create blob with correct MIME type
+          const blob = new Blob([bytes], {
+            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          });
+
+          return blob;
+        })
+      );
+  }
 }
