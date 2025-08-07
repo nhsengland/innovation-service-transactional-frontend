@@ -1,6 +1,7 @@
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import {
   ActivityLogItemsEnum,
@@ -186,6 +187,7 @@ export type InnovationInfoDTO = {
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
   statusUpdatedAt: null | DateISOType;
+  archiveReason: null | InnovationArchiveReasonEnum;
   collaboratorId?: string;
   createdAt: DateISOType;
 };

@@ -37,6 +37,7 @@
         >
       </div>
       <p *ngIf="isArchived">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
+        <p *ngIf="innovation.archiveReason">Reason: {{ 'innovator.archive.reason.' + innovation.archiveReason | translate }}</p>
     </div>
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />

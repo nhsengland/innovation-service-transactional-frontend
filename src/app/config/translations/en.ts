@@ -1052,6 +1052,16 @@ export const locale = {
               description: 'This innovation has been withdrawn by the innovator.'
             }
           },
+          archive: {
+            reason: {
+              DEVELOP_FURTHER: 'To develop it further and come back for support later on',
+              HAVE_ALL_SUPPORT: 'I have all the support I need for now',
+              DECIDED_NOT_TO_PURSUE: 'I have decided not to pursue this innovation',
+              ALREADY_LIVE_NHS: 'My innovation is already live in the NHS',
+              OTHER_DONT_WANT_TO_SAY: 'Other reason or I do not want to say',
+              SIX_MONTHS_INACTIVITY: 'Innovation without interaction for more than 6 months'
+            }
+          },
           export_request_status: {
             PENDING: { name: 'Pending' },
             APPROVED: { name: 'Approved' },
