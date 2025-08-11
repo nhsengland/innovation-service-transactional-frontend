@@ -24,7 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: ContextInnovationType & {
     organisationsStatusDescription?: string;
     groupedStatus?: InnovationGroupedStatusEnum;
-    archiveReason?: InnovationArchiveReasonEnum;
+    archiveReason?: InnovationArchiveReasonEnum | null;
   };
 
   innovationSupport: {
@@ -123,6 +123,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
       this.innovation = {
         ...this.innovation,
+        archiveReason: innovation.archiveReason,
         groupedStatus: innovation.groupedStatus,
         organisationsStatusDescription: Object.entries(occurrences)
           .map(([_, item]) => `${item.count} ${item.text}`)
