@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import { InnovationsService } from '@modules/shared/services/innovations.service';
 import {
@@ -23,6 +24,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
   innovation: ContextInnovationType & {
     organisationsStatusDescription?: string;
     groupedStatus?: InnovationGroupedStatusEnum;
+    archiveReason?: InnovationArchiveReasonEnum;
   };
 
   innovationSupport: {
