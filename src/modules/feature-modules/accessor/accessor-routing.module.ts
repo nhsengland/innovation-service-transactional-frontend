@@ -87,6 +87,7 @@ import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innov
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
+import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-and-innovation-list/needs-accessor-and-innovation-list.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -729,6 +730,11 @@ const routes: Routes = [
         path: 'accessor-list',
         pathMatch: 'full',
         component: AccessorAndInnovationListComponent
+      },
+      {
+        path: 'needs-accessor-list',
+        pathMatch: 'full',
+        component: NeedsAccessorAndInnovationListComponent
       }
     ]
   }
@@ -738,4 +744,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AccessorRoutingModule {}
+export class AccessorRoutingModule { }

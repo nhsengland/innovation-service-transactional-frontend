@@ -130,14 +130,14 @@ export type DefaultResponseDTO<T extends EventType, K extends DefaultOptions<T>>
   subscriptionType: SubscriptionType;
 } & {
   [k in K]: 'preConditions' extends keyof (NotifyMeConfig & { eventType: T })
-    ? k extends keyof SubscriptionConfigType<T>['preConditions']
-      ? SubscriptionConfigType<T>['preConditions'][k]
-      : k extends keyof SubscriptionConfigType<T>
-        ? SubscriptionConfigType<T>[k]
-        : never
-    : k extends keyof SubscriptionConfigType<T>
-      ? SubscriptionConfigType<T>[k]
-      : never;
+  ? k extends keyof SubscriptionConfigType<T>['preConditions']
+  ? SubscriptionConfigType<T>['preConditions'][k]
+  : k extends keyof SubscriptionConfigType<T>
+  ? SubscriptionConfigType<T>[k]
+  : never
+  : k extends keyof SubscriptionConfigType<T>
+  ? SubscriptionConfigType<T>[k]
+  : never;
 };
 
 export type NotifyMeResponseTypes = {
@@ -162,6 +162,18 @@ export type GetUnitAccessorList = {
   data: {
     accessor: { name: string; role: UserRoleEnum };
     innovations: { id: string; name: string }[];
+  }[];
+};
+
+export type GetUnitNeedsAccessorList = {
+  count: number;
+  data: {
+    needsAssessorUserId: string;
+    needsAssessorUserName: string;
+    assignedInnovation: string;
+    needsAssessmentVersion: string;
+    innovationId: string;
+    assessmentId: string;
   }[];
 };
 
@@ -290,5 +302,12 @@ export class AccessorService extends CoreService {
       .addPath('v1/organisations/:orgId/units/:unitId/accessors')
       .setPathParams({ orgId, unitId });
     return this.http.get<GetUnitAccessorList>(url.buildUrl()).pipe(take(1));
+  }
+
+  getUnitNeedsAccessorAndInnovationsList(orgId: string, unitId: string): Observable<GetUnitNeedsAccessorList> {
+    const url = new UrlModel(this.API_USERS_URL)
+      .addPath('v1/organisations/:orgId/units/:unitId/needs-accessors')
+      .setPathParams({ orgId, unitId });
+    return this.http.get<GetUnitNeedsAccessorList>(url.buildUrl()).pipe(take(1));
   }
 }
