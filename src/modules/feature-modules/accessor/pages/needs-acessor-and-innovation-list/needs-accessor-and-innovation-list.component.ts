@@ -19,7 +19,7 @@ export class NeedsAccessorAndInnovationListComponent extends CoreComponent imple
     visibleColumns: {
       innovation: { label: 'Assigned Innovation' },
       needsAssesmentVersion: { label: 'Needs Assessment Version' },
-      needsAssesmentUser: { label: 'Needs Assessor' },
+      needsAssesmentUser: { label: 'Needs Assessor' }
     },
     pageSize: 10
   });

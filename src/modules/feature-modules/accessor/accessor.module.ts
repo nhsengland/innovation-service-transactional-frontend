@@ -97,7 +97,7 @@ import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-a
     TrainingAndResourcesComponent,
     // // Unit
     AccessorAndInnovationListComponent,
-    NeedsAccessorAndInnovationListComponent,
+    NeedsAccessorAndInnovationListComponent
   ],
   providers: [
     // Services.
@@ -105,4 +105,4 @@ import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-a
     AnnouncementsService
   ]
 })
-export class AccessorModule { }
+export class AccessorModule {}
