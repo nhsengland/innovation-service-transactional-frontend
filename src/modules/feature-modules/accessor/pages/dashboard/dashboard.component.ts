@@ -122,8 +122,8 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         {
           condition: this.ctx.user.isQualifyingAccessor(),
           card: {
-            title: 'List of accessors',
-            emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
+            title: 'List of Assessors',
+            emptyMessage: 'Assessors in your organisation and the innovations they are assigned to',
             link: '/accessor/accessor-list'
           }
         },
@@ -132,7 +132,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           condition: this.ctx.user.isQualifyingAccessor(),
           card: {
             title: 'List of Needs Assessors',
-            emptyMessage: 'Needs Accessors in your organisation and the innovations they are assigned to',
+            emptyMessage: 'Needs Assessors in your organisation and the innovations they are assigned to',
             link: '/accessor/needs-accessor-list'
           }
         }
