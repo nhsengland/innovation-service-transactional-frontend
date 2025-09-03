@@ -98,7 +98,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         },
         {
           title: 'List of Needs Assessors',
-          emptyMessage: 'Needs Assessors in your organisation and the innovations they are assigned to',
+          emptyMessage: 'Needs Assessors and the innovations they are assigned to',
           link: '/assessment/needs-assessor-list'
         }
       ];
