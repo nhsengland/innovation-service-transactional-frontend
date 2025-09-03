@@ -2,20 +2,20 @@ import { Component, OnInit } from '@angular/core';
 
 import { CoreComponent } from '@app/base';
 import { TableModel } from '@app/base/models';
-import { AccessorService, GetUnitNeedsAccessorList } from '../../services/accessor.service';
+import { AssessmentService, NeedsAssessorList } from '../../services/assessment.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
-type NeedsAccessorAndInnovationsInfo = GetUnitNeedsAccessorList['data'][0];
+type NeedsAssessorAndInnovationsInfo = NeedsAssessorList['data'][0];
 
 @Component({
-  selector: 'app-accessor-pages-needs-accessor-list',
-  templateUrl: './needs-accessor-and-innovation-list.component.html'
+  selector: 'app-assessment-pages-needs-accessor-list',
+  templateUrl: './needs-assessor-and-innovation-list.component.html'
 })
-export class NeedsAccessorAndInnovationListComponent extends CoreComponent implements OnInit {
-  rawList: NeedsAccessorAndInnovationsInfo[] = [];
-  needsAssessorList = new TableModel<NeedsAccessorAndInnovationsInfo, { search: string }>({
+export class NeedsAssessorAndInnovationListComponent extends CoreComponent implements OnInit {
+  rawList: NeedsAssessorAndInnovationsInfo[] = [];
+  needsAssessorList = new TableModel<NeedsAssessorAndInnovationsInfo, { search: string }>({
     visibleColumns: {
       innovation: { label: 'Assigned Innovation' },
       needsAssesmentVersion: { label: 'Needs Assessment Version' },
@@ -28,7 +28,7 @@ export class NeedsAccessorAndInnovationListComponent extends CoreComponent imple
     search: new FormControl('', { validators: [Validators.maxLength(INPUT_LENGTH_LIMIT.xs)], updateOn: 'blur' })
   });
 
-  constructor(private readonly accessorService: AccessorService) {
+  constructor(private readonly assessmentService: AssessmentService) {
     super();
   }
 
@@ -36,15 +36,10 @@ export class NeedsAccessorAndInnovationListComponent extends CoreComponent imple
     this.setPageStatus('LOADING');
 
     const ctx = this.ctx.user.getUserContext();
-    const unit = ctx?.organisationUnit;
-    const org = ctx?.organisation;
-    if (!unit || !org) {
-      this.redirectTo(this.ctx.user.userUrlBasePath());
-      return;
-    }
 
-    const needsAccessorListSubscription = this.accessorService
-      .getUnitNeedsAccessorAndInnovationsList(org.id, unit.id)
+
+    const needsAccessorListSubscription = this.assessmentService
+      .getNeedsAccessorAndInnovationsList()
       .subscribe(response => {
         this.rawList = response.data;
         this.onPageChange({ pageNumber: 1 });

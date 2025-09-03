@@ -78,6 +78,7 @@ import { InnovationTaskDataResolver } from '@modules/shared/resolvers/innovation
 import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovation-thread-data.resolver';
 import { InnovationTaskStatusEnum } from '@modules/stores';
 import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
+import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-and-innovation-list/needs-assessor-and-innovation-list.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -523,6 +524,12 @@ const routes: Routes = [
         ]
       },
 
+      {
+        path: 'needs-assessor-list',
+        pathMatch: 'full',
+        component: NeedsAssessorAndInnovationListComponent
+      },
+
       { path: 'innovation-statuses', pathMatch: 'full', component: PageInnovationStatusListComponent },
 
       {
@@ -640,4 +647,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AssessmentRoutingModule {}
+export class AssessmentRoutingModule { }

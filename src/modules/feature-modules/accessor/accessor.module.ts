@@ -48,7 +48,6 @@ import { AccessorService } from './services/accessor.service';
 
 import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
 import { InnovatorContactDetailsComponent } from '@modules/shared/components/innovator-contact-details/innovator-contact-details.component';
-import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-and-innovation-list/needs-accessor-and-innovation-list.component';
 
 @NgModule({
   imports: [
@@ -96,8 +95,7 @@ import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-a
     // // Training.
     TrainingAndResourcesComponent,
     // // Unit
-    AccessorAndInnovationListComponent,
-    NeedsAccessorAndInnovationListComponent
+    AccessorAndInnovationListComponent
   ],
   providers: [
     // Services.
@@ -105,4 +103,4 @@ import { NeedsAccessorAndInnovationListComponent } from './pages/needs-acessor-a
     AnnouncementsService
   ]
 })
-export class AccessorModule {}
+export class AccessorModule { }
