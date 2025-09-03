@@ -69,4 +69,4 @@ import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-
     AnnouncementsService
   ]
 })
-export class AssessmentModule { }
+export class AssessmentModule {}

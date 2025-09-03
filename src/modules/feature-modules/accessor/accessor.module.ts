@@ -103,4 +103,4 @@ import { InnovatorContactDetailsComponent } from '@modules/shared/components/inn
     AnnouncementsService
   ]
 })
-export class AccessorModule { }
+export class AccessorModule {}

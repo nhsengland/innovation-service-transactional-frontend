@@ -133,10 +133,8 @@ export class AssessmentService extends CoreService {
     );
   }
 
-
   getNeedsAccessorAndInnovationsList(): Observable<NeedsAssessorList> {
-    const url = new UrlModel(this.API_USERS_URL)
-      .addPath('v1/needs-assessors');
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/needs-assessors');
     return this.http.get<NeedsAssessorList>(url.buildUrl()).pipe(take(1));
   }
 }

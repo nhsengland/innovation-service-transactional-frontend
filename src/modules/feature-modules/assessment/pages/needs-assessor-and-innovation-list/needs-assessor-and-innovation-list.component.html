@@ -48,7 +48,7 @@
                 <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("innovation") }}</span>
                 <ul class="nhsuk-list">
                   <li >
-                    <a class="text-word-break" routerLink="/accessor/innovations/{{ item.innovationId }}">{{ item.assignedInnovation }}</a>
+                    <a class="text-word-break" routerLink="/assessment/innovations/{{ item.innovationId }}" attr.aria-label="View {{ item.innovationId }} innovation">{{ item.assignedInnovation }}</a>
                   </li>
                 </ul>
               </td>

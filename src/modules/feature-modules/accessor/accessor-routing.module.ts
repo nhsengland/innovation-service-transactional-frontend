@@ -729,7 +729,7 @@ const routes: Routes = [
         path: 'accessor-list',
         pathMatch: 'full',
         component: AccessorAndInnovationListComponent
-      },
+      }
     ]
   }
 ];
@@ -738,4 +738,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AccessorRoutingModule { }
+export class AccessorRoutingModule {}

@@ -130,14 +130,14 @@ export type DefaultResponseDTO<T extends EventType, K extends DefaultOptions<T>>
   subscriptionType: SubscriptionType;
 } & {
   [k in K]: 'preConditions' extends keyof (NotifyMeConfig & { eventType: T })
-  ? k extends keyof SubscriptionConfigType<T>['preConditions']
-  ? SubscriptionConfigType<T>['preConditions'][k]
-  : k extends keyof SubscriptionConfigType<T>
-  ? SubscriptionConfigType<T>[k]
-  : never
-  : k extends keyof SubscriptionConfigType<T>
-  ? SubscriptionConfigType<T>[k]
-  : never;
+    ? k extends keyof SubscriptionConfigType<T>['preConditions']
+      ? SubscriptionConfigType<T>['preConditions'][k]
+      : k extends keyof SubscriptionConfigType<T>
+        ? SubscriptionConfigType<T>[k]
+        : never
+    : k extends keyof SubscriptionConfigType<T>
+      ? SubscriptionConfigType<T>[k]
+      : never;
 };
 
 export type NotifyMeResponseTypes = {

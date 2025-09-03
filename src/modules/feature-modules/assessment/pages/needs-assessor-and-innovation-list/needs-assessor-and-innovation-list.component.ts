@@ -37,7 +37,6 @@ export class NeedsAssessorAndInnovationListComponent extends CoreComponent imple
 
     const ctx = this.ctx.user.getUserContext();
 
-
     const needsAccessorListSubscription = this.assessmentService
       .getNeedsAccessorAndInnovationsList()
       .subscribe(response => {

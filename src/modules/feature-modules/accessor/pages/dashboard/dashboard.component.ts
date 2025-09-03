@@ -126,7 +126,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             emptyMessage: 'Assessors in your organisation and the innovations they are assigned to',
             link: '/accessor/accessor-list'
           }
-        },
+        }
       ];
 
       // Build the cardsList by filtering out cards whose conditions are false:
