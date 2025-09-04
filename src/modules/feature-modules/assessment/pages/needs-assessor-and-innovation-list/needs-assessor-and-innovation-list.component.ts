@@ -10,7 +10,7 @@ import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-eng
 type NeedsAssessorAndInnovationsInfo = NeedsAssessorList['data'][0];
 
 @Component({
-  selector: 'app-assessment-pages-needs-accessor-list',
+  selector: 'app-assessment-pages-needs-assessor-list',
   templateUrl: './needs-assessor-and-innovation-list.component.html'
 })
 export class NeedsAssessorAndInnovationListComponent extends CoreComponent implements OnInit {
