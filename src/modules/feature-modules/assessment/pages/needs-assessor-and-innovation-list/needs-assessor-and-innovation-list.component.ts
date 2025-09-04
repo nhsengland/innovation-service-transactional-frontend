@@ -35,24 +35,18 @@ export class NeedsAssessorAndInnovationListComponent extends CoreComponent imple
   ngOnInit(): void {
     this.setPageStatus('LOADING');
 
-    const ctx = this.ctx.user.getUserContext();
-
-    const needsAccessorListSubscription = this.assessmentService
-      .getNeedsAccessorAndInnovationsList()
+    const needsAssessorListSubscription = this.assessmentService
+      .getNeedsAssessorAndInnovationsList()
       .subscribe(response => {
         this.rawList = response.data;
         this.onPageChange({ pageNumber: 1 });
-
-        this.setPageTitle('List of Needs Assessors and Assigned Innovations', {
-          hint: this.ctx.user.getAccessorUnitName()
-        });
-
+        this.setPageTitle('List of Needs Assessors and Assigned Innovations');
         this.setBackLink();
         this.setPageStatus('READY');
       });
 
     this.subscriptions.push(
-      needsAccessorListSubscription,
+      needsAssessorListSubscription,
       this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => this.onFormChange())
     );
   }
