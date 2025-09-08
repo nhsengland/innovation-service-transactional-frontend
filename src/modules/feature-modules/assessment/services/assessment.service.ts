@@ -20,6 +20,16 @@ export type AssessmentExemptionTypeDTO = {
   exemption?: { reason: InnovationKPIExemption; message?: string; exemptedAt: DateISOType };
 };
 
+export type NeedsAssessorList = {
+  count: number;
+  data: {
+    needsAssessorUserName: string;
+    assignedInnovation: string;
+    needsAssessmentVersion: string;
+    innovationId: string;
+  }[];
+};
+
 @Injectable()
 export class AssessmentService extends CoreService {
   constructor() {
@@ -119,5 +129,10 @@ export class AssessmentService extends CoreService {
       take(1),
       map(response => response)
     );
+  }
+
+  getNeedsAssessorAndInnovationsList(): Observable<NeedsAssessorList> {
+    const url = new UrlModel(this.API_USERS_URL).addPath('v1/needs-assessors');
+    return this.http.get<NeedsAssessorList>(url.buildUrl()).pipe(take(1));
   }
 }

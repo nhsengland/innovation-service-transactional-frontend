@@ -95,6 +95,11 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           count: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].count,
           total: statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].total,
           overdue: this.getFooter(statistics[UserStatisticsTypeEnum.ASSIGNED_INNOVATIONS_COUNTER].overdue)
+        },
+        {
+          title: 'List of Needs Assessors',
+          emptyMessage: 'Needs Assessors and the innovations they are assigned to',
+          link: '/assessment/needs-assessor-list'
         }
       ];
 
