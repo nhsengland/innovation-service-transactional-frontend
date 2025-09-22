@@ -87,6 +87,7 @@ export type InnovationListSelectType =
   | 'assessment.isExempt'
   | 'assessment.finishedAt'
   | 'assessment.updatedAt'
+  | 'assessment.maturityLevel'
   | 'statistics.notifications'
   | 'statistics.tasks'
   | 'statistics.messages';
@@ -140,6 +141,7 @@ export type InnovationListFullDTO = {
     finishedAt: DateISOType | null;
     updatedAt: DateISOType;
     isExempt: boolean;
+    maturityLevel: string | null;
   } | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
@@ -184,6 +186,7 @@ export type InnovationInfoDTO = {
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
+    maturityLevel: null | string;
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
   statusUpdatedAt: null | DateISOType;

@@ -95,7 +95,6 @@
         Status updated on {{ innovationCardData.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
     </li>
-
     <li *ngIf="ctx.user.isAdmin() || ctx.user.isAssessment()">
       <span class="nhsuk-u-font-weight-bold"
         >Innovation status:
@@ -110,6 +109,14 @@
       <span *ngIf="ctx.user.isAssessment() && innovationCardData.updatedAt" class="font-color-secondary">
         Status updated on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
+    </li>
+
+     <li *ngIf="(ctx.user.isAdmin() || ctx.user.isAccessorType()) && innovationCardData.assessment?.id">
+      <span class="nhsuk-u-font-weight-bold"
+        >Needs Assessment Date:
+        <span *ngIf="innovationCardData.assessment?.needsAssessmentDate; else none">{{ innovationCardData.assessment?.needsAssessmentDate | date: ("app.date_formats.long_date" | translate) }}</span>
+      </span>
+      
     </li>
 
     <ng-container *ngIf="innovationCardData.highlights && highlightInfo && innovationCardData.status !== 'WITHDRAWN' && !isAccessorTypeAndStoppedSharingInnovation">
