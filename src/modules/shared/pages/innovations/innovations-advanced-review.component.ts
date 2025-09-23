@@ -178,7 +178,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
               this.onFormChange();
             }
           }),
-          this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+          this.form.valueChanges.pipe(debounceTime(200)).subscribe(() => {
             this.onFormChange();
           })
         );
