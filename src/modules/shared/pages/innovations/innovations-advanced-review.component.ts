@@ -166,7 +166,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
         this.form = this.filtersModel.form;
-
+        this.getInnovationsList();
         this.subscriptions.push(
           this.activatedRoute.queryParams.subscribe(params => {
             // To keep the same page title when updating query params.
@@ -178,7 +178,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
               this.onFormChange();
             }
           }),
-          this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+          this.form.valueChanges.pipe(debounceTime(200)).subscribe(() => {
             this.onFormChange();
           })
         );
@@ -439,8 +439,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
-
-    this.getInnovationsList();
+    this.filtersModel.handleStateChanges();
   }
 
   onPageChange(event: { pageNumber: number }): void {
@@ -450,6 +449,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   onSearchClick() {
     this.form.updateValueAndValidity({ onlySelf: true });
+    this.getInnovationsList();
   }
 
   onSortByChange(selectKey: string): void {

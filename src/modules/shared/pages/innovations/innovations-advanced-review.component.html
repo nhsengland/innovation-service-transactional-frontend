@@ -23,7 +23,7 @@
 
   <div class="nhsuk-grid-row" *ngIf="filtersModel">
     <div class="nhsuk-grid-column-one-quarter nhsuk-u-margin-top-5">
-      <shared-filters-wrapper-component [form]="form" [model]="filtersModel" />
+      <shared-filters-wrapper-component [form]="form" [model]="filtersModel" (searchEvent)="onSearchClick()" [showApplyButton]="true" />
     </div>
 
     <div class="nhsuk-grid-column-three-quarters">
