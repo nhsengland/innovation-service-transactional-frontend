@@ -90,7 +90,8 @@ export type InnovationListSelectType =
   | 'assessment.maturityLevel'
   | 'statistics.notifications'
   | 'statistics.tasks'
-  | 'statistics.messages';
+  | 'statistics.messages'
+  | 'progressAreas';
 
 export type InnovationSearchSelectType = InnovationListSelectType | 'highlights';
 
@@ -143,6 +144,7 @@ export type InnovationListFullDTO = {
     isExempt: boolean;
     maturityLevel: string | null;
   } | null;
+  progressAreas: string[] | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
