@@ -28,6 +28,23 @@ export const locationItems = [
   }
 ];
 
+export const keyProgressAreas = [
+  { value: 'deploymentCount', label: 'Deployment count' },
+  { value: 'ukcaceCertification', label: 'UKCA/CE certification' },
+  { value: 'dtacCertification', label: 'DTAC certification' },
+  { value: 'evidenceClinicalOrCare', label: 'Evidence in clinical or care settings' },
+  { value: 'evidenceRealWorld', label: 'Evidence in real world settings' },
+  { value: 'assessmentRealWorldValidation', label: 'Assessment of real world validation' },
+  { value: 'evidenceOfImpact', label: 'Evidence of impact' },
+  { value: 'assessmentEvidenceProveEfficacy', label: 'Assessment of evidence to prove efficacy' },
+  { value: 'evidenceCostImpact', label: 'Evidence of cost impact' },
+  { value: 'workingProduct', label: 'Working product' },
+  { value: 'carbonReductionPlan', label: 'Carbon reduction plan' },
+  { value: 'htwTerComplete', label: 'HTW TER complete' },
+  { value: 'niceGuidanceComplete', label: 'NICE guidance complete' },
+  { value: 'scProcurementRouteIdentified', label: 'SC procurement route identified' }
+];
+
 export const maturityLevelItems = [
   { value: 'DISCOVERY', label: 'Discovery or early development' },
   { value: 'ADVANCED', label: 'Advanced development and testing' },

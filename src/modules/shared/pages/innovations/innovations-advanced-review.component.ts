@@ -15,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
-import { maturityLevelItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import { keyProgressAreas, maturityLevelItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -138,6 +138,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             value: status
           }));
         datasets.maturityLevels = [...maturityLevelItems];
+        datasets.progressAreas = [...keyProgressAreas];
         if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
@@ -146,6 +147,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }));
         } else if (this.ctx.user.isAssessment()) {
           datasets.maturityLevels = [];
+          datasets.progressAreas = [];
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
             .filter(
@@ -227,7 +229,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'areas',
       'assessment.id',
       'assessment.finishedAt',
-      'assessment.maturityLevel'
+      'assessment.maturityLevel',
+      'progressAreas'
     ];
 
     if (this.ctx.user.isAdmin()) {
@@ -377,7 +380,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.status': 'Support Status',
       'support.closeReason': 'Support (close reason)',
       'assessment.finishedAt': 'Needs Assessment Date',
-      'assessment.maturityLevel': 'Approximate Maturity'
+      'assessment.maturityLevel': 'Approximate Maturity',
+      progressAreas: 'Progress Areas'
     } as const;
 
     if (this.ctx.user.isAdmin()) {
