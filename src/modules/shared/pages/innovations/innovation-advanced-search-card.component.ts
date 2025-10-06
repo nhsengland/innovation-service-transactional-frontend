@@ -36,6 +36,7 @@ export type InnovationCardData = {
   assessment?: {
     id: string | null;
     needsAssessmentDate?: DateISOType | null;
+    maturityLevel: string;
   };
 };
 

@@ -312,7 +312,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             highlights: result.highlights,
             assessment: {
               id: result.assessment?.id ?? null,
-              needsAssessmentDate: result.assessment?.finishedAt
+              needsAssessmentDate: result.assessment?.finishedAt,
+              maturityLevel: result.assessment?.maturityLevel ?? ''
             }
           };
 
@@ -380,7 +381,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.status': 'Support Status',
       'support.closeReason': 'Support (close reason)',
       'assessment.finishedAt': 'Needs Assessment Date',
-      'assessment.maturityLevel': 'Approximate Maturity',
+      'assessment.maturityLevel': 'Maturity at Needs Assessment',
       progressAreas: 'Progress Areas'
     } as const;
 

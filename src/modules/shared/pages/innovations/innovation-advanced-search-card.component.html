@@ -111,10 +111,10 @@
       >
     </li>
 
-     <li *ngIf="(ctx.user.isAdmin() || ctx.user.isAccessorType()) && innovationCardData.assessment?.id">
-      <span class="nhsuk-u-font-weight-bold"
-        >Needs Assessment Date:
-        <span *ngIf="innovationCardData.assessment?.needsAssessmentDate; else none">{{ innovationCardData.assessment?.needsAssessmentDate | date: ("app.date_formats.long_date" | translate) }}</span>
+     <li *ngIf="(ctx.user.isAdmin() || ctx.user.isAccessorType()) && innovationCardData.assessment">
+      <span class="nhsuk-u-font-weight-bold">
+        Maturity at Needs Assessment: <theme-tag [type]="'WHITE'" [label]="innovationCardData.assessment.maturityLevel" class="nhsuk-u-margin-left-1" />
+         <span *ngIf="innovationCardData.assessment.needsAssessmentDate; else none">{{ innovationCardData.assessment.needsAssessmentDate | date: ("app.date_formats.long_date" | translate) }}</span>
       </span>
       
     </li>

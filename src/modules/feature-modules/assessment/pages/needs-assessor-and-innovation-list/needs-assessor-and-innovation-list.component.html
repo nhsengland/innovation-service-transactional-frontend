@@ -44,6 +44,14 @@
 
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of needsAssessorList.getRecords()" class="nhsuk-table__row">
+               <td class="nhsuk-table__cell width-30">
+                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentUser") }}</span>
+                <span class="d-block text-word-break">{{ item.needsAssessorUserName }}</span>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentVersion") }}</span>
+                {{ item.needsAssessmentVersion }}
+              </td>
               <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("innovation") }}</span>
                 <ul class="nhsuk-list">
@@ -51,14 +59,6 @@
                     <a class="text-word-break" routerLink="/assessment/innovations/{{ item.innovationId }}" attr.aria-label="View {{ item.innovationId }} innovation">{{ item.assignedInnovation }}</a>
                   </li>
                 </ul>
-              </td>
-              <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentVersion") }}</span>
-                {{ item.needsAssessmentVersion }}
-              </td>
-              <td class="nhsuk-table__cell width-30">
-                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentUser") }}</span>
-                <span class="d-block text-word-break">{{ item.needsAssessorUserName }}</span>
               </td>
               
             </tr>
