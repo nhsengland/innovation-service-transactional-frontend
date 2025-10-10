@@ -32,7 +32,7 @@
         <theme-select-component [id]="'sortBy'" [label]="'Sort by'" [selectList]="sortByComponentInputList" (selectChanged)="onSortByChange($event)" />
       </div>
 
-      <shared-filters-selection-wrapper-component [model]="filtersModel" />
+      <shared-filters-selection-wrapper-component [model]="filtersModel" (filterRemoved)="onSearchClick()" />
 
       <hr class="nhsuk-section-break nhsuk-section-break--visible nhsuk-u-margin-top-2" />
 

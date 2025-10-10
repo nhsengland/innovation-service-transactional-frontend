@@ -7,7 +7,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { INPUT_LENGTH_LIMIT } from '@modules/shared/forms/engine/config/form-engine.config';
 
-type NeedsAssessorAndInnovationsInfo = NeedsAssessorList['data'][0];
+type NeedsAssessorAndInnovationsInfo = NeedsAssessorList['data'][0] & { daysSinceAssessmentStarted: number };
 
 @Component({
   selector: 'app-assessment-pages-needs-assessor-list',
@@ -17,9 +17,10 @@ export class NeedsAssessorAndInnovationListComponent extends CoreComponent imple
   rawList: NeedsAssessorAndInnovationsInfo[] = [];
   needsAssessorList = new TableModel<NeedsAssessorAndInnovationsInfo, { search: string }>({
     visibleColumns: {
+      needsAssesmentUser: { label: 'Needs Assessor' },
       innovation: { label: 'Assigned Innovation' },
       needsAssesmentVersion: { label: 'Needs Assessment Version' },
-      needsAssesmentUser: { label: 'Needs Assessor' }
+      daysSinceAssessmentStarted: { label: 'Days Since Assessment Started' }
     },
     pageSize: 10
   });
@@ -38,7 +39,12 @@ export class NeedsAssessorAndInnovationListComponent extends CoreComponent imple
     const needsAssessorListSubscription = this.assessmentService
       .getNeedsAssessorAndInnovationsList()
       .subscribe(response => {
-        this.rawList = response.data;
+        this.rawList = response.data.map(item => ({
+          ...item,
+          daysSinceAssessmentStarted: Math.floor(
+            (new Date().getTime() - new Date(item.assessmentStartDate).getTime()) / (1000 * 3600 * 24)
+          )
+        }));
         this.onPageChange({ pageNumber: 1 });
         this.setPageTitle('List of Needs Assessors and Assigned Innovations');
         this.setBackLink();
