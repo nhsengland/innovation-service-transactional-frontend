@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DatesHelper } from '@app/base/helpers';
 import { Filter, FiltersModel } from '@modules/core/models/filters/filters.model';
 
@@ -8,6 +8,7 @@ import { Filter, FiltersModel } from '@modules/core/models/filters/filters.model
 })
 export class FiltersSelectionWrapperComponent implements OnInit {
   @Input({ required: true }) model!: FiltersModel;
+  @Output() filterRemoved = new EventEmitter<void>();
 
   checkboxesTranslations = new Map();
 
@@ -17,6 +18,7 @@ export class FiltersSelectionWrapperComponent implements OnInit {
 
   onRemoveFilter(filterKey: string, selection: string): void {
     this.model.removeSelection(filterKey, selection);
+    this.filterRemoved.emit();
   }
 
   getDaterangeFilterTitle(filter: Filter): string {

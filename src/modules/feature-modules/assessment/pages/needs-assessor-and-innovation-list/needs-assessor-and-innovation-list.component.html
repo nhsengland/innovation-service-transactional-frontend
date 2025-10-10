@@ -49,16 +49,20 @@
                 <span class="d-block text-word-break">{{ item.needsAssessorUserName }}</span>
               </td>
               <td class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentVersion") }}</span>
-                {{ item.needsAssessmentVersion }}
-              </td>
-              <td class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("innovation") }}</span>
                 <ul class="nhsuk-list">
                   <li >
                     <a class="text-word-break" routerLink="/assessment/innovations/{{ item.innovationId }}" attr.aria-label="View {{ item.innovationId }} innovation">{{ item.assignedInnovation }}</a>
                   </li>
                 </ul>
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("needsAssesmentVersion") }}</span>
+                {{ item.needsAssessmentVersion }}
+              </td>
+              <td class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ needsAssessorList.getColumnLabel("daysSinceAssessmentStarted") }}</span>
+                {{ item.daysSinceAssessmentStarted }}
               </td>
               
             </tr>

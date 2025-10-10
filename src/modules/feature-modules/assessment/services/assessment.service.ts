@@ -27,6 +27,7 @@ export type NeedsAssessorList = {
     assignedInnovation: string;
     needsAssessmentVersion: string;
     innovationId: string;
+    assessmentStartDate: string;
   }[];
 };
 
