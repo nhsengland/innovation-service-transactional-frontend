@@ -27,8 +27,14 @@
           <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned on</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">{{ task.createdAt | date: ("app.date_formats.long_date" | translate) }}</dd>
         </div>
+        <div class="nhsuk-summary-list__row" *ngIf="task?.assignedTo?.name">
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned to</dt>
+          <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
+            <span>{{ task.assignedTo.name }}, {{ task.assignedTo.displayTag }}</span>
+          </dd>
+        </div>
         <div class="nhsuk-summary-list__row">
-          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Assigned by</dt>
+          <dt class="nhsuk-summary-list__key nhsuk-u-padding-3">Created by</dt>
           <dd class="nhsuk-summary-list__value nhsuk-u-padding-3">
             <span>{{ task.createdBy.name }}, {{ task.createdBy.displayTag }}</span>
           </dd>
