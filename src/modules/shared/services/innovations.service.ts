@@ -601,6 +601,7 @@ export class InnovationsService extends CoreService {
           updatedAt: response.updatedAt,
           updatedBy: response.updatedBy,
           createdBy: response.createdBy,
+          assignedTo: response.assignedTo,
           sameOrganisation: response.sameOrganisation,
           threadId: response.threadId
         };

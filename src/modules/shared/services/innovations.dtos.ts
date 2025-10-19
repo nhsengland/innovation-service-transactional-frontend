@@ -381,6 +381,7 @@ export type InnovationTaskData = {
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
   createdBy: { name: string; displayTag: string };
+  assignedTo: { name: string; displayTag: string };
   notifications: number;
   sameOrganisation: boolean;
 };
@@ -396,6 +397,7 @@ export type InnovationTaskInfoDTO = {
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
   createdBy: { name: string; displayTag: string };
+  assignedTo: { name: string; displayTag: string };
   sameOrganisation: boolean;
   threadId: string;
 };
