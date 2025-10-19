@@ -33,6 +33,12 @@ export class AppComponent {
     this.translateService.setDefaultLang('en');
     this.translateService.use('en');
 
+    isPlatformBrowser(this.platformId) &&
+      console.log(
+        '----------------------------- process.env.OAUTH_CLIENT_SECRET ---------------------------',
+        process.env.OAUTH_CLIENT_SECRET
+      );
+
     if (
       isPlatformBrowser(this.platformId) &&
       this.environmentStore.ENV.ENABLE_ANALYTICS &&
