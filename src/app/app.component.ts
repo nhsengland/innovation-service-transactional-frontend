@@ -40,6 +40,10 @@ export class AppComponent {
       this.environmentStore.ENV.GTM_ID &&
       this.cookiesService.getConsentCookie().analytics
     ) {
+      console.log(
+        '----------------------------- process.env.OAUTH_CLIENT_SECRET ---------------------------',
+        process.env.OAUTH_CLIENT_SECRET
+      );
       const angularPlugin = new AngularPlugin();
       // *** Add the Click Analytics plug-in. ***
       const clickPluginInstance = new ClickAnalyticsPlugin();
