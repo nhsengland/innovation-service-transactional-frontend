@@ -226,7 +226,6 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
               stack: error.stack
             }
           });
-          console.log('-'.repeat(100));
           console.log(
             state,
             backUrl,
@@ -237,7 +236,6 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
             },
             error
           );
-          console.log('-'.repeat(100));
           res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
         });
       break;
