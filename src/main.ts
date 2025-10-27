@@ -7,10 +7,6 @@ import { environment } from './environments/environment';
 if (environment.production) enableProdMode();
 
 function bootstrap() {
-  console.log(
-    '----------------------------- process.env.OAUTH_CLIENT_SECRET ---------------------------',
-    process.env.OAUTH_CLIENT_SECRET
-  );
   platformBrowserDynamic()
     .bootstrapModule(AppModule)
     .catch(err => console.error(err));
