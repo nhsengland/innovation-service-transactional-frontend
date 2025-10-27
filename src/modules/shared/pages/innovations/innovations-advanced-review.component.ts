@@ -444,7 +444,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
-    this.filtersModel.handleStateChanges();
   }
 
   onPageChange(event: { pageNumber: number }): void {
@@ -454,6 +453,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   onSearchClick() {
     this.form.updateValueAndValidity({ onlySelf: true });
+    this.filtersModel.handleStateChanges();
     this.getInnovationsList();
   }
 

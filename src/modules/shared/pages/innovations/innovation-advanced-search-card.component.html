@@ -45,7 +45,6 @@
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ categoriesList }}</span>
       </li>
 
-
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Relevant areas: </span>
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ areasList }}</span>
@@ -61,11 +60,13 @@
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ diseasesAndConditionsList }}</span>
       </li>
 
-      <li *ngIf="innovationCardData.assessment" class="nhsuk-u-margin-bottom-1">
-        <span class="nhsuk-u-font-weight-bold">
-          Maturity at Needs Assessment: <theme-tag [type]="'WHITE'" [label]="innovationCardData.assessment.maturityLevel" class="nhsuk-u-margin-left-1" />
-            <span *ngIf="innovationCardData.assessment.needsAssessmentDate; else none">({{ innovationCardData.assessment.needsAssessmentDate | date: ("app.date_formats.short_date" | translate) }})</span>
+      <li *ngIf="innovationCardData?.assessment" class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
+          Maturity at Needs Assessment: <theme-tag [type]="'WHITE'" [label]="innovationCardData.assessment?.maturityLevel || ''" class="nhsuk-u-margin-left-1" />
         </span>
+        <span *ngIf="innovationCardData.assessment?.needsAssessmentDate"
+          >({{ innovationCardData.assessment?.needsAssessmentDate | date: ("app.date_formats.long_date" | translate) }})</span
+        >
       </li>
 
       <ng-container *ngIf="ctx.user.isAdmin()">
@@ -117,8 +118,6 @@
         Status updated on {{ innovationCardData.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
     </li>
-
-
 
     <ng-container *ngIf="innovationCardData.highlights && highlightInfo && innovationCardData.status !== 'WITHDRAWN' && !isAccessorTypeAndStoppedSharingInnovation">
       <li class="font-color-secondary nhsuk-u-margin-top-3 nhsuk-u-margin-bottom-2">
