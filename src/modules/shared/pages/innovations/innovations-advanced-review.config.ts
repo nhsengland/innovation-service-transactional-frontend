@@ -88,7 +88,7 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
       state: 'closed',
       items: []
     },
-    { type: 'CHECKBOX_GROUP', key: 'progressAreas', title: 'Progress Areas', state: 'closed', items: [] },
+    { type: 'CHECKBOX_GROUP', key: 'progressAreas', title: 'Key Progress Areas', state: 'closed', items: [] },
     {
       type: 'DATE_RANGE',
       key: 'submittedAt',
