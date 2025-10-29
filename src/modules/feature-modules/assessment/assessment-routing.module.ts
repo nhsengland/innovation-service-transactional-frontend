@@ -79,6 +79,7 @@ import { InnovationThreadDataResolver } from '@modules/shared/resolvers/innovati
 import { InnovationTaskStatusEnum } from '@modules/stores';
 import { PageInnovationAssessmentEditReasonComponent } from './pages/innovation/assessment/assessment-edit-reason.component';
 import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-and-innovation-list/needs-assessor-and-innovation-list.component';
+import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -160,6 +161,13 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
+              },
+
+              {
+                path: 'key-progress-areas',
+                pathMatch: 'full',
+                component: KeyProgressAreasPageComponent,
+                data: { breadcrumb: 'Key progress areas' }
               },
 
               {
