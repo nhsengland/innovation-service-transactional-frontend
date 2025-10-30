@@ -38,6 +38,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit {
 
     this.sidebarItems.set([
       { label: 'Overview', url: `/accessor/innovations/${innovation.id}/overview` },
+      { label: 'Key progress areas', url: `/accessor/innovations/${innovation.id}/key-progress-areas` },
       { label: 'Innovation record', url: `/accessor/innovations/${innovation.id}/record` },
       { label: 'Tasks', url: `/accessor/innovations/${innovation.id}/tasks` },
       { label: 'Messages', url: `/accessor/innovations/${innovation.id}/threads` },

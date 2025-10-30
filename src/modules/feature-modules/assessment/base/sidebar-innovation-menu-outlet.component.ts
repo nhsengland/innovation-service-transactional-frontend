@@ -47,6 +47,7 @@ export class SidebarInnovationMenuOutletComponent implements OnInit {
       ...(innovation.hasBeenAssessed
         ? [{ label: 'Support summary', url: `/assessment/innovations/${innovation.id}/support-summary` }]
         : []),
+      { label: 'Key progress areas', url: `/assessment/innovations/${innovation.id}/key-progress-areas` },
       { label: 'Data sharing preferences', url: `/assessment/innovations/${innovation.id}/support` },
       { label: 'Activity log', url: `/assessment/innovations/${innovation.id}/activity-log` }
     ]);

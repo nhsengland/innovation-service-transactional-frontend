@@ -70,6 +70,7 @@ import { PageTaskStatusListComponent } from '@modules/shared/pages/innovation/ta
 import { PageInnovationTaskToDoListComponent } from '@modules/shared/pages/innovation/tasks/task-to-do-list.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/innovations/innovations-advanced-review.component';
+import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
 
 // Wizards.
 import { WizardOrganisationUnitActivateComponent } from './wizards/organisation-unit-activate/organisation-unit-activate.component';
@@ -489,6 +490,12 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
+              },
+              {
+                path: 'key-progress-areas',
+                pathMatch: 'full',
+                component: KeyProgressAreasPageComponent,
+                data: { breadcrumb: 'Key progress areas' }
               },
               {
                 path: 'assessments',

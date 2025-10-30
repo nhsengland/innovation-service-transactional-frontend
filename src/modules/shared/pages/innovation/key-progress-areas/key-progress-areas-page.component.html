@@ -1,0 +1,4 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <app-key-progress-areas-card *ngIf="innovationProgress" [progressData]="innovationProgress"></app-key-progress-areas-card>
+  <p *ngIf="!innovationProgress" class="nhsuk-body">There are no progress areas for this innovation yet.</p>
+</theme-content-wrapper>
