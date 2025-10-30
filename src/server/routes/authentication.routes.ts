@@ -52,7 +52,7 @@ const confidentialClientConfig: Configuration = {
         }
       },
       piiLoggingEnabled: false,
-      logLevel: LogLevel.Warning
+      logLevel: LogLevel.Verbose
     }
   }
 };
@@ -226,6 +226,16 @@ authenticationRouter.get(`${ENVIRONMENT.BASE_PATH}/signin/callback`, (req, res) 
               stack: error.stack
             }
           });
+          console.log(
+            state,
+            backUrl,
+            {
+              redirectUri: redirects.LOGIN,
+              scopes: scopes,
+              code: req.query.code as string
+            },
+            error
+          );
           res.redirect(`${ENVIRONMENT.BASE_PATH}/error/generic`);
         });
       break;

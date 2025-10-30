@@ -87,6 +87,7 @@ import { WizardInnovationCustomNotificationDeleteComponent } from './pages/innov
 import { InnovationChangeAccessorsComponent } from './pages/innovation/support/support-change-accessors.component';
 import { TrainingAndResourcesComponent } from './pages/training-and-resources/training-and-resources/training-and-resources.component';
 import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-innovation-list.component';
+import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -175,6 +176,13 @@ const routes: Routes = [
                 pathMatch: 'full',
                 component: InnovationOverviewComponent,
                 data: { breadcrumb: null }
+              },
+
+              {
+                path: 'key-progress-areas',
+                pathMatch: 'full',
+                component: KeyProgressAreasPageComponent,
+                data: { breadcrumb: 'Key progress areas' }
               },
 
               {

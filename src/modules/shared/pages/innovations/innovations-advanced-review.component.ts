@@ -15,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
+import { keyProgressAreas, maturityLevelItems } from '@modules/stores/innovation/config/innovation-catalog.config';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -136,7 +137,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             label: this.translate(`shared.catalog.innovation.support_status.${status}.name`),
             value: status
           }));
-
+        datasets.maturityLevels = [...maturityLevelItems];
+        datasets.progressAreas = [...keyProgressAreas];
         if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
@@ -144,6 +146,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             value: status
           }));
         } else if (this.ctx.user.isAssessment()) {
+          datasets.maturityLevels = [];
+          datasets.progressAreas = [];
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
             .filter(
@@ -164,7 +168,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
         this.filtersModel = new FiltersModel({ filters, datasets, data: previousFilters });
         this.form = this.filtersModel.form;
-
+        this.getInnovationsList();
         this.subscriptions.push(
           this.activatedRoute.queryParams.subscribe(params => {
             // To keep the same page title when updating query params.
@@ -176,7 +180,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
               this.onFormChange();
             }
           }),
-          this.form.valueChanges.pipe(debounceTime(500)).subscribe(() => {
+          this.form.valueChanges.pipe(debounceTime(200)).subscribe(() => {
             this.onFormChange();
           })
         );
@@ -222,7 +226,11 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.status',
       'support.updatedAt',
       'support.closeReason',
-      'areas'
+      'areas',
+      'assessment.id',
+      'assessment.finishedAt',
+      'assessment.maturityLevel',
+      'progressAreas'
     ];
 
     if (this.ctx.user.isAdmin()) {
@@ -242,7 +250,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.updatedAt',
             'support.closeReason',
             'involvedAACProgrammes',
-            'keyHealthInequalities'
+            'keyHealthInequalities',
+            'assessment.finishedAt',
+            'assessment.maturityLevel'
           ].includes(item)
       );
     }
@@ -299,7 +309,12 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
               updatedAt: result.support.updatedAt,
               closeReason: result.support.closeReason
             },
-            highlights: result.highlights
+            highlights: result.highlights,
+            assessment: {
+              id: result.assessment?.id ?? null,
+              needsAssessmentDate: result.assessment?.finishedAt,
+              maturityLevel: result.assessment?.maturityLevel ?? ''
+            }
           };
 
           this.innovationCardsData.push(innovationData);
@@ -337,7 +352,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'involvedAACProgrammes',
       'engagingOrganisations',
       'support.status',
-      'support.closeReason'
+      'support.closeReason',
+      'assessment.finishedAt',
+      'assessment.maturityLevel'
     ];
 
     const queryFieldsMap = {
@@ -362,7 +379,10 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       involvedAACProgrammes: 'AAC Involvement',
       engagingOrganisations: 'Engaging Organisations',
       'support.status': 'Support Status',
-      'support.closeReason': 'Support (close reason)'
+      'support.closeReason': 'Support (close reason)',
+      'assessment.finishedAt': 'Needs Assessment Date',
+      'assessment.maturityLevel': 'Maturity at Needs Assessment',
+      progressAreas: 'Progress Areas'
     } as const;
 
     if (this.ctx.user.isAdmin()) {
@@ -424,8 +444,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
-
-    this.getInnovationsList();
   }
 
   onPageChange(event: { pageNumber: number }): void {
@@ -435,6 +453,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   onSearchClick() {
     this.form.updateValueAndValidity({ onlySelf: true });
+    this.filtersModel.handleStateChanges();
+    this.getInnovationsList();
   }
 
   onSortByChange(selectKey: string): void {

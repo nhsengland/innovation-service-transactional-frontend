@@ -31,6 +31,7 @@ import { AssessmentService } from './services/assessment.service';
 
 import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
 import { InnovatorContactDetailsComponent } from '@modules/shared/components/innovator-contact-details/innovator-contact-details.component';
+import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-and-innovation-list/needs-assessor-and-innovation-list.component';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { InnovatorContactDetailsComponent } from '@modules/shared/components/inn
     InnovationChangeAssessorComponent,
     PageInnovationAssessmentEditReasonComponent,
     // // Innovations.
-    InnovationsListComponent
+    InnovationsListComponent,
+    NeedsAssessorAndInnovationListComponent
   ],
   providers: [
     // Services.

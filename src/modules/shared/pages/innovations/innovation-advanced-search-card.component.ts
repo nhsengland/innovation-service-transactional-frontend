@@ -33,6 +33,11 @@ export type InnovationCardData = {
   } | null;
   highlights?: Record<string, string[]>;
   areas: string[];
+  assessment?: {
+    id: string | null;
+    needsAssessmentDate?: DateISOType | null;
+    maturityLevel: string;
+  };
 };
 
 @Component({

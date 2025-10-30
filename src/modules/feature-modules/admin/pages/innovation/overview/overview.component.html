@@ -12,17 +12,14 @@
     <div class="nhsuk-grid-column-full">
       <div class="nhsuk-u-margin-bottom-3">
         <p class="nhsuk-u-font-weight-bold d-inline-block nhsuk-u-margin-bottom-0">Innovation status</p>
-        <a routerLink="/admin/innovations/{{ innovationId }}/statuses" class="float-r nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View innovation status information"
-          >What does this status mean?</a
-        >
+        <a routerLink="/admin/innovations/{{ innovationId }}/statuses" class="float-r nhsuk-body-s nhsuk-u-margin-bottom-0" arial-label="View innovation status information">What does this status mean?</a>
       </div>
 
       <div>
         <div class="d-inline-block nhsuk-u-margin-bottom-3">
           <theme-tag
             type="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.cssColorClass' | translate }}"
-            label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}"
-          >
+            label="{{ 'shared.catalog.innovation.grouped_status.' + innovation.groupedStatus + '.name' | translate }}">
           </theme-tag>
           <span class="font-color-secondary nhsuk-body-s nhsuk-u-margin-bottom-0 nhsuk-u-margin-left-2 d-inline-block" *ngIf="innovation.organisationsStatusDescription">
             Organisations: {{ innovation.organisationsStatusDescription }}
@@ -32,11 +29,10 @@
           routerLink="/admin/innovations/{{ innovation.id }}/support"
           class="float-r nhsuk-body-s"
           arial-label="View innovation support status"
-          *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'"
-          >View support status</a
-        >
+          *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">View support status</a>
       </div>
       <p *ngIf="isArchived">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
+      <p *ngIf="innovation.archiveReason">Reason: {{ 'shared.catalog.innovation.archive.reason.' + innovation.archiveReason | translate }}</p>
     </div>
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />

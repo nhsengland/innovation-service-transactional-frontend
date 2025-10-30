@@ -1,6 +1,7 @@
 import { FileUploadType } from '@app/base/forms';
 import { DateISOType } from '@app/base/types';
 import { ReassessmentSendType } from '@modules/feature-modules/innovator/pages/innovation/needs-reassessment/needs-reassessment-send.config';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 import {
   ActivityLogItemsEnum,
@@ -86,9 +87,11 @@ export type InnovationListSelectType =
   | 'assessment.isExempt'
   | 'assessment.finishedAt'
   | 'assessment.updatedAt'
+  | 'assessment.maturityLevel'
   | 'statistics.notifications'
   | 'statistics.tasks'
-  | 'statistics.messages';
+  | 'statistics.messages'
+  | 'progressAreas';
 
 export type InnovationSearchSelectType = InnovationListSelectType | 'highlights';
 
@@ -139,7 +142,9 @@ export type InnovationListFullDTO = {
     finishedAt: DateISOType | null;
     updatedAt: DateISOType;
     isExempt: boolean;
+    maturityLevel: string | null;
   } | null;
+  progressAreas: string[] | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 
@@ -183,9 +188,11 @@ export type InnovationInfoDTO = {
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
     assignedTo?: { id: string; name: string; userRoleId: string };
+    maturityLevel: null | string;
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
   statusUpdatedAt: null | DateISOType;
+  archiveReason: null | InnovationArchiveReasonEnum;
   collaboratorId?: string;
   createdAt: DateISOType;
 };
@@ -374,6 +381,7 @@ export type InnovationTaskData = {
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
   createdBy: { name: string; displayTag: string };
+  assignedTo: { name: string; displayTag: string };
   notifications: number;
   sameOrganisation: boolean;
 };
@@ -389,6 +397,7 @@ export type InnovationTaskInfoDTO = {
   updatedAt: DateISOType;
   updatedBy: { name: string; displayTag: string };
   createdBy: { name: string; displayTag: string };
+  assignedTo: { name: string; displayTag: string };
   sameOrganisation: boolean;
   threadId: string;
 };

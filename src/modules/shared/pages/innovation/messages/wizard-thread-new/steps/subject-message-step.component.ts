@@ -32,25 +32,25 @@ export class WizardInnovationThreadNewSubjectMessageStepComponent
 
   sectionId?: string;
 
-  form = new FormGroup(
-    {
-      subject: new FormControl<string>('', [
-        CustomValidators.required('A subject is required'),
-        Validators.maxLength(100)
-      ]),
-      message: new FormControl<string>('', CustomValidators.required('A message is required')),
-      file: new FormControl<File | null>(null, [
-        CustomValidators.emptyFileValidator(),
-        CustomValidators.maxFileSizeValidator(20)
-      ]),
-      fileName: new FormControl<string>(''),
-      confirmation: new FormControl<boolean>(
-        false,
-        CustomValidators.required("You must select 'I understand' to send your message")
-      )
-    },
-    { updateOn: 'blur' }
-  );
+  form = new FormGroup({
+    subject: new FormControl<string>('', {
+      validators: [CustomValidators.required('A subject is required'), Validators.maxLength(100)],
+      updateOn: 'blur'
+    }),
+    message: new FormControl<string>('', {
+      validators: CustomValidators.required('A message is required'),
+      updateOn: 'blur'
+    }),
+    file: new FormControl<File | null>(null, [
+      CustomValidators.emptyFileValidator(),
+      CustomValidators.maxFileSizeValidator(20)
+    ]),
+    fileName: new FormControl<string>(''),
+    confirmation: new FormControl<boolean>(
+      false,
+      CustomValidators.required("You must select 'I understand' to send your message")
+    )
+  });
 
   formConfirmationField = { label: '', description: '' };
 

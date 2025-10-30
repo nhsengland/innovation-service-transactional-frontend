@@ -82,6 +82,14 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
     { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] },
     { type: 'CHECKBOX_GROUP', key: 'groupedStatuses', title: 'Innovation status', state: 'closed', items: [] },
     {
+      type: 'CHECKBOX_GROUP',
+      key: 'maturityLevels',
+      title: 'Maturity at Needs Assessment',
+      state: 'closed',
+      items: []
+    },
+    { type: 'CHECKBOX_GROUP', key: 'progressAreas', title: 'Key Progress Areas', state: 'closed', items: [] },
+    {
       type: 'DATE_RANGE',
       key: 'submittedAt',
       title: 'Filter by date',
@@ -108,7 +116,9 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
     involvedAACProgrammes: getIrSchemaQuestionItemsValueAndLabel(schema, 'involvedAACProgrammes').filter(
       i => i.label !== ''
     ),
-    areas: getIrSchemaQuestionItemsValueAndLabel(schema, 'areas').filter(i => i.label !== '')
+    areas: getIrSchemaQuestionItemsValueAndLabel(schema, 'areas').filter(i => i.label !== ''),
+    progressAreas: [],
+    maturityLevels: []
   };
 }
 
@@ -134,7 +144,9 @@ export function getConfig(
         'submittedAt',
         'categories',
         'careSettings',
-        'areas'
+        'areas',
+        'maturityLevels',
+        'progressAreas'
       ];
       break;
     case UserRoleEnum.ASSESSMENT:
@@ -147,7 +159,8 @@ export function getConfig(
         'engagingOrganisations',
         'groupedStatuses',
         'submittedAt',
-        'areas'
+        'areas',
+        'maturityLevels'
       ];
 
       const assignedToMeFilter = (InnovationsListFiltersConfig?.filters?.[0] as CheckboxesFilter).checkboxes?.[0];
@@ -165,7 +178,9 @@ export function getConfig(
         'careSettings',
         'keyHealthInequalities',
         'involvedAACProgrammes',
-        'areas'
+        'areas',
+        'maturityLevels',
+        'progressAreas'
       ];
       break;
     default:

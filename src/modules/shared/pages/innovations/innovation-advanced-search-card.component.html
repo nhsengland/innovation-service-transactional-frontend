@@ -45,7 +45,6 @@
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ categoriesList }}</span>
       </li>
 
-
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Relevant areas: </span>
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ areasList }}</span>
@@ -59,6 +58,15 @@
       <li class="nhsuk-u-margin-bottom-1">
         <span class="nhsuk-u-font-weight-bold">Diseases and conditions: </span>
         <span appHighlight [searchTerm]="highlightInfo?.termsFound">{{ diseasesAndConditionsList }}</span>
+      </li>
+
+      <li *ngIf="innovationCardData?.assessment" class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-font-weight-bold nhsuk-u-margin-right-2">
+          Maturity at Needs Assessment: <theme-tag [type]="'WHITE'" [label]="innovationCardData.assessment?.maturityLevel || ''" class="nhsuk-u-margin-left-1" />
+        </span>
+        <span *ngIf="innovationCardData.assessment?.needsAssessmentDate"
+          >({{ innovationCardData.assessment?.needsAssessmentDate | date: ("app.date_formats.long_date" | translate) }})</span
+        >
       </li>
 
       <ng-container *ngIf="ctx.user.isAdmin()">
@@ -95,7 +103,6 @@
         Status updated on {{ innovationCardData.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}</span
       >
     </li>
-
     <li *ngIf="ctx.user.isAdmin() || ctx.user.isAssessment()">
       <span class="nhsuk-u-font-weight-bold"
         >Innovation status:

@@ -59,6 +59,7 @@ import { PageInnovationSupportStatusListComponent } from './pages/innovation/sup
 import { PageInnovationSupportSummaryListComponent } from './pages/innovation/support/support-summary-list.component';
 import { PageInnovationSupportSummaryProgressUpdateDeleteComponent } from './pages/innovation/support/support-summary-progress-update-delete.component';
 import { PageInnovationSupportSummaryProgressUpdateWrapperComponent } from './pages/innovation/support/support-summary-progress-update-wrapper.component';
+import { KeyProgressAreasPageComponent } from './pages/innovation/key-progress-areas/key-progress-areas-page.component';
 // // Innovations.
 import { PageInnovationsAdvancedReviewComponent } from './pages/innovations/innovations-advanced-review.component';
 // // Notifications.
@@ -223,6 +224,7 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepC
     WizardInnovationSupportSummaryProgressUpdateSummaryStepComponent,
 
     InnovationSectionSummaryComponent,
+    KeyProgressAreasPageComponent,
     // // Innovations.
     PageInnovationsAdvancedReviewComponent,
     // // Notifications.
