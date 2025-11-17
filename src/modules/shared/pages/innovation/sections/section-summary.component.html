@@ -49,7 +49,16 @@
                   <dt class="nhsuk-summary-list__key nhsuk-u-margin-padding-4 nhsuk-u-padding-bottom-4">{{ item.label | irv3translate: "questions" }}</dt>
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value" appHighlight [searchTerm]="search"></span>
-                    <span *ngIf="!item.allowHTML" appHighlight [searchTerm]="search">{{ item.value | irv3translate: "items" : item.stepId }}</span>
+                    <ng-container *ngIf="!item.allowHTML">
+                      <ng-container *ngIf="(item.stepId === 'hasVideoDemonstration' || item.stepId === 'hasWebsite') && item.value && item.value[1]; else defaultTranslation">
+                        {{ item.value[0] | irv3translate: "items" : item.stepId }}<br>
+                        <!-- <a [href]="item.value[1]" target="_blank" rel="noopener noreferrer">{{ item.value[1] }}</a> -->
+                        <a [href]="item.value" target="_blank" rel="noopener noreferrer">{{ item.value }}</a>
+                      </ng-container>
+                      <ng-template #defaultTranslation>
+                        <span appHighlight [searchTerm]="search">{{ item.value | irv3translate: "items" : item.stepId }}</span>
+                      </ng-template>
+                    </ng-container>
                   </dd>
                   <dd class="nhsuk-summary-list__actions">
                     <a
