@@ -28,7 +28,8 @@ const stepsLabels = {
   },
   q4: { label: 'What is your head office postcode?' },
   q5: { label: 'Which country is your head office located in?' },
-  q6: { label: 'Does your innovation have a website?' }
+  q6: { label: 'Does your innovation have a website?' },
+  q7: { label: 'Does your innovation have a video that explains how it works ?' }
 };
 
 // Types.
@@ -40,6 +41,8 @@ type StepPayloadType = {
   postcode?: string;
   hasWebsite: string;
   website?: string;
+  hasVideoDemonstration?: string;
+  videoDemonstrationUrl?: string;
 };
 
 type OutboundPayloadType = {
@@ -50,6 +53,8 @@ type OutboundPayloadType = {
   postcode?: string;
   website?: string;
   hasWebsite: string;
+  hasVideoDemonstration?: string;
+  videoDemonstrationUrl?: string;
 };
 
 export function getNewInnovationQuestionsWizard(currentSchema: InnovationRecordSchemaInfoType): WizardEngineModel {
@@ -181,6 +186,34 @@ function runtimeRules(
       ]
     })
   );
+
+  steps.push(
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'hasVideoDemonstration',
+          dataType: 'radio-group',
+          label: stepsLabels.q7.label,
+          validations: { isRequired: [true, 'Choose one option'] },
+          items: [
+            {
+              value: 'YES',
+              label: 'Yes',
+              conditional: new FormEngineParameterModel({
+                id: 'videoDemonstrationUrl',
+                dataType: 'text',
+                label: 'Link',
+                validations: {
+                  urlFormat: { maxLength: 2000 }
+                }
+              })
+            },
+            { value: 'NO', label: 'No' }
+          ]
+        }
+      ]
+    })
+  );
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
@@ -191,7 +224,9 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     countryLocation: data.countryLocation ? data.countryLocation[0] : undefined,
     postcode: data.postcode ?? undefined,
     hasWebsite: data.hasWebsite,
-    website: data.website ?? undefined
+    website: data.website ?? undefined,
+    hasVideoDemonstration: data.hasVideoDemonstration,
+    videoDemonstrationUrl: data.videoDemonstrationUrl ?? undefined
   };
 }
 
@@ -227,6 +262,12 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   toReturn.push({
     label: stepsLabels.q6.label,
     value: data.hasWebsite === 'YES' ? `Yes \n${data.website}` : 'No',
+    editStepNumber: editStepNumber++
+  });
+
+  toReturn.push({
+    label: stepsLabels.q7.label,
+    value: data.hasVideoDemonstration === 'YES' ? `Yes \n${data.videoDemonstrationUrl}` : 'No',
     editStepNumber: editStepNumber++
   });
 
