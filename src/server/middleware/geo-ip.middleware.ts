@@ -1,34 +1,34 @@
 import { Request, Response, NextFunction } from 'express';
 import { GeoIpService } from '../services/GeoIpService';
 import { getClientIp } from '../helpers/client-ip.helper';
-import { sendLogToWebhook } from '../helpers/logger-beeceptor.helper';
+import { sendLogToAppAnalytics } from '../helpers/logger-beeceptor.helper';
 
 export const geoIpMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  await sendLogToWebhook('GeoIpMiddleware: Start', {}, req);
+  await sendLogToAppAnalytics('GeoIpMiddleware: Start', {}, req);
   const geoIpEnabled = process.env.GEO_IP_ENABLED === 'false' ? false : true;
 
   if (!geoIpEnabled) {
-    await sendLogToWebhook('GeoIpMiddleware: Disabled', { geoIpEnabled }, req);
+    await sendLogToAppAnalytics('GeoIpMiddleware: Disabled', { geoIpEnabled }, req);
     return next();
   }
 
   // Allow access to the error page to prevent infinite redirect loops
   if (req.path.includes('/error/generic')) {
-    await sendLogToWebhook('GeoIpMiddleware: Error Page Access', { path: req.path }, req);
+    await sendLogToAppAnalytics('GeoIpMiddleware: Error Page Access', { path: req.path }, req);
     return next();
   }
 
   const clientIp = getClientIp(req);
-  await sendLogToWebhook('GeoIpMiddleware: Client IP Determined', { clientIp }, req);
+  await sendLogToAppAnalytics('GeoIpMiddleware: Client IP Determined', { clientIp }, req);
   console.log(`GeoIP Middleware: Client IP is ${clientIp}`);
   const geoIpService = GeoIpService.getInstance();
-  await sendLogToWebhook('GeoIpMiddleware: Checking Country Ban', { clientIp }, req);
+  await sendLogToAppAnalytics('GeoIpMiddleware: Checking Country Ban', { clientIp }, req);
 
   try {
     const isBanned = await geoIpService.isCountryBanned(clientIp);
 
     if (isBanned) {
-      await sendLogToWebhook('GeoIpMiddleware: Country Banned - Redirecting', { clientIp, isBanned }, req);
+      await sendLogToAppAnalytics('GeoIpMiddleware: Country Banned - Redirecting', { clientIp, isBanned }, req);
       // The user's country is banned.
       // You can redirect them to an error page or simply send a forbidden status.
       // We will redirect to a generic error page to avoid giving too much information.
@@ -36,10 +36,10 @@ export const geoIpMiddleware = async (req: Request, res: Response, next: NextFun
     }
 
     // If not banned, proceed to the next middleware or route handler.
-    await sendLogToWebhook('GeoIpMiddleware: Country Not Banned - Proceeding', { clientIp, isBanned }, req);
+    await sendLogToAppAnalytics('GeoIpMiddleware: Country Not Banned - Proceeding', { clientIp, isBanned }, req);
     return next();
   } catch (error: any) {
-    await sendLogToWebhook(
+    await sendLogToAppAnalytics(
       'GeoIpMiddleware: Error during GeoIP check',
       { errorMessage: error.message, stack: error.stack },
       req
