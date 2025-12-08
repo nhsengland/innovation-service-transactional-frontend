@@ -113,7 +113,14 @@
             "outputPath": "dist/app/server",
             "main": "server.ts",
             "tsConfig": "tsconfig.server.json",
-            "inlineStyleLanguage": "scss"
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              {
+                "glob": "**/*",
+                "input": "src/server/geoip",
+                "output": "/geoip"
+              }
+            ]
           },
           "configurations": {
             "production": {

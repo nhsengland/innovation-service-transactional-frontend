@@ -13,6 +13,7 @@ import * as dotenv from 'dotenv';
 import { Response, Router } from 'express';
 import { Agent } from 'https';
 import { getAppInsightsClient } from 'src/globals';
+import { geoIpMiddleware } from '../middleware/geo-ip.middleware';
 import { ENVIRONMENT } from '../config/constants.config';
 
 dotenv.config();
@@ -82,6 +83,7 @@ const redirects = {
 };
 
 const authenticationRouter: Router = Router();
+authenticationRouter.use(geoIpMiddleware);
 
 export async function getAccessTokenBySessionId(sessionId: string): Promise<string> {
   const sessionToken = userSessions.get(sessionId);
