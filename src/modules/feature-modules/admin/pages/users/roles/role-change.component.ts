@@ -58,8 +58,9 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
           ...userInfo,
           rolesDescription: userInfo.roles.map(r => {
             let roleDescription = this.ctx.user.getRoleDescription(r.role);
-            if (r.displayTeam) {
-              roleDescription += ` (${r.displayTeam})`;
+            const unitName = r.organisationUnit?.name || r.organisation?.name || r.displayTeam;
+            if (unitName) {
+              roleDescription += ` (${unitName})`;
             }
 
             if (r.isActive) {

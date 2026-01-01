@@ -241,7 +241,7 @@ export type InnovationSupportsListDTO = {
     acronym: string;
     unit: { id: string; name: string; acronym: string };
   };
-  engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null; isActive: boolean }[];
+  engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null; isActive: boolean; role: string }[];
 }[];
 
 export type InnovationNeedingActionDTO = {

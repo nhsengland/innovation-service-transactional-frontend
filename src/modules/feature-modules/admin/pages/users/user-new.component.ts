@@ -119,8 +119,9 @@ export class PageUserNewComponent extends CoreComponent implements OnInit {
           ...response,
           rolesDescription: response.roles.map(r => {
             let roleDescription = this.ctx.user.getRoleDescription(r.role);
-            if (r.displayTeam) {
-              roleDescription += ` (${r.displayTeam})`;
+            const unitName = r.organisationUnit?.name || r.organisation?.name || r.displayTeam;
+            if (unitName) {
+              roleDescription += ` (${unitName})`;
             }
             return roleDescription;
           })
