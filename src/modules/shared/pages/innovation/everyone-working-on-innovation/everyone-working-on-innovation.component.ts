@@ -21,6 +21,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     }[];
     accessors: {
       name: string;
+      jobTitle?: string | null;
       organisation: {
         name: string;
         acronym: string;
@@ -32,6 +33,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     }[];
     assessmentUsers: {
       name: string;
+      jobTitle?: string | null;
     }[];
   } = { innovators: [], accessors: [], assessmentUsers: [] };
 
@@ -62,6 +64,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
       for (const support of innovationSupports) {
         const accessors = support.engagingAccessors.map(a => ({
           name: a.name,
+          jobTitle: a.jobTitle,
           organisation: {
             name: support.organisation.name,
             acronym: support.organisation.acronym,
@@ -72,7 +75,10 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
         this.innovationParticipants.accessors.push(...accessors);
       }
 
-      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({ name: u.name }));
+      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({
+        name: u.name,
+        jobTitle: u.jobTitle
+      }));
 
       this.setPageStatus('READY');
     });

@@ -15,6 +15,7 @@ export type UserInfo = {
     organisationUnit?: { id: string; name: string; acronym: string };
     displayTeam?: string;
   }[];
+  jobTitle?: string;
 };
 
 export type UsersListDTO = {
@@ -29,6 +30,7 @@ export type UsersListDTO = {
     lockedAt: null | string;
     organisationUnitUserId: string;
     email: string;
+    jobTitle?: string | null;
   }[];
 };
 
@@ -47,5 +49,6 @@ export type GetUsersRequestDTO = {
     }[];
     email?: string;
     organisationUnitUserId?: string;
+    jobTitle?: string | null;
   }[];
 };

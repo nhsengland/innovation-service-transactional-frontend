@@ -100,6 +100,7 @@ export type GetThreadFollowersDTO = {
   followers: {
     id: string;
     name: string;
+    jobTitle?: string | null;
     isLocked: boolean;
     isOwner?: boolean;
     role: { id: string; role: UserRoleEnum };
@@ -122,6 +123,7 @@ export type GetThreadMessagesListInDTO = {
       id: string;
       name: string;
       role: UserRoleEnum;
+      jobTitle?: string | null;
       isOwner?: boolean;
       organisation?: { id: string; name: string; acronym: string };
       organisationUnit?: { id: string; name: string; acronym: string };
