@@ -16,6 +16,7 @@ export const USER_INFO_ACCESSOR: Required<UserContextType>['user'] = {
   hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
+  jobTitle: null,
   organisations: [
     {
       id: 'org_id',
@@ -46,6 +47,7 @@ export const USER_INFO_INNOVATOR: Required<UserContextType>['user'] = {
   hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
+  jobTitle: null,
   organisations: [
     {
       id: 'org_id',
@@ -81,6 +83,7 @@ export const USER_INFO_ADMIN: Required<UserContextType>['user'] = {
   hasLoginAnnouncements: {},
   passwordResetAt: '2020-01-01T00:00:00.000Z',
   firstTimeSignInAt: '2020-01-01T00:00:00.000Z',
+  jobTitle: null,
   organisations: []
 };
 
