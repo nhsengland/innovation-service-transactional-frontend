@@ -145,13 +145,15 @@ export class PageInnovationThreadMessagesListComponent extends CoreComponent imp
         this.followerNumberText = this.threadFollowers.length > 1 ? 'recipients' : 'recipient';
 
         const threadMessages = response.threadMessages.messages.map(message => {
-          const jobTitleOrRole = message.createdBy.jobTitle || (
-            message.createdBy.role === 'ASSESSMENT'
+          const jobTitleOrRole =
+            message.createdBy.jobTitle ||
+            (message.createdBy.role === 'ASSESSMENT'
               ? 'Needs assessment'
               : message.createdBy.role === 'INNOVATOR'
-                ? (message.createdBy.isOwner ? 'Innovator owner' : 'Innovator')
-                : this.ctx.user.getRoleDescription(message.createdBy.role)
-          );
+                ? message.createdBy.isOwner
+                  ? 'Innovator owner'
+                  : 'Innovator'
+                : this.ctx.user.getRoleDescription(message.createdBy.role));
 
           return {
             ...message,
