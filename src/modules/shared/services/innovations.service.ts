@@ -100,6 +100,7 @@ export type GetThreadFollowersDTO = {
   followers: {
     id: string;
     name: string;
+    jobTitle?: string | null;
     isLocked: boolean;
     isOwner?: boolean;
     role: { id: string; role: UserRoleEnum };
@@ -122,6 +123,7 @@ export type GetThreadMessagesListInDTO = {
       id: string;
       name: string;
       role: UserRoleEnum;
+      jobTitle?: string | null;
       isOwner?: boolean;
       organisation?: { id: string; name: string; acronym: string };
       organisationUnit?: { id: string; name: string; acronym: string };
@@ -476,10 +478,19 @@ export class InnovationsService extends CoreService {
     );
   }
 
-  getInnovationSupportInfo(innovationId: string, supportId: string): Observable<InnovationSupportInfoDTO> {
+  getInnovationSupportInfo(
+    innovationId: string,
+    supportId: string,
+    includeInactive?: boolean
+  ): Observable<InnovationSupportInfoDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/supports/:supportId')
       .setPathParams({ innovationId, supportId });
+
+    if (includeInactive) {
+      url.setQueryParams({ includeInactive: true });
+    }
+
     return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)

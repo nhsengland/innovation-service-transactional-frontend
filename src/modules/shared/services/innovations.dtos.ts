@@ -174,6 +174,7 @@ export type InnovationInfoDTO = {
     contactByPhoneTimeframe?: PhoneUserPreferenceEnum | null;
     mobilePhone?: null | string;
     contactDetails?: null | string;
+    jobTitle?: null | string;
     isActive: boolean;
     organisation?: { name: string; size: null | string; registrationNumber: null | string };
     lastLoginAt?: DateISOType;
@@ -187,7 +188,7 @@ export type InnovationInfoDTO = {
     minorVersion: number;
     createdAt: DateISOType;
     finishedAt: null | DateISOType;
-    assignedTo?: { id: string; name: string; userRoleId: string };
+    assignedTo?: { id: string; name: string; userRoleId: string; jobTitle?: string | null };
     maturityLevel: null | string;
   };
   supports?: null | { id: string; status: InnovationSupportStatusEnum; organisationUnitId: string }[];
@@ -240,7 +241,14 @@ export type InnovationSupportsListDTO = {
     acronym: string;
     unit: { id: string; name: string; acronym: string };
   };
-  engagingAccessors: { id: string; userRoleId: string; name: string; isActive: boolean }[];
+  engagingAccessors: {
+    id: string;
+    userRoleId: string;
+    name: string;
+    jobTitle?: string | null;
+    isActive: boolean;
+    role: string;
+  }[];
 }[];
 
 export type InnovationNeedingActionDTO = {
@@ -259,7 +267,7 @@ export type InnovationNeedingAction = {
 export type InnovationSupportInfoDTO = {
   id: string;
   status: InnovationSupportStatusEnum;
-  engagingAccessors: { id: string; userRoleId: string; name: string }[];
+  engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null; isActive: boolean }[];
 };
 
 // Support summary.

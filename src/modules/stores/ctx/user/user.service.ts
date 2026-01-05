@@ -12,6 +12,7 @@ export type MFAInfo = { type: 'none' } | { type: 'email' } | { type: 'phone'; ph
 
 export type UpdateUserInfo = {
   displayName: string;
+  jobTitle?: string | null;
   contactByPhone?: boolean;
   contactByEmail?: boolean;
   contactByPhoneTimeframe?: PhoneUserPreferenceEnum;
@@ -79,6 +80,7 @@ export class UserContextService {
         hasLoginAnnouncements: response.hasLoginAnnouncements,
         passwordResetAt: response.passwordResetAt,
         firstTimeSignInAt: response.firstTimeSignInAt,
+        jobTitle: response.jobTitle,
         organisations: response.organisations
       }))
     );
