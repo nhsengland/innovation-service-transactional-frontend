@@ -478,22 +478,24 @@ export class InnovationsService extends CoreService {
     );
   }
 
-
-  getInnovationSupportInfo(innovationId: string, supportId: string, includeInactive?: boolean): Observable<InnovationSupportInfoDTO> {
+  getInnovationSupportInfo(
+    innovationId: string,
+    supportId: string,
+    includeInactive?: boolean
+  ): Observable<InnovationSupportInfoDTO> {
     const url = new UrlModel(this.API_INNOVATIONS_URL)
       .addPath('v1/:innovationId/supports/:supportId')
       .setPathParams({ innovationId, supportId });
-    
+
     if (includeInactive) {
       url.setQueryParams({ includeInactive: true });
     }
-    
+
     return this.http.get<InnovationSupportInfoDTO>(url.buildUrl()).pipe(
       take(1),
       map(response => response)
     );
   }
-
 
   // Support summary.
   getSupportSummaryOrganisationsList(innovationId: string): Observable<SupportSummaryOrganisationsListDTO> {

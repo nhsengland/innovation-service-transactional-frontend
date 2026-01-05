@@ -74,7 +74,9 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
           }
         }
       }),
-      ...(this.supportId ? [this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId, true)] : [])
+      ...(this.supportId
+        ? [this.innovationsService.getInnovationSupportInfo(this.innovationId, this.supportId, true)]
+        : [])
     ]).subscribe({
       next: ([usersList, innovationSupportInfo]) => {
         this.accessorsList = usersList.data.map(item => ({
@@ -86,12 +88,12 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
 
         if (innovationSupportInfo) {
           this.innovationSupportStatus = innovationSupportInfo.status;
-          
+
           // Add inactive assigned accessors to the list so they can be unassigned
           innovationSupportInfo.engagingAccessors.forEach(accessor => {
             // Check if accessor is already in the list (active users)
             const existingAccessor = this.accessorsList.find(a => a.id === accessor.id);
-            
+
             if (!existingAccessor && !accessor.isActive) {
               // Add inactive accessor to the list
               this.accessorsList.push({
@@ -101,11 +103,11 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
                 name: accessor.name
               });
             }
-            
+
             // Pre-select this accessor in the form
             (this.form.get('accessors') as FormArray).push(new FormControl<string>(accessor.id));
           });
-          
+
           this.setTitleAndLabels(innovationSupportInfo);
         }
 
@@ -158,18 +160,16 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
   setTitleAndLabels(innovationSupportInfo?: any) {
     // Create a map of inactive accessor IDs for quick lookup
     const inactiveAccessorIds = new Set(
-      innovationSupportInfo?.engagingAccessors
-        .filter((a: any) => !a.isActive)
-        .map((a: any) => a.id) || []
+      innovationSupportInfo?.engagingAccessors.filter((a: any) => !a.isActive).map((a: any) => a.id) || []
     );
 
     switch (this.innovationSupportStatus) {
       case InnovationSupportStatusEnum.ENGAGING:
         this.setPageTitle('Assign accessors to support this innovation', { width: 'full', size: 'l' });
         this.selectAccessorsStepLabel = `Select 1 or more accessors from ${this.userOrganisationUnit?.name} to support this innovation.`;
-        this.formAccessorsList = this.accessorsList.map(r => ({ 
-          value: r.id, 
-          label: inactiveAccessorIds.has(r.id) ? `${r.name} (Inactive)` : r.name 
+        this.formAccessorsList = this.accessorsList.map(r => ({
+          value: r.id,
+          label: inactiveAccessorIds.has(r.id) ? `${r.name} (Inactive)` : r.name
         }));
         break;
 
@@ -178,9 +178,9 @@ export class InnovationChangeAccessorsComponent extends CoreComponent implements
         this.selectAccessorsStepLabel = `Select 1 or more qualifying accessors from ${this.userOrganisationUnit?.name} to be assigned to this innovation. They will receive notifications regarding this innovation.`;
         this.formAccessorsList = this.accessorsList
           .filter(accessor => accessor.role === UserRoleEnum.QUALIFYING_ACCESSOR)
-          .map(r => ({ 
-            value: r.id, 
-            label: inactiveAccessorIds.has(r.id) ? `${r.name} (Inactive)` : r.name 
+          .map(r => ({
+            value: r.id,
+            label: inactiveAccessorIds.has(r.id) ? `${r.name} (Inactive)` : r.name
           }));
         break;
     }

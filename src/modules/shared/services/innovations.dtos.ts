@@ -270,7 +270,6 @@ export type InnovationSupportInfoDTO = {
   engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null; isActive: boolean }[];
 };
 
-
 // Support summary.
 const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
 export type SupportSummarySectionType = (typeof SupportSummarySectionType)[number];
