@@ -267,8 +267,9 @@ export type InnovationNeedingAction = {
 export type InnovationSupportInfoDTO = {
   id: string;
   status: InnovationSupportStatusEnum;
-  engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null }[];
+  engagingAccessors: { id: string; userRoleId: string; name: string; jobTitle?: string | null; isActive: boolean }[];
 };
+
 
 // Support summary.
 const SupportSummarySectionType = ['ENGAGING', 'BEEN_ENGAGED', 'SUGGESTED'] as const;
