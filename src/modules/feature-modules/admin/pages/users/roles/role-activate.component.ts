@@ -59,15 +59,12 @@ export class PageUsersRoleActivateComponent extends CoreComponent implements OnI
           ...this.user,
           role: user.roles
             .filter(role => role.id === this.user.role.id)
-            .map(r => {
-              const unitName = r.organisationUnit?.name || r.organisation?.name || r.displayTeam;
-              return {
-                id: r.id,
-                description: unitName
-                  ? `${this.ctx.user.getRoleDescription(r.role).toLowerCase()} (${unitName})`
-                  : `${this.ctx.user.getRoleDescription(r.role).toLowerCase()}`
-              };
-            })[0] ?? { id: '', description: '' }
+            .map(r => ({
+              id: r.id,
+              description: r.displayTeam
+                ? `${this.ctx.user.getRoleDescription(r.role).toLowerCase()} (${r.displayTeam})`
+                : `${this.ctx.user.getRoleDescription(r.role).toLowerCase()}`
+            }))[0] ?? { id: '', description: '' }
         };
 
         if (!this.user.role.id) {

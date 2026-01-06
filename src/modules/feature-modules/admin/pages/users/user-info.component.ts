@@ -85,9 +85,8 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
             ...userInfo,
             rolesDescription: userInfo.roles.map(r => {
               let roleDescription = this.ctx.user.getRoleDescription(r.role);
-              const unitName = r.organisationUnit?.name || r.organisation?.name || r.displayTeam;
-              if (unitName) {
-                roleDescription += ` (${unitName})`;
+              if (r.displayTeam) {
+                roleDescription += ` (${r.displayTeam})`;
               }
 
               if (r.isActive) {

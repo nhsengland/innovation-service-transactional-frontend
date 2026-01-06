@@ -160,7 +160,7 @@ export type GetNotifyMeInnovationsWithSubscriptions = {
 export type GetUnitAccessorList = {
   count: number;
   data: {
-    accessor: { name: string; role: UserRoleEnum };
+    accessor: { name: string; role: UserRoleEnum; jobTitle?: string | null };
     innovations: { id: string; name: string }[];
   }[];
 };

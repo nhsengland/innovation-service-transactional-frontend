@@ -44,12 +44,12 @@
 
           <tbody class="nhsuk-table__body">
             <tr *ngFor="let item of accessorList.getRecords()" class="nhsuk-table__row">
-              <td class="nhsuk-table__cell width-30">
+              <td class="nhsuk-table__cell width-40">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("accessor") }}</span>
                 <span class="d-block text-word-break">{{ item.accessor.name }},</span>
-                <span class="d-block">{{ item.accessor.role | serviceRoleTranslate }}</span>
+                <span class="d-block">{{ item.accessor.role | serviceRoleTranslate }}<span *ngIf="item.accessor.jobTitle"> ({{ item.accessor.jobTitle }})</span></span>
               </td>
-              <td class="nhsuk-table__cell">
+              <td class="nhsuk-table__cell width-15">
                 <span class="nhsuk-table-responsive__heading">{{ accessorList.getColumnLabel("innovationsCount") }}</span>
                 {{ item.innovations.length }}
               </td>
