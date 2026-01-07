@@ -38,6 +38,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
   } = { innovators: [], accessors: [], assessmentUsers: [] };
 
   innovationSupportIds: string[] = [];
+  isInnovator = this.ctx.user.isInnovator;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -66,8 +67,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
           const roleDescription = this.ctx.user.getRoleDescription(a.role);
           return {
             name: a.name,
-            jobTitle:
-              a.jobTitle && a.jobTitle !== roleDescription ? `${roleDescription} (${a.jobTitle})` : roleDescription,
+            jobTitle: a.jobTitle || roleDescription,
             organisation: {
               name: support.organisation.name,
               acronym: support.organisation.acronym,
@@ -81,7 +81,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
 
       this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({
         name: u.name,
-        jobTitle: u.jobTitle ? `${u.roleDescription} (${u.jobTitle})` : u.roleDescription
+        jobTitle: u.jobTitle || u.roleDescription
       }));
 
       this.setPageStatus('READY');

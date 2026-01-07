@@ -36,7 +36,7 @@
               >
                 <span *ngIf="follower.role.role === 'INNOVATOR'; else notInnovator">{{ follower.name }} ({{ follower.isOwner ? "Owner" : "Collaborator" }})</span>
                 <ng-template #notInnovator>
-                  <span>{{ follower.name }}, {{ follower.jobTitle || follower.organisationUnit?.name || ctx.user.getRoleDescription(follower.role.role) }}<ng-container *ngIf="follower.jobTitle && follower.organisationUnit?.name"> ({{ follower.organisationUnit?.name }})</ng-container></span>
+                  <span>{{ follower.name }}, {{ follower.organisationUnit?.name ?? ctx.user.getRoleDescription(follower.role.role) }}</span>
                 </ng-template>
               </dt>
               <dt

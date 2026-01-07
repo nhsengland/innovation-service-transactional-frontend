@@ -15,7 +15,7 @@ export type UserInfo = {
     organisationUnit?: { id: string; name: string; acronym: string };
     displayTeam?: string;
   }[];
-  jobTitle?: string;
+  jobTitle?: string | null;
 };
 
 export type UsersListDTO = {

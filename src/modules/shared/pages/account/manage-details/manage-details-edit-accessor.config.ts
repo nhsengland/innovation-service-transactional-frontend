@@ -28,7 +28,6 @@ export const ACCOUNT_DETAILS_ACCESSOR: WizardEngineModel = new WizardEngineModel
           id: 'jobTitle',
           dataType: 'text',
           label: 'What is your job title?',
-          description: 'This is displayed to other people you work with on an innovation.',
           validations: { maxLength: 255 }
         }
       ]
