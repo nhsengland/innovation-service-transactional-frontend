@@ -18,7 +18,8 @@ export class PageOrganisationsListComponent extends CoreComponent implements OnI
     link: string;
   }[] = [
     { name: 'Needs assessment team', isActive: true, link: UserRoleEnum.ASSESSMENT },
-    { name: 'Service administrators', isActive: true, link: UserRoleEnum.ADMIN }
+    { name: 'Service administrators', isActive: true, link: UserRoleEnum.ADMIN },
+    { name: 'Champions and senior sponsors', isActive: true, link: '/admin/strategic-roles' }
   ];
 
   constructor(private organisationsService: OrganisationsService) {

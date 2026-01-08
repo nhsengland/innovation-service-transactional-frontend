@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { CoreComponent } from '@app/base';
 
-import { UserRoleEnum } from '@app/base/enums';
+import { StrategicRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
 import { forkJoin, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -29,7 +29,8 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
     name: '',
     isActive: false,
     roles: [],
-    rolesDescription: []
+    rolesDescription: [],
+    strategicRoles: []
   };
 
   canAddRole = false;
@@ -39,6 +40,9 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
   accessorRolesCount = 0;
   hasActiveAccessorRole = false;
   isActiveQualifyingAccessor = false;
+  hasChampionRole = false;
+  hasSeniorSponsorRole = false;
+  canAssignStrategicRole = false;
 
   action: { label: string; url: string } = { label: '', url: '' };
 
@@ -70,6 +74,12 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
         break;
       case 'unitChangeSuccess':
         this.setAlertSuccess('Organisation unit has been successfully changed');
+        break;
+      case 'strategicRoleCreationSuccess':
+        this.setAlertSuccess('Strategic roles have been assigned successfully');
+        break;
+      case 'strategicRoleDeletionSuccess':
+        this.setAlertSuccess('Strategic role has been removed successfully');
         break;
       default:
         break;
@@ -119,6 +129,10 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
             this.isActiveQualifyingAccessor = accessorRoles.some(
               r => r.isActive === true && r.role === UserRoleEnum.QUALIFYING_ACCESSOR
             );
+
+            this.hasChampionRole = this.user.strategicRoles.some(sr => sr.role === StrategicRoleEnum.CHAMPION);
+            this.hasSeniorSponsorRole = this.user.strategicRoles.some(sr => sr.role === StrategicRoleEnum.SENIOR_SPONSOR);
+            this.canAssignStrategicRole = this.hasActiveAccessorRole && (!this.hasChampionRole || !this.hasSeniorSponsorRole);
           }
 
           return forkJoin([

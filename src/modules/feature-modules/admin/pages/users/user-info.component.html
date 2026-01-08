@@ -105,6 +105,32 @@
     </a>
   </div>
 
+  <section *ngIf="user.strategicRoles.length > 0 || canAssignStrategicRole" class="nhsuk-u-margin-top-7 nhsuk-u-margin-bottom-5">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Strategic roles</h2>
+        <div *ngIf="user.strategicRoles.length > 0">
+          <table class="nhsuk-table">
+            <tbody class="nhsuk-table__body">
+              <tr *ngFor="let strategicRole of user.strategicRoles" role="row" class="nhsuk-table__row">
+                <td class="nhsuk-table__cell">{{ strategicRole.role | strategicRoleTranslate }}</td>
+                <td class="nhsuk-table__cell text-align-right">
+                  <a routerLink="strategic-role/{{ strategicRole.id }}/inactivate">Inactivate</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div *ngIf="canAssignStrategicRole" class="nhsuk-action-link nhsuk-u-margin-top-5">
+          <a class="nhsuk-action-link__link" routerLink="strategic-role/new">
+            <theme-svg-icon type="arrow-right-circle" />
+            <span class="nhsuk-action-link__text">Add strategic role</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section *ngIf="assignedInnovations">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">

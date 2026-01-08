@@ -176,6 +176,11 @@ export const locale = {
       QUALIFYING_ACCESSOR: 'Qualifying accessor'
     },
 
+    strategicRoles: {
+      CHAMPION: 'Champion',
+      SENIOR_SPONSOR: 'Senior sponsor'
+    },
+
     // Shared translations to serve external / catalog modules.
     shared: {
       catalog: {

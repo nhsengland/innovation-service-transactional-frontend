@@ -24,6 +24,8 @@ import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserManageComponent } from './pages/users/user-manage.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
+import { PageStrategicRoleInactivateComponent } from './pages/users/strategic-roles/strategic-role-inactivate.component';
+import { PageStrategicRoleNewComponent } from './pages/users/strategic-roles/strategic-role-new.component';
 // // Announcements.
 import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
@@ -98,6 +100,8 @@ import { InnovatorContactDetailsComponent } from '@modules/shared/components/inn
     PageUserInfoComponent,
     PageUserNewComponent,
     PageRoleNewComponent,
+    PageStrategicRoleNewComponent,
+    PageStrategicRoleInactivateComponent,
     // // Announcements.
     PageAnnouncementDetailsComponent,
     PageAnnouncementNewditComponent,

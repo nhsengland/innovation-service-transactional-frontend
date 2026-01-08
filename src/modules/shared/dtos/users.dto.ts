@@ -1,4 +1,4 @@
-import { UserRoleEnum } from '@app/base/enums';
+import { StrategicRoleEnum, UserRoleEnum } from '@app/base/enums';
 import { DateISOType } from '@app/base/types';
 
 export type UserInfo = {
@@ -15,6 +15,7 @@ export type UserInfo = {
     organisationUnit?: { id: string; name: string; acronym: string };
     displayTeam?: string;
   }[];
+  strategicRoles: { id: string; role: StrategicRoleEnum }[];
   jobTitle?: string | null;
 };
 

@@ -1,0 +1,20 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+      <p>
+        Are you sure you want to inactivate the <strong>{{ roleToInactivate.role | strategicRoleTranslate }}</strong> role for
+        <strong>{{ user.name }}</strong>?
+      </p>
+
+      <div class="nhsuk-u-margin-top-6">
+        <button class="nhsuk-button" (click)="onSubmit()" [disabled]="!submitButton.isActive">
+          {{ submitButton.label }}
+        </button>
+      </div>
+
+      <div class="nhsuk-u-margin-top-0">
+        <a href="javascript:;" (click)="goBackOrCancel()" class="nhsuk-link">Cancel</a>
+      </div>
+    </div>
+  </div>
+</theme-content-wrapper>

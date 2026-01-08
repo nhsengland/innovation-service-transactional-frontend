@@ -81,4 +81,15 @@ export class UsersService extends CoreService {
       return this.http.put<void>(url.buildUrl(), body).pipe(take(1));
     };
   }
+
+  getStrategicRolesList(): Observable<
+    {
+      organisation: { id: string; name: string };
+      champions: { name: string; email: string }[];
+      seniorSponsors: { name: string; email: string }[];
+    }[]
+  > {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/strategic-roles');
+    return this.http.get<any>(url.buildUrl()).pipe(take(1));
+  }
 }
