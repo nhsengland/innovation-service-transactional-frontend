@@ -129,7 +129,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
         },
         {
           card: {
-            title: 'Contacts at each support organization',
+            title: 'Contacts at each support organisation',
             emptyMessage: 'Champions and senior sponsors for each organisation',
             link: '/accessor/strategic-roles'
           }

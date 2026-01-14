@@ -102,7 +102,7 @@ export class DashboardComponent extends CoreComponent implements OnInit {
           link: '/assessment/needs-assessor-list'
         },
         {
-          title: 'Contacts at each support organization',
+          title: 'Contacts at each support organisation',
           emptyMessage: 'Champions and senior sponsors for each organisation',
           link: '/assessment/strategic-roles'
         }
