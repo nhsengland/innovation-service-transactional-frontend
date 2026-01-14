@@ -21,6 +21,9 @@ import { PageUserInfoComponent } from './pages/users/user-info.component';
 import { PageUserLockComponent } from './pages/users/user-lock.component';
 import { PageUserNewComponent } from './pages/users/user-new.component';
 import { PageUserUnlockComponent } from './pages/users/user-unlock.component';
+import { PageStrategicRoleInactivateComponent } from './pages/users/strategic-roles/strategic-role-inactivate.component';
+import { PageStrategicRoleNewComponent } from './pages/users/strategic-roles/strategic-role-new.component';
+import { PageStrategicRolesListComponent } from '@modules/shared/pages/strategic-roles-list/strategic-roles-list.component';
 // // Announcements.
 import { PageAnnouncementDetailsComponent } from './pages/announcements/announcement-details.component';
 import { PageAnnouncementNewditComponent } from './pages/announcements/announcement-newdit.component';
@@ -311,12 +314,42 @@ const routes: Routes = [
                     ]
                   }
                 ]
+              },
+              {
+                path: 'strategic-role',
+                data: { breadcrumb: null },
+                children: [
+                  {
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: PageStrategicRoleNewComponent,
+                    data: { breadcrumb: null }
+                  },
+                  {
+                    path: ':strategicRoleId',
+                    data: { breadcrumb: null },
+                    children: [
+                      {
+                        path: 'inactivate',
+                        pathMatch: 'full',
+                        component: PageStrategicRoleInactivateComponent,
+                        data: { breadcrumb: null }
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           }
         ]
       },
 
+      {
+        path: 'strategic-roles',
+        pathMatch: 'full',
+        component: PageStrategicRolesListComponent,
+        data: { breadcrumb: 'Champions and senior sponsors' }
+      },
       {
         path: 'announcements',
         data: { breadcrumb: 'Announcements' },

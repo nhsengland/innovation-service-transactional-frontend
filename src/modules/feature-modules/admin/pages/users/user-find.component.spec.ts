@@ -61,7 +61,8 @@ describe('FeatureModules/Admin/Pages/Users/PageUserFindComponent', () => {
           role: UserRoleEnum.INNOVATOR,
           isActive: true
         }
-      ]
+      ],
+      strategicRoles: []
     };
 
     usersService.getUserInfo = () => of(responseMock);
