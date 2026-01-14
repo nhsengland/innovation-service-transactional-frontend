@@ -14,13 +14,19 @@ export type OutboundPayloadType = { strategicRoles: StrategicRoleEnum[] };
 export const WIZARD_ADD_STRATEGIC_ROLE: WizardEngineModel = new WizardEngineModel({
   steps: [],
   showSummary: true,
-  runtimeRules: [(steps: WizardStepType[], currentValues: StepPayloadType & { rolesAlreadyAssigned: StrategicRoleEnum[] }) => wizardRuntimeRules(steps, currentValues)],
+  runtimeRules: [
+    (steps: WizardStepType[], currentValues: StepPayloadType & { rolesAlreadyAssigned: StrategicRoleEnum[] }) =>
+      wizardRuntimeRules(steps, currentValues)
+  ],
   inboundParsing: (data: InboundPayloadType) => inboundParsing(data),
   outboundParsing: (data: StepPayloadType) => outboundParsing(data),
   summaryParsing: (data: StepPayloadType) => summaryParsing(data)
 });
 
-function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType & { rolesAlreadyAssigned: StrategicRoleEnum[] }): void {
+function wizardRuntimeRules(
+  steps: WizardStepType[],
+  data: StepPayloadType & { rolesAlreadyAssigned: StrategicRoleEnum[] }
+): void {
   steps.splice(0);
 
   const roles = [StrategicRoleEnum.CHAMPION, StrategicRoleEnum.SENIOR_SPONSOR];
@@ -65,9 +71,7 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
   return [
     {
       label: 'Strategic role',
-      value: selectedRoles
-        .map(r => (r === StrategicRoleEnum.CHAMPION ? 'Champion' : 'Senior sponsor'))
-        .join(', '),
+      value: selectedRoles.map(r => (r === StrategicRoleEnum.CHAMPION ? 'Champion' : 'Senior sponsor')).join(', '),
       editStepNumber: 1
     }
   ];

@@ -131,8 +131,11 @@ export class PageUserInfoComponent extends CoreComponent implements OnInit {
             );
 
             this.hasChampionRole = this.user.strategicRoles.some(sr => sr.role === StrategicRoleEnum.CHAMPION);
-            this.hasSeniorSponsorRole = this.user.strategicRoles.some(sr => sr.role === StrategicRoleEnum.SENIOR_SPONSOR);
-            this.canAssignStrategicRole = this.hasActiveAccessorRole && (!this.hasChampionRole || !this.hasSeniorSponsorRole);
+            this.hasSeniorSponsorRole = this.user.strategicRoles.some(
+              sr => sr.role === StrategicRoleEnum.SENIOR_SPONSOR
+            );
+            this.canAssignStrategicRole =
+              this.hasActiveAccessorRole && (!this.hasChampionRole || !this.hasSeniorSponsorRole);
           }
 
           return forkJoin([

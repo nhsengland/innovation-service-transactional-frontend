@@ -319,7 +319,12 @@ const routes: Routes = [
                 path: 'strategic-role',
                 data: { breadcrumb: null },
                 children: [
-                  { path: 'new', pathMatch: 'full', component: PageStrategicRoleNewComponent, data: { breadcrumb: null } },
+                  {
+                    path: 'new',
+                    pathMatch: 'full',
+                    component: PageStrategicRoleNewComponent,
+                    data: { breadcrumb: null }
+                  },
                   {
                     path: ':strategicRoleId',
                     data: { breadcrumb: null },

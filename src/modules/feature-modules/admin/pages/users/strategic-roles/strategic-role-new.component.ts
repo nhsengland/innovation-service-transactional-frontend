@@ -47,21 +47,21 @@ export class PageStrategicRoleNewComponent extends CoreComponent implements OnIn
     if (action === 'next' && !formData.valid) return;
 
     this.wizard.addAnswers(formData.data).runRules();
-    
+
     if (action === 'previous') {
-        if (this.wizard.isFirstStep()) {
-            this.goBackOrCancel();
-        } else {
-            this.wizard.previousStep();
-        }
+      if (this.wizard.isFirstStep()) {
+        this.goBackOrCancel();
+      } else {
+        this.wizard.previousStep();
+      }
     } else {
-        this.wizard.nextStep();
+      this.wizard.nextStep();
     }
 
     if (this.wizard.isQuestionStep()) {
-        this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
     } else {
-        this.setPageTitle('Check your answers', { size: 'l' });
+      this.setPageTitle('Check your answers', { size: 'l' });
     }
   }
 
