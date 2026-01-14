@@ -45,8 +45,6 @@ function parseAPIUrl(url: string): string {
       apiUrl = ENVIRONMENT.API_URL + '/api';
   }
 
-  console.log('Calling API: ', new URL(apiUrl + urlEndingSegments).href);
-
   return new URL(apiUrl + urlEndingSegments).href;
 }
 
