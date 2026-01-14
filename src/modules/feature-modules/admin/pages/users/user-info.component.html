@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">User details</h2>
 
@@ -30,6 +31,18 @@
             </ul>
           </dd>
         </div>
+        <div *ngIf="hasActiveAccessorRole" class="nhsuk-summary-list__row">
+          <dt class="nhsuk-summary-list__key">Strategic role</dt>
+          <dd class="nhsuk-summary-list__value">
+            <ng-container *ngIf="user.strategicRoles.length > 0; else noStrategicRole">
+              <span *ngFor="let strategicRole of user.strategicRoles; let last = last">
+                {{ strategicRole.role | strategicRoleTranslate }}<span *ngIf="!last">, </span>
+              </span>
+            </ng-container>
+            <ng-template #noStrategicRole>Not set</ng-template>
+          </dd>
+          <dd class="nhsuk-summary-list__actions"></dd>
+        </div>
       </dl>
     </div>
   </div>
@@ -39,8 +52,7 @@
       <div class="nhsuk-grid-column-two-thirds">
         <h2 class="nhsuk-heading-l nhsuk-u-margin-0 nhsuk-u-padding-bottom-3">Active roles</h2>
         <div *ngIf="hasActiveAccessorRole">
-          <a routerLink="/admin/users/{{ user.id }}/change-role"
-            >Change {{ isActiveQualifyingAccessor ? "qualifying accessor" : "accessor" }} {{ "dictionary.role" | pluralTranslate: accessorRolesCount | translate }} to
+          <a routerLink="/admin/users/{{ user.id }}/change-role">Change {{ isActiveQualifyingAccessor ? "qualifying accessor" : "accessor" }} {{ "dictionary.role" | pluralTranslate: accessorRolesCount | translate }} to
             {{ isActiveQualifyingAccessor ? "accessor" : "qualifying accessor" }}
           </a>
         </div>
@@ -192,8 +204,7 @@
               [currentPage]="assignedInnovations.page"
               [pageSize]="assignedInnovations.pageSize"
               [totalRows]="assignedInnovations.getTotalRowsNumber()"
-              (updatePageEvent)="onAssignedInnovationsPageChange($event)"
-            ></theme-pagination>
+              (updatePageEvent)="onAssignedInnovationsPageChange($event)"></theme-pagination>
           </div>
         </ng-container>
       </div>
