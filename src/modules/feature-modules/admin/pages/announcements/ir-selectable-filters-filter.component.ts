@@ -207,7 +207,7 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
         { key: undefined, text: 'Select question', disabled: true },
         ...this.ctx.schema
           .getIrSchemaSectionQuestions(sectionId)
-          .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
+          .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
           .filter(q => !['mainCategory'].includes(q.id))
           .map(q => ({ key: q.id, text: q.label }))
       ]
