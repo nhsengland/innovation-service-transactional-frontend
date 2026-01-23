@@ -209,9 +209,28 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
           .getIrSchemaSectionQuestions(sectionId)
           .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
           .filter(q => !['mainCategory'].includes(q.id))
+          .filter(q => this.isQuestionVisible(q))
           .map(q => ({ key: q.id, text: q.label }))
       ]
     };
+  }
+
+  isQuestionVisible(question: any): boolean {
+    if (!question.condition) {
+      return true;
+    }
+
+    const parentValues = this.parentFormArray.value as any[];
+
+    const matchingFilter = parentValues.find(f => f.question === question.condition.id);
+
+    if (!matchingFilter) {
+      return false;
+    }
+
+    const selectedAnswers = matchingFilter.answers || [];
+    // The condition is met if any of the selected answers match one of the required condition options.
+    return selectedAnswers.some((ans: string) => question.condition.options.includes(ans));
   }
 
   getAnswersList(
