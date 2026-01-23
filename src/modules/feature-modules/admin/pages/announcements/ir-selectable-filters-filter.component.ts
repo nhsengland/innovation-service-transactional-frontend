@@ -201,12 +201,19 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   }
 
   getQuestionsList(sectionId: string) {
+    // Manually flatten questions to include the step-level 'condition'
+    const questionsWithConditions = this.ctx.schema.schema()
+      .flatMap(section => section.subSections)
+      .find(s => s.id === sectionId)
+      ?.steps.flatMap(st =>
+        st.questions.map(q => ({ ...q, condition: st.condition }))
+      ) ?? [];
+
     return {
       defaultKey: this.questionFormControl.value,
       selectList: [
         { key: undefined, text: 'Select question', disabled: true },
-        ...this.ctx.schema
-          .getIrSchemaSectionQuestions(sectionId)
+        ...questionsWithConditions
           .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
           .filter(q => !['mainCategory'].includes(q.id))
           .filter(q => this.isQuestionVisible(q))
