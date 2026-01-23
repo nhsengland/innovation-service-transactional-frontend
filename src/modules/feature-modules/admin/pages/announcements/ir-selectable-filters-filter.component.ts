@@ -284,14 +284,46 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     });
   }
 
+  getSelectedQuestionSchema() {
+    if (!this.sectionFormControl.value || !this.questionFormControl.value) {
+      return null;
+    }
+    return (
+      this.ctx.schema
+        .getIrSchemaSectionQuestions(this.sectionFormControl.value)
+        .find(q => q.id === this.questionFormControl.value) ?? null
+    );
+  }
+
+  isMultiSelect() {
+    const question = this.getSelectedQuestionSchema();
+    return question?.dataType === 'autocomplete-array';
+  }
+
   clearQuestion() {
     this.questionFormControl.setValue(undefined);
     this.answersFormArrayControl.clear();
+    // Only add an initial answer field if it's NOT a multi-select (which manages its own fields)
+    // Actually, multi-select component expects to bind to a FormArray, so empty is fine.
+    // But for consistency with standard select, we add one if it's standard.
+    // We check type AFTER question is picked, but here we are clearing it.
+    // So initially we don't know the new type.
+    // Standard behavior: add one empty control. The multi-select component might need to handle a pre-filled empty control or clear it.
+    // Let's stick to adding one for now, as the multi-select might filter out empty values or we can handle it.
+    // WAIT: If we switch component, theme-form-input-autocomplete-array-v3 likely expects the array to represent SELECTED items.
+    // An empty string in the array might form an "empty chip".
+    // Better to clear array.
+    // If standard select: we AddAnswerField.
+    // If multi-select: we leave it empty.
+    // But clearQuestion happens BEFORE the new question is selected (or when clearing to undefined).
+    // So when clearing, we default to adding one field (standard behavior).
     this.addAnswerField();
   }
 
   clearAnswers() {
     this.answersFormArrayControl.clear();
-    this.addAnswerField();
+    if (!this.isMultiSelect()) {
+      this.addAnswerField();
+    }
   }
 }

@@ -40,28 +40,44 @@
       </div>
 
       <ng-container *ngIf="questionFormControl.value">
-        <div *ngFor="let answer of answersFormAsFormArray.controls; let i = index" class="nhsuk-u-margin-bottom-4">
-          <div class="d-flex nhsuk-u-margin-bottom-1">
-            <div class="width-85 nhsuk-u-font-size-19">
-              <span>Answer {{ i + 1 }}</span>
+        <!-- Standard Single Select Logic -->
+        <ng-container *ngIf="!isMultiSelect()">
+          <div *ngFor="let answer of answersFormAsFormArray.controls; let i = index" class="nhsuk-u-margin-bottom-4">
+            <div class="d-flex nhsuk-u-margin-bottom-1">
+              <div class="width-85 nhsuk-u-font-size-19">
+                <span>Answer {{ i + 1 }}</span>
+              </div>
+              <div class="width-15 nhsuk-u-font-size-19 text-align-right">
+                <a *ngIf="answersFormAsFormArray.controls.length > 1" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a>
+              </div>
             </div>
-            <div class="width-15 nhsuk-u-font-size-19 text-align-right">
-              <a *ngIf="answersFormAsFormArray.controls.length > 1" href="javascript:void(0)" (click)="removeAnswerField(i)">Remove</a>
+            <div class="width-85">
+              <theme-form-select
+                [formControl]="answer"
+                id="filter-{{ filterIndex }}_answer-{{ i + 1 }}"
+                [ariaLabel]="'Answer ' + (i + 1)"
+                [pageUniqueField]="false"
+                [selectItems]="getAnswersList(questionFormControl.value, i)"
+                (selectChanged)="onSelectChange($event)"
+                [previouslySelectedItems]="answersFormAsFormArray.value"
+              />
             </div>
           </div>
-          <div class="width-85">
-            <theme-form-select
-              [formControl]="answer"
-              id="filter-{{ filterIndex }}_answer-{{ i + 1 }}"
-              [ariaLabel]="'Answer ' + (i + 1)"
-              [pageUniqueField]="false"
-              [selectItems]="getAnswersList(questionFormControl.value, i)"
-              (selectChanged)="onSelectChange($event)"
-              [previouslySelectedItems]="answersFormAsFormArray.value"
-            />
-          </div>
-        </div>
-        <a href="javascript:void(0)" *ngIf="canAddAnswerField" (click)="addAnswerField()" class="nhsuk-u-font-size-19"> Add answer </a>
+          <a href="javascript:void(0)" *ngIf="canAddAnswerField" (click)="addAnswerField()" class="nhsuk-u-font-size-19"> Add answer </a>
+        </ng-container>
+
+        <!-- Multi-Select Autocomplete Logic -->
+        <ng-container *ngIf="isMultiSelect()">
+             <div [formGroup]="filterFormGroup">
+                <theme-form-input-autocomplete-array-v3
+                  [arrayName]="'answers'"
+                  [items]="getSelectedQuestionSchema()?.items"
+                  [label]="'Select answers'"
+                  [description]="getSelectedQuestionSchema()?.description"
+                  [pageUniqueField]="false"
+                ></theme-form-input-autocomplete-array-v3>
+             </div>
+        </ng-container>
       </ng-container>
     </ng-container>
   </fieldset>
