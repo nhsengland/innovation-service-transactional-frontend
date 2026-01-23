@@ -270,7 +270,57 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     if (['question'].includes(event.id.split('_')[1])) {
       this.clearAnswers();
     }
+    // Auto-add dependent questions when an answer is selected
+    if (event.id.includes('answer') && event.value) {
+      this.autoAddDependentQuestions(event.value as string);
+    }
     this.checkCanAddAnswer();
+  }
+
+  autoAddDependentQuestions(selectedAnswer: string) {
+    const currentSectionId = this.sectionFormControl.value;
+    const currentQuestionId = this.questionFormControl.value;
+
+    if (!currentSectionId || !currentQuestionId) return;
+
+    // Find questions in this section that depend on the current question and selected answer
+    const dependentQuestions = this.ctx.schema.schema()
+      .flatMap(section => section.subSections)
+      .find(s => s.id === currentSectionId)
+      ?.steps.flatMap(st =>
+        st.questions.map(q => ({ ...q, condition: st.condition }))
+      )
+      .filter(q => q.condition?.id === currentQuestionId && q.condition.options.includes(selectedAnswer)) ?? [];
+
+    if (dependentQuestions.length === 0) return;
+
+    const parentValues = this.parentFormArray.value as any[];
+
+    dependentQuestions.forEach(depQ => {
+      // Check if dependent question is already in the filter list
+      const exists = parentValues.some(f => f.question === depQ.id);
+      if (!exists) {
+        // We need to add a new FormGroup to the parentFormArray
+        // We can do this by emiting an event or accessing parentFormArray directly (which we have)
+        // But we need to structure the new FormGroup correctly.
+        // The parent component normally handles creation via 'addNewFilterFormGroup'
+        
+        // Access parent component method? No, direct component coupling is messy.
+        // We have `parentFormArray`, we can push a FormGroup.
+        const newGroup = new FormGroup({
+            section: new FormControl(currentSectionId),
+            question: new FormControl(depQ.id),
+            answers: new FormArray([
+                new FormControl(undefined, CustomValidators.required('Select an answer')) // Pre-add one empty answer field
+            ])
+        });
+        
+        this.parentFormArray.push(newGroup);
+        // Important: Use Cdr or MarkForCheck to ensure view updates?
+        // AdminModule usually handles ChangeDetectionStrategy.Default, but parent might be OnPush.
+        // We might need to trigger detection.
+      }
+    });
   }
 
   getSelectedQuestions() {
@@ -284,46 +334,14 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     });
   }
 
-  getSelectedQuestionSchema() {
-    if (!this.sectionFormControl.value || !this.questionFormControl.value) {
-      return null;
-    }
-    return (
-      this.ctx.schema
-        .getIrSchemaSectionQuestions(this.sectionFormControl.value)
-        .find(q => q.id === this.questionFormControl.value) ?? null
-    );
-  }
-
-  isMultiSelect() {
-    const question = this.getSelectedQuestionSchema();
-    return question?.dataType === 'autocomplete-array';
-  }
-
   clearQuestion() {
     this.questionFormControl.setValue(undefined);
     this.answersFormArrayControl.clear();
-    // Only add an initial answer field if it's NOT a multi-select (which manages its own fields)
-    // Actually, multi-select component expects to bind to a FormArray, so empty is fine.
-    // But for consistency with standard select, we add one if it's standard.
-    // We check type AFTER question is picked, but here we are clearing it.
-    // So initially we don't know the new type.
-    // Standard behavior: add one empty control. The multi-select component might need to handle a pre-filled empty control or clear it.
-    // Let's stick to adding one for now, as the multi-select might filter out empty values or we can handle it.
-    // WAIT: If we switch component, theme-form-input-autocomplete-array-v3 likely expects the array to represent SELECTED items.
-    // An empty string in the array might form an "empty chip".
-    // Better to clear array.
-    // If standard select: we AddAnswerField.
-    // If multi-select: we leave it empty.
-    // But clearQuestion happens BEFORE the new question is selected (or when clearing to undefined).
-    // So when clearing, we default to adding one field (standard behavior).
     this.addAnswerField();
   }
 
   clearAnswers() {
     this.answersFormArrayControl.clear();
-    if (!this.isMultiSelect()) {
-      this.addAnswerField();
-    }
+    this.addAnswerField();
   }
 }
