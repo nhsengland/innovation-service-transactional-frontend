@@ -202,12 +202,12 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
 
   getQuestionsList(sectionId: string) {
     // Manually flatten questions to include the step-level 'condition'
-    const questionsWithConditions = this.ctx.schema.schema()
-      .flatMap(section => section.subSections)
-      .find(s => s.id === sectionId)
-      ?.steps.flatMap(st =>
-        st.questions.map(q => ({ ...q, condition: st.condition }))
-      ) ?? [];
+    const questionsWithConditions =
+      this.ctx.schema
+        .schema()
+        .flatMap(section => section.subSections)
+        .find(s => s.id === sectionId)
+        ?.steps.flatMap(st => st.questions.map(q => ({ ...q, condition: st.condition }))) ?? [];
 
     return {
       defaultKey: this.questionFormControl.value,
@@ -284,15 +284,15 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     if (!currentSectionId || !currentQuestionId) return;
 
     // Find questions in this section that depend on the current question and selected answer
-    const dependentQuestions = this.ctx.schema.schema()
-      .flatMap(section => section.subSections)
-      .find(s => s.id === currentSectionId)
-      ?.steps.flatMap(st =>
-        st.questions.map(q => ({ ...q, condition: st.condition }))
-      )
-      .filter(q => q.condition?.id === currentQuestionId && q.condition?.options.includes(selectedAnswer))
-      .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
-      .filter(q => !['mainCategory'].includes(q.id)) ?? [];
+    const dependentQuestions =
+      this.ctx.schema
+        .schema()
+        .flatMap(section => section.subSections)
+        .find(s => s.id === currentSectionId)
+        ?.steps.flatMap(st => st.questions.map(q => ({ ...q, condition: st.condition })))
+        .filter(q => q.condition?.id === currentQuestionId && q.condition?.options.includes(selectedAnswer))
+        .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
+        .filter(q => !['mainCategory'].includes(q.id)) ?? [];
 
     if (dependentQuestions.length === 0) return;
 
@@ -308,13 +308,13 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
         // The parent component normally handles creation via 'addNewFilterFormGroup'
         // We have `parentFormArray`, we can push a FormGroup.
         const newGroup = new FormGroup({
-            section: new FormControl(currentSectionId),
-            question: new FormControl(depQ.id),
-            answers: new FormArray([
-                new FormControl(undefined, CustomValidators.required('Select an answer')) // Pre-add one empty answer field
-            ])
+          section: new FormControl(currentSectionId),
+          question: new FormControl(depQ.id),
+          answers: new FormArray([
+            new FormControl(undefined, CustomValidators.required('Select an answer')) // Pre-add one empty answer field
+          ])
         });
-        
+
         this.parentFormArray.push(newGroup);
       }
     });
