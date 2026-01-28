@@ -290,7 +290,9 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
       ?.steps.flatMap(st =>
         st.questions.map(q => ({ ...q, condition: st.condition }))
       )
-      .filter(q => q.condition?.id === currentQuestionId && q.condition.options.includes(selectedAnswer)) ?? [];
+      .filter(q => q.condition?.id === currentQuestionId && q.condition?.options.includes(selectedAnswer))
+      .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
+      .filter(q => !['mainCategory'].includes(q.id)) ?? [];
 
     if (dependentQuestions.length === 0) return;
 
@@ -304,8 +306,6 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
         // We can do this by emiting an event or accessing parentFormArray directly (which we have)
         // But we need to structure the new FormGroup correctly.
         // The parent component normally handles creation via 'addNewFilterFormGroup'
-        
-        // Access parent component method? No, direct component coupling is messy.
         // We have `parentFormArray`, we can push a FormGroup.
         const newGroup = new FormGroup({
             section: new FormControl(currentSectionId),
@@ -316,9 +316,6 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
         });
         
         this.parentFormArray.push(newGroup);
-        // Important: Use Cdr or MarkForCheck to ensure view updates?
-        // AdminModule usually handles ChangeDetectionStrategy.Default, but parent might be OnPush.
-        // We might need to trigger detection.
       }
     });
   }
