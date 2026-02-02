@@ -23,8 +23,7 @@
           [label]="'Section'"
           [pageUniqueField]="false"
           [selectItems]="getSectionsList()"
-          (selectChanged)="onSelectChange($event)"
-        />
+          (selectChanged)="onSelectChange($event)" />
       </div>
 
       <div class="nhsuk-u-margin-bottom-4">
@@ -35,8 +34,7 @@
           [label]="'Question'"
           [pageUniqueField]="false"
           [selectItems]="getQuestionsList(this.sectionFormControl.value)"
-          (selectChanged)="onSelectChange($event)"
-        />
+          (selectChanged)="onSelectChange($event)" />
       </div>
 
       <ng-container *ngIf="questionFormControl.value">
@@ -57,8 +55,7 @@
               [pageUniqueField]="false"
               [selectItems]="getAnswersList(questionFormControl.value, i)"
               (selectChanged)="onSelectChange($event)"
-              [previouslySelectedItems]="answersFormAsFormArray.value"
-            />
+              [previouslySelectedItems]="answersFormAsFormArray.value" />
           </div>
         </div>
         <a href="javascript:void(0)" *ngIf="canAddAnswerField" (click)="addAnswerField()" class="nhsuk-u-font-size-19"> Add answer </a>
