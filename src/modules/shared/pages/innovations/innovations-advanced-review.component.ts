@@ -436,13 +436,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (!this.form.valid) {
       this.form.markAllAsTouched();
     }
-
     this.pageNumber = 1;
 
     // If 'search' has a different value from 'form search field' value, the user typed a new value into 'form search field'.
     const currentSearch = this.form.value.search;
     if (this.search != currentSearch && (this.search !== undefined || (this.search === undefined && currentSearch))) {
-      this.updateSearchQueryParams(currentSearch);
+      this.updateSearchQueryParams(currentSearch).then(() => {
+        this.getInnovationsList();
+      });
+    } else {
+      this.getInnovationsList();
     }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
@@ -455,9 +458,17 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
   onSearchClick() {
     this.pageNumber = 1;
-    this.form.updateValueAndValidity({ onlySelf: true });
+    this.form.updateValueAndValidity({ onlySelf: true, emitEvent: false }); // Prevent debounce trigger
     this.filtersModel.handleStateChanges();
-    this.getInnovationsList();
+
+    const currentSearch = this.form.value.search;
+    if (this.search !== currentSearch) {
+      this.updateSearchQueryParams(currentSearch).then(() => {
+        this.getInnovationsList();
+      });
+    } else {
+      this.getInnovationsList();
+    }
   }
 
   onSortByChange(selectKey: string): void {
@@ -484,22 +495,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return translation.get(value)?.label ?? value;
   }
 
-  private updateSearchQueryParams(currentSearch: string): void {
-    const url = this.router
-      .createUrlTree([], {
-        relativeTo: this.activatedRoute,
-        queryParams: { search: currentSearch },
-        queryParamsHandling: 'merge'
-      })
-      .toString();
-
+  private updateSearchQueryParams(currentSearch: string): Promise<boolean> {
     // To update 'search' query param.
-    if (this.ctx.user.isAdmin()) {
-      this.redirectTo(`${this.baseUrl}`, { search: currentSearch });
-    } else {
-      this.redirectTo(`${this.baseUrl}/advanced-search`, {
-        search: currentSearch
-      });
-    }
+    // Use router.navigate directly to return a Promise we can await in onSearchClick
+    const path = this.ctx.user.isAdmin() ? this.baseUrl : `${this.baseUrl}/advanced-search`;
+
+    return this.router.navigate([path], {
+      queryParams: { search: currentSearch }
+    });
   }
 }
