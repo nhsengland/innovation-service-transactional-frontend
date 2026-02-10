@@ -67,7 +67,7 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
                               </span>
                             </span>
                           </p>
@@ -88,7 +88,7 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
                               </span>
                             </span>
                           </p>
@@ -105,7 +105,7 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold">
-                                {{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}
+                                {{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}
                               </span>
                             </span>
                           </p>
@@ -170,7 +170,7 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
+                                >{{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}</span
                               >
                             </span>
                           </p>
@@ -191,7 +191,7 @@
                               {{ historyItem.createdAt | date: ("app.date_formats.long_date" | translate) }}
                               by
                               <span class="nhsuk-u-font-weight-bold"
-                                >{{ historyItem.createdBy.name }}{{ historyItem.createdBy.displayRole ? " (" + historyItem.createdBy.displayRole + ")" : "" }}</span
+                                >{{ historyItem.createdBy.name }}{{ (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) ? " (" + (ctx.user.isInnovator() && historyItem.createdBy.jobTitle ? historyItem.createdBy.jobTitle : historyItem.createdBy.displayRole) + ")" : "" }}</span
                               >
                             </span>
                           </p>

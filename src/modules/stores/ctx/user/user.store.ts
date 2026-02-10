@@ -242,6 +242,7 @@ export class UserContextStore {
       contactByPhoneTimeframe: body.contactByPhoneTimeframe,
       phone: body.mobilePhone,
       contactDetails: body.contactDetails,
+      jobTitle: body.jobTitle,
       organisations: body.organisation && this.isInnovator() ? [organisation] : undefined
     });
   }

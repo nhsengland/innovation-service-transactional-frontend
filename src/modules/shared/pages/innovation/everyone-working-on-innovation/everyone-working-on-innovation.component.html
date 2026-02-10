@@ -36,6 +36,7 @@
         <thead role="rowgroup" class="nhsuk-table__head">
           <tr role="row">
             <th role="columnheader" class="" scope="col">User</th>
+            <th role="columnheader" class="" scope="col" *ngIf="isInnovator()">Job title / Role</th>
             <th role="columnheader" class="" scope="col">Organisation/unit</th>
           </tr>
         </thead>
@@ -43,6 +44,7 @@
           <ng-container *ngFor="let accessor of innovationParticipants.accessors">
             <tr role="row" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">{{ accessor.name }}</td>
+              <td class="nhsuk-table__cell" *ngIf="isInnovator()">{{ accessor.jobTitle }}</td>
               <td class="nhsuk-table__cell" *ngIf="accessor.organisation.name === accessor.organisation.unit.name; else notShadow">
                 {{ accessor.organisation.name }} ({{ accessor.organisation.acronym }})
               </td>
@@ -62,12 +64,14 @@
         <thead role="rowgroup" class="nhsuk-table__head">
           <tr role="row">
             <th role="columnheader" class="" scope="col">User</th>
+            <th role="columnheader" class="" scope="col" *ngIf="isInnovator()">Job title / Role</th>
           </tr>
         </thead>
         <tbody class="nhsuk-table__body">
           <ng-container *ngFor="let assessor of innovationParticipants.assessmentUsers">
             <tr role="row" class="nhsuk-table__row">
               <td class="nhsuk-table__cell">{{ assessor.name }}</td>
+              <td class="nhsuk-table__cell" *ngIf="isInnovator()">{{ assessor.jobTitle }}</td>
             </tr>
           </ng-container>
         </tbody>

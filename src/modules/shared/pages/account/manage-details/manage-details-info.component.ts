@@ -67,6 +67,7 @@ export class PageAccountManageDetailsInfoComponent extends CoreComponent {
       { label: 'Name', value: user.displayName, editStepNumber: 1 },
       { label: 'Email address', value: user.email },
       ...(organisation ? [{ label: 'Organisation', value: organisation }] : []),
+      { label: 'Job title', value: user.jobTitle, editStepNumber: 1 },
       { label: 'Service roles', value: roles }
     ];
   }

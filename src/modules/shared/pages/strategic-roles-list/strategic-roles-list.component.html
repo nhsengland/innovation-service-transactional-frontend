@@ -1,0 +1,46 @@
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full">
+      <div *ngIf="strategicRolesList.length > 0; else emptyState">
+        <table class="nhsuk-table">
+          <thead class="nhsuk-table__head">
+            <tr class="nhsuk-table__row">
+              <th class="nhsuk-table__header" scope="col">Organisation</th>
+              <th class="nhsuk-table__header text-align-center" scope="col">Champion details</th>
+              <th class="nhsuk-table__header text-align-center" scope="col">Senior sponsor details</th>
+            </tr>
+          </thead>
+          <tbody class="nhsuk-table__body">
+            <tr *ngFor="let org of strategicRolesList" class="nhsuk-table__row">
+              <td class="nhsuk-table__cell">
+                <strong>{{ org.organisation.name }}</strong>
+              </td>
+              <td class="nhsuk-table__cell text-align-center">
+                <div *ngFor="let champion of org.champions">
+                  {{ champion.name }}<br />
+                  <a [href]="'mailto:' + champion.email">{{ champion.email }}</a>
+                </div>
+                <p *ngIf="org.champions.length === 0" class="text-color-grey nhsuk-u-margin-0"><em>No Champion assigned</em></p>
+              </td>
+              <td class="nhsuk-table__cell text-align-center">
+                <div *ngFor="let sponsor of org.seniorSponsors">
+                  {{ sponsor.name }}<br />
+                  <a [href]="'mailto:' + sponsor.email">{{ sponsor.email }}</a>
+                </div>
+                <p *ngIf="org.seniorSponsors.length === 0" class="text-color-grey nhsuk-u-margin-0"><em>No Senior Sponsor assigned</em></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #emptyState>
+        <div class="nhsuk-card">
+          <div class="nhsuk-card__content">
+            <p class="nhsuk-body">No Champions or Senior Sponsors found.</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</theme-content-wrapper>

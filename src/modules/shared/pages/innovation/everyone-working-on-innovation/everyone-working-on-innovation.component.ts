@@ -21,6 +21,7 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     }[];
     accessors: {
       name: string;
+      jobTitle?: string | null;
       organisation: {
         name: string;
         acronym: string;
@@ -32,10 +33,12 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
     }[];
     assessmentUsers: {
       name: string;
+      jobTitle?: string | null;
     }[];
   } = { innovators: [], accessors: [], assessmentUsers: [] };
 
   innovationSupportIds: string[] = [];
+  isInnovator = this.ctx.user.isInnovator;
 
   constructor(
     private innovationsService: InnovationsService,
@@ -60,19 +63,26 @@ export class PageEveryoneWorkingOnInnovationComponent extends CoreComponent impl
       }
 
       for (const support of innovationSupports) {
-        const accessors = support.engagingAccessors.map(a => ({
-          name: a.name,
-          organisation: {
-            name: support.organisation.name,
-            acronym: support.organisation.acronym,
-            unit: { name: support.organisation.unit.name, acronym: support.organisation.unit.name }
-          }
-        }));
+        const accessors = support.engagingAccessors.map(a => {
+          const roleDescription = this.ctx.user.getRoleDescription(a.role);
+          return {
+            name: a.name,
+            jobTitle: a.jobTitle || roleDescription,
+            organisation: {
+              name: support.organisation.name,
+              acronym: support.organisation.acronym,
+              unit: { name: support.organisation.unit.name, acronym: support.organisation.unit.name }
+            }
+          };
+        });
 
         this.innovationParticipants.accessors.push(...accessors);
       }
 
-      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({ name: u.name }));
+      this.innovationParticipants.assessmentUsers = assessmentUsers.data.map(u => ({
+        name: u.name,
+        jobTitle: u.jobTitle || u.roleDescription
+      }));
 
       this.setPageStatus('READY');
     });

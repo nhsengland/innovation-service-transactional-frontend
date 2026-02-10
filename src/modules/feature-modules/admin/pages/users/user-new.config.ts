@@ -1,3 +1,4 @@
+import { StrategicRoleEnum } from '@app/base/enums';
 import { AppInjector } from '@modules/core';
 
 import { UserRoleEnum } from '@app/base/enums';
@@ -16,7 +17,8 @@ const stepsLabels = {
   },
   l3: { label: 'What is their role?' },
   l4: { label: 'Which organisation is the user associated to?' },
-  l5: { label: 'Which unit is the user associated to?' }
+  l5: { label: 'Which unit is the user associated to?' },
+  l6: { label: 'Are there any strategic roles?' }
 };
 
 // Types.
@@ -42,6 +44,7 @@ type QuestionFieldsType = {
   role?: UserRoleEnum.QUALIFYING_ACCESSOR | UserRoleEnum.ACCESSOR | UserRoleEnum.ASSESSMENT | UserRoleEnum.ADMIN;
   organisationId?: string;
   unitIds?: string[];
+  strategicRoles?: StrategicRoleEnum[];
 };
 type StepPayloadType = LogicFieldsType & QuestionFieldsType;
 
@@ -52,7 +55,7 @@ type CreateRolesType =
       organisationId: string;
       unitIds: string[];
     };
-type CreateUserType = { email: string; name: string } & CreateRolesType;
+type CreateUserType = { email: string; name: string; strategicRoles?: StrategicRoleEnum[] } & CreateRolesType;
 export type OutboundPayloadType = CreateUserType;
 
 // consts.
@@ -169,6 +172,24 @@ function wizardRuntimeRules(steps: WizardStepType[], data: StepPayloadType): voi
       }
     }
   }
+
+  if (data.role === UserRoleEnum.ACCESSOR || data.role === UserRoleEnum.QUALIFYING_ACCESSOR) {
+    steps.push(
+      new FormEngineModel({
+        parameters: [
+          {
+            id: 'strategicRoles',
+            dataType: 'checkbox-array',
+            label: stepsLabels.l6.label,
+            items: [
+              { value: StrategicRoleEnum.CHAMPION, label: 'Champion' },
+              { value: StrategicRoleEnum.SENIOR_SPONSOR, label: 'Senior sponsor' }
+            ]
+          }
+        ]
+      })
+    );
+  }
 }
 
 function inboundParsing(data: InboundPayloadType): StepPayloadType {
@@ -189,6 +210,7 @@ function outboundParsing(data: StepPayloadType): OutboundPayloadType {
     name: data.name ?? '',
     email: data.email ?? '',
     role: data.role ?? UserRoleEnum.ASSESSMENT, // This can't happen, since role is required.
+    strategicRoles: data.strategicRoles ?? [],
     ...((data.role === UserRoleEnum.ACCESSOR || data.role === UserRoleEnum.QUALIFYING_ACCESSOR) && {
       organisationId: data.organisationId,
       unitIds: data.unitIds
@@ -222,6 +244,16 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
       label: selectedUnits.length > 1 ? 'Roles' : 'Role',
       value: selectedUnits.map(u => `${role} (${u.name})`).join('\n'),
       editStepNumber
+    });
+  }
+
+  if (data.strategicRoles?.length) {
+    toReturn.push({
+      label: 'Strategic roles',
+      value: data.strategicRoles
+        .map(r => (r === StrategicRoleEnum.CHAMPION ? 'Champion' : 'Senior sponsor'))
+        .join(', '),
+      editStepNumber: toReturn.length + 1
     });
   }
 

@@ -18,7 +18,8 @@ export class PageUsersRoleChangeComponent extends CoreComponent implements OnIni
     name: '',
     isActive: false,
     roles: [],
-    rolesDescription: []
+    rolesDescription: [],
+    strategicRoles: []
   };
 
   currentRole = '';

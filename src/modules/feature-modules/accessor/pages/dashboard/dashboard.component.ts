@@ -126,6 +126,13 @@ export class DashboardComponent extends CoreComponent implements OnInit {
             emptyMessage: 'Accessors in your organisation and the innovations they are assigned to',
             link: '/accessor/accessor-list'
           }
+        },
+        {
+          card: {
+            title: 'Contacts at each support organisation',
+            emptyMessage: 'Champions and senior sponsors for each organisation',
+            link: '/accessor/strategic-roles'
+          }
         }
       ];
 

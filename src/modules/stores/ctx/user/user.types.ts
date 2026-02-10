@@ -32,6 +32,7 @@ export type UserInfo = {
   passwordResetAt: null | DateISOType;
   passwordChangeSinceLastSignIn?: boolean;
   firstTimeSignInAt: null | DateISOType;
+  jobTitle: string | null;
   organisations: {
     id: string;
     name: string;
@@ -60,6 +61,7 @@ export const EMPTY_USER_INFO: UserInfo = {
   hasLoginAnnouncements: {},
   passwordResetAt: null,
   firstTimeSignInAt: null,
+  jobTitle: null,
   organisations: []
 };
 

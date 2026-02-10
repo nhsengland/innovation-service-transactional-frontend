@@ -70,6 +70,7 @@ import { PageInnovationsAdvancedReviewComponent } from '@modules/shared/pages/in
 import { PageNotificationsListComponent } from '@modules/shared/pages/notifications/notifications-list.component';
 // // Terms of use.
 import { PageTermsOfUseAcceptanceComponent } from '@modules/shared/pages/terms-of-use/terms-of-use-acceptance.component';
+import { PageStrategicRolesListComponent } from '@modules/shared/pages/strategic-roles-list/strategic-roles-list.component';
 
 // Resolvers.
 import { PageAccountMFAEditComponent } from '@modules/shared/pages/account/mfa/mfa-edit.component';
@@ -733,6 +734,12 @@ const routes: Routes = [
         component: PageProgressCategoriesWrapperComponent
       },
 
+      {
+        path: 'strategic-roles',
+        pathMatch: 'full',
+        component: PageStrategicRolesListComponent,
+        data: { breadcrumb: 'Champions and senior sponsors' }
+      },
       {
         path: 'accessor-list',
         pathMatch: 'full',

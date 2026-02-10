@@ -80,6 +80,7 @@ import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
 import { ProgressCategoriesSubcategoryDescriptionPipe } from './pipes/progress-categories/category-description.pipe';
 import { ProgressCategoriesCategoryDescriptionPipe } from './pipes/progress-categories/subcategory-description.pipe';
 import { ServiceRoleTranslatePipe } from './pipes/service-role-translate.pipe';
+import { StrategicRoleTranslatePipe } from './pipes/strategic-role-translate.pipe';
 
 // Components
 import { OrganisationSuggestionsCardComponent } from './pages/innovation/data-sharing-and-support/components/organisation-suggestion-card.component';
@@ -132,6 +133,7 @@ import { InnovationSubmissionReadyComponent } from '@modules/feature-modules/inn
 import { InnovationRecordProgressComponent } from './pages/innovation/record/innovation-record-progress.component';
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/notification-step.component';
 
+import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/strategic-roles-list.component';
 @NgModule({
   imports: [
     RouterModule,
@@ -233,6 +235,7 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepC
     PageSwitchContextComponent,
     // // Terms of use.
     PageTermsOfUseAcceptanceComponent,
+    PageStrategicRolesListComponent,
 
     // Wizard.
     WizardSummaryWithConfirmStepComponent,
@@ -244,6 +247,7 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepC
     ProgressCategoriesSubcategoryDescriptionPipe,
     IrV3TranslatePipe,
     ServiceRoleTranslatePipe,
+    StrategicRoleTranslatePipe,
 
     // Components
     OrganisationSuggestionsCardComponent,
@@ -287,9 +291,10 @@ import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepC
     IrV3TranslatePipe,
     JoinArrayPipe,
     ServiceRoleTranslatePipe,
+    StrategicRoleTranslatePipe,
 
-    // Components.
-    InnovationAssessmentDetailsComponent
+    InnovationAssessmentDetailsComponent,
+    PageStrategicRolesListComponent
   ]
 })
 export class SharedModule {}

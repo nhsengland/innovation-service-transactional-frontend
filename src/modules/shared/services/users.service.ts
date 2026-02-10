@@ -57,7 +57,8 @@ export class UsersService extends CoreService {
           roleId: item.roles[0].id,
           roleDescription: this.ctx.user.getRoleDescription(item.roles[0].role),
           email: item.email ?? '',
-          organisationUnitUserId: item.organisationUnitUserId ?? ''
+          organisationUnitUserId: item.organisationUnitUserId ?? '',
+          jobTitle: item.jobTitle
         }))
       }))
     );
@@ -79,5 +80,16 @@ export class UsersService extends CoreService {
       const url = new UrlModel(this.API_ADMIN_URL).addPath(`v1/${userId}/mfa`);
       return this.http.put<void>(url.buildUrl(), body).pipe(take(1));
     };
+  }
+
+  getStrategicRolesList(): Observable<
+    {
+      organisation: { id: string; name: string };
+      champions: { name: string; email: string }[];
+      seniorSponsors: { name: string; email: string }[];
+    }[]
+  > {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/strategic-roles');
+    return this.http.get<any>(url.buildUrl()).pipe(take(1));
   }
 }

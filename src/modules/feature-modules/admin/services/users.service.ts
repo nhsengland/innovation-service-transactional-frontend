@@ -3,7 +3,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map, take } from 'rxjs/operators';
 
 import { CoreService } from '@app/base';
-import { TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
+import { StrategicRoleEnum, TermsOfUseTypeEnum, UserRoleEnum } from '@app/base/enums';
 import { UrlModel } from '@app/base/models';
 import { APIQueryParamsType, DateISOType, MappedObjectType } from '@app/base/types';
 import { UserInfo } from '@modules/shared/dtos/users.dto';
@@ -222,5 +222,27 @@ export class AdminUsersService extends CoreService {
       .addPath('/v1/users/:userId/assigned-innovations')
       .setPathParams({ userId });
     return this.http.get<AssignedInnovationsList>(url.buildUrl()).pipe(take(1));
+  }
+  createStrategicRoles(userId: string, body: { strategicRoles: StrategicRoleEnum[] }): Observable<{ id: string }[]> {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/users/:userId/strategic-roles').setPathParams({ userId });
+    return this.http.post<{ id: string }[]>(url.buildUrl(), body).pipe(take(1));
+  }
+
+  deleteStrategicRole(userId: string, strategicRoleId: string): Observable<void> {
+    const url = new UrlModel(this.API_ADMIN_URL)
+      .addPath('v1/users/:userId/strategic-roles/:strategicRoleId')
+      .setPathParams({ userId, strategicRoleId });
+    return this.http.delete<void>(url.buildUrl()).pipe(take(1));
+  }
+
+  getStrategicRolesList(): Observable<
+    {
+      organisation: { id: string; name: string };
+      champions: { name: string; email: string }[];
+      seniorSponsors: { name: string; email: string }[];
+    }[]
+  > {
+    const url = new UrlModel(this.API_ADMIN_URL).addPath('v1/strategic-roles');
+    return this.http.get<any>(url.buildUrl()).pipe(take(1));
   }
 }
