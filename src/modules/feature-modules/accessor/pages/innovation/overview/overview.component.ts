@@ -12,6 +12,7 @@ import { StatisticsService } from '@modules/shared/services/statistics.service';
 import { InnovationContextService, InnovationStatusEnum, InnovationSupportStatusEnum } from '@modules/stores';
 import { InnovationUnitSuggestionsType } from '@modules/stores/ctx/innovation/innovation.models';
 import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progress-areas-card/key-progress-areas-card.component';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 
 @Component({
   selector: 'app-accessor-pages-innovation-overview',
@@ -19,7 +20,9 @@ import { KeyProgressAreasPayloadType } from '@modules/theme/components/key-progr
 })
 export class InnovationOverviewComponent extends CoreComponent implements OnInit {
   innovationId: string;
-  innovation: ContextInnovationType;
+  innovation: ContextInnovationType & {
+    archiveReason?: InnovationArchiveReasonEnum | null;
+  };
 
   qaSuggestions: InnovationUnitSuggestionsType = [];
 
@@ -79,6 +82,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
     };
 
     forkJoin({
+      innovation: this.innovationsService.getInnovationInfo(this.innovationId),
       statistics: this.statisticsService.getInnovationStatisticsInfo(this.innovationId, qp),
       collaborators: this.innovationsService.getInnovationCollaboratorsList(this.innovationId, ['active']),
       ...(this.innovation.support?.id && {
@@ -186,6 +190,11 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
             : this.innovation.support?.id;
 
         this.customNotificationsAmount = customNotifications.length;
+
+        this.innovation = {
+          ...this.innovation,
+          archiveReason: this.innovation.archiveReason
+        };
 
         this.setPageStatus('READY');
       }
