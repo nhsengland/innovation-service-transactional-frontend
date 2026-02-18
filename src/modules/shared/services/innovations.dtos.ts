@@ -91,7 +91,8 @@ export type InnovationListSelectType =
   | 'statistics.notifications'
   | 'statistics.tasks'
   | 'statistics.messages'
-  | 'progressAreas';
+  | 'progressAreas'
+  | 'archiveReason';
 
 export type InnovationSearchSelectType = InnovationListSelectType | 'highlights';
 
@@ -145,6 +146,7 @@ export type InnovationListFullDTO = {
     maturityLevel: string | null;
   } | null;
   progressAreas: string[] | null;
+  archiveReason: string[] | null;
   statistics: { notifications: number; tasks: number; messages: number };
 };
 

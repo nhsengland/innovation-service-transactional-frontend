@@ -81,6 +81,7 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
     },
     { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] },
     { type: 'CHECKBOX_GROUP', key: 'groupedStatuses', title: 'Innovation status', state: 'closed', items: [] },
+    { type: 'CHECKBOX_GROUP', key: 'archiveReason', title: 'Archived reasons', state: 'closed', items: [] },
     {
       type: 'CHECKBOX_GROUP',
       key: 'maturityLevels',
@@ -118,6 +119,7 @@ export function getInnovationListDatasets(schema: InnovationRecordSchemaInfoType
     ),
     areas: getIrSchemaQuestionItemsValueAndLabel(schema, 'areas').filter(i => i.label !== ''),
     progressAreas: [],
+    archiveReason: [],
     maturityLevels: []
   };
 }
@@ -180,6 +182,7 @@ export function getConfig(
         'involvedAACProgrammes',
         'areas',
         'maturityLevels',
+        'archiveReason',
         'progressAreas'
       ];
       break;

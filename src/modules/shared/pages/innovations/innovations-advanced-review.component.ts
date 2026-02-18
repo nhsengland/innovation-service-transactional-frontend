@@ -15,7 +15,11 @@ import { ActivatedRoute } from '@angular/router';
 import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema.types';
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
-import { keyProgressAreas, maturityLevelItems } from '@modules/stores/innovation/config/innovation-catalog.config';
+import {
+  archiveReason,
+  keyProgressAreas,
+  maturityLevelItems
+} from '@modules/stores/innovation/config/innovation-catalog.config';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -124,7 +128,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
         const { filters, datasets } = getConfig(this.ctx.schema.irSchemaInfo(), this.ctx.user.getUserType());
-
+        console.log('filters:', filters);
+        console.log('datasets:', datasets);
         const isAccessor = this.ctx.user.isAccessor();
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
         datasets.supportStatuses = Object.keys(InnovationSupportStatusEnum)
@@ -139,15 +144,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }));
         datasets.maturityLevels = [...maturityLevelItems];
         datasets.progressAreas = [...keyProgressAreas];
+        datasets.archiveReason = [];
         if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
             label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
             value: status
           }));
+          datasets.archiveReason = [...archiveReason];
         } else if (this.ctx.user.isAssessment()) {
           datasets.maturityLevels = [];
           datasets.progressAreas = [];
+          datasets.archiveReason = [];
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
             .filter(
@@ -230,6 +238,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'assessment.id',
       'assessment.finishedAt',
       'assessment.maturityLevel',
+      'archiveReason',
       'progressAreas'
     ];
 
@@ -257,6 +266,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       );
     }
 
+    console.log('/*****this.filtersModel.getAPIQueryParams():', this.filtersModel.getAPIQueryParams());
     this.innovationsService
       .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
       .pipe(finalize(() => this.setPageStatus('READY')))
@@ -384,7 +394,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.closeReason': 'Support (close reason)',
       'assessment.finishedAt': 'Needs Assessment Date',
       'assessment.maturityLevel': 'Maturity at Needs Assessment',
-      progressAreas: 'Progress Areas'
+      progressAreas: 'Progress Areas',
+      archiveReason: 'Archive Reason'
     } as const;
 
     if (this.ctx.user.isAdmin()) {

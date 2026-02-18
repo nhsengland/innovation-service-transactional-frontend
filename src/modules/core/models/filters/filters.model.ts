@@ -20,7 +20,7 @@ export type CheckboxesFilter = {
 type CheckboxGroupFilter = {
   type: 'CHECKBOX_GROUP';
   selected?: { key: string; value: string }[];
-  searchable?: boolean;
+  searchable?: boolean; 
   items: Dataset;
 } & CollapsibleFilter;
 
@@ -183,7 +183,7 @@ export class FiltersModel {
     if (!this.#state) {
       return {};
     }
-
+    console.log('this.#state.filters', this.#state.filters);
     const qp = {
       ...this.#state.filters,
       dateFilters:

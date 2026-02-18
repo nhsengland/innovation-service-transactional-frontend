@@ -1,3 +1,5 @@
+import { locale } from '@app/config/translations/en';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
 import { FormEngineParameterModel } from '@modules/shared/forms';
 
 export const locationItems = [
@@ -43,6 +45,17 @@ export const keyProgressAreas = [
   { value: 'htwTerComplete', label: 'HTW TER complete' },
   { value: 'niceGuidanceComplete', label: 'NICE guidance complete' },
   { value: 'scProcurementRouteIdentified', label: 'SC procurement route identified' }
+];
+
+const archiveReasonsLocale = locale.data.shared.catalog.innovation.archive.reason;
+
+export const archiveReason = [
+  {
+    value: 'ARCHIVED_BY_INNOVATOR',
+    label: 'Archived by innovator'
+  },
+  { value: InnovationArchiveReasonEnum.SIX_MONTHS_INACTIVITY, label: archiveReasonsLocale.SIX_MONTHS_INACTIVITY },
+  { value: InnovationArchiveReasonEnum.OWNER_ACCOUNT_DELETED, label: archiveReasonsLocale.OWNER_ACCOUNT_DELETED }
 ];
 
 export const maturityLevelItems = [
