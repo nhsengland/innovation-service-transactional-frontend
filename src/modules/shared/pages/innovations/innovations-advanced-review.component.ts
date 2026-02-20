@@ -325,7 +325,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   exportingCSV = false;
-  exportCSV(): void {
+    exportCSV(): void {
     this.exportingCSV = true;
     // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
     this.filtersModel.handleStateChanges();
@@ -340,6 +340,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'countryName',
       'submittedAt',
       'groupedStatus',
+      'archiveReason',
       'statusUpdatedAt',
       'suggestion.suggestedBy',
       'careSettings',
@@ -367,6 +368,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       countryName: 'Country',
       submittedAt: 'Date of innovation submission',
       groupedStatus: 'Status',
+      archiveReason: 'Archive reason',
       statusUpdatedAt: 'Date of status update',
       'suggestion.suggestedBy': 'Referral By',
       careSettings: 'Care Settings',
@@ -392,7 +394,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+      queryFields = queryFields.filter(
+        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
+      );
     } else if (this.ctx.user.isAssessment()) {
       // filter out unavailable fields for Assessment
       queryFields = queryFields.filter(
@@ -402,7 +406,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.updatedAt',
             'support.closeReason',
             'involvedAACProgrammes',
-            'keyHealthInequalities'
+            'keyHealthInequalities',
+            'archiveReason'
           ].includes(item)
       );
     }
