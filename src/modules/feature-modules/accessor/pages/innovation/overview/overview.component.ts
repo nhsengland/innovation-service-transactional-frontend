@@ -190,7 +190,7 @@ export class InnovationOverviewComponent extends CoreComponent implements OnInit
 
         this.customNotificationsAmount = customNotifications.length;
 
-         this.innovation = {
+        this.innovation = {
           ...this.innovation,
           archiveReason: this.innovation.archiveReason
         };
