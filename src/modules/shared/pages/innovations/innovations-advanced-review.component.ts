@@ -342,6 +342,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'countryName',
       'submittedAt',
       'groupedStatus',
+      'archiveReason',
       'statusUpdatedAt',
       'suggestion.suggestedBy',
       'careSettings',
@@ -369,6 +370,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       countryName: 'Country',
       submittedAt: 'Date of innovation submission',
       groupedStatus: 'Status',
+      archiveReason: 'Archive reason',
       statusUpdatedAt: 'Date of status update',
       'suggestion.suggestedBy': 'Referral By',
       careSettings: 'Care Settings',
@@ -390,7 +392,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason', 'archiveReason'].includes(item)
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
@@ -404,7 +406,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.updatedAt',
             'support.closeReason',
             'involvedAACProgrammes',
-            'keyHealthInequalities'
+            'keyHealthInequalities',
+            'archiveReason'
           ].includes(item)
       );
     }
