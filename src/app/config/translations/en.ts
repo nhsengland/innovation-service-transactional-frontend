@@ -1064,7 +1064,8 @@ export const locale = {
               DECIDED_NOT_TO_PURSUE: 'I have decided not to pursue this innovation',
               ALREADY_LIVE_NHS: 'My innovation is already live in the NHS',
               OTHER_DONT_WANT_TO_SAY: 'Other reason or I do not want to say',
-              SIX_MONTHS_INACTIVITY: 'Innovation without interaction for more than 6 months'
+              SIX_MONTHS_INACTIVITY: 'Innovation without interaction for more than 6 months',
+              OWNER_ACCOUNT_DELETED: 'The owner has deleted their account.'
             }
           },
           export_request_status: {
