@@ -16,10 +16,12 @@ import { IrSchemaTranslatorItemMapType } from '@modules/stores/ctx/schema/schema
 import { InnovationCardData } from './innovation-advanced-search-card.component';
 import { getConfig } from './innovations-advanced-review.config';
 import {
-  archiveReason,
+  archiveReasonFilterItems,
   keyProgressAreas,
   maturityLevelItems
 } from '@modules/stores/innovation/config/innovation-catalog.config';
+import { InnovationArchiveReasonEnum } from '@modules/feature-modules/innovator/services/innovator.service';
+import { group } from 'console';
 
 type AdvancedReviewSortByKeys =
   | 'support.updatedAt'
@@ -37,6 +39,15 @@ type AdvancedReviewSortByKeysType = Record<
     order: 'ascending' | 'descending';
   }
 >;
+
+type GroupedFilterOption = {
+  groupedOptionID: string;
+  ungroupedOptionsIDs: string[];
+};
+
+type GroupedFilterMap = {
+  archiveReason: GroupedFilterOption;
+};
 
 @Component({
   selector: 'shared-pages-innovations-advanced-review',
@@ -128,8 +139,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.organisationsService.getOrganisationsList({ unitsInformation: false }).subscribe({
       next: response => {
         const { filters, datasets } = getConfig(this.ctx.schema.irSchemaInfo(), this.ctx.user.getUserType());
-        console.log('filters:', filters);
-        console.log('datasets:', datasets);
+
         const isAccessor = this.ctx.user.isAccessor();
         datasets.engagingOrganisations = response.map(o => ({ value: o.id, label: o.name }));
         datasets.supportStatuses = Object.keys(InnovationSupportStatusEnum)
@@ -144,18 +154,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
           }));
         datasets.maturityLevels = [...maturityLevelItems];
         datasets.progressAreas = [...keyProgressAreas];
-        datasets.archiveReason = [];
         if (this.ctx.user.isAdmin()) {
           datasets.supportStatuses = [];
-          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum).map(status => ({
-            label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
-            value: status
-          }));
-          datasets.archiveReason = [...archiveReason];
+          datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
+            // .filter(e => e !== 'ARCHIVED')
+            .map(status => ({
+              label: this.translate(`shared.catalog.innovation.grouped_status.${status}.name`),
+              value: status
+            }));
+          datasets.archiveReason = [...archiveReasonFilterItems];
         } else if (this.ctx.user.isAssessment()) {
           datasets.maturityLevels = [];
           datasets.progressAreas = [];
-          datasets.archiveReason = [];
           datasets.supportStatuses = [];
           datasets.groupedStatuses = Object.keys(InnovationGroupedStatusEnum)
             .filter(
@@ -266,9 +276,23 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       );
     }
 
-    console.log('/*****this.filtersModel.getAPIQueryParams():', this.filtersModel.getAPIQueryParams());
+    // Define and replace grouped option for the expanded list before querying
+    const groupedFilterOptions: GroupedFilterMap = {
+      archiveReason: {
+        groupedOptionID: 'ARCHIVED_BY_INNOVATOR',
+        ungroupedOptionsIDs: [
+          InnovationArchiveReasonEnum.DEVELOP_FURTHER,
+          InnovationArchiveReasonEnum.HAVE_ALL_SUPPORT,
+          InnovationArchiveReasonEnum.DECIDED_NOT_TO_PURSUE,
+          InnovationArchiveReasonEnum.ALREADY_LIVE_NHS,
+          InnovationArchiveReasonEnum.OTHER_DONT_WANT_TO_SAY
+        ]
+      }
+    };
+    const apiQueryParams = this.replaceFilterGroupedOptions(this.filtersModel, groupedFilterOptions);
+
     this.innovationsService
-      .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
+      .getInnovationsSearch(queryFields, apiQueryParams, this.paginationParams)
       .pipe(finalize(() => this.setPageStatus('READY')))
       .subscribe({
         next: response => {
@@ -352,6 +376,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'countryName',
       'submittedAt',
       'groupedStatus',
+      'archiveReason',
       'statusUpdatedAt',
       'suggestion.suggestedBy',
       'careSettings',
@@ -379,6 +404,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       countryName: 'Country',
       submittedAt: 'Date of innovation submission',
       groupedStatus: 'Status',
+      archiveReason: 'Archive reason',
       statusUpdatedAt: 'Date of status update',
       'suggestion.suggestedBy': 'Referral By',
       careSettings: 'Care Settings',
@@ -394,8 +420,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'support.closeReason': 'Support (close reason)',
       'assessment.finishedAt': 'Needs Assessment Date',
       'assessment.maturityLevel': 'Maturity at Needs Assessment',
-      progressAreas: 'Progress Areas',
-      archiveReason: 'Archive Reason'
+      progressAreas: 'Progress Areas'
     } as const;
 
     if (this.ctx.user.isAdmin()) {
@@ -405,7 +430,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+      queryFields = queryFields.filter(
+        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
+      );
     } else if (this.ctx.user.isAssessment()) {
       // filter out unavailable fields for Assessment
       queryFields = queryFields.filter(
@@ -415,7 +442,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.updatedAt',
             'support.closeReason',
             'involvedAACProgrammes',
-            'keyHealthInequalities'
+            'keyHealthInequalities',
+            'archiveReason'
           ].includes(item)
       );
     }
@@ -424,6 +452,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       .getInnovationsSearchCSV(queryFields, this.filtersModel.getAPIQueryParams())
       .subscribe(response => {
         // replace the CSV headers
+        console.log('data response', response);
         const data = response.split('\n');
         data[0] = data[0]
           .split(',')
@@ -471,7 +500,6 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     this.pageNumber = 1;
     this.form.updateValueAndValidity({ onlySelf: true, emitEvent: false }); // Prevent debounce trigger
     this.filtersModel.handleStateChanges();
-
     const currentSearch = this.form.value.search;
     if (this.search !== currentSearch) {
       this.updateSearchQueryParams(currentSearch).then(() => {
@@ -514,5 +542,23 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return this.router.navigate([path], {
       queryParams: { search: currentSearch }
     });
+  }
+
+  replaceFilterGroupedOptions(filtersModel: FiltersModel, data: GroupedFilterMap) {
+    const apiQueryParams = filtersModel.getAPIQueryParams();
+    for (const [key, value] of Object.entries(data)) {
+      // check if selected options include a grouped one, and replace
+      if (
+        apiQueryParams[key] &&
+        Array.isArray(apiQueryParams[key]) &&
+        apiQueryParams[key].includes(value.groupedOptionID)
+      ) {
+        apiQueryParams[key] = [
+          ...apiQueryParams[key].filter(r => r != value.groupedOptionID),
+          ...value.ungroupedOptionsIDs
+        ];
+      }
+    }
+    return apiQueryParams;
   }
 }

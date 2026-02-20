@@ -49,7 +49,7 @@ export const keyProgressAreas = [
 
 const archiveReasonsLocale = locale.data.shared.catalog.innovation.archive.reason;
 
-export const archiveReason = [
+export const archiveReasonFilterItems = [
   {
     value: 'ARCHIVED_BY_INNOVATOR',
     label: 'Archived by innovator'

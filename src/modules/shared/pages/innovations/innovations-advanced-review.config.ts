@@ -81,7 +81,7 @@ export const InnovationsListFiltersConfig: FiltersConfig = {
     },
     { type: 'CHECKBOX_GROUP', key: 'supportStatuses', title: 'Support status', state: 'closed', items: [] },
     { type: 'CHECKBOX_GROUP', key: 'groupedStatuses', title: 'Innovation status', state: 'closed', items: [] },
-    { type: 'CHECKBOX_GROUP', key: 'archiveReason', title: 'Archived reasons', state: 'closed', items: [] },
+    { type: 'CHECKBOX_GROUP', key: 'archiveReason', title: 'Archived reason', state: 'closed', items: [] },
     {
       type: 'CHECKBOX_GROUP',
       key: 'maturityLevels',
