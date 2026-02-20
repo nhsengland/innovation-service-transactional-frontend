@@ -46,7 +46,7 @@
       </div>
     </dl>
     <ng-container *ngIf="isArchived">
-      <p class="nhsuk-u-font-size-16">Archived <span *ngIf="innovation.archiveReason !== 'SIX_MONTHS_INACTIVITY'">by innovator</span> on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
+      <p class="nhsuk-u-font-size-16">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
       <hr class="nhsuk-section-break nhsuk-section-break--visible" />
     </ng-container>
   </div>
