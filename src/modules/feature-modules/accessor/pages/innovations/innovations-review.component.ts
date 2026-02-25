@@ -244,7 +244,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.status',
             'support.updatedAt',
             'statistics.notifications',
-            'engagingOrganisations'            ,
+            'engagingOrganisations',
             'lastSupportGivenAt'
           ],
           notifications: null
@@ -270,7 +270,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.isShared',
             'statistics.notifications',
             'engagingOrganisations',
-                        'lastSupportGivenAt'
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -297,7 +297,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.isShared',
             'statistics.notifications',
             'engagingOrganisations',
-                        'lastSupportGivenAt'
+            'lastSupportGivenAt'
           ],
           notifications: null
         }
@@ -424,7 +424,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            'lastSupportGivenAt': { label: 'Support updated', orderable: true },
+            lastSupportGivenAt: { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             accessors: { label: 'Accessor', orderable: false },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
@@ -444,7 +444,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            'lastSupportGivenAt': { label: 'Support updated', orderable: true },
+            lastSupportGivenAt: { label: 'Support updated', orderable: true },
             mainCategory: { label: 'Main category', orderable: true },
             countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
