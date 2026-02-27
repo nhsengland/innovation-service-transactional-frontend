@@ -2,13 +2,11 @@
   <div class="nhsuk-width-container app-width-container">
     <ol class="nhsuk-breadcrumb__list">
       <ng-container *ngFor="let item of breadcrumbs; let last = last">
-        <li *ngIf="!last" class="nhsuk-breadcrumb__item">
+        <li *ngIf="!last" class="nhsuk-breadcrumb__list-item">
           <a class="nhsuk-breadcrumb__link" [routerLink]="item.url">{{ item.label }}</a>
         </li>
       </ng-container>
     </ol>
-    <p class="nhsuk-breadcrumb__back">
-      <a class="nhsuk-breadcrumb__backlink" [routerLink]="backToItem.url"> <span class="nhsuk-u-visually-hidden">Back to &nbsp;</span>{{ backToItem.label }} </a>
-    </p>
+      <a class="nhsuk-back-link" [routerLink]="backToItem.url"> <span class="nhsuk-u-visually-hidden">Back to &nbsp;</span>{{ backToItem.label }} </a>
   </div>
 </nav>
