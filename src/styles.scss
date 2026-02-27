@@ -215,6 +215,9 @@ $service-manual-container-size: 1100px; // Container width variable.
   color: var(--error-color);
 }
 
+.border-0 {
+  border: 0;
+}
 .border-bottom-0 {
   border-bottom: 0;
 }

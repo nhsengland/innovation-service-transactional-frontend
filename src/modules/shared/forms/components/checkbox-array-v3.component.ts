@@ -30,6 +30,7 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   @Input() items: FormEngineParameterModelV3['items'] = [];
   @Input() size?: 'small' | 'normal';
   @Input() pageUniqueField = true;
+  @Input() collapsableGroups = true;
 
   hasError = false;
   error: { message: string; params: Record<string, string> } = { message: '', params: {} };
@@ -40,6 +41,8 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
   isRunningOnServer: boolean;
 
   exclusiveItem: string | undefined = undefined;
+
+  groupVisibility: Record<string, boolean> = {};
 
   // Form controls.
   get parentFieldControl(): AbstractControl | null {
@@ -91,6 +94,130 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.lookForAndSetExclusive();
+
+    console.log('items:', this.items);
+    this.items = [
+      {
+        id: 'UK_MDR_Class_I',
+        label: 'UK MDR Class I (Great Britain)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'UK_MDR_Class_IIA',
+        label: 'UK MDR Class IIa (Great Britain)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'UK_MDR_Class_IIB',
+        label: 'UK MDR Class IIb (Great Britain)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'UK_MDR_Class_III',
+        label: 'UK MDR Class III (Great Britain)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'EU_MDR_Class_I',
+        label: 'EU MDR Class I (Northern Ireland & EU)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'EU_MDR_Class_IIA',
+        label: 'EU MDR Class IIa (Northern Ireland & EU)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'EU_MDR_Class_IIB',
+        label: 'EU MDR Class IIb (Northern Ireland & EU)',
+        group: 'Medical device regulations'
+      },
+      {
+        id: 'EU_MDR_Class_III',
+        label: 'EU MDR Class III (Northern Ireland & EU)',
+        group: 'Medical device regulations'
+      },
+
+      {
+        id: 'UKR_MDR_GENERAL_IVD',
+        label: 'UK MDR General IVD (Great Britain)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'UKR_MDR_IVD_SELF_TEST',
+        label: 'UK MDR IVD for self test (Great Britain)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'UKR_MDR_IVD_ANNEX_II_LIST_B',
+        label: 'UK MDR IVD Annex II List B (Great Britain)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'UKR_MDR_IVD_ANNEX_II_LIST_A',
+        label: 'UK MDR IVD Annex II List A (Great Britain)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'EU_IVDR_IVD_CLASS_A',
+        label: 'EU IVDR IVD Class A (Northern Ireland & EU)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'EU_IVDR_IVD_CLASS_B',
+        label: 'EU IVDR IVD Class B (Northern Ireland & EU)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'EU_IVDR_IVD_CLASS_C',
+        label: 'EU IVDR IVD Class C (Northern Ireland & EU)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'EU_IVDR_IVD_CLASS_D',
+        label: 'EU IVDR IVD Class D (Northern Ireland & EU)',
+        group: 'In-vitro diagnostics regulations'
+      },
+      {
+        id: 'IONISING_RADIATION',
+        label: 'Ionising Radiation (Medical Exposure) Regulations'
+      },
+      {
+        id: 'DTAC',
+        label: 'Digital Technology Assessment Criteria (DTAC)'
+      },
+      {
+        id: 'MARKETING_AUTHORISATION',
+        label: 'Marketing authorisation for medicines'
+      },
+      {
+        id: 'CQC',
+        label: 'Care Quality Commission (CQC) registration, as I am providing a regulated activity'
+      },
+      {
+        id: 'OTHER',
+        label: 'Other',
+        conditional: {
+          id: 'otherRegulationDescription',
+          dataType: 'text',
+          label: 'Other regulations, standards and certifications that apply',
+          validations: {
+            isRequired: 'Other regulations, standards and certifications is required',
+            maxLength: 100
+          }
+        }
+      }
+    ];
+
+    if (this.collapsableGroups) {
+      (this.items || []).forEach(item => {
+        if (item.group && this.groupVisibility[item.group] === undefined) {
+          // Expand if any item in this group is selected
+          const groupItemIds = this.items?.filter(i => i.group === item.group).map(i => i.id) || [];
+          this.groupVisibility[item.group] = groupItemIds.some(id => this.fieldArrayValues.includes(id!));
+        }
+      });
+    }
 
     this.id = this.id || RandomGeneratorHelper.generateRandom();
     this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
@@ -161,5 +288,41 @@ export class FormCheckboxArrayV3Component implements OnInit, DoCheck {
 
   private lookForAndSetExclusive() {
     this.items?.forEach(item => item.exclusive && (this.exclusiveItem = item.id ?? ''));
+  }
+
+  isGroupVisible(group: string): boolean {
+    // If collapsableGroups is off, always visible
+    if (!this.collapsableGroups) return true;
+
+    // If user toggled it manually, respect that
+    if (this.groupVisibility[group] !== undefined) return this.groupVisibility[group];
+
+    // Otherwise, expand if any item in this group is selected
+    const groupItemIds = this.items?.filter(i => i.group === group).map(i => i.id) || [];
+
+    return groupItemIds.some(id => this.fieldArrayValues.includes(id!));
+  }
+
+  toggleGroupVisibility(group: string, checked: boolean): void {
+    this.groupVisibility[group] = checked;
+  }
+
+  isFirstItemInGroup(index: number): boolean {
+    if (!this.items || !this.items[index]?.group) {
+      return false;
+    }
+
+    if (index === 0) {
+      return true;
+    }
+
+    return this.items[index].group !== this.items[index - 1]?.group;
+  }
+
+  isLastItemInGroup(index: number): boolean {
+    if (!this.items || !this.items[index]) return false;
+    const group = this.items[index].group;
+    if (!group) return false;
+    return index === this.items.length - 1 || this.items[index + 1].group !== group;
   }
 }
