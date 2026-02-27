@@ -3,7 +3,7 @@
 );
 
 // NHS Design System.
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 // Custom styles.
 @use "styles/left-menu-layout.scss" as left-menu-layout;

@@ -1,5 +1,5 @@
 // Based on https://github.com/alphagov/govuk-prototype-kit/blob/master/app/assets/sass/patterns/_step-by-step-nav.scss
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 @use "node_modules/govuk-frontend/dist/govuk" as govuk;
 

@@ -1,4 +1,4 @@
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 @use "node_modules/govuk-frontend/dist/govuk" as govuk;
 
@@ -39,7 +39,7 @@
   }
 
   .app-panel__body {
-    @include nhsuk.nhsuk-font($size: 32);
+    @include nhsuk.nhsuk-font($size: 36);
   }
 }
 

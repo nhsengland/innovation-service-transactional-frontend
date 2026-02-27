@@ -1,5 +1,5 @@
 /* Left Menu Sidebar layout*/
-@use "node_modules/nhsuk-frontend/packages/nhsuk.scss" as nhsuk;
+@use "nhsuk-frontend/dist/nhsuk" as nhsuk;
 
 .app-pane {
   display: -webkit-box;
