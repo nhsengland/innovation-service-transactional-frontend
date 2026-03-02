@@ -1,4 +1,5 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <p>You can invite others to collaborate on your innovation.</p>
 
@@ -23,12 +24,10 @@
         </div>
       </details>
 
-      <div class="nhsuk-action-link">
-        <a routerLink="new" class="nhsuk-action-link__link">
-          <theme-svg-icon type="arrow-right-circle" />
-          <span class="nhsuk-action-link__text">Invite a new collaborator</span>
-        </a>
-      </div>
+      <a routerLink="new" class="d-flex align-items-center nhsuk-action-link">
+        <theme-svg-icon type="arrow-right-circle" />
+        <span class="nhsuk-action-link__text">Invite a new collaborator</span>
+      </a>
     </div>
 
     <div *ngIf="activeCollaborators.getTotalRowsNumber() > 0" class="nhsuk-grid-column-full">

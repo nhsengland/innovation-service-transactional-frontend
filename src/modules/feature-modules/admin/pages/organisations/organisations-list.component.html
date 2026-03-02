@@ -1,12 +1,11 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <div class="nhsuk-u-padding-bottom-5">
-        <div class="nhsuk-action-link">
-          <a routerLink="/admin/organisations/new" class="nhsuk-action-link__link">
-            <theme-svg-icon type="arrow-right-circle" />
-            <span class="nhsuk-action-link__text">Create a new organisation</span>
-          </a>
-        </div>
+        <a routerLink="/admin/organisations/new" class="d-flex align-items-center nhsuk-action-link">
+          <theme-svg-icon type="arrow-right-circle" />
+          <span class="nhsuk-action-link__text">Create a new organisation</span>
+        </a>
         <ul class="nhsuk-list nhsuk-list--bullet">
           <li>You will need a unique organisation name</li>
           <li>You will need a unique organisation acronym</li>
