@@ -13,6 +13,7 @@ import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stor
 
 import { HttpErrorResponse } from '@angular/common/http';
 import { IRSchemaErrors } from '@modules/shared/enums/ir-schema-errors.enum';
+import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-edit',
@@ -28,6 +29,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isArchived: boolean;
   sectionId: string;
   baseUrl: string;
+
+  sectionInfo: InnovationSectionInfoDTO | undefined;
 
   sectionsIdsList: string[];
   sectionQuestionsIdList: string[];
@@ -71,6 +74,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
         this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionId).subscribe({
           next: sectionInfoResponse => {
+            this.sectionInfo = sectionInfoResponse;
             this.wizard.setAnswers(sectionInfoResponse.data).runRules().runInboundParsing();
             this.sectionStatus = sectionInfoResponse.status;
 

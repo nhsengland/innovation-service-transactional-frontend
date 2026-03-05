@@ -33,6 +33,8 @@ import { FormInputAutocompleteArrayV3Component } from './components/input-autoco
 import { FormIRSelectableFiltersFilterComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters-filter.component';
 import { ThemeModule } from '../../theme/theme.module';
 import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin/pages/announcements/ir-selectable-filters.component';
+import { AddEvidencesStepComponent } from './components/evidence-step-v3.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
@@ -43,12 +45,14 @@ import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin
     NgxDropzoneModule,
     // Angular Material.
     MatAutocompleteModule,
-    ThemeModule
+    ThemeModule,
+    RouterModule
   ],
   declarations: [
     FormEngineComponent,
     FormEngineV3Component,
 
+    AddEvidencesStepComponent,
     FormFileUploadPreviewComponent,
     FormCheckboxComponent,
     FormCheckboxArrayComponent,
@@ -80,6 +84,7 @@ import { FormIRSelectableFiltersComponent } from '@modules/feature-modules/admin
     FormEngineComponent,
     FormEngineV3Component,
 
+    AddEvidencesStepComponent,
     FormCheckboxComponent,
     FormCheckboxArrayComponent,
     FormCheckboxArrayV3Component,

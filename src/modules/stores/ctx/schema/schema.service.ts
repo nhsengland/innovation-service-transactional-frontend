@@ -4,10 +4,11 @@ import { Injectable } from '@angular/core';
 
 import { EnvironmentVariablesStore } from '@modules/core';
 
-import { Observable, take } from 'rxjs';
+import { Observable, of, take } from 'rxjs';
 
 import { UrlModel } from '@app/base/models';
 import { ContextSchemaType } from './schema.types';
+import { IR_SCHEMA } from '@modules/shared/forms/engine/models/schema';
 
 @Injectable()
 export class SchemaContextService {
@@ -20,6 +21,7 @@ export class SchemaContextService {
 
   getLatestSchema(): Observable<ContextSchemaType['irSchema']> {
     const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/ir-schema');
+    return of({ id: '', version: 11, schema: IR_SCHEMA });
     return this.http.get<ContextSchemaType['irSchema']>(url.buildUrl()).pipe(take(1));
   }
 }

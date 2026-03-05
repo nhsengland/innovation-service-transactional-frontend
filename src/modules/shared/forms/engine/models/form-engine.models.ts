@@ -8,6 +8,7 @@ import {
   InnovationRecordQuestionStepType,
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { EvidenceV3Type } from './wizard-engine-irv3-schema.model';
 
 export type FormatUrlValidatorType = { message?: string; maxLength?: number };
 
@@ -236,6 +237,8 @@ export class FormEngineParameterModelV3 {
     label: string;
     validations: InnovationRecordStepValidationsType;
   };
+
+  evidences?: EvidenceV3Type[]
 
   // fieldsGroupConfig?: {
   //   fields: FormEngineParameterModelV3[]; // Used in "fields-group" dataType.

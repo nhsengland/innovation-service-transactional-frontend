@@ -2,7 +2,7 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-two-thirds">
       <ng-container *ngIf="wizard.isQuestionStep()">
-        <theme-form-engine-v3 formId="sectionForm" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" />
+        <theme-form-engine-v3 formId="sectionForm" [sectionInfo]="sectionInfo" [parameters]="wizard.currentStepParameters()" [values]="wizard.getAnswers()" />
         <button type="submit" form="sectionForm" [disabled]="!saveButton.isActive" class="nhsuk-button" (click)="onSubmitStep('next')">{{ saveButton.label }}</button>
       </ng-container>
 
@@ -23,8 +23,10 @@
                   <dd class="nhsuk-summary-list__value text-pre-wrap">
                     <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
                     <ng-container *ngIf="!item.allowHTML">
-                      <ng-container *ngIf="(item.stepId === 'hasVideoDemonstration' || item.stepId === 'hasWebsite') && item.value && item.value[0].length > 1; else defaultTranslation">
-                        {{ item.value[0] | irv3translate: "items" : item.stepId }}<br>
+                      <ng-container
+                        *ngIf="(item.stepId === 'hasVideoDemonstration' || item.stepId === 'hasWebsite') && item.value && item.value[0].length > 1; else defaultTranslation"
+                      >
+                        {{ item.value[0] | irv3translate: "items" : item.stepId }}<br />
                         <a [href]="item.value[1]" target="_blank" rel="noopener noreferrer">{{ item.value[1] }}</a>
                       </ng-container>
                       <ng-template #defaultTranslation>

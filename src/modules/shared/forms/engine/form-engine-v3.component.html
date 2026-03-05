@@ -37,6 +37,16 @@
           ></theme-form-textarea>
         </div>
 
+        <div *ngSwitchCase="'evidence-step'">
+          <theme-add-evidences-step
+            [id]="p.id"
+            [controlName]="p.id"
+            [label]="p.label"
+            [description]="p.description"
+            [evidencesList]="sectionInfo?.data?.evidences ?? []"
+          ></theme-add-evidences-step>
+        </div>
+
         <div *ngSwitchCase="'fields-group'" [formArrayName]="p.id" class="nhsuk-u-margin-bottom-5">
           <fieldset class="nhsuk-fieldset" attr.aria-describedby="{{ p.id }}-hint">
             <legend *ngIf="p.label" class="nhsuk-fieldset__legend nhsuk-fieldset__legend--l">

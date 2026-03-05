@@ -17,10 +17,12 @@ import {
 } from '../errors';
 import { InnovationInfoDTO } from '@modules/shared/services/innovations.dtos';
 import { InnovationRecordSchemaInfoType } from '@modules/stores/ctx/schema/schema.types';
+import { IR_SCHEMA } from '@modules/shared/forms/engine/models/schema';
 
 export const getSchema = async (config: any): Promise<InnovationRecordSchemaInfoType> => {
   const url = `${ENVIRONMENT.API_INNOVATIONS_URL}/v1/ir-schema/`;
   const response = await axios.get<InnovationRecordSchemaInfoType>(url, { ...config });
+  return { id: '', version: 11, schema: IR_SCHEMA };
   return response.data;
 };
 

@@ -64,7 +64,8 @@ export type InnovationRecordFormComponentType =
   | 'radio-group'
   | 'autocomplete-array'
   | 'checkbox-array'
-  | 'fields-group';
+  | 'fields-group'
+  | 'evidence-step';
 
 export type InnovationRecordStepValidationsType = {
   isRequired?: string;

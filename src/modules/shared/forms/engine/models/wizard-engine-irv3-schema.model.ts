@@ -14,6 +14,7 @@ import {
   InnovationRecordSectionUpdateType,
   IrSchemaTranslatorMapType
 } from '@modules/stores/ctx/schema/schema.types';
+import { EvidenceDTOType } from '../../components/evidence-step-v3.component';
 
 export type WizardStepType = FormEngineModel & { saveStrategy?: 'updateAndWait' };
 export type WizardStepTypeV3 = FormEngineModelV3 & { saveStrategy?: 'updateAndWait' };
@@ -490,6 +491,17 @@ export class WizardIRV3EngineModel {
             }
 
             break;
+          case 'evidence-step':
+            let stepValue = currentAnswers[stepParams.id] as EvidenceDTOType[];
+            if (stepValue) {
+              let parsedValue: string[] = [];
+              stepValue.map(item => parsedValue.push(`${item.name}\n`));
+              value = parsedValue.join('\n');
+            } else {
+              value = '';
+            }
+            this.addSummaryStep(stepId, value, editStepNumber, label, isNotMandatory);
+            break;
           case 'checkbox-array':
             {
               value = undefined;
@@ -749,7 +761,7 @@ export class WizardIRV3EngineModel {
 
     // Add evidences when available
     if (this.currentAnswers['evidences']) {
-      (this.currentAnswers['evidences'] as { id: string; name: string; summary: string }[]).forEach((evidence, i) =>
+      (this.currentAnswers['evidences'] as EvidenceDTOType[]).forEach((evidence, i) =>
         translatedSummary.push({ label: `Evidence ${i + 1}`, value: evidence.name })
       );
     }

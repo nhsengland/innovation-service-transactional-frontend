@@ -21,6 +21,8 @@ import { debounceTime } from 'rxjs/operators';
 
 import { FormEngineParameterModelV3 } from './models/form-engine.models';
 import { FormEngineHelperV3 } from './helpers/form-engine-v3.helper';
+import { SectionInfoType } from '@modules/shared/pages/innovation/sections/section-info.component';
+import { InnovationSectionInfoDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 /**
  * @param parameters is an array of ParameterModel. For more info, check ParameterModel.
@@ -44,6 +46,7 @@ export class FormEngineV3Component implements OnInit, OnChanges, OnDestroy {
   @Input() parameters: FormEngineParameterModelV3[] = [];
   @Input() formValidations?: ValidatorFn[];
   @Input() values?: Record<string, any> = {};
+  @Input({required:true}) sectionInfo!: InnovationSectionInfoDTO | undefined
   @Output() formChanges: any = new EventEmitter<Record<string, any>>();
 
   private formChangeSubscription = new Subscription();
