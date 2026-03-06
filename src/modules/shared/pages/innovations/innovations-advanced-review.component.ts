@@ -325,7 +325,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   exportingCSV = false;
-    exportCSV(): void {
+  exportCSV(): void {
     this.exportingCSV = true;
     // code from getInnovationList could probably be reused here but mostly duplicated for simplicity
     this.filtersModel.handleStateChanges();
