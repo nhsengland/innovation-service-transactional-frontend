@@ -80,6 +80,7 @@ export type InnovationListSelectType =
   | 'support.updatedBy'
   | 'support.closeReason'
   | 'support.isShared'
+  | 'lastSupportGivenAt'
   | 'assessment.id'
   | 'assessment.majorVersion'
   | 'assessment.minorVersion'
@@ -133,6 +134,7 @@ export type InnovationListFullDTO = {
     closeReason: InnovationSupportCloseReasonEnum | null;
     isShared: boolean;
   } | null;
+  lastSupportGivenAt: DateISOType;
   suggestion: { suggestedBy: string[]; suggestedOn: DateISOType } | null;
   assessment: {
     id: string;
