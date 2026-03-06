@@ -236,7 +236,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason', 'archiveReason'].includes(item)
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
@@ -251,6 +251,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.closeReason',
             'involvedAACProgrammes',
             'keyHealthInequalities',
+            'archiveReason',
             'assessment.finishedAt',
             'assessment.maturityLevel'
           ].includes(item)
