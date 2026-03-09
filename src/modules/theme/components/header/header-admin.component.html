@@ -1,0 +1,157 @@
+<noscript>
+  <div class="app-u-hide-print bg-color-warning">
+    <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-2 nhsuk-u-padding-bottom-2">
+      <p class="nhsuk-body-s nhsuk-u-margin-0">It looks like JavaScript is disabled in your browser. You'll need to enable it if you want to create an account.</p>
+      <p class="nhsuk-body-s nhsuk-u-margin-0">
+        Find out <a href="{{ URLS.ENABLE_JAVASCRIPT_SUPPORT }}" class="font-color-text">how to enable JavaScript for Windows</a>, or
+        <a href="{{ URLS.SAFARI_SUPPORT }}" class="font-color-text">how to enable JavaScript for Mac</a>.
+      </p>
+    </div>
+  </div>
+</noscript>
+
+<ng-container *ngIf="showCookiesBanner">
+  <div class="app-u-hide-print bg-color-white nhsuk-u-padding-top-4">
+    <div class="nhsuk-width-container app-width-container">
+      <p class="nhsuk-heading-l">Cookies on the NHS website</p>
+      <p>We've put some small files called cookies on your device to make our site work.</p>
+      <p>
+        We'd also like to use analytics cookies. These send information about how our site is used to services called Adobe Analytics, Hotjar and Google Analytics. We use this
+        information to improve our site.
+      </p>
+      <p>
+        Let us know if this is OK. We'll use a cookie to save your choice. You can <a routerLink="/policies/cookies-policy"> read more about our cookies </a> before you choose.
+      </p>
+      <div>
+        <button class="nhsuk-button nhsuk-u-margin-right-4" (click)="onSaveCookies(true)">I'm OK with analytics cookies</button>
+        <button class="nhsuk-button" (click)="onSaveCookies(false)">Do not use analytics cookies</button>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="showCookiesSaveSuccess">
+  <div class="app-u-hide-print cookie-success-banner">
+    <div class="nhsuk-width-container app-width-container">
+      <p class="nhsuk-body-s nhsuk-u-margin-0">You can change your cookie settings at any time using our <a routerLink="/policies/cookies-policy">cookies page</a>.</p>
+    </div>
+  </div>
+</ng-container>
+
+<a class="nhsuk-skip-link" href="javascript:void()" (click)="handleSkipLinkClick($event)"> Skip to main content </a>
+
+<header class="nhsuk-header" role="banner">
+  <div class="nhsuk-width-container nhsuk-header__container app-width-container">
+    <div class="nhsuk-header__logo">
+      <a class="nhsuk-header__link nhsuk-header__link--service" href="/" aria-label="NHS Innovation Service homepage">
+        <theme-svg-icon type="logo" />
+        <span class="nhsuk-header__service-name"> Innovation Service </span>
+      </a>
+    </div>
+
+    <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0">
+      <div class="nhsuk-header__content" id="content-header">
+        <div class="nhsuk-header__menu nhsuk-u-padding-left-3">
+          <button class="nhsuk-header__menu-toggle" id="toggle-menu" aria-controls="header-navigation" aria-label="Open menu">Menu</button>
+        </div>
+      </div>
+    </ng-container>
+
+    @if (showUserInformation && ctx.user.isStateLoaded()) {
+      <div class="user-information">
+        <p>{{ ctx.user.getDisplayName() }}</p>
+        <p>{{ userDescription() }} <a routerLink="/switch-user-context" *ngIf="ctx.user.hasMultipleRoles()">Switch profile</a></p>
+      </div>
+    }
+  </div>
+
+  <ng-container *ngIf="leftMenuBarItems.length > 0 || rightMenuBarItems.length > 0 || showSignOut">
+    <nav
+      id="header-navigation"
+      role="navigation"
+      class="nhsuk-header__navigation app-header__navigation app-multilevel-navigation"
+      [ngClass]="{ 'children-items-height': menuBarItems.isChildrenOpened }"
+      aria-label="Primary navigation"
+      aria-labelledby="label-navigation"
+    >
+      <div class="nhsuk-width-container app-width-container">
+        <p class="nhsuk-header__navigation-title">
+          <span id="label-navigation">Menu</span>
+          <button class="nhsuk-header__navigation-close" id="close-menu">
+            <theme-svg-icon type="close" />
+            <span class="nhsuk-u-visually-hidden">Close menu</span>
+          </button>
+        </p>
+
+        <ul class="nhsuk-header__navigation-list">
+          <li *ngFor="let item of leftMenuBarItems" class="nhsuk-header__navigation-item app-multilevel-navigation__navigation-item">
+            <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
+          </li>
+          <li *ngFor="let item of rightMenuBarItems; let first = first" class="nhsuk-header__navigation-item" [ngClass]="{ 'ml-auto': first }">
+            <ng-container *ngTemplateOutlet="menuItemTemplate; context: { item: item }"> </ng-container>
+          </li>
+
+          <ng-container *ngIf="showSignOut">
+            <li class="nhsuk-header__navigation-item" [ngClass]="{ 'ml-auto': rightMenuBarItems.length === 0 }">
+              <a href="javascript:void(0)" class="nhsuk-header__navigation-link" (click)="signOut()">Sign out</a>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </nav>
+  </ng-container>
+</header>
+
+<ng-template #menuItemTemplateLink let-item="item" let-css="css" let-showIcon="showIcon">
+  <div class="d-flex align-items-center">
+    <a *ngIf="!item.fullReload" [routerLink]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }">
+      <span>{{ item.label }}</span>
+      <theme-svg-icon *ngIf="showIcon" type="chevron-right" />
+    </a>
+    <a *ngIf="item.fullReload" [href]="item.url" [class]="css" [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+      >{{ item.label }}
+      <theme-svg-icon *ngIf="showIcon" type="chevron-right" />
+    </a>
+    <theme-notification-tag *ngIf="notifications[item.id]" [label]="notifications[item.id]" class="nhsuk-u-padding-right-2 nhsuk-u-padding-bottom-3"></theme-notification-tag>
+  </div>
+</ng-template>
+
+<ng-template #menuItemTemplate let-item="item">
+  <ng-container *ngIf="(item.children || []).length === 0">
+    <ng-container *ngTemplateOutlet="menuItemTemplateLink; context: { item: item, css: 'nhsuk-header__navigation-link', showIcon: true }"></ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="(item.children || []).length > 0">
+    <button
+      type="button"
+      class="nhsuk-header__navigation-link app-multilevel-navigation__toggle-button"
+      [ngClass]="{ 'button-closed': !item.isOpen, 'button-open': item.isOpen }"
+      (click)="onHeaderMenuClick(item)"
+      [attr.aria-expanded]="item.isOpen"
+      attr.aria-label="{{ item.isOpen ? 'Hide' : 'Show' }} {{ item.label }} menu"
+    >
+      {{ item.label }}
+      <theme-svg-icon type="chevron-right" />
+    </button>
+
+    <div *ngIf="item.isOpen" class="app-multilevel-navigation__dropdown-menu">
+      <div class="nhsuk-width-container app-width-container">
+        <div class="nhsuk-grid-row">
+          <div class="nhsuk-grid-column-one-third">
+            <p class="nhsuk-body-m app-multilevel-navigation__dropdown-menu-description">{{ item.description }}</p>
+          </div>
+          <div class="nhsuk-grid-column-two-thirds">
+            <ul class="app-multilevel-navigation__dropdown-menu-list">
+              <li *ngFor="let childItem of item.children">
+                <ng-container
+                  *ngTemplateOutlet="menuItemTemplateLink; context: { item: childItem, css: 'nhsuk-u-font-size-16 nhsuk-u-font-weight-bold', showIcon: false }"
+                ></ng-container>
+                <p *ngIf="childItem.description" class="nhsuk-body-s nhsuk-u-margin-0">{{ childItem.description }}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-template>

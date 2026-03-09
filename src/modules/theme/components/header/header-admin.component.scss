@@ -171,30 +171,3 @@
     }
   }
 }
-
-.nhsuk-header__menu {
-  position: relative;
-}
-
-.nhsuk-header__menu-list {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  z-index: 1000;
-}
-
-:host ::ng-deep .nhsuk-header__navigation-list {
-  position: relative;
-}
-
-:host ::ng-deep .nhsuk-header__menu {
-  position: static;
-}
-
-:host ::ng-deep .nhsuk-header__menu-list {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-}
