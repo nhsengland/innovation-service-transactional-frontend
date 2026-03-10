@@ -47,6 +47,7 @@ import { SpinnerComponent } from './components/spinner/spinner.component';
 import { StatisticsCardsComponent } from './components/statistics-cards/statistics-cards.component';
 import { SuggestionsCardsComponent } from './components/suggestions-cards/suggestions-cards-component';
 import { TagComponent } from './components/tag/tag.component';
+import { HeaderAdminComponent } from './components/header/header-admin.component';
 
 @NgModule({
   imports: [
@@ -70,6 +71,7 @@ import { TagComponent } from './components/tag/tag.component';
     AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,
+    HeaderAdminComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,
@@ -123,6 +125,7 @@ import { TagComponent } from './components/tag/tag.component';
     AnnouncementCardComponent,
     ContentWrapperComponent,
     HeaderComponent,
+    HeaderAdminComponent,
     HeaderBreadcrumbsBarComponent,
     HeaderNavigationBarComponent,
     FooterComponent,

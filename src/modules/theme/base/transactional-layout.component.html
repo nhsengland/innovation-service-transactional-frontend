@@ -1,11 +1,24 @@
-<theme-header
-  id="theme-header"
-  [showUserInformation]="true"
-  [showSignOut]="true"
-  [leftMenuBarItems]="header.menuBarItems.left"
-  [rightMenuBarItems]="header.menuBarItems.right"
-  [notifications]="headerNotifications()"
-></theme-header>
+<ng-container *ngIf="!isAdmin">
+  <theme-header
+    id="theme-header"
+    [showUserInformation]="true"
+    [showSignOut]="true"
+    [leftMenuBarItems]="header.menuBarItems.left"
+    [rightMenuBarItems]="header.menuBarItems.right"
+    [notifications]="headerNotifications()"
+  />
+</ng-container>
+<ng-container *ngIf="isAdmin">
+  <theme-header-admin
+    id="theme-header"
+    [showUserInformation]="true"
+    [showSignOut]="true"
+    [leftMenuBarItems]="header.menuBarItems.left"
+    [rightMenuBarItems]="header.menuBarItems.right"
+    [notifications]="headerNotifications()"
+  />
+</ng-container>
+
 <theme-header-breadcrumbs-bar id="theme-breadcrumbs-bar"></theme-header-breadcrumbs-bar>
 
 <div class="nhsuk-width-container-fluid app-width-container-fluid overflow-x-hidden" [ngClass]="routeLayoutInfo.backgroundColor">

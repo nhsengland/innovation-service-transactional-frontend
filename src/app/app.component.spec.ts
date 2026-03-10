@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from '@modules/theme/components/header/header.component';
 import { FooterComponent } from '@modules/theme/components/footer/footer.component';
 import { ActivityTimeoutComponent } from '@modules/theme/components/activity-timeout/activity-timeout.component';
+import { HeaderAdminComponent } from '@modules/theme/components/header/header-admin.component';
 
 describe('AppComponent running SERVER side', () => {
   let component: AppComponent;
@@ -21,7 +22,7 @@ describe('AppComponent running SERVER side', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
-      declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
+      declarations: [AppComponent, HeaderComponent, HeaderAdminComponent, FooterComponent, ActivityTimeoutComponent],
       providers: [{ provide: PLATFORM_ID, useValue: 'server' }]
     });
   });
@@ -44,7 +45,7 @@ describe('AppComponent running CLIENT side', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterModule, CoreModule, StoresModule],
-      declarations: [AppComponent, HeaderComponent, FooterComponent, ActivityTimeoutComponent],
+      declarations: [AppComponent, HeaderComponent, HeaderAdminComponent, FooterComponent, ActivityTimeoutComponent],
       providers: [
         { provide: PLATFORM_ID, useValue: 'browser' },
         { provide: 'APP_SERVER_ENVIRONMENT_VARIABLES', useValue: ENV }

@@ -22,11 +22,11 @@ export type HeaderMenuBarItemType = {
 export type HeaderNotificationsType = Record<string, number>;
 
 @Component({
-  selector: 'theme-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  selector: 'theme-header-admin',
+  templateUrl: './header-admin.component.html',
+  styleUrls: ['./header-admin.component.scss']
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showUserInformation = false;
   @Input() showSignOut = false;
   @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
@@ -40,8 +40,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userDescription = computed(() =>
     this.ctx.user.isAccessorType()
-      ? `Logged in as ${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
-      : `Logged in as ${this.ctx.user.getUserRoleTranslation()}`
+      ? `${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
+      : `${this.ctx.user.getUserRoleTranslation()}`
   );
 
   menuBarItems: {
@@ -86,6 +86,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       if (t && m && n) {
         [t, m].forEach(e => {
           e.addEventListener('click', r => {
+            console.log('clicked');
             r.preventDefault();
             const nTemp = 'true' === t.getAttribute('aria-expanded') ? 'false' : 'true';
             t.setAttribute('aria-expanded', nTemp);
@@ -133,6 +134,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
+    console.log('header menu click');
     [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(
       i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen)
     );

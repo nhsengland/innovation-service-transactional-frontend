@@ -171,3 +171,665 @@
     }
   }
 }
+
+.nhsuk-header__content-v7 {
+  position: relative;
+}
+.nhsuk-header__content-v7:after {
+  clear: both;
+  content: "";
+  display: block;
+}
+@media print {
+  .nhsuk-header__content-v7 {
+    display: none;
+  }
+}
+.nhsuk-header__content-v7.js-show {
+  border-bottom: 4px solid #f0f4f5;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__content-v7 {
+    float: right;
+  }
+  .nhsuk-header__content-v7.js-show {
+    border-bottom: 0;
+  }
+}
+
+.nhsuk-header__navigation-title-v7 {
+  font-weight: 600;
+  margin-bottom: 0;
+  padding: 16px;
+  position: relative;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-title-v7 {
+    display: none;
+  }
+}
+
+.nhsuk-header__navigation-close-v7 {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  height: 40px;
+  padding: 0;
+  width: 40px;
+  overflow: hidden;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  white-space: nowrap;
+}
+.nhsuk-header__navigation-close-v7 .nhsuk-icon__close {
+  fill: #005eb8;
+  height: 40px;
+  width: 40px;
+}
+.nhsuk-header__navigation-close-v7::-moz-focus-inner {
+  border: 0;
+}
+.nhsuk-header__navigation-close-v7:hover .nhsuk-icon__close {
+  fill: #3d4e5b;
+}
+.nhsuk-header__navigation-close-v7:focus {
+  background-color: #ffeb3b;
+  box-shadow:
+    0 -2px #ffeb3b,
+    0 4px #212b32;
+  color: #212b32;
+  outline: 4px solid transparent;
+  text-decoration: none;
+}
+.nhsuk-header__navigation-close-v7:focus .nhsuk-icon__close {
+  fill: #212b32;
+}
+
+.nhsuk-header__navigation-list-v7 {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-list-v7 {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    width: 100%;
+  }
+}
+
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-list-V7--small {
+    justify-content: flex-start;
+  }
+}
+
+.nhsuk-header--white .nhsuk-header__navigation-list-V7 {
+  border-top: 0;
+}
+
+.nhsuk-header--white-nav .nhsuk-header__navigation-v7 .nhsuk-header__navigation-list-V7 {
+  border-top: 1px solid #f0f4f5;
+}
+
+.nhsuk-header__navigation-item-v7 {
+  border-top: 1px solid #f0f4f5;
+  margin-bottom: 0;
+  position: relative;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-item-v7 {
+    border-top: 0;
+    margin: 0;
+    text-align: center;
+  }
+  .nhsuk-header__navigation-item-v7 .nhsuk-icon__chevron-right {
+    display: none;
+  }
+}
+
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-item--for-mobile-v7 {
+    display: none;
+  }
+}
+
+.nhsuk-header__menu-v7 {
+  float: right;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__menu-v7 {
+    float: left;
+  }
+}
+
+.nhsuk-header__menu-toggle-v7 {
+  background-color: transparent;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  margin-right: 0;
+  padding: 7px 16px;
+  position: relative;
+  text-decoration: none;
+  z-index: 1;
+}
+.nhsuk-header__menu-toggle-v7::-moz-focus-inner {
+  border: 0;
+}
+.nhsuk-header__menu-toggle-v7:hover {
+  background-color: #003d78;
+  border-color: #f0f4f5;
+  box-shadow: none;
+}
+.nhsuk-header__menu-toggle-v7:focus {
+  border: 1px solid #ffeb3b !important;
+}
+
+.nhsuk-header__menu-toggle-v7:active {
+  background-color: #002f5c;
+  border-color: #f0f4f5;
+  color: #f0f4f5;
+}
+@media (max-width: 40.0525em) {
+  .nhsuk-header__menu-toggle-v7 {
+    right: 48px;
+  }
+}
+@media (min-width: 40.0625em) and (max-width: 61.865em) {
+  .nhsuk-header__menu-toggle-v7 {
+    margin-top: 0;
+  }
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__menu-toggle-v7 {
+    display: none;
+  }
+}
+.nhsuk-header__menu-toggle-v7:focus {
+  background-color: #ffeb3b;
+  border: 0;
+  box-shadow: 0 4px 0 0 #212b32;
+  color: #212b32;
+  outline: 4px solid transparent;
+  outline-offset: 4px;
+  box-shadow:
+    0 0 0 2px #ffeb3b,
+    0 4px 0 2px #212b32;
+}
+.nhsuk-header__menu-toggle-v7:focus .nhsuk-icon {
+  fill: #212b32;
+}
+@media (max-width: 40.0525em) {
+  .nhsuk-header__menu-v7--only .nhsuk-header__menu-toggle-v7 {
+    position: relative;
+    right: auto;
+    top: auto;
+  }
+}
+
+.nhsuk-header__menu-toggle-v7.is-active,
+.nhsuk-header__menu-toggle-v7:active {
+  background-color: #002f5c;
+  border-color: #f0f4f5;
+  color: #f0f4f5;
+}
+
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7,
+.nhsuk-header--white .nhsuk-header__search-toggle {
+  border-color: #005eb8;
+  color: #005eb8;
+}
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7 .nhsuk-icon,
+.nhsuk-header--white .nhsuk-header__search-toggle .nhsuk-icon {
+  fill: #005eb8;
+}
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7.is-active,
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7:hover,
+.nhsuk-header--white .nhsuk-header__search-toggle.is-active,
+.nhsuk-header--white .nhsuk-header__search-toggle:hover {
+  border-color: #004b93;
+  color: #fff;
+}
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7.is-active .nhsuk-icon,
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7:hover .nhsuk-icon,
+.nhsuk-header--white .nhsuk-header__search-toggle.is-active .nhsuk-icon,
+.nhsuk-header--white .nhsuk-header__search-toggle:hover .nhsuk-icon {
+  fill: #fff;
+}
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7:focus,
+.nhsuk-header--white .nhsuk-header__search-toggle:focus {
+  color: #212b32;
+}
+.nhsuk-header--white .nhsuk-header__menu-toggle-v7:focus .nhsuk-icon,
+.nhsuk-header--white .nhsuk-header__search-toggle:focus .nhsuk-icon {
+  fill: #212b32;
+}
+
+.nhsuk-width-container-v7 {
+  margin: 0 16px;
+  max-width: 960px;
+}
+@media (min-width: 48.0625em) {
+  .nhsuk-width-container-v7 {
+    margin: 0 32px;
+  }
+}
+@media (min-width: 1024px) {
+  .nhsuk-width-container-v7 {
+    margin: 0 auto;
+  }
+}
+.nhsuk-width-container-v7-fluid {
+  margin: 0 16px;
+  max-width: 100%;
+}
+@media (min-width: 48.0625em) {
+  .nhsuk-width-container-v7-fluid {
+    margin: 0 32px;
+  }
+}
+
+.nhsuk-breadcrumb + .nhsuk-width-container-v7 .nhsuk-main-wrapper {
+  padding-top: 0;
+}
+
+.nhsuk-header__navigation-v7.js-show {
+  display: block;
+}
+
+@media (max-width: 61.865em) {
+  .nhsuk-header__navigation-v7.js-show {
+    border-bottom: 4px solid #f0f4f5;
+    border-top: 4px solid #f0f4f5;
+  }
+  .nhsuk-header__navigation-v7.js-show .nhsuk-width-container-v7 {
+    margin: 0 16px;
+  }
+}
+@media (max-width: 48.0525em) {
+  .nhsuk-header__navigation-v7.js-show .nhsuk-width-container-v7 {
+    margin: 0;
+  }
+}
+
+.nhsuk-header__container-v7 {
+  padding: 20px 0;
+}
+.nhsuk-header__container-v7:after {
+  clear: both;
+  content: "";
+  display: block;
+}
+@media (max-width: 40.0525em) {
+  .nhsuk-header__container-v7 {
+    margin: 0;
+    padding: 16px;
+  }
+}
+
+.nhsuk-header__logo-v7 {
+  float: left;
+}
+@media (max-width: 40.0525em) {
+  .nhsuk-header__logo-v7 {
+    position: relative;
+    z-index: 1;
+  }
+}
+.nhsuk-header__logo-v7 .nhsuk-logo__background {
+  fill: #fff;
+}
+@media print {
+  .nhsuk-header__logo-v7 .nhsuk-logo__background {
+    fill: #005eb8;
+  }
+}
+.nhsuk-header__logo-v7 .nhsuk-logo__text {
+  fill: #005eb8;
+}
+@media print {
+  .nhsuk-header__logo-v7 .nhsuk-logo__text {
+    fill: #fff;
+  }
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__logo-v7 {
+    padding-left: 0;
+  }
+}
+.nhsuk-header__logo-v7 .nhsuk-logo {
+  height: 40px;
+  width: 100px;
+  border: 0;
+}
+@media (max-width: 48.0525em) {
+  .nhsuk-header__logo-v7 {
+    max-width: 60%;
+  }
+}
+@media (max-width: 450px) {
+  .nhsuk-header__logo-v7 {
+    max-width: 50%;
+  }
+}
+
+.nhsuk-header__logo-v7--only {
+  max-width: 100%;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__logo-v7--only .nhsuk-header__link-V7--service {
+    align-items: center;
+    display: flex;
+    -ms-flex-align: center;
+    margin-bottom: 0;
+    width: auto;
+  }
+  .nhsuk-header__logo-v7--only .nhsuk-header__service-name-v7 {
+    padding-left: 16px;
+  }
+}
+
+.nhsuk-header--organisation .nhsuk-header__logo-v7 .nhsuk-logo {
+  height: 32px;
+  width: 80px;
+}
+@media (max-width: 450px) {
+  .nhsuk-header--organisation .nhsuk-header__logo-v7 .nhsuk-logo {
+    height: 24px;
+    width: 60px;
+  }
+}
+@media (max-width: 375px) {
+  .nhsuk-header--organisation .nhsuk-header__logo-v7 .nhsuk-logo {
+    height: 20px;
+    width: 50px;
+  }
+}
+
+.nhsuk-header__navigation-v7 {
+  background-color: #fff;
+  clear: both;
+  display: none;
+  overflow: hidden;
+}
+@media print {
+  .nhsuk-header__navigation-v7 {
+    display: none;
+  }
+}
+
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-v7 {
+    background-color: #005eb8;
+    display: block;
+    margin: 0 auto;
+    max-width: 1024px;
+  }
+}
+
+.nhsuk-header--organisation .nhsuk-header__navigation-v7 {
+  max-width: 100%;
+}
+
+.nhsuk-header-v7 {
+  background-color: #005eb8;
+}
+
+.nhsuk-header-v7:after {
+  clear: both;
+  content: "";
+  display: block;
+}
+
+.nhsuk-header__link-v7 {
+  height: 40px;
+  width: 100px;
+  display: block;
+}
+.nhsuk-header__link-v7:hover .nhsuk-logo {
+  box-shadow: 0 0 0 4px #003d78;
+}
+.nhsuk-header__link-v7:focus {
+  box-shadow: none;
+}
+.nhsuk-header__link-v7:focus .nhsuk-logo {
+  box-shadow:
+    0 0 0 4px #ffeb3b,
+    0 4px 0 4px #212b32;
+}
+@media print {
+  .nhsuk-header__link-v7:after {
+    content: "";
+  }
+}
+.nhsuk-header__link-v7:active,
+.nhsuk-header__link-v7:focus,
+.nhsuk-header__link-v7:hover {
+  background-color: transparent;
+}
+
+.nhsuk-header--transactional .nhsuk-header__link-v7 {
+  height: 32px;
+  width: 80px;
+  display: block;
+}
+
+.nhsuk-header__link-v7--service {
+  height: auto;
+  margin-bottom: -4px;
+  text-decoration: none;
+  width: auto;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__link-v7--service {
+    align-items: center;
+    display: flex;
+    -ms-flex-align: center;
+    margin-bottom: 0;
+    width: auto;
+  }
+}
+.nhsuk-header__link-v7--service:hover {
+  background: 0 0;
+}
+.nhsuk-header__link-v7--service:hover .nhsuk-header__service-name-v7 {
+  text-decoration: underline;
+}
+.nhsuk-header__link-v7--service:focus {
+  background: #ffeb3b;
+  box-shadow:
+    0 0 0 4px #ffeb3b,
+    0 4px 0 4px #212b32;
+}
+.nhsuk-header__link-v7--service:focus .nhsuk-header__service-name-v7 {
+  color: #212b32;
+  text-decoration: none;
+}
+
+.nhsuk-header__link-v7--service:focus .nhsuk-logo {
+  box-shadow: none;
+}
+
+.nhsuk-header--organisation .nhsuk-header__link-v7 {
+  height: auto;
+  text-decoration: none;
+  width: auto;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:hover .nhsuk-logo {
+  box-shadow: none;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:focus {
+  background: #ffeb3b;
+  box-shadow:
+    0 0 0 4px #ffeb3b,
+    0 4px 0 4px #212b32;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:focus .nhsuk-organisation-descriptor,
+.nhsuk-header--organisation .nhsuk-header__link-v7:focus .nhsuk-organisation-name {
+  color: #212b32;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:focus .nhsuk-logo {
+  box-shadow: none;
+}
+.nhsuk-header--organisation .nhsuk-header__link-v7:focus:hover {
+  text-decoration: none;
+}
+
+.nhsuk-header--white .nhsuk-header__link-v7:hover {
+  color: #212b32;
+  text-decoration: underline;
+}
+.nhsuk-header--white .nhsuk-header__link-v7:hover .nhsuk-organisation-descriptor {
+  color: #212b32;
+}
+
+.nhsuk-header__service-name-v7 {
+  font-weight: 400;
+  font-size: 16px;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #fff;
+  display: block;
+  padding-left: 0;
+  padding-right: 0;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__service-name-v7 {
+    font-size: 19px;
+    font-size: 1.1875rem;
+    line-height: 1.47368;
+  }
+}
+@media print {
+  .nhsuk-header__service-name-v7 {
+    font-size: 14pt;
+    line-height: 1.15;
+  }
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__service-name-v7 {
+    padding-left: 16px;
+  }
+}
+@media (max-width: 61.865em) {
+  .nhsuk-header__service-name-v7 {
+    max-width: 220px;
+  }
+}
+
+.nhsuk-header--white .nhsuk-header__service-name-v7 {
+  color: #212b32;
+}
+
+.nhsuk-header__navigation-link-v7 {
+  font-weight: 400;
+  font-size: 14px;
+  font-size: 0.875rem;
+  line-height: 1.71429;
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  color: #005eb8;
+  display: block;
+  padding: 12px 16px;
+  text-decoration: none;
+}
+@media (min-width: 40.0625em) {
+  .nhsuk-header__navigation-link-v7 {
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+@media print {
+  .nhsuk-header__navigation-link-v7 {
+    font-size: 14pt;
+    line-height: 1.2;
+  }
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-link-v7 {
+    color: #fff;
+    line-height: normal;
+  }
+}
+.nhsuk-header__navigation-link-v7 .nhsuk-icon__chevron-right {
+  fill: #aeb7bd;
+  position: absolute;
+  right: 4px;
+  top: 11px;
+}
+.nhsuk-header__navigation-link-v7:visited {
+  color: #005eb8;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-link-v7:visited {
+    color: #fff;
+  }
+}
+.nhsuk-header__navigation-link-v7:hover {
+  box-shadow: none;
+  color: #005eb8;
+  text-decoration: underline;
+}
+@media (min-width: 61.875em) {
+  .nhsuk-header__navigation-link-v7:hover {
+    color: #fff;
+  }
+}
+.nhsuk-header__navigation-link-v7:hover .nhsuk-icon__chevron-right {
+  fill: #005eb8;
+}
+.nhsuk-header__navigation-link-v7:active,
+.nhsuk-header__navigation-link-v7:focus {
+  background-color: #ffeb3b;
+  border-bottom: 4px solid #212b32;
+  box-shadow: none;
+  color: #212b32;
+  outline: 4px solid transparent;
+  outline-offset: 4px;
+  text-decoration: none;
+}
+.nhsuk-header__navigation-link-v7:active:hover,
+.nhsuk-header__navigation-link-v7:focus:hover {
+  background-color: #ffeb3b;
+  color: #212b32;
+}
+.nhsuk-header__navigation-link-v7:active:hover .nhsuk-icon__chevron-right,
+.nhsuk-header__navigation-link-v7:focus:hover .nhsuk-icon__chevron-right {
+  fill: #212b32;
+}
+.nhsuk-header__navigation-link-v7:active:visited,
+.nhsuk-header__navigation-link-v7:focus:visited {
+  background-color: #ffeb3b;
+  color: #212b32;
+}
+
+.nhsuk-header--white-nav .nhsuk-header__navigation-v7 .nhsuk-header__navigation-link-v7 {
+  color: #005eb8;
+}
+.nhsuk-header--white-nav .nhsuk-header__navigation-v7 .nhsuk-header__navigation-link-v7:visited {
+  color: #005eb8;
+}
+.nhsuk-header--white-nav .nhsuk-header__navigation-v7 .nhsuk-header__navigation-link-v7:focus {
+  color: #212b32;
+}
+.nhsuk-header--white-nav .nhsuk-header__navigation-v7 .nhsuk-header__navigation-link-v7:focus:hover {
+  background: #ffeb3b;
+}
+
+.ml-auto {
+  margin-left: auto;
+}

@@ -69,8 +69,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('menuList') menuListRef?: ElementRef<HTMLUListElement>;
   @ViewChild('navigation') navigationRef?: ElementRef<HTMLElement>;
 
-  visibleItems: NhsHeaderNavItem[] = [];
-  overflowItems: NhsHeaderNavItem[] = [];
+  visibleItems: HeaderMenuBarItemType[] = [];
+  overflowItems: HeaderMenuBarItemType[] = [];
   menuEnabled = false;
   menuOpen = false;
 
@@ -83,8 +83,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   userDescription = computed(() =>
     this.ctx.user.isAccessorType()
-      ? `Logged in as ${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
-      : `Logged in as ${this.ctx.user.getUserRoleTranslation()}`
+      ? `${this.ctx.user.getUserRoleTranslation()}, ${this.ctx.user.getAccessorUnitName()}`
+      : `${this.ctx.user.getUserRoleTranslation()}`
   );
 
   menuBarItems: {
@@ -124,7 +124,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     // Copied from NHS design system framework scripts.
 
     // Wait for initial render so widths are measurable
-    this.visibleItems = [...this.items];
+    this.visibleItems = [...this.leftMenuBarItems, ...this.rightMenuBarItems];
     this.cdr.detectChanges();
 
     setTimeout(() => this.updateNavigation());
@@ -229,7 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!navContainer || !menuItem || !navList) return;
 
     // Reset
-    this.visibleItems = [...this.items];
+    this.visibleItems = [...this.leftMenuBarItems, ...this.rightMenuBarItems];
     this.overflowItems = [];
     this.menuEnabled = false;
     this.menuOpen = false;
@@ -241,6 +241,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       navList.querySelectorAll<HTMLElement>('.nhsuk-header__navigation-item[data-nav-item="true"]')
     );
 
+    console.log('leftItems', this.leftMenuBarItems);
+    console.log('rightItems', this.rightMenuBarItems);
+    console.log('visibleItems', this.visibleItems);
     console.log('items', itemElements.length);
     console.log(
       itemElements.map(el => ({
@@ -304,8 +307,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.visibleItems = this.items.slice(0, overflowIndex);
-    this.overflowItems = this.items.slice(overflowIndex);
+    this.visibleItems = this.leftMenuBarItems.slice(0, overflowIndex);
+    this.overflowItems = this.leftMenuBarItems.slice(overflowIndex);
     this.menuEnabled = this.overflowItems.length > 0;
     this.menuOpen = false;
 

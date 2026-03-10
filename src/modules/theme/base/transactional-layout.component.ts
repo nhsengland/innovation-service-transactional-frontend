@@ -40,6 +40,9 @@ export class TransactionalLayoutComponent implements OnDestroy {
 
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
+  isAdmin = this.ctx.user.isAdmin();
+
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
     private activatedRoute: ActivatedRoute,
