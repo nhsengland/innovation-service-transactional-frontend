@@ -1,9 +1,8 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-action-link nhsuk-u-margin-bottom-5">
-    <a class="nhsuk-action-link__link" routerLink="/admin/users/new">
-      <theme-svg-icon type="arrow-right-circle" />
-      <span class="nhsuk-action-link__text">Add new user</span>
-    </a>
-  </div>
+<theme-content-wrapper [status]="pageStatus()">
+  <a class="nhsuk-action-link nhsuk-u-margin-bottom-5 d-flex align-items-center" routerLink="/admin/users/new">
+    <theme-svg-icon type="arrow-right-circle" />
+    <span class="nhsuk-action-link__text">Add new user</span>
+  </a>
 
   <p>Find a specific user by providing an email address</p>
 
