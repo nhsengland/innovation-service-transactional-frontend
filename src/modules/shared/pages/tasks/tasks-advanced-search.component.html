@@ -12,7 +12,7 @@
       <form [formGroup]="form">
         <theme-form-input [id]="'searchInnovation'" [label]="search.placeholder" [controlName]="search.key" [pageUniqueField]="false">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button nhsuk-button--small form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
               <span class="nhsuk-u-visually-hidden">Search</span>
             </button>

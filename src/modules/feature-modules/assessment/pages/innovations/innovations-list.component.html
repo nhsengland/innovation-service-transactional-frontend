@@ -1,9 +1,10 @@
-<theme-content-wrapper [status]="pageStatus()">  <div class="nhsuk-grid-row">
+<theme-content-wrapper [status]="pageStatus()">
+  <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <form [formGroup]="form">
         <theme-form-input [id]="'searchInnovation'" controlName="search" label="Search all innovations" [pageUniqueField]="false" placeholder="Search" width="one-third">
           <ng-container append>
-            <button type="button" (click)="onSearchClick()" class="nhsuk-search__submit form-input-appended-button-search" id="search-btn">
+            <button type="button" (click)="onSearchClick()" class="nhsuk-button nhsuk-button--small form-input-appended-button-search" id="search-btn">
               <theme-svg-icon type="search" />
               <span class="nhsuk-u-visually-hidden">Search</span>
             </button>
