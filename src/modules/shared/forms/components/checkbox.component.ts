@@ -56,7 +56,7 @@ export class FormCheckboxComponent extends ControlValueAccessorComponent impleme
   ngOnInit(): void {
     this.id = this.id || RandomGeneratorHelper.generateRandom();
 
-    this.cssClass = this.size === 'small' ? 'form-checkboxes-small' : '';
+    this.cssClass = this.size === 'small' ? 'nhsuk-checkboxes--small' : '';
   }
 
   ngDoCheck(): void {

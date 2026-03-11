@@ -29,7 +29,7 @@
                   [formControlName]="item.value"
                   id="{{ id }}{{ i }}"
                   type="checkbox"
-                  name="{{ groupName }}[{{ item.value }}] }"
+                  name="{{ groupName }}[{{ item.value }}]"
                   class="nhsuk-checkboxes__input"
                   [attr.aria-describedby]="item.description ? '{{ id }}{{ i }}-hint' : null"
                 />
@@ -38,7 +38,7 @@
                 <input
                   id="{{ id }}{{ i }}"
                   type="checkbox"
-                  name="{{ groupName }}[{{ item.value }}] }"
+                  name="{{ groupName }}[{{ item.value }}]"
                   [value]="true"
                   [checked]="isChecked(item.value)"
                   class="nhsuk-checkboxes__input"
