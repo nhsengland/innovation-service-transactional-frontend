@@ -138,4 +138,21 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       }
     });
   }
+
+  downloadInnovationRecordTemplate(): void {
+    console.log('download xlsx');
+    this.innovationsService.getInnovationRecordTemplate().subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `innovation-record-template.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.setAlertError('Unable to download the document. Please try again.');
+      }
+    });
+  }
 }
