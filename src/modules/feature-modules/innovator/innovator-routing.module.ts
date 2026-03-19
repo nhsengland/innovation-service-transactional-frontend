@@ -103,6 +103,7 @@ import { InnovationSubmissionReadyComponent } from './pages/innovation/submissio
 import { EndSupportSurveyJourneyComponent } from './pages/innovation/surveys/journeys/end-support.component';
 import { PageInnovationSupportSurveysComponent } from './pages/innovation/surveys/support-surveys.component';
 import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
+import { PageInnovationSectionEvidenceListComponent } from '@modules/shared/pages/innovation/sections/section-evidence-list.component';
 
 const header: RoutesDataType['header'] = {
   menuBarItems: {
@@ -293,8 +294,16 @@ const routes: Routes = [
                             path: 'evidences',
                             data: { breadcrumb: null },
                             children: [
-                              { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
-
+                              // { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
+                              {
+                                path: '',
+                                pathMatch: 'full',
+                                component: PageInnovationSectionEvidenceListComponent,
+                                data: {
+                                  breadcrumb: 'Evidence',
+                                  layout: { type: 'full' }
+                                }
+                              },
                               { path: 'new', pathMatch: 'full', redirectTo: 'new/1' },
                               {
                                 path: 'new/:questionId',

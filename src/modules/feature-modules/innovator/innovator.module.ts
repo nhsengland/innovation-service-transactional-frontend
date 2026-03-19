@@ -57,6 +57,7 @@ import { InnovatorDataSharingInfoComponent } from './base/data-sharing-info.comp
 import { InnovatorService } from './services/innovator.service';
 
 import { InnovationRecordSidebarComponent } from '@modules/shared/components/innovation-record-sidebar/innovation-record-sidebar.component';
+import { PageInnovationSectionEvidenceListComponent } from '@modules/shared/pages/innovation/sections/section-evidence-list.component';
 
 @NgModule({
   imports: [
@@ -93,6 +94,7 @@ import { InnovationRecordSidebarComponent } from '@modules/shared/components/inn
     PageInnovationManageTransferComponent,
     PageInnovationNeedsReassessmentSendComponent,
     InnovationOverviewComponent,
+    PageInnovationSectionEvidenceListComponent,
     InnovationSectionEvidenceEditComponent,
     InnovationSectionEditComponent,
     InnovationSectionSubmittedComponent,

@@ -39,6 +39,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   isChangeMode = false;
   lastSection = false;
 
+  isEvidenceSection = false;
+
   displayChangeButtonList: number[] = [];
 
   constructor(private activatedRoute: ActivatedRoute) {
@@ -55,6 +57,8 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
     this.wizard.currentStepId = this.activatedRoute.snapshot.params.questionId;
 
     this.isArchived = this.ctx.innovation.isArchived();
+
+    this.isEvidenceSection = this.innovation.id === 'EVIDENCE_OF_EFFECTIVENESS';
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -244,24 +248,32 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
   }
 
   onSubmitSection(): void {
-    this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
-      next: () => {
-        const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
-        const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
-        this.setRedirectAlertSuccess(`You have completed section ${sectionLabel}`);
+    if (!this.isEvidenceSection) {
+      this.ctx.innovation.submitSections$(this.innovation.id, this.sectionId).subscribe({
+        next: () => {
+          const { group, section } = this.ctx.schema.getIrSchemaSectionIdentificationV3(this.sectionId)!;
+          const sectionLabel = `${group.number}.${section.number}. '${section.title}'`;
+          this.setRedirectAlertSuccess(`You have completed section ${sectionLabel}`);
 
-        if (
-          this.innovation.status === InnovationStatusEnum.CREATED ||
-          this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
-        ) {
-          this.redirectTo(
-            this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
-          );
-        } else {
-          this.redirectTo(`${this.baseUrl}/submitted`);
-        }
-      },
-      error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
-    });
+          if (
+            this.innovation.status === InnovationStatusEnum.CREATED ||
+            this.innovation.status === InnovationStatusEnum.WAITING_NEEDS_ASSESSMENT
+          ) {
+            this.redirectTo(
+              this.lastSection ? `/innovator/innovations/${this.innovation.id}/submission-ready` : this.baseUrl
+            );
+          } else {
+            this.redirectTo(`${this.baseUrl}/submitted`);
+          }
+        },
+        error: () => this.setAlertError('Please try again or contact us for further help.', { width: '2.thirds' })
+      });
+    }
+
+    
+    if (this.isEvidenceSection) {
+      this.redirectTo(`${this.baseUrl}`)
+    }
+
   }
 }

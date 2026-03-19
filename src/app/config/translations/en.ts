@@ -1081,6 +1081,15 @@ export const locale = {
                 'My innovation was previously archived or I stopped working on it for a period of time',
               HAS_PROGRESSED_SIGNIFICANTLY: 'My innovation has progressed significantly since my last needs assessment'
             }
+          },
+          evidence: {
+            submitType: {
+              CLINICAL_OR_CARE: 'Evidence of clinical or care outcomes',
+              COST_IMPACT_OR_ECONOMIC: 'Evidence of cost impact, efficiency gains and/or economic modelling',
+              OTHER_EFFECTIVENESS: 'Other evidence of effectiveness (for example environmental or social)',
+              PRE_CLINICAL: 'Pre-clinical evidence',
+              REAL_WORLD: 'Real world evidence'
+            }
           }
         },
         user: {

@@ -143,9 +143,11 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionSummaryData.sectionInfo.wizard = section.wizard;
 
     // Status not created or archived as created or it's a section with files.
+    console.log('sectionID', this.sectionId);
     this.shouldShowDocuments =
-      !!this.innovation.submittedAt ||
-      this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
+      this.sectionId !== 'EVIDENCE_OF_EFFECTIVENESS' &&
+      (!!this.innovation.submittedAt ||
+        this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id));
 
     forkJoin([
       this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
