@@ -58,7 +58,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
       this.summaryList = this.wizard.runSummaryParsing(evidenceInfo);
       this.documentsList = documents.data;
 
-      this.setPageTitle(this.summaryList[1].value ?? '');
+      this.setPageTitle(this.summaryList[1].value ?? '', { width: '2.thirds' });
       this.setPageStatus('READY');
     });
   }

@@ -67,10 +67,14 @@ export type InnovationSectionsListDTO = {
   openTasksCount: number;
 }[];
 
+export type DocumentInfoType = {
+  id: string; displayFileName: string; size?: number; url: string 
+}
+
 export type GetInnovationEvidenceDTO = {
   id: string;
-  evidenceType?: catalogEvidenceSubmitType
-  clinicalEvidenceType:
+  evidenceSubmitType?: catalogEvidenceSubmitType;
+  evidenceType:
     | 'DATA_PUBLISHED'
     | 'NON_RANDOMISED_COMPARATIVE_DATA'
     | 'NON_RANDOMISED_NON_COMPARATIVE_DATA'
@@ -80,7 +84,7 @@ export type GetInnovationEvidenceDTO = {
     | 'OTHER';
   description?: string;
   summary: string;
-  files: { id: string; displayFileName: string; url: string }[];
+  files: DocumentInfoType[];
 };
 
 export type SectionsSummaryModel = {

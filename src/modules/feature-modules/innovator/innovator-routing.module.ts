@@ -320,6 +320,7 @@ const routes: Routes = [
                                   innovationSectionEvidenceData: mapToResolve(InnovationSectionEvidenceDataResolver)
                                 },
                                 data: {
+                                  layout: { type: 'full' },
                                   breadcrumb: (data: RoutesDataType) => {
                                     const name = data.innovationSectionEvidenceData?.name ?? '';
                                     return name.length > 30 ? `${name.substring(0, 30)}...` : name;

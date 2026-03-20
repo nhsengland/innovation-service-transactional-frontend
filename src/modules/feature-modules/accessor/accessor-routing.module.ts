@@ -261,11 +261,10 @@ const routes: Routes = [
                             data: { breadcrumb: null },
                             children: [
                               { path: '', pathMatch: 'full', redirectTo: '../:sectionId' },
-
                               {
                                 path: ':evidenceId',
                                 // resolve: { innovationSectionEvidenceData: InnovationSectionEvidenceDataResolver },
-                                data: { breadcrumb: 'Evidence Info' },
+                                data: { layout: { type: 'full' }, breadcrumb: 'Evidence Info' },
                                 pathMatch: 'full',
                                 component: PageInnovationSectionEvidenceInfoComponent
                               }

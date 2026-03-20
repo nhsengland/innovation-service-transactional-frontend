@@ -44,7 +44,7 @@ export const stepsLabels = {
 };
 
 const stepsChildParentRelations = {
-  evidenceType: 'evidenceSubmitType',
+  evidenceSubmitType: 'evidenceSubmitType',
   description: 'evidenceSubmitType'
 };
 

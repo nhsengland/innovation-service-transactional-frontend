@@ -16,7 +16,7 @@ export class InnovationSectionEvidenceDataResolver {
           id: route.params['evidenceId'] as string,
           name:
             response.description ||
-            irVersionsClinicalMainCategoryItems.find(e => e.value === response.clinicalEvidenceType)?.label ||
+            irVersionsClinicalMainCategoryItems.find(e => e.value === response.evidenceType)?.label ||
             ''
         };
       })

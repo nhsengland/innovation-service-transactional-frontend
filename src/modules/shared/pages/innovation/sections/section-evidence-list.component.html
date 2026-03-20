@@ -2,24 +2,33 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
       <h2 class="nhsuk-caption-l nhsuk-u-margin-bottom-8">Add documents for your evidence.</h2>
-      <a class="nhsuk-action-link__link" routerLink="/admin/users/new">
-        <theme-svg-icon type="arrow-right-circle" />
-        <span class="nhsuk-action-link__text">Add evidence</span>
-      </a>
       <dl class="nhsuk-summary-list">
         <div *ngFor="let evidence of evidenceList" class="nhsuk-summary-list__row">
-          <dt *ngIf="evidence.evidenceType" class="nhsuk-summary-list__key"> {{ "shared.catalog.innovation.evidence.submitType." + evidence.evidenceType  | translate }}</dt>
+          <dt class="nhsuk-summary-list__key">
+            {{ "shared.catalog.innovation.evidence.evidenceSubmitType." + evidence.evidenceSubmitType | translate }}
+          </dt>
           <dd class="nhsuk-summary-list__value text-pre-wrap">
-            <!-- <span *ngIf="item.allowHTML" [innerHTML]="item.value"></span>
-            <span *ngIf="!item.allowHTML">{{ item.value }}</span> -->
+            <span *ngIf="evidence.evidenceType">{{ "shared.catalog.innovation.evidence.evidenceType." + evidence.evidenceType | translate }}</span>
+            <span *ngIf="evidence.description" [innerHTML]="evidence.description"></span>
           </dd>
           <dd *ngIf="ctx.user.isInnovator()" class="nhsuk-summary-list__actions">
             <a routerLink="">
-              More details <span class="nhsuk-u-visually-hidden">{{ evidence.clinicalEvidenceType | lowercase }}</span></a
+              More details <span class="nhsuk-u-visually-hidden">{{ evidence.evidenceType | lowercase }}</span></a
             >
           </dd>
         </div>
       </dl>
+      <div>
+        <a class="nhsuk-action-link__link" routerLink="/admin/users/new">
+          <theme-svg-icon type="arrow-right-circle" />
+          <span class="nhsuk-action-link__text">Add evidence</span>
+        </a>
+      </div>
+      <div>
+        <button class="nhsuk-button nhsuk-u-margin-top-8 nhsuk-u-margin-right-3" (click)="({})">
+          {{ saveButton.label }}
+        </button>
+      </div>
     </div>
   </div>
 </theme-content-wrapper>

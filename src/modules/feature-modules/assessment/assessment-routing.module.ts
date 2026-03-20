@@ -309,7 +309,7 @@ const routes: Routes = [
                                 path: ':evidenceId',
                                 pathMatch: 'full',
                                 component: PageInnovationSectionEvidenceInfoComponent,
-                                data: { breadcrumb: 'Evidence Info' }
+                                data: { layout: { type: 'full' },breadcrumb: 'Evidence Info' }
                               }
                             ]
                           }

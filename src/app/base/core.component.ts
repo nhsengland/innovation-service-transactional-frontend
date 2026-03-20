@@ -18,7 +18,7 @@ import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
 import { ContextLayoutType, CtxStore } from '@modules/stores';
 
-type AlertOptions = {
+export type AlertOptions = {
   message?: string;
   listStyleType?: NonNullable<ContextLayoutType['alert']>['listStyleType'];
   itemsList?: NonNullable<ContextLayoutType['alert']>['itemsList'];

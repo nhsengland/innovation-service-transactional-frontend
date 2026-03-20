@@ -9,6 +9,7 @@ import {
 } from '@modules/feature-modules/accessor/services/accessor.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
+import { GetInnovationEvidenceDTO } from '@modules/stores/ctx/innovation/innovation.models';
 
 export class UtilsHelper {
   static isEmpty(value: any) {
@@ -148,5 +149,10 @@ export class UtilsHelper {
 
   static getAssessmentVersion(majorVersion = 1, minorVersion = 0): string {
     return `${majorVersion}.${minorVersion}`;
+  }
+
+  static allEvidenceHaveDocuments(evidenceList: GetInnovationEvidenceDTO[]): boolean{
+    const allHaveFiles = !evidenceList.some(item => !item.files?.length);
+    return allHaveFiles
   }
 }
