@@ -8,6 +8,7 @@ import {
 
 import { evidenceSubmitTypeItems, evidenceTypeItems } from './evidences-forms.config';
 import { DocumentType202405 } from './evidences-document.types';
+import { UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
 
 // Labels.
 export const stepsLabels = {
@@ -35,6 +36,12 @@ export const stepsLabels = {
     description:
       'Give a brief overview that covers the scope of the study and its key findings. Organisations will read this summary to see if any evidence is relevant to what they can help you with.',
     conditional: true
+  },
+  q6: {
+    label: 'Supporting Documents',
+    description:
+      'Add documents for your evidence. Files must be CSV, XLSX, DOCX or PDF, and can be up to 20MB each.',
+    conditional: false
   }
   // q6: {
   //   label: 'Upload any documents that support this evidence',
@@ -49,8 +56,10 @@ const stepsChildParentRelations = {
 };
 
 // Types.
-type StepPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
-type OutboundPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
+type StepPayloadType =
+  Omit<Required<DocumentType202405>['evidences'][number], 'id'> & {
+    file: UpsertInnovationDocumentType[];
+  };type OutboundPayloadType = Omit<Required<DocumentType202405>['evidences'][number], 'id'>;
 
 // Logic.
 export const SECTION_2_EVIDENCES = new WizardEngineModel({
@@ -162,6 +171,20 @@ function runtimeRules(steps: WizardStepType[], currentValues: StepPayloadType, c
       ]
     })
   );
+
+  steps.push(
+    new FormEngineModel({
+      parameters: [
+        {
+          id: 'supportingDocuments',
+          dataType: 'elements-list-info',
+          label: stepsLabels.q6.label,
+          description: stepsLabels.q6.description,
+          validations: { isRequired: [true, 'You must add at least one document to complete this evidence.'] }
+        }
+      ]
+    })
+  );
 }
 
 function outboundParsing(data: StepPayloadType): OutboundPayloadType {
@@ -223,5 +246,15 @@ function summaryParsing(data: StepPayloadType): WizardSummaryType[] {
     editStepNumber: editStepNumber++
   });
 
+  //   toReturn.push({
+  //   label: stepsLabels.q6.label,
+  //   value: formatFileSummary(data.file) ?? [],
+  //   editStepNumber: editStepNumber++
+  // });
+
   return toReturn;
+}
+
+function formatFileSummary(files: UpsertInnovationDocumentType[] ):string {
+  return files.map((f)=>{`${f.name}(${f.file?.extension})`}).join('\n')
 }

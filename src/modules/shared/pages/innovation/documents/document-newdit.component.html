@@ -21,7 +21,8 @@
           </div>
         </dl>
 
-        <button *ngIf="pageData.isCreation" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
+        <button *ngIf="isEntrypointEvidenceSection" type="button" class="nhsuk-button" (click)="onAddEvidenceDocument()">Confirm and add document</button>
+        <button *ngIf="pageData.isCreation && !isEntrypointEvidenceSection" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and add document</button>
         <button *ngIf="pageData.isEdition" type="button" class="nhsuk-button" (click)="onSubmitWizard()">Confirm and update document</button>
       </ng-container>
     </div>

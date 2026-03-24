@@ -159,6 +159,11 @@
           <theme-form-date-input [groupName]="p.id" [id]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField" />
         </div>
 
+        <div *ngSwitchCase="'elements-list-info'">
+          <theme-form-supporting-documents-list-info [id]="p.id" [arrayName]="p.id" [label]="p.label" [description]="p.description" [supportingDocumentsList]="supportingDocumentsList">
+          </theme-form-supporting-documents-list-info>
+        </div>
+
         <div *ngSwitchDefault>
           <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>

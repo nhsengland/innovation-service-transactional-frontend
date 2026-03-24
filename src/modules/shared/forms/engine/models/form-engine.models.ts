@@ -8,6 +8,7 @@ import {
   InnovationRecordQuestionStepType,
   InnovationRecordStepValidationsType
 } from '@modules/stores/innovation/innovation-record/202405/ir-v3-types';
+import { UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
 
 export type FormatUrlValidatorType = { message?: string; maxLength?: number };
 
@@ -43,7 +44,8 @@ export class FormEngineParameterModel {
     | 'file-upload-array'
     | 'select-component'
     | 'date-input'
-    | 'ir-selectable-filters';
+    | 'ir-selectable-filters'
+    | 'elements-list-info';
   label?: string;
   description?: string;
   placeholder?: string;
@@ -112,6 +114,8 @@ export class FormEngineParameterModel {
   };
 
   selectItems?: { selectList: SelectComponentInputType[]; defaultKey: string };
+
+  supportingDocumentsList?: UpsertInnovationDocumentType[]
 
   constructor(data: FormEngineParameterModel) {
     this.id = data.id;

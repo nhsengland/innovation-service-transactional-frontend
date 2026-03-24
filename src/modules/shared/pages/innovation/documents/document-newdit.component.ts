@@ -5,7 +5,10 @@ import { CoreComponent } from '@app/base';
 import { FileTypes, FormEngineComponent, WizardEngineModel } from '@app/base/forms';
 import { UrlModel } from '@app/base/models';
 
-import { InnovationDocumentsService } from '@modules/shared/services/innovation-documents.service';
+import {
+  InnovationDocumentsService,
+  UpsertInnovationDocumentType
+} from '@modules/shared/services/innovation-documents.service';
 
 import { InnovationErrorsEnum } from '@app/base/enums';
 import {
@@ -14,6 +17,7 @@ import {
   WIZARD_EDIT_QUESTIONS,
   WIZARD_WITH_LOCATION_QUESTIONS
 } from './document-newdit.config';
+import { EvidenceDraftService } from '@modules/stores/ctx/evidence/evidenceDraft.store';
 
 @Component({
   selector: 'shared-pages-innovation-documents-document-newdit',
@@ -25,31 +29,43 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   innovationId: string;
   documentId: string;
 
+  baseUrl: string;
+
   pageData: {
     isCreation: boolean;
     isEdition: boolean;
-    queryParams: { sectionId?: string; evidenceId?: string; progressUpdateId?: string };
+    queryParams: { sectionId?: string; evidenceId?: string; progressUpdateId?: string; entrypointSection?: string };
   };
+
+  isEntrypointEvidenceSection = false;
 
   wizard = new WizardEngineModel({});
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private innovationDocumentsService: InnovationDocumentsService
+    private innovationDocumentsService: InnovationDocumentsService,
+    private evidenceDraftService: EvidenceDraftService
   ) {
     super();
 
     this.innovationId = this.activatedRoute.snapshot.params.innovationId;
     this.documentId = this.activatedRoute.snapshot.params.announcementId;
+    this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovationId}/`;
     this.pageData = {
       isCreation: !this.documentId,
       isEdition: !!this.documentId,
       queryParams: {
         sectionId: this.activatedRoute.snapshot.queryParams.sectionId,
         evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId,
-        progressUpdateId: this.activatedRoute.snapshot.queryParams.progressUpdateId
+        progressUpdateId: this.activatedRoute.snapshot.queryParams.progressUpdateId,
+        entrypointSection: this.activatedRoute.snapshot.queryParams.entrypointSection
       }
     };
+
+    this.isEntrypointEvidenceSection = this.pageData.queryParams.entrypointSection === 'EVIDENCE_OF_EFFECTIVENESS';
+
+    console.log('pageData.queryParams.entrypointSection:', this.pageData.queryParams.entrypointSection);
+    console.log('isEntrypointEvidenceSection:', this.isEntrypointEvidenceSection);
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
@@ -69,6 +85,16 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
             innovationId: this.innovationId,
             context: { type: 'INNOVATION_EVIDENCE', id: this.pageData.queryParams.evidenceId }
           });
+        } else if (this.isEntrypointEvidenceSection) {
+          this.wizard = new WizardEngineModel(WIZARD_BASE_QUESTIONS);
+          this.wizard.setInboundParsedAnswers({
+            innovationId: this.innovationId,
+            context: { type: 'INNOVATION_EVIDENCE' }
+          });
+          // if coming from evidence flow, check and init draft store
+          if (this.evidenceDraftService.isEmpty()) {
+            this.evidenceDraftService.initDraft();
+          }
         } else {
           this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({
             innovationId: this.innovationId,
@@ -157,6 +183,24 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     } else {
       this.setPageTitle('Check your answers', { size: 'l' });
     }
+  }
+
+  onAddEvidenceDocument(): void {
+    console.log('adding document to store ')
+    const wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
+
+    const doc: UpsertInnovationDocumentType = {
+      context: wizardSummary.context,
+      name: wizardSummary.name,
+      description: wizardSummary.description,
+      file: wizardSummary.file
+    };
+
+    this.evidenceDraftService.addDocument(doc);
+
+    this.router.navigate([`${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/new/`], {
+      queryParams: { entrypoint: 'newDocumentWizard' }
+    });
   }
 
   onSubmitWizard(): void {
