@@ -73,7 +73,6 @@ import { PageTermsOfUseAcceptanceComponent } from './pages/terms-of-use/terms-of
 import { WizardSummaryWithConfirmStepComponent } from './wizards/steps/summary-with-confirm-step.component';
 
 // Pipes.
-import { BytesPrettyPrintPipe } from './pipes/bytes-pretty-print.pipe';
 import { IrV3TranslatePipe } from './pipes/ir-v3-translate.pipe';
 import { JoinArrayPipe } from './pipes/join-array.pipe';
 import { PluralTranslatePipe } from './pipes/plural-translate.pipe';
@@ -134,6 +133,7 @@ import { InnovationRecordProgressComponent } from './pages/innovation/record/inn
 import { WizardInnovationSupportSummaryProgressUpdateMilestonesNotificationStepComponent } from './pages/innovation/support/wizard-support-summary-progress-update-milestones/steps/notification-step.component';
 
 import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/strategic-roles-list.component';
+import { BytesPrettyPrintPipeModule } from './pipes/bytes-pretty-print.module';
 @NgModule({
   imports: [
     RouterModule,
@@ -149,7 +149,10 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     // Standalone
     PluralTranslatePipe,
     InnovationRecordProgressComponent,
-    InnovationSubmissionReadyComponent
+    InnovationSubmissionReadyComponent,
+
+    // Pipe Modules
+    BytesPrettyPrintPipeModule
   ],
   declarations: [
     // Pages.
@@ -241,7 +244,6 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     WizardSummaryWithConfirmStepComponent,
 
     // Pipes.
-    BytesPrettyPrintPipe,
     JoinArrayPipe,
     ProgressCategoriesCategoryDescriptionPipe,
     ProgressCategoriesSubcategoryDescriptionPipe,
@@ -286,7 +288,7 @@ import { PageStrategicRolesListComponent } from './pages/strategic-roles-list/st
     FormsModule,
 
     // Pipes.
-    BytesPrettyPrintPipe,
+    BytesPrettyPrintPipeModule,
     PluralTranslatePipe,
     IrV3TranslatePipe,
     JoinArrayPipe,
