@@ -336,8 +336,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.setPageStatus('LOADING');
 
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
-console.log('this.currentTab.queryFields',this.currentTab.queryFields)
-console.log('this.currentTab.queryFields',this.currentTab.queryFields)
     this.innovationsService.getInnovationsList(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
       next: response => {
         this.innovationsList.setData(
