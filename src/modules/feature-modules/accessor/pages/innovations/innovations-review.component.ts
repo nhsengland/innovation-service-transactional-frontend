@@ -118,7 +118,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.updatedAt',
             'statistics.notifications',
             'engagingOrganisations',
-            'engagingUnits'
+            'engagingUnits',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -144,7 +145,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'support.isShared',
             'support.closeReason',
             'statistics.notifications',
-            'engagingOrganisations'
+            'engagingOrganisations',
+            'lastSupportGivenAt'
           ],
           notifications: null
         }
@@ -170,7 +172,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'assessment.id',
             'assessment.finishedAt',
             'support.status',
-            'statistics.notifications'
+            'statistics.notifications',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -197,7 +200,8 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             'statistics.notifications',
             'engagingOrganisations',
             'suggestion.suggestedOn',
-            'suggestion.suggestedBy'
+            'suggestion.suggestedBy',
+            'lastSupportGivenAt'
           ],
           notifications: null
         },
@@ -332,7 +336,6 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
     this.setPageStatus('LOADING');
 
     const { take, skip, order, filters } = this.innovationsList.getAPIQueryParams();
-
     this.innovationsService.getInnovationsList(this.currentTab.queryFields, filters, { take, skip, order }).subscribe({
       next: response => {
         this.innovationsList.setData(
