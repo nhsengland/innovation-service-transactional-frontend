@@ -46,6 +46,8 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   }
 
   ngOnInit(): void {
+    this.setBackLink('Go back',`${this.baseUrl}/record/sections/${this.sectionId}`);
+
     forkJoin([
       this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId),
       this.innovationDocumentsService.getDocumentList(this.innovation.id, {
@@ -58,6 +60,20 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
       this.summaryList = this.wizard.runSummaryParsing(evidenceInfo);
 
       this.documentsList = documents.data;
+
+      // add error if any evidence is missing document
+      if (this.documentsList.length === 0) {
+        this.setAlertError('There is a problem', {
+          message: 'You must add a supporting document for this evidence.',
+          itemsList: [
+            {
+              title: 'Add evidence',
+              callback: `${this.baseUrl}/documents/new?evidenceId=${this.evidenceId}`
+            }
+          ],
+          width: 'full'
+        });
+      }
 
       this.setPageTitle(this.summaryList[1].value ?? '', { width: '2.thirds' });
       this.setPageStatus('READY');

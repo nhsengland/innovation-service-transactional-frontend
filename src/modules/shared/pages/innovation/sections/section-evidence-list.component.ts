@@ -69,7 +69,7 @@ export class PageInnovationSectionEvidenceListComponent extends CoreComponent im
         return { ...evidence, files: files };
       });
 
-      this.hasEvidenceAndDocuments = UtilsHelper.allEvidenceHaveDocuments(evidenceList);
+      // this.hasEvidenceAndDocuments = UtilsHelper.allEvidenceHaveDocuments(evidenceList);
 
       this.setPageTitle('Supporting documents', { hint: '', width: '2.thirds' });
 
@@ -88,14 +88,12 @@ export class PageInnovationSectionEvidenceListComponent extends CoreComponent im
 
       if (this.evidenceList.length > 0 && !this.hasEvidenceAndDocuments) {
         const incompleteEvidenceList = this.evidenceList.filter(e => !e.files.length);
-        console.log('this.evidenceList', this.evidenceList);
-        console.log('incompleteEvidenceList', incompleteEvidenceList);
+
         const itemsList = incompleteEvidenceList.map(i => ({
           title: i.evidenceSubmitType ?? i.description ?? '',
           callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${i.id}`
         }));
 
-        console.log('itemsList', itemsList);
         this.setAlertError('You must add a supporting document for this evidence.', {
           itemsList: itemsList
         });

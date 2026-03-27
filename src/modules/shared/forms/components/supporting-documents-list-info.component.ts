@@ -65,14 +65,14 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
   ngOnInit(): void {
     const draftDocuments = this.evidenceDraftService.documents();
 
-    if (draftDocuments.length) {
-      this.supportingDocumentsList = [
-        ...(this.supportingDocumentsList ?? []),
-        ...this.evidenceDraftService.documents()
-      ];
+    // if (draftDocuments.length) {
+    //   this.supportingDocumentsList = [
+    //     // ...(this.supportingDocumentsList ?? []),
+    //     ...this.evidenceDraftService.documents()
+    //   ];
 
       this.fieldArrayControl.clear();
-      this.supportingDocumentsList.forEach(d => {
+      this.supportingDocumentsList?.forEach(d => {
         this.fieldArrayControl.push(
           new FormGroup({
             id: new FormControl(''),
@@ -83,7 +83,7 @@ export class FormSupportingDocumentListComponent implements OnInit, DoCheck {
           })
         );
       });
-    }
+    // }
   }
 
   ngDoCheck(): void {

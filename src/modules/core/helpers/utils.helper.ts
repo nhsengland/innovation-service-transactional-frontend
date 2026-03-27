@@ -7,6 +7,8 @@ import {
   ProgressUpdateCreatedResponseDTO,
   SupportUpdatedResponseDTO
 } from '@modules/feature-modules/accessor/services/accessor.service';
+import { EvidenceV3Type } from '@modules/shared/forms/engine/models/wizard-engine-irv3-schema.model';
+import { InnovationDocumentsListOutDTO } from '@modules/shared/services/innovation-documents.service';
 import { OrganisationsListDTO } from '@modules/shared/services/organisations.service';
 import { PhoneUserPreferenceEnum, SchemaContextStore } from '@modules/stores';
 import { GetInnovationEvidenceDTO } from '@modules/stores/ctx/innovation/innovation.models';
@@ -151,8 +153,14 @@ export class UtilsHelper {
     return `${majorVersion}.${minorVersion}`;
   }
 
-  static allEvidenceHaveDocuments(evidenceList: GetInnovationEvidenceDTO[]): boolean{
-    const allHaveFiles = !evidenceList.some(item => !item.files?.length);
-    return allHaveFiles
+  static allEvidenceHaveDocuments(
+    evidenceList: EvidenceV3Type[],
+    supportingDocumentsList: InnovationDocumentsListOutDTO['data']
+  ): EvidenceV3Type[] {
+    console.log('evidenceList', evidenceList);
+    console.log('supportingDocumentsList', supportingDocumentsList);
+    const docContextIds = new Set(supportingDocumentsList.map(d => d.context.id));
+
+    return evidenceList.filter(e => !docContextIds.has(e.evidenceId)).map(e => e);
   }
 }

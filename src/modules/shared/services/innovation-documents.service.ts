@@ -62,6 +62,7 @@ export type InnovationDocumentInfoOutDTO = InnovationDocumentInfoInDTO & {
 };
 
 export type UpsertInnovationDocumentType = {
+  id?: string;
   context: { type: ContextTypeType; id: string };
   name: string;
   description?: string;

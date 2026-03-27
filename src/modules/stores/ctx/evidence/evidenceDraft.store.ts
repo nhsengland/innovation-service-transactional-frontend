@@ -1,14 +1,13 @@
 import { Injectable, signal, computed } from '@angular/core';
 
-import { UpsertInnovationDocumentType } from "@modules/shared/services/innovation-documents.service";
-import { GetInnovationEvidenceDTO } from "../innovation/innovation.models";
+import { UpsertInnovationDocumentType } from '@modules/shared/services/innovation-documents.service';
+import { GetInnovationEvidenceDTO } from '../innovation/innovation.models';
 
 export type EvidenceDraftType = {
   evidence: Partial<GetInnovationEvidenceDTO>;
   documents: UpsertInnovationDocumentType[];
   createdAt: number;
 };
-
 
 @Injectable({ providedIn: 'root' })
 export class EvidenceDraftService {
@@ -32,8 +31,18 @@ export class EvidenceDraftService {
     });
   }
 
+  updateEvidenceId(evidenceId?: string) {
+    this._draft.update(d =>
+      d
+        ? {
+            ...d,
+            evidenceId
+          }
+        : null
+    );
+  }
+
   updateEvidence(partial: Partial<GetInnovationEvidenceDTO>) {
-    console.log('partial', partial)
     this._draft.update(d => ({
       ...d!,
       evidence: partial
@@ -59,15 +68,15 @@ export class EvidenceDraftService {
   }
 
   updateAllDocumentContexts(evidenceId: string) {
-  this._draft.update(d => ({
-    ...d!,
-    documents: d!.documents.map(doc => ({
-      ...doc,
-      context: {
-        ...doc.context,
-        id: evidenceId
-      }
-    }))
-  }));
-}
+    this._draft.update(d => ({
+      ...d!,
+      documents: d!.documents.map(doc => ({
+        ...doc,
+        context: {
+          ...doc.context,
+          id: evidenceId
+        }
+      }))
+    }));
+  }
 }

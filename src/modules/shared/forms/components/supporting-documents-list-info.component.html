@@ -23,14 +23,14 @@
         >
         <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
       </dd>
-      <!-- <dd class="nhsuk-summary-list__actions">
-            <a routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
-          </dd> -->
+      <dd class="nhsuk-summary-list__actions">
+            <a *ngIf="document.id" routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+          </dd>
     </div>
   </dl>
 
-  <div>
-    <a class="nhsuk-action-link__link" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ entrypointSection: 'EVIDENCE_OF_EFFECTIVENESS' }">
+  <div *ngIf="!supportingDocumentsList || supportingDocumentsList.length === 0">
+    <a class="nhsuk-action-link__link" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }">
       <theme-svg-icon type="arrow-right-circle" />
       <span class="nhsuk-action-link__text">Add document</span>
     </a>

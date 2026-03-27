@@ -136,7 +136,7 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
           status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
           submitButton: { show: false, label: 'Mark section complete' },
           isNotStarted: false,
-          hasEvidences: false,
+          // hasEvidences: false,
           wizard: new WizardIRV3EngineModel({}),
           allStepsList: {},
           date: '',
@@ -171,11 +171,11 @@ export class PageInnovationAllSectionsInfoComponent extends CoreComponent implem
         sectionInfo.openTasksCount = responseItem.section.openTasksCount ? responseItem.section.openTasksCount : 0;
 
         // Special business rule around section 2.2.
-        sectionInfo.hasEvidences = !!(
-          section.evidences &&
-          responseItem.data.hasEvidence &&
-          responseItem.data.hasEvidence === 'YES'
-        );
+        // sectionInfo.hasEvidences = !!(
+        //   section.evidences &&
+        //   responseItem.data.hasEvidence &&
+        //   responseItem.data.hasEvidence === 'YES'
+        // );
 
         sectionInfo.wizard.setAnswers(responseItem.data).runRules();
 

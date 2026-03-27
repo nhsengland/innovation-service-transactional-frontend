@@ -11,7 +11,7 @@ import {
   UpsertInnovationDocumentType
 } from '@modules/shared/services/innovation-documents.service';
 import { EvidenceDraftService } from '@modules/stores/ctx/evidence/evidenceDraft.store';
-import { concatMap, from } from 'rxjs';
+import { concatMap, finalize, forkJoin, from, of } from 'rxjs';
 
 @Component({
   selector: 'app-innovator-pages-innovation-section-evidence-edit',
@@ -27,6 +27,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
 
   queryParams: { entrypoint: string };
 
+  isEntryPointNewDocumentFlow = false;
   wizard: WizardEngineModel;
 
   submitButton = { isActive: true, label: 'Save' };
@@ -62,26 +63,36 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       this.redirectTo(this.baseUrl);
     }
 
+    this.isEntryPointNewDocumentFlow = this.queryParams.entrypoint === 'newDocumentWizard';
+
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous', new Event('')));
   }
 
   ngOnInit(): void {
-    this.innovationDocumentsService
-      .getDocumentList(this.innovation.id, {
-        skip: 0,
-        take: 50,
-        order: { createdAt: 'ASC' },
-        filters: { contextTypes: ['INNOVATION_EVIDENCE'], contextId: this.evidenceId, fields: ['description'] }
-      })
-      .subscribe(documents => {
-        this.supportingDocumentsList = documents.data;
-        console.log('evidence-edit supportingDocumentsList', this.supportingDocumentsList);
-        if (this.isCreation()) {
-          this.runCreationFlow();
-        } else {
-          this.runEditFlow();
-        }
-      });
+    console.log('this.evidenceId', this.evidenceId);
+    forkJoin([
+      !this.evidenceId
+        ? of(null)
+        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+            skip: 0,
+            take: 50,
+            order: { createdAt: 'ASC' },
+            filters: { contextTypes: ['INNOVATION_EVIDENCE'], contextId: this.evidenceId, fields: ['description'] }
+          })
+    ]).subscribe(([documents]) => {
+      this.supportingDocumentsList = documents?.data ?? [];
+
+      // initialize draft store, clear if not coming from documents flow
+      if (!this.isEntryPointNewDocumentFlow) {
+        this.evidenceDraftService.initDraft();
+      }
+
+      if (this.isCreation()) {
+        this.runCreationFlow();
+      } else {
+        this.runEditFlow();
+      }
+    });
   }
 
   onGotoStep(stepNumber: number): void {
@@ -110,9 +121,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
       // Apply validation only when moving forward.
       return;
     }
-
-    this.evidenceDraftService.updateEvidence(this.wizard.currentAnswers);
     this.wizard.addAnswers(formData?.data || {}).runRules();
+    this.evidenceDraftService.updateEvidence(this.wizard.currentAnswers);
     this.wizard.nextStep();
 
     if (this.wizard.isQuestionStep()) {
@@ -133,12 +143,18 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         next: response => {
           const evidenceId = response.id;
 
-          // add uploaded documents to the DB
-          if (this.isCreation()) {
+          // add uploaded documents to the DB, if came back from new document flow, then clear draft's data
+          if (this.isEntryPointNewDocumentFlow) {
             this.evidenceDraftService.updateAllDocumentContexts(evidenceId);
 
             from(this.evidenceDraftService.documents())
-              .pipe(concatMap(document => this.innovationDocumentsService.createDocument(this.innovation.id, document)))
+              .pipe(
+                concatMap(document => this.innovationDocumentsService.createDocument(this.innovation.id, document)),
+                finalize(() => {
+                  // we submitted evidence and documents, we can clear the draft store
+                  this.evidenceDraftService.clearDraft();
+                })
+              )
               .subscribe();
           }
 
@@ -165,13 +181,8 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
     this.setPageTitle('New evidence', { showPage: false });
     this.setPageStatus('READY');
 
-    // if creation initialize draft store
-    if (this.evidenceDraftService.isEmpty()) {
-      this.evidenceDraftService.initDraft();
-    }
-
     // if coming from document flow, load answers & redirect to supporting documents step
-    if (this.queryParams.entrypoint === 'newDocumentWizard') {
+    if (this.isEntryPointNewDocumentFlow) {
       const draftEvidence = this.evidenceDraftService.evidence();
       this.wizard
         .setAnswers(
@@ -183,13 +194,18 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
           })
         )
         .runRules();
-        this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()]
+      this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()];
       this.wizard.gotoStep(4);
     }
   }
 
   runEditFlow() {
     this.ctx.innovation.getSectionEvidence$(this.innovation.id, this.evidenceId).subscribe(response => {
+      //set evidence id on draft service
+      if (!this.evidenceDraftService.isEmpty()) {
+        this.evidenceDraftService.updateEvidenceId(this.evidenceId);
+      }
+
       this.wizard.setAnswers(this.wizard.runInboundParsing(response)).runRules();
       this.wizard.gotoStep(this.activatedRoute.snapshot.params.questionId || 1);
 

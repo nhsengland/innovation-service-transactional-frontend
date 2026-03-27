@@ -34,7 +34,12 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   pageData: {
     isCreation: boolean;
     isEdition: boolean;
-    queryParams: { sectionId?: string; evidenceId?: string; progressUpdateId?: string; entrypointSection?: string };
+    queryParams: {
+      sectionId?: string;
+      evidenceId?: string;
+      progressUpdateId?: string;
+      entrypoint?: string;
+    };
   };
 
   isEntrypointEvidenceSection = false;
@@ -58,15 +63,12 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
         sectionId: this.activatedRoute.snapshot.queryParams.sectionId,
         evidenceId: this.activatedRoute.snapshot.queryParams.evidenceId,
         progressUpdateId: this.activatedRoute.snapshot.queryParams.progressUpdateId,
-        entrypointSection: this.activatedRoute.snapshot.queryParams.entrypointSection
+        entrypoint: this.activatedRoute.snapshot.queryParams.entrypoint
       }
     };
 
-    this.isEntrypointEvidenceSection = this.pageData.queryParams.entrypointSection === 'EVIDENCE_OF_EFFECTIVENESS';
-
-    console.log('pageData.queryParams.entrypointSection:', this.pageData.queryParams.entrypointSection);
-    console.log('isEntrypointEvidenceSection:', this.isEntrypointEvidenceSection);
-
+    this.isEntrypointEvidenceSection =
+      !!this.pageData.queryParams.evidenceId || this.pageData.queryParams.entrypoint === 'EVIDENCE_OF_EFFECTIVENESS';
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
@@ -186,19 +188,44 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
   }
 
   onAddEvidenceDocument(): void {
-    console.log('adding document to store ')
+    const evidenceId = this.pageData.queryParams.evidenceId;
     const wizardSummary = this.wizard.runOutboundParsing() as OutboundPayloadType;
 
-    const doc: UpsertInnovationDocumentType = {
+    /**
+     * IF IT'S COMING FROM THE EVIDENCE DETAILS, CALL ADD DOCUMENT ENDPOINT HERE
+     */
+    evidenceId && console.log('this.router.url.endsWith(evidenceId)', this.router.url.endsWith(evidenceId));
+    if (evidenceId && this.router.url.endsWith(evidenceId)) {
+      this.innovationDocumentsService.createDocument(this.innovationId, wizardSummary).subscribe({
+        next: () => {
+          console.log('adding doc');
+          this.setRedirectAlertSuccess('Your document has been added');
+          this.redirectTo(
+            this.redirectUrl({
+              sectionId: this.pageData.queryParams.sectionId,
+              evidenceId: this.pageData.queryParams.evidenceId
+            })
+          );
+        }
+      });
+    }
+
+    const draftDocument: UpsertInnovationDocumentType = {
       context: wizardSummary.context,
       name: wizardSummary.name,
       description: wizardSummary.description,
       file: wizardSummary.file
     };
 
-    this.evidenceDraftService.addDocument(doc);
+    this.evidenceDraftService.addDocument(draftDocument);
 
-    this.router.navigate([`${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/new/`], {
+    // we can add documents for evidences on evidence creation, evidence edit
+    // check and redirect to appropriate one:
+    const redirectURL = evidenceId
+      ? `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${evidenceId}/edit/4`
+      : `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/new/`;
+
+    this.router.navigate([redirectURL], {
       queryParams: { entrypoint: 'newDocumentWizard' }
     });
   }

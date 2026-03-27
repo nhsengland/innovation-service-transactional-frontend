@@ -31,7 +31,7 @@ export class InnovationCustomNotificationsComponent extends CoreComponent implem
 
     this.innovation = this.ctx.innovation.info();
 
-    this.setPageTitle('Custom notifications');
+    this.setPageTitle('Custom notifications',{ width: '2.thirds'});
   }
 
   ngOnInit() {

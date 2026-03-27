@@ -19,6 +19,7 @@ import {
 } from '@modules/shared/services/innovation-documents.service';
 import { InnovationSectionStatusEnum, InnovationStatusEnum } from '@modules/stores';
 import { InnovationSectionStepLabels } from '@modules/stores/innovation/innovation-record/ir-versions.types';
+import { UtilsHelper } from '@app/base/helpers';
 
 export type SectionInfoType = {
   id: string;
@@ -27,7 +28,7 @@ export type SectionInfoType = {
   status: { id: InnovationSectionStatusEnum; label: string };
   submitButton: { show: boolean; label: string };
   isNotStarted: boolean;
-  hasEvidences: boolean;
+  // hasEvidences: boolean;
   wizard: WizardIRV3EngineModel;
   allStepsList: InnovationSectionStepLabels;
   date: string;
@@ -48,6 +49,13 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   sectionsIdsList: string[];
 
+  evidenceData: {
+    evidenceSupportingDocumentsList: InnovationDocumentsListOutDTO['data'];
+    evidencesWithoutDocuments: EvidenceV3Type[];
+    hasEvidences: boolean;
+    hasAddedEvidence: boolean;
+    allEvidencesHaveDocuments: boolean;
+  };
   sectionSummaryData: {
     sectionInfo: SectionInfoType;
     summaryList: WizardSummaryV3Type[];
@@ -69,6 +77,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   customNotificationLinks: CustomNotificationEntrypointComponentLinksType[] = [];
 
+  isEvidenceSection = false;
+  isSectionComplete = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService
@@ -76,6 +87,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     super();
 
     this.sectionId = this.activatedRoute.snapshot.params.sectionId;
+    this.isEvidenceSection = this.sectionId === 'EVIDENCE_OF_EFFECTIVENESS';
     this.search = this.activatedRoute.snapshot.queryParams.search;
 
     this.innovation = this.ctx.innovation.info();
@@ -87,6 +99,14 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     this.baseUrl = `${this.ctx.user.userUrlBasePath()}/innovations/${this.innovation.id}`;
 
+    this.evidenceData = {
+      evidenceSupportingDocumentsList: [],
+      evidencesWithoutDocuments: [],
+      hasEvidences: false,
+      hasAddedEvidence: false,
+      allEvidencesHaveDocuments: false
+    };
+
     this.sectionSummaryData = {
       sectionInfo: {
         id: '',
@@ -95,7 +115,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         status: { id: InnovationSectionStatusEnum.NOT_STARTED, label: '' },
         submitButton: { show: false, label: 'Mark section complete' },
         isNotStarted: false,
-        hasEvidences: false,
         wizard: new WizardIRV3EngineModel({}),
         allStepsList: {},
         date: '',
@@ -110,7 +129,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
   ngOnInit(): void {
     this.initializePage();
-
     // This router subscription is needed for the button to go to the next step.
     // As is it the same component, we can't use the routerLink directive alone.
     this.subscriptions.push(
@@ -132,6 +150,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       : '';
 
     this.setPageTitle(this.translate(sectionIdentification?.section.title ?? ''), {
+      width: 'full',
       hint: sectionIdentification ? `${sectionIdentification.group.number}. ${sectionIdentification.group.title}` : ''
     });
     this.setBackLink('Innovation Record', `${this.baseUrl}/record`);
@@ -143,11 +162,9 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
     this.sectionSummaryData.sectionInfo.wizard = section.wizard;
 
     // Status not created or archived as created or it's a section with files.
-    console.log('sectionID', this.sectionId);
     this.shouldShowDocuments =
-      this.sectionId !== 'EVIDENCE_OF_EFFECTIVENESS' &&
-      (!!this.innovation.submittedAt ||
-        this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id));
+      !!this.innovation.submittedAt ||
+      this.ctx.schema.getInnovationSectionsWithFiles().includes(this.sectionSummaryData.sectionInfo.id);
 
     forkJoin([
       this.ctx.innovation.getSectionInfo$(this.innovation.id, this.sectionSummaryData.sectionInfo.id),
@@ -163,10 +180,21 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
               fields: ['description']
             }
           }),
+      !this.isEvidenceSection
+        ? of(null)
+        : this.innovationDocumentsService.getDocumentList(this.innovation.id, {
+            skip: 0,
+            take: 100,
+            order: { createdAt: 'ASC' },
+            filters: {
+              contextTypes: ['INNOVATION_EVIDENCE'],
+              fields: ['description']
+            }
+          }),
       this.ctx.user.isInnovator() && this.innovation.status === InnovationStatusEnum.CREATED
         ? this.ctx.innovation.getSectionsSummary$(this.innovation.id)
         : of(null)
-    ]).subscribe(([sectionInfo, documents, allSections]) => {
+    ]).subscribe(([sectionInfo, sectionDocumentsResp, evidenceDocumentsResp, allSections]) => {
       this.sectionSummaryData.sectionInfo.status = {
         id: sectionInfo.status,
         label: this.translate(`shared.catalog.innovation.support_status.${sectionInfo.status}.name`)
@@ -178,14 +206,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
       this.sectionSummaryData.sectionInfo.date = sectionInfo.submittedAt;
       this.sectionSummaryData.sectionInfo.submittedBy = sectionInfo.submittedBy;
       this.sectionSummaryData.sectionInfo.openTasksCount = sectionInfo.tasksIds ? sectionInfo.tasksIds.length : 0;
-
-      // Special business rule around section 2.2.
-
-      this.sectionSummaryData.sectionInfo.hasEvidences = !!(
-        section.evidences &&
-        sectionInfo.data.hasEvidence &&
-        sectionInfo.data.hasEvidence === 'YES'
-      );
 
       const wizard = this.sectionSummaryData.sectionInfo.wizard;
       wizard.setAnswers(sectionInfo.data).runRules();
@@ -200,9 +220,64 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
           }))
         : [];
 
-      const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
+      const sectionDocuments = sectionDocumentsResp?.data ?? [];
+      const evidenceSupportingDocuments = evidenceDocumentsResp?.data ?? [];
 
-      if (this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid) {
+      this.sectionSummaryData.documentsList = sectionDocuments ?? [];
+
+      const validInformation = this.sectionSummaryData.sectionInfo.wizard.validateData();
+      this.isSectionComplete = this.sectionSummaryData.sectionInfo.status.id === 'DRAFT' && validInformation.valid;
+
+      // Special business rule around section 2.2.
+      if (this.isEvidenceSection) {
+
+        this.evidenceData.hasEvidences = !!(
+          section.evidences &&
+          sectionInfo.data.hasEvidence &&
+          sectionInfo.data.hasEvidence === 'YES'
+        );
+
+        this.sectionSummaryData.evidencesList = evidenceData;
+
+        this.evidenceData.evidenceSupportingDocumentsList = evidenceSupportingDocuments ?? [];
+        this.evidenceData.evidencesWithoutDocuments = UtilsHelper.allEvidenceHaveDocuments(
+          this.sectionSummaryData.evidencesList,
+          evidenceSupportingDocuments
+        );
+        this.evidenceData.hasAddedEvidence = this.sectionSummaryData.evidencesList.length > 0;
+        this.evidenceData.allEvidencesHaveDocuments = this.evidenceData.evidencesWithoutDocuments.length === 0;
+
+        // rules for Evidence Section to be marked as complete
+        this.isSectionComplete =
+          this.isSectionComplete &&
+          this.evidenceData.hasEvidences &&
+          this.evidenceData.hasAddedEvidence &&
+          this.evidenceData.allEvidencesHaveDocuments;
+
+        // add warning callout if answered YES but has not added evidence
+        if (this.evidenceData.hasEvidences && !this.evidenceData.hasAddedEvidence) {
+          this.setWarningCallout({
+            title: 'Missing evidence',
+            description: 'In order to mark this section as complete, you need to add at least one evidence.'
+          });
+        }
+
+        // add error if any evidence is missing document
+        if (this.evidenceData.hasAddedEvidence && !this.evidenceData.allEvidencesHaveDocuments) {
+          const errorItemsList = this.evidenceData.evidencesWithoutDocuments.map(e => ({
+            title: e.label,
+            callback: `${this.baseUrl}/record/sections/EVIDENCE_OF_EFFECTIVENESS/evidences/${e.evidenceId})`
+          }));
+
+          this.setAlertError('There is a problem', {
+            message: 'You must add a supporting document for this evidence.',
+            itemsList: errorItemsList,
+            width: 'full'
+          });
+        }
+      }
+
+      if (this.isSectionComplete) {
         this.sectionSummaryData.sectionInfo.submitButton.show = true;
         if (this.innovation.status !== InnovationStatusEnum.CREATED) {
           this.sectionSummaryData.sectionInfo.submitButton.label = 'Save updates';
@@ -213,11 +288,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
       this.sectionSummaryData.summaryList = data.filter(item => !item.evidenceId);
 
-      this.sectionSummaryData.evidencesList = evidenceData;
-
       this.getPreviousAndNextPagination();
-
-      this.sectionSummaryData.documentsList = documents?.data ?? [];
 
       this.customNotificationLinks = [
         {
@@ -301,4 +372,6 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
 
     return this.sectionsIdsList[currentSectionIndex + 1] || null;
   }
+
+  private runEvidenceSectionLogic() {}
 }

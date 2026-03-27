@@ -70,7 +70,7 @@ export class PageInnovationDocumentInfoComponent extends CoreComponent implement
       this.setBackLink('Go back', `${this.baseUrl}/documents`);
     }
 
-    this.setPageTitle('Document details');
+    this.setPageTitle('Document details', {width:'2.thirds'});
     this.pageStep = 'INFO';
   }
 
