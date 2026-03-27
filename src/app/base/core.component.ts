@@ -13,7 +13,7 @@ import { AppInjector } from '@modules/core/injectors/app-injector';
 
 import { EnvironmentVariablesStore } from '@modules/core/stores/environment-variables.store';
 
-import { AlertType, LinkType, MappedObjectType } from '@modules/core/interfaces/base.interfaces';
+import { AlertType, LinkType, MappedObjectType, WarningCalloutType } from '@modules/core/interfaces/base.interfaces';
 import { URLS } from './constants';
 import { UtilsHelper } from './helpers';
 import { ContextLayoutType, CtxStore } from '@modules/stores';
@@ -54,6 +54,8 @@ export class CoreComponent implements OnDestroy {
   protected subscriptions: Subscription[] = [];
 
   public alert: AlertType = { type: null };
+
+  public warningCallout: WarningCalloutType = {title:'', description:''}
 
   public pageStatus = computed(() => this.ctx.layout.status());
 
@@ -197,6 +199,12 @@ export class CoreComponent implements OnDestroy {
     this.alert = { type: data.type, title: data.title, message: data.message, setFocus: true };
     this.ctx.layout.update({ alert: data });
   }
+
+  setWarningCallout(data: NonNullable<ContextLayoutType['warningCallout']>): void{
+    this.warningCallout = {title: data.title, description:data.description}
+    this.ctx.layout.update({warningCallout: data})
+  }
+
   setRedirectAlertSuccess(title: string, options?: AlertOptions): void {
     this.ctx.layout.update({
       alert: {
@@ -243,6 +251,9 @@ export class CoreComponent implements OnDestroy {
       title: 'There is a problem',
       message: 'It appears that something went wrong! You can try again or contact us for further help'
     });
+  }
+  setWarningCalloutMessage(title: string, description: string):void{
+    this.setWarningCallout({title, description})
   }
 
   // focusBody(): void {
