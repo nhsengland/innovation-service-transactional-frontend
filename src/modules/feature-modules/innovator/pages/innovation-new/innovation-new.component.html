@@ -27,6 +27,20 @@
         <div class="nhsuk-inset-text">
           <span class="nhsuk-u-visually-hidden">Information:</span>
           <p>All innovations registered on this account should be developed by the same innovator or organisation.</p>
+
+          <div class="nhsuk-u-margin-top-4" style="border-top: 1px solid #d8dde0; padding-top: 20px;">
+            <p><strong>Already have a filled Excel record?</strong></p>
+            <p>You can skip the manual registration by uploading your Excel file instead.</p>
+            <input type="file" (change)="onExcelFileSelected($event)" accept=".xlsx" style="display: none" #excelFileInput />
+            <button
+              class="nhsuk-button nhsuk-button--secondary nhsuk-u-margin-bottom-0"
+              (click)="excelFileInput.click()"
+              [disabled]="isImportingExcel"
+              type="button"
+            >
+              {{ isImportingExcel ? "Importing..." : "Import from Excel" }}
+            </button>
+          </div>
         </div>
       }
 

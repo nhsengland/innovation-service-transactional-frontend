@@ -138,4 +138,27 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
       }
     });
   }
+
+  downloadInnovationRecordExcel(): void {
+    this.ctx.innovation.getAllSectionsInfo$(this.innovationId).subscribe({
+      next: (payload: any) => {
+        this.innovationsService.getInnovationRecordExcelExport(payload).subscribe({
+          next: (blob: Blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `${this.innovation.name}-Innovation-Record.xlsx`;
+            link.click();
+            window.URL.revokeObjectURL(url);
+          },
+          error: () => {
+            this.setAlertError('Unable to download the Excel export. Please try again.');
+          }
+        });
+      },
+      error: () => {
+        this.setAlertError('Unable to retrieve sections data for export.');
+      }
+    });
+  }
 }

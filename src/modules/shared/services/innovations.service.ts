@@ -979,25 +979,77 @@ export class InnovationsService extends CoreService {
       })
       .pipe(
         take(1),
-        map(response => {
-          // The response body is Base64 encoded
-          const base64Content = response.body || '';
-
-          // Convert Base64 to binary
-          const binaryString = atob(base64Content);
-          const bytes = new Uint8Array(binaryString.length);
-
-          for (let i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-          }
-
-          // Create blob with correct MIME type
-          const blob = new Blob([bytes], {
-            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-          });
-
-          return blob;
-        })
+        map(response =>
+          this.base64ToBlob(
+            response.body || '',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          )
+        )
       );
+  }
+
+  /**
+   * Generates an empty Excel template for the Innovation Record.
+   */
+  getInnovationRecordExcelTemplate(): Observable<Blob> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovation-record/xlsx');
+
+    return this.http
+      .get(url.buildUrl(), {
+        responseType: 'text',
+        observe: 'response'
+      })
+      .pipe(
+        take(1),
+        map(response =>
+          this.base64ToBlob(
+            response.body || '',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          )
+        )
+      );
+  }
+
+  /**
+   * Generates a pre-filled Excel file based on the provided Innovation Record payload.
+   */
+  getInnovationRecordExcelExport(payload: any): Observable<Blob> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovation-record/xlsx');
+
+    return this.http
+      .post(url.buildUrl(), payload, {
+        responseType: 'text',
+        observe: 'response'
+      })
+      .pipe(
+        take(1),
+        map(response =>
+          this.base64ToBlob(
+            response.body || '',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          )
+        )
+      );
+  }
+
+  /**
+   * Creates a new Innovation Record (DRAFT) by uploading a filled Excel file.
+   * @param base64File Base64 encoded string of the Excel file.
+   */
+  createInnovationFromExcel(base64File: string): Observable<{ id: string }> {
+    const url = new UrlModel(this.API_INNOVATIONS_URL).addPath('v1/innovations/xlsx');
+
+    return this.http.post<{ id: string }>(url.buildUrl(), { file: base64File }).pipe(take(1));
+  }
+
+  private base64ToBlob(base64Content: string, type: string): Blob {
+    const binaryString = atob(base64Content);
+    const bytes = new Uint8Array(binaryString.length);
+
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return new Blob([bytes], { type });
   }
 }

@@ -28,6 +28,32 @@ export class InnovationNewComponent extends CoreComponent implements OnInit {
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
 
+  isImportingExcel = false;
+
+  onExcelFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (!file) return;
+
+    this.isImportingExcel = true;
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      const base64 = e.target.result.split(',')[1];
+      this.innovatorService.createInnovationFromExcel(base64).subscribe({
+        next: response => {
+          this.setRedirectAlertSuccess(`Innovation successfully imported from Excel.`);
+          this.redirectTo(`innovator/innovations/${response.id}/registered`);
+        },
+        error: () => {
+          this.setAlertError('Failed to import from Excel. Please check the file format and try again.');
+          this.isImportingExcel = false;
+        }
+      });
+    };
+
+    reader.readAsDataURL(file);
+  }
+
   ngOnInit(): void {
     this.wizard.setAnswers(this.wizard.runInboundParsing({}));
   }
