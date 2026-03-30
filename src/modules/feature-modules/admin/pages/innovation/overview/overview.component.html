@@ -31,8 +31,7 @@
           arial-label="View innovation support status"
           *ngIf="innovation.groupedStatus === 'RECEIVING_SUPPORT'">View support status</a>
       </div>
-      <p *ngIf="isArchived">Archived by innovator on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>
-      <p *ngIf="innovation.archiveReason">Reason: {{ 'shared.catalog.innovation.archive.reason.' + innovation.archiveReason | translate }}</p>
+<p *ngIf="isArchived">Archived <span *ngIf="innovation.archiveReason !== 'SIX_MONTHS_INACTIVITY'">by innovator</span> on {{ innovation.statusUpdatedAt | date: ("app.date_formats.long_date" | translate) }}.</p>      <p *ngIf="innovation.archiveReason">Reason: {{ 'shared.catalog.innovation.archive.reason.' + innovation.archiveReason | translate }}</p>
     </div>
   </div>
   <hr class="nhsuk-section-break nhsuk-section-break--visible" />

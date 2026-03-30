@@ -201,17 +201,43 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
   }
 
   getQuestionsList(sectionId: string) {
+    // Manually flatten questions to include the step-level 'condition'
+    const questionsWithConditions =
+      this.ctx.schema
+        .schema()
+        .flatMap(section => section.subSections)
+        .find(s => s.id === sectionId)
+        ?.steps.flatMap(st => st.questions.map(q => ({ ...q, condition: st.condition }))) ?? [];
+
     return {
       defaultKey: this.questionFormControl.value,
       selectList: [
         { key: undefined, text: 'Select question', disabled: true },
-        ...this.ctx.schema
-          .getIrSchemaSectionQuestions(sectionId)
-          .filter(q => ['radio-group', 'checkbox-array'].includes(q.dataType))
+        ...questionsWithConditions
+          .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
           .filter(q => !['mainCategory'].includes(q.id))
+          .filter(q => this.isQuestionVisible(q))
           .map(q => ({ key: q.id, text: q.label }))
       ]
     };
+  }
+
+  isQuestionVisible(question: any): boolean {
+    if (!question.condition) {
+      return true;
+    }
+
+    const parentValues = this.parentFormArray.value as any[];
+
+    const matchingFilter = parentValues.find(f => f.question === question.condition.id);
+
+    if (!matchingFilter) {
+      return false;
+    }
+
+    const selectedAnswers = matchingFilter.answers || [];
+    // The condition is met if any of the selected answers match one of the required condition options.
+    return selectedAnswers.some((ans: string) => question.condition.options.includes(ans));
   }
 
   getAnswersList(
@@ -244,7 +270,54 @@ export class FormIRSelectableFiltersFilterComponent implements OnInit, DoCheck {
     if (['question'].includes(event.id.split('_')[1])) {
       this.clearAnswers();
     }
+    // Auto-add dependent questions when an answer is selected
+    if (event.id.includes('answer') && event.value) {
+      this.autoAddDependentQuestions(event.value as string);
+    }
     this.checkCanAddAnswer();
+  }
+
+  autoAddDependentQuestions(selectedAnswer: string) {
+    const currentSectionId = this.sectionFormControl.value;
+    const currentQuestionId = this.questionFormControl.value;
+
+    if (!currentSectionId || !currentQuestionId) return;
+
+    // Find questions in this section that depend on the current question and selected answer
+    const dependentQuestions =
+      this.ctx.schema
+        .schema()
+        .flatMap(section => section.subSections)
+        .find(s => s.id === currentSectionId)
+        ?.steps.flatMap(st => st.questions.map(q => ({ ...q, condition: st.condition })))
+        .filter(q => q.condition?.id === currentQuestionId && q.condition?.options.includes(selectedAnswer))
+        .filter(q => ['radio-group', 'checkbox-array', 'autocomplete-array'].includes(q.dataType))
+        .filter(q => !['mainCategory'].includes(q.id)) ?? [];
+
+    if (dependentQuestions.length === 0) return;
+
+    const parentValues = this.parentFormArray.value as any[];
+
+    dependentQuestions.forEach(depQ => {
+      // Check if dependent question is already in the filter list
+      const exists = parentValues.some(f => f.question === depQ.id);
+      if (!exists) {
+        // We need to add a new FormGroup to the parentFormArray
+        // We can do this by emiting an event or accessing parentFormArray directly (which we have)
+        // But we need to structure the new FormGroup correctly.
+        // The parent component normally handles creation via 'addNewFilterFormGroup'
+        // We have `parentFormArray`, we can push a FormGroup.
+        const newGroup = new FormGroup({
+          section: new FormControl(currentSectionId),
+          question: new FormControl(depQ.id),
+          answers: new FormArray([
+            new FormControl(undefined, CustomValidators.required('Select an answer')) // Pre-add one empty answer field
+          ])
+        });
+
+        this.parentFormArray.push(newGroup);
+      }
+    });
   }
 
   getSelectedQuestions() {

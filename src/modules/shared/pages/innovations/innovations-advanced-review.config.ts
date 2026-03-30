@@ -159,8 +159,7 @@ export function getConfig(
         'engagingOrganisations',
         'groupedStatuses',
         'submittedAt',
-        'areas',
-        'maturityLevels'
+        'areas'
       ];
 
       const assignedToMeFilter = (InnovationsListFiltersConfig?.filters?.[0] as CheckboxesFilter).checkboxes?.[0];

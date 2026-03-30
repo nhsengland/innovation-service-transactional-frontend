@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, finalize } from 'rxjs/operators';
 
 import { CoreComponent } from '@app/base';
 
@@ -236,7 +236,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (this.ctx.user.isAdmin()) {
       // filter out unavailable fields if Admin
       queryFields = queryFields.filter(
-        item => !['support.status', 'support.updatedAt', 'support.closeReason'].includes(item)
+        item => !['support.status', 'support.updatedAt', 'support.closeReason', 'archiveReason'].includes(item)
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
@@ -251,6 +251,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.closeReason',
             'involvedAACProgrammes',
             'keyHealthInequalities',
+            'archiveReason',
             'assessment.finishedAt',
             'assessment.maturityLevel'
           ].includes(item)
@@ -259,68 +260,70 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
 
     this.innovationsService
       .getInnovationsSearch(queryFields, this.filtersModel.getAPIQueryParams(), this.paginationParams)
-      .subscribe(response => {
-        this.innovationsCount = response.count;
-        this.innovationCardsData = [];
+      .pipe(finalize(() => this.setPageStatus('READY')))
+      .subscribe({
+        next: response => {
+          this.innovationsCount = response.count;
+          this.innovationCardsData = [];
 
-        response.data.forEach(result => {
-          const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
-          const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
+          response.data.forEach(result => {
+            const translatedAacInvolvement = result.involvedAACProgrammes?.map(item => (item === 'No' ? 'None' : item));
+            const engagingUnits = result.engagingUnits ? result.engagingUnits.map(unit => unit.acronym) : [];
 
-          const translations = this.ctx.schema.getIrSchemaTranslationsMap();
-          const innovationData: InnovationCardData = {
-            id: result.id,
-            uniqueId: result.uniqueId,
-            name: result.name,
-            status: result.status,
-            statusUpdatedAt: result.statusUpdatedAt,
-            groupedStatus: result.groupedStatus,
-            updatedAt: result.updatedAt,
-            owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
-            countryName: result.countryName ?? null,
-            postCode: result.postcode,
-            categories: this.translateLists(
-              result.categories,
-              translations.questions.get('categories')?.items,
-              result.otherCategoryDescription
-            ),
-            careSettings: this.translateLists(
-              result.careSettings,
-              translations.questions.get('careSettings')?.items,
-              result.otherCareSetting
-            ),
-            diseasesAndConditions: this.translateLists(
-              result.diseasesAndConditions,
-              translations.questions.get('diseasesConditionsImpact')?.items,
-              'None'
-            ),
-            keyHealthInequalities: this.translateLists(
-              result.keyHealthInequalities,
-              translations.questions.get('keyHealthInequalities')?.items,
+            const translations = this.ctx.schema.getIrSchemaTranslationsMap();
+            const innovationData: InnovationCardData = {
+              id: result.id,
+              uniqueId: result.uniqueId,
+              name: result.name,
+              status: result.status,
+              statusUpdatedAt: result.statusUpdatedAt,
+              groupedStatus: result.groupedStatus,
+              updatedAt: result.updatedAt,
+              owner: result.owner?.companyName ?? result.owner?.name ?? 'Deleted user',
+              countryName: result.countryName ?? null,
+              postCode: result.postcode,
+              categories: this.translateLists(
+                result.categories,
+                translations.questions.get('categories')?.items,
+                result.otherCategoryDescription
+              ),
+              careSettings: this.translateLists(
+                result.careSettings,
+                translations.questions.get('careSettings')?.items,
+                result.otherCareSetting
+              ),
+              diseasesAndConditions: this.translateLists(
+                result.diseasesAndConditions,
+                translations.questions.get('diseasesConditionsImpact')?.items,
+                'None'
+              ),
+              keyHealthInequalities: this.translateLists(
+                result.keyHealthInequalities,
+                translations.questions.get('keyHealthInequalities')?.items,
 
-              'None'
-            ),
-            areas: this.translateLists(result.areas, translations.questions.get('areas')?.items, 'None'),
-            involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
-            submittedAt: result.submittedAt,
-            engagingUnits: engagingUnits,
-            support: result.support && {
-              status: result.support.status,
-              updatedAt: result.support.updatedAt,
-              closeReason: result.support.closeReason
-            },
-            highlights: result.highlights,
-            assessment: {
-              id: result.assessment?.id ?? null,
-              needsAssessmentDate: result.assessment?.finishedAt,
-              maturityLevel: result.assessment?.maturityLevel ?? ''
-            }
-          };
+                'None'
+              ),
+              areas: this.translateLists(result.areas, translations.questions.get('areas')?.items, 'None'),
+              involvedAACProgrammes: translatedAacInvolvement ?? ['Question not answered'],
+              submittedAt: result.submittedAt,
+              engagingUnits: engagingUnits,
+              support: result.support && {
+                status: result.support.status,
+                updatedAt: result.support.updatedAt,
+                closeReason: result.support.closeReason
+              },
+              highlights: result.highlights,
+              assessment: {
+                id: result.assessment?.id ?? null,
+                needsAssessmentDate: result.assessment?.finishedAt,
+                maturityLevel: result.assessment?.maturityLevel ?? ''
+              }
+            };
 
-          this.innovationCardsData.push(innovationData);
-        });
-
-        this.setPageStatus('READY');
+            this.innovationCardsData.push(innovationData);
+          });
+        },
+        error: err => this.logger.error(err)
       });
   }
 
@@ -340,6 +343,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       'countryName',
       'submittedAt',
       'groupedStatus',
+      'archiveReason',
       'statusUpdatedAt',
       'suggestion.suggestedBy',
       'careSettings',
@@ -367,6 +371,7 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       countryName: 'Country',
       submittedAt: 'Date of innovation submission',
       groupedStatus: 'Status',
+      archiveReason: 'Archive reason',
       statusUpdatedAt: 'Date of status update',
       'suggestion.suggestedBy': 'Referral By',
       careSettings: 'Care Settings',
@@ -392,7 +397,9 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
       );
     } else if (this.ctx.user.isAccessorType()) {
       // filter out unavailable fields for QA/A
-      queryFields = queryFields.filter(item => !['involvedAACProgrammes', 'keyHealthInequalities'].includes(item));
+      queryFields = queryFields.filter(
+        item => !['involvedAACProgrammes', 'keyHealthInequalities', 'archiveReason'].includes(item)
+      );
     } else if (this.ctx.user.isAssessment()) {
       // filter out unavailable fields for Assessment
       queryFields = queryFields.filter(
@@ -402,7 +409,8 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
             'support.updatedAt',
             'support.closeReason',
             'involvedAACProgrammes',
-            'keyHealthInequalities'
+            'keyHealthInequalities',
+            'archiveReason'
           ].includes(item)
       );
     }
@@ -434,13 +442,16 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     if (!this.form.valid) {
       this.form.markAllAsTouched();
     }
-
     this.pageNumber = 1;
 
     // If 'search' has a different value from 'form search field' value, the user typed a new value into 'form search field'.
     const currentSearch = this.form.value.search;
     if (this.search != currentSearch && (this.search !== undefined || (this.search === undefined && currentSearch))) {
-      this.updateSearchQueryParams(currentSearch);
+      this.updateSearchQueryParams(currentSearch).then(() => {
+        this.getInnovationsList();
+      });
+    } else {
+      this.getInnovationsList();
     }
 
     sessionStorage.setItem('innovationListFilters', JSON.stringify(this.form.value));
@@ -452,9 +463,18 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
   }
 
   onSearchClick() {
-    this.form.updateValueAndValidity({ onlySelf: true });
+    this.pageNumber = 1;
+    this.form.updateValueAndValidity({ onlySelf: true, emitEvent: false }); // Prevent debounce trigger
     this.filtersModel.handleStateChanges();
-    this.getInnovationsList();
+
+    const currentSearch = this.form.value.search;
+    if (this.search !== currentSearch) {
+      this.updateSearchQueryParams(currentSearch).then(() => {
+        this.getInnovationsList();
+      });
+    } else {
+      this.getInnovationsList();
+    }
   }
 
   onSortByChange(selectKey: string): void {
@@ -481,24 +501,13 @@ export class PageInnovationsAdvancedReviewComponent extends CoreComponent implem
     return translation.get(value)?.label ?? value;
   }
 
-  private updateSearchQueryParams(currentSearch: string): void {
-    const url = this.router
-      .createUrlTree([], {
-        relativeTo: this.activatedRoute,
-        queryParams: { search: currentSearch },
-        queryParamsHandling: 'merge'
-      })
-      .toString();
-
-    this.location.replaceState(url);
-
+  private updateSearchQueryParams(currentSearch: string): Promise<boolean> {
     // To update 'search' query param.
-    if (this.ctx.user.isAdmin()) {
-      this.redirectTo(`${this.baseUrl}`, { search: currentSearch });
-    } else {
-      this.redirectTo(`${this.baseUrl}/advanced-search`, {
-        search: currentSearch
-      });
-    }
+    // Use router.navigate directly to return a Promise we can await in onSearchClick
+    const path = this.ctx.user.isAdmin() ? this.baseUrl : `${this.baseUrl}/advanced-search`;
+
+    return this.router.navigate([path], {
+      queryParams: { search: currentSearch }
+    });
   }
 }
