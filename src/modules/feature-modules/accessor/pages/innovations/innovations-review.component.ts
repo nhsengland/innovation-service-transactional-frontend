@@ -466,12 +466,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            lastSupportGivenAt: { label: 'Closed date', orderable: true },
+            'support.updatedAt': { label: 'Closed date', orderable: true },
             'support.updatedBy': { label: 'Closed by', orderable: false },
             'support.closeReason': { label: 'Reason', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('lastSupportGivenAt', 'descending');
+          .setOrderBy('support.updatedAt', 'descending');
         break;
 
       case 'ALL':
