@@ -452,7 +452,7 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
             countryName: { label: 'Location', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('support.updatedAt', 'descending');
+          .setOrderBy('lastSupportGivenAt', 'descending');
         break;
 
       case InnovationSupportStatusEnum.CLOSED:
@@ -466,12 +466,12 @@ export class InnovationsReviewComponent extends CoreComponent implements OnInit 
           })
           .setVisibleColumns({
             name: { label: 'Innovation', orderable: true },
-            'support.updatedAt': { label: 'Closed date', orderable: true },
+            lastSupportGivenAt: { label: 'Closed date', orderable: true },
             'support.updatedBy': { label: 'Closed by', orderable: false },
             'support.closeReason': { label: 'Reason', orderable: true },
             engagingOrganisations: { label: 'Engaging organisations', align: 'right', orderable: false }
           })
-          .setOrderBy('support.updatedAt', 'descending');
+          .setOrderBy('lastSupportGivenAt', 'descending');
         break;
 
       case 'ALL':
