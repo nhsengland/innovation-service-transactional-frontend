@@ -102,7 +102,7 @@ export class EndSupportSurveyJourneyComponent extends CoreComponent implements O
   onSubmitWizard(): void {
     const data = this.wizard.runOutboundParsing();
     const body: SurveyAnswersType = {
-      comment: !UtilsHelper.isEmpty(data.coment) ? data.comment : null,
+      comment: !UtilsHelper.isEmpty(data.comment) ? data.comment : null,
       ideaOnHowToProceed: data.ideaOnHowToProceed,
       supportSatisfaction: data.supportSatisfaction,
       howLikelyWouldYouRecommendIS: data.howLikelyWouldYouRecommendIS

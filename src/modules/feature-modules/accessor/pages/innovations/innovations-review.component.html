@@ -122,6 +122,11 @@
                 {{ item.updatedAt | date: ("app.date_formats.long_date" | translate) }}
               </td>
 
+              <td *ngIf="innovationsList.getColumnLabel('support.updatedAt')" class="nhsuk-table__cell">
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.updatedAt") }} </span>
+                {{ item.support?.updatedAt | date: ("app.date_formats.long_date" | translate) }}
+              </td>
+
               <td *ngIf="innovationsList.getColumnLabel('lastSupportGivenAt')" class="nhsuk-table__cell">
                 <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("lastSupportGivenAt") }} </span>
                 {{ item.lastSupportGivenAt | date: ("app.date_formats.long_date" | translate) }}
@@ -153,7 +158,7 @@
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.status')" class="nhsuk-table__cell text-align-right">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("supportStatus") }}</span>
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.status") }}</span>
                 <theme-tag
                   type="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.cssColorClass' | translate }}"
                   label="{{ 'shared.catalog.innovation.support_status.' + (item.support?.status ?? 'UNASSIGNED') + '.name' | translate }}"
@@ -161,12 +166,12 @@
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.updatedBy')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("updatedBy") }} </span>
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.updatedBy") }} </span>
                 {{ item.support?.updatedBy }}
               </td>
 
               <td *ngIf="innovationsList.getColumnLabel('support.closeReason')" class="nhsuk-table__cell">
-                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("closeReason") }} </span>
+                <span class="nhsuk-table-responsive__heading">{{ innovationsList.getColumnLabel("support.closeReason") }} </span>
                 {{ item.support?.closeReason?.label }}
               </td>
 
