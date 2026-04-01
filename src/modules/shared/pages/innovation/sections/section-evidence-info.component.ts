@@ -18,12 +18,13 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
   innovation: ContextInnovationType;
   sectionId: string;
   evidenceId: string;
+  pageStep: 'INFO' | 'DELETE' = 'INFO';
   baseUrl: string;
 
   wizard: WizardEngineModel;
 
-  summaryList: WizardSummaryType[] = [];
-  documentsList: InnovationDocumentsListOutDTO['data'] = [];
+  summaryList: null | WizardSummaryType[] = null
+  documentsList: null | InnovationDocumentsListOutDTO['data'] = null
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -98,5 +99,23 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
         );
       }
     });
+  }
+
+  gotoDeletePage() {
+    this.resetAlert();
+    this.setPageTitle('Are you sure you want to delete this evidence?', { width: '2.thirds' });
+    this.setBackLink('Go back', this.gotoInfoPage.bind(this));
+    this.pageStep = 'DELETE';
+  }
+
+  gotoInfoPage() {
+    if (['/sections', '/support-summary'].some(i => this.ctx.layout.previousUrl()?.includes(i))) {
+      this.setBackLink('Go back');
+    } else {
+      this.setBackLink('Go back', `${this.baseUrl}/record/sections/${this.sectionId}`);
+    }
+
+    this.setPageTitle('Document details', { width: '2.thirds' });
+    this.pageStep = 'INFO';
   }
 }
