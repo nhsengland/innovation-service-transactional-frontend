@@ -30,10 +30,13 @@
     </div>
   </dl>
 
-  <div *ngIf="!supportingDocumentsList || supportingDocumentsList.length === 0">
-    <a class="nhsuk-action-link__link" routerLink="/{{ baseUrl }}/documents/new" [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }">
-      <theme-svg-icon type="arrow-right-circle" />
-      <span class="nhsuk-action-link__text">Add document</span>
-    </a>
-  </div>
+  <button
+    *ngIf="!supportingDocumentsList || supportingDocumentsList.length === 0"
+    type="button"
+    class="nhsuk-button nhsuk-button--secondary"
+    [routerLink]="[baseUrl, 'documents', 'new']"
+    [queryParams]="{ entrypoint: 'EVIDENCE_OF_EFFECTIVENESS' }"
+  >
+    Add document
+  </button>
 </div>
