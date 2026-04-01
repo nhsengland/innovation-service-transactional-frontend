@@ -58,7 +58,7 @@ export class InnovationSectionEditComponent extends CoreComponent implements OnI
 
     this.isArchived = this.ctx.innovation.isArchived();
 
-    this.isEvidenceSection = this.innovation.id === 'EVIDENCE_OF_EFFECTIVENESS';
+    this.isEvidenceSection = this.sectionId === 'EVIDENCE_OF_EFFECTIVENESS';
 
     this.setBackLink('Go back', this.onSubmitStep.bind(this, 'previous'));
   }
