@@ -183,8 +183,18 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
       this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
       this.setUploadConfiguration();
     } else {
-      this.setPageTitle('Check your answers', { size: 'l' });
+      this.setSummaryTitle();
     }
+  }
+
+  setSummaryTitle() {
+    let summaryTitle = '';
+    if (this.isEntrypointEvidenceSection) {
+      summaryTitle = 'Document';
+    } else {
+      summaryTitle = 'Check your answers';
+    }
+    this.setPageTitle(summaryTitle, { width: 'full', size: 'l' });
   }
 
   onAddEvidenceDocument(): void {
