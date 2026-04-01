@@ -18,14 +18,15 @@
     <div *ngFor="let document of supportingDocumentsList; let i = index" class="nhsuk-summary-list__row">
       <dt class="nhsuk-summary-list__key">Document {{ i + 1 }}</dt>
       <dd class="nhsuk-summary-list__value text-pre-wrap">
-        <a href="javascript:void(0)" attr.aria-label="Download {{ document.name }} file"
-          ><span>{{ document.name }} <span *ngIf="document.file && document.file.extension">({{ document.file.extension | uppercase }}</span></span> <span *ngIf="document.file && document.file.size">{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</span></a
+        <span
+          >{{ document.name }} <span *ngIf="document.file && document.file.extension">({{ document.file.extension | uppercase }}</span></span
         >
+        <span *ngIf="document.file && document.file.size">{{ document.file.size ? ", " + (document.file.size | bytesPrettyPrint) : "" }})</span>
         <p *ngIf="document.description" class="nhsuk-body-s">{{ document.description }}</p>
       </dd>
       <dd class="nhsuk-summary-list__actions">
-            <a *ngIf="document.id" routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
-          </dd>
+        <a *ngIf="document.id" routerLink="/{{ baseUrl }}/documents/{{ document.id }}" attr.aria-label="View {{ document.name }} details">More details</a>
+      </dd>
     </div>
   </dl>
 
