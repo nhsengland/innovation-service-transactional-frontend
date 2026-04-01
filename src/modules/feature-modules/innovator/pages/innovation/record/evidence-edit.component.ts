@@ -195,7 +195,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         )
         .runRules();
       this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()];
-      this.wizard.gotoStep(4);
+      this.wizard.gotoSummary()
     }
   }
 
