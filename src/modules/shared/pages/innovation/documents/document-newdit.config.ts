@@ -194,7 +194,7 @@ function wizardWithLocationRuntimeRules(
             label: stepsLabels.l2.label,
             description: `If you want to upload evidence of impact and benefit, go to <a href="/innovator/innovations/${data.innovationId}/record/sections/EVIDENCE_OF_EFFECTIVENESS">this section of your innovation record</a>`,
             validations: { isRequired: [true, 'Choose one option'] },
-            items: innovationSectionsItems.map(item => ({
+            items: innovationSectionsItems.filter(s=> !['EVIDENCE_OF_EFFECTIVENESS','REGULATIONS_AND_STANDARDS'].includes(s.value)).map(item => ({
               ...item
               // ...(item.value === evidencesSectionId && (data.evidencesList ?? []).length > 0 && {
               //   description: `There's ${data.evidencesList?.length} evidence${data.evidencesList?.length === 1 ? '' : 's'}. Choosing this section we'll ask you more information on the next question.`
