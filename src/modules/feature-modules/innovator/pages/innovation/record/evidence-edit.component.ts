@@ -69,6 +69,9 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   }
 
   ngOnInit(): void {
+    const section = this.ctx.schema.getIrSchemaSectionV3(this.sectionId);
+    console.log('section:', section);
+    console.log('section.wizard.validateData()', section.wizard.validateData());
     console.log('this.evidenceId', this.evidenceId);
     forkJoin([
       !this.evidenceId
@@ -158,11 +161,12 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
               .subscribe();
           }
 
-          this.setRedirectAlertSuccess('Your evidence has been saved', {
-            message: 'You need to submit this section for review to notify your supporting accessor(s).'
+          // TODO mark section as complete and redirect to section details page
+          this.setRedirectAlertSuccess("You have completed section 2.2 'Evidence of impact and benefit'", {
+            message: 'You can still add more evidence below if needed.'
           });
           this.redirectTo(
-            `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}/evidences/${response.id}`
+            `innovator/innovations/${this.innovation.id}/record/sections/${this.activatedRoute.snapshot.params.sectionId}`
           );
         },
         error: () => {
@@ -195,7 +199,7 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
         )
         .runRules();
       this.supportingDocumentsList = [...this.supportingDocumentsList, ...this.evidenceDraftService.documents()];
-      this.wizard.gotoSummary()
+      this.wizard.gotoSummary();
     }
   }
 
