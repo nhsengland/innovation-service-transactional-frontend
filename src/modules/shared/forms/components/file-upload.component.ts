@@ -20,6 +20,7 @@ import { FormEngineHelper } from '../engine/helpers/form-engine.helper';
 export class FormFileUploadComponent implements OnInit, DoCheck {
   @Input() id?: string;
   @Input() groupName = '';
+  @Input() hint?: string;
   @Input() label?: string;
   @Input() description?: string;
   @Input() pageUniqueField? = true;

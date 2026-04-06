@@ -73,6 +73,7 @@
           <theme-form-textarea
             [id]="p.id"
             [controlName]="p.id"
+            [hint]="titleHint" 
             [label]="p.label"
             [description]="p.description"
             [pageUniqueField]="onlyOneField"
@@ -83,6 +84,7 @@
         <div *ngSwitchCase="'file-upload'">
           <theme-form-file-upload
             [groupName]="p.id"
+            [hint]="titleHint" 
             [label]="p.label"
             [description]="p.description"
             [config]="p.fileUploadConfig"
@@ -165,7 +167,7 @@
         </div>
 
         <div *ngSwitchDefault>
-          <theme-form-input [controlName]="p.id" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
+          <theme-form-input [controlName]="p.id" [hint]="titleHint" [label]="p.label" [description]="p.description" [pageUniqueField]="onlyOneField"></theme-form-input>
         </div>
       </ng-container>
     </ng-container>

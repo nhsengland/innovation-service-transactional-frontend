@@ -48,6 +48,7 @@ export class FormEngineComponent implements OnInit, OnChanges, OnDestroy {
   @Input() values?: Record<string, any> = {};
   @Input() showParamLabelAsTitle?: boolean;
   @Input() supportingDocumentsList?: UpsertInnovationDocumentType[];
+  @Input() titleHint?: string;
   @Output() formChanges: any = new EventEmitter<Record<string, any>>();
 
   private formChangeSubscription = new Subscription();
