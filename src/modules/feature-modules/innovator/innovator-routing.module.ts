@@ -105,14 +105,11 @@ import { PageInnovationSupportSurveysComponent } from './pages/innovation/survey
 import { ShareInnovationsWithOrgComponent } from './pages/share-innovations-with-org/share-innovations-with-org.component';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard' },
-      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications' },
-      { id: 'account', label: 'Your account', url: '/innovator/account/manage-details' }
+  menuBarItems: [
+      { id: 'innovations', label: 'Your innovations', url: '/innovator/dashboard', align:'left' },
+      { id: 'notifications', label: 'Notifications', url: '/innovator/notifications', align:'left'  },
+      { id: 'account', label: 'Your account', url: '/innovator/account/manage-details', align:'left'  }
     ],
-    right: []
-  }
 };
 
 const routes: Routes = [

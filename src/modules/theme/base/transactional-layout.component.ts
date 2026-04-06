@@ -11,8 +11,11 @@ import { HeaderMenuBarItemType } from '@modules/theme/components/header/header.c
 
 export type RoutesDataType = {
   module?: string; // TODO: To remove.
-  header: {
+  adminHeader: {
     menuBarItems: { left: HeaderMenuBarItemType[]; right: HeaderMenuBarItemType[] };
+  };
+  header: {
+    menuBarItems: HeaderMenuBarItemType[];
   };
   breadcrumb?: string;
   layout?: {
@@ -34,14 +37,18 @@ export class TransactionalLayoutComponent implements OnDestroy {
   private subscriptions = new Subscription();
 
   header: RoutesDataType['header'] = {
+    menuBarItems: []
+  };
+
+  adminHeader: RoutesDataType['adminHeader'] = {
     menuBarItems: { left: [], right: [] }
   };
+
   headerNotifications = computed(() => ({ notifications: this.ctx.notifications.unread() }));
 
   routeLayoutInfo: Required<RoutesDataType>['layout'] = { type: 'full', backgroundColor: null };
 
   isAdmin = this.ctx.user.isAdmin();
-
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -72,6 +79,8 @@ export class TransactionalLayoutComponent implements OnDestroy {
     // console.log('ThemeTransactionalLayout::eventUrl', event.url);
 
     this.header = routeData.header;
+
+    this.adminHeader = routeData.adminHeader
 
     this.routeLayoutInfo = {
       type: routeData.layout?.type ?? 'full',

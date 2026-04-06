@@ -97,7 +97,7 @@ import { OrganisationDataResolver } from './resolvers/organisation-data.resolver
 import { OrganisationUnitDataResolver } from './resolvers/organisation-unit-data.resolver';
 import { ServiceUserDataResolver } from './resolvers/service-user-data.resolver';
 
-const header: RoutesDataType['header'] = {
+const adminHeader: RoutesDataType['adminHeader'] = {
   menuBarItems: {
     left: [
       {
@@ -152,7 +152,7 @@ const routes: Routes = [
   {
     path: '',
     component: TransactionalLayoutComponent,
-    data: { header, breadcrumb: 'Home', module: 'admin' },
+    data: { adminHeader, breadcrumb: 'Home', module: 'admin' },
     children: [
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
       { path: 'dashboard', pathMatch: 'full', component: PageDashboardComponent },

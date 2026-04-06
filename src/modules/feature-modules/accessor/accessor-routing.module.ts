@@ -91,16 +91,13 @@ import { AccessorAndInnovationListComponent } from './pages/unit/accessor-and-in
 import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Innovations', url: '/accessor/innovations' },
-      { id: 'tasks', label: 'Tasks', url: '/accessor/tasks' },
-      { id: 'notifications', label: 'Notifications', url: '/accessor/notifications' },
-      { id: 'account', label: 'Your account', url: '/accessor/account/manage-details' },
-      { id: 'training', label: 'Training and resources', url: '/accessor/training-and-resources' }
-    ],
-    right: []
-  }
+  menuBarItems: [
+    { id: 'innovations', label: 'Innovations', url: '/accessor/innovations', align: 'left' },
+    { id: 'tasks', label: 'Tasks', url: '/accessor/tasks', align: 'left' },
+    { id: 'notifications', label: 'Notifications', url: '/accessor/notifications', align: 'left' },
+    { id: 'account', label: 'Your account', url: '/accessor/account/manage-details', align: 'left' },
+    { id: 'training', label: 'Training and resources', url: '/accessor/training-and-resources', align: 'left' }
+  ]
 };
 
 const routes: Routes = [

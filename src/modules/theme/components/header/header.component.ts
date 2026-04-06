@@ -31,6 +31,8 @@ export type HeaderMenuBarItemType = {
   fullReload?: boolean;
   isOpen?: boolean;
   children?: { label: string; url: string; description?: string; fullReload?: boolean }[];
+  isCurrent?: boolean;
+  align?: 'left' | 'right';
 };
 
 export type HeaderNotificationsType = Record<string, number>;
@@ -50,17 +52,8 @@ export interface NhsHeaderNavItem {
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() showUserInformation = false;
   @Input() showSignOut = false;
-  @Input() leftMenuBarItems: HeaderMenuBarItemType[] = [];
-  @Input() rightMenuBarItems: HeaderMenuBarItemType[] = [];
+  @Input() menuBarItems: HeaderMenuBarItemType[] = [];
   @Input() notifications: HeaderNotificationsType = {};
-
-  @Input() items: NhsHeaderNavItem[] = [
-    { label: 'NHS service standard', routerLink: '/service-standard' },
-    { label: 'Design system', routerLink: '/design-system', current: true },
-    { label: 'Content guide', routerLink: '/content-guide' },
-    { label: 'Accessibility', routerLink: '/accessibility' },
-    { label: 'Community and contribution', routerLink: '/community' }
-  ];
 
   @ViewChild('navList') navListRef?: ElementRef<HTMLUListElement>;
   @ViewChild('navContainer') navContainerRef?: ElementRef<HTMLDivElement>;
@@ -87,13 +80,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       : `${this.ctx.user.getUserRoleTranslation()}`
   );
 
-  menuBarItems: {
-    isChildrenOpened: boolean;
-    left: HeaderMenuBarItemType[];
-    right: HeaderMenuBarItemType[];
-  } = { isChildrenOpened: false, left: [], right: [] };
-
   URLS: typeof URLS;
+
+  alignAtEnd = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: object,
@@ -112,21 +101,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuBarItems = {
-      left: this.leftMenuBarItems,
-      right: this.rightMenuBarItems,
-      isChildrenOpened: false
-    };
+    this.visibleItems = this.menuBarItems;
+
+    this.alignAtEnd = this.menuBarItems.some(item => item.align === 'right');
   }
 
   ngAfterViewInit(): void {
     // Behaviour for header menu on mobile.
     // Copied from NHS design system framework scripts.
-
     // Wait for initial render so widths are measurable
-    this.visibleItems = [...this.leftMenuBarItems, ...this.rightMenuBarItems];
-    this.cdr.detectChanges();
 
+    this.updateCurrentTab();
+    this.cdr.detectChanges();
+    
     setTimeout(() => this.updateNavigation());
   }
 
@@ -134,14 +121,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     // Only show cookies banner if NOT on policies pages.
     this.showCookiesBanner = this.coockiesService.shouldAskForCookies() && !event.url.startsWith('/policies');
 
-    // // Always reset focus to body.
-    // if (isPlatformBrowser(this.platformId)) {
-    //   setTimeout(() => {
-    //     document.body.setAttribute('tabindex', '-1');
-    //     document.body.focus();
-    //     document.body.removeAttribute('tabindex');
-    //   });
-    // }
+    this.updateCurrentTab();
+
+    // Always reset focus to body.
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        document.body.setAttribute('tabindex', '-1');
+        document.body.focus();
+        document.body.removeAttribute('tabindex');
+      });
+    }
   }
 
   onSaveCookies(useCookies: boolean): void {
@@ -166,11 +155,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onHeaderMenuClick(menuItem: HeaderMenuBarItemType): void {
-    [...this.menuBarItems.left, ...this.menuBarItems.right].forEach(
-      i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen)
-    );
-
-    this.menuBarItems.isChildrenOpened = menuItem.isOpen = !menuItem.isOpen;
+    this.menuBarItems.forEach(i => (i.isOpen = menuItem.label !== i.label && i.isOpen ? false : i.isOpen));
   }
 
   signOut(): void {
@@ -229,30 +214,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!navContainer || !menuItem || !navList) return;
 
     // Reset
-    this.visibleItems = [...this.leftMenuBarItems, ...this.rightMenuBarItems];
+    this.visibleItems = this.menuBarItems;
     this.overflowItems = [];
     this.menuEnabled = false;
     this.menuOpen = false;
     this.navigationRef?.nativeElement.style.removeProperty('border-bottom-width');
     this.cdr.detectChanges();
 
+    // Do not collapse when menu is explicitly right-aligned
+    if (this.alignAtEnd) {
+      return;
+    }
+
+    // Do not collapse when there is only one item
+    if (this.menuBarItems.length <= 1) {
+      return;
+    }
+
     // Measure after reset has rendered
     const itemElements = Array.from(
       navList.querySelectorAll<HTMLElement>('.nhsuk-header__navigation-item[data-nav-item="true"]')
     );
-
-    console.log('leftItems', this.leftMenuBarItems);
-    console.log('rightItems', this.rightMenuBarItems);
-    console.log('visibleItems', this.visibleItems);
-    console.log('items', itemElements.length);
-    console.log(
-      itemElements.map(el => ({
-        text: el.innerText.trim(),
-        right: el.getBoundingClientRect().right,
-        top: el.getBoundingClientRect().top
-      }))
-    );
-    console.log('containerRight', navContainer.getBoundingClientRect().right);
 
     if (!itemElements.length) {
       return;
@@ -307,8 +289,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
 
-    this.visibleItems = this.leftMenuBarItems.slice(0, overflowIndex);
-    this.overflowItems = this.leftMenuBarItems.slice(overflowIndex);
+    this.visibleItems = this.menuBarItems.slice(0, overflowIndex);
+    this.overflowItems = this.menuBarItems.slice(overflowIndex);
     this.menuEnabled = this.overflowItems.length > 0;
     this.menuOpen = false;
 
@@ -322,5 +304,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     if (!nav || !menuList || !this.menuOpen) return;
 
     nav.style.setProperty('border-bottom-width', `${menuList.offsetHeight}px`);
+  }
+
+  private updateCurrentTab(): void {
+    this.menuBarItems = this.menuBarItems.map(item => {
+      return {
+        ...item,
+        ...(item.url && { isCurrent: this.router.url.includes(item.url) })
+      };
+    });
+
+    this.visibleItems = this.visibleItems.map(item => {
+      return {
+        ...item,
+        ...(item.url && { isCurrent: this.router.url.includes(item.url) })
+      };
+    });
+
+    this.cdr.detectChanges();
   }
 }

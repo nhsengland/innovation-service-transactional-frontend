@@ -8,16 +8,7 @@ import { CookiesService } from '@modules/core/services/cookies.service';
 
 import { URLS } from '@app/base/constants';
 import { CtxStore } from '@modules/stores';
-
-export type HeaderMenuBarItemType = {
-  id: string;
-  label: string;
-  url?: string;
-  description?: string;
-  fullReload?: boolean;
-  isOpen?: boolean;
-  children?: { label: string; url: string; description?: string; fullReload?: boolean }[];
-};
+import { HeaderMenuBarItemType } from './header.component';
 
 export type HeaderNotificationsType = Record<string, number>;
 
@@ -73,6 +64,7 @@ export class HeaderAdminComponent implements OnInit, AfterViewInit, OnDestroy {
       right: this.rightMenuBarItems,
       isChildrenOpened: false
     };
+    console.log('admin menuBarItems', this.menuBarItems)
   }
 
   ngAfterViewInit(): void {

@@ -3,8 +3,7 @@
     id="theme-header"
     [showUserInformation]="true"
     [showSignOut]="true"
-    [leftMenuBarItems]="header.menuBarItems.left"
-    [rightMenuBarItems]="header.menuBarItems.right"
+    [menuBarItems]="header.menuBarItems"
     [notifications]="headerNotifications()"
   />
 </ng-container>
@@ -13,8 +12,8 @@
     id="theme-header"
     [showUserInformation]="true"
     [showSignOut]="true"
-    [leftMenuBarItems]="header.menuBarItems.left"
-    [rightMenuBarItems]="header.menuBarItems.right"
+    [leftMenuBarItems]="adminHeader.menuBarItems.left"
+    [rightMenuBarItems]="adminHeader.menuBarItems.right"
     [notifications]="headerNotifications()"
   />
 </ng-container>

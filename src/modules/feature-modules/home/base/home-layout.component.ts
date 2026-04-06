@@ -9,21 +9,24 @@ import { HeaderMenuBarItemType } from '@app/base/types';
 })
 export class HomeLayoutComponent extends CoreComponent {
   headerSection: {
-    menuBarItems: { left: HeaderMenuBarItemType[]; right: HeaderMenuBarItemType[] };
+    menuBarItems: HeaderMenuBarItemType[];
   } = {
-    menuBarItems: { left: [], right: [] }
+    menuBarItems: []
   };
 
   constructor() {
     super();
 
     this.headerSection = {
-      menuBarItems: {
-        left: [],
-        right: [
-          { id: 'myDashboard', label: 'My dashboard', url: `${this.CONSTANTS.APP_URL}/dashboard`, fullReload: true }
-        ]
-      }
+      menuBarItems: [
+        {
+          id: 'myDashboard',
+          label: 'My dashboard',
+          url: `${this.CONSTANTS.APP_URL}/dashboard`,
+          fullReload: true,
+          align: 'right'
+        }
+      ]
     };
   }
 }

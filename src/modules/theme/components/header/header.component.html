@@ -78,15 +78,30 @@
   </div>
   <nav #navigation class="nhsuk-header__navigation" aria-label="Menu">
     <div #navContainer class="nhsuk-header__navigation-container nhsuk-width-container">
-      <ul #navList class="nhsuk-header__navigation-list">
-        <li *ngFor="let item of visibleItems; trackBy: trackByLabel" class="nhsuk-header__navigation-item" [class.nhsuk-header__navigation-item--current]="" data-nav-item="true">
-          <a class="nhsuk-header__navigation-link" [routerLink]="item.url" [attr.aria-current]="">
-            <ng-container *ngIf="false; else normalRouterLabel">
-              <strong class="nhsuk-header__navigation-item-current-fallback">
-                {{ item.label }}
-              </strong>
-            </ng-container>
-            <ng-template #normalRouterLabel>{{ item.label }}</ng-template>
+      <ul #navList class="nhsuk-header__navigation-list" [class.justify-content-end]="alignAtEnd">
+        <li
+          *ngFor="let item of visibleItems; trackBy: trackByLabel"
+          class="nhsuk-header__navigation-item"
+          [class.nhsuk-header__navigation-item--current]="item.isCurrent"
+          data-nav-item="true"
+        >
+          <a
+            *ngIf="!item.fullReload"
+            class="nhsuk-header__navigation-link"
+            [routerLink]="item.url"
+            [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+            [attr.aria-current]="item.isCurrent ? 'true' : null"
+          >
+            <span>{{ item.label }}</span>
+          </a>
+          <a
+            *ngIf="item.fullReload"
+            class="nhsuk-header__navigation-link"
+            [href]="item.url"
+            [ngClass]="{ 'nhsuk-u-padding-right-1': notifications[item.id] }"
+            [attr.aria-current]="item.isCurrent ? 'true' : null"
+          >
+            <span>{{ item.label }}</span>
           </a>
         </li>
 

@@ -83,15 +83,12 @@ import { NeedsAssessorAndInnovationListComponent } from './pages/needs-assessor-
 import { KeyProgressAreasPageComponent } from '@modules/shared/pages/innovation/key-progress-areas/key-progress-areas-page.component';
 
 const header: RoutesDataType['header'] = {
-  menuBarItems: {
-    left: [
-      { id: 'innovations', label: 'Innovations', url: '/assessment/innovations' },
-      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks' },
-      { id: 'notifications', label: 'Notifications', url: '/assessment/notifications' },
-      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details' }
-    ],
-    right: []
-  }
+  menuBarItems: [
+      { id: 'innovations', label: 'Innovations', url: '/assessment/innovations', align:'left'  },
+      { id: 'tasks', label: 'Tasks', url: '/assessment/tasks', align:'left'  },
+      { id: 'notifications', label: 'Notifications', url: '/assessment/notifications', align:'left'  },
+      { id: 'account', label: 'Your account', url: '/assessment/account/manage-details', align:'left'  }
+    ]
 };
 
 const routes: Routes = [
