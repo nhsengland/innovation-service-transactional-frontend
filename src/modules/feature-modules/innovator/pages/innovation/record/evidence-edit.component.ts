@@ -69,10 +69,6 @@ export class InnovationSectionEvidenceEditComponent extends CoreComponent implem
   }
 
   ngOnInit(): void {
-    const section = this.ctx.schema.getIrSchemaSectionV3(this.sectionId);
-    console.log('section:', section);
-    console.log('section.wizard.validateData()', section.wizard.validateData());
-    console.log('this.evidenceId', this.evidenceId);
     forkJoin([
       !this.evidenceId
         ? of(null)

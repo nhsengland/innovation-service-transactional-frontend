@@ -247,7 +247,7 @@ export class PageInnovationSectionInfoComponent extends CoreComponent implements
         this.evidenceData.hasAddedEvidence = this.sectionSummaryData.evidencesList.length > 0;
         this.evidenceData.allEvidencesHaveDocuments = this.evidenceData.evidencesWithoutDocuments.length === 0;
 
-        // rules for Evidence Section to be marked as complete
+        // extra rules for Evidence Section in order to be able to mark as complete
         this.isSectionComplete =
           this.isSectionComplete &&
           this.evidenceData.hasEvidences &&

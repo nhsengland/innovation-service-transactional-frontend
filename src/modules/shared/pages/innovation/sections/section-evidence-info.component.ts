@@ -68,7 +68,7 @@ export class PageInnovationSectionEvidenceInfoComponent extends CoreComponent im
           message: 'You must add a supporting document for this evidence.',
           itemsList: [
             {
-              title: 'Add evidence',
+              title: 'Add document',
               callback: `${this.baseUrl}/documents/new?evidenceId=${this.evidenceId}`
             }
           ],
