@@ -143,7 +143,7 @@ export class CoreComponent implements OnDestroy {
           main,
           secondary: options?.hint,
           size: options?.size,
-          width: options?.width,
+          width: options?.width ?? 'full',
           actions: options?.actions
         }
       });
