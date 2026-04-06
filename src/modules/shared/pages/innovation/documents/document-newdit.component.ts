@@ -46,6 +46,8 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
 
   wizard = new WizardEngineModel({});
 
+  titleHint: string | undefined;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private innovationDocumentsService: InnovationDocumentsService,
@@ -93,10 +95,11 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
             innovationId: this.innovationId,
             context: { type: 'INNOVATION_EVIDENCE' }
           });
-          // if coming from evidence flow, check and init draft store
-          if (this.evidenceDraftService.isEmpty()) {
-            this.evidenceDraftService.initDraft();
-          }
+
+          this.titleHint = this.translate(
+            'shared.catalog.innovation.evidence.evidenceSubmitType.' +
+              this.evidenceDraftService.evidence()?.evidenceSubmitType
+          );
         } else {
           this.wizard = new WizardEngineModel(WIZARD_WITH_LOCATION_QUESTIONS).setInboundParsedAnswers({
             innovationId: this.innovationId,
@@ -180,7 +183,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     }
 
     if (this.wizard.isQuestionStep()) {
-      this.setPageTitle(this.wizard.currentStepTitle(), { showPage: false });
+      this.setPageTitle(this.wizard.currentStepTitle(), { width:'full', showPage: false });
       this.setUploadConfiguration();
     } else {
       this.setSummaryTitle();
@@ -194,7 +197,7 @@ export class PageInnovationDocumentsNewditComponent extends CoreComponent implem
     } else {
       summaryTitle = 'Check your answers';
     }
-    this.setPageTitle(summaryTitle, { width: 'full', size: 'l' });
+    this.setPageTitle(summaryTitle, { hint: this.titleHint, width: '2.thirds', size: 'l' });
   }
 
   onAddEvidenceDocument(): void {
