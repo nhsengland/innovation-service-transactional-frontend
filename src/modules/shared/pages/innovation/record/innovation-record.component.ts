@@ -141,8 +141,17 @@ export class PageInnovationRecordComponent extends CoreComponent implements OnIn
 
   downloadInnovationRecordExcel(): void {
     this.ctx.innovation.getAllSectionsInfo$(this.innovationId).subscribe({
-      next: (payload: any) => {
-        this.innovationsService.getInnovationRecordExcelExport(payload).subscribe({
+      next: (payload: any[]) => {
+        // Transform the InnovationAllSectionsInfoDTO array into an InnovationRecordDocumentType object
+        // The backend ExcelExportService expects a dictionary keyed by section ID.
+        const exportPayload = payload.reduce((acc, curr) => {
+          if (curr?.section?.section && curr?.data) {
+            acc[curr.section.section] = curr.data;
+          }
+          return acc;
+        }, {} as Record<string, any>);
+
+        this.innovationsService.getInnovationRecordExcelExport(exportPayload).subscribe({
           next: (blob: Blob) => {
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
