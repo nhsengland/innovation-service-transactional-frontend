@@ -307,20 +307,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private updateCurrentTab(): void {
-    this.menuBarItems = this.menuBarItems.map(item => {
-      return {
-        ...item,
-        ...(item.url && { isCurrent: this.router.url.includes(item.url) })
-      };
-    });
+  // check all items for the current one and update all logic's arrays
+  
+  const currentUrl = this.router.url;
 
-    this.visibleItems = this.visibleItems.map(item => {
-      return {
-        ...item,
-        ...(item.url && { isCurrent: this.router.url.includes(item.url) })
-      };
-    });
+  const markCurrent = (item: HeaderMenuBarItemType): HeaderMenuBarItemType => ({
+    ...item,
+    isCurrent: !!item.url && currentUrl.includes(item.url)
+  });
 
-    this.cdr.detectChanges();
-  }
+  this.menuBarItems = this.menuBarItems.map(markCurrent);
+  this.visibleItems = this.visibleItems.map(markCurrent);
+  this.overflowItems = this.overflowItems.map(markCurrent);
+
+  this.cdr.detectChanges();
+}
 }

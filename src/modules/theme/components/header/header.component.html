@@ -118,8 +118,8 @@
           </button>
 
           <ul #menuList class="nhsuk-header__menu-list" [hidden]="!menuOpen">
-            <li *ngFor="let item of overflowItems; trackBy: trackByLabel" class="nhsuk-header__navigation-item">
-              <a class="nhsuk-header__navigation-link" [routerLink]="item.url" [attr.aria-current]="">
+            <li *ngFor="let item of overflowItems; trackBy: trackByLabel" class="nhsuk-header__navigation-item" [class.nhsuk-header__navigation-item--current]="item.isCurrent">
+              <a class="nhsuk-header__navigation-link" [routerLink]="item.url" [attr.aria-current]="item.isCurrent ? 'true' : null">
                 {{ item.label }}
               </a>
             </li>
